@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import QuickAddSheet from "@/components/quick-add-sheet";
+import NowCard from "@/components/home/now-card";
+import OrkSummary from "@/components/home/ork-summary";
+import DailyFlowList from "@/components/day/daily-flow-list";
 import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
@@ -98,6 +101,14 @@ export default function Home() {
 
   useEffect(() => {
     track("home_viewed");
+  }, []);
+
+  const [firstVisit, setFirstVisit] = useState(false);
+  useEffect(() => {
+    if (!window.localStorage.getItem("myflove-home-start-seen")) {
+      setFirstVisit(true);
+      window.localStorage.setItem("myflove-home-start-seen", "1");
+    }
   }, []);
 
   const { visible } = useHomeLayout();
@@ -252,48 +263,28 @@ export default function Home() {
               </button>
             </nav>
 
+            <div data-npf="optional">
             {hasSavedItems && (
               <Link
                 href={savedItemsHref}
-                onClick={() =>
-                  track("home_widget_opened", {
-                    source: openItems.length > 0 ? "sparat_quickflow" : "sparat_anteckningar",
-                  })
-                }
                 data-testid="home-saved-items-reminder"
-                className="mt-4 flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card/70 px-3.5 py-3 shadow-soft transition-colors hover:border-primary/35 hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="mt-4 flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card/70 px-3.5 py-3 shadow-soft"
               >
-                <span
-                  aria-hidden
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-lavender/50 text-primary"
-                >
-                  {openItems.length > 0 ? (
-                    <Brain className="h-4 w-4" />
-                  ) : (
-                    <NotebookPen className="h-4 w-4" />
-                  )}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold leading-snug text-ink">
+                <NotebookPen className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                <span className="min-w-0 flex-1 text-sm">
+                  <span className="block font-semibold text-ink">
                     {hasWaitingQuickflow
                       ? t("Du har något sparat som väntar på dig")
                       : t("Du har saker sparade")}
                   </span>
-                  <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">
+                  <span className="block text-xs text-muted-foreground">
                     {savedItemCounts.join(" · ")}
                   </span>
                 </span>
-                <span className="hidden shrink-0 items-center gap-1 text-xs font-semibold text-primary sm:inline-flex">
-                  {t("Visa det jag sparat")}
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-primary sm:hidden" aria-hidden />
+                <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               </Link>
             )}
-
-            <HomeShortcuts />
-
-            <NextLectureHomeRow />
+            </div>
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}
             <div className="mt-4 flex w-full justify-center">
@@ -363,6 +354,8 @@ export default function Home() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
+              <HomeShortcuts />
+              <NextLectureHomeRow />
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (
                 <MyFloveWide style={{ order: 9 }} className="min-w-0">
