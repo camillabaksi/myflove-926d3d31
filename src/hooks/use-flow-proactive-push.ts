@@ -6,9 +6,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useTasks } from "@/hooks/use-data";
 import { todayISO } from "@/lib/day";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useFlowItems } from "@/hooks/use-flow-items";
-import { planForCapacity } from "@/lib/priority-engine";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
 
 /**
  * Flow hör av sig när det faktiskt behövs.
@@ -26,14 +24,9 @@ export function useFlowProactivePush(): void {
   const [tick, setTick] = useState(0);
 
   const today = todayISO();
-  const { mode } = useCapacityMode();
-  const { todayOpen } = useFlowItems();
-  const firstMustDo =
-    planForCapacity(
-      todayOpen.map((i) => ({ id: i.id, title: i.title, time: i.time, dueDate: i.dueDate })),
-      mode,
-      today,
-    ).planned.find((p) => p.priority === 1)?.item.title ?? null;
+  // Samma FlowPlan som Hem och Flow – puffen hittar aldrig på en egen "första sak".
+  const flowPlan = useFlowPlan();
+  const firstMustDo = flowPlan.order.find((p) => p.priority === 1)?.item.title ?? null;
   const timedTodayCount = tasks.filter(
     (t) => !t.completed && t.dueDate === today && !!t.time,
   ).length;
@@ -61,7 +54,7 @@ export function useFlowProactivePush(): void {
       orkValue10: energyValue,
       openQuickflowCount: openItems.length,
       timedTodayCount,
-      capacityMode: mode,
+      capacityMode: flowPlan.mode,
       firstMustDo,
     });
 
@@ -88,5 +81,5 @@ export function useFlowProactivePush(): void {
     };
 
     void run();
-  }, [energyValue, openItems.length, timedTodayCount, sync, tick, mode, firstMustDo]);
+  }, [energyValue, openItems.length, timedTodayCount, sync, tick, flowPlan.mode, firstMustDo]);
 }

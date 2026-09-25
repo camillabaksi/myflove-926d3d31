@@ -22,8 +22,10 @@ export interface AreaLoad {
 }
 
 export interface LifePuzzleInput {
-  /** 0–100, kapacitet just nu (inte prestation). */
+  /** 0–100, kompatibilitetssiffra härledd från kapacitetsläget (inte prestation). */
   score: number;
+  /** Användarens valda kapacitetsläge – den enda kapacitetskällan. */
+  capacityLabel?: string;
   load: "låg" | "medel" | "hög";
   capacityMinutes: number;
   suggestedTasks: number;
@@ -222,10 +224,12 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
  */
 export function lifeContextPrompt(input: LifePuzzleInput): string {
   const lines: string[] = [
-    `FlowScore just nu: ${input.score}% (kapacitet, inte prestation). Belastning: ${input.load}.`,
+    input.capacityLabel
+      ? `Kapacitetsläge (användarens eget val): ${input.capacityLabel}.`
+      : `Kapacitet just nu: ${input.score}% (kapacitet, inte prestation). Belastning: ${input.load}.`,
     `Rimligt idag: ca ${input.capacityMinutes} min fokus och ${input.suggestedTasks} sak(er).`,
   ];
-  if (input.energy != null) lines.push(`Energi: ${input.energy}/5.`);
+  if (input.energy != null) lines.push(`Senast loggad energi (bara historik, styr inte planen): ${input.energy}/5.`);
   if (input.mood != null) lines.push(`Mående: ${input.mood}/5.`);
   lines.push(`Tid kvar av dagen: ${input.minutesLeft} min.`);
   if (input.openThoughts) lines.push(`Osorterade tankar i Quickflow: ${input.openThoughts}.`);

@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { CheckCircle2, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import StartHelper from "@/components/home/start-helper";
 import LandingPause from "@/components/home/landing-pause";
 import { useFlowItems } from "@/hooks/use-flow-items";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
@@ -17,7 +18,10 @@ function toMinutes(time?: string | null) {
   return Number.isFinite(h) ? h * 60 + (m || 0) : null;
 }
 
-/** Väljer EN sak att göra nu ur dagens befintliga lista. */
+/**
+ * @deprecated Äldre tidsbaserat urval. "Just nu" läser FlowPlan (useFlowPlan).
+ * Kvar för bakåtkompatibilitet – används inte längre av någon vy.
+ */
 export function pickNow(items: FlowItem[], nowMinutes: number, skipped: string[]) {
   const open = items.filter((i) => !i.done && !skipped.includes(i.id));
   if (open.length === 0) return null;
@@ -32,18 +36,15 @@ export function pickNow(items: FlowItem[], nowMinutes: number, skipped: string[]
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const { t } = useLang();
-  const { today, toggleItem } = useFlowItems();
+  const { toggleItem } = useFlowItems();
   const [skipped, setSkipped] = useState<string[]>([]);
+  // FlowPlan är enda källan för "vad nu" – samma som Nästa steg och Flow.
+  const plan = useFlowPlan(skipped);
   const [justDone, setJustDone] = useState(false);
   const [helping, setHelping] = useState(false);
   // Mjuk övergång: "ask" = frågan visas, "run" = två minuter att landa.
   const [landing, setLanding] = useState<"none" | "ask" | "run">("none");
-  const now = new Date();
-  const current = useMemo(
-    () => pickNow(today, now.getHours() * 60 + now.getMinutes(), skipped),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [today, skipped],
-  );
+  const current = plan.now && !skipped.includes(plan.now.item.id) ? plan.now.item.flowItem : null;
   const endLanding = useCallback(() => setLanding("none"), []);
 
   if (landing !== "none") {

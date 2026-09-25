@@ -162,11 +162,16 @@ export function classifyPriority<T extends PlanInput>(item: T, today: string): P
 /** Kedjor där steg i måste ske före steg i+1. */
 const CHAINS: RegExp[][] = [
   [/starta\s+tvätt|sätt\s+på\s+tvätt|tvätta\b/i, /häng|torktumla/i, /vik\b|vika|lägg\s+in\s+tvätt/i],
-  [/packa.*väska|väska/i, /klä\s+på/i, /gå\s+hemifrån|åka|lämna/i],
+  [
+    /packa.*väska|väska/i,
+    /klä\s+på|ytterkläder/i,
+    /gå\s+hemifrån|gå\s+till|buss|åka/i,
+    /lämna|förskola|dagis/i,
+  ],
   [/handla|inköp/i, /laga|middag/i],
 ];
 
-function chainPos(title: string): { chain: number; step: number } | null {
+export function chainPos(title: string): { chain: number; step: number } | null {
   for (let c = 0; c < CHAINS.length; c++) {
     const chain = CHAINS[c];
     for (let s = chain.length - 1; s >= 0; s--) {

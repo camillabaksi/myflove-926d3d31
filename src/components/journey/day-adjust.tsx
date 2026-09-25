@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Check, Undo2 } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { todayISO, daysUntilDate } from "@/lib/flow-items";
 import {
   ADJUST_META,
@@ -52,9 +53,24 @@ export default function DayAdjust() {
       }));
   }, [activeTasks, today]);
 
+  // "Flytta" följer FlowPlans "Kan vänta" – ingen egen kapacitetsregel här.
+  const flowPlan = useFlowPlan();
+  const deferIds = useMemo(
+    () =>
+      new Set(
+        flowPlan.waiting
+          .filter((p) => p.item.movable)
+          .map((p) => p.item.id.replace(/^task-/, "")),
+      ),
+    [flowPlan.waiting],
+  );
   const suggestions = useMemo(
-    () => suggestAdjustments(candidates, { capacity: Math.max(1, flow.suggestedTasks || 3) }),
-    [candidates, flow.suggestedTasks],
+    () =>
+      suggestAdjustments(candidates, {
+        capacity: Math.max(1, flow.suggestedTasks || 3),
+        deferIds,
+      }),
+    [candidates, flow.suggestedTasks, deferIds],
   );
 
   const open = suggestions.filter(

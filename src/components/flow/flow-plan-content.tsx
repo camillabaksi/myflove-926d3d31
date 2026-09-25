@@ -1,5 +1,5 @@
 import { track } from "@/lib/analytics";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeader } from "@/components/myflove";
@@ -11,23 +11,28 @@ import {
   ListOrdered,
   Sparkles,
   Clock,
-  Battery,
   RotateCcw,
   BellRing,
   ArrowUp,
   ArrowDown,
   Check,
 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { planFlowSequence, type FlowPlanResult } from "@/lib/flowplan.functions";
 import { useTasks, useFocus } from "@/hooks/use-data";
-import { supabase } from "@/integrations/supabase/client";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { buildFlowPlan } from "@/lib/flow-plan";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WhyHint from "@/components/why-hint";
 import DayAdjust from "@/components/journey/day-adjust";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
-import { PRIORITY_LABEL, prioritize, type PriorityLevel } from "@/lib/priority-engine";
+import {
+  CAPACITY_META,
+  PRIORITY_LABEL,
+  prioritize,
+  type CapacityMode,
+  type PriorityLevel,
+} from "@/lib/priority-engine";
 import { todayISO as engineToday } from "@/lib/day";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
@@ -52,43 +57,23 @@ type StoredPlan = {
 
 type Energy = "low" | "medium" | "high";
 
-const ENERGY_LABELS: Record<Energy, string> = {
-  low: "Låg – ta det försiktigt",
-  medium: "Vanlig – som en normal dag",
-  high: "Hög – jag är peppad",
+/** AI-prompten tar fortfarande low/medium/high – härlett från kapacitetsläget. */
+const MODE_TO_ENERGY: Record<CapacityMode, Energy> = {
+  fullt: "high",
+  mellan: "medium",
+  lagt: "low",
 };
 
-const LEVEL_LABELS: Record<number, string> = {
-  1: "Tom",
-  2: "Låg",
-  3: "Ok",
-  4: "På",
-  5: "Fullt laddad",
-};
-
-function levelToEnergy(level: number): Energy {
-  if (level <= 2) return "low";
-  if (level >= 4) return "high";
-  return "medium";
-}
-
-function timeAgo(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.round(diff / 60000);
-  if (mins < 1) return "just nu";
-  if (mins < 60) return `${mins} min sedan`;
-  const hrs = Math.round(mins / 60);
-  return `${hrs} h sedan`;
-}
+const CAPACITY_MODES: CapacityMode[] = ["fullt", "mellan", "lagt"];
 
 export function FlowPlanContent() {
   const { explain } = useFlowExplainer();
   const planExplainer = explain("planering");
   const { activeTasks, toggleTask, setTaskDueDate } = useTasks();
   const { currentFocus } = useFocus();
-  const [energy, setEnergy] = useState<Energy>("medium");
-  const [energyAuto, setEnergyAuto] = useState<{ level: number; loggedAt: string } | null>(null);
-  const [energyManual, setEnergyManual] = useState(false);
+  // Kapacitetsläget är enda källan – ingen energilogg eller batteri styr planen.
+  const { mode: capacityMode, setMode: setCapacityMode } = useCapacityMode();
+  const energy = MODE_TO_ENERGY[capacityMode];
   const [timeAvailable, setTimeAvailable] = useState<number>(120);
   const [storedPlan, setStoredPlan] = useCloudSyncedStorage<StoredPlan | null>(
     "myflow-flowplan",
@@ -114,31 +99,6 @@ export function FlowPlanContent() {
   };
 
   const run = useServerFn(planFlowSequence);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      const uid = userData.user?.id;
-      if (!uid) return;
-      const since = new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString();
-      const { data } = await supabase
-        .from("energy_logs")
-        .select("level, logged_at")
-        .eq("user_id", uid)
-        .gte("logged_at", since)
-        .order("logged_at", { ascending: false })
-        .limit(1);
-      if (!mounted || !data || data.length === 0) return;
-      const latest = data[0];
-      setEnergyAuto({ level: latest.level, loggedAt: latest.logged_at });
-      setEnergy((prev) => (energyManual ? prev : levelToEnergy(latest.level)));
-    })();
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   /** Deadline-info per uppgift: dagar kvar + om en påminnelse redan är aktiv. */
   const deadlineInfo = useMemo(() => {
@@ -227,21 +187,31 @@ export function FlowPlanContent() {
     }
   };
 
-  /** Flows föreslagna ordning (deadline först, sedan AI:ns ordning). */
+  /**
+   * FlowPlans ordning (prioritet + kapacitetsläge + fasta tider + beroenden).
+   * AI:n bidrar bara med "varför" och tidsuppskattning – aldrig ordningen.
+   */
+  const engineOrder = useMemo(() => {
+    const now = new Date();
+    const fp = buildFlowPlan(
+      activeTasks.map((t) => ({ id: t.id, title: t.title, time: t.time, dueDate: t.dueDate })),
+      { mode: capacityMode, today: engineToday(), nowMinutes: now.getHours() * 60 + now.getMinutes() },
+    );
+    const ids = [...fp.order, ...fp.extras, ...fp.waiting].map((p) => p.item.id);
+    return new Map(ids.map((id, i) => [id, i] as const));
+  }, [activeTasks, capacityMode]);
+
   const suggestedOrder = useMemo(() => {
     if (!plan) return [] as string[];
     return [...plan.plan]
       .sort((a, b) => {
-        const ba = item2Boost(a, deadlineInfo) ? 0 : 1;
-        const bb = item2Boost(b, deadlineInfo) ? 0 : 1;
-        if (ba !== bb) return ba - bb;
-        const pa = priorityById.get(a.taskId) ?? 3;
-        const pb = priorityById.get(b.taskId) ?? 3;
-        if (pa !== pb) return pa - pb;
+        const ea = engineOrder.get(a.taskId) ?? Number.MAX_SAFE_INTEGER;
+        const eb = engineOrder.get(b.taskId) ?? Number.MAX_SAFE_INTEGER;
+        if (ea !== eb) return ea - eb;
         return a.order - b.order;
       })
       .map((i) => i.taskId);
-  }, [plan, deadlineInfo, priorityById]);
+  }, [plan, engineOrder]);
 
   /** Din ordning om du ändrat något, annars Flows förslag. */
   const orderedItems = useMemo(() => {
@@ -301,7 +271,7 @@ export function FlowPlanContent() {
 
       <MyFloveBlock
         title="Hur ser dagen ut?"
-        subtitle="Välj energi och tid – Flow ger ett förslag"
+        subtitle="Välj kapacitetsläge och tid – Flow ger ett förslag"
         eyebrow="Steg 1"
         icon={ListOrdered}
         tone="lavender"
@@ -313,51 +283,22 @@ export function FlowPlanContent() {
       >
         <div className="surface-card p-5 space-y-5">
           <div>
-            <div className="flex items-center justify-between mb-2 gap-2">
-              <label className="text-sm font-medium">Hur är energin just nu?</label>
-              {energyAuto && !energyManual && (
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <Battery size={12} className="text-primary" />
-                  Från Energikarta ({LEVEL_LABELS[energyAuto.level]}, {timeAgo(energyAuto.loggedAt)}
-                  )
-                </span>
-              )}
-              {energyAuto && energyManual && (
+            <p className="text-sm font-medium mb-2">Kapacitetsläge idag</p>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Kapacitetsläge">
+              {CAPACITY_MODES.map((m) => (
                 <button
+                  key={m}
                   type="button"
-                  onClick={() => {
-                    setEnergyManual(false);
-                    setEnergy(levelToEnergy(energyAuto.level));
-                  }}
-                  className="text-xs text-primary hover:underline"
-                >
-                  Använd loggad energi
-                </button>
-              )}
-              {!energyAuto && (
-                <Link
-                  to="/mitt-batteri"
-                  className="text-xs text-primary hover:underline flex items-center gap-1"
-                >
-                  <Battery size={12} /> Logga energi
-                </Link>
-              )}
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {(Object.keys(ENERGY_LABELS) as Energy[]).map((e) => (
-                <button
-                  key={e}
-                  onClick={() => {
-                    setEnergy(e);
-                    setEnergyManual(true);
-                  }}
-                  className={`px-3 py-3 rounded-2xl border text-sm text-left transition-colors ${
-                    energy === e
+                  role="radio"
+                  aria-checked={capacityMode === m}
+                  onClick={() => setCapacityMode(m)}
+                  className={`min-h-11 px-3 py-3 rounded-2xl border text-sm text-left transition-colors ${
+                    capacityMode === m
                       ? "border-primary bg-primary/10 text-primary"
                       : "border-border bg-background hover:bg-secondary"
                   }`}
                 >
-                  {ENERGY_LABELS[e]}
+                  <span aria-hidden>{CAPACITY_META[m].dot}</span> {CAPACITY_META[m].label}
                 </button>
               ))}
             </div>

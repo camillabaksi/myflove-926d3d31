@@ -12,9 +12,9 @@ import { useFlowItems } from "@/hooks/use-flow-items";
 import { useReplanMode } from "@/hooks/use-replan";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
-import { capacityForMode, shouldOfferReplan } from "@/lib/replan";
 import { assessToday } from "@/lib/flow-engine";
-import { withinCapacity } from "@/lib/flow-items";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useDayPlan } from "@/lib/day-plan";
 import { todayISO as todayStr } from "@/lib/day";
 import { Bell, CalendarDays, Heart, ListOrdered, Plus } from "lucide-react";
@@ -43,15 +43,14 @@ export function TodayContent() {
 
   const { today: todaysItems } = useFlowItems();
   const { mode, chosen, setMode } = useReplanMode();
-  const { keep, rest } = useMemo(
-    () =>
-      withinCapacity(
-        todaysItems.filter((item) => !item.done),
-        capacityForMode(flow, mode),
-      ),
-    [todaysItems, flow, mode],
-  );
-  const offerReplan = shouldOfferReplan(flow.score) || chosen;
+  // Hur mycket som ryms avgörs av FlowPlan (prioritet + kapacitetsläge) –
+  // inte av FlowScore eller batteriet.
+  const flowPlan = useFlowPlan();
+  const capacity = useCapacityMode();
+  const keep = flowPlan.order;
+  const rest = flowPlan.waiting;
+  const replanFlow = useMemo(() => ({ ...flow, score: capacity.percent }), [flow, capacity.percent]);
+  const offerReplan = capacity.mode !== "fullt" || chosen;
 
   /** Dagens belastning – samma bedömning som Flow → IDAG. */
   const load = useMemo(() => assessToday(reading, batteryItems), [reading, batteryItems]);
@@ -130,7 +129,7 @@ export function TodayContent() {
             )}
             {offerReplan && (
               <FlowReplan
-                flow={flow}
+                flow={replanFlow}
                 items={todaysItems}
                 mode={mode}
                 chosen={chosen}

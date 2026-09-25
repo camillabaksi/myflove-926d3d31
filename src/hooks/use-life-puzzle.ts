@@ -3,6 +3,8 @@ import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { CAPACITY_META } from "@/lib/priority-engine";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { getArea } from "@/lib/life-areas";
 import { isMeeting, workDemand } from "@/lib/work-profile";
@@ -42,7 +44,9 @@ export function useLifePuzzle(): {
   const { activeTasks } = useTasks();
   const { openItems } = useQuickflow();
   const { lectures } = useStudySchedule();
+  // FlowScore används bara för belastning/historik – kapaciteten är användarens val.
   const { flow, energy, mood, minutesLeft } = useFlowScore();
+  const capacity = useCapacityMode();
   const childEvents = useChildEvents();
   const { profile: lifeProfile } = useLifeProfile();
   const { situation } = useSituation();
@@ -111,10 +115,11 @@ export function useLifePuzzle(): {
       studyDemand: sDemand,
       workContext: "",
       workDemand: demand,
-      score: flow.score,
+      score: capacity.percent,
+      capacityLabel: CAPACITY_META[capacity.mode].label,
       load: flow.load,
-      capacityMinutes: flow.capacityMinutes,
-      suggestedTasks: flow.suggestedTasks,
+      capacityMinutes: capacity.minutes,
+      suggestedTasks: capacity.suggestedTasks,
       energy,
       mood,
       minutesLeft,
@@ -127,6 +132,10 @@ export function useLifePuzzle(): {
     lectures,
     childEvents,
     flow,
+    capacity.percent,
+    capacity.mode,
+    capacity.minutes,
+    capacity.suggestedTasks,
     energy,
     mood,
     minutesLeft,
