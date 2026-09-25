@@ -8,8 +8,16 @@
  */
 
 import type { TaskClarification } from "./quickflow-clarify";
+import {
+  QUICKFLOW_LABEL,
+  bucketToPriority,
+  classifyPriority,
+  priorityToBucket,
+  type QuickflowBucket,
+} from "./priority-engine";
 
-export type PriorityBucket = "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
+/** Lagringsvärde för P1–P4 (presentation). Prioriteten kommer från priority-engine. */
+export type PriorityBucket = QuickflowBucket;
 
 export interface PriorityTask {
   id: string;
@@ -25,17 +33,22 @@ export interface PriorityTask {
   createdAt: number;
 }
 
-export const BUCKETS: PriorityBucket[] = ["nu", "sedan", "om-du-orkar", "kan-vanta"];
+/** Ordning P1 → P4. */
+export const BUCKETS: PriorityBucket[] = ([1, 2, 3, 4] as const).map(priorityToBucket);
 
-export const BUCKET_META: Record<PriorityBucket, { emoji: string; label: string; dot: string }> = {
-  nu: { emoji: "◉", label: "När det passar", dot: "bg-primary" },
-  sedan: { emoji: "🟠", label: "Gör sedan", dot: "bg-sun" },
-  "om-du-orkar": { emoji: "🟢", label: "Om du orkar", dot: "bg-mint" },
-  "kan-vanta": { emoji: "⚪", label: "Kan vänta", dot: "bg-muted" },
-};
+const DOTS = { 1: "bg-primary", 2: "bg-sun", 3: "bg-muted", 4: "bg-mint" } as const;
+const MARKS = { 1: "◉", 2: "🟠", 3: "⚪", 4: "🟢" } as const;
 
-export function bucketRank(b: PriorityBucket): number {
-  return BUCKETS.indexOf(b);
+export const BUCKET_META = Object.fromEntries(
+  BUCKETS.map((b) => {
+    const p = bucketToPriority(b);
+    return [b, { emoji: MARKS[p], label: QUICKFLOW_LABEL[p], dot: DOTS[p] }];
+  }),
+) as Record<PriorityBucket, { emoji: string; label: string; dot: string }>;
+
+/** Rang = P-nivå minus 1. Gamla/okända värden översätts via priority-engine. */
+export function bucketRank(b: PriorityBucket | string | undefined): number {
+  return bucketToPriority(b) - 1;
 }
 
 const SPLIT = /\n|;|,| och | samt | sen | sedan | dessutom |·|•/gi;
@@ -51,48 +64,22 @@ export function splitTasks(raw: string): string[] {
     .slice(0, 20);
 }
 
-const URGENT = ["betala", "räkning", "svara", "läraren", "läkare", "boka", "ringa", "deadline"];
-const HEAVY = ["städa", "storstäd", "flytta", "deklaration", "renovera", "packa", "förbered"];
-const LIGHT = ["diska", "tvätta", "vattna", "posta", "hämta", "sortera"];
-
 /**
- * Lugn fallback när AI inte är tillgänglig: viktighet och brådska först,
- * och batterinivån från Mitt batteri påverkar ordningen – lätta saker
- * prioriteras upp när energin är låg, tunga saker tidigt när den är hög.
+ * Fallback när AI inte är tillgänglig. Prioriteten kommer ENBART från
+ * priority-engine – kapacitet/batteri ändrar aldrig en uppgifts prioritet.
+ * Parametern `_energyPercent` finns kvar för bakåtkompatibla anrop.
  */
-export function heuristicPriority(titles: string[], energyPercent?: number): PriorityTask[] {
-  const hasEnergy = typeof energyPercent === "number";
-  const low = hasEnergy && (energyPercent as number) < 40;
-  const high = hasEnergy && (energyPercent as number) > 70;
+export function heuristicPriority(titles: string[], _energyPercent?: number): PriorityTask[] {
   const now = Date.now();
-  const scored = titles.map((title, i) => {
-    const t = title.toLowerCase();
-    let score = 2;
-    let why = "Kan göras när det passar.";
-    if (URGENT.some((w) => t.includes(w))) {
-      score = 0;
-      why = "Känns viktigt att få ur världen.";
-    } else if (LIGHT.some((w) => t.includes(w))) {
-      score = low ? 1 : high ? 2 : 1;
-      why = low ? "Liten sak – går att göra även med lite energi." : "Liten sak som går snabbt.";
-    } else if (HEAVY.some((w) => t.includes(w))) {
-      score = low ? 3 : high ? 1 : 2;
-      why = low
-        ? "Tung sak – den får gärna vänta medan batteriet är lågt."
-        : high
-          ? "Kräver mer av dig – bra läge nu när batteriet är högt."
-          : "Kräver lite mer av dig.";
-    }
-    return { title, score, why, i };
-  });
-
-  return scored
-    .sort((a, b) => a.score - b.score || a.i - b.i)
-    .map((s, order) => ({
-      id: `${now}-${s.i}`,
-      title: s.title,
-      bucket: BUCKETS[Math.min(s.score, 3)] as PriorityBucket,
-      why: s.why,
+  const today = new Date().toISOString().slice(0, 10);
+  return titles
+    .map((title, i) => ({ i, p: classifyPriority({ id: String(i), title }, today) }))
+    .sort((a, b) => a.p.priority - b.p.priority || a.i - b.i)
+    .map(({ i, p }, order) => ({
+      id: `${now}-${i}`,
+      title: p.item.title,
+      bucket: priorityToBucket(p.priority),
+      why: p.reason,
       order,
       createdAt: now,
     }));

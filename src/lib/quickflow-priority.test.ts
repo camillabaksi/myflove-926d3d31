@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { energyHint, heuristicPriority, sortPriority, splitTasks } from "@/lib/quickflow-priority";
+import { energyHint, heuristicPriority, sortPriority, splitTasks, BUCKETS, bucketRank } from "@/lib/quickflow-priority";
+import {
+  bucketToPriority,
+  classifyPriority,
+  normalizeBucket,
+  priorityToBucket,
+} from "@/lib/priority-engine";
 
 describe("quickflow-priority", () => {
   it("delar upp flera saker i ett fält", () => {
@@ -7,25 +13,33 @@ describe("quickflow-priority", () => {
     expect(splitTasks("Tvätta\nHandla\n- Diska")).toEqual(["Tvätta", "Handla", "Diska"]);
   });
 
-  it("prioriterar små saker högre när energin är låg", () => {
-    const low = heuristicPriority(["Storstäda", "Diska"], 20);
-    const idx = (t: string) => low.findIndex((i) => i.title === t);
-    expect(idx("Diska")).toBeLessThan(idx("Storstäda"));
+  it("översätter gamla bucket-värden till P1–P4", () => {
+    expect(bucketToPriority("nu")).toBe(1);
+    expect(bucketToPriority("sedan")).toBe(2);
+    expect(bucketToPriority("kan-vanta")).toBe(3);
+    expect(bucketToPriority("om-du-orkar")).toBe(4);
+    expect(bucketToPriority("okänt")).toBe(3);
+    expect(normalizeBucket(undefined)).toBe("kan-vanta");
+    for (const p of [1, 2, 3, 4] as const) expect(bucketToPriority(priorityToBucket(p))).toBe(p);
   });
 
-  it("räknar med batteriet: tunga saker tidigare när energin är hög", () => {
-    const idx = (list: ReturnType<typeof heuristicPriority>, t: string) =>
-      list.findIndex((i) => i.title === t);
-    const low = heuristicPriority(["Städa", "Tvätta"], 20);
-    expect(idx(low, "Tvätta")).toBeLessThan(idx(low, "Städa"));
-    const high = heuristicPriority(["Städa", "Tvätta"], 90);
-    expect(idx(high, "Städa")).toBeLessThan(idx(high, "Tvätta"));
-    expect(high.find((i) => i.title === "Städa")?.why).toContain("batteriet är högt");
+  it("ordnar nivåerna P1 → P4", () => {
+    expect(BUCKETS).toEqual(["nu", "sedan", "kan-vanta", "om-du-orkar"]);
+    expect(bucketRank("om-du-orkar")).toBe(3);
   });
 
-  it("lägger brådskande saker i Gör nu", () => {
-    const res = heuristicPriority(["Betala räkningen", "Vattna blommor"], 60);
-    expect(res[0]?.bucket).toBe("nu");
+  it("heuristiken ger samma P-nivå som prioritetsmotorn", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    for (const title of ["Betala räkningen idag", "Handla mat", "Organisera garderoben", "Vattna blommor"]) {
+      const [res] = heuristicPriority([title]);
+      expect(bucketToPriority(res?.bucket)).toBe(classifyPriority({ id: "x", title }, today).priority);
+    }
+  });
+
+  it("batteriet ändrar aldrig prioriteten", () => {
+    const low = heuristicPriority(["Storstäda", "Handla mat"], 10).map((i) => i.bucket);
+    const high = heuristicPriority(["Storstäda", "Handla mat"], 95).map((i) => i.bucket);
+    expect(low).toEqual(high);
   });
 
   it("anpassar hjälptexten efter batteriet", () => {
@@ -34,7 +48,7 @@ describe("quickflow-priority", () => {
   });
 
   it("sorterar efter nivå", () => {
-    const items = heuristicPriority(["Diska", "Betala räkningen"], 60);
-    expect(sortPriority(items)[0]?.title).toBe("Betala räkningen");
+    const items = heuristicPriority(["Vattna blommor", "Betala räkningen idag"]);
+    expect(sortPriority(items)[0]?.title).toBe("Betala räkningen idag");
   });
 });
