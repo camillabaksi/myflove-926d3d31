@@ -6,9 +6,17 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-24";
+export const CHANGELOG_UPDATED = "2026-09-25";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Hem: en sak i taget",
+    items: [
+      "Just nu-kort med Klar och Inte nu, följt av Dagens checklista (2026-09-25)",
+      "Orken visas i ord – Låg, Lagom eller God – med enkel förklaring (2026-09-25)",
+      "Färre rutor på Hem; resten ligger i Mer i MyFlove (2026-09-25)",
+    ],
+  },
   {
     title: "Min dag, barnens dagar och Familj",
     items: [
