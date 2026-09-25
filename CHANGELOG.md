@@ -1,5 +1,10 @@
 ## 2026-09-25
+- "Hjälp mig börja (2 min)" på Just nu-kortet: ett litet första steg och en lugn tvåminuterstimer som sänker tröskeln att komma igång.
+- Mjuk övergång efter Klar: frågan "Vill du landa 2 minuter innan nästa?" med Landa 2 minuter eller Redo direkt.
+- "Stäng dagen" på kvällen: varm summering av dagen, ogjorda saker kan flyttas till imorgon med Ångra, och dagen avslutas utan skuld.
+- Tre nya mjuka påminnelseljud med långsam intoning: Klangskål, Regndroppe och Mjuk harpa.
 - Anpassa hemskärmen: visa/dölj Hur är läget, Orken, Dagens checklista, fördjupning, Kvällscheck och Mina genvägar; välj 3, 5 eller alla saker i checklistan. Nytt val Ljust/Mörkt/Som telefonen under Anpassa appen.
+
 - Dagens checklista på Hem visar de tre första punkterna direkt och resten fälls ut med "Visa alla (X till)" / "Visa färre".
 - Ändringar i Planera, Kalender och barnschemat hämtas direkt när en annan enhet öppnar eller återvänder till appen, utöver den befintliga livesynken.
 

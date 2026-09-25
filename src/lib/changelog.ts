@@ -12,7 +12,12 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Hjälp mig börja (2 min) på Just nu-kortet – ett litet första steg och en lugn timer (2026-09-25)",
+      "Mjuk övergång efter Klar: vill du landa 2 minuter innan nästa? (2026-09-25)",
+      "Stäng dagen på kvällen: varm summering, ogjort kan flyttas till imorgon med Ångra (2026-09-25)",
+      "Tre nya mjuka påminnelseljud med långsam intoning: Klangskål, Regndroppe och Mjuk harpa (2026-09-25)",
       "Fler val under Anpassa hemskärmen och nytt ljust/mörkt läge (2026-09-25)",
+
       "Dagens checklista på Hem visar tre punkter direkt och resten fälls ut med Visa alla (2026-09-25)",
       "Ändringar syns direkt på alla dina enheter, även när appen legat i bakgrunden (2026-09-25)",
 
