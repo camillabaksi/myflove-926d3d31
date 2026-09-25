@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { CheckCircle2, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BUCKET_META } from "@/lib/quickflow-priority";
+import { normalizeBucket } from "@/lib/priority-engine";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { areaChipStyle, areaColor, AREA_META } from "@/lib/life-areas";
 import {
@@ -84,7 +85,7 @@ export function FlowItemCard({
             <span className="inline-flex items-center gap-1 rounded-pill bg-muted px-2 py-0.5 text-muted-foreground">
               {item.quickflowBucket && (
                 <span
-                  className={`h-2 w-2 rounded-full ${BUCKET_META[item.quickflowBucket].dot}`}
+                  className={`h-2 w-2 rounded-full ${BUCKET_META[normalizeBucket(item.quickflowBucket)].dot}`}
                   aria-hidden="true"
                 />
               )}
