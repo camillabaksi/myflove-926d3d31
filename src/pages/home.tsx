@@ -264,26 +264,26 @@ export default function Home() {
             </nav>
 
             <div data-npf="optional">
-            {hasSavedItems && (
-              <Link
-                href={savedItemsHref}
-                data-testid="home-saved-items-reminder"
-                className="mt-4 flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card/70 px-3.5 py-3 shadow-soft"
-              >
-                <NotebookPen className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-                <span className="min-w-0 flex-1 text-sm">
-                  <span className="block font-semibold text-ink">
-                    {hasWaitingQuickflow
-                      ? t("Du har något sparat som väntar på dig")
-                      : t("Du har saker sparade")}
+              {hasSavedItems && (
+                <Link
+                  href={savedItemsHref}
+                  data-testid="home-saved-items-reminder"
+                  className="mt-4 flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card/70 px-3.5 py-3 shadow-soft"
+                >
+                  <NotebookPen className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  <span className="min-w-0 flex-1 text-sm">
+                    <span className="block font-semibold text-ink">
+                      {hasWaitingQuickflow
+                        ? t("Du har något sparat som väntar på dig")
+                        : t("Du har saker sparade")}
+                    </span>
+                    <span className="block text-xs text-muted-foreground">
+                      {savedItemCounts.join(" · ")}
+                    </span>
                   </span>
-                  <span className="block text-xs text-muted-foreground">
-                    {savedItemCounts.join(" · ")}
-                  </span>
-                </span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              </Link>
-            )}
+                  <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                </Link>
+              )}
             </div>
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. */}

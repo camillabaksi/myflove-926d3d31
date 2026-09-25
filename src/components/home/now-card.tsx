@@ -41,12 +41,20 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
 
   if (!current) {
     return (
-      <section className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft" aria-label={t("Just nu")}>
+      <section
+        className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+        aria-label={t("Just nu")}
+      >
         <p className="text-xs font-semibold uppercase text-primary">{t("Just nu")}</p>
         <p className="mt-2 font-display text-lg font-bold text-ink">
           {justDone ? t("Allt för idag är klart. Bra jobbat!") : t("Inget planerat just nu")}
         </p>
-        <Button type="button" variant="outline" onClick={onAdd} className="mt-4 min-h-11 rounded-full">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onAdd}
+          className="mt-4 min-h-11 rounded-full"
+        >
           <Plus className="h-4 w-4" aria-hidden /> {t("Lägg till något")}
         </Button>
       </section>
@@ -75,7 +83,9 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           style={color ? { color } : undefined}
         />
         <div className="min-w-0">
-          <p className="break-words font-display text-xl font-bold leading-snug text-ink">{current.title}</p>
+          <p className="break-words font-display text-xl font-bold leading-snug text-ink">
+            {current.title}
+          </p>
           <p className="text-sm text-muted-foreground">
             {current.time ? `${current.time} · ` : ""}
             {visual.label}
