@@ -28,6 +28,8 @@ const EMOJI_SIZE = {
   xl: "text-4xl",
 } as const;
 
+const ICON_PX = { xs: 14, sm: 16, md: 20, lg: 28, xl: 36 } as const;
+
 const EMOJI_MOTION = {
   none: "",
   breathe: "breathe",
