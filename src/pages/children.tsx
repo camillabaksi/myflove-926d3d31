@@ -504,7 +504,9 @@ function ChildrenContent() {
                 {visibleItems.map((item) => {
                   const Icon = KIND_META[item.kind].icon;
                   const mine = item.owner_id === userId;
-                  const displayNote = decodeVisualNotes(item.notes).note.trim();
+                  const displayNote = decodeVisualNotes(item.notes).note
+                    .replace(/^\[myflove-visual:[^\]\n]*\]\r?\n?/, "")
+                    .trim();
                   return (
                     <li key={item.id} className="surface-card p-4 space-y-2">
                       <div className="flex items-start gap-3">
