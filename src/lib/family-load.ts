@@ -8,6 +8,7 @@
  */
 
 import type { CapacityLevel } from "@/lib/adaptive-activity";
+import { orkWord } from "@/lib/ork-word";
 
 export interface FamilyLoadItem {
   /** HH:MM */

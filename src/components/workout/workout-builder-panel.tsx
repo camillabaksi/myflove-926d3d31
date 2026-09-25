@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { track } from "@/lib/analytics";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { cn } from "@/lib/utils";
+import { orkWord } from "@/lib/ork-word";
 import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus } from "@/lib/exercise-library";
 import {
   DEFAULT_REQUEST,

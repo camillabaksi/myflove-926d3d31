@@ -17,6 +17,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { MyFloveBlock } from "@/components/myflove/block";
+import { orkWord } from "@/lib/ork-word";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
