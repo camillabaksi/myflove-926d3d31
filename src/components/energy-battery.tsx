@@ -6,6 +6,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import ImpactBatteryNudge from "@/components/impact-battery-nudge";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
+import { orkWord } from "@/lib/ork-word";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
 import { MyFloveIcon } from "@/components/myflove";
 import { useLang } from "@/hooks/use-language";

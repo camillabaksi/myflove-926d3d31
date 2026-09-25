@@ -2,6 +2,7 @@ import { Clock, NotebookPen } from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { buildObservations } from "@/lib/battery-observations";
+import { orkWord } from "@/lib/ork-word";
 import { useLang } from "@/hooks/use-language";
 
 const MOOD_EMOJI: Record<number, string> = { 1: "😢", 2: "😕", 3: "😐", 4: "🙂", 5: "😄" };
@@ -48,7 +49,7 @@ function EnergyRing({ pct }: { pct: number }) {
         />
       </svg>
       <span className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-        <span className="font-display text-base font-bold text-ink">{pct}%</span>
+        <span className="font-display text-sm font-bold text-ink">{t(orkWord(pct).short)}</span>
         <span className="text-[10px] text-muted-foreground">{t("Energi")}</span>
       </span>
     </div>
