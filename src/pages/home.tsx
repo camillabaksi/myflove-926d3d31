@@ -230,12 +230,12 @@ export default function Home() {
                 id="home-daily-checklist"
                 title={t("Dagens checklista")}
                 description={t("Möten, vardag och rutiner i samma lista.")}
-                defaultCollapsed
                 className="rounded-3xl border border-border/60 bg-card/80 p-4 shadow-soft"
                 headingClassName="font-display text-base font-bold text-ink"
               >
-                <DailyFlowList />
+                <DailyFlowList previewCount={3} />
               </CollapsibleSection>
+
               {shows("barnens-dag") && (
                 <div data-npf="optional">
                   <ChildrenDaySummary />
