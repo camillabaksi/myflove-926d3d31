@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Hälsa i bottennavigeringen öppnar nu samma kategorivyn som Mer → Hälsa, så båda vägarna leder till samma vy.
 - Komplett tvåspråkigt materialpaket 6.0 med sammanhängande Living Blueprint, redigerbara pitchdeck, pitchmanus och 180-sekunders pitchfilmer i 16:9 och 9:16.
 - Materialet följer det nya forskningsramverkets sex lager, den aktuella produktens kapacitetslägen, prioritering, Family Flow, återhämtning och Zero-Guilt UX.
 - Svenska och engelska versioner använder samma redaktionella design, verifierade siffror och försiktiga valideringspåståenden.

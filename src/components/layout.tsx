@@ -920,7 +920,34 @@ export default function Layout({ children }: LayoutProps) {
           QuickFlow ligger inne i Flow (och som flytande knapp), inte som egen punkt. */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
-          {primaryNav.slice(0, 4).map((item) => (
+          {primaryNav.slice(0, 4).map((item) =>
+            item.href === "/halsa" ? (
+              // Hälsa i bottennavet öppnar samma kategorivyn som Mer → Hälsa,
+              // så båda vägarna leder till samma vy.
+              <button
+                key={item.href}
+                type="button"
+                onClick={() => {
+                  setNavSearch("");
+                  setOpenCategory("healthflow");
+                  setMobileMenuOpen(true);
+                }}
+                className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
+                  location === "/halsa" || location.startsWith("/halsa/")
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span
+                  className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+                    location === "/halsa" || location.startsWith("/halsa/") ? "bg-primary/12" : ""
+                  }`}
+                >
+                  <item.icon size={22} strokeWidth={location === "/halsa" ? 2.6 : 2} />
+                </span>
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </button>
+            ) : (
             <BottomNavLink
               key={item.href}
               item={item}
@@ -928,7 +955,8 @@ export default function Layout({ children }: LayoutProps) {
               onClick={() => setMobileMenuOpen(false)}
               label={item.href === "/assistant" ? "Flow" : item.label}
             />
-          ))}
+            ),
+          )}
 
 
 
