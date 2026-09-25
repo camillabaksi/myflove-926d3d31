@@ -2,7 +2,10 @@
  * "Din MyFlove" – färgtema, alarmsignal och alarmformat på ett ställe.
  * Kompakt och mobil först: små färgcirklar och täta valrader.
  */
-import { Check, Play, Palette, Bell, BellRing, SunMoon } from "lucide-react";
+import { Check, Play, Palette, Bell, BellRing, SunMoon, Languages } from "lucide-react";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
