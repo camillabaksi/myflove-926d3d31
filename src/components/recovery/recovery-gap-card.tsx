@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Leaf, OctagonX, Sparkles, Sunrise, Wind, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,13 @@ import type { RecoveryGap, RecoveryOption } from "@/lib/recovery-gaps";
  * återhämtning som får plats. Inget bokas förrän användaren säger ja, och
  * förslagen är alltid förslag – aldrig krav eller bedömningar.
  */
+const KIND_ICON: Record<RecoveryOption["kind"], LucideIcon> = {
+  paus: Leaf,
+  ljusboost: Sunrise,
+  stopp: OctagonX,
+  vardag: Wind,
+};
+
 export default function RecoveryGapCard({
   className,
   includeFamily = true,
@@ -112,8 +119,11 @@ export default function RecoveryGapCard({
       ) : (
         <div className="mt-3 space-y-3">
           <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-            <p className="text-sm font-semibold text-ink">
-              <span aria-hidden>{current.option.emoji} </span>
+            <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+              {(() => {
+                const KindIcon = KIND_ICON[current.option.kind];
+                return <KindIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />;
+              })()}
               {current.gap.start}–{current.gap.end}
             </p>
             <p className="text-xs text-muted-foreground">
@@ -137,7 +147,10 @@ export default function RecoveryGapCard({
                     }}
                     className="press flex min-h-12 w-full items-center gap-2 rounded-2xl border border-border/60 bg-card px-3 py-2 text-left text-sm text-ink"
                   >
-                    <span aria-hidden>{option.emoji}</span>
+                    {(() => {
+                      const KindIcon = KIND_ICON[option.kind];
+                      return <KindIcon className="h-4 w-4 shrink-0 text-primary" aria-hidden />;
+                    })()}
                     <span className="min-w-0 flex-1 truncate">
                       {gap.start} · {t(option.label)} {option.minutes} min
                     </span>

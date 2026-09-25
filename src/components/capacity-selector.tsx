@@ -37,7 +37,15 @@ export default function CapacitySelector({
             onClick={() => setMode(item)}
             className="min-h-11 min-w-0 rounded-2xl px-2 text-sm font-semibold"
           >
-            <span aria-hidden>{CAPACITY_META[item].dot}</span>
+            <span
+              aria-hidden
+              className={cn(
+                "h-2.5 w-2.5 shrink-0 rounded-full",
+                item === "fullt" && "bg-sage",
+                item === "mellan" && "bg-gold",
+                item === "lagt" && "bg-terracotta",
+              )}
+            />
             <span className="truncate">{t(CAPACITY_META[item].label)}</span>
           </Button>
         ))}

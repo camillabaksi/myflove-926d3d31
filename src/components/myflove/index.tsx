@@ -9,6 +9,7 @@ import { Link, useLocation } from "wouter";
 import { ArrowLeft, ChevronDown, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MYFLOVE_EMOJI, type MyFloveEmojiKey } from "@/lib/myflove-emoji";
+import { MYFLOVE_ICON } from "@/lib/myflove-icons";
 import { useCollapsible } from "@/lib/collapse-store";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import { areaProps, type AreaId } from "@/lib/areas";
@@ -26,6 +27,8 @@ const EMOJI_SIZE = {
   lg: "text-3xl",
   xl: "text-4xl",
 } as const;
+
+const ICON_PX = { xs: 14, sm: 16, md: 20, lg: 28, xl: 36 } as const;
 
 const EMOJI_MOTION = {
   none: "",
@@ -50,8 +53,9 @@ export function MyFloveEmoji({
   motion?: keyof typeof EMOJI_MOTION;
   className?: string;
 }) {
+  const Icon = name ? MYFLOVE_ICON[name] : undefined;
   const shown = emoji ?? (name ? MYFLOVE_EMOJI[name] : undefined);
-  if (!shown) return null;
+  if (!Icon && !shown) return null;
   return (
     <span
       aria-hidden
@@ -62,7 +66,7 @@ export function MyFloveEmoji({
         className,
       )}
     >
-      {shown}
+      {Icon ? <Icon size={ICON_PX[size]} strokeWidth={2.2} /> : shown}
     </span>
   );
 }

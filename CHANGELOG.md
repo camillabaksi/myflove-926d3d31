@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Ikoner: appens emojis har ersatts med riktiga Lucide-ikoner via den gemensamma emoji-komponenten, så inget längre visas som tomma fyrkanter på enheter utan emojiteckensnitt. Kapacitetslägena Fullt/Mellan/Lågt visar färgade prickar och återhämtningsförslagen visar ikoner i stället för emojis.
 - Familj: Rutiner och Anteckningar kan nu också vara "Kan ändra" – familjen kan bocka av dagens rutiner och skriva nya anteckningar. Medicin kan fortfarande bara visas.
 - Familj: delad städlista visar nu både vardagsstädning och storstädning per rum, med tydlig markering av läge.
 - Familj: välj vem i familjen som får ändra (Alla eller utvalda personer). Delad städlista visar nu även appens egna städsteg per rum, utom de du valt bort.
