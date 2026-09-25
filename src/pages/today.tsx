@@ -1,21 +1,18 @@
 import { track } from "@/lib/analytics";
-import { useMemo, useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "wouter";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
-import { FlowReplan } from "@/components/flow-replan";
-import { useFlowScore } from "@/hooks/use-flowscore";
 import { useFlowItems } from "@/hooks/use-flow-items";
-import { useReplanMode } from "@/hooks/use-replan";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 
 import { assessToday } from "@/lib/flow-engine";
-import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useDayPlan } from "@/lib/day-plan";
+import { useFlowPlan } from "@/hooks/use-flow-plan";
+import { CAPACITY_META } from "@/lib/priority-engine";
 import { todayISO as todayStr } from "@/lib/day";
 import { Bell, CalendarDays, Heart, ListOrdered, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,20 +34,13 @@ export function TodayContent() {
   }, []);
 
   const today = todayStr();
-  const { flow } = useFlowScore();
   const { reading, items: batteryItems } = useEnergyBattery();
-  const { plan: dayPlan } = useDayPlan();
 
   const { today: todaysItems } = useFlowItems();
-  const { mode, chosen, setMode } = useReplanMode();
   // Hur mycket som ryms avgörs av FlowPlan (prioritet + kapacitetsläge) –
   // inte av FlowScore eller batteriet.
   const flowPlan = useFlowPlan();
   const capacity = useCapacityMode();
-  const keep = flowPlan.order;
-  const rest = flowPlan.waiting;
-  const replanFlow = useMemo(() => ({ ...flow, score: capacity.percent }), [flow, capacity.percent]);
-  const offerReplan = capacity.mode !== "fullt" || chosen;
 
   /** Dagens belastning – samma bedömning som Flow → IDAG. */
   const load = useMemo(() => assessToday(reading, batteryItems), [reading, batteryItems]);
@@ -113,30 +103,25 @@ export function TodayContent() {
               href="/mitt-batteri"
               onNavigate={() => track("battery_opened", { source: "idag" })}
             />
-            {dayPlan && dayPlan.steps.length > 0 && (
+            <div className="rounded-2xl bg-secondary/30 p-4">
+              <p className="text-sm font-semibold text-ink">
+                {CAPACITY_META[capacity.mode].dot} {t("Dagens kapacitet")}: {t(CAPACITY_META[capacity.mode].label)}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{t(CAPACITY_META[capacity.mode].meaning)}</p>
+            </div>
+            {flowPlan.order.length > 0 && (
               <div className="rounded-2xl bg-secondary/30 p-4">
                 <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink">
                   <ListOrdered size={16} className="text-primary" /> {t("Dagens ordning")}
                 </p>
                 <ol className="space-y-1.5 text-sm text-foreground">
-                  {dayPlan.steps.map((step, index) => (
-                    <li key={`${step.taskId}-${index}`}>
-                      {index + 1}. {step.title}
+                  {(capacity.mode === "lagt" ? flowPlan.order.slice(0, 1) : flowPlan.order).map((step, index) => (
+                    <li key={step.item.id}>
+                      {index === 0 ? `${t("Nu")}: ` : `${t("Sedan")}: `}{step.item.title}
                     </li>
                   ))}
                 </ol>
               </div>
-            )}
-            {offerReplan && (
-              <FlowReplan
-                flow={replanFlow}
-                items={todaysItems}
-                mode={mode}
-                chosen={chosen}
-                onChange={setMode}
-                keepCount={keep.length}
-                restCount={rest.length}
-              />
             )}
             <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-foreground">
               <p>{load.summary}</p>

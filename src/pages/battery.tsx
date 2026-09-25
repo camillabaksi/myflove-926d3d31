@@ -47,9 +47,9 @@ export default function BatteryPage() {
               name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")
             }
             emojiKey="wellness"
-            description={t("Din energi och ditt mående – checka in och se hur dagen brukar se ut.")}
+            description={t("Välj dagens kapacitet och se tidigare energi och mående som mönster.")}
             why={t(
-              "Vi frågar för att Flow ska kunna anpassa dagens krav efter hur mycket ork du faktiskt har – inte efter hur mycket du borde ha.",
+              "Ditt val Fullt, Mellan eller Lågt styr dagens plan. Dina energiloggar sparas som historik.",
             )}
           />
         </MyFloveWide>
@@ -88,8 +88,8 @@ export default function BatteryPage() {
           <CollapsibleSection
             id="battery-more-details"
             defaultCollapsed
-            title={t("Mer om din energi")}
-            description={t("Se batteriet, dagens mönster och vad som påverkar dig.")}
+            title={t("Kapacitet & mönster")}
+            description={t("Historik som hjälper dig förstå tidigare dagar – den styr inte dagens plan.")}
             className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
           >
