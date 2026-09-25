@@ -27,7 +27,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WhyHint from "@/components/why-hint";
 import DayAdjust from "@/components/journey/day-adjust";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
-import { prioritize } from "@/lib/priority-engine";
+import { PRIORITY_LABEL, prioritize, type PriorityLevel } from "@/lib/priority-engine";
 import { todayISO as engineToday } from "@/lib/day";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
@@ -485,11 +485,14 @@ export function FlowPlanContent() {
                           ~{item.estimatedMin} min
                         </span>
                       </div>
+                      <p className="mt-0.5 text-[11px] font-semibold text-primary">
+                        {PRIORITY_LABEL[(priorityById.get(item.taskId) ?? 3) as PriorityLevel]}
+                      </p>
                       {boosted && info && (
                         <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full px-2.5 py-1">
                           <BellRing size={12} />
                           {info.daysUntilDue < 0
-                            ? `Deadline passerad – prioriterad idag`
+                            ? "Blev inte klar tidigare – vill du göra den idag?"
                             : info.daysUntilDue === 0
                               ? "Deadline idag – prioriterad först"
                               : `Deadline om ${info.daysUntilDue} dag${info.daysUntilDue === 1 ? "" : "ar"} – påminnelsen har gått igång`}

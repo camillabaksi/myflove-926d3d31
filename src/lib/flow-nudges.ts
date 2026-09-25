@@ -72,7 +72,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
     nudges.push({
       key: `flow-latt-dag-${day}`,
       title: "Låt dagen väga mindre 💜",
-      body: `Du har ${timedTodayCount} tider idag och lite ork. Vad kan vänta till imorgon?`,
+      body: `Du har ${timedTodayCount} tider idag och lite ork. Det som kan vänta kan flyttas till imorgon.`,
       url: "/kalender",
       deliverAt: at(now, 12),
     });
@@ -95,8 +95,8 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
     if (input.firstMustDo) {
       out.push({
         key: `flow-first-${day}`,
-        title: "Vi tar en sak i taget 💜",
-        body: `Först: ${input.firstMustDo}. Resten kan vänta.`,
+        title: `Måste idag: ${input.firstMustDo}`,
+        body: "Vi tar en sak i taget. Resten kan vänta.",
         url: "/hem",
         deliverAt: at(now, 9, 30),
       });
