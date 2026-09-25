@@ -28,7 +28,7 @@ export default function CapacityPlanCard() {
   const { t } = useLang();
   const { todayOpen } = useFlowItems();
   const { updateTask } = useTasks();
-  const { mode, setMode, chosen, derived } = useCapacityMode();
+  const { mode, setMode } = useCapacityMode();
   // Kontextuell check-in: frågar max en gång per dag.
   const [askedOn, setAskedOn] = useCloudSyncedStorage<string>("myflove-capacity-asked", "");
   const [note, setNote] = useState<string | null>(null);
