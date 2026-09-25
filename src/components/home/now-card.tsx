@@ -9,29 +9,6 @@ import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
-import type { FlowItem } from "@/lib/flow-items";
-
-
-function toMinutes(time?: string | null) {
-  if (!time) return null;
-  const [h, m] = time.split(":").map(Number);
-  return Number.isFinite(h) ? h * 60 + (m || 0) : null;
-}
-
-/**
- * @deprecated Äldre tidsbaserat urval. "Just nu" läser FlowPlan (useFlowPlan).
- * Kvar för bakåtkompatibilitet – används inte längre av någon vy.
- */
-export function pickNow(items: FlowItem[], nowMinutes: number, skipped: string[]) {
-  const open = items.filter((i) => !i.done && !skipped.includes(i.id));
-  if (open.length === 0) return null;
-  const timed = open
-    .map((item) => ({ item, m: toMinutes(item.time) }))
-    .filter((x): x is { item: FlowItem; m: number } => x.m != null)
-    .sort((a, b) => Math.abs(a.m - nowMinutes) - Math.abs(b.m - nowMinutes));
-  const upcomingOrCurrent = timed.find((x) => x.m >= nowMinutes - 60);
-  return upcomingOrCurrent?.item ?? open.find((i) => !i.time) ?? timed[0]?.item ?? open[0];
-}
 
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {

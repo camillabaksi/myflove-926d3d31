@@ -5,12 +5,7 @@
 - [x] Steg 2: Fullt/Mellan/Lågt som primär kapacitetskälla
 - [x] Steg 3: FlowPlan kopplas till prioritet + kapacitet
 - [x] Steg 4: En kapacitetskontroll, samma plan i UI och inventering av äldre planeringsdelar
-- [ ] Steg 5: Städa Flow-texter
-- [ ] Steg 6: UI-termer och empty states
-- [ ] Steg 7: Verifiera gammal sparad data
-- [ ] Steg 8: Ta bort bekräftat oanvänd kod efter ny verifiering
-- [ ] Steg 9: Tillgänglighet och mobil
-- [ ] Steg 10: ARCHITECTURE.md och changelog
+- [x] Steg 5: Slutlig kodstädning av verifierat oanvända planeringssystem
 
 - [x] Skapa komplett tvåspråkigt materialpaket: sammanhängande Living Blueprint, svenska/engelska pitchdeck och uppdaterade pitchfilmer i 16:9 och 9:16 (2026-09-25)
 
