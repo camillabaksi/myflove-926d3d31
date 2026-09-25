@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Familj: välj vilka delar av appen familjen får se – Kalender & Min dag, Uppgifter, Inköp & måltider, Rutiner & medicin. Allt privat tills du slår på; familjen kan bara läsa.
 - Medicinpåminnelsen försvinner nu direkt när dosen bockats av som tagen, i stället för att fortsätta dyka upp.
 - Barnens aktivitetslista visar nu endast den läsbara anteckningen, inte den sparade informationen för pictogram och färg.
 - Städning steg 5: verifierat oanvänd planeringskod har tagits bort: gamla `pickNow`, batteribaserad Nu-rankning och det fristående FlowScore-omplaneringsläget. Historik, sparade omplaneringsvärden, FlowScore, energidata, QuickFlow-kompatibilitet och Jobb/Studier-stöd är orörda.
