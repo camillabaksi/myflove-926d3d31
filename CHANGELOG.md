@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Familj: nu kan även Träning, Mående & ork, Ekonomi, Studier, Jobb, Anteckningar & idéer och Resor delas med familjen, var för sig.
 - Familj: välj vilka delar av appen familjen får se – Kalender & Min dag, Uppgifter, Inköp & måltider, Rutiner & medicin. Allt privat tills du slår på; familjen kan bara läsa.
 - Medicinpåminnelsen försvinner nu direkt när dosen bockats av som tagen, i stället för att fortsätta dyka upp.
 - Barnens aktivitetslista visar nu endast den läsbara anteckningen, inte den sparade informationen för pictogram och färg.
