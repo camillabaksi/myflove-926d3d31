@@ -35,14 +35,55 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const { today, toggleItem } = useFlowItems();
   const [skipped, setSkipped] = useState<string[]>([]);
   const [justDone, setJustDone] = useState(false);
+  const [helping, setHelping] = useState(false);
+  // Mjuk övergång: "ask" = frågan visas, "run" = två minuter att landa.
+  const [landing, setLanding] = useState<"none" | "ask" | "run">("none");
   const now = new Date();
   const current = useMemo(
     () => pickNow(today, now.getHours() * 60 + now.getMinutes(), skipped),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [today, skipped],
   );
+  const endLanding = useCallback(() => setLanding("none"), []);
+
+  if (landing !== "none") {
+    return (
+      <section
+        className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+        aria-label={t("Just nu")}
+        aria-live="polite"
+      >
+        <p className="text-xs font-semibold uppercase text-primary">{t("Bra jobbat")}</p>
+        <p className="mt-2 font-display text-lg font-bold text-ink">
+          {t("Vill du landa 2 minuter innan nästa?")}
+        </p>
+        {landing === "ask" ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              onClick={() => setLanding("run")}
+              className="min-h-12 rounded-full px-6 text-base font-semibold"
+            >
+              {t("Landa 2 minuter")}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={endLanding}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Redo direkt")}
+            </Button>
+          </div>
+        ) : (
+          <LandingPause onReady={endLanding} />
+        )}
+      </section>
+    );
+  }
 
   if (!current) {
+
     return (
       <section
         className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
