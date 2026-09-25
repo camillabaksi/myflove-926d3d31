@@ -6,7 +6,7 @@ import { FlowMascot } from "@/components/flow-mascot";
 import NextStepCard from "@/components/journey/next-step-card";
 import { useLang } from "@/hooks/use-language";
 import { useTasks } from "@/hooks/use-data";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { planFamilySituation, type FamilySubject } from "@/lib/family-flow";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
@@ -33,7 +33,9 @@ export default function FamilySituation({
 }) {
   const { t } = useLang();
   const { addTask } = useTasks();
-  const { flow } = useFlowScore();
+  const { percent: capacityPercent } = useCapacityMode();
+  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
+  const flow = { score: capacityPercent };
   const [draft, setDraft] = useState("");
   const [text, setText] = useState("");
   const [subject, setSubject] = useState<FamilySubject>("jag");

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { adaptActivity, type AdaptiveSuggestion } from "@/lib/adaptive-activity";
 
@@ -13,7 +13,9 @@ import { adaptActivity, type AdaptiveSuggestion } from "@/lib/adaptive-activity"
  * alltid ett svar och behöver aldrig fylla i ett formulär först.
  */
 export function useAdaptiveActivity() {
-  const { flow } = useFlowScore();
+  const { percent: capacityPercent } = useCapacityMode();
+  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
+  const flow = { score: capacityPercent };
   const { energyValue } = useQuickCheckin();
 
   const score = typeof flow?.score === "number" ? flow.score : null;
