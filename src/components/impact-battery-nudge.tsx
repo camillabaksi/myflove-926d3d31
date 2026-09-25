@@ -1,51 +1,44 @@
 import { useMemo } from "react";
 import { HeartHandshake } from "lucide-react";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
-import { useQuickCheckin } from "@/hooks/use-quick-checkin";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useLocalStorage } from "@/lib/storage";
-import { orkWord } from "@/lib/ork-word";
+import { CAPACITY_META, type CapacityMode } from "@/lib/priority-engine";
 import { useLang } from "@/hooks/use-language";
 
 /**
- * Påverkan → batteri, alltid som fråga.
- * Batteriprocenten ändras aldrig automatiskt av påverkan. Men om användaren
- * själv registrerat att något påverkar kapaciteten idag, och batteriet står
- * högre än vad det brukar innebära, föreslår kortet varsamt en lägre nivå.
- * Användaren godkänner alltid själv – eller avböjer för resten av dagen.
+ * Påverkan → kapacitetsläge, alltid som fråga.
+ * Läget ändras aldrig automatiskt. Om användaren själv registrerat att något
+ * påverkar hen idag och läget är högre än vad det brukar innebära, föreslår
+ * kortet varsamt ett lägre läge. Användaren godkänner alltid själv.
  */
 
 const todayKey = () => new Date().toISOString().slice(0, 10);
+const ORDER: CapacityMode[] = ["fullt", "mellan", "lagt"];
 
-/** Föreslagen nivå (0–100) utifrån grad – varsamma steg, aldrig under 20. */
-function suggestedLevel(degree: "lite" | "mattligt" | "mycket", timing: "nu" | "tidigare"): number {
-  const base = degree === "mycket" ? 30 : degree === "mattligt" ? 50 : 70;
-  // Något som redan har påverkat väger lite lättare än det som pågår just nu.
-  return timing === "tidigare" ? base + 10 : base;
+function suggestedMode(degree: "lite" | "mattligt" | "mycket"): CapacityMode {
+  return degree === "mycket" ? "lagt" : degree === "mattligt" ? "mellan" : "fullt";
 }
 
 export default function ImpactBatteryNudge() {
   const { t } = useLang();
   const { impact } = useImpactCheckin();
-  const { reading } = useEnergyBattery();
-  const { logEnergy } = useQuickCheckin();
-  // Avböjer användaren ska vi inte fråga igen samma dag.
+  const { mode, setMode } = useCapacityMode();
   const [dismissed, setDismissed] = useLocalStorage<string | null>(
     "myflove-impact-nudge-dismissed",
     null,
   );
 
-  const suggestion = useMemo(() => {
+  const suggestion = useMemo<CapacityMode | null>(() => {
     if (!impact) return null;
     if (impact.kinds.includes("inget")) return null;
     if (dismissed === todayKey()) return null;
-    const target = suggestedLevel(impact.degree, impact.timing ?? "nu");
-    // Fråga bara om batteriet ligger tydligt över det som verkar rimligt.
-    if (reading.now <= target + 8) return null;
-    return Math.round(target / 5) * 5;
-  }, [impact, reading.now, dismissed]);
+    const target = suggestedMode(impact.degree);
+    return ORDER.indexOf(target) > ORDER.indexOf(mode) ? target : null;
+  }, [impact, mode, dismissed]);
 
   if (!suggestion) return null;
+  const label = `${CAPACITY_META[suggestion].dot} ${t(CAPACITY_META[suggestion].label)}`;
 
   return (
     <div
@@ -58,24 +51,24 @@ export default function ImpactBatteryNudge() {
         </span>
         <div className="min-w-0 space-y-2">
           <p className="text-sm text-ink">
-            {t("Du har sagt att något påverkar dig idag. Vill du sänka batteriet till")}{" "}
-            <strong>{t(orkWord(suggestion).label).toLocaleLowerCase("sv")}</strong>?
+            {t("Du har sagt att något påverkar dig idag. Vill du byta kapacitetsläge till")}{" "}
+            <strong>{label}</strong>?
           </p>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => {
-                void logEnergy(Math.round(suggestion / 10));
+                setMode(suggestion);
                 setDismissed(todayKey());
               }}
-              className="press rounded-pill bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground"
+              className="press min-h-11 rounded-pill bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground"
             >
-              {t("Ja, sätt")} {t(orkWord(suggestion).label).toLocaleLowerCase("sv")}
+              {t("Ja, byt till")} {label}
             </button>
             <button
               type="button"
               onClick={() => setDismissed(todayKey())}
-              className="press rounded-pill bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
+              className="press min-h-11 rounded-pill bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground"
             >
               {t("Nej tack, det stämmer")}
             </button>
