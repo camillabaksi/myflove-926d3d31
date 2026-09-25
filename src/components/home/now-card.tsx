@@ -144,6 +144,8 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
             onClick={() => {
               toggleItem(current);
               setJustDone(true);
+              setHelping(false);
+              setLanding("ask");
             }}
             className="min-h-12 flex-1 rounded-full text-base font-semibold sm:flex-none sm:px-8"
           >
@@ -156,12 +158,37 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           onClick={() => {
             setSkipped((s) => [...s, current.id]);
             setJustDone(false);
+            setHelping(false);
           }}
           className="min-h-11 rounded-full text-muted-foreground"
         >
           {t("Inte nu")}
         </Button>
       </div>
+      {!helping && (
+        <button
+          type="button"
+          onClick={() => setHelping(true)}
+          className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary underline underline-offset-4"
+        >
+          <Sparkles className="h-4 w-4" aria-hidden /> {t("Hjälp mig börja (2 min)")}
+        </button>
+      )}
+      {helping && (
+        <StartHelper
+          title={current.title}
+          onDone={() => {
+            setHelping(false);
+            if (current.completable) {
+              toggleItem(current);
+              setJustDone(true);
+              setLanding("ask");
+            }
+          }}
+          onClose={() => setHelping(false)}
+        />
+      )}
     </section>
+
   );
 }
