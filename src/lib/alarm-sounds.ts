@@ -18,7 +18,10 @@ interface Tone {
   noise?: boolean;
   /** Glid till den här frekvensen under tonen. */
   slideTo?: number;
+  /** Intoningstid i sekunder – längre = mjukare start utan skarp kant. */
+  attack?: number;
 }
+
 
 interface SoundSpec {
   seconds: number;
