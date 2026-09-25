@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Tillbakapilen visas på alla sidor utom startsidan (Hem). Familjesidans block "Dagen för hela familjen" och "Barnen" kan nu fällas ihop och expanderas som övriga vyer.
 - Mer-menyns kategorier är färre och mer sammanhängande: Min dag, Flow, Hälsa & ork, Återhämtning, Studier & jobb, Familj, Hem & vardag, Insikter (Avancerat slogs in i Insikter, Studier och Jobb i samma grupp). Länkarna och kategorivyn fungerar som tidigare.
 - Hälsa i bottennavigeringen öppnar nu samma kategorivyn som Mer → Hälsa, så båda vägarna leder till samma vy.
 - Komplett tvåspråkigt materialpaket 6.0 med sammanhängande Living Blueprint, redigerbara pitchdeck, pitchmanus och 180-sekunders pitchfilmer i 16:9 och 9:16.
