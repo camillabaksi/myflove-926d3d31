@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Familj: delad städlista visar nu både vardagsstädning och storstädning per rum, med tydlig markering av läge.
 - Familj: välj vem i familjen som får ändra (Alla eller utvalda personer). Delad städlista visar nu även appens egna städsteg per rum, utom de du valt bort.
 - Familj: varje del kan vara Av, Kan se eller Kan ändra. Inköp, Hem & städning, Uppgifter och Kalender kan familjen bocka av (och lägga till varor i inköpslistan); det syns vem som ändrat. Personliga delar kan bara visas. Bara ägaren kan ta bort.
 - Familj: nu kan även Träning, Mående & ork, Ekonomi, Studier, Jobb, Anteckningar & idéer och Resor delas med familjen, var för sig.

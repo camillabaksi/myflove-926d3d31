@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familj: delad städlista visar både vardagsstädning och storstädning per rum (2026-09-25)",
       "Familj: välj vem som får ändra; delad städlista visar även appens städsteg (2026-09-25)",
       "Familj: välj Av, Kan se eller Kan ändra per del; familjen kan bocka av inköp, städning, uppgifter och kalender (2026-09-25)",
       "Familj: även Träning, Mående & ork, Ekonomi, Studier, Jobb, Anteckningar och Resor kan delas (2026-09-25)",
