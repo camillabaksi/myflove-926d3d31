@@ -57,6 +57,13 @@
       "when": 1790354496163,
       "tag": "0007_family_share_edit",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790354954662,
+      "tag": "0008_family_share_editors",
+      "breakpoints": true
     }
   ]
 }

@@ -3,6 +3,7 @@ import { CalendarDays, ListChecks, ShoppingCart, Pill, Users, Dumbbell, Smile, W
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { todayISO } from "@/lib/day";
+import { CLEAN_ROOMS } from "@/lib/cleaning";
 
 type Area =
   | "kalender" | "uppgifter" | "inkop" | "rutiner" | "traning" | "maende"
@@ -56,13 +57,24 @@ function itemsFor(area: Area, rows: SharedRow[]): Item[] {
   // hem: egna städsteg per rum:läge, klar-markering nyckel "läge:stegId"
   const done = asObj(raw("myflove-cleaning-done"));
   const custom = asObj(raw("myflove-cleaning-custom"));
-  return Object.entries(custom).flatMap(([listKey, steps]) => {
-    const mode = listKey.split(":")[1] ?? "vardag";
-    return asList(steps).map((s) => {
-      const id = `${mode}:${str(s.id)}`;
-      return { id, text: label(s), done: Boolean(done[id]) };
+  const hidden = asObj(raw("myflove-cleaning-hidden"));
+  // Appens vardagssteg per rum (utan bortvalda) + egna steg i alla lägen.
+  const builtIn = CLEAN_ROOMS.flatMap((room) => {
+    const off = new Set((Array.isArray(hidden[`${room.id}:vardag`]) ? hidden[`${room.id}:vardag`] : []) as string[]);
+    return room.steps.vardag.filter((st) => !off.has(st.id)).map((st) => {
+      const id = `vardag:${st.id}`;
+      return { id, text: `${room.label} · ${st.label}`, done: Boolean(done[id]) };
     });
-  }).filter((i) => i.text).slice(0, 15);
+  });
+  const own = Object.entries(custom).flatMap(([listKey, steps]) => {
+    const [roomId, mode = "vardag"] = listKey.split(":");
+    const roomLabel = CLEAN_ROOMS.find((x) => x.id === roomId)?.label;
+    return asList(steps).map((st) => {
+      const id = `${mode}:${str(st.id)}`;
+      return { id, text: `${roomLabel ? `${roomLabel} · ` : ""}${label(st)}`, done: Boolean(done[id]) };
+    });
+  });
+  return [...builtIn, ...own].filter((i) => i.text);
 }
 
 /** Läsrader för delar som bara visas. */
@@ -98,15 +110,22 @@ export default function FamilyAreaSharing() {
   const [shared, setShared] = useState<SharedRow[]>([]);
   const [perms, setPerms] = useState<Set<string>>(new Set());
   const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [editors, setEditors] = useState<Map<Area, string[] | null>>(new Map());
+  const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
 
   const load = useCallback(async () => {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
-    const [{ data: own }, { data: rows }, { data: p }] = await Promise.all([
-      supabase.from("family_share_areas").select("area, can_edit").eq("user_id", u.user.id),
+    const [{ data: own }, { data: rows }, { data: p }, { data: hm }] = await Promise.all([
+      supabase.from("family_share_areas").select("area, can_edit, editors").eq("user_id", u.user.id),
       supabase.rpc("get_family_shared_data"),
       supabase.rpc("get_family_share_permissions"),
+      supabase.from("household_members").select("user_id, display_name"),
     ]);
+    setEditors(new Map((own ?? []).map((r) => [r.area as Area, r.editors ?? null])));
+    const seen = new Map<string, string>();
+    for (const m of hm ?? []) if (m.user_id !== u.user.id) seen.set(m.user_id, m.display_name);
+    setMembers([...seen.entries()].map(([id, name]) => ({ id, name })));
     setMine(new Map((own ?? []).map((r) => [r.area as Area, r.can_edit ? "edit" : "view"])));
     setShared((rows ?? []) as SharedRow[]);
     setPerms(new Set((p ?? []).filter((r) => r.can_edit).map((r) => `${r.owner_id}|${r.area}`)));
@@ -132,6 +151,18 @@ export default function FamilyAreaSharing() {
           : await supabase.from("family_share_areas").update({ can_edit: level === "edit" }).eq("user_id", uid).eq("area", area);
     if (error) {
       setMine(prev);
+      toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
+    }
+  };
+
+  const setAreaEditors = async (area: Area, list: string[] | null) => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    const prev = editors;
+    setEditors(new Map(editors).set(area, list));
+    const { error } = await supabase.from("family_share_areas").update({ editors: list }).eq("user_id", u.user.id).eq("area", area);
+    if (error) {
+      setEditors(prev);
       toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
     }
   };
@@ -198,6 +229,38 @@ export default function FamilyAreaSharing() {
                   </button>
                 ))}
               </div>
+              {level === "edit" && members.length > 0 && (() => {
+                const list = editors.get(id) ?? null;
+                const chip = (on: boolean) =>
+                  `rounded-full px-2.5 py-1 text-xs border ${on ? "bg-primary/15 border-primary text-ink" : "border-border text-muted-foreground bg-card"}`;
+                return (
+                  <div className="mt-2 space-y-1">
+                    <p className="text-xs text-muted-foreground">Vem får ändra?</p>
+                    <div className="flex flex-wrap gap-1">
+                      <button type="button" aria-pressed={list === null} className={chip(list === null)} onClick={() => setAreaEditors(id, null)}>Alla</button>
+                      {members.map((m) => {
+                        const on = list !== null && list.includes(m.id);
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            aria-pressed={on}
+                            className={chip(on)}
+                            onClick={() => {
+                              const base = list ?? [];
+                              const next = on ? base.filter((x) => x !== m.id) : [...base, m.id];
+                              void setAreaEditors(id, next.length === 0 ? null : next);
+                            }}
+                          >
+                            {m.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {list !== null && <p className="text-[11px] text-muted-foreground">Övriga i familjen kan bara se.</p>}
+                  </div>
+                );
+              })()}
             </li>
           );
         })}
