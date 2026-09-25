@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useAdaptiveActivity } from "@/hooks/use-adaptive-activity";
 import { useLang } from "@/hooks/use-language";
 import { orkWord } from "@/lib/ork-word";
@@ -26,13 +26,12 @@ export default function AreaFocus({
   hrefLabel?: string;
 }) {
   const { t } = useLang();
-  const { reading } = useEnergyBattery();
+  const { percent, mode } = useCapacityMode();
   const { adapt } = useAdaptiveActivity();
 
-  const pct = Math.max(0, Math.min(100, Math.round(reading.now)));
-  const word = orkWord(pct);
+  const word = orkWord(percent);
   const suggestion = adapt(intent);
-  const low = pct < 40;
+  const low = mode === "lagt";
 
   return (
     <section

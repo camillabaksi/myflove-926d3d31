@@ -389,3 +389,22 @@ export function capacityFromPercent(percent: number): CapacityMode {
   if (percent < 70) return "mellan";
   return "fullt";
 }
+
+/**
+ * Kompatibilitetsvärde för äldre funktioner som fortfarande tar en siffra
+ * (t.ex. AI-prompter och förslag på aktivitetslängd). Siffran HÄRLEDS från
+ * användarens valda kapacitetsläge – aldrig tvärtom – och visas aldrig.
+ */
+export const CAPACITY_PERCENT: Record<CapacityMode, number> = {
+  fullt: 85,
+  mellan: 55,
+  lagt: 25,
+};
+
+/** Gammal orkskala 1–10 (Mycket 9, Okej 7, Lite 4, Nästan slut 2) → kapacitetsläge. */
+export function capacityFromOrk10(value: number | null | undefined): CapacityMode | null {
+  if (value == null || !Number.isFinite(value)) return null;
+  if (value >= 8) return "fullt";
+  if (value >= 5) return "mellan";
+  return "lagt";
+}

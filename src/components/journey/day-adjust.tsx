@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Check, Undo2 } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { todayISO, daysUntilDate } from "@/lib/flow-items";
 import {
   ADJUST_META,
@@ -28,7 +28,9 @@ function tomorrowISO(): string {
  */
 export default function DayAdjust() {
   const { activeTasks, snoozeTask, setTaskDueDate, updateTask, addTaskSteps } = useTasks();
-  const { flow } = useFlowScore();
+  const capacity = useCapacityMode();
+  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const [handled, setHandled] = useState<Record<string, AdjustKind>>({});
   const [skipped, setSkipped] = useState<string[]>([]);
   const today = todayISO();

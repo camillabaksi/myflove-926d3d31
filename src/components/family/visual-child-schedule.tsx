@@ -28,7 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useLang } from "@/hooks/use-language";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -162,7 +162,9 @@ export default function VisualChildSchedule({
   openDoc: (path: string) => Promise<string>;
 }) {
   const { t, locale } = useLang();
-  const { flow } = useFlowScore();
+  const capacity = useCapacityMode();
+  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { openItems: quickItems, absorb } = useQuickflow();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);

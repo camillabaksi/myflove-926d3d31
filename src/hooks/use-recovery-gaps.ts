@@ -4,7 +4,7 @@ import { useTasks } from "@/hooks/use-data";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { useDayWindow } from "@/hooks/use-day-window";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import {
   buildRecoveryGaps,
@@ -38,7 +38,9 @@ export function useRecoveryGaps(opts?: { includeFamily?: boolean }): {
   const { lectures } = useStudySchedule();
   const childEvents = useChildEvents();
   const { window } = useDayWindow();
-  const { flow } = useFlowScore();
+  const capacity = useCapacityMode();
+  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
+  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { balance } = useEnergyFlow();
 
   const today = todayISO();

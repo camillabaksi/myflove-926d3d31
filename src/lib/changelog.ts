@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Städning steg 2: Fullt/Mellan/Lågt är enda källan för aktuellt kapacitetsläge. Användarens val gäller tills hen ändrar det (standard Mellan); batteri, FlowScore och Energiflöde styr inte längre läget men finns kvar för historik. Orkfrågan har tre val (gamla värden Mycket/Okej/Lite/Nästan slut läses som Fullt/Mellan/Lågt). Påverkan-kortet föreslår ett lägre läge i stället för batterinivå. (2026-09-25)",
       "Städning steg 1: QuickFlow använder prioritetsmotorn P1–P4 som enda källa; Nu/Sedan/Kan vänta/Om du orkar är bara visningsord och gammal sparad data översätts vid läsning (2026-09-25)",
       "Passerade möten och tidsbokade aktiviteter rullar inte över till Idag; tidlösa uppgifter följer med (2026-09-25)",
       "Tillbakapil på alla sidor utom Hem; fler vyer kan fällas ihop och expanderas (2026-09-25)",

@@ -92,7 +92,7 @@ export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {
 
   const batteryText =
     typeof input.batteryPercent === "number"
-      ? `Du har ${orkWord(Math.round(input.batteryPercent)).label.toLocaleLowerCase("sv")}. `
+      ? `Kapacitetsläge: ${orkWord(Math.round(input.batteryPercent)).short}. `
       : "";
 
   const summaryLine = upcoming.length
@@ -112,7 +112,7 @@ export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {
   const suggestion = !upcoming.length
     ? null
     : demanding && lowBattery && upcoming.length >= 2
-      ? `Din ${partOfDay} är ganska tät${battery !== null ? ` och du har ${orkWord(battery).label.toLocaleLowerCase("sv")}` : ""}. Vill du ${hasMeal ? "förenkla middagen och " : ""}lägga in 20 min återhämtning efter ${first!.title.toLocaleLowerCase("sv")}?`
+      ? `Din ${partOfDay} är ganska tät${battery !== null ? ` och kapacitetsläget är ${orkWord(battery).short.toLocaleLowerCase("sv")}` : ""}. Vill du ${hasMeal ? "förenkla middagen och " : ""}lägga in 20 min återhämtning efter ${first!.title.toLocaleLowerCase("sv")}?`
       : demanding
         ? "Vill du att jag hjälper dig hitta en kort återhämtning som får plats?"
         : "Vill du att jag hjälper dig hitta ett lugnt nästa steg?";

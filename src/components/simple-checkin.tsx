@@ -11,6 +11,7 @@ import { MyFloveBlock } from "@/components/myflove/block";
 import { useLang } from "@/hooks/use-language";
 
 import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 
 const MOODS = MOOD_FACES;
 
@@ -101,6 +102,7 @@ export default function SimpleCheckin({
   };
 
   const ork = orkFromValue10(battery);
+  const { setMode: setCapacity } = useCapacityMode();
 
   return (
     <MyFloveBlock
@@ -125,14 +127,14 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <span aria-hidden>🔋</span> {t("Hur mycket ork har du idag?")}
+            <span aria-hidden>🔋</span> {t("Hur mycket ryms idag?")}
           </p>
           <WhyHint label={t("logga ork")}>
             {t("Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.")}
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-3 gap-2">
           {ORK_LEVELS.map((l) => (
             <button
               key={l.id}
@@ -142,6 +144,7 @@ export default function SimpleCheckin({
               onClick={() => {
                 markStarted("battery");
                 setBattery(l.value10);
+                setCapacity(l.id);
               }}
               className={cn(
                 "flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-medium transition-all",

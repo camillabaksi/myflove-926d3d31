@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useTasks } from "@/hooks/use-data";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useLang } from "@/hooks/use-language";
 import { addDaysISO, todayISO } from "@/lib/day";
 import {
@@ -28,9 +27,7 @@ export default function CapacityPlanCard() {
   const { t } = useLang();
   const { todayOpen } = useFlowItems();
   const { updateTask } = useTasks();
-  const { mode, setMode, chosen, derived } = useCapacityMode();
-  // Kontextuell check-in: frågar max en gång per dag.
-  const [askedOn, setAskedOn] = useCloudSyncedStorage<string>("myflove-capacity-asked", "");
+  const { mode, setMode } = useCapacityMode();
   const [note, setNote] = useState<string | null>(null);
   const [moved, setMoved] = useState<Array<{ id: string; title: string; prev?: string }>>([]);
   const today = todayISO();
@@ -56,8 +53,6 @@ export default function CapacityPlanCard() {
   const tip = mode === "fullt" ? parallelTip(plan.planned) : null;
   const shown = mode === "lagt" ? plan.planned.slice(0, 1) : plan.planned;
 
-  const order: CapacityMode[] = ["fullt", "mellan", "lagt"];
-  const heavier = chosen && order.indexOf(derived) > order.indexOf(mode) && askedOn !== today;
 
   const choose = (next: CapacityMode) => {
     setNote(recalcMessage(mode, next));
@@ -109,36 +104,6 @@ export default function CapacityPlanCard() {
       <p className="mt-3 text-sm text-muted-foreground" aria-live="polite">
         {t(note ?? plan.message)}
       </p>
-
-      {heavier && (
-        <div className="mt-3 rounded-2xl border border-border/60 p-3 text-sm">
-          <p className="text-ink">
-            {t("Det verkar som att dagen blev tyngre än planerat. Vill du att jag förenklar resten av dagen?")}
-          </p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <Button
-              type="button"
-              size="sm"
-              className="min-h-11 rounded-full"
-              onClick={() => {
-                setAskedOn(today);
-                choose(derived);
-              }}
-            >
-              {t("Ja, förenkla")}
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              className="min-h-11 rounded-full"
-              onClick={() => setAskedOn(today)}
-            >
-              {t("Nej, fortsätt som planerat")}
-            </Button>
-          </div>
-        </div>
-      )}
 
       {shown.length > 0 && (
         <ol className="mt-3 space-y-2">

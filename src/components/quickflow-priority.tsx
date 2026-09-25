@@ -17,14 +17,14 @@ import {
   Trash2,
 } from "lucide-react";
 import { MyFloveBlock } from "@/components/myflove/block";
-import { orkWord } from "@/lib/ork-word";
+import { CAPACITY_META } from "@/lib/priority-engine";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import QuickflowPlanDialog, { type PlanChoice } from "@/components/quickflow-plan-dialog";
 import { usePriorityList } from "@/hooks/use-priority-list";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useCapacityContext } from "@/hooks/use-capacity-context";
 import { useTasks } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
@@ -52,7 +52,7 @@ export function QuickflowPriority() {
   const { t } = useLang();
   const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
-  const { reading } = useEnergyBattery();
+  const { percent, mode: capacityMode } = useCapacityMode();
   const capacityContext = useCapacityContext();
   const { tasks, addTask, updateTask } = useTasks();
   const { toast } = useToast();
@@ -66,7 +66,7 @@ export function QuickflowPriority() {
   const [expandedClarificationId, setExpandedClarificationId] = useState<string | null>(null);
   const [planFor, setPlanFor] = useState<PriorityTask | null>(null);
 
-  const energyPercent = reading?.now;
+  const energyPercent = percent;
   const hint = useMemo(() => energyHint(energyPercent), [energyPercent]);
 
   const clarifyTask = async (item: PriorityTask) => {
@@ -173,9 +173,9 @@ export function QuickflowPriority() {
               {typeof energyPercent === "number" && (
                 <span
                   className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
-                  aria-label={`${t("Ditt batteri just nu:")} ${t(orkWord(Math.round(energyPercent)).label)}`}
+                  aria-label={`${t("Kapacitetsläge:")} ${t(CAPACITY_META[capacityMode].label)}`}
                 >
-                  🔋 {t(orkWord(Math.round(energyPercent)).label)}
+                  {CAPACITY_META[capacityMode].dot} {t(CAPACITY_META[capacityMode].label)}
                 </span>
               )}
               {intro ? (

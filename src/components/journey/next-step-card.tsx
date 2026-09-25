@@ -5,11 +5,9 @@ import { FlowMascot } from "@/components/flow-mascot";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import { useLang } from "@/hooks/use-language";
 import { useTasks } from "@/hooks/use-data";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useFlowScore } from "@/hooks/use-flowscore";
-import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { suggestNow } from "@/lib/flow-engine";
-import { LOW_ORK_MAX } from "@/lib/day-journey";
 import { track } from "@/lib/analytics";
 import { useCollapsible } from "@/lib/collapse-store";
 import { cn } from "@/lib/utils";
@@ -21,14 +19,13 @@ import { cn } from "@/lib/utils";
 export default function NextStepCard() {
   const { t } = useLang();
   const { activeTasks } = useTasks();
-  const { reading } = useEnergyBattery();
-  const { energyValue } = useQuickCheckin();
+  const { percent, mode } = useCapacityMode();
+  const lowOrk = mode === "lagt";
   const [smaller, setSmaller] = useState(false);
   const { collapsed, toggle } = useCollapsible("home-next-step");
   const { flow } = useFlowScore();
 
-  const battery = Math.round(reading.now);
-  const lowOrk = energyValue != null && energyValue <= LOW_ORK_MAX;
+  const battery = percent;
   /** FlowScore och nästa steg hör ihop – men steget funkar även utan score. */
   const flowScore = typeof flow?.score === "number" ? Math.round(flow.score) : null;
 
@@ -36,10 +33,10 @@ export default function NextStepCard() {
     () =>
       suggestNow({
         tasks: activeTasks,
-        batteryNow: lowOrk ? Math.min(battery, 30) : battery,
+        batteryNow: battery,
         availableMinutes: smaller ? 5 : undefined,
       }),
-    [activeTasks, battery, lowOrk, smaller],
+    [activeTasks, battery, smaller],
   );
 
   return (
@@ -78,7 +75,7 @@ export default function NextStepCard() {
             (lowOrk && !smaller ? (
               <>
                 <p className="mt-2 text-sm text-ink">
-                  {t("Du har låg energi idag. Vi kan börja mindre.")}
+                  {t("Kapacitetsläget är Lågt. Vi kan börja mindre.")}
                 </p>
                 <button
                   type="button"

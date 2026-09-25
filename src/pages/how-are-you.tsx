@@ -9,6 +9,8 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import { useCycle } from "@/hooks/use-cycle";
 import { ORK_LEVELS, orkFromValue10 } from "@/lib/ork";
+import { capacityFromOrk10 } from "@/lib/priority-engine";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import type { ImpactKind } from "@/lib/impact-checkin";
 import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -51,7 +53,10 @@ export default function HowAreYou() {
       ]
     : QUICK_IMPACTS;
 
+  const { setMode } = useCapacityMode();
   const chooseOrk = (value10: number) => {
+    const m = capacityFromOrk10(value10);
+    if (m) setMode(m);
     setOrk(value10);
     logEnergy(value10);
     track("battery_logged", { source: "hur-mar-du", method: "ork" });
@@ -92,13 +97,13 @@ export default function HowAreYou() {
             id="how-are-you-energy"
             title={
               <span>
-                <span aria-hidden>🔋</span> {t("Hur mycket ork har du idag?")}
+                <span aria-hidden>🔋</span> {t("Hur mycket ryms idag?")}
               </span>
             }
             headingClassName="text-base font-semibold"
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="mt-3 grid grid-cols-3 gap-2">
               {ORK_LEVELS.map((level) => (
                 <button
                   key={level.id}

@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 
 import { useChildEvents } from "@/hooks/use-child-events";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { useFlowScore } from "@/hooks/use-flowscore";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useActivityHistory } from "@/hooks/use-activity-history";
 import { capacityLevel } from "@/lib/recovery-gaps";
 import {
@@ -19,8 +18,7 @@ import {
  */
 export function useFamilyLoad(dateISO?: string): FamilyLoadSummary {
   const events = useChildEvents(dateISO);
-  const { reading } = useEnergyBattery();
-  const { flow } = useFlowScore();
+  const { percent: capacityPercent } = useCapacityMode();
   const { records } = useActivityHistory();
 
   const patternNote = useMemo(() => {
@@ -48,10 +46,10 @@ export function useFamilyLoad(dateISO?: string): FamilyLoadSummary {
 
     return buildFamilyLoad({
       items,
-      batteryPercent: typeof reading?.now === "number" ? Math.round(reading.now) : null,
-      capacity: capacityLevel(typeof flow?.score === "number" ? flow.score : null),
+      batteryPercent: capacityPercent,
+      capacity: capacityLevel(capacityPercent),
       nowMinutes: now.getHours() * 60 + now.getMinutes(),
       patternNote,
     });
-  }, [events, reading?.now, flow?.score, patternNote]);
+  }, [events, capacityPercent,  patternNote]);
 }
