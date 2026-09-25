@@ -14,6 +14,10 @@ export interface FlowNudgeInput {
   openQuickflowCount: number;
   /** Antal tidsatta aktiviteter idag. */
   timedTodayCount: number;
+  /** Dagens kapacitetsläge (prioritetsmotorn). Valfritt. */
+  capacityMode?: "fullt" | "mellan" | "lagt";
+  /** Första "Måste idag"-saken från prioritetsmotorn. */
+  firstMustDo?: string | null;
 }
 
 export interface FlowNudge {
@@ -85,5 +89,19 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
     });
   }
 
+  // 4) Lågt läge: EN konkret nästa sak, och färre puffar totalt.
+  if (input.capacityMode === "lagt") {
+    const out: FlowNudge[] = [];
+    if (input.firstMustDo) {
+      out.push({
+        key: `flow-first-${day}`,
+        title: "Vi tar en sak i taget 💜",
+        body: `Först: ${input.firstMustDo}. Resten kan vänta.`,
+        url: "/hem",
+        deliverAt: at(now, 9, 30),
+      });
+    }
+    return [...out, ...nudges].slice(0, 2);
+  }
   return nudges;
 }
