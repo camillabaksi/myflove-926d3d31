@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import OrkSummary from "@/components/home/ork-summary";
+import CapacityPlanCard from "@/components/home/capacity-plan-card";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
 import { FlowMascot } from "@/components/flow-mascot";
@@ -223,6 +224,7 @@ export default function Home() {
 
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
+              <CapacityPlanCard />
               <OrkSummary />
               <CollapsibleSection
                 id="home-daily-checklist"

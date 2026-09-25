@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Kapacitetslägen Fullt/Mellan/Lågt på Hem med gemensam prioritetsmotor (Måste idag / Bör / Kan vänta / Extra): planen krymper vid lägre kapacitet, saker som kan vänta kan flyttas till imorgon med Ångra, enklare versioner och parallella tips (t.ex. tvätt + middag).
 - Barnens dag är nu ett frivilligt val under Anpassa hemskärmen och visas inte på Hem förrän användaren själv slår på det.
 - Dagens checklista och det valfria barnschemat börjar som lugna sammanfattningar och kan öppnas för alla detaljer och kontroller.
 - Hem visar nu Bella och Biancas aktiviteter sida vid sida med tid, pictogram och direkt avbockning.
