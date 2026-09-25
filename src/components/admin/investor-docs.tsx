@@ -26,6 +26,15 @@ function formatSize(bytes: number | null) {
   return mb >= 1 ? `${mb.toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} kB`;
 }
 
+type SortKey = "newest" | "oldest" | "name" | "category" | "size";
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? ""
+    : d.toLocaleString("sv-SE", { dateStyle: "short", timeStyle: "short" });
+}
+
 /** Privat sektion: allt material hämtas via adminskyddade serverfunktioner. */
 export default function InvestorDocs() {
   const qc = useQueryClient();
@@ -38,6 +47,24 @@ export default function InvestorDocs() {
     queryKey: ["investor-docs"],
     queryFn: () => listInvestorDocsFn(),
     retry: false,
+  });
+
+  const [sort, setSort] = useState<SortKey>("newest");
+  const sorted = [...(data ?? [])].sort((a, b) => {
+    const ta = a.updated_at ? Date.parse(a.updated_at) : 0;
+    const tb = b.updated_at ? Date.parse(b.updated_at) : 0;
+    switch (sort) {
+      case "oldest":
+        return ta - tb;
+      case "name":
+        return a.name.localeCompare(b.name, "sv");
+      case "category":
+        return a.category.localeCompare(b.category) || tb - ta;
+      case "size":
+        return (b.size ?? 0) - (a.size ?? 0);
+      default:
+        return tb - ta;
+    }
   });
 
   const open = useMutation({
@@ -145,8 +172,29 @@ export default function InvestorDocs() {
         </p>
       )}
 
+      {data && data.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <label htmlFor="investor-sort" className="text-sm text-muted-foreground">
+            Sortera:
+          </label>
+          <select
+            id="investor-sort"
+            value={sort}
+            onChange={(e) => setSort(e.target.value as SortKey)}
+            className="rounded-xl border border-border bg-background px-3 py-2 text-sm"
+          >
+            <option value="newest">Nyast först</option>
+            <option value="oldest">Äldst först</option>
+            <option value="name">Namn A–Ö</option>
+            <option value="category">Typ</option>
+            <option value="size">Störst först</option>
+          </select>
+          <span className="text-xs text-muted-foreground">{data.length} filer</span>
+        </div>
+      )}
+
       <div className="space-y-2">
-        {(data ?? []).map((doc) => (
+        {sorted.map((doc) => (
           <div
             key={doc.path}
             className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-3"
@@ -156,6 +204,7 @@ export default function InvestorDocs() {
               <p className="truncate text-sm font-medium">{doc.name}</p>
               <p className="text-xs text-muted-foreground">
                 {INVESTOR_CATEGORY_LABELS[doc.category]}
+                {doc.updated_at ? ` · ${formatDate(doc.updated_at)}` : ""}
                 {doc.size ? ` · ${formatSize(doc.size)}` : ""}
               </p>
             </div>
