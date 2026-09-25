@@ -2,7 +2,7 @@
  * "Din MyFlove" – färgtema, alarmsignal och alarmformat på ett ställe.
  * Kompakt och mobil först: små färgcirklar och täta valrader.
  */
-import { Check, Play, Palette, Bell, BellRing } from "lucide-react";
+import { Check, Play, Palette, Bell, BellRing, SunMoon } from "lucide-react";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { haptic } from "@/lib/haptics";
 import {
   ALARM_FORMATS,
   ALARM_SOUNDS,
+  APPEARANCES,
   THEMES,
   usePersonalization,
   type AlarmFormat,
@@ -19,7 +20,7 @@ import {
 } from "@/lib/personalization";
 
 export function PersonalizationSettings() {
-  const { personalization, update } = usePersonalization();
+  const { personalization, update, appearance, setAppearance } = usePersonalization();
 
   const chooseTheme = (id: ThemeId) => {
     update({ theme: id });
@@ -42,6 +43,43 @@ export function PersonalizationSettings() {
 
   return (
     <>
+      <MyFloveBlock
+        title="Ljust eller mörkt"
+        subtitle="Välj hur ljus appen ska vara."
+        icon={SunMoon}
+        tone="sky"
+        surface="sky"
+        collapsible
+        defaultCollapsed
+        collapseId="anpassa::utseende"
+        status={`Valt: ${APPEARANCES.find((a) => a.id === appearance)?.label ?? "Ljust"}`}
+        data-testid="personalization-appearance"
+      >
+        <div className="grid grid-cols-3 gap-2">
+          {APPEARANCES.map((a) => {
+            const active = appearance === a.id;
+            return (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => {
+                  setAppearance(a.id);
+                  haptic("soft");
+                }}
+                aria-pressed={active}
+                title={a.hint}
+                className={cn(
+                  "min-h-[3.5rem] rounded-2xl border-2 bg-card/70 p-2 text-center text-sm font-medium text-ink transition",
+                  active ? "border-primary" : "border-border/50 hover:border-border",
+                )}
+              >
+                {a.label}
+              </button>
+            );
+          })}
+        </div>
+      </MyFloveBlock>
+
       <MyFloveBlock
         title="Färgtema"
         subtitle="Välj hur MyFlove ska kännas."
