@@ -1,3 +1,6 @@
+## 2026-09-25
+- Hem: "Just nu"-kort med en sak i taget (Klar / Inte nu), Dagens checklista, orken i ord (Låg/Lagom/God) med förklaring, färre rutor och stilla maskot vid Ingen rörelse.
+
 ## 2026-09-24 – Min dag, barnens dagar och Familj
 
 - Ny personväxlare i Idag och Familj: Min dag, varje barn och Familj – det syns alltid vems dag som visas.
