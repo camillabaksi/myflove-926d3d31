@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Familj: Rutiner och Anteckningar kan nu också vara "Kan ändra" – familjen kan bocka av dagens rutiner och skriva nya anteckningar. Medicin kan fortfarande bara visas.
 - Familj: delad städlista visar nu både vardagsstädning och storstädning per rum, med tydlig markering av läge.
 - Familj: välj vem i familjen som får ändra (Alla eller utvalda personer). Delad städlista visar nu även appens egna städsteg per rum, utom de du valt bort.
 - Familj: varje del kan vara Av, Kan se eller Kan ändra. Inköp, Hem & städning, Uppgifter och Kalender kan familjen bocka av (och lägga till varor i inköpslistan); det syns vem som ändrat. Personliga delar kan bara visas. Bara ägaren kan ta bort.
