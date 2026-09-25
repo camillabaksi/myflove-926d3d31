@@ -437,6 +437,45 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, setValue]);
 
+  // Appen kom tillbaka i förgrunden eller nätet återkom: hämta det senaste
+  // från molnet. Telefoner tappar liveanslutningen i bakgrunden, så ändringar
+  // från andra enheter hämtas här direkt i stället för vid nästa omstart.
+  useEffect(() => {
+    let last = 0;
+    const refresh = async () => {
+      if (document.visibilityState !== "visible") return;
+      const nowTs = Date.now();
+      if (nowTs - last < 3000) return;
+      last = nowTs;
+      if (dirtyRef.current) return;
+      const user = await getSyncUser();
+      if (!user) return;
+      const { data, error } = await supabase
+        .from("user_kv")
+        .select("value, updated_at")
+        .eq("user_id", user.id)
+        .eq("key", key)
+        .maybeSingle();
+      if (error || !data || dirtyRef.current) return;
+      const cloudTs = new Date(data.updated_at as string).getTime();
+      if (cloudTs <= getLocalUpdatedAt()) return;
+      sharedValues.set(key, data.value as T);
+      setValue(data.value as T);
+      setLocalUpdatedAt(cloudTs);
+      setLocalSyncedAt(cloudTs);
+    };
+    const onVis = () => void refresh();
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("focus", onVis);
+    window.addEventListener("online", onVis);
+    return () => {
+      document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("focus", onVis);
+      window.removeEventListener("online", onVis);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, setValue]);
+
   // Nätet kom tillbaka – försök igen med det som inte hunnit bekräftas.
   useEffect(() => {
     const retry = () => {

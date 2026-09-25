@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Ändringar i Planera, Kalender och barnschemat hämtas direkt när en annan enhet öppnar eller återvänder till appen, utöver den befintliga livesynken.
 - Planera visar samma prioritetsord som Hem (Måste idag / Bör göras / Kan vänta / Extra); Flows påminnelser använder samma ord och skuldfri ton.
 - Mjuk fråga när dagen redan är full vid tillägg (Behåll / Flytta något annat), Flow frågar max en gång per dag om dagen ska förenklas, Planera och Flows påminnelser använder samma prioritetsmotor.
 - Kapacitetslägen Fullt/Mellan/Lågt på Hem med gemensam prioritetsmotor (Måste idag / Bör / Kan vänta / Extra): planen krymper vid lägre kapacitet, saker som kan vänta kan flyttas till imorgon med Ångra, enklare versioner och parallella tips (t.ex. tvätt + middag).
