@@ -31,6 +31,7 @@ import { QuickflowCapture } from "@/components/quickflow-capture";
 import { QuickflowList } from "@/components/quickflow-list";
 import { WorkflowContent } from "@/pages/workflow";
 import LifeProfileLink from "@/components/life-profile-link";
+import AreaFocus from "@/components/area-focus";
 
 const BUCKET = "work-docs";
 
@@ -228,6 +229,11 @@ export default function WorkPage() {
               title="Jobb"
               emojiKey="work"
               description="Din arbetsdag – plan, uppgifter, projekt och dokument på ett ställe."
+            />
+
+            <AreaFocus
+              intent="Jag ska jobba"
+              lowHint="Låg ork idag – välj en liten uppgift och stanna där."
             />
 
             {/* Dagens plan: vad som är rimligt just nu */}

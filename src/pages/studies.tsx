@@ -27,6 +27,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import CollapsibleSection from "@/components/collapsible-section";
+import AreaFocus from "@/components/area-focus";
 
 const BUCKET = "study-docs";
 
@@ -225,6 +226,10 @@ export function StudiesSection() {
 
   return (
     <div className="space-y-8">
+      <AreaFocus
+        intent="Jag ska plugga"
+        lowHint="Låg ork idag – 5 minuters repetition räknas."
+      />
       {/* Nästa steg – en sak i taget */}
       <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
         <h2 className="text-sm font-semibold text-ink">Nästa steg</h2>
