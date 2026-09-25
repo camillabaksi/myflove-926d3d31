@@ -57,6 +57,18 @@ function linesFor(area: Area, rows: SharedRow[]): string[] {
     const shop = get("myflow-shopping").filter((e) => !e.completed && !e.checked).map(label);
     return shop.slice(0, 10).map((s) => `🛒 ${s}`);
   }
+  if (area === "hem") {
+    const done = new Set(get("myflove-cleaning-done").map((e) => str(e.id) || str(e.taskId)));
+    const custom = get("myflove-cleaning-custom");
+    return custom
+      .slice(0, 10)
+      .map((e) => {
+        const id = str(e.id);
+        const t = label(e) || str(e.task);
+        return t ? `${t}${id && done.has(id) ? " – klar" : ""}` : "";
+      })
+      .filter(Boolean);
+  }
   if (area !== "rutiner") {
     const list = rows.flatMap((r) => asList(r.value));
     const out = list
