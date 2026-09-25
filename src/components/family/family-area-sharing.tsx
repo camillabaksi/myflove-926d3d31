@@ -58,14 +58,17 @@ function itemsFor(area: Area, rows: SharedRow[]): Item[] {
   const done = asObj(raw("myflove-cleaning-done"));
   const custom = asObj(raw("myflove-cleaning-custom"));
   const hidden = asObj(raw("myflove-cleaning-hidden"));
-  // Appens vardagssteg per rum (utan bortvalda) + egna steg i alla lägen.
-  const builtIn = CLEAN_ROOMS.flatMap((room) => {
-    const off = new Set((Array.isArray(hidden[`${room.id}:vardag`]) ? hidden[`${room.id}:vardag`] : []) as string[]);
-    return room.steps.vardag.filter((st) => !off.has(st.id)).map((st) => {
-      const id = `vardag:${st.id}`;
-      return { id, text: `${room.label} · ${st.label}`, done: Boolean(done[id]) };
-    });
-  });
+  // Appens steg per rum i båda lägena (utan bortvalda) + egna steg.
+  const builtIn = CLEAN_ROOMS.flatMap((room) =>
+    (["vardag", "stor"] as const).flatMap((mode) => {
+      const off = new Set((Array.isArray(hidden[`${room.id}:${mode}`]) ? hidden[`${room.id}:${mode}`] : []) as string[]);
+      const modeLabel = mode === "stor" ? "Storstädning" : "Vardag";
+      return room.steps[mode].filter((st) => !off.has(st.id)).map((st) => {
+        const id = `${mode}:${st.id}`;
+        return { id, text: `${room.label} · ${modeLabel} · ${st.label}`, done: Boolean(done[id]) };
+      });
+    }),
+  );
   const own = Object.entries(custom).flatMap(([listKey, steps]) => {
     const [roomId, mode = "vardag"] = listKey.split(":");
     const roomLabel = CLEAN_ROOMS.find((x) => x.id === roomId)?.label;
