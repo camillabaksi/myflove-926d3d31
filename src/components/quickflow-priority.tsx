@@ -172,9 +172,9 @@ export function QuickflowPriority() {
               {typeof energyPercent === "number" && (
                 <span
                   className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
-                  aria-label={`${t("Ditt batteri just nu:")} ${Math.round(energyPercent)} ${t("procent")}`}
+                  aria-label={`${t("Ditt batteri just nu:")} ${t(orkWord(Math.round(energyPercent)).label)}`}
                 >
-                  🔋 {Math.round(energyPercent)} %
+                  🔋 {t(orkWord(Math.round(energyPercent)).label)}
                 </span>
               )}
               {intro ? (
