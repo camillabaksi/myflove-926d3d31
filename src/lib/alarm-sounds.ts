@@ -154,7 +154,7 @@ export function buildAlarmWav(id: AlarmSoundId): Blob {
   for (const tone of spec.tones) {
     const startSample = Math.floor(tone.start * sampleRate);
     const durSamples = Math.floor(tone.dur * sampleRate);
-    const attack = Math.max(1, Math.floor(0.02 * sampleRate));
+    const attack = Math.max(1, Math.floor((tone.attack ?? 0.02) * sampleRate));
     const release = Math.max(1, Math.floor(Math.min(0.3, tone.dur * 0.6) * sampleRate));
     const gain = tone.gain ?? 0.35;
     let phase = 0;
