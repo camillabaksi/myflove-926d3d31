@@ -15,7 +15,11 @@ interface Rule {
 const RULES: Rule[] = [
   { match: /disk|diskmaskin/i, step: "Ställ dig vid diskbänken och ta bara ut det översta." },
   { match: /tvätt|tvätta/i, step: "Gå till tvättkorgen och lägg i en enda maskin." },
-  { match: /städ|damm|dammsug|plocka|undan/i, step: "Plocka undan tre saker. Sen får du sluta." },
+  {
+    match: /städ|damm|dammsug|plocka|undan|rensa|sortera|garderob|bädda|golv/i,
+    step: "Plocka undan tre saker. Sen får du sluta.",
+  },
+
   { match: /mat|middag|frukost|lunch|laga|koka/i, step: "Öppna kylen och ta fram en enda sak." },
   { match: /handla|inköp|affär/i, step: "Skriv de tre viktigaste sakerna på listan." },
   {
