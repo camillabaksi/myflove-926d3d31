@@ -104,7 +104,7 @@ export default function RecoveryLibrary() {
                   </ol>
                   <Button type="button" size="sm" className="mt-3 rounded-full"
                     onClick={() => {
-                      track("recovery_library_done", { source: s.id });
+                      track("recovery_viewed");
                       emitActivityDone({ id: `recovery-${s.id}-${Date.now()}`, title: s.title, dueDate: todayISO() });
                       setOpen(null);
                     }}>

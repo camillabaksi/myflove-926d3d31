@@ -63,7 +63,7 @@ export default function FamilyDayPerspectives({
   const { children, items: childItems, updateItem } = useChildren();
   const childEvents = useChildEvents(dayISO);
   const { today: myItems } = useFlowItems(dayISO);
-  const { updateTask } = useTasks();
+  const { updateTask, toggleTask } = useTasks();
 
   const [perspective, setPerspective] = useState<Perspective>(defaultPerspective);
   const [selected, setSelected] = useState<string[] | null>(null);
@@ -177,7 +177,7 @@ export default function FamilyDayPerspectives({
         return;
       }
     } else if (entry.taskId) {
-      updateTask(entry.taskId, { completed: done, ...(done ? { completedAt: Date.now() } : {}) });
+      toggleTask(entry.taskId);
     } else return;
     if (done) {
       const who = entry.personId === ME_ID ? "" : ` (${personById.get(entry.personId)?.name ?? "barn"})`;
