@@ -57,6 +57,15 @@ export default function HealthPage() {
           />
         </MyFloveWide>
 
+        <MyFloveWide>
+          <AreaFocus
+            intent="Jag vill göra något bra för min hälsa idag"
+            lowHint="Låg ork idag – vila och en kort promenad räcker."
+            href="/mitt-batteri"
+            hrefLabel="Checka in hur du mår"
+          />
+        </MyFloveWide>
+
         <MyFloveWide className="space-y-2">
           <EnergyBattery href="/mitt-batteri" />
           <p className="text-xs text-muted-foreground">
