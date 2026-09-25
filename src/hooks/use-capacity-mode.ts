@@ -28,5 +28,5 @@ export function useCapacityMode() {
     [setStored],
   );
 
-  return { mode, chosen: chosen != null, setMode };
+  return { mode, chosen: chosen != null, setMode, derived: capacityFromPercent(reading.now) };
 }

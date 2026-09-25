@@ -3,8 +3,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useActiveArea } from "@/lib/life-areas";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { useFlowItems } from "@/hooks/use-flow-items";
+import { isDayFull, planForCapacity } from "@/lib/priority-engine";
 import { useLang } from "@/hooks/use-language";
 import { todayISO } from "@/lib/day";
+import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import { CalendarDays, Brain, Bell, CheckSquare } from "lucide-react";
@@ -44,6 +48,14 @@ export default function QuickAddSheet({
   const [time, setTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
+  const [fullWarn, setFullWarn] = useState(false);
+  const { mode } = useCapacityMode();
+  const { todayOpen } = useFlowItems();
+  const plannedToday = planForCapacity(
+    todayOpen.map((i) => ({ id: i.id, title: i.title, time: i.time, dueDate: i.dueDate })),
+    mode,
+    todayISO(),
+  ).planned.length;
 
   const area = activeArea === "alla" ? "vardag" : activeArea;
   const needsWhen = kind !== "tanke";
@@ -55,9 +67,15 @@ export default function QuickAddSheet({
     setDate(todayISO());
   };
 
-  const save = () => {
+  const save = (confirmed = false) => {
     const title = text.trim();
     if (!title) return;
+    // Stopp-principen: mjuk fråga, aldrig ett förbud.
+    if (!confirmed && kind === "aktivitet" && date === todayISO() && isDayFull(plannedToday, mode)) {
+      setFullWarn(true);
+      return;
+    }
+    setFullWarn(false);
     if (kind === "tanke") {
       addThought({ text: title, level: "tanke" });
     } else if (kind === "aktivitet") {
@@ -103,6 +121,34 @@ export default function QuickAddSheet({
             placeholder={t("Vad dök upp? T.ex. Ring tandläkaren")}
             className="min-h-12 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink"
           />
+          {fullWarn && (
+            <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3 text-sm" role="alert">
+              <p className="text-ink">
+                {t("Du har redan en ganska full dag. Vill du lägga till den här ändå, eller ska vi flytta något annat?")}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Button type="button" size="sm" className="min-h-11 rounded-full" onClick={() => save(true)}>
+                  {t("Behåll")}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="min-h-11 rounded-full"
+                  onClick={() => {
+                    save(true);
+                    onOpenChange(false);
+                    window.setTimeout(
+                      () => document.querySelector('[data-testid="capacity-plan"]')?.scrollIntoView({ behavior: "smooth" }),
+                      200,
+                    );
+                  }}
+                >
+                  {t("Flytta något annat")}
+                </Button>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-2">
             {KINDS.map((k) => {
@@ -167,7 +213,7 @@ export default function QuickAddSheet({
 
           <button
             type="button"
-            onClick={save}
+            onClick={() => save()}
             disabled={!text.trim()}
             className="min-h-12 w-full rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
           >

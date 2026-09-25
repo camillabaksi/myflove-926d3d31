@@ -27,6 +27,8 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WhyHint from "@/components/why-hint";
 import DayAdjust from "@/components/journey/day-adjust";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
+import { prioritize } from "@/lib/priority-engine";
+import { todayISO as engineToday } from "@/lib/day";
 
 type DeadlineInfo = { daysUntilDue: number; hasReminder: boolean; activeNow: boolean };
 
@@ -164,6 +166,16 @@ export function FlowPlanContent() {
     return m;
   }, [activeTasks]);
 
+  /** Samma prioritetsmotor som Hem: Måste idag före Bör, Kan vänta och Extra. */
+  const priorityById = useMemo(() => {
+    const m = new Map<string, number>();
+    prioritize(
+      activeTasks.map((t) => ({ id: t.id, title: t.title, time: t.time, dueDate: t.dueDate })),
+      engineToday(),
+    ).forEach((p) => m.set(p.item.id, p.priority));
+    return m;
+  }, [activeTasks]);
+
   const canPlan = activeTasks.length > 0 && !loading;
 
   const handlePlan = async () => {
@@ -223,10 +235,13 @@ export function FlowPlanContent() {
         const ba = item2Boost(a, deadlineInfo) ? 0 : 1;
         const bb = item2Boost(b, deadlineInfo) ? 0 : 1;
         if (ba !== bb) return ba - bb;
+        const pa = priorityById.get(a.taskId) ?? 3;
+        const pb = priorityById.get(b.taskId) ?? 3;
+        if (pa !== pb) return pa - pb;
         return a.order - b.order;
       })
       .map((i) => i.taskId);
-  }, [plan, deadlineInfo]);
+  }, [plan, deadlineInfo, priorityById]);
 
   /** Din ordning om du ändrat något, annars Flows förslag. */
   const orderedItems = useMemo(() => {
