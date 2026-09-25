@@ -2,7 +2,10 @@
  * "Din MyFlove" – färgtema, alarmsignal och alarmformat på ett ställe.
  * Kompakt och mobil först: små färgcirklar och täta valrader.
  */
-import { Check, Play, Palette, Bell, BellRing, SunMoon } from "lucide-react";
+import { Check, Play, Palette, Bell, BellRing, SunMoon, Languages } from "lucide-react";
+import { useLang } from "@/hooks/use-language";
+import { LANGUAGES } from "@/lib/i18n";
+import { clearTranslationCache } from "@/lib/auto-translate";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -21,6 +24,7 @@ import {
 
 export function PersonalizationSettings() {
   const { personalization, update, appearance, setAppearance } = usePersonalization();
+  const { lang, setLang } = useLang();
 
   const chooseTheme = (id: ThemeId) => {
     update({ theme: id });
@@ -43,6 +47,36 @@ export function PersonalizationSettings() {
 
   return (
     <>
+      <MyFloveBlock
+        title="Språk"
+        subtitle="Hela appen på svenska eller engelska."
+        icon={Languages}
+        tone="lavender"
+        surface="lavender"
+      >
+        <div className="grid grid-cols-2 gap-2" data-no-translate>
+          {LANGUAGES.map((l) => (
+            <Button
+              key={l.value}
+              variant={lang === l.value ? "default" : "outline"}
+              className="h-auto justify-start gap-2 rounded-2xl py-3"
+              onClick={() => {
+                if (l.value === lang) return;
+                if (l.value === "sv") clearTranslationCache();
+                setLang(l.value);
+                haptic("soft");
+              }}
+            >
+              <span aria-hidden>{l.flag}</span>
+              <span className="text-sm font-semibold">{l.label}</span>
+            </Button>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          I engelskt läge översätts hela appen. Valet följer ditt konto mellan enheter.
+        </p>
+      </MyFloveBlock>
+
       <MyFloveBlock
         title="Ljust eller mörkt"
         subtitle="Välj hur ljus appen ska vara."
