@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familj: välj Av, Kan se eller Kan ändra per del; familjen kan bocka av inköp, städning, uppgifter och kalender (2026-09-25)",
       "Familj: även Träning, Mående & ork, Ekonomi, Studier, Jobb, Anteckningar och Resor kan delas (2026-09-25)",
       "Familj: välj vilka delar av appen familjen får se (kalender, uppgifter, inköp, rutiner & medicin), privat som standard (2026-09-25)",
       "Medicinpåminnelsen försvinner direkt när dosen markerats som tagen (2026-09-25)",
