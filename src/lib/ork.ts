@@ -1,39 +1,37 @@
 /**
- * Ork – MyFloves enda energifråga till användaren.
+ * Orkfrågan – samma tre kapacitetslägen som resten av MyFlove:
+ * 🟢 Fullt / 🟡 Mellan / 🔴 Lågt. Ingen procent, ingen skala.
  *
- * "Hur mycket ork har du idag?" med fyra tydliga svar. Ingen procent,
- * ingen skattningsskala, ingen medicinsk terminologi.
- *
- * Bakom kulisserna sparas svaret i BEFINTLIG datamodell (energy_logs via
- * useQuickCheckin, 1–10-skala som i sin tur blir 1–5). Ingen ny datamodell.
+ * Svaret sätter kapacitetsläget (useCapacityMode) och sparas dessutom som
+ * tidigare i energy_logs (1–10) för historik. Gamla sparade värden från den
+ * fyrgradiga modellen (Mycket 9, Okej 7, Lite 4, Nästan slut 2) läses in via
+ * capacityFromOrk10 – ingenting skrivs om.
  */
+import { CAPACITY_META, capacityFromOrk10, type CapacityMode } from "./priority-engine";
 
-export type OrkId = "mycket" | "okej" | "lite" | "slut";
+export type OrkId = CapacityMode;
 
 export interface OrkLevel {
   id: OrkId;
-  /** Färgprick i UI:t. */
   dot: string;
   label: string;
-  /** Värdet som sparas i befintlig 1–10-skala. */
+  /** Värdet som sparas i befintlig 1–10-skala (historik). */
   value10: number;
 }
 
-export const ORK_LEVELS: OrkLevel[] = [
-  { id: "mycket", dot: "🟢", label: "Mycket", value10: 9 },
-  { id: "okej", dot: "🟡", label: "Okej", value10: 7 },
-  { id: "lite", dot: "🟠", label: "Lite", value10: 4 },
-  { id: "slut", dot: "🔴", label: "Nästan slut", value10: 2 },
-];
+const VALUE10: Record<CapacityMode, number> = { fullt: 9, mellan: 6, lagt: 3 };
 
-/** Närmaste ork-nivå för ett sparat 1–10-värde (för att visa vad du valt). */
+export const ORK_LEVELS: OrkLevel[] = (["fullt", "mellan", "lagt"] as const).map((id) => ({
+  id,
+  dot: CAPACITY_META[id].dot,
+  label: CAPACITY_META[id].label,
+  value10: VALUE10[id],
+}));
+
+/** Kapacitetsnivå för ett sparat 1–10-värde (även gamla fyrgradiga värden). */
 export function orkFromValue10(value: number | null | undefined): OrkLevel | null {
-  if (value == null) return null;
-  let best = ORK_LEVELS[0];
-  for (const level of ORK_LEVELS) {
-    if (Math.abs(level.value10 - value) < Math.abs(best.value10 - value)) best = level;
-  }
-  return best;
+  const mode = capacityFromOrk10(value);
+  return mode ? (ORK_LEVELS.find((l) => l.id === mode) ?? null) : null;
 }
 
 /** Fem ansikten – "Hur känns det just nu?". Alltid frivilligt. */

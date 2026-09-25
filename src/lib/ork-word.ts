@@ -1,33 +1,27 @@
+import { CAPACITY_META, capacityFromPercent } from "./priority-engine";
+
 /**
- * Kanonisk översättning av batteriprocent → ordnivå.
- * Samma trösklar och formuleringar över hela MyFlove (Hem, Mitt batteri,
- * QuickFlow, Familj, Träning). Procent visas bara på begäran.
+ * Ord för en nivå, med samma tre begrepp som kapacitetsläget:
+ * 🟢 Fullt / 🟡 Mellan / 🔴 Lågt. Används för historik (t.ex. batterikurvan)
+ * och för kompatibilitetssiffror härledda från kapacitetsläget.
+ * OBS: styr aldrig aktuellt kapacitetsläge – det gör useCapacityMode.
  */
 export interface OrkWord {
-  /** Kort nivå: "Låg" | "Lagom" | "God" */
+  /** "Fullt" | "Mellan" | "Lågt" */
   short: string;
-  /** Full etikett: "Låg ork" | "Lagom ork" | "God ork" */
+  /** "🟢 Fullt" osv – ikon + text, aldrig bara färg. */
   label: string;
-  /** Lugn förklaring till nivån. */
   text: string;
 }
 
+const TEXT = {
+  lagt: "En sak i taget idag. Det viktigaste räcker.",
+  mellan: "Du fungerar, men hushållar. Håll planen enkel.",
+  fullt: "Det finns utrymme idag – utan att pressa in mer.",
+} as const;
+
 export function orkWord(percent: number): OrkWord {
-  if (percent < 40)
-    return {
-      short: "Låg",
-      label: "Låg ork",
-      text: "Ta det lugnt. Gör bara det viktigaste idag.",
-    };
-  if (percent < 70)
-    return {
-      short: "Lagom",
-      label: "Lagom ork",
-      text: "Du orkar det vanliga. Lägg in en paus.",
-    };
-  return {
-    short: "God",
-    label: "God ork",
-    text: "Bra läge att ta itu med något som kräver lite mer.",
-  };
+  const mode = capacityFromPercent(percent);
+  const meta = CAPACITY_META[mode];
+  return { short: meta.label, label: `${meta.dot} ${meta.label}`, text: TEXT[mode] };
 }
