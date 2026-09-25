@@ -4,7 +4,8 @@ import Layout from "@/components/layout";
 import { track } from "@/lib/analytics";
 import { HOME_BLOCKS, useHomeLayout } from "@/lib/home-layout";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle } from "lucide-react";
+import { ArrowLeft, ArrowUp, ArrowDown, Eye, EyeOff, RotateCcw, PlayCircle, Palette } from "lucide-react";
+import type { ChecklistPreview } from "@/lib/home-layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import HomeShortcuts from "@/components/home-shortcuts";
 
@@ -13,7 +14,7 @@ import HomeShortcuts from "@/components/home-shortcuts";
  * och vilka fyra genvägar som ligger på Hem.
  */
 export default function HomeCustomizePage() {
-  const { order, hidden, toggle, move, reset } = useHomeLayout();
+  const { order, hidden, toggle, move, reset, checklistPreview, setChecklistPreview } = useHomeLayout();
 
   useEffect(() => {
     track("settings_opened", { source: "hemskarm" });
@@ -124,13 +125,49 @@ export default function HomeCustomizePage() {
         </CollapsibleSection>
 
         <CollapsibleSection
+          title="Dagens checklista"
+          id="home-customize-checklist"
+          headingClassName="text-sm font-semibold uppercase tracking-wide"
+          className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
+        >
+          <p className="mb-3 text-sm text-muted-foreground">Hur många saker ska synas innan "Visa alla"?</p>
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Antal saker i checklistan">
+            {([3, 5, 0] as ChecklistPreview[]).map((n) => (
+              <button
+                key={n}
+                type="button"
+                role="radio"
+                aria-checked={checklistPreview === n}
+                onClick={() => setChecklistPreview(n)}
+                className={`min-h-11 rounded-2xl border-2 text-sm font-medium text-ink ${
+                  checklistPreview === n ? "border-primary bg-primary/10" : "border-border/60 bg-background"
+                }`}
+              >
+                {n === 0 ? "Alla" : `${n} saker`}
+              </button>
+            ))}
+          </div>
+        </CollapsibleSection>
+
+        <Link
+          href="/anpassa"
+          className="flex items-center gap-3 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft hover:border-primary/50"
+        >
+          <Palette size={18} className="text-primary" aria-hidden />
+          <span className="min-w-0 flex-1">
+            <span className="block font-medium text-ink">Färger, ljust/mörkt och text</span>
+            <span className="block text-xs text-muted-foreground">Ändra färgtema, mörkt läge, textstorlek och ljud</span>
+          </span>
+        </Link>
+
+        <CollapsibleSection
           title="Mina genvägar"
           id="home-customize-shortcuts"
           headingClassName="text-sm font-semibold uppercase tracking-wide"
           className="rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft"
         >
           <p className="mb-3 text-sm text-muted-foreground">
-            Välj vad du vill ha direkt på startsidan. Tryck för att lägga till eller ta bort.
+            "Just nu" ligger alltid överst. Välj vad du vill ha direkt på startsidan. Tryck för att lägga till eller ta bort.
           </p>
           <HomeShortcuts />
         </CollapsibleSection>
