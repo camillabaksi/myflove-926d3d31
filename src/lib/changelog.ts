@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Ikoner: emojis ersatta med riktiga Lucide-ikoner överallt – inga tomma fyrkanter; kapacitetslägen visar färgade prickar (2026-09-25)",
       "Familj: Rutiner och Anteckningar kan vara Kan ändra – bocka av rutiner, skriva anteckningar (2026-09-25)",
       "Familj: delad städlista visar både vardagsstädning och storstädning per rum (2026-09-25)",
       "Familj: välj vem som får ändra; delad städlista visar även appens städsteg (2026-09-25)",
