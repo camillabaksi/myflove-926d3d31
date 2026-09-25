@@ -33,7 +33,11 @@ export type AlarmSoundId =
   | "mjuk-ton"
   | "bubblig"
   | "natur"
-  | "lugn-melodi";
+  | "lugn-melodi"
+  | "klangskal"
+  | "regndroppe"
+  | "harpa";
+
 
 /** Hur en påminnelse ska märkas av. */
 export type AlarmFormat = "ljud" | "vibration" | "bada" | "tyst";
@@ -322,7 +326,11 @@ export const ALARM_SOUNDS: AlarmSoundPreset[] = [
   { id: "bubblig", label: "Bubblig", hint: "Små studsande toner", premium: true },
   { id: "natur", label: "Natur", hint: "Mjukt sus och fågelpip", premium: true },
   { id: "lugn-melodi", label: "Lugn melodi", hint: "Fyra toner i dur", premium: true },
+  { id: "klangskal", label: "Klangskål", hint: "Djup resonans som tonar in", premium: true },
+  { id: "regndroppe", label: "Regndroppe", hint: "Mjukt och organiskt", premium: true },
+  { id: "harpa", label: "Mjuk harpa", hint: "Varm och dämpad", premium: true },
 ];
+
 
 export const ALARM_FORMATS: Array<{ id: AlarmFormat; label: string; icon: string }> = [
   { id: "ljud", label: "Ljud", icon: "🔔" },

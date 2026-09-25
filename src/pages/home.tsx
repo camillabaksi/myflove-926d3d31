@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
+import CloseDay from "@/components/home/close-day";
+
 import OrkSummary from "@/components/home/ork-summary";
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -243,7 +245,11 @@ export default function Home() {
                   <ChildrenDaySummary />
                 </div>
               )}
+
+              {/* Kvällen: en varm avslutning utan skuld. */}
+              <CloseDay />
             </div>
+
 
             <nav
               className="mt-5 grid grid-cols-4 gap-2"

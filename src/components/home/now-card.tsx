@@ -1,12 +1,15 @@
-import { useMemo, useState } from "react";
-import { CheckCircle2, Plus } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { CheckCircle2, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import StartHelper from "@/components/home/start-helper";
+import LandingPause from "@/components/home/landing-pause";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
 import type { FlowItem } from "@/lib/flow-items";
+
 
 function toMinutes(time?: string | null) {
   if (!time) return null;
@@ -32,14 +35,55 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const { today, toggleItem } = useFlowItems();
   const [skipped, setSkipped] = useState<string[]>([]);
   const [justDone, setJustDone] = useState(false);
+  const [helping, setHelping] = useState(false);
+  // Mjuk övergång: "ask" = frågan visas, "run" = två minuter att landa.
+  const [landing, setLanding] = useState<"none" | "ask" | "run">("none");
   const now = new Date();
   const current = useMemo(
     () => pickNow(today, now.getHours() * 60 + now.getMinutes(), skipped),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [today, skipped],
   );
+  const endLanding = useCallback(() => setLanding("none"), []);
+
+  if (landing !== "none") {
+    return (
+      <section
+        className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+        aria-label={t("Just nu")}
+        aria-live="polite"
+      >
+        <p className="text-xs font-semibold uppercase text-primary">{t("Bra jobbat")}</p>
+        <p className="mt-2 font-display text-lg font-bold text-ink">
+          {t("Vill du landa 2 minuter innan nästa?")}
+        </p>
+        {landing === "ask" ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              onClick={() => setLanding("run")}
+              className="min-h-12 rounded-full px-6 text-base font-semibold"
+            >
+              {t("Landa 2 minuter")}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={endLanding}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Redo direkt")}
+            </Button>
+          </div>
+        ) : (
+          <LandingPause onReady={endLanding} />
+        )}
+      </section>
+    );
+  }
 
   if (!current) {
+
     return (
       <section
         className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
@@ -100,6 +144,8 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
             onClick={() => {
               toggleItem(current);
               setJustDone(true);
+              setHelping(false);
+              setLanding("ask");
             }}
             className="min-h-12 flex-1 rounded-full text-base font-semibold sm:flex-none sm:px-8"
           >
@@ -112,12 +158,37 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           onClick={() => {
             setSkipped((s) => [...s, current.id]);
             setJustDone(false);
+            setHelping(false);
           }}
           className="min-h-11 rounded-full text-muted-foreground"
         >
           {t("Inte nu")}
         </Button>
       </div>
+      {!helping && (
+        <button
+          type="button"
+          onClick={() => setHelping(true)}
+          className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary underline underline-offset-4"
+        >
+          <Sparkles className="h-4 w-4" aria-hidden /> {t("Hjälp mig börja (2 min)")}
+        </button>
+      )}
+      {helping && (
+        <StartHelper
+          title={current.title}
+          onDone={() => {
+            setHelping(false);
+            if (current.completable) {
+              toggleItem(current);
+              setJustDone(true);
+              setLanding("ask");
+            }
+          }}
+          onClose={() => setHelping(false)}
+        />
+      )}
     </section>
+
   );
 }
