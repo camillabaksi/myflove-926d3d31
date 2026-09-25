@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-09-25";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Navigation",
+    items: [
+      "Hälsa i bottennavigeringen öppnar samma kategorivyn som Mer → Hälsa, så båda vägarna leder till samma vy (2026-09-25)",
+    ],
+  },
+  {
     title: "Tvåspråkigt pitch- och dokumentpaket 6.0",
     items: [
       "Ny sammanhängande Living Blueprint på svenska och engelska, förankrad i forskningsramverkets sex lager (2026-09-25)",
