@@ -7,6 +7,7 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import EnergyBattery from "@/components/energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
+import OrkSummary from "@/components/home/ork-summary";
 import ImpactCheckin from "@/components/impact-checkin";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
