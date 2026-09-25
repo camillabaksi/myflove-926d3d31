@@ -18,7 +18,9 @@ const POLL_INTERVAL_MS = 60 * 1000;
 const SNOOZE_MINUTES = 10;
 
 export function useMedicationAlerts() {
-  const { medications, isTaken, toggleTaken } = useMedications();
+  const { medications, isTaken, toggleTaken, log } = useMedications();
+  // Tagna doser måste trigga ny kontroll, annars ligger larmet kvar.
+  const logKey = log.map((l) => `${l.medId}:${l.time}:${l.date}`).join("|");
   const [alerts, setAlerts] = useState<MedicationAlert[]>([]);
   const notifiedRef = useRef<Set<string>>(new Set());
   const dismissedRef = useRef<Set<string>>(new Set());
@@ -62,7 +64,7 @@ export function useMedicationAlerts() {
     const interval = setInterval(check, POLL_INTERVAL_MS);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [medsKey]);
+  }, [medsKey, logKey]);
 
   const dismissAlert = (alert: MedicationAlert) => {
     dismissedRef.current.add(alert.key);

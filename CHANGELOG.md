@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Medicinpåminnelsen försvinner nu direkt när dosen bockats av som tagen, i stället för att fortsätta dyka upp.
 - Barnens aktivitetslista visar nu endast den läsbara anteckningen, inte den sparade informationen för pictogram och färg.
 - Städning steg 5: verifierat oanvänd planeringskod har tagits bort: gamla `pickNow`, batteribaserad Nu-rankning och det fristående FlowScore-omplaneringsläget. Historik, sparade omplaneringsvärden, FlowScore, energidata, QuickFlow-kompatibilitet och Jobb/Studier-stöd är orörda.
 - Städning steg 4: Hem har en enda kapacitetskontroll med Fullt/Mellan/Lågt och kort förklaring. Planera och Idag visar samma dagsplan utan egna energi- eller FlowScore-val; Lågt visar bara Nu och döljer extra val. Batteri, FlowScore och Energiflöde finns kvar tydligt märkta som historik och mönster. De tre äldre planeringsdelarna har inventerats men inte raderats.
