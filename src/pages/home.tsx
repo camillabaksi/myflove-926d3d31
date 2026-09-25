@@ -113,7 +113,7 @@ export default function Home() {
     }
   }, []);
 
-  const { visible } = useHomeLayout();
+  const { visible, checklistPreview } = useHomeLayout();
   const shows = (id: HomeBlockId) => visible.includes(id);
   const pos = (id: HomeBlockId) => ({ order: visible.indexOf(id) + 10 });
 
@@ -224,8 +224,9 @@ export default function Home() {
 
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
-              <CapacityPlanCard />
-              <OrkSummary />
+              {shows("lage") && <CapacityPlanCard />}
+              {shows("ork") && <OrkSummary />}
+              {shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"
                 title={t("Dagens checklista")}
@@ -233,8 +234,9 @@ export default function Home() {
                 className="rounded-3xl border border-border/60 bg-card/80 p-4 shadow-soft"
                 headingClassName="font-display text-base font-bold text-ink"
               >
-                <DailyFlowList previewCount={3} />
+                <DailyFlowList previewCount={checklistPreview === 0 ? undefined : checklistPreview} />
               </CollapsibleSection>
+              )}
 
               {shows("barnens-dag") && (
                 <div data-npf="optional">
@@ -330,6 +332,7 @@ export default function Home() {
 
         {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem.
             Enkelt läge ("Visa mindre") viker också detta – bara översta kortet syns. */}
+        {shows("fordjupa") && (
         <MyFloveWide style={{ order: 0.3 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="home-day-support"
@@ -346,10 +349,11 @@ export default function Home() {
             </div>
           </CollapsibleSection>
         </MyFloveWide>
+        )}
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
-        {new Date().getHours() >= 18 && (
+        {shows("kvall") && new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <EveningCheck />
           </MyFloveWide>
@@ -366,7 +370,7 @@ export default function Home() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid gap-4">
-              <HomeShortcuts />
+              {shows("mina-genvagar") && <HomeShortcuts />}
               <NextLectureHomeRow />
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (

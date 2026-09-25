@@ -16,7 +16,7 @@ export type HomeBlockId =
   | "barnens-dag"
   | "fordjupa"
   | "kvall"
-  | "genvagar"
+  | "mina-genvagar"
   | "medicin"
   | "omrade";
 
@@ -34,7 +34,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "barnens-dag", label: "Barnens dag", hint: "Visa valda barns aktiviteter på Hem" },
   { id: "fordjupa", label: "Din dag – fördjupning", hint: "Dagens steg och nästa rimliga sak" },
   { id: "kvall", label: "Kvällscheck", hint: "Kort avstämning efter kl 18" },
-  { id: "genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i MyFlove" },
+  { id: "mina-genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i MyFlove" },
   {
     id: "medicin",
     label: "Rutiner & medicin",

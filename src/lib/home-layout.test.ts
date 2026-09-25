@@ -29,6 +29,6 @@ describe("hemskärmens standardlayout (fyra fasta widgets)", () => {
     const gammal = ["omrade", "idag", "batteri", "vagar", "medicin"] as HomeBlockId[];
     const sorterad = cleanupOrder(gammal);
     expect(sorterad).toEqual(["medicin", "omrade"]);
-    expect(sorterad).toHaveLength(HOME_BLOCKS.length - 1);
+    expect(sorterad).not.toContain("idag");
   });
 });
