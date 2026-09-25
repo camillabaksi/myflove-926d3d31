@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Städning steg 2: Fullt/Mellan/Lågt är enda källan för aktuellt kapacitetsläge. Användarens val gäller tills hen ändrar det (standard Mellan); batteri, FlowScore och Energiflöde styr inte längre läget men finns kvar för historik. Orkfrågan har tre val (gamla värden Mycket/Okej/Lite/Nästan slut läses som Fullt/Mellan/Lågt). Påverkan-kortet föreslår ett lägre läge i stället för batterinivå.
 - Städning steg 1: en enda prioritetsmotor (P1 Måste göras, P2 Bör göras, P3 Kan vänta, P4 Extra). QuickFlows nivåer visas som Nu, Sedan, Kan vänta och Om du orkar men räknas av prioritetsmotorn; batteriet påverkar inte längre prioriteten. Gamla sparade QuickFlow-poster översätts vid läsning utan att något skrivs om.
 - Möten och aktiviteter med fast klockslag från tidigare dagar rullar inte längre över till dagens lista; tidlösa att-göra-saker följer med som vanligt.
 - Tillbakapil och appens ram på Flow-inställningar; Pitch-sidans block kan fällas ihop.
