@@ -182,9 +182,22 @@ async function loadAll(): Promise<void> {
 let channel: ReturnType<typeof supabase.channel> | null = null;
 let subscribers = 0;
 
+let lastResume = 0;
+function onResume() {
+  if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
+  const now = Date.now();
+  if (now - lastResume < 3000) return;
+  lastResume = now;
+  void loadAll();
+}
+
 function subscribeRealtime() {
   subscribers += 1;
   if (channel) return;
+  // Hämta om när appen kommer tillbaka – liveanslutningen kan ha tappats.
+  document.addEventListener("visibilitychange", onResume);
+  window.addEventListener("focus", onResume);
+  window.addEventListener("online", onResume);
   channel = supabase
     .channel("children-sync")
     .on("postgres_changes", { event: "*", schema: "public", table: "child_items" }, () => {
@@ -205,6 +218,9 @@ function unsubscribeRealtime() {
     supabase.removeChannel(channel);
     channel = null;
     subscribers = 0;
+    document.removeEventListener("visibilitychange", onResume);
+    window.removeEventListener("focus", onResume);
+    window.removeEventListener("online", onResume);
   }
 }
 
