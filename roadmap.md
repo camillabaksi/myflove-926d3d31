@@ -3,8 +3,8 @@
 ## Städning (godkänd audit 2026-09-25)
 - [x] Steg 1: Konsolidera prioritet till priority-engine
 - [x] Steg 2: Fullt/Mellan/Lågt som primär kapacitetskälla
-- [ ] Steg 3 väntar på godkännande
-- [ ] Steg 3: FlowPlan kopplas till prioritet + kapacitet
+- [x] Steg 3: FlowPlan kopplas till prioritet + kapacitet
+- [ ] Steg 4 väntar på godkännande
 - [ ] Steg 4: Sekundära planeringskort läser FlowPlans resultat
 - [ ] Steg 5: Städa Flow-texter
 - [ ] Steg 6: UI-termer och empty states
