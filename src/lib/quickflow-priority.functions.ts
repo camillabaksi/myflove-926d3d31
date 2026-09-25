@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { PRIORITY_DEFINITIONS, normalizeBucket } from "@/lib/priority-engine";
 
 const InputSchema = z.object({
   titles: z.array(z.string().min(1).max(200)).min(1).max(20),
@@ -26,17 +27,17 @@ export type QuickflowPriorityResult = z.infer<typeof OutputSchema>;
 const SYSTEM = `Du är Flow – MyFloves lugna, NPF-vänliga kompanjon.
 Användaren har många saker på en gång och vill INTE planera tider.
 
-Sortera sakerna i fyra nivåer utifrån:
-1. Viktighet 2. Brådska 3. Energi som krävs 4. Hur svårt det är att komma igång
-5. Användarens aktuella energinivå 6. Kända deadlines eller beroenden.
-
-Nivåer: "nu", "sedan", "om-du-orkar", "kan-vanta".
+Sortera sakerna i MyFloves fyra prioritetsnivåer:
+- "nu" = P1. ${PRIORITY_DEFINITIONS[1]}
+- "sedan" = P2. ${PRIORITY_DEFINITIONS[2]}
+- "kan-vanta" = P3. ${PRIORITY_DEFINITIONS[3]}
+- "om-du-orkar" = P4. ${PRIORITY_DEFINITIONS[4]}
+Prioritet beskriver konsekvens och sammanhang – inte användarens ork.
 
 Regler:
 - Hitta ALDRIG på deadlines, tider eller datum. Nämn bara deadline om användaren skrivit den.
 - Säg aldrig att användaren måste något. Ton: varm, kort, aldrig dömande.
-- Låg energi: lägg små, viktiga saker högt och tunga saker lägre.
-- Hög energi: det som kräver mest fokus får gärna ligga tidigt.
+- Kapacitet ändrar aldrig prioritet; ordna inom samma nivå så små steg kommer först vid låg ork.
 - "why" är max 12 ord. "intro" är en mening, max 20 ord.
 - Behåll varje titel exakt som användaren skrev den.
 - Svara ENDAST med giltig JSON: { intro, items: [{ title, bucket, why }] }.`;
@@ -82,5 +83,6 @@ export const prioritizeQuickflow = createServerFn({ method: "POST" })
     } catch {
       throw new Error("AI:n svarade i fel format.");
     }
-    return OutputSchema.parse(parsed);
+    const out = OutputSchema.parse(parsed);
+    return { ...out, items: out.items.map((i) => ({ ...i, bucket: normalizeBucket(i.bucket) })) };
   });

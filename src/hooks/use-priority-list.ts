@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import { normalizeBucket } from "@/lib/priority-engine";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { normalizeQuickflowText } from "@/lib/quickflow";
 import {
@@ -19,7 +20,12 @@ const newId = () => Math.random().toString(36).slice(2, 11);
  * kalenderhändelse, påminnelse eller energipost.
  */
 export function usePriorityList() {
-  const [items, setItems] = useCloudSyncedStorage<PriorityTask[]>(STORAGE_KEY, []);
+  const [rawItems, setItems] = useCloudSyncedStorage<PriorityTask[]>(STORAGE_KEY, []);
+  // Gamla/okända bucket-värden översätts vid läsning (P1–P4) – inget skrivs om.
+  const items = useMemo(
+    () => (rawItems ?? []).map((i) => ({ ...i, bucket: normalizeBucket(i.bucket) })),
+    [rawItems],
+  );
   const [intro, setIntro] = useCloudSyncedStorage<string | null>(INTRO_KEY, null);
 
   const replace = useCallback((next: PriorityTask[]) => setItems(sortPriority(next)), [setItems]);
