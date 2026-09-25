@@ -24,6 +24,7 @@ import {
 
 export function PersonalizationSettings() {
   const { personalization, update, appearance, setAppearance } = usePersonalization();
+  const { lang, setLang } = useLang();
 
   const chooseTheme = (id: ThemeId) => {
     update({ theme: id });
