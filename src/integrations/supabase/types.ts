@@ -388,18 +388,21 @@ export type Database = {
           area: string
           can_edit: boolean
           created_at: string
+          editors: string[] | null
           user_id: string
         }
         Insert: {
           area: string
           can_edit?: boolean
           created_at?: string
+          editors?: string[] | null
           user_id: string
         }
         Update: {
           area?: string
           can_edit?: boolean
           created_at?: string
+          editors?: string[] | null
           user_id?: string
         }
         Relationships: []
