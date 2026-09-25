@@ -60,7 +60,7 @@ export const planFlowSequence = createServerFn({ method: "POST" })
       data.timeAvailableMin ? `Tillgänglig tid: ${data.timeAvailableMin} min` : null,
       "",
       "Uppgifter:",
-      ...data.tasks.map((t) => {
+      ...data.tasks.map((t, index) => {
         const bits: string[] = [];
         if (t.dueDate) bits.push(`deadline ${t.dueDate}`);
         if (typeof t.daysUntilDue === "number") {
