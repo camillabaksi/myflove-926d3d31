@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { HeartPulse, Lock } from "lucide-react";
 
 import Layout from "@/components/layout";
+import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import ChildProfiles from "@/components/family/child-profiles";
 import FamilyLoadCard from "@/components/family/family-load-card";
@@ -94,18 +95,20 @@ export default function FamilyFlowPage() {
             </section>
 
             {children.length > 0 && (
-              <section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
-                <h2 className="text-base font-semibold text-ink">{t("Dagen för hela familjen")}</h2>
+              <CollapsibleSection
+                id="Dagen för hela familjen"
+                title={t("Dagen för hela familjen")}
+                className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5"
+              >
                 <FamilyDayPerspectives myDay={<DailyFlowList />} defaultPerspective="familj" />
-              </section>
+              </CollapsibleSection>
             )}
 
             <FamilyLoadCard />
 
             <RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} />
 
-            <section className="space-y-3">
-              <h2 className="text-base font-semibold text-ink">{t("Barnen")}</h2>
+            <CollapsibleSection id="Barnen" title={t("Barnen")} className="space-y-3">
               {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
@@ -130,7 +133,7 @@ export default function FamilyFlowPage() {
                   onSchedule={(child) => setScheduleChildId(child.id)}
                 />
               )}
-            </section>
+            </CollapsibleSection>
 
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Lock size={12} aria-hidden />
