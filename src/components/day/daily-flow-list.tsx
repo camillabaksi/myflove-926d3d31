@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle, Link2 } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, ChevronDown, Circle, Link2 } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
@@ -232,6 +232,18 @@ export function DailyFlowList({
           );
         })}
       </ul>
+      {previewCount != null && items.length > previewCount && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-1 inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-4 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          {expanded ? "Visa färre" : `Visa alla (${items.length - previewCount} till)`}
+          <ChevronDown className={cn("h-4 w-4 transition-transform", expanded && "rotate-180")} aria-hidden />
+        </button>
+      )}
+
       <Dialog open={!!adaptItem} onOpenChange={(o) => !o && setAdaptItem(null)}>
         <DialogContent className="max-w-sm rounded-3xl">
           <DialogHeader>
