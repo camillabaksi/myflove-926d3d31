@@ -35,12 +35,17 @@ export function DailyFlowList({
   date,
   extraItems = [],
   onCompleted,
+  previewCount,
 }: {
   date?: string;
   extraItems?: FlowItem[];
   onCompleted?: (item: FlowItem) => void;
+  /** Visa bara de första punkterna och låt resten fällas ut. */
+  previewCount?: number;
 }) {
   const { today, toggleItem } = useFlowItems(date);
+  const [expanded, setExpanded] = useState(false);
+
   /**
    * "Hur kändes det?" hör ihop med själva avbockningen och bor därför här –
    * samma lista används i både Min dag och Kalendern, så frågan ställs exakt
@@ -121,10 +126,15 @@ export function DailyFlowList({
     );
   }
 
+  const hiddenCount =
+    previewCount && !expanded ? Math.max(0, items.length - previewCount) : 0;
+  const shownItems = hiddenCount > 0 ? items.slice(0, previewCount) : items;
+
   return (
     <>
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
-        {items.map((item, index) => {
+        {shownItems.map((item, index) => {
+
           const visual = dailyActivityVisual(item);
           const visualColor = visual.colorArea ? areaColor(visual.colorArea) : undefined;
           const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
