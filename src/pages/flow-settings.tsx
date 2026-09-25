@@ -1,6 +1,7 @@
 import { Link } from "wouter";
+import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
-import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
+import { RotateCcw, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -20,17 +21,8 @@ export default function FlowSettingsPage() {
   const { settings, update, togglePriority, reset } = useFlowSettings();
 
   return (
+    <Layout>
     <MyFlovePageGrid className="mx-auto w-full max-w-4xl pb-24">
-      <MyFloveWide>
-        <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="rounded-full">
-            <Link href="/hem">
-              <ArrowLeft className="mr-1 size-4" />
-              Tillbaka
-            </Link>
-          </Button>
-        </div>
-      </MyFloveWide>
 
       <MyFloveWide>
         <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
@@ -187,5 +179,6 @@ export default function FlowSettingsPage() {
         </div>
       </MyFloveWide>
     </MyFlovePageGrid>
+    </Layout>
   );
 }
