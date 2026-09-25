@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Hem: en sak i taget",
     items: [
+      "Fler val under Anpassa hemskärmen och nytt ljust/mörkt läge (2026-09-25)",
       "Dagens checklista på Hem visar tre punkter direkt och resten fälls ut med Visa alla (2026-09-25)",
       "Ändringar syns direkt på alla dina enheter, även när appen legat i bakgrunden (2026-09-25)",
 

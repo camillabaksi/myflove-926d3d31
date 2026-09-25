@@ -1,4 +1,5 @@
 ## 2026-09-25
+- Anpassa hemskärmen: visa/dölj Hur är läget, Orken, Dagens checklista, fördjupning, Kvällscheck och Mina genvägar; välj 3, 5 eller alla saker i checklistan. Nytt val Ljust/Mörkt/Som telefonen under Anpassa appen.
 - Dagens checklista på Hem visar de tre första punkterna direkt och resten fälls ut med "Visa alla (X till)" / "Visa färre".
 - Ändringar i Planera, Kalender och barnschemat hämtas direkt när en annan enhet öppnar eller återvänder till appen, utöver den befintliga livesynken.
 

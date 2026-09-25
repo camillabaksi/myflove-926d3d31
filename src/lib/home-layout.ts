@@ -9,7 +9,16 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
  * av anpassningen. Nedanför dem kan användaren slå av/på sekundära block:
  * hälsningen ligger alltid överst och går inte att stänga av.
  */
-export type HomeBlockId = "barnens-dag" | "medicin" | "omrade";
+export type HomeBlockId =
+  | "lage"
+  | "ork"
+  | "checklista"
+  | "barnens-dag"
+  | "fordjupa"
+  | "kvall"
+  | "mina-genvagar"
+  | "medicin"
+  | "omrade";
 
 export interface HomeBlockMeta {
   id: HomeBlockId;
@@ -17,12 +26,15 @@ export interface HomeBlockMeta {
   hint: string;
 }
 
+/** "Just nu" ligger alltid överst och kan inte stängas av. */
 export const HOME_BLOCKS: HomeBlockMeta[] = [
-  {
-    id: "barnens-dag",
-    label: "Barnens dag",
-    hint: "Visa valda barns aktiviteter på Hem",
-  },
+  { id: "lage", label: "Hur är läget idag?", hint: "Välj Fullt, Mellan eller Lågt" },
+  { id: "ork", label: "Orken i ord", hint: "Låg, Lagom eller God ork" },
+  { id: "checklista", label: "Dagens checklista", hint: "Möten, vardag och rutiner" },
+  { id: "barnens-dag", label: "Barnens dag", hint: "Visa valda barns aktiviteter på Hem" },
+  { id: "fordjupa", label: "Din dag – fördjupning", hint: "Dagens steg och nästa rimliga sak" },
+  { id: "kvall", label: "Kvällscheck", hint: "Kort avstämning efter kl 18" },
+  { id: "mina-genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i MyFlove" },
   {
     id: "medicin",
     label: "Rutiner & medicin",
@@ -31,14 +43,19 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "omrade", label: "Områdesväljare", hint: "Vilket rum du är i" },
 ];
 
+/** Hur många saker checklistan visar innan "Visa alla". 0 = alla. */
+export type ChecklistPreview = 3 | 5 | 0;
+
 export interface HomeLayoutPrefs {
   hidden: HomeBlockId[];
   order: HomeBlockId[];
+  checklistPreview?: ChecklistPreview;
 }
 
 export const DEFAULT_PREFS: HomeLayoutPrefs = {
   hidden: ["barnens-dag"],
-  order: ["barnens-dag", "medicin", "omrade"],
+  order: HOME_BLOCKS.map((b) => b.id),
+  checklistPreview: 3,
 };
 
 const STORAGE_KEY = "myflove-home-layout";
@@ -84,6 +101,7 @@ export function useHomeLayout() {
     setPrefs((p) => {
       const current = p?.hidden ?? [];
       return {
+        ...p,
         order: p?.order ?? DEFAULT_PREFS.order,
         hidden: current.includes(id) ? current.filter((x) => x !== id) : [...current, id],
       };
@@ -96,10 +114,18 @@ export function useHomeLayout() {
       const j = i + dir;
       if (i < 0 || j < 0 || j >= arr.length) return p ?? DEFAULT_PREFS;
       [arr[i], arr[j]] = [arr[j]!, arr[i]!];
-      return { hidden: p?.hidden ?? [], order: arr };
+      return { ...p, hidden: p?.hidden ?? [], order: arr };
     });
+
+  const checklistPreview: ChecklistPreview = prefs?.checklistPreview ?? 3;
+  const setChecklistPreview = (n: ChecklistPreview) =>
+    setPrefs((p) => ({
+      hidden: p?.hidden ?? DEFAULT_PREFS.hidden,
+      order: p?.order ?? DEFAULT_PREFS.order,
+      checklistPreview: n,
+    }));
 
   const reset = () => setPrefs(DEFAULT_PREFS);
 
-  return { order, hidden, visible, toggle, move, reset };
+  return { order, hidden, visible, toggle, move, reset, checklistPreview, setChecklistPreview };
 }
