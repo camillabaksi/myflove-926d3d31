@@ -46,8 +46,9 @@ describe("BatteryToday – dagens observationer", () => {
     expect(screen.getByText("Energi idag")).toBeTruthy();
     expect(screen.getByText("Mående idag")).toBeTruthy();
     // Båda energiobservationerna syns – inget skrivs över.
-    expect(screen.getByText(new RegExp(`${toScale10(2) * 10}%`))).toBeTruthy();
-    expect(screen.getByText(new RegExp(`${toScale10(4) * 10}%`))).toBeTruthy();
+    // Energin visas som ordnivå (Låg/Lagom/God), inte som procent.
+    expect(screen.getByText(orkWord(toScale10(2) * 10).short)).toBeTruthy();
+    expect(screen.getByText(orkWord(toScale10(4) * 10).short)).toBeTruthy();
     // Fritexten följer med sin observation.
     expect(screen.getByText("Sovit bara 4 timmar.")).toBeTruthy();
     expect(screen.getByText("Känner mig bättre.")).toBeTruthy();
