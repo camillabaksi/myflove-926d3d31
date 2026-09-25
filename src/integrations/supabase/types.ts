@@ -383,6 +383,24 @@ export type Database = {
         }
         Relationships: []
       }
+      family_share_areas: {
+        Row: {
+          area: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          area: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          area?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       flow_conversations: {
         Row: {
           created_at: string
@@ -902,6 +920,17 @@ export type Database = {
       create_household: {
         Args: { _color: string; _display_name: string; _name: string }
         Returns: string
+      }
+      get_family_shared_data: {
+        Args: never
+        Returns: {
+          area: string
+          color: string
+          display_name: string
+          key: string
+          owner_id: string
+          value: Json
+        }[]
       }
       get_friction_board: {
         Args: never
