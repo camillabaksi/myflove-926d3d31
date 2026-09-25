@@ -395,6 +395,40 @@ export function applyTheme(themeId: ThemeId): void {
   el.style.setProperty("--forest", vars.primary);
 }
 
+/** Ljust, mörkt eller följ telefonen. Sparas per enhet. */
+export type Appearance = "auto" | "ljust" | "morkt";
+export const APPEARANCE_KEY = "myflove-appearance";
+export const APPEARANCES: Array<{ id: Appearance; label: string; hint: string }> = [
+  { id: "ljust", label: "Ljust", hint: "Ljusa ytor hela dagen" },
+  { id: "morkt", label: "Mörkt", hint: "Mörka ytor, skonsamt på kvällen" },
+  { id: "auto", label: "Som telefonen", hint: "Följer telefonens inställning" },
+];
+
+export function readAppearance(): Appearance {
+  const v = readKey(APPEARANCE_KEY, "ljust");
+  return v === "auto" || v === "morkt" ? v : "ljust";
+}
+
+export function applyAppearance(a: Appearance = readAppearance()): void {
+  if (typeof document === "undefined") return;
+  const dark =
+    a === "morkt" ||
+    (a === "auto" && typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches);
+  document.documentElement.classList.toggle("dark", Boolean(dark));
+}
+
+export function setAppearance(a: Appearance): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(APPEARANCE_KEY, a);
+  } catch {
+    /* gäller bara denna session */
+  }
+  applyAppearance(a);
+  applyTheme(readPersonalization().theme);
+  window.dispatchEvent(new CustomEvent(PERSONALIZATION_EVENT, { detail: readPersonalization() }));
+}
+
 export function setPersonalization(patch: Partial<Personalization>): void {
   if (typeof window === "undefined") return;
   try {
@@ -410,26 +444,47 @@ export function setPersonalization(patch: Partial<Personalization>): void {
 
 /** Kallas vid appstart så temat finns på plats direkt. */
 export function initPersonalization(): void {
+  applyAppearance();
   applyTheme(readPersonalization().theme);
 }
 
 export function usePersonalization() {
   const [value, setValue] = useState<Personalization>(PERSONALIZATION_DEFAULTS);
+  const [appearance, setAppearanceState] = useState<Appearance>("ljust");
 
   useEffect(() => {
-    const sync = () => setValue(readPersonalization());
+    const sync = () => {
+      setValue(readPersonalization());
+      setAppearanceState(readAppearance());
+    };
     sync();
     initPersonalization();
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const onScheme = () => {
+      if (readAppearance() === "auto") initPersonalization();
+    };
+    mq?.addEventListener?.("change", onScheme);
     window.addEventListener(PERSONALIZATION_EVENT, sync);
     window.addEventListener("storage", sync);
     return () => {
+      mq?.removeEventListener?.("change", onScheme);
       window.removeEventListener(PERSONALIZATION_EVENT, sync);
       window.removeEventListener("storage", sync);
     };
   }, []);
 
   const update = useCallback((patch: Partial<Personalization>) => setPersonalization(patch), []);
-  const reset = useCallback(() => setPersonalization(PERSONALIZATION_DEFAULTS), []);
+  const reset = useCallback(() => {
+    setPersonalization(PERSONALIZATION_DEFAULTS);
+    setAppearance("ljust");
+  }, []);
 
-  return { personalization: value, update, reset, unlocked: isPersonalizationUnlocked() };
+  return {
+    personalization: value,
+    appearance,
+    setAppearance,
+    update,
+    reset,
+    unlocked: isPersonalizationUnlocked(),
+  };
 }
