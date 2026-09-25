@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Circle, Link2 } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
