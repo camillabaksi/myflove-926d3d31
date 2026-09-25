@@ -43,6 +43,13 @@
       "when": 1790353957319,
       "tag": "0005_family_share_more_areas",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790354125095,
+      "tag": "0006_family_share_add_hem_drop_resor",
+      "breakpoints": true
     }
   ]
 }

@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CalendarDays, ListChecks, ShoppingCart, Pill, Lock, Users, Dumbbell, Smile, Wallet, GraduationCap, Briefcase, StickyNote, MapPin } from "lucide-react";
+import { CalendarDays, ListChecks, ShoppingCart, Pill, Lock, Users, Dumbbell, Smile, Wallet, GraduationCap, Briefcase, StickyNote, Home } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { todayISO } from "@/lib/day";
 
 type Area =
   | "kalender" | "uppgifter" | "inkop" | "rutiner" | "traning" | "maende"
-  | "ekonomi" | "studier" | "jobb" | "anteckningar" | "resor";
+  | "ekonomi" | "studier" | "jobb" | "anteckningar" | "hem";
 
 const AREAS: { id: Area; label: string; hint: string; icon: typeof CalendarDays }[] = [
   { id: "kalender", label: "Kalender & Min dag", hint: "Dina aktiviteter och möten med datum", icon: CalendarDays },
@@ -19,7 +19,7 @@ const AREAS: { id: Area; label: string; hint: string; icon: typeof CalendarDays 
   { id: "studier", label: "Studier", hint: "Kurser och studieplan", icon: GraduationCap },
   { id: "jobb", label: "Jobb", hint: "Projekt", icon: Briefcase },
   { id: "anteckningar", label: "Anteckningar & idéer", hint: "Tankar du skrivit ner", icon: StickyNote },
-  { id: "resor", label: "Resor", hint: "Sparade resor", icon: MapPin },
+  { id: "hem", label: "Hem & städning", hint: "Städlistor och sysslor hemma", icon: Home },
 ];
 
 type SharedRow = {
@@ -56,6 +56,18 @@ function linesFor(area: Area, rows: SharedRow[]): string[] {
   if (area === "inkop") {
     const shop = get("myflow-shopping").filter((e) => !e.completed && !e.checked).map(label);
     return shop.slice(0, 10).map((s) => `🛒 ${s}`);
+  }
+  if (area === "hem") {
+    const done = new Set(get("myflove-cleaning-done").map((e) => str(e.id) || str(e.taskId)));
+    const custom = get("myflove-cleaning-custom");
+    return custom
+      .slice(0, 10)
+      .map((e) => {
+        const id = str(e.id);
+        const t = label(e) || str(e.task);
+        return t ? `${t}${id && done.has(id) ? " – klar" : ""}` : "";
+      })
+      .filter(Boolean);
   }
   if (area !== "rutiner") {
     const list = rows.flatMap((r) => asList(r.value));
