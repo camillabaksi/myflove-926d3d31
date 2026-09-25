@@ -29,6 +29,58 @@ export const PRIORITY_LABEL: Record<PriorityLevel, string> = {
   4: "Extra",
 };
 
+/**
+ * QuickFlows lagringsvärden. Endast PRESENTATION/kompatibilitet av P1–P4 –
+ * all prioriteringslogik bor i den här filen.
+ */
+export type QuickflowBucket = "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
+
+const BUCKET_TO_PRIORITY: Record<QuickflowBucket, PriorityLevel> = {
+  nu: 1,
+  sedan: 2,
+  "kan-vanta": 3,
+  "om-du-orkar": 4,
+};
+
+const PRIORITY_TO_BUCKET: Record<PriorityLevel, QuickflowBucket> = {
+  1: "nu",
+  2: "sedan",
+  3: "kan-vanta",
+  4: "om-du-orkar",
+};
+
+/** Användarvänliga ord i QuickFlow för P1–P4. */
+export const QUICKFLOW_LABEL: Record<PriorityLevel, string> = {
+  1: "Nu",
+  2: "Sedan",
+  3: "Kan vänta",
+  4: "Om du orkar",
+};
+
+/** Översätter gammal/ny sparad bucket till P1–P4. Okända värden → P3. */
+export function bucketToPriority(bucket: unknown): PriorityLevel {
+  return typeof bucket === "string" && bucket in BUCKET_TO_PRIORITY
+    ? BUCKET_TO_PRIORITY[bucket as QuickflowBucket]
+    : 3;
+}
+
+export function priorityToBucket(priority: PriorityLevel): QuickflowBucket {
+  return PRIORITY_TO_BUCKET[priority];
+}
+
+/** Normaliserar ett sparat värde till en giltig bucket. */
+export function normalizeBucket(bucket: unknown): QuickflowBucket {
+  return priorityToBucket(bucketToPriority(bucket));
+}
+
+/** Korta definitioner – används t.ex. i AI-prompten. */
+export const PRIORITY_DEFINITIONS: Record<PriorityLevel, string> = {
+  1: "Måste göras: deadline idag, fast tid, hälsa/säkerhet, omsorg eller tydlig konsekvens.",
+  2: "Bör göras: viktigt men kan flyttas utan större konsekvens.",
+  3: "Kan vänta: kan flyttas utan större konsekvens.",
+  4: "Extra: frivilligt eller låg konsekvens.",
+};
+
 export interface PlanInput {
   id: string;
   title: string;
