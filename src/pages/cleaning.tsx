@@ -21,6 +21,7 @@ import {
 } from "@/lib/cleaning";
 import { Clock, RotateCcw, Sparkles, ShoppingBasket, Plus, X, ListChecks } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import AreaFocus from "@/components/area-focus";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
@@ -141,6 +142,13 @@ export default function CleaningPage() {
             title="Städning"
             emoji="🧹"
             description="Välj rum och läge. Kryssa av i din takt – allt räknas."
+          />
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <AreaFocus
+            intent="Jag ska städa"
+            lowHint="Låg ork idag – plocka 3 saker räcker."
           />
         </MyFloveWide>
 

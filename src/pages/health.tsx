@@ -4,6 +4,7 @@ import { ArrowRight, Battery, Dumbbell, Pill, Sunrise } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import EnergyBattery from "@/components/energy-battery";
+import AreaFocus from "@/components/area-focus";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 
