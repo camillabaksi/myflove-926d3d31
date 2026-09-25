@@ -1,12 +1,15 @@
-import { useMemo, useState } from "react";
-import { CheckCircle2, Plus } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { CheckCircle2, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import StartHelper from "@/components/home/start-helper";
+import LandingPause from "@/components/home/landing-pause";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
 import type { FlowItem } from "@/lib/flow-items";
+
 
 function toMinutes(time?: string | null) {
   if (!time) return null;
