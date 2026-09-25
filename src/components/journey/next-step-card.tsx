@@ -19,7 +19,8 @@ import { cn } from "@/lib/utils";
 export default function NextStepCard() {
   const { t } = useLang();
   const { activeTasks } = useTasks();
-  const { percent } = useCapacityMode();
+  const { percent, mode } = useCapacityMode();
+  const lowOrk = mode === "lagt";
   const [smaller, setSmaller] = useState(false);
   const { collapsed, toggle } = useCollapsible("home-next-step");
   const { flow } = useFlowScore();
@@ -74,7 +75,7 @@ export default function NextStepCard() {
             (lowOrk && !smaller ? (
               <>
                 <p className="mt-2 text-sm text-ink">
-                  {t("Du har låg energi idag. Vi kan börja mindre.")}
+                  {t("Kapacitetsläget är Lågt. Vi kan börja mindre.")}
                 </p>
                 <button
                   type="button"

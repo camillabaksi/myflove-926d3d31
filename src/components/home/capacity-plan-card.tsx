@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useTasks } from "@/hooks/use-data";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useLang } from "@/hooks/use-language";
 import { addDaysISO, todayISO } from "@/lib/day";
 import {
