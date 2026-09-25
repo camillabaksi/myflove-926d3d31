@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { syncReminder, cancelReminder } from "@/lib/push.functions";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { emitActivityDone } from "@/lib/activity-energy-event";
+import { decodeVisualNotes } from "@/lib/child-visual-schedule";
 
 import CollapsibleSection from "@/components/collapsible-section";
 import ChildSchedule from "@/components/child-schedule";
@@ -503,6 +504,7 @@ function ChildrenContent() {
                 {visibleItems.map((item) => {
                   const Icon = KIND_META[item.kind].icon;
                   const mine = item.owner_id === userId;
+                  const displayNote = decodeVisualNotes(item.notes).note.trim();
                   return (
                     <li key={item.id} className="surface-card p-4 space-y-2">
                       <div className="flex items-start gap-3">
@@ -530,7 +532,7 @@ function ChildrenContent() {
                               .filter(Boolean)
                               .join(" · ")}
                           </div>
-                          {item.notes && <p className="text-sm mt-1">{item.notes}</p>}
+                           {displayNote && <p className="mt-1 break-words text-sm">{displayNote}</p>}
                           {item.file_path && (
                             <button
                               type="button"
