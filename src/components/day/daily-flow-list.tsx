@@ -89,6 +89,30 @@ export function DailyFlowList({
     [items, dayISO, setOrderMap],
   );
 
+  /** Var i dagen är vi just nu? Uppdateras varje minut, bara för dagens datum. */
+  const [nowMinutes, setNowMinutes] = useState(() => {
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  });
+  useEffect(() => {
+    const id = setInterval(() => {
+      const d = new Date();
+      setNowMinutes(d.getHours() * 60 + d.getMinutes());
+    }, 30000);
+    return () => clearInterval(id);
+  }, []);
+  const isToday = dayISO === todayISO();
+  const nowIndex = useMemo(() => {
+    if (!isToday) return -1;
+    const idx = items.findIndex((item) => {
+      if (!item.time) return false;
+      const [h, m] = item.time.split(":").map(Number);
+      if (Number.isNaN(h)) return false;
+      return h * 60 + (m || 0) > nowMinutes;
+    });
+    return idx;
+  }, [items, isToday, nowMinutes]);
+
   if (items.length === 0) {
     return (
       <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">
