@@ -53,8 +53,9 @@ export function MyFloveEmoji({
   motion?: keyof typeof EMOJI_MOTION;
   className?: string;
 }) {
+  const Icon = name ? MYFLOVE_ICON[name] : undefined;
   const shown = emoji ?? (name ? MYFLOVE_EMOJI[name] : undefined);
-  if (!shown) return null;
+  if (!Icon && !shown) return null;
   return (
     <span
       aria-hidden
@@ -65,7 +66,7 @@ export function MyFloveEmoji({
         className,
       )}
     >
-      {shown}
+      {Icon ? <Icon size={ICON_PX[size]} strokeWidth={2.2} /> : shown}
     </span>
   );
 }
