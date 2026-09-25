@@ -1,5 +1,17 @@
 # Roadmap
 
+## Städning (godkänd audit 2026-09-25)
+- [x] Steg 1: Konsolidera prioritet till priority-engine
+- [ ] Steg 2: Fullt/Mellan/Lågt som primär kapacitetskälla (väntar på godkännande efter steg 1)
+- [ ] Steg 3: FlowPlan kopplas till prioritet + kapacitet
+- [ ] Steg 4: Sekundära planeringskort läser FlowPlans resultat
+- [ ] Steg 5: Städa Flow-texter
+- [ ] Steg 6: UI-termer och empty states
+- [ ] Steg 7: Verifiera gammal sparad data
+- [ ] Steg 8: Ta bort bekräftat oanvänd kod efter ny verifiering
+- [ ] Steg 9: Tillgänglighet och mobil
+- [ ] Steg 10: ARCHITECTURE.md och changelog
+
 - [x] Skapa komplett tvåspråkigt materialpaket: sammanhängande Living Blueprint, svenska/engelska pitchdeck och uppdaterade pitchfilmer i 16:9 och 9:16 (2026-09-25)
 
 - [x] Förtydliga Dagsvyn med gemensamma pictogram, områdesfärger och lugnare aktivitetsrader (2026-09-24)
