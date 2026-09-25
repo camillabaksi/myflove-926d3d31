@@ -14,6 +14,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Just nu-kort med Klar och Inte nu, följt av Dagens checklista (2026-09-25)",
       "Orken visas i ord – Låg, Lagom eller God – med enkel förklaring (2026-09-25)",
+      "Samma ordnivåer för batteriet överallt: Mitt batteri, observationer, QuickFlow, Familj och Träning (2026-09-25)",
       "Färre rutor på Hem; resten ligger i Mer i MyFlove (2026-09-25)",
     ],
   },

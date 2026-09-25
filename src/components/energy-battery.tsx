@@ -6,6 +6,7 @@ import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import ImpactBatteryNudge from "@/components/impact-battery-nudge";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
+import { orkWord } from "@/lib/ork-word";
 import { MyFloveBlock, MyFloveStat } from "@/components/myflove/block";
 import { MyFloveIcon } from "@/components/myflove";
 import { useLang } from "@/hooks/use-language";
@@ -29,14 +30,8 @@ export default function EnergyBattery({
   const [open, setOpen] = useState(defaultOpen);
   const level = Math.round(reading.now);
   const shownLevel = Math.round(useAnimatedNumber(level));
-  const levelWord =
-    level >= 75
-      ? t("Gott om energi")
-      : level >= 55
-        ? t("Medelbra energi")
-        : level >= 35
-          ? t("Energi på halvfart")
-          : t("Låg energi just nu");
+  const ork = orkWord(shownLevel);
+  const levelWord = t(ork.label);
   const trendWord =
     reading.trend === "stiger"
       ? t("på väg upp")
@@ -52,7 +47,7 @@ export default function EnergyBattery({
         onClick={onNavigate}
         data-testid="battery-card"
         data-area="halsa"
-        aria-label={`${t("Mitt batteri")}, ${shownLevel} %. ${t("Öppna för att logga energi och mående.")}`}
+        aria-label={`${t("Mitt batteri")}, ${levelWord}. ${t("Öppna för att logga energi och mående.")}`}
         className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
         <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" className="rounded-full" />
@@ -64,7 +59,7 @@ export default function EnergyBattery({
         </span>
         <span className="w-full space-y-1 border-t border-border/50 pt-3">
           <span className="block font-display text-3xl font-bold leading-none text-ink">
-            {shownLevel}%
+            {t(ork.short)}
           </span>
           <span className="block text-sm font-medium text-gold">{levelWord}</span>
         </span>
@@ -83,8 +78,8 @@ export default function EnergyBattery({
       <div className="grid grid-cols-1 gap-2 @min-[240px]:grid-cols-2 sm:gap-3">
         <MyFloveStat
           label={t("Energi")}
-          value={`${shownLevel}%`}
-          hint={`${levelWord} · ${trendWord}`}
+          value={levelWord}
+          hint={`${t("Ungefär")} ${shownLevel} % · ${trendWord}`}
           icon={BatteryCharging}
           tone="sun"
         />

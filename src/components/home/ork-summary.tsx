@@ -2,14 +2,10 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useLang } from "@/hooks/use-language";
+import { orkWord } from "@/lib/ork-word";
 
 /** Orken i ord – Låg / Lagom / God. Procent bara på begäran. */
-export function orkWord(percent: number) {
-  if (percent < 40)
-    return { label: "Låg ork", text: "Ta det lugnt. Gör bara det viktigaste idag." };
-  if (percent < 70) return { label: "Lagom ork", text: "Du orkar det vanliga. Lägg in en paus." };
-  return { label: "God ork", text: "Bra läge att ta itu med något som kräver lite mer." };
-}
+export { orkWord };
 
 export default function OrkSummary() {
   const { t } = useLang();

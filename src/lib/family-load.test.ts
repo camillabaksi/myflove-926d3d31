@@ -41,7 +41,7 @@ describe("familjens belastning", () => {
       batteryPercent: 20,
     });
     expect(load.demanding).toBe(true);
-    expect(load.summaryLine).toContain("20 %");
+    expect(load.summaryLine).toContain("låg ork");
   });
 
   it("ger ingen kontext när inget återstår", () => {

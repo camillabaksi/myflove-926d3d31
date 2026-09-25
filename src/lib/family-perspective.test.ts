@@ -117,7 +117,7 @@ describe("Förälderns kapacitet och tät eftermiddag", () => {
   ];
   it("låg batterinivå ger konkret förslag med förenklad middag och återhämtning", () => {
     const s = buildFamilyLoad({ items, batteryPercent: 35, capacity: "medel", nowMinutes: 12 * 60 });
-    expect(s.suggestion).toContain("35 % batteri");
+    expect(s.suggestion).toContain("låg ork");
     expect(s.suggestion).toContain("förenkla middagen");
     expect(s.suggestion).toContain("20 min återhämtning efter hämta bella");
   });

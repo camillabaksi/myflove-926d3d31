@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { track } from "@/lib/analytics";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { cn } from "@/lib/utils";
+import { orkWord } from "@/lib/ork-word";
 import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus } from "@/lib/exercise-library";
 import {
   DEFAULT_REQUEST,
@@ -212,7 +213,8 @@ export default function WorkoutBuilderPanel({
               Berätta vad du behöver, så gör jag ett pass som passar dagen.
             </p>
             <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-muted/60 px-3 py-1 text-xs text-muted-foreground">
-              <BatteryMedium size={14} aria-hidden /> Din energi just nu: {energyPercent} %
+              <BatteryMedium size={14} aria-hidden /> Din energi just nu:{" "}
+              {orkWord(energyPercent).label}
             </p>
             <Button type="button" variant="ghost" size="sm" onClick={onCloseBuilder}>
               Stäng skaparen

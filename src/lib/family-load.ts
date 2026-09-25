@@ -8,6 +8,7 @@
  */
 
 import type { CapacityLevel } from "@/lib/adaptive-activity";
+import { orkWord } from "@/lib/ork-word";
 
 export interface FamilyLoadItem {
   /** HH:MM */
@@ -90,7 +91,9 @@ export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {
     (upcoming.length >= 1 && input.capacity === "låg");
 
   const batteryText =
-    typeof input.batteryPercent === "number" ? `Du har ${Math.round(input.batteryPercent)} % batteri. ` : "";
+    typeof input.batteryPercent === "number"
+      ? `Du har ${orkWord(Math.round(input.batteryPercent)).label.toLocaleLowerCase("sv")}. `
+      : "";
 
   const summaryLine = upcoming.length
     ? `${batteryText}${upcoming.length === 1 ? "En familjeaktivitet" : `${upcoming.length} familjeaktiviteter`} kräver dig${windowLabel ? ` ${windowLabel}` : ""}.`
@@ -109,7 +112,7 @@ export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {
   const suggestion = !upcoming.length
     ? null
     : demanding && lowBattery && upcoming.length >= 2
-      ? `Din ${partOfDay} är ganska tät${battery !== null ? ` och du har ${battery} % batteri` : ""}. Vill du ${hasMeal ? "förenkla middagen och " : ""}lägga in 20 min återhämtning efter ${first!.title.toLocaleLowerCase("sv")}?`
+      ? `Din ${partOfDay} är ganska tät${battery !== null ? ` och du har ${orkWord(battery).label.toLocaleLowerCase("sv")}` : ""}. Vill du ${hasMeal ? "förenkla middagen och " : ""}lägga in 20 min återhämtning efter ${first!.title.toLocaleLowerCase("sv")}?`
       : demanding
         ? "Vill du att jag hjälper dig hitta en kort återhämtning som får plats?"
         : "Vill du att jag hjälper dig hitta ett lugnt nästa steg?";

@@ -4,6 +4,7 @@ import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useLocalStorage } from "@/lib/storage";
+import { orkWord } from "@/lib/ork-word";
 import { useLang } from "@/hooks/use-language";
 
 /**
@@ -58,7 +59,7 @@ export default function ImpactBatteryNudge() {
         <div className="min-w-0 space-y-2">
           <p className="text-sm text-ink">
             {t("Du har sagt att något påverkar dig idag. Vill du sänka batteriet till")}{" "}
-            <strong>{suggestion}%</strong>?
+            <strong>{t(orkWord(suggestion).label).toLocaleLowerCase("sv")}</strong>?
           </p>
           <div className="flex flex-wrap gap-2">
             <button
@@ -69,7 +70,7 @@ export default function ImpactBatteryNudge() {
               }}
               className="press rounded-pill bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground"
             >
-              {t("Ja, sätt")} {suggestion}%
+              {t("Ja, sätt")} {t(orkWord(suggestion).label).toLocaleLowerCase("sv")}
             </button>
             <button
               type="button"

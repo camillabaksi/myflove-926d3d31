@@ -1,5 +1,6 @@
 ## 2026-09-25
 - Hem: "Just nu"-kort med en sak i taget (Klar / Inte nu), Dagens checklista, orken i ord (Låg/Lagom/God) med förklaring, färre rutor och stilla maskot vid Ingen rörelse.
+- Batteriet följer samma ordnivåer (Låg/Lagom/God ork) över hela appen: Mitt batteri, dagens observationer, QuickFlow, Familj och Träning. Procenten finns kvar bakom "Hur räknas det?".
 
 ## 2026-09-24 – Min dag, barnens dagar och Familj
 
