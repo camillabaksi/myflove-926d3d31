@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Hem: \"Ny på MyFlove?\" och \"Så funkar MyFlove\" sammanslagna till en ruta – kartan leder vidare till hela översikten (2026-09-26)",
       "Hem: hopfälld \"Ny på MyFlove? Så funkar det\"-lathund längst ner – visuell karta över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning (2026-09-26)",
       "Studier: Word-, PowerPoint-, Excel- och OpenDocument-dokument kan laddas upp (2026-09-25)",
       "Ikoner: emojis ersatta med riktiga Lucide-ikoner överallt – inga tomma fyrkanter; kapacitetslägen visar färgade prickar (2026-09-25)",
