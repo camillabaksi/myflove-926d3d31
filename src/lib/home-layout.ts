@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
@@ -56,12 +56,6 @@ export const DEFAULT_PREFS: HomeLayoutPrefs = {
 };
 
 const STORAGE_KEY = "myflove-home-layout";
-/**
- * Återställning: Hem fick fyra fasta widgets i stället för de gamla
- * konkurrerande blocken – gamla sparade ordrar/hidden nollställs en gång.
- */
-const CLEANUP_MIGRATION_KEY = "myflove-home-layout-children-opt-in-3";
-
 /** Filtrerar bort gamla block och återställer sekundärblockens standardordning. */
 export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
   const known = new Set(
@@ -72,16 +66,6 @@ export function cleanupOrder(order: HomeBlockId[] | undefined): HomeBlockId[] {
 
 export function useHomeLayout() {
   const [prefs, setPrefs] = useCloudSyncedStorage<HomeLayoutPrefs>(STORAGE_KEY, DEFAULT_PREFS);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.localStorage.getItem(CLEANUP_MIGRATION_KEY)) return;
-    window.localStorage.setItem(CLEANUP_MIGRATION_KEY, "1");
-    setPrefs((current) => ({
-      order: cleanupOrder(current?.order),
-      hidden: Array.from(new Set([...(current?.hidden ?? []), "barnens-dag"])),
-    }));
-  }, [setPrefs]);
 
   const order = useMemo<HomeBlockId[]>(() => {
     const valid = (prefs?.order ?? []).filter((id): id is HomeBlockId =>

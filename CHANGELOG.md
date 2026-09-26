@@ -1,4 +1,5 @@
 ## 2026-09-26
+- Länken Anpassa hemskärmen ligger nu sist på Hem, efter guiden. Sparade val för block, ordning och checklistan skrivs inte längre över av en äldre engångsåterställning på nya enheter.
 - Hem fokuserar nu på vad du behöver just nu: Enkelt läge-knappen är borttagen och "Din dag – när du vill fördjupa" finns hopfälld i Idag. "Ny på MyFlove?" ligger sist på Hem och kan leda direkt till Flow. Befintliga planeringsdelar och data är kvar.
 - Hem: "Ny på MyFlove?"-lathunden och länken "Så funkar MyFlove" är sammanslagna till en ruta längst ner – kartan avslutas med en knapp till hela översikten, så det finns bara en ingång till hjälpen.
 - Hem: ny hopfälld "Ny på MyFlove? Så funkar det"-lathund längst ner – en visuell karta med Flow i mitten över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning, med Prova-knappar.

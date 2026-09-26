@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Anpassa hemskärmen ligger sist på Hem; sparade val för block, ordning och checklistan bevaras även på nya enheter (2026-09-26)",
       "Hem fokuserar på vad du behöver just nu: Enkelt läge-knappen och dagfördjupningen har flyttats bort. Dagfördjupningen finns hopfälld i Idag, och Ny på MyFlove?-guiden ligger sist på Hem med väg till Flow (2026-09-26)",
       "Hem: \"Ny på MyFlove?\" och \"Så funkar MyFlove\" sammanslagna till en ruta – kartan leder vidare till hela översikten (2026-09-26)",
       "Hem: hopfälld \"Ny på MyFlove? Så funkar det\"-lathund längst ner – visuell karta över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning (2026-09-26)",
