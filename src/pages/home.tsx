@@ -437,12 +437,6 @@ export default function Home() {
           data-npf="optional"
         >
           <Link
-            href="/oversikt"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
-          >
-            <Compass size={13} /> {t("Så funkar MyFlove")}
-          </Link>
-          <Link
             href="/anpassa-hem"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
           >
