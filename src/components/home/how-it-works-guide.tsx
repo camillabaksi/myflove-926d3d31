@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
+import { Button } from "@/components/ui/button";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -123,11 +124,12 @@ export default function HowItWorksGuide() {
       data-testid="home-how-it-works"
       className="rounded-3xl border border-border/60 bg-card/70 shadow-soft"
     >
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 p-4 text-left"
+        className="flex h-auto w-full items-center justify-start gap-3 rounded-3xl p-4 text-left"
       >
         <FlowMascot size="sm" mood="calm" alt="" />
         <span className="min-w-0 flex-1">
@@ -140,7 +142,7 @@ export default function HowItWorksGuide() {
           className={cn("h-5 w-5 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
           aria-hidden
         />
-      </button>
+      </Button>
 
       {open && (
         <div className="animate-fade-in space-y-3 px-4 pb-5">
@@ -172,12 +174,17 @@ export default function HowItWorksGuide() {
               {t("Tips! Du kan alltid fråga Flow om du inte vet var du ska börja.")}
             </p>
           </div>
+          <Button asChild className="w-full rounded-2xl">
+            <Link href="/flow" onClick={() => track("home_widget_opened", { source: "guide-ask-flow" })}>
+              {t("Fråga Flow")} <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </Button>
           <Link
             href="/oversikt"
             onClick={() => track("home_widget_opened", { source: "guide-overview" })}
-            className="flex items-center justify-center gap-1.5 rounded-2xl border border-border/60 bg-card px-4 py-3 text-sm font-semibold text-primary"
+            className="block text-center text-xs font-medium text-primary underline underline-offset-2"
           >
-            {t("Se allt som finns i MyFlove")} <ArrowRight className="h-4 w-4" aria-hidden />
+            {t("Se allt som finns i MyFlove")}
           </Link>
         </div>
       )}

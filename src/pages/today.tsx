@@ -1,5 +1,5 @@
 import { track } from "@/lib/analytics";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -17,6 +17,13 @@ import { todayISO as todayStr } from "@/lib/day";
 import { Bell, CalendarDays, Heart, ListOrdered, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLang } from "@/hooks/use-language";
+import QuickAddSheet from "@/components/quick-add-sheet";
+import JourneySteps from "@/components/journey/journey-steps";
+import NextStepCard from "@/components/journey/next-step-card";
+import WeekReviewCard from "@/components/week-review-card";
+import { useWeekReview } from "@/hooks/use-activity-history";
+import { weekStartISO } from "@/lib/week-review";
+import { parseISODate } from "@/lib/day";
 
 /**
  * ❤️ Idag – appens huvudupplevelse för dagen.
@@ -29,11 +36,14 @@ import { useLang } from "@/hooks/use-language";
  */
 export function TodayContent() {
   const { t } = useLang();
+  const [addOpen, setAddOpen] = useState(false);
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
 
   const today = todayStr();
+  const isSunday = parseISODate(today).getDay() === 0;
+  const weekReview = useWeekReview(weekStartISO(today));
   const { reading, items: batteryItems } = useEnergyBattery();
 
   const { today: todaysItems } = useFlowItems();
@@ -52,6 +62,7 @@ export function TodayContent() {
 
   return (
     <MyFlovePageGrid area="idag">
+      <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
         <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
           <Heart className="h-7 w-7 text-primary" /> {t("Idag")}
@@ -87,6 +98,23 @@ export function TodayContent() {
             <FamilyDayPerspectives myDay={<DailyFlowList />} />
           </div>
         </section>
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <CollapsibleSection
+          id="today-day-deep-dive"
+          title={t("Din dag – när du vill fördjupa")}
+          description={t("Se dagens steg och nästa rimliga sak.")}
+          defaultCollapsed
+          className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+          headingClassName="text-base font-semibold text-ink"
+        >
+          <div className="space-y-4">
+            <JourneySteps onAddOpen={() => setAddOpen(true)} />
+            <NextStepCard />
+            {isSunday && <WeekReviewCard review={weekReview} />}
+          </div>
+        </CollapsibleSection>
       </MyFloveWide>
 
       <MyFloveWide>

@@ -14,7 +14,6 @@ export type HomeBlockId =
   | "ork"
   | "checklista"
   | "barnens-dag"
-  | "fordjupa"
   | "kvall"
   | "mina-genvagar"
   | "medicin"
@@ -31,7 +30,6 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "lage", label: "Hur är läget idag?", hint: "Välj Fullt, Mellan eller Lågt" },
   { id: "checklista", label: "Dagens checklista", hint: "Möten, vardag och rutiner" },
   { id: "barnens-dag", label: "Barnens dag", hint: "Visa valda barns aktiviteter på Hem" },
-  { id: "fordjupa", label: "Din dag – fördjupning", hint: "Dagens steg och nästa rimliga sak" },
   { id: "kvall", label: "Kvällscheck", hint: "Kort avstämning efter kl 18" },
   { id: "mina-genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i MyFlove" },
   {

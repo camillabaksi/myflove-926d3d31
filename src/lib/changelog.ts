@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Hem fokuserar på vad du behöver just nu: Enkelt läge-knappen och dagfördjupningen har flyttats bort. Dagfördjupningen finns hopfälld i Idag, och Ny på MyFlove?-guiden ligger sist på Hem med väg till Flow (2026-09-26)",
       "Hem: \"Ny på MyFlove?\" och \"Så funkar MyFlove\" sammanslagna till en ruta – kartan leder vidare till hela översikten (2026-09-26)",
       "Hem: hopfälld \"Ny på MyFlove? Så funkar det\"-lathund längst ner – visuell karta över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning (2026-09-26)",
       "Studier: Word-, PowerPoint-, Excel- och OpenDocument-dokument kan laddas upp (2026-09-25)",
