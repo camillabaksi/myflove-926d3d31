@@ -172,6 +172,13 @@ export default function HowItWorksGuide() {
               {t("Tips! Du kan alltid fråga Flow om du inte vet var du ska börja.")}
             </p>
           </div>
+          <Link
+            href="/oversikt"
+            onClick={() => track("home_widget_opened", { source: "guide-overview" })}
+            className="flex items-center justify-center gap-1.5 rounded-2xl border border-border/60 bg-card px-4 py-3 text-sm font-semibold text-primary"
+          >
+            {t("Se allt som finns i MyFlove")} <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
         </div>
       )}
     </section>

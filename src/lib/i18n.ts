@@ -67,6 +67,7 @@ export const EN: Record<string, string> = {
   Appstatistik: "App statistics",
   "Flow-inställningar": "Flow settings",
   "Så funkar MyFlove": "How MyFlove works",
+  "Se allt som finns i MyFlove": "See everything in MyFlove",
   "Min profil": "My profile",
   "Anpassa hemskärmen": "Customise home screen",
   "Anpassa appen": "Customise the app",
