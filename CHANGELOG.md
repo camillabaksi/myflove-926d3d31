@@ -1,4 +1,5 @@
 ## 2026-09-26
+- Hem: "Ny på MyFlove?"-lathunden och länken "Så funkar MyFlove" är sammanslagna till en ruta längst ner – kartan avslutas med en knapp till hela översikten, så det finns bara en ingång till hjälpen.
 - Hem: ny hopfälld "Ny på MyFlove? Så funkar det"-lathund längst ner – en visuell karta med Flow i mitten över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning, med Prova-knappar.
 
 ## 2026-09-25
