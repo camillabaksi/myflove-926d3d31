@@ -40,21 +40,14 @@ import {
   Pill,
   ArrowRight,
   Wind,
-  Sparkles,
   NotebookPen,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
-import WeekReviewCard from "@/components/week-review-card";
-import JourneySteps from "@/components/journey/journey-steps";
-import NextStepCard from "@/components/journey/next-step-card";
 import EveningCheck from "@/components/journey/evening-check";
 import CollapsibleSection from "@/components/collapsible-section";
 import NextLectureHomeRow from "@/components/study/next-lecture-home-row";
-import { useWeekReview } from "@/hooks/use-activity-history";
 import { useNpfSettings } from "@/lib/npf-mode";
-import { weekStartISO } from "@/lib/week-review";
-import { parseISODate } from "@/lib/day";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -79,19 +72,8 @@ export default function Home() {
   const { activeReminders } = useReminders();
   const { openItems } = useQuickflow();
   const { openNotes } = useNotes();
-  const { settings: npf, update: updateNpf } = useNpfSettings();
-  /** Enkelt läge följer det val som faktiskt gömmer innehåll. */
-  const simpleMode = npf.less;
-  const toggleSimpleMode = () =>
-    updateNpf(
-      simpleMode
-        ? { less: false, stillness: false }
-        : { less: true, calm: true, stillness: true, plainWords: true },
-    );
+  const { settings: npf } = useNpfSettings();
   const todayIso = todayISO();
-  // Veckoöversikten hör hemma på söndagen – veckan som varit, i lugn takt.
-  const isSunday = parseISODate(todayIso).getDay() === 0;
-  const weekReview = useWeekReview(weekStartISO(todayIso));
 
   const openQuickflow = () => {
     track("home_widget_opened", { source: "quickflow" });
@@ -320,42 +302,6 @@ export default function Home() {
           </section>
         </MyFloveWide>
 
-        {/* Enkelt läge – ett tryck för den som vill ha det lugnare. */}
-        <MyFloveWide style={{ order: 0.1 }} className="min-w-0 text-center">
-          <button
-            type="button"
-            onClick={toggleSimpleMode}
-            aria-pressed={simpleMode}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-3.5 py-2 text-xs font-medium text-muted-foreground shadow-soft transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <Sparkles size={13} aria-hidden className="text-primary" />
-            {simpleMode
-              ? t("Enkelt läge är på – visa allt igen")
-              : t("Vill du ha det lugnare? Visa mindre på skärmen")}
-          </button>
-        </MyFloveWide>
-
-        {/* Dagens detaljer finns kvar, men visas först när användaren ber om dem.
-            Enkelt läge ("Visa mindre") viker också detta – bara översta kortet syns. */}
-        {!isLowCapacity && shows("fordjupa") && (
-        <MyFloveWide style={{ order: 0.3 }} className="min-w-0" data-npf="optional">
-          <CollapsibleSection
-            id="home-day-support"
-            title={t("Din dag – när du vill fördjupa")}
-            description={t("Se dagens steg och nästa rimliga sak.")}
-            defaultCollapsed
-            className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
-            headingClassName="text-base font-semibold text-ink"
-          >
-            <div className="space-y-4">
-              <JourneySteps onAddOpen={() => setAddOpen(true)} />
-              <NextStepCard />
-              {isSunday && <WeekReviewCard review={weekReview} />}
-            </div>
-          </CollapsibleSection>
-        </MyFloveWide>
-        )}
-
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
         {!isLowCapacity && shows("kvall") && new Date().getHours() >= 18 && (
@@ -426,10 +372,6 @@ export default function Home() {
           <PwaInstallCard compact />
         </MyFloveWide>}
 
-        <MyFloveWide style={{ order: 98.8 }} className="min-w-0">
-          <HowItWorksGuide />
-        </MyFloveWide>
-
         <MyFloveWide
           style={{ order: 99 }}
           className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
@@ -441,6 +383,9 @@ export default function Home() {
           >
             <SlidersHorizontal size={13} /> {t("Anpassa hemskärmen")}
           </Link>
+        </MyFloveWide>
+        <MyFloveWide style={{ order: 100 }} className="min-w-0 pb-2">
+          <HowItWorksGuide />
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>

@@ -68,6 +68,7 @@ export const EN: Record<string, string> = {
   "Flow-inställningar": "Flow settings",
   "Så funkar MyFlove": "How MyFlove works",
   "Se allt som finns i MyFlove": "See everything in MyFlove",
+  "Fråga Flow": "Ask Flow",
   "Min profil": "My profile",
   "Anpassa hemskärmen": "Customise home screen",
   "Anpassa appen": "Customise the app",

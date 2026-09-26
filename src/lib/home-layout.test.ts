@@ -25,6 +25,11 @@ describe("hemskärmens standardlayout (fyra fasta widgets)", () => {
     expect(ids).not.toContain("energifloede");
   });
 
+  it("har flyttat dagfördjupningen från hemskärmens val", () => {
+    expect(HOME_BLOCKS.map((block) => block.id)).not.toContain("fordjupa");
+    expect(cleanupOrder(["fordjupa", "checklista"] as HomeBlockId[])).toEqual(["checklista"]);
+  });
+
   it("filtrerar bort okända block ur en gammal sparad ordning", () => {
     const gammal = ["omrade", "idag", "batteri", "vagar", "medicin"] as HomeBlockId[];
     const sorterad = cleanupOrder(gammal);
