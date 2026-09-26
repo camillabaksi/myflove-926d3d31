@@ -372,20 +372,20 @@ export default function Home() {
           <PwaInstallCard compact />
         </MyFloveWide>}
 
+        <MyFloveWide style={{ order: 100 }} className="min-w-0 pb-2">
+          <HowItWorksGuide />
+        </MyFloveWide>
         <MyFloveWide
-          style={{ order: 99 }}
-          className="flex flex-wrap items-center justify-center gap-4 pb-2 text-center"
+          style={{ order: 101 }}
+          className="flex items-center justify-center pb-2 text-center"
           data-npf="optional"
         >
           <Link
             href="/anpassa-hem"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+            className="inline-flex min-h-10 items-center gap-1.5 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
           >
             <SlidersHorizontal size={13} /> {t("Anpassa hemskärmen")}
           </Link>
-        </MyFloveWide>
-        <MyFloveWide style={{ order: 100 }} className="min-w-0 pb-2">
-          <HowItWorksGuide />
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
