@@ -40,7 +40,6 @@ import {
   Pill,
   ArrowRight,
   Wind,
-  Sparkles,
   NotebookPen,
 } from "lucide-react";
 import { todayISO } from "@/lib/day";
