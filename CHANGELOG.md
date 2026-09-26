@@ -1,3 +1,6 @@
+## 2026-09-26
+- Hem: ny hopfälld "Ny på MyFlove? Så funkar det"-lathund längst ner – en visuell karta med Flow i mitten över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning, med Prova-knappar.
+
 ## 2026-09-25
 - Studier: Word-, PowerPoint-, Excel-, OpenDocument- och EPUB-dokument kan nu laddas upp till flashcards/quiz och schema – texten läses ut direkt i telefonen.
 - Ikoner: appens emojis har ersatts med riktiga Lucide-ikoner via den gemensamma emoji-komponenten, så inget längre visas som tomma fyrkanter på enheter utan emojiteckensnitt. Kapacitetslägena Fullt/Mellan/Lågt visar färgade prickar och återhämtningsförslagen visar ikoner i stället för emojis.
