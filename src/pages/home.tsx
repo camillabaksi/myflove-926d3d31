@@ -33,7 +33,6 @@ import { AREA_META, useActiveArea } from "@/lib/life-areas";
 import IntroTour from "@/components/intro-tour";
 import {
   SlidersHorizontal,
-  Compass,
   CalendarDays,
   Brain,
   BatteryMedium,
