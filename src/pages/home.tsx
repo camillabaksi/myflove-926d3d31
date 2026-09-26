@@ -4,6 +4,7 @@ import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
+import HowItWorksGuide from "@/components/home/how-it-works-guide";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
@@ -425,6 +426,10 @@ export default function Home() {
         >
           <PwaInstallCard compact />
         </MyFloveWide>}
+
+        <MyFloveWide style={{ order: 98.8 }} className="min-w-0">
+          <HowItWorksGuide />
+        </MyFloveWide>
 
         <MyFloveWide
           style={{ order: 99 }}
