@@ -222,6 +222,11 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
+              <EnergyBattery
+                widget
+                href="/mitt-batteri"
+                onNavigate={() => track("battery_opened", { source: "hem" })}
+              />
               {!isLowCapacity && shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"
@@ -371,11 +376,6 @@ export default function Home() {
           >
             <div className="grid gap-4">
               {shows("mina-genvagar") && <HomeShortcuts />}
-              <EnergyBattery
-                widget
-                href="/mitt-batteri"
-                onNavigate={() => track("battery_opened", { source: "hem-historik" })}
-              />
               <NextLectureHomeRow />
               {/* Rutiner & medicin – dagens doser och rutiner. */}
               {shows("medicin") && (
