@@ -4,6 +4,7 @@ import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
+import QuickLogButton from "@/components/home/quick-log-button";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -36,7 +37,6 @@ import {
   CalendarDays,
   Brain,
   BatteryMedium,
-  Heart,
   Pill,
   ArrowRight,
   Wind,
@@ -204,6 +204,7 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
+              <QuickLogButton />
               <EnergyBattery
                 widget
                 href="/mitt-batteri"
@@ -233,7 +234,7 @@ export default function Home() {
 
 
             {!isLowCapacity && <nav
-              className="mt-5 grid grid-cols-4 gap-2"
+              className="mt-5 grid grid-cols-3 gap-2"
               data-testid="home-widgets"
               aria-label={t("Genvägar")}
               data-npf="optional"
@@ -241,7 +242,6 @@ export default function Home() {
               {[
                 { href: "/kalender", icon: CalendarDays, label: t("Kalender"), src: "kalender" },
                 { href: "/mitt-batteri", icon: BatteryMedium, label: t("Batteri"), src: "batteri" },
-                { href: "/hur-mar-du", icon: Heart, label: t("Mående"), src: "logga" },
               ].map((s) => (
                 <Link
                   key={s.href}

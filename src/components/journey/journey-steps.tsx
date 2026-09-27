@@ -33,7 +33,7 @@ const STEPS: StepDef[] = [
     body: "Logga ditt mående, din ork och vad som påverkar dig – så förstår vi vad du har kapacitet till idag.",
     simpleBody: "Känn efter hur du mår och hur mycket du orkar.",
     cta: "Logga hur du mår",
-    href: "/hur-mar-du",
+    href: "/mitt-batteri",
     event: "step1_opened",
   },
   {
