@@ -81,6 +81,7 @@ const SYNCED_SUFFIX = "__synced_at";
  * information, men den här listan är det säkra skyddet mot pre-mount-race.
  */
 export const CLOUD_USER_DATA_KEYS = new Set([
+  "myflove-saved-exercises",
   "myflove-rebuild-dismissed",
   "myflove-timeline-show-untimed",
   "myflove-flow-intro-seen",
