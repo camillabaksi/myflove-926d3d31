@@ -1,3 +1,4 @@
+import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isoWeekNumber, isoWeekNumberFromString } from "@/lib/iso-week";
@@ -838,6 +839,7 @@ export function CalendarContent() {
                       <Plus size={16} className="text-primary" />
                       {t("Påminnelse")}
                     </button>
+                    <CopyDayButton date={selectedDateStr} />
                     <button
                       onClick={() => setPictoMode(!pictoMode)}
                       aria-pressed={pictoMode}

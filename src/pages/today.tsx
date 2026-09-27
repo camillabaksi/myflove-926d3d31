@@ -1,3 +1,4 @@
+import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
@@ -92,6 +93,7 @@ export function TodayContent() {
                   <Bell size={15} /> {t("Påminnelse")}
                 </Link>
               </Button>
+              <CopyDayButton date={today} className="inline-flex h-9 items-center gap-1.5 rounded-full border border-input bg-background px-3 text-sm font-medium hover:bg-secondary/50" />
             </div>
           </header>
           <div className="pt-3">
