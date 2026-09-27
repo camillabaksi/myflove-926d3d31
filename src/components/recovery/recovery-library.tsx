@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { BookOpen, Check, ChevronDown } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, ChevronDown, ChevronRight, Play, Trash2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import ExercisePlayer from "@/components/recovery/exercise-player";
+import { useSavedExercises } from "@/hooks/use-saved-exercises";
+import { useChildren } from "@/hooks/use-children";
+import { durationLabel, ownerLine, type SavedExercise } from "@/lib/saved-exercises";
 import { Button } from "@/components/ui/button";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/flow-items";
@@ -54,24 +59,89 @@ const LIBRARY: Group[] = [
   },
 ];
 
-export default function RecoveryLibrary() {
+type TopCategory = "mig" | "barn" | "sparade";
+
+const TOP: { id: TopCategory; emoji: string; label: string; hint: string }[] = [
+  { id: "mig", emoji: "🌿", label: "För mig", hint: "Kropp, sinnen, tankar och vardag" },
+  { id: "barn", emoji: "👨‍👩‍👧", label: "Barn & familj", hint: "Övningar ni sparat för barnen" },
+  { id: "sparade", emoji: "⭐", label: "Mina sparade", hint: "Allt du har sparat från Flow" },
+];
+
+const CHILD_EXAMPLES = ["🧸 Lugn inför läggdags", "🌬️ Andas och landa", "🌈 Efter starka känslor", "🫶 Svår övergång", "👀 Sinnespaus"];
+
+function SavedList({ list, emptyText, showExamples }: { list: SavedExercise[]; emptyText: string; showExamples?: boolean }) {
+  const { remove } = useSavedExercises();
+  const { children } = useChildren();
   const { t } = useLang();
+  const [playing, setPlaying] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState<string | null>(null);
+
+  if (list.length === 0) {
+    return (
+      <div className="space-y-3 rounded-2xl bg-secondary/40 p-4 text-sm text-muted-foreground">
+        <p>{t(emptyText)}</p>
+        {showExamples && (
+          <div className="flex flex-wrap gap-2">
+            {CHILD_EXAMPLES.map((e) => <span key={e} className="rounded-full bg-card px-3 py-1 text-xs text-ink">{e}</span>)}
+          </div>
+        )}
+        <Link to="/assistant" className="inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground">
+          {t("Be Flow skapa en övning")}
+        </Link>
+      </div>
+    );
+  }
+  return (
+    <ul className="space-y-2">
+      {list.map((ex) => {
+        const childName = children.find((c) => c.id === ex.childId)?.name;
+        if (playing === ex.id) {
+          return (
+            <li key={ex.id}>
+              <ExercisePlayer exercise={{ ...ex, subtitle: ownerLine(ex, childName) }} onClose={() => setPlaying(null)}
+                onDone={() => { track("recovery_viewed"); emitActivityDone({ id: `recovery-${ex.id}-${Date.now()}`, title: ex.title, dueDate: todayISO() }); }} />
+            </li>
+          );
+        }
+        return (
+          <li key={ex.id} className="rounded-2xl border border-border/60 bg-background/60 p-3" data-testid="saved-exercise">
+            <div className="flex items-center gap-3">
+              <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{ex.icon}</span>
+              <button type="button" onClick={() => setPlaying(ex.id)} className="min-w-0 flex-1 text-left">
+                <span className="block break-words text-sm font-semibold text-ink">{ex.title}</span>
+                <span className="block text-xs text-muted-foreground">{[durationLabel(ex.minutes), ownerLine(ex, childName)].filter(Boolean).join(" · ")}</span>
+              </button>
+              <Button size="icon" variant="ghost" className="shrink-0 rounded-full" aria-label={t("Starta övning")} onClick={() => setPlaying(ex.id)}>
+                <Play className="h-4 w-4" />
+              </Button>
+              <Button size="icon" variant="ghost" className="shrink-0 rounded-full text-muted-foreground" aria-label={t("Ta bort övning")} onClick={() => setConfirm(confirm === ex.id ? null : ex.id)}>
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+            {confirm === ex.id && (
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                <span className="text-muted-foreground">{t("Ta bort övningen?")}</span>
+                <Button size="sm" variant="destructive" className="rounded-full" onClick={() => { remove(ex.id); setConfirm(null); }}>{t("Ta bort")}</Button>
+                <Button size="sm" variant="ghost" className="rounded-full" onClick={() => setConfirm(null)}>{t("Avbryt")}</Button>
+              </div>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function ForMe() {
+  const { t } = useLang();
+  const { exercises } = useSavedExercises();
   const [group, setGroup] = useState(LIBRARY[0]!.id);
   const [open, setOpen] = useState<string | null>(null);
   const active = LIBRARY.find((g) => g.id === group) ?? LIBRARY[0]!;
+  const mine = exercises.filter((e) => e.category === "mig");
 
   return (
-    <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Återhämtningsbibliotek")} data-testid="recovery-library">
-      <div className="flex items-start gap-3">
-        <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-secondary text-primary">
-          <BookOpen className="h-5 w-5" />
-        </span>
-        <div className="min-w-0">
-          <h2 className="text-base font-semibold text-ink">{t("Återhämtningsbibliotek")}</h2>
-          <p className="text-xs text-muted-foreground">{t("Välj det som passar dig just nu. Allt är frivilligt.")}</p>
-        </div>
-      </div>
-
+    <>
       <div className="mt-3 flex flex-wrap gap-2" role="tablist">
         {LIBRARY.map((g) => (
           <button key={g.id} type="button" role="tab" aria-selected={g.id === group}
@@ -116,6 +186,96 @@ export default function RecoveryLibrary() {
           );
         })}
       </ul>
+      {mine.length > 0 && (
+        <div className="mt-4 space-y-2">
+          <h3 className="text-sm font-semibold text-ink">{t("Sparade för mig")}</h3>
+          <SavedList list={mine} emptyText="" />
+        </div>
+      )}
+    </>
+  );
+}
+
+function ChildrenFamily({ childId }: { childId?: string }) {
+  const { t } = useLang();
+  const { exercises } = useSavedExercises();
+  const { children } = useChildren();
+  const [filter, setFilter] = useState<string>(childId ?? "alla");
+  const barn = exercises.filter((e) => e.category === "barn");
+  const shown = filter === "alla" ? barn : barn.filter((e) => e.childId === filter || e.childId === "all");
+  return (
+    <div className="mt-3 space-y-3">
+      {children.length > 0 && barn.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {[{ id: "alla", name: t("Alla"), color: "" }, ...children].map((c) => (
+            <button key={c.id} type="button" aria-pressed={filter === c.id} onClick={() => setFilter(c.id)}
+              className={cn("min-h-10 rounded-full px-3 text-sm font-medium", filter === c.id ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground")}>
+              {c.name}
+            </button>
+          ))}
+        </div>
+      )}
+      <SavedList list={shown} showExamples emptyText="Här hamnar övningar som Flow skapat för barnen, när du väljer att spara dem." />
+    </div>
+  );
+}
+
+function Favorites() {
+  const { exercises } = useSavedExercises();
+  const sorted = [...exercises.filter((e) => e.category === "favorit"), ...exercises.filter((e) => e.category !== "favorit")];
+  return <div className="mt-3"><SavedList list={sorted} emptyText="Inget sparat än. När Flow skapar en övning kan du spara den här." /></div>;
+}
+
+export default function RecoveryLibrary({ initialCategory, childId }: { initialCategory?: TopCategory; childId?: string } = {}) {
+  const { t } = useLang();
+  const { exercises } = useSavedExercises();
+  const [cat, setCat] = useState<TopCategory | null>(initialCategory ?? null);
+  const current = TOP.find((c) => c.id === cat);
+  const count = (id: TopCategory) =>
+    id === "sparade" ? exercises.length : id === "barn" ? exercises.filter((e) => e.category === "barn").length : null;
+
+  return (
+    <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Återhämtningsbibliotek")} data-testid="recovery-library">
+      <div className="flex items-start gap-3">
+        <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-secondary text-primary">
+          <BookOpen className="h-5 w-5" />
+        </span>
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold text-ink">{t("Återhämtningsbibliotek")}</h2>
+          <p className="text-xs text-muted-foreground">{t("Välj det som passar dig just nu. Allt är frivilligt.")}</p>
+        </div>
+      </div>
+
+      {!current ? (
+        <div className="mt-3 grid gap-2">
+          {TOP.map((c) => {
+            const n = count(c.id);
+            return (
+              <button key={c.id} type="button" onClick={() => setCat(c.id)} data-testid={`library-cat-${c.id}`}
+                className="flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/60 bg-background/60 px-3 text-left transition-colors hover:bg-secondary/60">
+                <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{c.emoji}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-ink">{t(c.label)}{n ? ` · ${n}` : ""}</span>
+                  <span className="block text-xs text-muted-foreground">{t(c.hint)}</span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="mt-3">
+          {!initialCategory && (
+            <button type="button" onClick={() => setCat(null)} className="inline-flex min-h-10 items-center gap-1 rounded-full px-2 text-sm font-medium text-primary">
+              <ArrowLeft className="h-4 w-4" /> {t("Alla kategorier")}
+            </button>
+          )}
+          <h3 className="mt-1 flex items-center gap-2 text-sm font-semibold text-ink"><span aria-hidden>{current.emoji}</span> {t(current.label)}</h3>
+          {cat === "mig" && <ForMe />}
+          {cat === "barn" && <ChildrenFamily childId={childId} />}
+          {cat === "sparade" && <Favorites />}
+        </div>
+      )}
     </section>
   );
 }

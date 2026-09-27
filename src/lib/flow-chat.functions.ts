@@ -26,7 +26,29 @@ Nästa steg: kontexten innehåller "FlowPlan". Om du rekommenderar vad användar
 ska göra nu MÅSTE det vara FlowPlans "Nu". Hitta aldrig på en annan nästa uppgift
 och föreslå inte parallella saker som FlowPlan inte nämner. Vid kapacitetsläge
 Lågt: nämn bara Nu, i en eller två korta meningar. Batteri, FlowScore och
-energisiffror avgör aldrig vad som är nästa steg.`;
+energisiffror avgör aldrig vad som är nästa steg.
+
+ÅTERHÄMTNINGSÖVNINGAR:
+När du skapar en konkret lugn-/återhämtningsövning (t.ex. för ett barn inför
+läggdags) ska du lägga till ett block sist i svaret så användaren kan starta
+och frivilligt spara den:
+
+\`\`\`flow-exercise
+{"title":"Nallebjörns-andningen","description":"En lugn andning med nallen på magen.","steps":["Lägg nallebjörnen på magen.","Andas långsamt in...","Andas långsamt ut..."],"minutes":3,"age":"3–7 år","situation":"läggdags","forChild":true,"icon":"🧸"}
+\`\`\`
+- steps: 3–8 korta steg, ett i taget. minutes bara om en längd är rimlig. age bara om du vet.
+- icon: en enkel symbol (🧸 🌬️ 🌈 🫶 👀 🌿). forChild=true när övningen är för ett barn.
+- Skriv inte ut stegen i texten också – kort intro räcker, stegen visas i kortet.
+
+Kontexten kan innehålla "Sparade övningar". Föreslå en sparad övning BARA när
+den tydligt passar det användaren ber om (samma barn och/eller liknande
+situation). Lägg då till blocket nedan och skriv t.ex. "Ni har sparat den här
+tidigare. Vill du prova den igen?". Säg aldrig att den "fungerar" för barnet.
+\`\`\`flow-saved
+{"id":"<id från listan>"}
+\`\`\`
+Om användaren vill ha andra alternativ eller något nytt: skapa en ny övning.
+Nämn aldrig blocken eller id i texten.`;
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),

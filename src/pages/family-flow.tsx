@@ -14,6 +14,7 @@ import SituationLogOverview from "@/components/family/situation-log-overview";
 import type { SituationLogEntry } from "@/components/family/situation-log";
 import VisualChildSchedule from "@/components/family/visual-child-schedule";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import RecoveryLibrary from "@/components/recovery/recovery-library";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import { useChildren, CHILD_COLORS } from "@/hooks/use-children";
 import { useLang } from "@/hooks/use-language";
@@ -126,6 +127,12 @@ export default function FamilyFlowPage() {
             <FamilyLoadCard />
 
             <RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} />
+
+            {children.length > 0 && (
+              <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} className="space-y-3">
+                <RecoveryLibrary initialCategory="barn" />
+              </CollapsibleSection>
+            )}
 
             <CollapsibleSection id="Barnen" title={t("Barnen")} className="space-y-3">
               {children.length === 0 && !showChildren && !loading && (
