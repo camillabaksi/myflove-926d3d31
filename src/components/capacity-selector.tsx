@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useLang } from "@/hooks/use-language";
 import { CAPACITY_META, type CapacityMode } from "@/lib/priority-engine";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const MODES: CapacityMode[] = ["fullt", "mellan", "lagt"];
+/** Samma energivärden som ork-nivåerna – valet loggas även som dagens ork. */
+const VALUE10: Record<CapacityMode, number> = { fullt: 9, mellan: 6, lagt: 3 };
 
 export default function CapacitySelector({
   className,
@@ -17,6 +21,13 @@ export default function CapacitySelector({
 }) {
   const { t } = useLang();
   const { mode, setMode } = useCapacityMode();
+  const { logEnergy } = useQuickCheckin();
+
+  const choose = (item: CapacityMode) => {
+    setMode(item);
+    void logEnergy(VALUE10[item]);
+    track("battery_logged", { source: "kapacitet", method: "ork" });
+  };
 
   return (
     <section className={cn("rounded-3xl border border-border/60 bg-card p-5 shadow-soft", className)}>
@@ -34,7 +45,7 @@ export default function CapacitySelector({
             variant={mode === item ? "default" : "outline"}
             role="radio"
             aria-checked={mode === item}
-            onClick={() => setMode(item)}
+            onClick={() => choose(item)}
             className="min-h-11 min-w-0 rounded-2xl px-2 text-sm font-semibold"
           >
             <span
