@@ -25,9 +25,12 @@ const RESULT_STYLE: Record<AttemptResult, string> = {
 export default function SituationLog({
   entries,
   onDelete,
+  heading,
 }: {
   entries: SituationLogEntry[];
   onDelete: (id: string) => void;
+  /** Egen rubrik, t.ex. när listan ligger inuti "Tidigare situationer"-sektionen. */
+  heading?: string;
 }) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
@@ -40,7 +43,7 @@ export default function SituationLog({
         onClick={() => setOpen((v) => !v)}
         className="press flex min-h-11 w-full items-center justify-between text-left text-sm font-semibold text-ink"
       >
-        {t("Tidigare situationer")} ({entries.length})
+        {t(heading ?? "Tidigare situationer")} ({entries.length})
         <ChevronDown size={16} aria-hidden className={cn("transition-transform", open && "rotate-180")} />
       </button>
       {open && (

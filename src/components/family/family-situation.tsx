@@ -24,7 +24,6 @@ import {
   type StrategyId,
 } from "@/lib/situation-helper";
 import { todayISO } from "@/lib/day";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import SituationLog, { type SituationLogEntry, type AttemptResult } from "@/components/family/situation-log";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -59,11 +58,16 @@ const VISUAL_ICON: Record<string, PictogramId> = {
 export default function FamilySituation({
   childrenList,
   onSaveHelp,
+  log,
+  onChangeLog,
   className,
 }: {
   childrenList: SituationChild[];
   /** Spara en observation i barnets befintliga profil ("brukar hjälpa"). */
   onSaveHelp?: (childId: string, helps: string[]) => Promise<unknown> | void;
+  /** Situationlogg som ägs av sidan, så "Tidigare situationer" också kan visas i Family Flow. */
+  log: SituationLogEntry[];
+  onChangeLog: (update: (prev: SituationLogEntry[]) => SituationLogEntry[]) => void;
   className?: string;
 }) {
   const { t } = useLang();
@@ -86,7 +90,8 @@ export default function FamilySituation({
   const [added, setAdded] = useState(false);
   const [helped, setHelped] = useState<string | null>(null);
   const [savedHelp, setSavedHelp] = useState(false);
-  const [log, setLog] = useCloudSyncedStorage<SituationLogEntry[]>("myflove-situation-log", []);
+  // Loggen ägs av sidan (family-flow) så den kan visas i flera sektioner.
+  const setLog = onChangeLog;
   const [entryId, setEntryId] = useState<string | null>(null);
 
   /** Uppdaterar aktuell situation i loggen (skapas vid första valda väg). */

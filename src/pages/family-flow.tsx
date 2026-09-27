@@ -10,7 +10,10 @@ import FamilyLoadCard from "@/components/family/family-load-card";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import FamilySituation from "@/components/family/family-situation";
+import SituationLogOverview from "@/components/family/situation-log-overview";
+import type { SituationLogEntry } from "@/components/family/situation-log";
 import VisualChildSchedule from "@/components/family/visual-child-schedule";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import { useChildren, CHILD_COLORS } from "@/hooks/use-children";
 import { useLang } from "@/hooks/use-language";
@@ -37,6 +40,11 @@ export default function FamilyFlowPage() {
     openDoc,
   } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
+  // Situationen (och dess logg) delas mellan flödet och översikten på sidan.
+  const [situationLog, setSituationLog] = useCloudSyncedStorage<SituationLogEntry[]>(
+    "myflove-situation-log",
+    [],
+  );
   const [showChildren, setShowChildren] = useState(false);
   const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
   const scheduleChild = children.find((child) => child.id === scheduleChildId) ?? null;
@@ -91,9 +99,19 @@ export default function FamilyFlowPage() {
                   className="pt-1"
                   childrenList={children.map((c) => ({ id: c.id, name: c.name, helps: c.helps }))}
                   onSaveHelp={(id, helps) => updateChild(id, { helps })}
+                  log={situationLog ?? []}
+                  onChangeLog={(update) => setSituationLog((prev) => update(prev ?? []))}
                 />
               )}
             </section>
+
+            <SituationLogOverview
+              entries={situationLog ?? []}
+              onDelete={(id) =>
+                setSituationLog((prev) => (prev ?? []).filter((e) => e.id !== id))
+              }
+            />
+
 
             {children.length > 0 && (
               <CollapsibleSection
