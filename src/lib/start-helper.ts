@@ -20,7 +20,7 @@ const RULES: Rule[] = [
     step: "Plocka undan tre saker. Sen får du sluta.",
   },
 
-  { match: /mat|middag|frukost|lunch|laga|koka/i, step: "Öppna kylen och ta fram en enda sak." },
+  { match: /mat|middag|frukost|lunch|laga|koka/i, step: "Ta fram en tallrik och ställ den på bänken." },
   { match: /handla|inköp|affär/i, step: "Skriv de tre viktigaste sakerna på listan." },
   {
     match: /plugg|läs|studer|tenta|prov|uppsats|lektion/i,
