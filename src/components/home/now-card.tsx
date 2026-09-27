@@ -143,6 +143,39 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           </p>
         </div>
       </div>
+      {showPrep && (
+        <div className="mt-4 rounded-2xl bg-primary/10 p-4" aria-live="polite">
+          <p className="flex items-start gap-2 text-sm font-medium text-ink">
+            <Clock className="mt-0.5 h-4 w-4 shrink-0 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] text-primary" aria-hidden />
+            <span>
+              {minsLeft && minsLeft > 0
+                ? t(`Om ${minsLeft} min: ${current.title}.`)
+                : t(`Det är dags: ${current.title}.`)}{" "}
+              {t("Vill du starta mjukt i 2 lugna minuter?")}
+            </span>
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => setHelping(true)}
+              className="min-h-11 rounded-full"
+            >
+              <Sparkles className="h-4 w-4" aria-hidden /> {t("Starta mjukt")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => setPrepDismissed(current.id)}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Inte nu")}
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {current.completable && (
           <Button
