@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { CalendarPlus, Check, Plus, Target, Trash2 } from "lucide-react";
-import { useCloudSyncedStorage } from "@/hooks/use-cloud-synced-storage";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useTasks } from "@/hooks/use-data";
 import { addDaysISO, parseISODate, todayISO } from "@/lib/day";
 import { isoWeekNumber } from "@/lib/iso-week";

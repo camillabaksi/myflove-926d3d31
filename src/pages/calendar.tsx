@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isoWeekNumber, isoWeekNumberFromString } from "@/lib/iso-week";
+import WeekGoals from "@/components/week-goals";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
@@ -490,6 +491,10 @@ export function CalendarContent() {
 
       <MyFloveWide>
         <EnergyBattery widget href="/mitt-batteri" />
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <WeekGoals />
       </MyFloveWide>
 
       <MyFloveWide>
