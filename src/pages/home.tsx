@@ -37,7 +37,6 @@ import {
   CalendarDays,
   Brain,
   BatteryMedium,
-  Heart,
   Pill,
   ArrowRight,
   Wind,
