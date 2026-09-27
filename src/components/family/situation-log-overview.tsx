@@ -53,7 +53,7 @@ export default function SituationLogOverview({
           </ul>
         </div>
       )}
-      <SituationLog entries={entries} onDelete={onDelete} />
+      <SituationLog entries={entries} onDelete={onDelete} heading="Alla situationer" />
     </section>
   );
 }
