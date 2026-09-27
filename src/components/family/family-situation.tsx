@@ -90,7 +90,8 @@ export default function FamilySituation({
   const [added, setAdded] = useState(false);
   const [helped, setHelped] = useState<string | null>(null);
   const [savedHelp, setSavedHelp] = useState(false);
-  const [log, setLog] = useCloudSyncedStorage<SituationLogEntry[]>("myflove-situation-log", []);
+  // Loggen ägs av sidan (family-flow) så den kan visas i flera sektioner.
+  const setLog = onChangeLog;
   const [entryId, setEntryId] = useState<string | null>(null);
 
   /** Uppdaterar aktuell situation i loggen (skapas vid första valda väg). */
