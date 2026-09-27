@@ -70,6 +70,7 @@
     "date-fns": "^3.6.0",
     "docx": "^9.7.1",
     "embla-carousel-react": "^8.6.0",
+    "eventsource-parser": "^4.1.1",
     "framer-motion": "^12.42.2",
     "input-otp": "^1.4.2",
     "jspdf": "^4.2.1",
