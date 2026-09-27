@@ -1,4 +1,5 @@
 ## 2026-09-27
+- Familj: "Hjälp mig med en situation" sparar nu varje situation i en egen logg – vilka vägar du provat, om de fungerade eller inte och vad som hjälpte mest. Visas som "Tidigare situationer" under första steget och synkas mellan enheter.
 - Familj: "Hjälp mig med en situation" är nu ett steg-för-steg-stöd – Vad händer? → Vem gäller det? → 1–3 korta följdfrågor → Flow sammanfattar → 3–5 vägar att prova med konkreta steg och "Säg så här" → "Det fungerade inte" ger nya vägar → kort feedback som kan sparas i barnets profil. Använder befintliga barnprofiler, barnschema, kapacitetsläge, Min dag och bildstöd.
 
 ## 2026-09-26
