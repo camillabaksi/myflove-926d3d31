@@ -390,7 +390,7 @@ export default function FamilySituation({
           <div className="space-y-2">
             {options.map((s, i) => (
               <button key={s.id} type="button" className={big()} onClick={() => choose(s)}>
-                <span aria-hidden>{s.dot}</span>
+                <Dot dot={s.dot} />
                 <span className="min-w-0 flex-1">
                   <span className="font-semibold">{String.fromCharCode(65 + i)}</span> – {t(s.title)}
                 </span>
@@ -404,7 +404,7 @@ export default function FamilySituation({
       {step === "strategy" && current && (
         <div className="space-y-4">
           <h3 className="font-display text-lg font-bold text-ink">
-            <span aria-hidden>{current.dot}</span> {t(current.title)}
+            <Dot dot={current.dot} /> {t(current.title)}
           </h3>
           <ol className="space-y-2 text-sm text-ink">
             {current.steps.map((s, i) => (
@@ -536,4 +536,16 @@ function SummaryRow({ icon, label, value }: { icon: string; label: string; value
 function nowHHMM(): string {
   const d = new Date();
   return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+const DOT_CLASS: Record<string, string> = {
+  "🟣": "bg-primary",
+  "🟢": "bg-mint",
+  "🟡": "bg-sun",
+  "🔵": "bg-sky",
+  "🟠": "bg-blush",
+};
+
+function Dot({ dot }: { dot: string }) {
+  return <span aria-hidden className={cn("inline-block h-3 w-3 shrink-0 rounded-full align-middle", DOT_CLASS[dot] ?? "bg-primary")} />;
 }
