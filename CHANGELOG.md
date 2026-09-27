@@ -1,4 +1,5 @@
 ## 2026-09-27
+- Flow har fått röst: varje svar i chatten har en liten högtalarknapp – tryck så läser Flow upp svaret med en mjuk, varm och tydlig röst (som en lugn vän, inte en robot). Tryck igen för att stoppa. Inget spelas automatiskt.
 - Mitt batteri och "Hur mår du?" är sammanslagna – Mitt batteri är nu den enda platsen för incheckning (ork, mående, påverkan). Gamla länkar till /hur-mar-du pekar vidare dit. På Hem finns ett enda "Hur är läget idag?"-kort: valet Fullt/Mellan/Lågt loggar direkt både kapacitet och dagens ork – inga dubbla rutor.
 - Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort.
 - Hem: snäll starttimer vid tidsatta saker – ca 15 minuter innan (och när det är dags) frågar "Just nu"-kortet lugnt "Vill du starta mjukt i 2 lugna minuter?". Du får ett enda litet första steg, en mjuk nedräkning och sedan Fortsätt, Jag är klar eller Ta en paus. Inga larm, ingen försening, inget krav.
