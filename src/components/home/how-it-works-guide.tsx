@@ -40,45 +40,45 @@ export default function HowItWorksGuide() {
   const steps: Step[] = [
     {
       n: 1,
-      kicker: t("Få ur dig det"),
+      kicker: t("Fånga"),
       title: "QuickFlow",
-      text: t("Skriv ner det som snurrar. Du behöver inte bestämma något direkt."),
+      text: t("Skriv ner det som snurrar."),
       href: "/quickflow",
       icon: Brain,
       tone: "bg-accent/40",
     },
     {
       n: 2,
-      kicker: t("Känn efter"),
+      kicker: t("Förstå"),
       title: t("Mitt batteri"),
-      text: t("Berätta hur du mår och hur mycket ork du har. MyFlove använder det som stöd för att anpassa dagen."),
+      text: t("Känn efter hur mycket ork du har."),
       href: "/mitt-batteri",
       icon: BatteryMedium,
       tone: "bg-secondary/60",
     },
     {
       n: 3,
-      kicker: t("Hitta ditt Flow"),
+      kicker: t("Anpassa"),
       title: "Flow",
-      text: t("Fråga om råd, bolla tankar eller berätta vad du behöver göra. Flow hjälper dig hitta nästa rimliga steg."),
+      text: t("Få hjälp att hitta nästa steg."),
       href: "/flow",
       icon: Sparkles,
       tone: "bg-primary/10",
     },
     {
       n: 4,
-      kicker: t("Gör nästa steg"),
+      kicker: t("Gör"),
       title: t("Min dag"),
-      text: t("Här ser du det du behöver göra idag – möten, uppgifter och vardagssaker. En sak i taget."),
+      text: t("Se möten och vardagssaker på samma plats."),
       href: "/idag",
       icon: CalendarDays,
       tone: "bg-accent/30",
     },
     {
       n: 5,
-      kicker: t("Landa när det behövs"),
+      kicker: t("Återhämta"),
       title: t("Återhämtning"),
-      text: t("Pauser och återhämtning när du behöver skapa lite mer utrymme."),
+      text: t("Pausa när du behöver."),
       href: "/aterhamtning",
       icon: Leaf,
       tone: "bg-secondary/50",
@@ -88,8 +88,8 @@ export default function HowItWorksGuide() {
   const card = (s: Step, center = false) => (
     <div
       key={s.n}
-      className={cn(
-        "relative flex min-w-0 flex-col items-center rounded-3xl border border-border/60 p-4 text-center shadow-soft",
+       className={cn(
+         "relative flex min-w-0 flex-col items-center rounded-3xl border border-border/60 p-3 text-center shadow-soft",
         s.tone,
         center && "sm:px-6",
       )}
@@ -105,14 +105,14 @@ export default function HowItWorksGuide() {
         </span>
       )}
       <p className="mt-2 text-xs font-medium text-muted-foreground">{s.kicker}</p>
-      <h3 className="font-display text-base font-bold text-ink">{s.title}</h3>
-      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.text}</p>
+       <h3 className="font-display text-base font-bold text-ink">{s.title}</h3>
+       <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.text}</p>
       <Link
         href={s.href}
         onClick={() => track("home_widget_opened", { source: `guide-${s.n}` })}
-        className="mt-3 inline-flex items-center gap-1 rounded-full border border-primary/40 bg-card px-4 py-1.5 text-xs font-semibold text-primary"
+        className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary"
       >
-        {t("Prova")} <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        {t("Öppna")} <ArrowRight className="h-3.5 w-3.5" aria-hidden />
       </Link>
     </div>
   );

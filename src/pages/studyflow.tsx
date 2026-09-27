@@ -268,11 +268,13 @@ export default function StudyflowPage() {
 
             <MySchedule />
 
-            <div id="schema-import">
-              <ScheduleImport />
-            </div>
+            <CollapsibleSection id="studies-import" title="Lägg till eller byt schema" defaultCollapsed className={card} headingClassName={sectionTitle}>
+              <div id="schema-import"><ScheduleImport /></div>
+            </CollapsibleSection>
 
-            <StudyHelp />
+            <CollapsibleSection id="studies-help" title="Studiehjälp" defaultCollapsed className={card} headingClassName={sectionTitle}>
+              <StudyHelp />
+            </CollapsibleSection>
 
             <CollapsibleSection
               className={card}

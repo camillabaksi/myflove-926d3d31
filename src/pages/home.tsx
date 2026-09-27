@@ -132,11 +132,8 @@ export default function Home() {
                   {name ? `${t("Hej")} ${name}` : t("Hej")}
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  {awayForDays
-                    ? t(
-                        "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
-                      )
-                    : t("Vad behöver du just nu?")}
+                  {t("Vad behöver du just nu?")}
+                  {awayForDays && <span className="block text-xs">{t("Vi tar det lugnt idag, oavsett hur dagarna har varit.")}</span>}
                 </p>
                 {editingName ? (
                   <form
@@ -207,6 +204,7 @@ export default function Home() {
                 id="home-daily-checklist"
                 title={t("Dagens checklista")}
                 description={t("Möten, vardag och rutiner i samma lista.")}
+                defaultCollapsed
                 className="rounded-3xl border border-border/60 bg-card/80 p-4 shadow-soft"
                 headingClassName="font-display text-base font-bold text-ink"
               >
@@ -221,19 +219,20 @@ export default function Home() {
               )}
 
               {/* Kvällen: en varm avslutning utan skuld. */}
-              {!isLowCapacity && <CloseDay />}
+              {!isLowCapacity && <CollapsibleSection id="home-close-day" title={t("Stäng dagen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><CloseDay /></CollapsibleSection>}
             </div>
 
 
-            {!isLowCapacity && <nav
-              className="mt-5 grid grid-cols-3 gap-2"
+             <nav
+               className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4"
               data-testid="home-widgets"
               aria-label={t("Genvägar")}
               data-npf="optional"
             >
               {[
                 { href: "/kalender", icon: CalendarDays, label: t("Kalender"), src: "kalender" },
-                { href: "/mitt-batteri", icon: BatteryMedium, label: t("Batteri"), src: "batteri" },
+                 { href: "/mitt-batteri", icon: BatteryMedium, label: t("Mitt batteri"), src: "batteri" },
+                 { href: "/assistant", icon: Wind, label: t("Prata med Flow"), src: "flow" },
               ].map((s) => (
                 <Link
                   key={s.href}
@@ -245,7 +244,8 @@ export default function Home() {
                   {s.label}
                 </Link>
               ))}
-              <button
+               <Button
+                 variant="outline"
                 type="button"
                 onClick={openQuickflow}
                 data-testid="home-widget-quickflow"
@@ -253,8 +253,8 @@ export default function Home() {
               >
                 <Brain className="h-5 w-5 text-primary" aria-hidden />
                 QuickFlow
-              </button>
-            </nav>}
+               </Button>
+             </nav>
 
             <div data-npf="optional">
               {!isLowCapacity && hasSavedItems && (
@@ -298,7 +298,7 @@ export default function Home() {
 
         {!isLowCapacity && shows("kvall") && new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
-            <EveningCheck />
+            <CollapsibleSection id="home-evening-check" title={t("Kvällscheck")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><EveningCheck /></CollapsibleSection>
           </MyFloveWide>
         )}
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, LineChart, Smile, Battery, Zap } from "lucide-react";
+import { ArrowRight, LineChart, Smile, Battery, Zap, MessageCircle } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -22,6 +22,9 @@ import { EnergyFlowContent } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
+import { useEnergyBattery } from "@/hooks/use-energy-battery";
+import { useFlowScore } from "@/hooks/use-flowscore";
+import { orkWord } from "@/lib/ork-word";
 
 /**
  * Mitt batteri – den enda platsen för energi och mående.
@@ -33,6 +36,9 @@ import { useLang } from "@/hooks/use-language";
 export default function BatteryPage() {
   const { name } = useUserProfile();
   const { t, lang } = useLang();
+  const { reading } = useEnergyBattery();
+  const { flow } = useFlowScore();
+  const activeFactors = flow.factors.filter((factor) => factor.delta !== 0).sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta)).slice(0, 4);
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -47,21 +53,35 @@ export default function BatteryPage() {
               name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")
             }
             emojiKey="wellness"
-            description={t("Välj dagens kapacitet och se tidigare energi och mående som mönster.")}
-            why={t(
-              "Ditt val Fullt, Mellan eller Lågt styr dagens plan. Dina energiloggar sparas som historik.",
-            )}
+            description={t("Hur mycket ork har du idag?")}
           />
         </MyFloveWide>
 
-        {/* 0. Orken i ord först – samma språk som på Hem. */}
+        <MyFloveWide>
+          <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+            <div className="flex flex-wrap items-center gap-2">
+              <Battery className="h-6 w-6 text-primary" aria-hidden />
+              <h2 className="font-display text-lg font-bold text-ink">Din uppskattade energi: {t(orkWord(reading.now).short)}</h2>
+              <CollapsibleSection id="battery-why" title="Varför?" defaultCollapsed className="w-full border-t border-border/60 pt-2" headingClassName="text-sm font-semibold text-primary">
+                <p className="text-sm text-muted-foreground">Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning. Kurvan utgår från ditt FlowScore just nu och tar hänsyn till planerade tider och registrerade energipåverkningar. Utan egna mönster används en generell kurva.</p>
+                {activeFactors.length > 0 && <><p className="text-xs font-semibold text-ink">Det här påverkar FlowScore just nu:</p><ul className="space-y-1 text-sm text-muted-foreground">{activeFactors.map((factor) => <li key={factor.source + factor.label}>{factor.label}: {factor.reading}</li>)}</ul></>}
+                <p className="text-xs text-muted-foreground">Ditt eget val Fullt, Mellan eller Lågt styr dagens plan – inte den uppskattade procentsiffran.</p>
+              </CollapsibleSection>
+            </div>
+          </section>
+        </MyFloveWide>
+
+        {/* Dagens val styr planen; den uppskattade kurvan gör det inte. */}
         <MyFloveWide>
           <OrkSummary />
         </MyFloveWide>
 
-        {/* 1. En enda primär handling – samma befintliga dataväg. */}
         <MyFloveWide>
-          <SimpleCheckin source="mitt-batteri" />
+          <Link href="/assistant" className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden /><span className="min-w-0 flex-1 text-sm font-semibold text-ink">Prata med Flow om dagens nästa steg</span><ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden /></Link>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <CollapsibleSection id="battery-log-energy-mood" title={t("Logga energi & mående")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><SimpleCheckin source="mitt-batteri" /></CollapsibleSection>
         </MyFloveWide>
 
         {/* Kort väg till den befintliga historiken – ingen ny vy, ingen ny data. */}

@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Battery, Dumbbell, Pill, Sunrise } from "lucide-react";
+import { ArrowRight, Battery, Dumbbell, Pill, Sunrise, MessageCircle } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
-import EnergyBattery from "@/components/energy-battery";
-import AreaFocus from "@/components/area-focus";
+import CollapsibleSection from "@/components/collapsible-section";
+import { useCapacityMode } from "@/hooks/use-capacity-mode";
+import { CAPACITY_META } from "@/lib/priority-engine";
+import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 
@@ -41,6 +43,8 @@ const AREAS: {
 ];
 
 export default function HealthPage() {
+  const { mode } = useCapacityMode();
+  const { t } = useLang();
   useEffect(() => {
     track("health_viewed", { source: "sida" });
   }, []);
@@ -53,29 +57,28 @@ export default function HealthPage() {
             title="Hälsa"
             area="halsa"
             emojiKey="wellness"
-            description="Hur du mår – energi, träning, medicin och vila på ett ställe."
-            why="Allt om ditt mående ligger samlat här, så att dagens lista slipper blandas ihop med hur du känner dig."
-          />
-        </MyFloveWide>
-
-        <MyFloveWide>
-          <AreaFocus
-            intent="Jag vill göra något bra för min hälsa idag"
-            lowHint="Låg ork idag – vila och en kort promenad räcker."
-            href="/mitt-batteri"
-            hrefLabel="Checka in hur du mår"
+            description="Hur är läget idag?"
           />
         </MyFloveWide>
 
         <MyFloveWide className="space-y-2">
-          <EnergyBattery href="/mitt-batteri" />
-          <p className="text-xs text-muted-foreground">
-            Energi, mående, sömn och dagens början och slut checkar du in här – Mitt batteri är enda
-            stället du behöver.
-          </p>
+          <Link href="/mitt-batteri" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+            <Battery className="h-7 w-7 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">Dagens val: {t(CAPACITY_META[mode].label)}. Logga hur du mår eller se ditt energimönster.</span></span>
+            <ArrowRight className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+          </Link>
         </MyFloveWide>
 
         <MyFloveWide>
+          <Link href="/assistant" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+            <MessageCircle className="h-6 w-6 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 flex-1"><span className="block font-display font-bold text-ink">Prata med Flow</span><span className="block text-sm text-muted-foreground">Berätta vad du behöver göra så hjälper Flow dig att hitta ett nästa steg.</span></span>
+            <ArrowRight className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+          </Link>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <CollapsibleSection id="health-other" title="Mer inom hälsa" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="font-display text-base font-bold text-ink">
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] items-stretch gap-3">
             {AREAS.map((a) => {
               const Icon = a.icon;
@@ -102,13 +105,7 @@ export default function HealthPage() {
               );
             })}
           </ul>
-        </MyFloveWide>
-
-        <MyFloveWide>
-          <p className="text-sm text-muted-foreground">
-            Allt du fyller i här är samma information som Flow använder för att föreslå saker –
-            inget dubbellagras.
-          </p>
+          </CollapsibleSection>
         </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>

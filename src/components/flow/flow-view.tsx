@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Brain } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -17,7 +18,7 @@ import { AssistantContent } from "@/components/flow/assistant-content";
  * öppnar samma läge som användaren faktiskt valt.
  *
  * Ingången är förenklad: en kort fråga med EN tydlig huvudhandling
- * ("Visa mitt förslag") som leder direkt till Flows planeringsläge.
+  * ("Prata med Flow") som leder direkt till samtalet.
  * Mer information och de övriga lägena finns kvar – bakom klick.
  */
 export default function FlowView({
@@ -50,20 +51,21 @@ export default function FlowView({
         <MyFlovePageGrid area="flow">
           <MyFloveWide>
             <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
-              <button
+               <FlowEntry onPlan={() => changeTab("planera")} onChat={() => changeTab("chatt")} />
+               <Button
+                 variant="outline"
                 type="button"
                 onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-                className="mb-4 flex w-full items-center gap-3 rounded-3xl bg-primary px-4 py-4 text-left text-primary-foreground shadow-lifted press"
+                 className="mt-4 flex h-auto w-full items-center justify-start gap-3 rounded-2xl px-4 py-3 text-left"
               >
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-foreground/20">
+                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Brain size={22} strokeWidth={2.4} />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-semibold">QuickFlow</span>
-                  <span className="block text-sm opacity-90">Få ut det ur huvudet direkt</span>
+                   <span className="block text-sm text-muted-foreground">Få ut det ur huvudet direkt</span>
                 </span>
-              </button>
-              <FlowEntry onPlan={() => changeTab("planera")} onChat={() => changeTab("chatt")} />
+               </Button>
             </main>
           </MyFloveWide>
         </MyFlovePageGrid>

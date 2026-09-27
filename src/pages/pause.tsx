@@ -9,6 +9,7 @@ import PauseSession from "@/components/recovery/pause-session";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import EnergyAfterCheck from "@/components/recovery/energy-after-check";
 import RecoveryLibrary from "@/components/recovery/recovery-library";
+import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -79,8 +80,6 @@ export default function PausePage() {
               />
             )}
 
-            <RecoveryGapCard />
-
             <section
               className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
               aria-label={t("Paus")}
@@ -138,10 +137,9 @@ export default function PausePage() {
               </div>
             </section>
 
-            <RecoveryLibrary />
-
             <div className="grid gap-3">
-              <button
+              <Button
+                variant="outline"
                 type="button"
                 data-testid="pause-light-boost"
                 onClick={() => {
@@ -164,7 +162,7 @@ export default function PausePage() {
                   </span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              </button>
+              </Button>
 
               <Link
                 href="/stop-paus"
@@ -186,6 +184,8 @@ export default function PausePage() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               </Link>
             </div>
+            <CollapsibleSection id="recovery-library-entry" title={t("Återhämtningsbibliotek")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryLibrary /></CollapsibleSection>
+            <CollapsibleSection id="recovery-gap-entry" title={t("Hitta en lugnare väg")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard /></CollapsibleSection>
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>

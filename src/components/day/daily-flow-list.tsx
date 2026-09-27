@@ -36,12 +36,15 @@ export function DailyFlowList({
   extraItems = [],
   onCompleted,
   previewCount,
+  dayHeadings = false,
 }: {
   date?: string;
   extraItems?: FlowItem[];
   onCompleted?: (item: FlowItem) => void;
   /** Visa bara de första punkterna och låt resten fällas ut. */
   previewCount?: number;
+  /** Lugn översikt på Min dag, utan att skapa ytterligare en lista. */
+  dayHeadings?: boolean;
 }) {
   const { today, toggleItem } = useFlowItems(date);
   const [expanded, setExpanded] = useState(false);
@@ -129,6 +132,8 @@ export function DailyFlowList({
   const hiddenCount =
     previewCount && !expanded ? Math.max(0, items.length - previewCount) : 0;
   const shownItems = hiddenCount > 0 ? items.slice(0, previewCount) : items;
+  const firstTimedIndex = items.findIndex((item) => !!item.time);
+  const firstUntimedIndex = items.findIndex((item) => !item.time);
 
   return (
     <>
@@ -140,6 +145,8 @@ export function DailyFlowList({
           const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
           return (
             <li key={item.id}>
+              {dayHeadings && index === firstTimedIndex && <h2 className="px-2 pb-1 pt-3 font-display text-sm font-bold text-primary">Tider idag</h2>}
+              {dayHeadings && index === firstUntimedIndex && <h2 className="px-2 pb-1 pt-3 font-display text-sm font-bold text-primary">Övrigt idag</h2>}
               {index === nowIndex && (
                 <div className="flex items-center gap-2 py-1" aria-label="Just nu">
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">

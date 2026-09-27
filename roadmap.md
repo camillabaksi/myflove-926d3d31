@@ -1,5 +1,10 @@
 # Roadmap
 
+## UX-förenkling 1.0 (2026-09-27)
+- [x] Förenkla Hem, Hälsa, Mitt batteri, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar med primär handling först och fördjupning bakom klick.
+- [x] Förklara batteriets faktiska uppskattning utan att förväxla den med valt kapacitetsläge; gör lathunden kort och klickbar.
+- [x] Verifiera mobilbredder och desktop, kontroller, tester och uppdatera båda ändringsloggarna.
+
 ## Städning (godkänd audit 2026-09-25)
 - [x] Steg 1: Konsolidera prioritet till priority-engine
 - [x] Steg 2: Fullt/Mellan/Lågt som primär kapacitetskälla
