@@ -1,4 +1,5 @@
 ## 2026-09-27
+- UX-förenkling 1.0: Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar visar nu tydliga första steg, med fördjupning bakom öppningsbara avsnitt. Batteriets ”Varför?” skiljer uppskattad energi från ditt eget val Fullt/Mellan/Lågt. Befintlig data och funktioner finns kvar.
 - Flow: prata in i stället för att skriva – en "Prata"-knapp i chattrutan spelar in din röst och skriver ut det du sa i textrutan. Tryck igen för att stoppa. Kräver mikrofontillåtelse i webbläsaren.
 - Flow har fått röst: varje svar i chatten har en liten högtalarknapp – tryck så läser Flow upp svaret med en mjuk, varm och tydlig röst (som en lugn vän, inte en robot). Tryck igen för att stoppa. Inget spelas automatiskt.
 - Mitt batteri och "Hur mår du?" är sammanslagna – Mitt batteri är nu den enda platsen för incheckning (ork, mående, påverkan). Gamla länkar till /hur-mar-du pekar vidare dit. På Hem finns ett enda "Hur är läget idag?"-kort: valet Fullt/Mellan/Lågt loggar direkt både kapacitet och dagens ork – inga dubbla rutor.
