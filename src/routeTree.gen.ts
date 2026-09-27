@@ -23,6 +23,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OauthKalenderReturRouteImport } from './routes/oauth.kalender-retur'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
+import { Route as ApiFlowTranscribeRouteImport } from './routes/api/flow-transcribe'
 import { Route as ApiFlowSpeechRouteImport } from './routes/api/flow-speech'
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
@@ -164,6 +165,11 @@ const GuideAdhdPlannerForAdultsRoute =
     path: '/guide/adhd-planner-for-adults',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiFlowTranscribeRoute = ApiFlowTranscribeRouteImport.update({
+  id: '/api/flow-transcribe',
+  path: '/api/flow-transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiFlowSpeechRoute = ApiFlowSpeechRouteImport.update({
   id: '/api/flow-speech',
   path: '/api/flow-speech',
@@ -595,6 +601,7 @@ export interface FileRoutesByFullPath {
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/api/flow-speech': typeof ApiFlowSpeechRoute
+  '/api/flow-transcribe': typeof ApiFlowTranscribeRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -680,6 +687,7 @@ export interface FileRoutesByTo {
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
   '/api/flow-speech': typeof ApiFlowSpeechRoute
+  '/api/flow-transcribe': typeof ApiFlowTranscribeRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -767,6 +775,7 @@ export interface FileRoutesById {
   '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
   '/api/flow-speech': typeof ApiFlowSpeechRoute
+  '/api/flow-transcribe': typeof ApiFlowTranscribeRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -854,6 +863,7 @@ export interface FileRouteTypes {
     | '/veckans-flow'
     | '/workflow'
     | '/api/flow-speech'
+    | '/api/flow-transcribe'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -939,6 +949,7 @@ export interface FileRouteTypes {
     | '/veckans-flow'
     | '/workflow'
     | '/api/flow-speech'
+    | '/api/flow-transcribe'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -1025,6 +1036,7 @@ export interface FileRouteTypes {
     | '/_app/veckans-flow'
     | '/_app/workflow'
     | '/api/flow-speech'
+    | '/api/flow-transcribe'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -1051,6 +1063,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiFlowSpeechRoute: typeof ApiFlowSpeechRoute
+  ApiFlowTranscribeRoute: typeof ApiFlowTranscribeRoute
   GuideAdhdPlannerForAdultsRoute: typeof GuideAdhdPlannerForAdultsRoute
   OauthKalenderReturRoute: typeof OauthKalenderReturRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1158,6 +1171,13 @@ declare module '@tanstack/react-router' {
       path: '/guide/adhd-planner-for-adults'
       fullPath: '/guide/adhd-planner-for-adults'
       preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/flow-transcribe': {
+      id: '/api/flow-transcribe'
+      path: '/api/flow-transcribe'
+      fullPath: '/api/flow-transcribe'
+      preLoaderRoute: typeof ApiFlowTranscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/flow-speech': {
@@ -1802,6 +1822,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiFlowSpeechRoute: ApiFlowSpeechRoute,
+  ApiFlowTranscribeRoute: ApiFlowTranscribeRoute,
   GuideAdhdPlannerForAdultsRoute: GuideAdhdPlannerForAdultsRoute,
   OauthKalenderReturRoute: OauthKalenderReturRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,

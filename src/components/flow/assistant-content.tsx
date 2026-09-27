@@ -20,6 +20,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
+import { FlowMicButton } from "@/components/flow/flow-mic-button";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
@@ -796,7 +797,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               placeholder="Skriv till Flow…"
               className="w-full h-24 p-3 bg-transparent border-none outline-none resize-none text-base"
             />
-            <div className="flex justify-end px-2 pb-1">
+            <div className="flex justify-end gap-2 px-2 pb-1">
+              <FlowMicButton
+                disabled={isSending}
+                onTranscript={(text) =>
+                  setInput((prev) => (prev.trim() ? `${prev.trim()} ${text}` : text))
+                }
+                onError={(message) => setError(message)}
+              />
               <Button
                 onClick={() => void send(input)}
                 disabled={!input.trim() || isSending}
