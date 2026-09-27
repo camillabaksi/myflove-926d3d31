@@ -50,7 +50,7 @@ function dayLabel(iso: string): string {
  */
 export function WeekGoals() {
   const [goals, setGoals] = useCloudSyncedStorage<WeekGoal[]>(WEEK_GOALS_KEY, []);
-  const { tasks, addTask, updateTask, deleteTask } = useTasks();
+  const { tasks, addTask, updateTask, deleteTask, toggleTask } = useTasks();
   const [text, setText] = useState("");
   const [picking, setPicking] = useState<string | null>(null);
   const week = weekKey();
@@ -88,13 +88,8 @@ export function WeekGoals() {
 
   const toggle = (g: WeekGoal) => {
     const next = !isDone(g);
-    if (g.taskId && tasks.some((t) => t.id === g.taskId)) {
-      updateTask(g.taskId, {
-        completed: next,
-        completedAt: next ? Date.now() : undefined,
-        status: next ? "klart" : "pagar",
-      });
-    }
+    const linked = g.taskId ? tasks.find((t) => t.id === g.taskId) : undefined;
+    if (linked && linked.completed !== next) toggleTask(linked.id);
     update(g.id, { done: next });
   };
 
