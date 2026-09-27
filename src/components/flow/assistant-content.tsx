@@ -55,6 +55,10 @@ import {
   parseFlowReply,
   type FlowAction,
 } from "@/lib/flow-actions";
+import { parseExerciseBlocks, savedExercisesContext } from "@/lib/saved-exercises";
+import { useSavedExercises } from "@/hooks/use-saved-exercises";
+import { useChildren } from "@/hooks/use-children";
+import { FlowExerciseDraftCard, FlowSavedSuggestionCard } from "@/components/recovery/flow-exercise-cards";
 import { relativeDayLabel } from "@/lib/flow-chat-history";
 import { track } from "@/lib/analytics";
 
@@ -144,6 +148,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const personalContext = useFlowPersonalContext();
   // Flow kommunicerar FlowPlans nästa steg – aldrig en egen rekommendation.
   const flowPlan = useFlowPlan();
+  const { exercises: savedExercises } = useSavedExercises();
+  const { children: childProfiles } = useChildren();
   const [place, setPlace] = useState<FlowPlace | null>(null);
   useEffect(() => {
     setPlace(lastPlace());
@@ -272,8 +278,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       await saveFlowMessage(id, "user", trimmed);
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
+      const exerciseContext = savedExercisesContext(
+        savedExercises,
+        (cid) => childProfiles.find((c) => c.id === cid)?.name,
+      );
+      const childNames = childProfiles.length
+        ? `Barnprofiler i Family Flow: ${childProfiles.map((c) => c.name).join(", ")}`
+        : "";
       const context =
-        `${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+        `${exerciseContext}\n${childNames}\n\n${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
           .trim()
           .slice(0, 4000);
       const { reply } = await chat({
@@ -634,9 +647,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     </div>
                   )}
                   {messages.map((m) => {
+                    const ex = m.role === "assistant" ? parseExerciseBlocks(m.content) : null;
                     const parsed =
                       m.role === "assistant"
-                        ? parseFlowReply(m.content)
+                        ? parseFlowReply(ex?.text ?? m.content)
                         : { text: m.content, actions: [] as FlowAction[] };
                     return (
                       <div key={m.id} className="space-y-2">
@@ -663,6 +677,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                           </div>
                         </div>
 
+                        {ex?.exercises.map((d, i) => (
+                          <FlowExerciseDraftCard key={`${m.id}:ex${i}`} draft={d} />
+                        ))}
+                        {ex?.savedIds.map((sid) => (
+                          <FlowSavedSuggestionCard key={`${m.id}:s${sid}`} id={sid} onAsk={(q) => void send(q)} />
+                        ))}
                         {parsed.actions.map((a, i) => {
                           const key = `${m.id}:${i}`;
                           const done = doneActions[key];
