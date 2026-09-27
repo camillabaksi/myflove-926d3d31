@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { CheckCircle2, Plus, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CheckCircle2, Clock, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import StartHelper from "@/components/home/start-helper";
@@ -9,6 +9,24 @@ import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
+import { minutesUntil, PREP_WINDOW_MIN } from "@/lib/start-helper";
+
+/** Minuter sedan midnatt, uppdaterat varje minut. */
+function useNowMinutes(): number {
+  const [min, setMin] = useState(() => {
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  });
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const d = new Date();
+      setMin(d.getHours() * 60 + d.getMinutes());
+    }, 30000);
+    return () => window.clearInterval(id);
+  }, []);
+  return min;
+}
+
 
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {
