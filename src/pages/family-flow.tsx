@@ -90,6 +90,7 @@ export default function FamilyFlowPage() {
                 <FamilySituation
                   className="pt-1"
                   childrenList={children.map((c) => ({ id: c.id, name: c.name, helps: c.helps }))}
+                  onSaveHelp={(id, helps) => updateChild(id, { helps })}
                 />
               )}
             </section>
