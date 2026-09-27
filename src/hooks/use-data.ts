@@ -599,8 +599,14 @@ export function useTasks() {
     .filter((t) => !t.completed && isSnoozed(t))
     .sort((a, b) => (a.snoozedUntil ?? "").localeCompare(b.snoozedUntil ?? ""));
 
+  /** Lägger till färdiga kopior (från lib/copy-day) i ett enda sparsteg. */
+  const addTaskCopies = (copies: Task[]) => {
+    if (copies.length) setTasks((prev) => [...copies, ...prev]);
+  };
+
   return {
     tasks,
+    addTaskCopies,
     activeTasks,
     completedTasks,
     snoozedTasks,
@@ -867,8 +873,13 @@ export function useReminders() {
       return 0;
     });
 
+  const addReminderCopies = (copies: Reminder[]) => {
+    if (copies.length) setReminders((prev) => [...copies, ...prev]);
+  };
+
   return {
     reminders,
+    addReminderCopies,
     activeReminders,
     addReminder,
     toggleReminder,

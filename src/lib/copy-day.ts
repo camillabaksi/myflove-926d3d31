@@ -46,7 +46,7 @@ export function buildTaskCopies(existing: Task[], source: Task[], targetDates: s
         friction: t.friction,
         courseId: t.courseId,
         steps: t.steps?.map((s) => ({ id: newId(), title: s.title, done: false, when: s.when })),
-      } as Task);
+      });
     }
   }
   return out;
