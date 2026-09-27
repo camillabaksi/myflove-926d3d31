@@ -4,6 +4,7 @@ import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
+import QuickLogButton from "@/components/home/quick-log-button";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
 import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -204,6 +205,7 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
+              <QuickLogButton />
               <EnergyBattery
                 widget
                 href="/mitt-batteri"
@@ -241,7 +243,7 @@ export default function Home() {
               {[
                 { href: "/kalender", icon: CalendarDays, label: t("Kalender"), src: "kalender" },
                 { href: "/mitt-batteri", icon: BatteryMedium, label: t("Batteri"), src: "batteri" },
-                { href: "/hur-mar-du", icon: Heart, label: t("Mående"), src: "logga" },
+                { href: "/mitt-batteri", icon: Heart, label: t("Mående"), src: "logga" },
               ].map((s) => (
                 <Link
                   key={s.href}
