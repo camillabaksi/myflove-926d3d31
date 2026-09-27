@@ -97,7 +97,12 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
         className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
         aria-label={t("Just nu")}
       >
-        <p className="text-xs font-semibold uppercase text-primary">{t("Just nu")}</p>
+        <Link
+          href="/min-dag"
+          className="text-xs font-semibold uppercase text-primary underline-offset-4 hover:underline"
+        >
+          {t("Just nu")}
+        </Link>
         <p className="mt-2 font-display text-lg font-bold text-ink">
           {justDone ? t("Allt för idag är klart. Bra jobbat!") : t("Inget planerat just nu")}
         </p>
