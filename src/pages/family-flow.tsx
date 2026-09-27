@@ -45,6 +45,7 @@ export default function FamilyFlowPage() {
     openDoc,
   } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
+  const [showChildren, setShowChildren] = useState(false);
   // Situationen (och dess logg) delas mellan flödet och översikten på sidan.
   const [situationLog, setSituationLog] = useCloudSyncedStorage<SituationLogEntry[]>(
     "myflove-situation-log",
@@ -105,7 +106,7 @@ export default function FamilyFlowPage() {
                 >
                   {t("Hjälp mig med en situation")}
                  </Button>
-                 <Button variant="outline" asChild className="press min-h-11 rounded-full px-4 text-sm font-medium"><Link href="/barn">{t("Lägg till barn")}</Link></Button>
+                  <Button variant="outline" type="button" onClick={() => setShowChildren(true)} className="press min-h-11 rounded-full px-4 text-sm font-medium">{t("Lägg till barn")}</Button>
               </div>
 
               {showSituation && (
@@ -148,8 +149,8 @@ export default function FamilyFlowPage() {
               </CollapsibleSection>
             )}
 
-             <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
-              {children.length === 0 && !loading && (
+              <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed={!showChildren} className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
+              {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
                 </p>
@@ -159,7 +160,7 @@ export default function FamilyFlowPage() {
               ) : (
                 <ChildProfiles
                   childrenList={children}
-                  startAdding={false}
+                  startAdding={showChildren}
                   onAdd={async (d) =>
                     addChild(d.name, CHILD_COLORS[0]!, undefined, undefined, {
                       helps: d.helps,
