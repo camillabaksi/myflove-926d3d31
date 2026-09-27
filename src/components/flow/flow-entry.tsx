@@ -4,12 +4,11 @@
  * diskreta val. All information finns kvar, men bakom klick så första
  * skärmen förblir lugn.
  */
-import { ListOrdered, MessageCircle } from "lucide-react";
+import { ListOrdered } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FlowMascot } from "@/components/flow-mascot";
 import CollapsibleSection from "@/components/collapsible-section";
 import { track } from "@/lib/analytics";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
 
 export default function FlowEntry({
   onPlan,
@@ -20,7 +19,6 @@ export default function FlowEntry({
   /** Går till chatt-läget. */
   onChat: () => void;
 }) {
-  useCapacityMode();
 
   return (
     <section className="space-y-4" aria-label="Flow – vad passar bäst just nu">

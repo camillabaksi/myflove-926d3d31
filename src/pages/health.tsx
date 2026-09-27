@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { ArrowRight, Battery, Dumbbell, Pill, Sunrise, MessageCircle } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
-import EnergyBattery from "@/components/energy-battery";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { CAPACITY_META } from "@/lib/priority-engine";

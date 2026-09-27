@@ -105,7 +105,8 @@ export default function HowItWorksGuide() {
         </span>
       )}
       <p className="mt-2 text-xs font-medium text-muted-foreground">{s.kicker}</p>
-      <h3 className="font-display text-base font-bold text-ink">{s.title}</h3>
+       <h3 className="font-display text-base font-bold text-ink">{s.title}</h3>
+       <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.text}</p>
       <Link
         href={s.href}
         onClick={() => track("home_widget_opened", { source: `guide-${s.n}` })}
