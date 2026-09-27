@@ -56,6 +56,7 @@ import {
   type FlowAction,
 } from "@/lib/flow-actions";
 import { parseExerciseBlocks, savedExercisesContext } from "@/lib/saved-exercises";
+import { FlowSpeakButton } from "@/components/flow/flow-speak-button";
 import { useSavedExercises } from "@/hooks/use-saved-exercises";
 import { useChildren } from "@/hooks/use-children";
 import { FlowExerciseDraftCard, FlowSavedSuggestionCard } from "@/components/recovery/flow-exercise-cards";
@@ -674,6 +675,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                             }`}
                           >
                             {parsed.text}
+                            {m.role === "assistant" && parsed.text.trim().length > 0 && (
+                              <div className="mt-1 flex justify-end">
+                                <FlowSpeakButton text={parsed.text} />
+                              </div>
+                            )}
                           </div>
                         </div>
 
