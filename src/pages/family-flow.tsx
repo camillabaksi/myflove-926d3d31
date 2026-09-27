@@ -88,7 +88,7 @@ export default function FamilyFlowPage() {
               {upcoming.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("Inga fler tider inlagda idag.")}</p> : (
                 <div className="mt-3 space-y-2">{upcoming.slice(0, 2).map((event, index) => (
                   <div key={`${event.childId}-${event.time}-${event.title}-${index}`} className="flex items-center gap-3 rounded-2xl bg-secondary/30 p-2">
-                    <ActivityPictogram id={pictogramForActivity(event.title)} tone="lavender" className="h-10 w-10 shrink-0 rounded-xl" />
+                    <ActivityPictogram id={pictogramForActivity(event.title, "calendar")} tone="lavender" className="h-10 w-10 shrink-0 rounded-xl" />
                     <span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-primary">{index === 0 ? t("Nu") : t("Sen")} · {event.time} · {event.childName}</span><span className="block truncate text-sm font-medium text-ink">{event.title}</span></span>
                   </div>
                 ))}</div>
@@ -127,12 +127,12 @@ export default function FamilyFlowPage() {
               )}
             </section>
 
-            <SituationLogOverview
+            <CollapsibleSection id="family-situation-history" title={t("Tidigare situationer")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><SituationLogOverview
               entries={situationLog ?? []}
               onDelete={(id) =>
                 setSituationLog((prev) => (prev ?? []).filter((e) => e.id !== id))
               }
-            />
+            /></CollapsibleSection>
 
 
             {children.length > 0 && (

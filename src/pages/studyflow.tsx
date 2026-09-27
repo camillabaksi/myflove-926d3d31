@@ -272,7 +272,9 @@ export default function StudyflowPage() {
               <div id="schema-import"><ScheduleImport /></div>
             </CollapsibleSection>
 
-            <StudyHelp />
+            <CollapsibleSection id="studies-help" title="Studiehjälp" defaultCollapsed className={card} headingClassName={sectionTitle}>
+              <StudyHelp />
+            </CollapsibleSection>
 
             <CollapsibleSection
               className={card}
