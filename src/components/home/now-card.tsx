@@ -41,6 +41,17 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const [landing, setLanding] = useState<"none" | "ask" | "run">("none");
   const current = plan.now && !skipped.includes(plan.now.item.id) ? plan.now.item.flowItem : null;
   const endLanding = useCallback(() => setLanding("none"), []);
+  const nowMin = useNowMinutes();
+  // Mjuk puff: kvartsvarning inför en fast tid, så man slipper vänteläget.
+  const [prepDismissed, setPrepDismissed] = useState<string | null>(null);
+  const minsLeft = current ? minutesUntil(current.time, nowMin) : null;
+  const showPrep =
+    !!current &&
+    !helping &&
+    minsLeft !== null &&
+    minsLeft <= PREP_WINDOW_MIN &&
+    prepDismissed !== current.id;
+
 
   if (landing !== "none") {
     return (
