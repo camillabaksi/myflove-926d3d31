@@ -14,14 +14,18 @@ describe("En enda plats för energi & mående", () => {
     expect(battery).toContain('source="mitt-batteri"');
   });
 
-  it("Hem visar batteriet och leder till samma centrala vy", () => {
+  it("Hem har ett enda lägeskort som loggar och leder till samma centrala vy", () => {
     const home = read("src/pages/home.tsx");
-    expect(home).toContain("EnergyBattery");
-    // Hem-widgetarna länkar till samma centrala vy (href kommer från HOME_WIDGETS).
+    // Ett enda kort på Hem – kapacitetsvalet loggar även dagens ork.
+    expect(home).toContain("CapacityPlanCard");
     expect(home).toContain('"/mitt-batteri"');
-    // Hem har inget eget loggningsformulär.
+    // Inga dubbla loggningsrutor på Hem.
     expect(home).not.toContain("simple-checkin");
-    expect(home).not.toContain("logEnergy");
+    expect(home).not.toContain("QuickLogButton");
+    expect(home).not.toContain("EnergyBattery");
+    // Självaste loggningen sker i kapacitetsväljaren (samma dataväg som Mitt batteri).
+    const selector = read("src/components/capacity-selector.tsx");
+    expect(selector).toContain("logEnergy");
   });
 
   it("den gamla dubbletten QuickCheckin finns inte kvar", () => {
