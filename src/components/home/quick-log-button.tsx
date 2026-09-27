@@ -21,9 +21,9 @@ export default function QuickLogButton() {
 
   const current = orkFromValue10(energyValue ?? null);
 
-  const log = (value10: number, modeId: string) => {
+  const log = (value10: number, modeId: "fullt" | "mellan" | "lagt") => {
     void logEnergy(value10);
-    setMode(modeId as "lagt" | "mellan" | "god");
+    setMode(modeId);
     track("battery_logged", { source: "hem-snabb", method: "ork" });
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2000);
@@ -55,7 +55,7 @@ export default function QuickLogButton() {
             key={level.id}
             type="button"
             aria-pressed={current?.id === level.id}
-            onClick={() => log(level.value10, level.id)}
+            onClick={() => log(level.value10, level.id as "fullt" | "mellan" | "lagt")}
             className={cn(
               "press flex min-h-11 items-center justify-center gap-1.5 rounded-2xl border text-sm font-medium transition-all",
               current?.id === level.id
