@@ -17,7 +17,7 @@ export interface PlayableExercise {
 const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 /** Enkel timer – återanvänder träningens klockmotor med ett enda moment. */
-function ExerciseTimer({ minutes }: { minutes: number }) {
+function ExerciseTimerInner({ minutes, onReset }: { minutes: number; onReset: () => void }) {
   const [started, setStarted] = useState(false);
   const steps = useMemo<TimelineStep[]>(
     () => [{ id: "t", kind: "arbete", blockIndex: 0, exerciseId: "t", exerciseName: "Övning", setNumber: 1, totalSets: 1, seconds: Math.round(minutes * 60), title: "", detail: "", announce: "" }],
@@ -42,7 +42,7 @@ function ExerciseTimer({ minutes }: { minutes: number }) {
             </Button>
           )}
           {started && (
-            <Button size="sm" variant="ghost" className="rounded-full" onClick={() => { timer.pause(); timer.restart(); timer.pause(); setStarted(false); }}>
+            <Button size="sm" variant="ghost" className="rounded-full" onClick={onReset}>
               <Square className="h-4 w-4" /> Avsluta
             </Button>
           )}
@@ -50,6 +50,11 @@ function ExerciseTimer({ minutes }: { minutes: number }) {
       )}
     </div>
   );
+}
+
+function ExerciseTimer({ minutes }: { minutes: number }) {
+  const [round, setRound] = useState(0);
+  return <ExerciseTimerInner key={round} minutes={minutes} onReset={() => setRound((r) => r + 1)} />;
 }
 
 /** "Starta övning" – intro, sedan ett steg i taget. */
