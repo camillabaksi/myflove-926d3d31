@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "wouter";
 import { CheckCircle2, Clock, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
@@ -96,7 +97,12 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
         className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
         aria-label={t("Just nu")}
       >
-        <p className="text-xs font-semibold uppercase text-primary">{t("Just nu")}</p>
+        <Link
+          href="/min-dag"
+          className="text-xs font-semibold uppercase text-primary underline-offset-4 hover:underline"
+        >
+          {t("Just nu")}
+        </Link>
         <p className="mt-2 font-display text-lg font-bold text-ink">
           {justDone ? t("Allt för idag är klart. Bra jobbat!") : t("Inget planerat just nu")}
         </p>
@@ -122,9 +128,22 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
       aria-label={t("Just nu")}
       aria-live="polite"
     >
-      <p className="text-xs font-semibold uppercase text-primary">
-        {justDone ? t("Bra jobbat – nästa:") : t("Just nu")}
-      </p>
+      <div className="flex items-center justify-between gap-2">
+        <Link
+          href="/min-dag"
+          className="text-xs font-semibold uppercase text-primary underline-offset-4 hover:underline"
+        >
+          {justDone ? t("Bra jobbat – nästa:") : t("Just nu")}
+        </Link>
+        <button
+          type="button"
+          onClick={onAdd}
+          aria-label={t("Lägg till aktivitet")}
+          className="inline-flex min-h-9 items-center gap-1 rounded-full border border-border/60 bg-card/70 px-3 text-xs font-semibold text-ink shadow-soft"
+        >
+          <Plus className="h-3.5 w-3.5 text-primary" aria-hidden /> {t("Lägg till")}
+        </button>
+      </div>
       <div className="mt-3 flex min-w-0 items-center gap-3">
         <ActivityPictogram
           id={visual.pictogram}
