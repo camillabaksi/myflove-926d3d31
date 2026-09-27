@@ -24,6 +24,8 @@ import {
   type StrategyId,
 } from "@/lib/situation-helper";
 import { todayISO } from "@/lib/day";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import SituationLog, { type SituationLogEntry, type AttemptResult } from "@/components/family/situation-log";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -84,6 +86,31 @@ export default function FamilySituation({
   const [added, setAdded] = useState(false);
   const [helped, setHelped] = useState<string | null>(null);
   const [savedHelp, setSavedHelp] = useState(false);
+  const [log, setLog] = useCloudSyncedStorage<SituationLogEntry[]>("myflove-situation-log", []);
+  const [entryId, setEntryId] = useState<string | null>(null);
+
+  /** Uppdaterar aktuell situation i loggen (skapas vid första valda väg). */
+  const logAttempt = (title: string, result: AttemptResult) => {
+    const catLabel = SITUATION_CATEGORIES.find((c) => c.id === cat)?.label ?? "Annat";
+    const id = entryId ?? `sit-${Date.now()}`;
+    if (!entryId) setEntryId(id);
+    setLog((prev) => {
+      const list = prev ?? [];
+      const existing = list.find((e) => e.id === id);
+      const base: SituationLogEntry = existing ?? {
+        id, at: Date.now(), category: catLabel, text: text.trim().slice(0, 300), who, attempts: [], helped: null,
+      };
+      const attempts = base.attempts.some((a) => a.title === title && a.result === "provat")
+        ? base.attempts.map((a) => (a.title === title && a.result === "provat" ? { ...a, result } : a))
+        : [...base.attempts, { title, result }];
+      const next = { ...base, attempts };
+      return [next, ...list.filter((e) => e.id !== id)].slice(0, 100);
+    });
+  };
+  const logHelped = (h: string) => {
+    if (!entryId) return;
+    setLog((prev) => (prev ?? []).map((e) => (e.id === entryId ? { ...e, helped: h } : e)));
+  };
 
   const cat = category ?? "annat";
   const kids = childrenList.filter((c) => whoIds.includes(c.id));
@@ -122,6 +149,7 @@ export default function FamilySituation({
     setAdded(false);
     setHelped(null);
     setSavedHelp(false);
+    setEntryId(null);
   };
 
   const afterQuestions = () => setStep(capacity.mode === "lagt" ? "capacity" : "summary");
@@ -138,6 +166,7 @@ export default function FamilySituation({
 
   const choose = (s: Strategy) => {
     setCurrent(s);
+    logAttempt(s.title, "provat");
     setShowVisual(false);
     setAdded(false);
     setStep("strategy");
@@ -223,6 +252,10 @@ export default function FamilySituation({
               {t("Fortsätt")} <ChevronRight size={16} aria-hidden />
             </button>
           </div>
+          <SituationLog
+            entries={log ?? []}
+            onDelete={(id) => setLog((prev) => (prev ?? []).filter((e) => e.id !== id))}
+          />
         </div>
       )}
 
@@ -448,6 +481,7 @@ export default function FamilySituation({
               className={primary}
               onClick={() => {
                 setTried((x) => [...x, current.id]);
+                logAttempt(current.title, "fungerade");
                 setStep("done");
                 track("flow_suggestion_accepted", { source: "family-situation-done" });
               }}
@@ -459,6 +493,7 @@ export default function FamilySituation({
               className={ghost}
               onClick={() => {
                 setTried((x) => [...x, current.id]);
+                logAttempt(current.title, "fungerade inte");
                 setRetry(true);
                 setStep("options");
                 track("flow_suggestion_rejected", { source: "family-situation" });
@@ -485,6 +520,7 @@ export default function FamilySituation({
                 aria-pressed={helped === h}
                 onClick={() => {
                   setHelped(h);
+                  logHelped(h);
                   track("flow_suggestion_accepted", { source: "family-situation-feedback" });
                 }}
                 className={cn(
