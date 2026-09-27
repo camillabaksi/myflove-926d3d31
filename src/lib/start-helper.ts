@@ -20,7 +20,7 @@ const RULES: Rule[] = [
     step: "Plocka undan tre saker. Sen får du sluta.",
   },
 
-  { match: /mat|middag|frukost|lunch|laga|koka/i, step: "Öppna kylen och ta fram en enda sak." },
+  { match: /mat|middag|frukost|lunch|laga|koka/i, step: "Ta fram en tallrik och ställ den på bänken." },
   { match: /handla|inköp|affär/i, step: "Skriv de tre viktigaste sakerna på listan." },
   {
     match: /plugg|läs|studer|tenta|prov|uppsats|lektion/i,
@@ -31,10 +31,29 @@ const RULES: Rule[] = [
   { match: /träna|promenad|gå ut|löp|gym/i, step: "Ta på dig skorna. Bara det." },
   { match: /dusch|tänder|morgon|kväll|sova/i, step: "Gå in i badrummet och tänd lampan." },
   { match: /medicin|tablett|vård|läkare/i, step: "Ta fram förpackningen och ställ den framför dig." },
-  { match: /hämta|lämna|skjuts|förskola|skola/i, step: "Ta fram nycklar och ytterkläder." },
+  { match: /hämta|lämna|skjuts|förskola|skola|iväg|buss|tåg|resa|åka/i, step: "Ta fram skorna och nycklarna. Bara det." },
   { match: /betal|räkning|faktura|ekonomi/i, step: "Öppna appen och titta på summan." },
-  { match: /pappers|blankett|ansök|formulär/i, step: "Lägg fram pappret och skriv ditt namn." },
+  { match: /pappers|blankett|ansök|formulär/i, step: "Lägg fram pappret och en penna på bordet." },
 ];
+
+/** Hur långt innan en fast tid den mjuka puffen dyker upp. */
+export const PREP_WINDOW_MIN = 15;
+
+/** Minuter kvar till ett klockslag "HH:MM" idag. Null om tiden saknas eller passerat. */
+export function minutesUntil(time: string | undefined, nowMinutes: number): number | null {
+  if (!time) return null;
+  const [h, m] = time.split(":").map(Number);
+  if (!Number.isFinite(h)) return null;
+  const left = h * 60 + (m || 0) - nowMinutes;
+  return left >= 0 ? left : null;
+}
+
+/** Sant när det är dags att erbjuda en mjuk förberedelse inför en fast tid. */
+export function shouldPrep(time: string | undefined, nowMinutes: number): boolean {
+  const left = minutesUntil(time, nowMinutes);
+  return left !== null && left <= PREP_WINDOW_MIN;
+}
+
 
 /** Ett litet, konkret första steg för aktiviteten. */
 export function microStepFor(title: string): string {

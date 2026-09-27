@@ -32,7 +32,7 @@ export default function StartHelper({
     <div className="mt-4 rounded-2xl bg-muted/50 p-4" aria-live="polite">
       {finished ? (
         <>
-          <p className="font-medium text-ink">{t("Bra start! Två minuter är gjorda.")}</p>
+          <p className="font-medium text-ink">{t("Fint! Du har tagit första steget 💜")}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button
               type="button"

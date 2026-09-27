@@ -1,5 +1,7 @@
 ## 2026-09-27
+- Hem: snäll starttimer vid tidsatta saker – ca 15 minuter innan (och när det är dags) frågar "Just nu"-kortet lugnt "Vill du starta mjukt i 2 lugna minuter?". Du får ett enda litet första steg, en mjuk nedräkning och sedan Fortsätt, Jag är klar eller Ta en paus. Inga larm, ingen försening, inget krav.
 - Kalender: "Veckans mål" – lägg in saker som ska bli gjorda någon gång i veckan (t.ex. dammsuga, barnens papper). Välj en dag när det passar så hamnar det i Min dag, eller bocka av direkt. Synkas mellan enheter.
+
 - Familj: "Tidigare situationer" syns nu direkt på Family Flow-sidan – med en summering av vilka vägar som fungerat för barnet och hela loggen hopfälld under "Alla situationer". Loggen delas med "Hjälp mig med en situation" och synkas mellan enheter.
 - Familj: "Hjälp mig med en situation" sparar nu varje situation i en egen logg – vilka vägar du provat, om de fungerade eller inte och vad som hjälpte mest. Visas som "Tidigare situationer" under första steget och synkas mellan enheter.
 - Familj: "Hjälp mig med en situation" är nu ett steg-för-steg-stöd – Vad händer? → Vem gäller det? → 1–3 korta följdfrågor → Flow sammanfattar → 3–5 vägar att prova med konkreta steg och "Säg så här" → "Det fungerade inte" ger nya vägar → kort feedback som kan sparas i barnets profil. Använder befintliga barnprofiler, barnschema, kapacitetsläge, Min dag och bildstöd.

@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { CheckCircle2, Plus, Sparkles } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { CheckCircle2, Clock, Plus, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import StartHelper from "@/components/home/start-helper";
@@ -9,6 +9,24 @@ import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useLang } from "@/hooks/use-language";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import { areaColor } from "@/lib/life-areas";
+import { minutesUntil, PREP_WINDOW_MIN } from "@/lib/start-helper";
+
+/** Minuter sedan midnatt, uppdaterat varje minut. */
+function useNowMinutes(): number {
+  const [min, setMin] = useState(() => {
+    const d = new Date();
+    return d.getHours() * 60 + d.getMinutes();
+  });
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const d = new Date();
+      setMin(d.getHours() * 60 + d.getMinutes());
+    }, 30000);
+    return () => window.clearInterval(id);
+  }, []);
+  return min;
+}
+
 
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {
@@ -23,6 +41,17 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const [landing, setLanding] = useState<"none" | "ask" | "run">("none");
   const current = plan.now && !skipped.includes(plan.now.item.id) ? plan.now.item.flowItem : null;
   const endLanding = useCallback(() => setLanding("none"), []);
+  const nowMin = useNowMinutes();
+  // Mjuk puff: kvartsvarning inför en fast tid, så man slipper vänteläget.
+  const [prepDismissed, setPrepDismissed] = useState<string | null>(null);
+  const minsLeft = current ? minutesUntil(current.time, nowMin) : null;
+  const showPrep =
+    !!current &&
+    !helping &&
+    minsLeft !== null &&
+    minsLeft <= PREP_WINDOW_MIN &&
+    prepDismissed !== current.id;
+
 
   if (landing !== "none") {
     return (
@@ -114,6 +143,39 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           </p>
         </div>
       </div>
+      {showPrep && (
+        <div className="mt-4 rounded-2xl bg-primary/10 p-4" aria-live="polite">
+          <p className="flex items-start gap-2 text-sm font-medium text-ink">
+            <Clock className="mt-0.5 h-4 w-4 shrink-0 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] text-primary" aria-hidden />
+            <span>
+              {minsLeft && minsLeft > 0
+                ? t(`Om ${minsLeft} min: ${current.title}.`)
+                : t(`Det är dags: ${current.title}.`)}{" "}
+              {t("Vill du starta mjukt i 2 lugna minuter?")}
+            </span>
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => setHelping(true)}
+              className="min-h-11 rounded-full"
+            >
+              <Sparkles className="h-4 w-4" aria-hidden /> {t("Starta mjukt")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => setPrepDismissed(current.id)}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Inte nu")}
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {current.completable && (
           <Button
