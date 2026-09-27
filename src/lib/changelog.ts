@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Flow har fått röst – en högtalarknapp vid varje svar läser upp det med en mjuk, varm och tydlig röst; tryck igen för att stoppa, inget spelas automatiskt (2026-09-27)",
       "Mitt batteri och \"Hur mår du?\" sammanslagna – en enda incheckningsplats; Hem har ett enda \"Hur är läget idag?\"-kort som loggar kapacitet och ork direkt (2026-09-27)",
       "Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort (2026-09-27)",
       "Hem: snäll starttimer vid tidsatta saker – mjuk puff ca 15 min innan, ett litet första steg och 2 lugna minuter utan larm eller försening (2026-09-27)",
