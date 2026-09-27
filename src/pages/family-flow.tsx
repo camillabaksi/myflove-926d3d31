@@ -89,7 +89,7 @@ export default function FamilyFlowPage() {
                 <div className="mt-3 space-y-2">{upcoming.slice(0, 2).map((event, index) => (
                   <div key={`${event.childId}-${event.time}-${event.title}-${index}`} className="flex items-center gap-3 rounded-2xl bg-secondary/30 p-2">
                     <ActivityPictogram id={pictogramForActivity(event.title, "calendar")} tone="lavender" className="h-10 w-10 shrink-0 rounded-xl" />
-                    <span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-primary">{index === 0 ? t("Nu") : t("Sen")} · {event.time} · {event.childName}</span><span className="block truncate text-sm font-medium text-ink">{event.title}</span></span>
+                    <span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-primary">{index === 0 ? t("Härnäst") : t("Sedan")} · {event.time} · {event.childName}</span><span className="block truncate text-sm font-medium text-ink">{event.title}</span></span>
                   </div>
                 ))}</div>
               )}
@@ -156,7 +156,7 @@ export default function FamilyFlowPage() {
               </CollapsibleSection>
             )}
 
-             <CollapsibleSection id="Barnen" title={t("Barnen")} className="space-y-3">
+             <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed className="space-y-3">
               {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}

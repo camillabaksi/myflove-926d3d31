@@ -132,12 +132,10 @@ export function DailyFlowList({
   const hiddenCount =
     previewCount && !expanded ? Math.max(0, items.length - previewCount) : 0;
   const shownItems = hiddenCount > 0 ? items.slice(0, previewCount) : items;
-  const firstOpenIndex = items.findIndex((item) => !item.done);
-  const firstUntimedIndex = items.findIndex((item) => !item.time);
-  const nextTimedIndex = items.findIndex((item, index) => index > firstOpenIndex && !!item.time && !item.done);
 
   return (
     <>
+      {dayHeadings && <p className="px-2 pb-2 text-xs font-semibold text-primary">Nu · Sen · Övrigt idag</p>}
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
@@ -146,15 +144,6 @@ export function DailyFlowList({
           const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
           return (
             <li key={item.id}>
-              {dayHeadings && index === firstOpenIndex && (
-                <h2 className="pb-1 pt-3 font-display text-sm font-bold text-primary">Nu</h2>
-              )}
-              {dayHeadings && index === nextTimedIndex && index !== firstOpenIndex && (
-                <h2 className="pb-1 pt-3 font-display text-sm font-bold text-primary">Sen</h2>
-              )}
-              {dayHeadings && index === firstUntimedIndex && index !== firstOpenIndex && (
-                <h2 className="pb-1 pt-3 font-display text-sm font-bold text-primary">Övrigt idag</h2>
-              )}
               {index === nowIndex && (
                 <div className="flex items-center gap-2 py-1" aria-label="Just nu">
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">

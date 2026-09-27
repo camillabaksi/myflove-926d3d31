@@ -18,7 +18,7 @@ import { AssistantContent } from "@/components/flow/assistant-content";
  * öppnar samma läge som användaren faktiskt valt.
  *
  * Ingången är förenklad: en kort fråga med EN tydlig huvudhandling
- * ("Visa mitt förslag") som leder direkt till Flows planeringsläge.
+  * ("Prata med Flow") som leder direkt till samtalet.
  * Mer information och de övriga lägena finns kvar – bakom klick.
  */
 export default function FlowView({
