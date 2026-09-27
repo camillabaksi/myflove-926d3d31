@@ -152,6 +152,7 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-done-log",
   "myflove-daily-checkin",
   "myflove-situation",
+  "myflove-situation-log",
   "myflove-work-projects",
   "myflove-flowstudy",
   "myflove-life-profile",
