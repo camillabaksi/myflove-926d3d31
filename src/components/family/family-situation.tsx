@@ -124,7 +124,7 @@ export default function FamilySituation({
     setSavedHelp(false);
   };
 
-  const afterQuestions = () => setStep(capacity.mode === "lågt" ? "capacity" : "summary");
+  const afterQuestions = () => setStep(capacity.mode === "lagt" ? "capacity" : "summary");
 
   const goNextFromWhat = (id: SituationCategoryId | null) => {
     const c = id ?? detectCategory(text) ?? "annat";
@@ -158,7 +158,7 @@ export default function FamilySituation({
       who: "what",
       questions: childrenList.length ? "who" : "what",
       capacity: "questions",
-      summary: capacity.mode === "lågt" ? "capacity" : "questions",
+      summary: capacity.mode === "lagt" ? "capacity" : "questions",
       options: "summary",
       strategy: "options",
     };

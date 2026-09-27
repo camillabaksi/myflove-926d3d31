@@ -402,7 +402,7 @@ export function strategiesFor(
     default:
       ids = ["mjukare", "tva-val", "mindre", "forsta-steget", "nod"];
   }
-  if (answers.forvarnat === "nej" && !ids.includes("mjukare")) ids = ["mjukare", ...ids].slice(0, 5);
+  if (answers.forvarnat === "nej" && !ids.includes("mjukare")) ids = (["mjukare", ...ids] as StrategyId[]).slice(0, 5);
   return ids.map((id) => strategy(id, category));
 }
 
