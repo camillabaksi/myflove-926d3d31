@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
-      "Mitt batteri och \"Hur mår du?\" sammanslagna – en enda incheckningsplats; Hem har en liten \"Hur är läget?\"-knapp som loggar direkt (2026-09-27)",
+      "Mitt batteri och \"Hur mår du?\" sammanslagna – en enda incheckningsplats; Hem har ett enda \"Hur är läget idag?\"-kort som loggar kapacitet och ork direkt (2026-09-27)",
       "Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort (2026-09-27)",
       "Hem: snäll starttimer vid tidsatta saker – mjuk puff ca 15 min innan, ett litet första steg och 2 lugna minuter utan larm eller försening (2026-09-27)",
       "Kalender: \"Veckans mål\" – saker som ska bli gjorda någon gång i veckan; välj en dag när det passar så hamnar det i Min dag (2026-09-27)",

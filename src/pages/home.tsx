@@ -4,9 +4,7 @@ import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
-import QuickLogButton from "@/components/home/quick-log-button";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
-import EnergyBattery from "@/components/energy-battery";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
 import { FlowMascot } from "@/components/flow-mascot";
@@ -204,12 +202,6 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <NowCard onAdd={() => setAddOpen(true)} />
               {shows("lage") && <CapacityPlanCard />}
-              <QuickLogButton />
-              <EnergyBattery
-                widget
-                href="/mitt-batteri"
-                onNavigate={() => track("battery_opened", { source: "hem" })}
-              />
               {!isLowCapacity && shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"
