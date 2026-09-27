@@ -50,7 +50,6 @@ export default function FamilyFlowPage() {
     "myflove-situation-log",
     [],
   );
-  const [showChildren, setShowChildren] = useState(false);
   const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
   const todayEvents = useChildEvents();
   const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
@@ -106,14 +105,7 @@ export default function FamilyFlowPage() {
                 >
                   {t("Hjälp mig med en situation")}
                  </Button>
-                 <Button
-                   variant="outline"
-                  type="button"
-                  onClick={() => setShowChildren((v) => !v)}
-                  className="press min-h-11 rounded-full border border-border bg-card px-4 text-sm font-medium text-ink"
-                >
-                  {t("Lägg till barn")}
-                 </Button>
+                 <Button variant="outline" asChild className="press min-h-11 rounded-full px-4 text-sm font-medium"><Link href="/barn">{t("Lägg till barn")}</Link></Button>
               </div>
 
               {showSituation && (
@@ -157,7 +149,7 @@ export default function FamilyFlowPage() {
             )}
 
              <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
-              {children.length === 0 && !showChildren && !loading && (
+              {children.length === 0 && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
                 </p>
@@ -167,7 +159,7 @@ export default function FamilyFlowPage() {
               ) : (
                 <ChildProfiles
                   childrenList={children}
-                  startAdding={showChildren}
+                  startAdding={false}
                   onAdd={async (d) =>
                     addChild(d.name, CHILD_COLORS[0]!, undefined, undefined, {
                       helps: d.helps,
