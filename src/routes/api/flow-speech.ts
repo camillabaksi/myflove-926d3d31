@@ -43,7 +43,11 @@ export const Route = createFileRoute("/api/flow-speech")({
             contents: [
               {
                 role: "user",
-                parts: [{ text: `Läs upp detta lugnt och varmt på svenska: ${text}` }],
+                parts: [
+                  {
+                    text: `Läs upp detta på svenska med en mjuk, varm och tydlig röst – som en lugn vän som pratar naturligt, inte som en robot. Håll ett avspänt tempo med naturliga pauser: ${text}`,
+                  },
+                ],
               },
             ],
             generationConfig: {

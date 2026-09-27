@@ -23,6 +23,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OauthKalenderReturRouteImport } from './routes/oauth.kalender-retur'
 import { Route as GuideAdhdPlannerForAdultsRouteImport } from './routes/guide.adhd-planner-for-adults'
+import { Route as ApiFlowSpeechRouteImport } from './routes/api/flow-speech'
 import { Route as AppWorkflowRouteImport } from './routes/_app.workflow'
 import { Route as AppVeckansFlowRouteImport } from './routes/_app.veckans-flow'
 import { Route as AppVadNuRouteImport } from './routes/_app.vad-nu'
@@ -163,6 +164,11 @@ const GuideAdhdPlannerForAdultsRoute =
     path: '/guide/adhd-planner-for-adults',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiFlowSpeechRoute = ApiFlowSpeechRouteImport.update({
+  id: '/api/flow-speech',
+  path: '/api/flow-speech',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppWorkflowRoute = AppWorkflowRouteImport.update({
   id: '/workflow',
   path: '/workflow',
@@ -588,6 +594,7 @@ export interface FileRoutesByFullPath {
   '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
+  '/api/flow-speech': typeof ApiFlowSpeechRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -672,6 +679,7 @@ export interface FileRoutesByTo {
   '/vad-nu': typeof AppVadNuRoute
   '/veckans-flow': typeof AppVeckansFlowRoute
   '/workflow': typeof AppWorkflowRoute
+  '/api/flow-speech': typeof ApiFlowSpeechRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -758,6 +766,7 @@ export interface FileRoutesById {
   '/_app/vad-nu': typeof AppVadNuRoute
   '/_app/veckans-flow': typeof AppVeckansFlowRoute
   '/_app/workflow': typeof AppWorkflowRoute
+  '/api/flow-speech': typeof ApiFlowSpeechRoute
   '/guide/adhd-planner-for-adults': typeof GuideAdhdPlannerForAdultsRoute
   '/oauth/kalender-retur': typeof OauthKalenderReturRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -844,6 +853,7 @@ export interface FileRouteTypes {
     | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
+    | '/api/flow-speech'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -928,6 +938,7 @@ export interface FileRouteTypes {
     | '/vad-nu'
     | '/veckans-flow'
     | '/workflow'
+    | '/api/flow-speech'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -1013,6 +1024,7 @@ export interface FileRouteTypes {
     | '/_app/vad-nu'
     | '/_app/veckans-flow'
     | '/_app/workflow'
+    | '/api/flow-speech'
     | '/guide/adhd-planner-for-adults'
     | '/oauth/kalender-retur'
     | '/.lovable/oauth/consent'
@@ -1038,6 +1050,7 @@ export interface RootRouteChildren {
   VillkorRoute: typeof VillkorRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiFlowSpeechRoute: typeof ApiFlowSpeechRoute
   GuideAdhdPlannerForAdultsRoute: typeof GuideAdhdPlannerForAdultsRoute
   OauthKalenderReturRoute: typeof OauthKalenderReturRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1145,6 +1158,13 @@ declare module '@tanstack/react-router' {
       path: '/guide/adhd-planner-for-adults'
       fullPath: '/guide/adhd-planner-for-adults'
       preLoaderRoute: typeof GuideAdhdPlannerForAdultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/flow-speech': {
+      id: '/api/flow-speech'
+      path: '/api/flow-speech'
+      fullPath: '/api/flow-speech'
+      preLoaderRoute: typeof ApiFlowSpeechRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app/workflow': {
@@ -1781,6 +1801,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiFlowSpeechRoute: ApiFlowSpeechRoute,
   GuideAdhdPlannerForAdultsRoute: GuideAdhdPlannerForAdultsRoute,
   OauthKalenderReturRoute: OauthKalenderReturRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
