@@ -151,12 +151,12 @@ export default function FamilyFlowPage() {
              <CollapsibleSection id="family-recovery-gap" title={t("Hitta utrymme för vila")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} /></CollapsibleSection>
 
             {children.length > 0 && (
-               <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} defaultCollapsed className="space-y-3">
+               <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
                 <RecoveryLibrary initialCategory="barn" />
               </CollapsibleSection>
             )}
 
-             <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed className="space-y-3">
+             <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
               {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
