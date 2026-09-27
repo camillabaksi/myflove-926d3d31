@@ -1,3 +1,6 @@
+## 2026-09-27
+- Familj: "Hjälp mig med en situation" är nu ett steg-för-steg-stöd – Vad händer? → Vem gäller det? → 1–3 korta följdfrågor → Flow sammanfattar → 3–5 vägar att prova med konkreta steg och "Säg så här" → "Det fungerade inte" ger nya vägar → kort feedback som kan sparas i barnets profil. Använder befintliga barnprofiler, barnschema, kapacitetsläge, Min dag och bildstöd.
+
 ## 2026-09-26
 - Länken Anpassa hemskärmen ligger nu sist på Hem, efter guiden. Sparade val för block, ordning och checklistan skrivs inte längre över av en äldre engångsåterställning på nya enheter.
 - Hem fokuserar nu på vad du behöver just nu: Enkelt läge-knappen är borttagen och "Din dag – när du vill fördjupa" finns hopfälld i Idag. "Ny på MyFlove?" ligger sist på Hem och kan leda direkt till Flow. Befintliga planeringsdelar och data är kvar.

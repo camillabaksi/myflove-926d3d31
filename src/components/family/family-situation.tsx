@@ -1,13 +1,28 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
-import { FlowMascot } from "@/components/flow-mascot";
-import NextStepCard from "@/components/journey/next-step-card";
 import { useLang } from "@/hooks/use-language";
 import { useTasks } from "@/hooks/use-data";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { planFamilySituation, type FamilySubject } from "@/lib/family-flow";
+import { useChildEvents } from "@/hooks/use-child-events";
+import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import type { PictogramId } from "@/lib/child-visual-schedule";
+import {
+  SITUATION_CATEGORIES,
+  HELPED_OPTIONS,
+  HELPED_TO_CHILD_HELP,
+  LOW_CAPACITY_PROMPTS,
+  alternativesAfter,
+  detectCategory,
+  questionsFor,
+  strategiesFor,
+  summarize,
+  type SituationAnswers,
+  type SituationCategoryId,
+  type Strategy,
+  type StrategyId,
+} from "@/lib/situation-helper";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -18,198 +33,519 @@ export interface SituationChild {
   helps: string[];
 }
 
+type Step = "what" | "who" | "questions" | "capacity" | "summary" | "options" | "strategy" | "done";
+
+const VISUAL_ICON: Record<string, PictogramId> = {
+  "Klä på sig": "dress",
+  "Ta på skor": "walk",
+  "Packa väskan": "bag",
+  "Gå till bilen": "car",
+  "Borsta tänder": "teeth",
+  "Tvätta händerna": "shower",
+  Pyjamas: "dress",
+  "Läsa saga": "study",
+  Sova: "sleep",
+  "Sätta sig vid bordet": "meal",
+  "Smaka en tugga": "meal",
+  "Gå till skolan": "school",
+};
+
 /**
- * "Vad behöver fungera?" → "Vem gäller det?" → "Vad brukar hjälpa?"
- *
- * Använder befintlig kapacitetslogik (FlowScore/Mitt batteri), befintliga
- * uppgifter och befintligt Nästa rimliga steg. Inget nytt aktivitetsregister.
+ * "Hjälp mig med en situation" – ett steg i taget.
+ * Återanvänder barnprofiler, barnens schema, kapacitetsläget, uppgifter och bildstöd.
  */
 export default function FamilySituation({
   childrenList,
+  onSaveHelp,
   className,
 }: {
   childrenList: SituationChild[];
+  /** Spara en observation i barnets befintliga profil ("brukar hjälpa"). */
+  onSaveHelp?: (childId: string, helps: string[]) => Promise<unknown> | void;
   className?: string;
 }) {
   const { t } = useLang();
-  const { addTask } = useTasks();
+  const { tasks, addTask } = useTasks();
   const capacity = useCapacityMode();
-  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
-  const [draft, setDraft] = useState("");
+  const events = useChildEvents();
+
+  const [step, setStep] = useState<Step>("what");
   const [text, setText] = useState("");
-  const [subject, setSubject] = useState<FamilySubject>("jag");
-  const [childId, setChildId] = useState<string | null>(null);
-  const [adjust, setAdjust] = useState<"mindre" | "större" | null>(null);
-  const [accepted, setAccepted] = useState(false);
+  const [category, setCategory] = useState<SituationCategoryId | null>(null);
+  const [whoIds, setWhoIds] = useState<string[]>([]);
+  const [whoSelf, setWhoSelf] = useState(false);
+  const [qIndex, setQIndex] = useState(0);
+  const [answers, setAnswers] = useState<SituationAnswers>({});
+  const [lowMode, setLowMode] = useState(false);
+  const [current, setCurrent] = useState<Strategy | null>(null);
+  const [tried, setTried] = useState<StrategyId[]>([]);
+  const [retry, setRetry] = useState(false);
+  const [showVisual, setShowVisual] = useState(false);
+  const [added, setAdded] = useState(false);
+  const [helped, setHelped] = useState<string | null>(null);
+  const [savedHelp, setSavedHelp] = useState(false);
 
-  const child = childrenList.find((c) => c.id === childId) ?? null;
-  const score = typeof flow?.score === "number" ? flow.score : null;
-  const capacityMinutes = typeof flow?.capacityMinutes === "number" ? flow.capacityMinutes : null;
-
-  const plan = useMemo(
-    () =>
-      text.trim()
-        ? planFamilySituation({
-            text,
-            subject,
-            childName: child?.name ?? null,
-            helps: subject === "barn" ? (child?.helps ?? []) : [],
-            score,
-            capacityMinutes,
-            adjust,
-          })
-        : null,
-    [text, subject, child, score, capacityMinutes, adjust],
+  const cat = category ?? "annat";
+  const kids = childrenList.filter((c) => whoIds.includes(c.id));
+  const who = whoSelf
+    ? "Du"
+    : kids.length > 1
+      ? kids.map((k) => k.name).join(" och ")
+      : (kids[0]?.name ?? "Barnet");
+  const questions = useMemo(() => questionsFor(cat, text), [cat, text]);
+  const summary = useMemo(
+    () => summarize({ text, category: cat, who, answers }),
+    [text, cat, who, answers],
   );
+  const options = useMemo(
+    () => (retry ? alternativesAfter(tried, cat) : strategiesFor(cat, answers)),
+    [retry, tried, cat, answers],
+  );
+  const single = kids.length === 1 ? kids[0]! : null;
+  const nextEvent = single
+    ? events.find((e) => e.childId === single.id && !e.completed && e.time >= nowHHMM())
+    : null;
 
-  const chip = (active: boolean) =>
-    cn(
-      "press min-h-11 rounded-full border px-4 text-sm font-medium",
-      active
-        ? "border-primary bg-primary/10 text-ink"
-        : "border-border bg-card text-muted-foreground",
-    );
-
-  const accept = () => {
-    if (!plan || accepted) return;
-    addTask(plan.taskTitle, todayISO(), { note: plan.steps.join(" ") });
-    setAccepted(true);
-    track("flow_suggestion_accepted", { source: "family-flow" });
-    toast.success(t("Den ligger i din dag nu. 💙"));
+  const reset = () => {
+    setStep("what");
+    setText("");
+    setCategory(null);
+    setWhoIds([]);
+    setWhoSelf(false);
+    setQIndex(0);
+    setAnswers({});
+    setLowMode(false);
+    setCurrent(null);
+    setTried([]);
+    setRetry(false);
+    setShowVisual(false);
+    setAdded(false);
+    setHelped(null);
+    setSavedHelp(false);
   };
 
+  const afterQuestions = () => setStep(capacity.mode === "lagt" ? "capacity" : "summary");
+
+  const goNextFromWhat = (id: SituationCategoryId | null) => {
+    const c = id ?? detectCategory(text) ?? "annat";
+    setCategory(c);
+    track("flow_suggestion_shown", { source: "family-situation" });
+    if (childrenList.length === 0) {
+      setWhoSelf(false);
+      setStep("questions");
+    } else setStep("who");
+  };
+
+  const choose = (s: Strategy) => {
+    setCurrent(s);
+    setShowVisual(false);
+    setAdded(false);
+    setStep("strategy");
+  };
+
+  const taskTitle = current ? `${current.title} (${who})` : "";
+  const addToDay = () => {
+    if (!current || added) return;
+    const exists = tasks.some((x) => x.title === taskTitle && x.dueDate === todayISO());
+    if (!exists) addTask(taskTitle, todayISO(), { steps: current.steps, note: current.say });
+    setAdded(true);
+    track("flow_suggestion_accepted", { source: "family-situation" });
+    toast.success(exists ? t("Den finns redan i din dag.") : t("Den ligger i din dag nu. 💙"));
+  };
+
+  const back = () => {
+    const prev: Partial<Record<Step, Step>> = {
+      who: "what",
+      questions: childrenList.length ? "who" : "what",
+      capacity: "questions",
+      summary: capacity.mode === "lagt" ? "capacity" : "questions",
+      options: "summary",
+      strategy: "options",
+    };
+    if (step === "questions" && qIndex > 0) return setQIndex(qIndex - 1);
+    const p = prev[step];
+    if (p) setStep(p);
+  };
+
+  const big = (active = false) =>
+    cn(
+      "press flex min-h-12 w-full items-center gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm font-medium text-ink",
+      active ? "border-primary bg-primary/10" : "border-border bg-card",
+    );
+  const primary =
+    "press inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground disabled:opacity-50";
+  const ghost =
+    "press inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-card px-5 text-sm font-medium text-ink";
+
   return (
-    <div className={cn("space-y-3", className)} data-testid="family-situation">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setAccepted(false);
-          setAdjust(null);
-          setText(draft.trim());
-          if (draft.trim()) track("flow_suggestion_shown", { source: "family-flow" });
-        }}
-        className="space-y-3"
-      >
-        <textarea
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          rows={2}
-          placeholder={t("T.ex. Vi ska gå om 20 minuter och barnet vill inte klä på sig")}
-          aria-label={t("Vad behöver fungera?")}
-          className="w-full rounded-2xl border border-border bg-card p-3 text-sm text-ink outline-none placeholder:text-muted-foreground focus:border-primary"
-        />
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              setSubject("jag");
-              setChildId(null);
-            }}
-            className={chip(subject === "jag")}
-          >
-            💜 {t("Jag")}
-          </button>
-          {childrenList.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => {
-                setSubject("barn");
-                setChildId(c.id);
-              }}
-              className={chip(subject === "barn" && childId === c.id)}
-            >
-              {c.name}
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => {
-              setSubject("familjen");
-              setChildId(null);
-            }}
-            className={chip(subject === "familjen")}
-          >
-            👨‍👩‍👧 {t("Familjen")}
-          </button>
-        </div>
-
+    <div className={cn("space-y-4", className)} data-testid="family-situation">
+      {step !== "what" && step !== "done" && (
         <button
-          type="submit"
-          disabled={!draft.trim()}
-          className="press inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+          type="button"
+          onClick={back}
+          className="press inline-flex min-h-10 items-center gap-1 text-sm text-muted-foreground"
         >
-          <Sparkles size={15} aria-hidden /> {t("Fråga Flow")}
+          <ArrowLeft size={15} aria-hidden /> {t("Tillbaka")}
         </button>
-      </form>
-
-      {plan && (
-        <section
-          aria-label={t("Flows förslag")}
-          className="rounded-3xl border border-border/60 bg-lavender/25 p-4 shadow-soft"
-        >
-          <div className="flex items-start gap-3">
-            <FlowMascot size="xs" mood="calm" className="mt-0.5 hidden shrink-0 sm:block" alt="" />
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-ink">💜 {t(plan.headline)}</p>
-              {plan.timingLine && <p className="mt-1 text-sm text-ink">{plan.timingLine}</p>}
-              {plan.helpLine && <p className="mt-0.5 text-sm text-ink">{plan.helpLine}</p>}
-              <p className="mt-1 text-xs text-muted-foreground">
-                {t(plan.capacityLine)}
-                {plan.usedFallback && ` · ${t("utifrån hur dagen ser ut")}`}
-              </p>
-
-              <ol className="mt-3 space-y-1 text-sm text-ink">
-                {plan.steps.map((s, i) => (
-                  <li key={s}>
-                    {i + 1}. {s}
-                  </li>
-                ))}
-              </ol>
-
-              {plan.capacityNote && (
-                <p className="mt-2 text-xs text-muted-foreground">{t(plan.capacityNote)}</p>
-              )}
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={accept}
-                  disabled={accepted}
-                  className="press inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-                >
-                  {t("Visa nästa steg")} <ArrowRight size={15} aria-hidden />
-                </button>
-                {plan.canShrink && (
-                  <button
-                    type="button"
-                    onClick={() => setAdjust("mindre")}
-                    className="press inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-sm font-medium text-ink"
-                  >
-                    {t("Ändra")}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => {
-                    track("flow_suggestion_rejected", { source: "family-flow" });
-                    setText("");
-                    setDraft("");
-                    setAccepted(false);
-                  }}
-                  className="press inline-flex min-h-11 items-center rounded-full px-3 text-sm text-muted-foreground underline-offset-2 hover:underline"
-                >
-                  {t("Senare")}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
       )}
 
-      {accepted && <NextStepCard />}
+      {step === "what" && (
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-display text-lg font-bold text-ink">{t("Vad händer?")} 💜</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {t("Du behöver inte formulera dig perfekt. Berätta bara lite så hjälper Flow dig vidare.")}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {SITUATION_CATEGORIES.map((c) => (
+              <button key={c.id} type="button" className={big()} onClick={() => goNextFromWhat(c.id)}>
+                <span aria-hidden className="text-lg">{c.emoji}</span>
+                <span className="min-w-0 flex-1">{t(c.label)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="space-y-2">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              rows={2}
+              placeholder={t("Eller skriv med egna ord…")}
+              aria-label={t("Vad händer?")}
+              className="w-full rounded-2xl border border-border bg-card p-3 text-sm text-ink outline-none placeholder:text-muted-foreground focus:border-primary"
+            />
+            <button
+              type="button"
+              disabled={!text.trim()}
+              onClick={() => goNextFromWhat(null)}
+              className={primary}
+            >
+              {t("Fortsätt")} <ChevronRight size={16} aria-hidden />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === "who" && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">{t("Vem gäller det?")}</h3>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {childrenList.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                aria-pressed={whoIds.includes(c.id)}
+                className={big(whoIds.includes(c.id))}
+                onClick={() => {
+                  setWhoSelf(false);
+                  setWhoIds((ids) => (ids.includes(c.id) ? ids.filter((x) => x !== c.id) : [...ids, c.id]));
+                }}
+              >
+                <span aria-hidden>👧</span> <span className="flex-1">{c.name}</span>
+                {whoIds.includes(c.id) && <Check size={16} aria-hidden />}
+              </button>
+            ))}
+            {childrenList.length > 1 && (
+              <button
+                type="button"
+                className={big(whoIds.length === childrenList.length)}
+                onClick={() => {
+                  setWhoSelf(false);
+                  setWhoIds(childrenList.map((c) => c.id));
+                }}
+              >
+                <span aria-hidden>👨‍👩‍👧</span> {t("Flera barn")}
+              </button>
+            )}
+            <button
+              type="button"
+              className={big(whoSelf)}
+              onClick={() => {
+                setWhoIds([]);
+                setWhoSelf(true);
+              }}
+            >
+              <span aria-hidden>👤</span> {t("Jag som förälder")}
+            </button>
+          </div>
+          <button
+            type="button"
+            className={primary}
+            onClick={() => {
+              setQIndex(0);
+              setStep("questions");
+            }}
+          >
+            {whoIds.length || whoSelf ? t("Fortsätt") : t("Hoppa över")} <ChevronRight size={16} aria-hidden />
+          </button>
+        </div>
+      )}
+
+      {step === "questions" && questions[qIndex] && (
+        <div className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            {t("Fråga")} {qIndex + 1}/{questions.length}
+          </p>
+          <h3 className="font-display text-lg font-bold text-ink">{t(questions[qIndex]!.question)}</h3>
+          {qIndex === 0 && single && single.helps.length > 0 && (
+            <p className="rounded-2xl bg-lavender/30 p-3 text-sm text-ink">
+              {t("Du har skrivit att")} {single.name} {t("brukar må bra av")}:{" "}
+              {single.helps.slice(0, 2).map((h) => h.toLowerCase()).join(", ")}.
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {questions[qIndex]!.options.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                className={big(answers[questions[qIndex]!.id] === o.id)}
+                onClick={() => {
+                  setAnswers((a) => ({ ...a, [questions[qIndex]!.id]: o.id }));
+                  if (qIndex + 1 < questions.length) setQIndex(qIndex + 1);
+                  else afterQuestions();
+                }}
+              >
+                {t(o.label)}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="press min-h-10 text-sm text-muted-foreground underline-offset-2 hover:underline"
+            onClick={() => (qIndex + 1 < questions.length ? setQIndex(qIndex + 1) : afterQuestions())}
+          >
+            {t("Hoppa över")}
+          </button>
+        </div>
+      )}
+
+      {step === "capacity" && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">{t("Har du väldigt lite ork just nu?")}</h3>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className={primary} onClick={() => { setLowMode(true); setStep("summary"); }}>
+              {t("Ja")}
+            </button>
+            <button type="button" className={ghost} onClick={() => { setLowMode(false); setStep("summary"); }}>
+              {t("Nej")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === "summary" && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">{t("Jag tror jag förstår situationen:")}</h3>
+          <p className="text-sm text-ink">{summary.sentence}</p>
+          <ul className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+            <SummaryRow icon="⏰" label={t("Tid")} value={summary.time} />
+            <SummaryRow icon="👧" label={t("Gäller")} value={summary.who === "Du" ? t("Dig") : summary.who} />
+            <SummaryRow icon="🔄" label={t("Situation")} value={t(summary.situation)} />
+            <SummaryRow icon="🎯" label={t("Målet")} value={t(summary.goal)} />
+          </ul>
+          {nextEvent && (
+            <p className="text-xs text-muted-foreground">
+              {t("Nästa för")} {single!.name}: {nextEvent.time} {nextEvent.title}
+            </p>
+          )}
+          {lowMode && (
+            <div className="space-y-2 rounded-2xl bg-lavender/30 p-3">
+              <p className="text-sm font-semibold text-ink">{t("Även din kapacitet räknas.")} 💜</p>
+              <ul className="space-y-1 text-sm text-ink">
+                {LOW_CAPACITY_PROMPTS.map((p) => <li key={p}>• {t(p)}</li>)}
+              </ul>
+            </div>
+          )}
+          <p className="text-sm font-medium text-ink">{t("Stämmer det?")}</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              className={primary}
+              onClick={() => {
+                if (lowMode) {
+                  const quick = strategiesFor(cat, answers).find((s) => s.id === "mindre") ?? options[0]!;
+                  choose(quick);
+                } else setStep("options");
+              }}
+            >
+              {t("Ja, hjälp mig vidare")}
+            </button>
+            <button type="button" className={ghost} onClick={() => { setQIndex(0); setStep("questions"); }}>
+              {t("Ändra något")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === "options" && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">
+            {retry ? t("Vill du prova något annat?") : t("Vad vill du prova?")}
+          </h3>
+          {retry && (
+            <p className="text-sm text-muted-foreground">
+              {t("Det är helt vanligt att första försöket inte fungerar. Här är fler vägar.")}
+            </p>
+          )}
+          <div className="space-y-2">
+            {options.map((s, i) => (
+              <button key={s.id} type="button" className={big()} onClick={() => choose(s)}>
+                <Dot dot={s.dot} />
+                <span className="min-w-0 flex-1">
+                  <span className="font-semibold">{String.fromCharCode(65 + i)}</span> – {t(s.title)}
+                </span>
+                <ChevronRight size={16} aria-hidden className="text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {step === "strategy" && current && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">
+            <Dot dot={current.dot} /> {t(current.title)}
+          </h3>
+          <ol className="space-y-2 text-sm text-ink">
+            {current.steps.map((s, i) => (
+              <li key={s} className="flex gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                  {i + 1}
+                </span>
+                <span className="pt-0.5">{t(s)}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="rounded-2xl border border-primary/20 bg-lavender/30 p-3">
+            <p className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+              <MessageCircle size={14} aria-hidden /> {t("Säg så här")}
+            </p>
+            <p className="mt-1 text-sm italic text-ink">"{t(current.say)}"</p>
+          </div>
+
+          {current.visual && (
+            <div className="space-y-2">
+              {!showVisual ? (
+                <button type="button" className="press min-h-10 text-sm font-medium text-primary" onClick={() => setShowVisual(true)}>
+                  {t("Vill du göra detta visuellt?")}
+                </button>
+              ) : (
+                <ol className="flex flex-wrap gap-2" aria-label={t("Bildstöd")}>
+                  {current.visual.map((v) => (
+                    <li key={v} className="flex w-20 flex-col items-center gap-1 text-center text-xs text-ink">
+                      <ActivityPictogram id={VISUAL_ICON[v] ?? "task"} tone="lavender" className="h-12 w-12" />
+                      {t(v)}
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              className={primary}
+              onClick={() => {
+                setTried((x) => [...x, current.id]);
+                setStep("done");
+                track("flow_suggestion_accepted", { source: "family-situation-done" });
+              }}
+            >
+              {t("Det gick!")} <Check size={16} aria-hidden />
+            </button>
+            <button
+              type="button"
+              className={ghost}
+              onClick={() => {
+                setTried((x) => [...x, current.id]);
+                setRetry(true);
+                setStep("options");
+                track("flow_suggestion_rejected", { source: "family-situation" });
+              }}
+            >
+              {t("Det fungerade inte")}
+            </button>
+          </div>
+          <button type="button" disabled={added} onClick={addToDay} className="press min-h-10 text-sm text-muted-foreground underline-offset-2 hover:underline disabled:no-underline">
+            {added ? t("Tillagd i Min dag ✓") : t("Vill du lägga detta i planen?")}
+          </button>
+        </div>
+      )}
+
+      {step === "done" && (
+        <div className="space-y-4">
+          <h3 className="font-display text-lg font-bold text-ink">{t("Det gick!")} 💜</h3>
+          <p className="text-sm text-ink">{t("Vad hjälpte mest?")}</p>
+          <div className="flex flex-wrap gap-2">
+            {HELPED_OPTIONS.map((h) => (
+              <button
+                key={h}
+                type="button"
+                aria-pressed={helped === h}
+                onClick={() => {
+                  setHelped(h);
+                  track("flow_suggestion_accepted", { source: "family-situation-feedback" });
+                }}
+                className={cn(
+                  "press min-h-11 rounded-full border px-4 text-sm font-medium",
+                  helped === h ? "border-primary bg-primary/10 text-ink" : "border-border bg-card text-muted-foreground",
+                )}
+              >
+                {t(h)}
+              </button>
+            ))}
+          </div>
+          {helped && single && onSaveHelp && HELPED_TO_CHILD_HELP[helped] && !single.helps.includes(HELPED_TO_CHILD_HELP[helped]!) && (
+            <button
+              type="button"
+              disabled={savedHelp}
+              className={ghost}
+              onClick={async () => {
+                await onSaveHelp(single.id, [...single.helps, HELPED_TO_CHILD_HELP[helped]!]);
+                setSavedHelp(true);
+                toast.success(t("Sparat i barnets profil."));
+              }}
+            >
+              {savedHelp ? t("Sparat ✓") : `${t("Kom ihåg för")} ${single.name}`}
+            </button>
+          )}
+          <div>
+            <button type="button" className={primary} onClick={reset}>
+              {t("Klar")}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
+}
+
+function SummaryRow({ icon, label, value }: { icon: string; label: string; value: string }) {
+  return (
+    <li className="flex items-start gap-2 rounded-2xl bg-muted/40 p-3">
+      <span aria-hidden>{icon}</span>
+      <span className="min-w-0">
+        <span className="block text-xs text-muted-foreground">{label}</span>
+        <span className="text-ink">{value}</span>
+      </span>
+    </li>
+  );
+}
+
+function nowHHMM(): string {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+const DOT_CLASS: Record<string, string> = {
+  "🟣": "bg-primary",
+  "🟢": "bg-mint",
+  "🟡": "bg-sun",
+  "🔵": "bg-sky",
+  "🟠": "bg-blush",
+};
+
+function Dot({ dot }: { dot: string }) {
+  return <span aria-hidden className={cn("inline-block h-3 w-3 shrink-0 rounded-full align-middle", DOT_CLASS[dot] ?? "bg-primary")} />;
 }
