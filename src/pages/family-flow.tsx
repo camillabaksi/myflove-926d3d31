@@ -124,12 +124,12 @@ export default function FamilyFlowPage() {
               </CollapsibleSection>
             )}
 
-            <FamilyLoadCard />
+             <CollapsibleSection id="family-load" title={t("Familjens belastning")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><FamilyLoadCard /></CollapsibleSection>
 
-            <RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} />
+             <CollapsibleSection id="family-recovery-gap" title={t("Hitta utrymme för vila")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} /></CollapsibleSection>
 
             {children.length > 0 && (
-              <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} className="space-y-3">
+               <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} defaultCollapsed className="space-y-3">
                 <RecoveryLibrary initialCategory="barn" />
               </CollapsibleSection>
             )}

@@ -136,6 +136,7 @@ export default function SettingsPage() {
         </MyFloveBlock>
 
         <MyFloveBlock
+          defaultCollapsed
           title="Språk"
           subtitle="Hela appen på svenska eller engelska"
           icon={Languages}
@@ -165,7 +166,7 @@ export default function SettingsPage() {
           </p>
         </MyFloveBlock>
 
-        <MyFloveBlock title="Anpassning" subtitle="Vad som visas och hur Flow hjälper" icon={LayoutGrid} tone="mint" surface="mint">
+        <MyFloveBlock defaultCollapsed title="Anpassning" subtitle="Vad som visas och hur Flow hjälper" icon={LayoutGrid} tone="mint" surface="mint">
           <SettingsLink href="/anpassa-hem" icon={Home} label="Hemskärm" hint="Välj block, ordning och genvägar" />
           <SettingsLink href="/flow-installningar" icon={Sparkles} label="Flow-inställningar" hint="Hjälpnivå, tider och prioriteringar" />
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3 text-left" onClick={toggleSimpleMode}>
@@ -181,7 +182,7 @@ export default function SettingsPage() {
           </div>
         </MyFloveBlock>
 
-        <MyFloveBlock title="Appen" subtitle="Introduktion, installation och ljud" icon={Settings} tone="sky" surface="sky">
+        <MyFloveBlock defaultCollapsed title="Appen" subtitle="Introduktion, installation och ljud" icon={Settings} tone="sky" surface="sky">
           <SettingsLink href="/oversikt" icon={Compass} label="Så funkar MyFlove" hint="En enkel sammanfattning av appen" />
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3" onClick={replayIntro}>
             <Sparkles className="size-5 shrink-0" /> Visa introduktionen igen
