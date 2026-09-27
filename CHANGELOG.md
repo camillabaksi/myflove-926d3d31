@@ -1,4 +1,5 @@
 ## 2026-09-27
+- Mitt batteri och "Hur mår du?" är sammanslagna – Mitt batteri är nu den enda platsen för incheckning (ork, mående, påverkan). Gamla länkar till /hur-mar-du pekar vidare dit. På Hem finns en liten "Hur är läget?"-knapp som loggar Låg/Mellan/Fullt direkt med ett tryck.
 - Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort.
 - Hem: snäll starttimer vid tidsatta saker – ca 15 minuter innan (och när det är dags) frågar "Just nu"-kortet lugnt "Vill du starta mjukt i 2 lugna minuter?". Du får ett enda litet första steg, en mjuk nedräkning och sedan Fortsätt, Jag är klar eller Ta en paus. Inga larm, ingen försening, inget krav.
 - Kalender: "Veckans mål" – lägg in saker som ska bli gjorda någon gång i veckan (t.ex. dammsuga, barnens papper). Välj en dag när det passar så hamnar det i Min dag, eller bocka av direkt. Synkas mellan enheter.
