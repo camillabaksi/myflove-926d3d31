@@ -95,7 +95,7 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-3">
-            <FamilyDayPerspectives myDay={<DailyFlowList />} />
+             <FamilyDayPerspectives myDay={<DailyFlowList dayHeadings />} />
           </div>
         </section>
       </MyFloveWide>

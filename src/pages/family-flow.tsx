@@ -17,6 +17,10 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import RecoveryLibrary from "@/components/recovery/recovery-library";
 import RecoveryGapCard from "@/components/recovery/recovery-gap-card";
 import { useChildren, CHILD_COLORS } from "@/hooks/use-children";
+import { useChildEvents } from "@/hooks/use-child-events";
+import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import { pictogramForActivity } from "@/lib/child-visual-schedule";
+import { Button } from "@/components/ui/button";
 import { useLang } from "@/hooks/use-language";
 
 /**
@@ -48,6 +52,9 @@ export default function FamilyFlowPage() {
   );
   const [showChildren, setShowChildren] = useState(false);
   const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
+  const todayEvents = useChildEvents();
+  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+  const upcoming = todayEvents.filter((event) => !event.completed && Number(event.time.slice(0, 2)) * 60 + Number(event.time.slice(3, 5)) >= nowMinutes);
   const scheduleChild = children.find((child) => child.id === scheduleChildId) ?? null;
 
   if (scheduleChild) {
@@ -76,23 +83,37 @@ export default function FamilyFlowPage() {
               </p>
             </header>
 
+            <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Barnens nästa steg")}>
+              <h2 className="font-display text-base font-bold text-ink">{t("Vad händer nu och sen?")}</h2>
+              {upcoming.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("Inga fler tider inlagda idag.")}</p> : (
+                <div className="mt-3 space-y-2">{upcoming.slice(0, 2).map((event, index) => (
+                  <div key={`${event.childId}-${event.time}-${event.title}-${index}`} className="flex items-center gap-3 rounded-2xl bg-secondary/30 p-2">
+                    <ActivityPictogram id={pictogramForActivity(event.title)} tone="lavender" className="h-10 w-10 shrink-0 rounded-xl" />
+                    <span className="min-w-0 flex-1"><span className="block text-xs font-semibold text-primary">{index === 0 ? t("Nu") : t("Sen")} · {event.time} · {event.childName}</span><span className="block truncate text-sm font-medium text-ink">{event.title}</span></span>
+                  </div>
+                ))}</div>
+              )}
+              <Button variant="link" className="mt-2 px-0" asChild><Link href="/barn">{t("Visa barnens dagar")}</Link></Button>
+            </section>
+
             <section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
               <h2 className="text-base font-semibold text-ink">{t("Vad behöver fungera idag?")}</h2>
               <div className="flex flex-wrap gap-2">
-                <button
+                 <Button
                   type="button"
                   onClick={() => setShowSituation((v) => !v)}
                   className="press min-h-11 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
                 >
                   {t("Hjälp mig med en situation")}
-                </button>
-                <button
+                 </Button>
+                 <Button
+                   variant="outline"
                   type="button"
                   onClick={() => setShowChildren((v) => !v)}
                   className="press min-h-11 rounded-full border border-border bg-card px-4 text-sm font-medium text-ink"
                 >
                   {t("Lägg till barn")}
-                </button>
+                 </Button>
               </div>
 
               {showSituation && (
@@ -115,9 +136,10 @@ export default function FamilyFlowPage() {
 
 
             {children.length > 0 && (
-              <CollapsibleSection
+               <CollapsibleSection
                 id="Dagen för hela familjen"
                 title={t("Dagen för hela familjen")}
+                 defaultCollapsed
                 className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5"
               >
                 <FamilyDayPerspectives myDay={<DailyFlowList />} defaultPerspective="familj" />
@@ -134,7 +156,7 @@ export default function FamilyFlowPage() {
               </CollapsibleSection>
             )}
 
-            <CollapsibleSection id="Barnen" title={t("Barnen")} className="space-y-3">
+             <CollapsibleSection id="Barnen" title={t("Barnen")} className="space-y-3">
               {children.length === 0 && !showChildren && !loading && (
                 <p className="text-sm text-muted-foreground">
                   {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
