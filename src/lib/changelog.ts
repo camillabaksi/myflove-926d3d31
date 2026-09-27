@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Kalender och Idag: \"Kopiera dagen\" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)",
       "UX-förenkling 1.0: ett tydligt första steg på Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar; mer innehåll bakom klick. Batteriets Varför? förklarar skillnaden mellan uppskattad energi och ditt kapacitetsval (2026-09-27)",
       "Flow: prata in i stället för att skriva – \"Prata\"-knappen i chattrutan spelar in din röst och skriver ut det du sa i textrutan (2026-09-27)",
       "Flow har fått röst – en högtalarknapp vid varje svar läser upp det med en mjuk, varm och tydlig röst; tryck igen för att stoppa, inget spelas automatiskt (2026-09-27)",

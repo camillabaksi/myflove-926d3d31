@@ -1,3 +1,6 @@
+## 2026-09-28
+- Kalender och Idag: "Kopiera dagen" – kopiera en dags uppgifter och påminnelser till en eller flera valfria dagar på en gång. Avklarade saker följer inte med och dubbletter hoppas över.
+
 ## 2026-09-27
 - UX-förenkling 1.0: Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar visar nu tydliga första steg, med fördjupning bakom öppningsbara avsnitt. Batteriets ”Varför?” skiljer uppskattad energi från ditt eget val Fullt/Mellan/Lågt. Befintlig data och funktioner finns kvar.
 - Flow: prata in i stället för att skriva – en "Prata"-knapp i chattrutan spelar in din röst och skriver ut det du sa i textrutan. Tryck igen för att stoppa. Kräver mikrofontillåtelse i webbläsaren.
