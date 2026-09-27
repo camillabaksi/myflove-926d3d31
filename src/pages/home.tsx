@@ -132,11 +132,8 @@ export default function Home() {
                   {name ? `${t("Hej")} ${name}` : t("Hej")}
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  {awayForDays
-                    ? t(
-                        "Vad skönt att se dig. Vi tar det lugnt idag, oavsett hur dagarna har varit.",
-                      )
-                    : t("Vad behöver du just nu?")}
+                  {t("Vad behöver du just nu?")}
+                  {awayForDays && <span className="block text-xs">{t("Vi tar det lugnt idag, oavsett hur dagarna har varit.")}</span>}
                 </p>
                 {editingName ? (
                   <form

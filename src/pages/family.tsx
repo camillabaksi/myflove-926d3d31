@@ -341,8 +341,10 @@ function HouseholdView({
         </div>
       </section>
 
-      <FamilyAreaSharing />
-      <FamilySharing members={household.members} />
+      <CollapsibleSection id="family-sharing-settings" title="Välj vad familjen delar" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
+        <FamilyAreaSharing />
+        <FamilySharing members={household.members} />
+      </CollapsibleSection>
 
       <CollapsibleSection
         title="Mer"

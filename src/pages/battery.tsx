@@ -63,8 +63,8 @@ export default function BatteryPage() {
               <Battery className="h-6 w-6 text-primary" aria-hidden />
               <h2 className="font-display text-lg font-bold text-ink">Din uppskattade energi: {t(orkWord(reading.now).label)}</h2>
               <CollapsibleSection id="battery-why" title="Varför?" defaultCollapsed className="w-full border-t border-border/60 pt-2" headingClassName="text-sm font-semibold text-primary">
-                <p className="text-sm text-muted-foreground">Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning. Den bygger på ditt senaste energivärde, mående, tid på dygnet och registrerad belastning.</p>
-                {activeFactors.length > 0 && <ul className="space-y-1 text-sm text-muted-foreground">{activeFactors.map((factor) => <li key={factor.source + factor.label}>{factor.label} ({factor.delta > 0 ? "+" : ""}{factor.delta})</li>)}</ul>}
+                <p className="text-sm text-muted-foreground">Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning. Kurvan utgår från ditt FlowScore just nu och tar hänsyn till planerade tider och registrerade energipåverkningar. Utan egna mönster används en generell kurva.</p>
+                {activeFactors.length > 0 && <><p className="text-xs font-semibold text-ink">Det här påverkar FlowScore just nu:</p><ul className="space-y-1 text-sm text-muted-foreground">{activeFactors.map((factor) => <li key={factor.source + factor.label}>{factor.label}: {factor.reading}</li>)}</ul></>}
                 <p className="text-xs text-muted-foreground">Ditt eget val Fullt, Mellan eller Lågt styr dagens plan – inte den uppskattade procentsiffran.</p>
               </CollapsibleSection>
             </div>
