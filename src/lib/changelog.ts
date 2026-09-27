@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Flow: prata in i stället för att skriva – \"Prata\"-knappen i chattrutan spelar in din röst och skriver ut det du sa i textrutan (2026-09-27)",
       "Flow har fått röst – en högtalarknapp vid varje svar läser upp det med en mjuk, varm och tydlig röst; tryck igen för att stoppa, inget spelas automatiskt (2026-09-27)",
       "Mitt batteri och \"Hur mår du?\" sammanslagna – en enda incheckningsplats; Hem har ett enda \"Hur är läget idag?\"-kort som loggar kapacitet och ork direkt (2026-09-27)",
       "Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort (2026-09-27)",
