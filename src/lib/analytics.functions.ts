@@ -36,6 +36,8 @@ export type AnalyticsSummary = {
   activeSessions30d: number;
   totalUsers: number;
   newUsers7d: number;
+  /** Konton som loggat in senaste 7/30 dagarna samt obekräftade e-postadresser. */
+  accountActivity: { active7d: number; active30d: number; unconfirmed: number };
   totalEvents: number;
   /** Snitt antal händelser per session (engagemang). */
   avgEventsPerSession: number;
@@ -189,6 +191,21 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       console.warn("[analytics] admin_user_stats failed:", err);
     }
 
+    // Inloggade konton (senaste inloggning) och obekräftade e-postadresser.
+    const accountActivity = { active7d: 0, active30d: 0, unconfirmed: 0 };
+    try {
+      const { data: act, error: aErr } = await supabaseAdmin.rpc("admin_account_activity");
+      if (aErr) throw aErr;
+      const r = Array.isArray(act) ? act[0] : act;
+      if (r) {
+        accountActivity.active7d = Number(r.active_7d ?? 0);
+        accountActivity.active30d = Number(r.active_30d ?? 0);
+        accountActivity.unconfirmed = Number(r.unconfirmed ?? 0);
+      }
+    } catch (err) {
+      console.warn("[analytics] admin_account_activity failed:", err);
+    }
+
     const dailySignups: Array<{ date: string; users: number }> = [];
     for (let i = 13; i >= 0; i--) {
       const d = new Date(now - i * oneDay).toISOString().slice(0, 10);
@@ -202,6 +219,7 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       activeSessions30d: sessions30d.size,
       totalUsers,
       newUsers7d,
+      accountActivity,
       totalEvents: rows.length,
       avgEventsPerSession: avg(rows.length, sessionCount),
       returningRate: pct(multiDaySessions, sessionCount),
