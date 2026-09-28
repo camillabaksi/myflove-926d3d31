@@ -114,6 +114,17 @@ export function TaskQuickAdd({
       completed: mode === "done",
       completedAt: mode === "done" ? Date.now() : undefined,
     });
+    if (time) {
+      const dayLabel =
+        safeDate === todayISO()
+          ? "idag"
+          : new Date(`${safeDate}T12:00:00`).toLocaleDateString("sv-SE", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+            });
+      toast.success(`Sparad ${dayLabel} kl ${time}. 💙`);
+    }
     setOpen(false);
     reset();
   };
@@ -313,6 +324,7 @@ export function QuickAddInline({
       completed: mode === "done",
       completedAt: mode === "done" ? Date.now() : undefined,
     });
+    if (time) toast.success(`Sparad ${dayLabel.toLowerCase()} kl ${time}. 💙`);
     setMode(null);
     setTitle("");
     setTime("");
