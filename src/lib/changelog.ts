@@ -12,7 +12,9 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
-      "Admin \"Aktiva användare\": visar även konton som använt appen i inloggat läge senaste dygnet/7/30 dagarna – bara tidpunkt sparas (2026-09-28)",
+    "Hem: de fyra genvägarna (Kalender, Mitt batteri, Prata med Flow, QuickFlow) ligger nu längst upp, direkt under hälsningen (2026-09-28)",
+    "Lägg till: bekräftelse visas när en händelse med klockslag sparas, t.ex. \"Sparad idag kl 17:30\" (2026-09-28)",
+    "Admin \"Aktiva användare\": visar även konton som använt appen i inloggat läge senaste dygnet/7/30 dagarna – bara tidpunkt sparas (2026-09-28)",
       "Admin \"Hur går MyFlove?\": ny ruta \"Aktiva användare\" – inloggade senaste 7/30 dagarna och obekräftade e-postadresser (2026-09-28)",
       "Uppgifter med klockslag som blev sena följer nu med in i Idag/Min dag tills de blir gjorda – en missad tid gör saken sen, inte borttappad. Riktiga möten bor i kalendern (2026-09-28)",
       "Kalender och Idag: \"Kopiera dagen\" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)",
