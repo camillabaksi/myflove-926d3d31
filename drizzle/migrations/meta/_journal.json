@@ -71,6 +71,13 @@
       "when": 1790356448147,
       "tag": "0009_family_edit_notes_routines",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790601257441,
+      "tag": "0010_admin_account_activity",
+      "breakpoints": true
     }
   ]
 }

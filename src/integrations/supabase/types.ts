@@ -905,6 +905,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_account_activity: {
+        Args: never
+        Returns: {
+          active_30d: number
+          active_7d: number
+          unconfirmed: number
+        }[]
+      }
       admin_user_stats: {
         Args: never
         Returns: {
