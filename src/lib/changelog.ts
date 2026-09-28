@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Admin \"Hur går MyFlove?\": ny ruta \"Aktiva användare\" – inloggade senaste 7/30 dagarna och obekräftade e-postadresser (2026-09-28)",
       "Uppgifter med klockslag som blev sena följer nu med in i Idag/Min dag tills de blir gjorda – en missad tid gör saken sen, inte borttappad. Riktiga möten bor i kalendern (2026-09-28)",
       "Kalender och Idag: \"Kopiera dagen\" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)",
       "UX-förenkling 1.0: ett tydligt första steg på Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar; mer innehåll bakom klick. Batteriets Varför? förklarar skillnaden mellan uppskattad energi och ditt kapacitetsval (2026-09-27)",
