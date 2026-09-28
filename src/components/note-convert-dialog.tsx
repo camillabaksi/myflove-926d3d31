@@ -12,10 +12,12 @@ import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { ENERGY_CATEGORIES, type EnergyCategory, type EnergyDirection } from "@/lib/energy-flow";
 import type { FlowNote } from "@/lib/notes";
 import { useLang } from "@/hooks/use-language";
+import { parseWhenFromText } from "@/lib/quickflow";
+import { toISODate, todayISO } from "@/lib/day";
 
 export type ConvertTarget = "uppgift" | "kalender" | "energi";
 
-const todayStr = () => new Date().toISOString().slice(0, 10);
+const todayStr = () => todayISO();
 
 /**
  * "Omvandla till …" – anteckningen blir något annat först efter
@@ -51,8 +53,20 @@ export default function NoteConvertDialog({
     if (open && note) {
       setTarget(null);
       setTitle(note.text);
-      setDate(todayStr());
-      setTime("09:00");
+      // Står ett datum i texten ("APT 14 oktober") används det – annars idag.
+      const parsed = parseWhenFromText(note.text);
+      if (parsed) {
+        const d = new Date(parsed.at);
+        setDate(toISODate(d));
+        setTime(
+          parsed.hasTime
+            ? `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`
+            : "09:00",
+        );
+      } else {
+        setDate(todayStr());
+        setTime("09:00");
+      }
       setRemind(false);
       setDirection("drains");
       setStrength(3);
