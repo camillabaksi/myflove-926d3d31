@@ -470,6 +470,26 @@ export default function AdminStats() {
               />
             </CollapsibleSection>
 
+            {/* Aktiva användare (inloggade konton) */}
+            <section className={cardClass}>
+              <h2 className="text-lg font-semibold mb-3">{t("Aktiva användare")}</h2>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: t("Inloggade senaste 7 dagarna"), value: data.accountActivity?.active7d ?? 0 },
+                  { label: t("Inloggade senaste 30 dagarna"), value: data.accountActivity?.active30d ?? 0 },
+                  { label: t("Har inte bekräftat e-post"), value: data.accountActivity?.unconfirmed ?? 0 },
+                ].map((kpi) => (
+                  <div key={kpi.label} className="rounded-2xl border border-border bg-secondary/30 p-3">
+                    <p className="text-xl font-bold">{kpi.value}</p>
+                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                {t("Räknas på senaste inloggning. Den som redan är inloggad i telefonen syns inte som ny inloggning förrän sessionen förnyas.")}
+              </p>
+            </section>
+
             {/* 6. Detaljerad statistik – sekundär och expanderbar */}
             <CollapsibleSection
               title={`📋 ${t("Detaljerad statistik")}`}
