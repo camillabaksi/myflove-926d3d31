@@ -190,6 +190,39 @@ export default function Home() {
               </div>
             </header>
 
+            <nav
+              className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4"
+              data-testid="home-widgets"
+              aria-label={t("Genvägar")}
+              data-npf="optional"
+            >
+              {[
+                { href: "/kalender", icon: CalendarDays, label: t("Kalender"), src: "kalender" },
+                { href: "/mitt-batteri", icon: BatteryMedium, label: t("Mitt batteri"), src: "batteri" },
+                { href: "/assistant", icon: Wind, label: t("Prata med Flow"), src: "flow" },
+              ].map((s) => (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  onClick={() => track("home_widget_opened", { source: s.src })}
+                  className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl border border-border/60 bg-card/70 p-2 text-center text-[11px] font-semibold text-ink"
+                >
+                  <s.icon className="h-5 w-5 text-primary" aria-hidden />
+                  {s.label}
+                </Link>
+              ))}
+              <Button
+                variant="outline"
+                type="button"
+                onClick={openQuickflow}
+                data-testid="home-widget-quickflow"
+                className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-2xl border border-border/60 bg-card/70 p-2 text-center text-[11px] font-semibold text-ink"
+              >
+                <Brain className="h-5 w-5 text-primary" aria-hidden />
+                QuickFlow
+              </Button>
+            </nav>
+
             {firstVisit && (
               <p className="mt-4 rounded-2xl bg-secondary/50 px-4 py-2 text-sm font-medium text-ink">
                 {t("Börja här – en sak i taget.")}
