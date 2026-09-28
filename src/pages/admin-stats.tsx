@@ -473,7 +473,7 @@ export default function AdminStats() {
             {/* Aktiva användare (inloggade konton) */}
             <section className={cardClass}>
               <h2 className="text-lg font-semibold mb-3">{t("Aktiva användare")}</h2>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
                   { label: t("Inloggade senaste 7 dagarna"), value: data.accountActivity?.active7d ?? 0 },
                   { label: t("Inloggade senaste 30 dagarna"), value: data.accountActivity?.active30d ?? 0 },
