@@ -76,12 +76,10 @@ export function useFlowItems(dateISO?: string): {
       if (isSnoozed(t.snoozedUntil)) continue;
       // Framtida uppgifter hör till sin egen dag. En öppen uppgift vars datum
       // passerat följer med in i idag tills den blir gjord – den får aldrig
-      // försvinna tyst bara för att den blev sen.
+      // försvinna tyst bara för att den blev sen. Det gäller även uppgifter
+      // med klockslag: en missad tid är en sen uppgift, inte en borttappad
+      // (riktiga möten bor i kalendern och hanteras av sin egen daglogik).
       if (isTodayView && t.dueDate && t.dueDate > today) continue;
-      // Möten och tidsbokade aktiviteter (fast klockslag) från tidigare dagar
-      // rullar INTE över – de har redan inträffat. Bara tidlösa att-göra-saker
-      // följer med in i idag.
-      if (isTodayView && !t.completed && t.dueDate && t.dueDate < today && t.time) continue;
       // En annan dag än idag visar bara det som faktiskt hör till den dagen.
       if (!isTodayView && t.dueDate !== today) continue;
       // Klara uppgifter hör till sitt PLANERADE datum – inte till dagen de
