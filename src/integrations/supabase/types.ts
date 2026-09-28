@@ -879,6 +879,21 @@ export type Database = {
         }
         Relationships: []
       }
+      user_last_active: {
+        Row: {
+          last_active_at: string
+          user_id: string
+        }
+        Insert: {
+          last_active_at?: string
+          user_id: string
+        }
+        Update: {
+          last_active_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -911,6 +926,14 @@ export type Database = {
           active_30d: number
           active_7d: number
           unconfirmed: number
+        }[]
+      }
+      admin_used_activity: {
+        Args: never
+        Returns: {
+          used_1d: number
+          used_30d: number
+          used_7d: number
         }[]
       }
       admin_user_stats: {
@@ -1001,6 +1024,7 @@ export type Database = {
         Args: { _item_id: string; _user_ids: string[] }
         Returns: undefined
       }
+      touch_last_active: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "user"
