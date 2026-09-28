@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-27";
+export const CHANGELOG_UPDATED = "2026-09-28";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Uppgifter med klockslag som blev sena följer nu med in i Idag/Min dag tills de blir gjorda – en missad tid gör saken sen, inte borttappad. Riktiga möten bor i kalendern (2026-09-28)",
       "Kalender och Idag: \"Kopiera dagen\" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)",
       "UX-förenkling 1.0: ett tydligt första steg på Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar; mer innehåll bakom klick. Batteriets Varför? förklarar skillnaden mellan uppskattad energi och ditt kapacitetsval (2026-09-27)",
       "Flow: prata in i stället för att skriva – \"Prata\"-knappen i chattrutan spelar in din röst och skriver ut det du sa i textrutan (2026-09-27)",
