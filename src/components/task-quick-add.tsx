@@ -324,6 +324,7 @@ export function QuickAddInline({
       completed: mode === "done",
       completedAt: mode === "done" ? Date.now() : undefined,
     });
+    if (time) toast.success(`Sparad ${dayLabel.toLowerCase()} kl ${time}. 💙`);
     setMode(null);
     setTitle("");
     setTime("");
