@@ -473,11 +473,14 @@ export default function AdminStats() {
             {/* Aktiva användare (inloggade konton) */}
             <section className={cardClass}>
               <h2 className="text-lg font-semibold mb-3">{t("Aktiva användare")}</h2>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
                   { label: t("Inloggade senaste 7 dagarna"), value: data.accountActivity?.active7d ?? 0 },
                   { label: t("Inloggade senaste 30 dagarna"), value: data.accountActivity?.active30d ?? 0 },
                   { label: t("Har inte bekräftat e-post"), value: data.accountActivity?.unconfirmed ?? 0 },
+                  { label: t("Använt appen senaste dygnet"), value: data.accountActivity?.used1d ?? 0 },
+                  { label: t("Använt appen senaste 7 dagarna"), value: data.accountActivity?.used7d ?? 0 },
+                  { label: t("Använt appen senaste 30 dagarna"), value: data.accountActivity?.used30d ?? 0 },
                 ].map((kpi) => (
                   <div key={kpi.label} className="rounded-2xl border border-border bg-secondary/30 p-3">
                     <p className="text-xl font-bold">{kpi.value}</p>
@@ -486,7 +489,7 @@ export default function AdminStats() {
                 ))}
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
-                {t("Räknas på senaste inloggning. Den som redan är inloggad i telefonen syns inte som ny inloggning förrän sessionen förnyas.")}
+                {t("Inloggningar räknas på senaste inloggning. \"Använt appen\" räknas på senaste aktivitet i inloggat läge (bara tidpunkt, inget innehåll) och mäts från och med nu.")}
               </p>
             </section>
 

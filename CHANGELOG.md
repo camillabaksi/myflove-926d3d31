@@ -1,4 +1,5 @@
 ## 2026-09-28
+- Admin "Aktiva användare": visar nu även hur många konton som faktiskt använt appen i inloggat läge senaste dygnet/7/30 dagarna (bara tidpunkt sparas, inget innehåll).
 - Admin "Hur går MyFlove?": ny ruta "Aktiva användare" – inloggade konton senaste 7 och 30 dagarna samt hur många som inte bekräftat sin e-post.
 - Uppgifter med klockslag som blev sena följer nu med in i Idag/Min dag tills de blir gjorda – en missad tid gör saken sen, inte borttappad. Riktiga möten bor i kalendern och rullar fortfarande inte över.
 - Kalender och Idag: "Kopiera dagen" – kopiera en dags uppgifter och påminnelser till en eller flera valfria dagar på en gång. Avklarade saker följer inte med och dubbletter hoppas över.

@@ -37,7 +37,7 @@ export type AnalyticsSummary = {
   totalUsers: number;
   newUsers7d: number;
   /** Konton som loggat in senaste 7/30 dagarna samt obekräftade e-postadresser. */
-  accountActivity: { active7d: number; active30d: number; unconfirmed: number };
+  accountActivity: { active7d: number; active30d: number; unconfirmed: number; used1d: number; used7d: number; used30d: number };
   totalEvents: number;
   /** Snitt antal händelser per session (engagemang). */
   avgEventsPerSession: number;
@@ -192,7 +192,7 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
     }
 
     // Inloggade konton (senaste inloggning) och obekräftade e-postadresser.
-    const accountActivity = { active7d: 0, active30d: 0, unconfirmed: 0 };
+    const accountActivity = { active7d: 0, active30d: 0, unconfirmed: 0, used1d: 0, used7d: 0, used30d: 0 };
     try {
       const { data: act, error: aErr } = await supabaseAdmin.rpc("admin_account_activity");
       if (aErr) throw aErr;
@@ -204,6 +204,18 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       }
     } catch (err) {
       console.warn("[analytics] admin_account_activity failed:", err);
+    }
+    try {
+      const { data: used, error: uErr } = await supabaseAdmin.rpc("admin_used_activity");
+      if (uErr) throw uErr;
+      const u = Array.isArray(used) ? used[0] : used;
+      if (u) {
+        accountActivity.used1d = Number(u.used_1d ?? 0);
+        accountActivity.used7d = Number(u.used_7d ?? 0);
+        accountActivity.used30d = Number(u.used_30d ?? 0);
+      }
+    } catch (err) {
+      console.warn("[analytics] admin_used_activity failed:", err);
     }
 
     const dailySignups: Array<{ date: string; users: number }> = [];

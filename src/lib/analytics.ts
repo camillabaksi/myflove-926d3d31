@@ -1,4 +1,5 @@
 import { logAnalyticsEventFn } from "@/lib/analytics.functions";
+import { touchLastActive } from "@/lib/last-active";
 import { isDemoSession } from "@/lib/demo-account";
 import { recordUsage } from "@/lib/usage-local";
 import { sanitizeEventName } from "@/lib/analytics-sanitize";
@@ -61,6 +62,7 @@ export function analyticsEnabled(): boolean {
 export function trackEvent(section: string, action: string): void {
   if (typeof window === "undefined") return;
   if (isDemoSession()) return;
+  touchLastActive();
   if (!analyticsEnabled()) return;
   const safeSection = sanitizeEventName(section);
   const safeAction = sanitizeEventName(action);

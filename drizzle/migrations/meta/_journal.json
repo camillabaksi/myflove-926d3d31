@@ -78,6 +78,13 @@
       "when": 1790601257441,
       "tag": "0010_admin_account_activity",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1790602734682,
+      "tag": "0011_user_last_active",
+      "breakpoints": true
     }
   ]
 }
