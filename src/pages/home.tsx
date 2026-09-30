@@ -354,16 +354,6 @@ export default function Home() {
           <AreaOnboarding />
         </MyFloveWide>}
 
-        {/* Liten, diskret notering längst ner – konkurrerar inte med korten. */}
-        {!isLowCapacity && <MyFloveWide
-          style={{ order: 98.5 }}
-          data-testid="home-install-note"
-          className="pt-1"
-          data-npf="optional"
-        >
-          <PwaInstallCard compact />
-        </MyFloveWide>}
-
         <MyFloveWide style={{ order: 100 }} className="min-w-0 pb-2">
           <HowItWorksGuide />
         </MyFloveWide>
@@ -379,6 +369,16 @@ export default function Home() {
             <SlidersHorizontal size={13} /> {t("Anpassa hemskärmen")}
           </Link>
         </MyFloveWide>
+
+        {/* "Lägg till på hemskärmen" – allra längst ner. */}
+        {!isLowCapacity && <MyFloveWide
+          style={{ order: 102 }}
+          data-testid="home-install-note"
+          className="pb-2"
+          data-npf="optional"
+        >
+          <PwaInstallCard compact />
+        </MyFloveWide>}
       </MyFlovePageGrid>
     </Layout>
   );
