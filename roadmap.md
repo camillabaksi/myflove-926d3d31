@@ -1,5 +1,9 @@
 # Roadmap
 
+## Android App Bundle 5.6 (2026-09-30)
+- [x] Höj versionCode till 15 och versionName till 5.6, bygg och kontrollera AAB.
+- [ ] Signering för Google Play väntar på den befintliga uppladdningsnyckeln; ingen ny nyckel får ersätta den.
+
 ## Barnvyn i Familje Flow (2026-09-30)
 - [x] Kompakta barnkort med Schema, Hjälp och meny; barnprofil med stöd och barnspecifika sparade övningar.
 - [x] Barnspecifikt situationsstöd utan att blanda ihop barn eller ändra befintlig lagring.

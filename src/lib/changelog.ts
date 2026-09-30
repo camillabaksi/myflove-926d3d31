@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Android: App Bundle 5.6 (versionCode 15) med uppdaterat versionsnummer; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-09-30)",
     "Barn/Familje Flow: kompakta barnkort med Schema och Hjälp, ⋯-meny för profiländringar och barnspecifik profil med stödchips och sparade övningar. Båda ingångarna öppnar samma visuella schema; gamla detaljer finns kvar bakom profilen (2026-09-30)",
     "Typografi: egna aktivitetsnamn och kalenderposter visas i upprätt Caveat i dagvy, veckovy, uppgiftslista och på Hem; tider och kontroller behåller standardtypsnitt (2026-09-30)",
     "Typografi: Caveat används sparsamt för hälsningen på Hem och Flows välkomstfråga, utan kursiv stil eller ändring av övrig text (2026-09-30)",
