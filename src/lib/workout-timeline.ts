@@ -138,7 +138,6 @@ export function buildWorkoutTimeline(workout: Workout, options?: TimelineOptions
       }
 
       const isLastSet = set === sets;
-      const isLastBlock = blockIndex === blocks.length - 1;
       // Mellan övningar räcker förvarningen – ingen extra vila.
       if (isLastSet) continue;
       if (block.restSeconds > 0) {
