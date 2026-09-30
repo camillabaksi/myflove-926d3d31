@@ -78,6 +78,8 @@ Regler:
 - Anpassa efter energin: låg energi = färre övningar, färre set, längre vila, mjukare övningar.
 - Respektera ömma områden, plats och tillgänglig utrustning.
 - Håll total tid nära användarens valda tid (räkna arbete + vila).
+- Vila: restSeconds 0 för uppvärmning och nedvarvning, 15–40 sek i huvuddelen. Hellre fler set än långa pauser.
+- Fyll den valda tiden – varken mycket kortare eller längre.
 - reps används för repbaserade övningar, seconds för tidbaserade – sätt den andra till null.
 - "note" är 1–3 korta meningar i du-form som förklarar varför passet ser ut så här idag, avlastande och utan skuld. Inga medicinska råd, inga emojis.`;
 

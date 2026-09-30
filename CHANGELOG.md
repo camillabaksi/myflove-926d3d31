@@ -1,3 +1,6 @@
+## 2026-09-30
+- Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild.
+
 ## 2026-09-28
 - Hem: de fyra genvägarna (Kalender, Mitt batteri, Prata med Flow, QuickFlow) ligger nu längst upp, direkt under hälsningen.
 - Lägg till: när en händelse med klockslag sparas visas en bekräftelse, t.ex. "Sparad idag kl 17:30".

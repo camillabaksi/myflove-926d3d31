@@ -38,6 +38,13 @@ export default function ExerciseCard({
         done && "opacity-60",
       )}
     >
+      {ex.cues.length > 0 && (
+        <ul className="mb-2 space-y-0.5 text-xs text-muted-foreground">
+          {ex.cues.slice(0, 2).map((cue) => (
+            <li key={cue}>• {cue}</li>
+          ))}
+        </ul>
+      )}
       <div className="flex min-w-0 gap-3">
         <ExerciseVisual
           visual={ex.visual}
@@ -60,7 +67,9 @@ export default function ExerciseCard({
           </div>
           <p className="mt-1 text-sm font-medium text-primary">{dose}</p>
           <p className="mt-1 text-sm text-muted-foreground">{ex.summary}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Vila {block.restSeconds} sek</p>
+          {block.restSeconds > 0 && (
+            <p className="mt-1 text-xs text-muted-foreground">Vila {block.restSeconds} sek mellan set</p>
+          )}
         </div>
       </div>
 
