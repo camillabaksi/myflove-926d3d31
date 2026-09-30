@@ -140,7 +140,7 @@ export function parseWorkoutText(text: string, base: WorkoutRequest): WorkoutReq
 }
 
 const ENERGY_SETS: Record<EnergyLevel, number> = { låg: 2, normal: 3, mycket: 3 };
-const ENERGY_REST: Record<EnergyLevel, number> = { låg: 60, normal: 45, mycket: 40 };
+const ENERGY_REST: Record<EnergyLevel, number> = { låg: 40, normal: 30, mycket: 25 };
 const ENERGY_REP_FACTOR: Record<EnergyLevel, number> = { låg: 0.7, normal: 1, mycket: 1.15 };
 
 /** Ungefärlig tid för ett block, inklusive vila. */
@@ -175,7 +175,8 @@ function scoreExercise(ex: Exercise, req: WorkoutRequest): number {
 function toBlock(ex: Exercise, req: WorkoutRequest, section: WorkoutBlock["section"]): WorkoutBlock {
   const light = section !== "huvuddel" || req.intent === "återhämtning";
   const sets = light ? ex.defaultSets : Math.max(1, ENERGY_SETS[req.energy]);
-  const rest = light ? 20 : ENERGY_REST[req.energy];
+  // Uppvärmning och nedvarvning flyter på utan vila – förvarningen räcker.
+  const rest = light ? 0 : ENERGY_REST[req.energy];
   const sideSplit = ex.sideSplit === true;
   const transitionSeconds = 5;
   if (ex.measure === "tid") {
@@ -274,11 +275,14 @@ export function generateWorkout(input: WorkoutRequest, now = Date.now()): Workou
     if (budget <= 30) break;
   }
 
-  const ordered: WorkoutBlock[] = [
-    ...blocks.filter((b) => b.section === "uppvärmning"),
-    ...main,
-    ...blocks.filter((b) => b.section === "nedvarvning"),
-  ];
+  const ordered = fitToMinutes(
+    [
+      ...blocks.filter((b) => b.section === "uppvärmning"),
+      ...main,
+      ...blocks.filter((b) => b.section === "nedvarvning"),
+    ],
+    targetMinutes(req),
+  );
 
   const totalSeconds = ordered.reduce((sum, b) => sum + blockSeconds(b), 0);
   const realMinutes = Math.max(5, Math.round(totalSeconds / 60));
@@ -364,14 +368,18 @@ export function buildWorkoutFromPlan(
       ...(ex.measure === "tid"
         ? { seconds: clamp(item.seconds ?? base.seconds ?? 30, 15, 180) }
         : { reps: clamp(item.reps ?? base.reps ?? 10, 3, 30) }),
-      restSeconds: clamp(item.restSeconds ?? base.restSeconds, 10, 120),
+      restSeconds:
+        section === "huvuddel" ? clamp(item.restSeconds ?? base.restSeconds, 10, 45) : 0,
       section,
     });
   }
 
   if (blocks.length < 3) return null;
 
-  const ordered = SECTION_ORDER.flatMap((s) => blocks.filter((b) => b.section === s));
+  const ordered = fitToMinutes(
+    SECTION_ORDER.flatMap((s) => blocks.filter((b) => b.section === s)),
+    targetMinutes(req),
+  );
   const totalSeconds = ordered.reduce((sum, b) => sum + blockSeconds(b), 0);
   const realMinutes = Math.max(5, Math.round(totalSeconds / 60));
   const avgIntensity =
@@ -394,6 +402,34 @@ export function buildWorkoutFromPlan(
     kcalLow: Math.round(realMinutes * (2.5 + avgIntensity)),
     kcalHigh: Math.round(realMinutes * (4 + avgIntensity * 1.5)),
   };
+}
+
+/** Vald tid – lite kortare vid låg energi. */
+function targetMinutes(req: WorkoutRequest): number {
+  return req.energy === "låg" ? Math.max(10, Math.round(req.minutes * 0.8)) : req.minutes;
+}
+
+/**
+ * Justerar huvuddelens set (och vid behov antal övningar) så att passet
+ * hamnar nära vald tid, i stället för att tiden bara blir vad den blir.
+ */
+export function fitToMinutes(input: WorkoutBlock[], minutes: number): WorkoutBlock[] {
+  const blocks = input.map((b) => ({ ...b }));
+  const target = minutes * 60;
+  const total = () => blocks.reduce((s, b) => s + blockSeconds(b), 0);
+  const mains = () => blocks.filter((b) => b.section === "huvuddel");
+  for (let guard = 0; guard < 60 && total() > target * 1.08; guard += 1) {
+    const m = mains().sort((a, b) => b.sets - a.sets)[0];
+    if (m && m.sets > 1) m.sets -= 1;
+    else if (mains().length > 2) blocks.splice(blocks.lastIndexOf(mains().at(-1)!), 1);
+    else break;
+  }
+  for (let guard = 0; guard < 60 && total() < target * 0.9; guard += 1) {
+    const m = mains().sort((a, b) => a.sets - b.sets)[0];
+    if (!m || m.sets >= 5) break;
+    m.sets += 1;
+  }
+  return blocks;
 }
 
 function clamp(value: number, min: number, max: number): number {

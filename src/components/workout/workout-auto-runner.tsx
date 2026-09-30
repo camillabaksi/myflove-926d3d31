@@ -198,6 +198,16 @@ export default function WorkoutAutoRunner({
           {isReps ? "repetitioner – tryck klart när du är färdig" : "sekunder"}
         </p>
 
+        {!isRest && ex.cues.length > 0 && (
+          <ul className="mx-auto mt-4 max-w-[280px] space-y-1 text-left text-sm text-ink">
+            {ex.cues.slice(0, 3).map((cue) => (
+              <li key={cue} className="flex gap-2">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
+                {cue}
+              </li>
+            ))}
+          </ul>
+        )}
         {!isRest && (
           <ExerciseVisual
             visual={ex.visual}
