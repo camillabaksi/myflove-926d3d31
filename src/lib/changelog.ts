@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-28";
+export const CHANGELOG_UPDATED = "2026-09-30";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Hem: batterirutan \"Hur är läget idag?\" har stora färgkodade val där vald nivå lyser tydligt, och \"Just nu\"-kortet har markant etikett och violett accentlinje så dagens viktigaste uppgift syns direkt (2026-09-30)",
     "Hem: de fyra genvägarna (Kalender, Mitt batteri, Prata med Flow, QuickFlow) ligger nu längst upp, direkt under hälsningen (2026-09-28)",
     "Lägg till: bekräftelse visas när en händelse med klockslag sparas, t.ex. \"Sparad idag kl 17:30\" (2026-09-28)",
     "Admin \"Aktiva användare\": visar även konton som använt appen i inloggat läge senaste dygnet/7/30 dagarna – bara tidpunkt sparas (2026-09-28)",
