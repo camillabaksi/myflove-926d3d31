@@ -123,15 +123,16 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
 
   return (
     <section
-      className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+      className="relative overflow-hidden rounded-3xl border border-primary/25 bg-card p-5 pt-6 shadow-soft"
       style={color ? { borderLeft: `6px solid ${color}` } : undefined}
       aria-label={t("Just nu")}
       aria-live="polite"
     >
+      <div aria-hidden className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary to-terracotta-soft" />
       <div className="flex items-center justify-between gap-2">
         <Link
           href="/min-dag"
-          className="text-xs font-semibold uppercase text-primary underline-offset-4 hover:underline"
+          className="inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-[11px] font-bold uppercase tracking-widest text-primary"
         >
           {justDone ? t("Bra jobbat – nästa:") : t("Just nu")}
         </Link>

@@ -2819,6 +2819,7 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ### Added
 
+- **Tydligare batteri och "Just nu" på Hem** (2026-09-30): Batterirutan "Hur är läget idag?" har nu stora, färgkodade val (Fullt/Mellan/Lågt) där den valda nivån lyser tydligt, och "Just nu"-kortet har en markant etikett och violett accentlinje så att dagens viktigaste uppgift syns direkt. Genvägen till Mitt batteri är centrerad och tydligare.
 - **Anpassa hemskärmen är tillbaka** (2026-08-20): Ny sida under Mer → Inställningar (och en liten länk längst ner på Hem) där du slår av/på och sorterar de block Hem faktiskt visar – Mitt batteri, Nästa, Flow-förslag, ＋ Lägg till, Dina genvägar, Korta vägar och Områdesväljare. Här väljer du också dina fyra egna genvägar, som nu kan visas direkt på Hem igen. Valen sparas i molnet.
 
 ### Changed
