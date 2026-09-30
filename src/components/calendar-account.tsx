@@ -208,7 +208,7 @@ export default function CalendarAccount({
                             ? `${ev.time}–${ev.endTime}`
                             : ev.time}
                       </span>
-                      <span className="min-w-0 flex-1 truncate text-ink">{ev.title}</span>
+                       <span className="font-handwritten min-w-0 flex-1 truncate text-xl font-semibold leading-tight text-ink">{ev.title}</span>
                       <span className="shrink-0 text-xs text-muted-foreground">
                         {PROVIDER_LABELS[ev.provider]}
                       </span>

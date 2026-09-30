@@ -192,7 +192,7 @@ export function DailyFlowList({
                             {item.done ? <CheckCircle2 className="text-primary" /> : <Circle />}
                           </Button>
                         )}
-                        <p className={cn("min-w-0 flex-1 break-words pt-1 text-sm font-semibold leading-snug text-ink sm:text-[15px]", item.done && "line-through")}>
+                        <p className={cn("font-handwritten min-w-0 flex-1 break-words pt-0.5 text-[22px] font-semibold leading-tight text-ink", item.done && "line-through")}>
                           {item.title}
                         </p>
                       </div>

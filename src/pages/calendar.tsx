@@ -785,10 +785,8 @@ export function CalendarContent() {
                                 className="w-1.5 h-1.5 rounded-full shrink-0"
                                 style={{ backgroundColor: e.color }}
                               />
-                              <span className="truncate">
-                                {e.time && `${e.time} `}
-                                {e.title}
-                              </span>
+                              {e.time && <span className="shrink-0 text-xs">{e.time}</span>}
+                              <span className="font-handwritten min-w-0 truncate text-lg font-semibold leading-none">{e.title}</span>
                             </div>
                           ))}
                           {entries.length > 4 && (
@@ -904,7 +902,7 @@ export function CalendarContent() {
                           style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
                         />
                         {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
-                        {r.title}
+                        <span className="font-handwritten text-lg font-semibold leading-none">{r.title}</span>
                         {r.time && ` · ${r.time}`}
                       </span>
                     ))}
@@ -951,7 +949,7 @@ export function CalendarContent() {
                                 {e.sharedWith.length > 0 && ` · ${t("delad")}`}
                               </div>
                               <div
-                                className={`text-lg font-medium truncate ${e.completed ? "line-through opacity-60" : ""}`}
+                                 className={`font-handwritten truncate text-2xl font-semibold leading-tight ${e.completed ? "line-through opacity-60" : ""}`}
                               >
                                 {e.title}
                               </div>
@@ -992,7 +990,7 @@ export function CalendarContent() {
                               {e.member?.displayName ?? t("Familj")}{" "}
                               {e.time && `${t("kl")} ${e.time}`}
                             </div>
-                            <div className="text-lg font-medium">{e.title}</div>
+                             <div className="font-handwritten break-words text-2xl font-semibold leading-tight">{e.title}</div>
                           </div>
                         </div>
                         <button
@@ -1018,7 +1016,7 @@ export function CalendarContent() {
                           <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
                             {t("Viktigast idag")}
                           </div>
-                          <div className="text-lg font-medium">{selectedItems.focus.text}</div>
+                           <div className="font-handwritten break-words text-2xl font-semibold leading-tight">{selectedItems.focus.text}</div>
                         </div>
                       </div>
                     )}
@@ -1043,7 +1041,7 @@ export function CalendarContent() {
                                 : t("Påminnelse")}{" "}
                               {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                             </div>
-                            <div className="text-lg font-medium truncate">{r.title}</div>
+                             <div className="font-handwritten truncate text-2xl font-semibold leading-tight">{r.title}</div>
                             {r.note && (
                               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
                                 {r.note}
@@ -1109,7 +1107,7 @@ export function CalendarContent() {
                               </div>
                             )}
                             <div
-                              className={`text-lg font-medium truncate ${task.completed ? "line-through text-muted-foreground" : ""}`}
+                               className={`font-handwritten truncate text-2xl font-semibold leading-tight ${task.completed ? "line-through text-muted-foreground" : ""}`}
                             >
                               {task.title}
                             </div>
