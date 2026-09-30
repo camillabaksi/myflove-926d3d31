@@ -230,7 +230,7 @@ export function migrateMedicationStorage(): MedicationMigrationResult {
     changed = true;
   }
 
-  return { medications, log, changed };
+  return { medications, log, changed, legacyMedications, legacyLog };
 }
 
 function removeKey(key: string): void {

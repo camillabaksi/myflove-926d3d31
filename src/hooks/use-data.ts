@@ -911,15 +911,15 @@ export function useMedications() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const run = () => {
+      // Lyft BARA poster från gamla nycklar. Den lokala kopian av den
+      // aktuella listan får aldrig slås ihop igen – då återuppstår mediciner
+      // som tagits bort på en annan enhet (och deras påminnelser).
       const result = migrateMedicationStorage();
-      if (
-        result.medications.length > 0 &&
-        JSON.stringify(result.medications) !== JSON.stringify(medsRef.current)
-      ) {
-        setMedications(dedupeMedications([...medsRef.current, ...result.medications]));
+      if (result.legacyMedications.length > 0) {
+        setMedications(dedupeMedications([...medsRef.current, ...result.legacyMedications]));
       }
-      if (result.log.length > 0 && JSON.stringify(result.log) !== JSON.stringify(logRef.current)) {
-        setLog(mergeMedicationLog(logRef.current, result.log));
+      if (result.legacyLog.length > 0) {
+        setLog(mergeMedicationLog(logRef.current, result.legacyLog));
       }
       setReady(true);
     };
