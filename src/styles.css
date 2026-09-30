@@ -57,6 +57,7 @@
   --font-display:
     "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Noto Color Emoji";
+  --font-handwritten: "Caveat", "Segoe Print", cursive;
 
   /* Rundningar – hela appen utgår från --radius (1.5rem) */
   --radius-xs: calc(var(--radius) - 12px);
@@ -78,6 +79,13 @@
   --shadow-hairline: 0 1px 0 hsl(var(--border) / 0.7);
   --shadow-float: var(--shadow-float-value);
   --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
+}
+
+/* Enstaka personliga hälsningar; normal stil, aldrig kursiv text. */
+@utility font-handwritten {
+  font-family: var(--font-handwritten);
+  font-style: normal;
+  letter-spacing: 0;
 }
 
 :root {

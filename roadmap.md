@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Typografi (2026-09-30)
-- [ ] Visa handskriftslika teckensnitt på Hem och invänta Camillas val innan appens teckensnitt ändras.
+- [x] Visa tre teckensnitt och använd valt Caveat sparsamt i personliga hälsningar, upprätt och utan ändring av appens övriga text.
 
 ## UX-förenkling 1.0 (2026-09-27)
 - [x] Förenkla Hem, Hälsa, Mitt batteri, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar med primär handling först och fördjupning bakom klick.
