@@ -1,4 +1,5 @@
 ## 2026-09-30
+- Dator: Träning i sidomenyn öppnar nu sidan direkt även när ett tidigare sidbyte har fastnat i den öppna fliken.
 - Barn/Familje Flow: barnen visas som kompakta kort med namn, avatar, kort stödöversikt och Schema/Hjälp; redigering och radering finns i ⋯-menyn. Varje barn har en egen profil med vardagsstöd, situationshjälp och enbart sina sparade övningar (kan startas och läsas upp). Samma befintliga visuella Family Flow-schema nås från Barn och Familje Flow; äldre aktiviteter, anteckningar och dokument finns kvar bakom profilen.
 - Typografi: namn på egna aktiviteter och kalenderposter visas i upprätt Caveat i dagvyn, veckovyn, uppgiftslistan och på Hem; tider, knappar och övrig information behåller lättläst standardtypsnitt.
 - Typografi: Caveat används sparsamt för den personliga hälsningen på Hem och frågan hos Flow; övrig text behåller sina tidigare teckensnitt. Ingen kursiv stil.

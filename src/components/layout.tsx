@@ -1,6 +1,6 @@
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { useRouter } from "@tanstack/react-router";
+import { Link as RouterLink, useRouter } from "@tanstack/react-router";
 import {
   Home,
   Target,
@@ -677,6 +677,23 @@ export default function Layout({ children }: LayoutProps) {
                 {cat.items.map((item) => {
                   const isActive = location === item.href;
                   const Icon = item.icon;
+                  if (item.href === "/traning") {
+                    return (
+                      <RouterLink
+                        key={item.href}
+                        to="/traning"
+                        reloadDocument
+                        className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
+                          isActive
+                            ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                        }`}
+                      >
+                        <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
+                        <span className="truncate leading-tight">{item.label}</span>
+                      </RouterLink>
+                    );
+                  }
                   return (
                     <Link
                       key={item.href}
