@@ -175,11 +175,13 @@ export interface MedicationMigrationResult {
   log: MedicationLogEntry[];
   /** Sant när något faktiskt skrevs om (gammal nyckel eller gammalt format). */
   changed: boolean;
+  /** Endast poster från gamla nycklar – bara dessa får lyftas till molnet. */
+  legacyMedications: Medication[];
+  legacyLog: MedicationLogEntry[];
 }
 
 /**
- * Migrerar och normaliserar all medicindata till de kanoniska nycklarna.
- * Säker att köra flera gånger – den skapar aldrig dubbletter.
+ * Migrera gamla nycklar/format till den nya lagringen. Idempotent.
  */
 export function migrateMedicationStorage(): MedicationMigrationResult {
   const currentRaw = readJson(MEDICATIONS_KEY);
@@ -188,11 +190,15 @@ export function migrateMedicationStorage(): MedicationMigrationResult {
   let medications = normalizeMedications(currentRaw);
   let log = normalizeMedicationLog(currentLogRaw);
   let changed = false;
+  let legacyMedications: Medication[] = [];
+  let legacyLog: MedicationLogEntry[] = [];
 
   for (const legacyKey of LEGACY_MEDICATION_KEYS) {
     const legacyRaw = readJson(legacyKey);
     if (legacyRaw === null) continue;
-    medications = mergeMedications(medications, normalizeMedications(legacyRaw));
+    const items = normalizeMedications(legacyRaw);
+    legacyMedications = mergeMedications(legacyMedications, items);
+    medications = mergeMedications(medications, items);
     removeKey(legacyKey);
     changed = true;
   }
@@ -200,7 +206,9 @@ export function migrateMedicationStorage(): MedicationMigrationResult {
   for (const legacyKey of LEGACY_MEDICATION_LOG_KEYS) {
     const legacyRaw = readJson(legacyKey);
     if (legacyRaw === null) continue;
-    log = mergeMedicationLog(log, normalizeMedicationLog(legacyRaw));
+    const items = normalizeMedicationLog(legacyRaw);
+    legacyLog = mergeMedicationLog(legacyLog, items);
+    log = mergeMedicationLog(log, items);
     removeKey(legacyKey);
     changed = true;
   }
@@ -222,7 +230,7 @@ export function migrateMedicationStorage(): MedicationMigrationResult {
     changed = true;
   }
 
-  return { medications, log, changed };
+  return { medications, log, changed, legacyMedications, legacyLog };
 }
 
 function removeKey(key: string): void {
