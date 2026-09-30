@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Typografi: Caveat används sparsamt för hälsningen på Hem och Flows välkomstfråga, utan kursiv stil eller ändring av övrig text (2026-09-30)",
     "Hem: rutan \"Lägg till på hemskärmen\" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen (2026-09-30)",
     "Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild (2026-09-30)",
     "Hem: batterirutan \"Hur är läget idag?\" har stora färgkodade val där vald nivå lyser tydligt, och \"Just nu\"-kortet har markant etikett och violett accentlinje så dagens viktigaste uppgift syns direkt (2026-09-30)",

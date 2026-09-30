@@ -25,7 +25,7 @@ export default function FlowEntry({
       <div className="flex flex-col items-center gap-4 p-5 text-center animate-fade-in sm:p-8">
         <FlowMascot size="lg" glow className="flow-entry" />
         <div className="space-y-1.5">
-          <h2 className="font-display text-2xl font-bold leading-tight text-ink">
+          <h2 className="font-handwritten text-4xl font-semibold leading-tight text-ink">
             Vad behöver du hjälp med?
           </h2>
           <p className="mx-auto max-w-xs text-sm leading-relaxed text-muted-foreground">

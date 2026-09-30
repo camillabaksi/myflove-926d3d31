@@ -10,3 +10,5 @@
 > the editor, so keep the branch in a working state.
 
 <!-- LOVABLE:END -->
+
+Use the existing Inter and Plus Jakarta Sans typography for functional UI; reserve normal-style Caveat for selected personal greetings so readability stays consistent.
