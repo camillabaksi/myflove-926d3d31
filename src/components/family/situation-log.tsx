@@ -7,6 +7,8 @@ export type AttemptResult = "provat" | "fungerade" | "fungerade inte";
 
 export interface SituationLogEntry {
   id: string;
+  /** Stabil barnkoppling för nya poster; gamla poster kan fortfarande läsas via who. */
+  childId?: string;
   at: number;
   category: string;
   text: string;
