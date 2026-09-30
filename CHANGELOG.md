@@ -1,4 +1,5 @@
 ## 2026-09-30
+- Hem: rutan "Lägg till på hemskärmen" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen.
 - Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild.
 
 ## 2026-09-28
