@@ -5,7 +5,7 @@ import { HeartPulse, Lock } from "lucide-react";
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import ChildProfiles from "@/components/family/child-profiles";
+import ChildProfiles, { ChildProfileDetail } from "@/components/family/child-profiles";
 import FamilyLoadCard from "@/components/family/family-load-card";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
@@ -30,6 +30,7 @@ import { useLang } from "@/hooks/use-language";
 export default function FamilyFlowPage() {
   const { t } = useLang();
   const {
+    userId,
     children,
     items,
     loading,
@@ -45,28 +46,47 @@ export default function FamilyFlowPage() {
     openDoc,
   } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
-  const [showChildren, setShowChildren] = useState(false);
   // Situationen (och dess logg) delas mellan flödet och översikten på sidan.
   const [situationLog, setSituationLog] = useCloudSyncedStorage<SituationLogEntry[]>(
     "myflove-situation-log",
     [],
   );
   const [scheduleChildId, setScheduleChildId] = useState<string | null>(null);
+  const [profileChildId, setProfileChildId] = useState<string | null>(null);
+  const [helpChildId, setHelpChildId] = useState<string | null>(null);
   const todayEvents = useChildEvents();
   const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
   const upcoming = todayEvents.filter((event) => !event.completed && Number(event.time.slice(0, 2)) * 60 + Number(event.time.slice(3, 5)) >= nowMinutes);
   const scheduleChild = children.find((child) => child.id === scheduleChildId) ?? null;
+  const profileChild = children.find((child) => child.id === profileChildId) ?? null;
+  const helpChild = children.find((child) => child.id === helpChildId) ?? null;
+
+  if (helpChild) {
+    return <Layout><MyFlovePageGrid area="hem"><MyFloveWide>
+      <div className="mx-auto max-w-2xl space-y-5">
+        <Button variant="ghost" type="button" onClick={() => setHelpChildId(null)} className="rounded-2xl">← {t("Barn")}</Button>
+        <header className="flex min-w-0 items-center gap-3"><span aria-hidden className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{helpChild.avatar || "💜"}</span><div className="min-w-0"><p className="truncate font-display text-xl font-bold text-ink">{helpChild.name}</p><h1 className="text-sm text-muted-foreground">{t("Vad behöver ni hjälp med just nu?")}</h1></div></header>
+        <FamilySituation key={helpChild.id} selectedChildId={helpChild.id} childrenList={[{ id: helpChild.id, name: helpChild.name, helps: helpChild.helps }]} onSaveHelp={(id, helps) => updateChild(id, { helps })} log={(situationLog ?? []).filter((entry) => entry.childId === helpChild.id || (!entry.childId && entry.who === helpChild.name))} onChangeLog={(update) => setSituationLog((prev) => update(prev ?? []))} />
+      </div>
+    </MyFloveWide></MyFlovePageGrid></Layout>;
+  }
 
   if (scheduleChild) {
     return (
       <Layout>
         <MyFlovePageGrid area="hem">
           <MyFloveWide>
-            <VisualChildSchedule child={scheduleChild} children={children} items={items} onClose={() => setScheduleChildId(null)} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />
+             <VisualChildSchedule child={scheduleChild} children={children} items={items} onClose={() => setScheduleChildId(null)} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />
           </MyFloveWide>
         </MyFlovePageGrid>
       </Layout>
     );
+  }
+
+  if (profileChild) {
+    return <Layout><MyFlovePageGrid area="hem"><MyFloveWide>
+      <ChildProfileDetail child={profileChild} canEdit={profileChild.owner_id === userId} onBack={() => setProfileChildId(null)} onSchedule={() => setScheduleChildId(profileChild.id)} onHelp={() => setHelpChildId(profileChild.id)} onUpdate={async (id, d) => updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })} onDelete={deleteChild} />
+    </MyFloveWide></MyFlovePageGrid></Layout>;
   }
 
   return (
@@ -82,6 +102,21 @@ export default function FamilyFlowPage() {
                 {t("Få vardagen att fungera för hela familjen.")}
               </p>
             </header>
+
+            <section aria-label={t("Barnen")} className="space-y-3">
+              <h2 className="font-display text-lg font-bold text-ink">{t("Barnen")}</h2>
+              {children.length === 0 && !loading && <p className="text-sm text-muted-foreground">{t("Inga barn tillagda än. Du kan använda Familj ändå.")}</p>}
+              {loading ? <p className="text-sm text-muted-foreground">{t("Laddar...")}</p> : <ChildProfiles
+                childrenList={children}
+                userId={userId}
+                onAdd={async (d) => addChild(d.name, CHILD_COLORS[0]!, undefined, undefined, { helps: d.helps, avatar: d.avatar })}
+                onUpdate={async (id, d) => updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })}
+                onDelete={async (id) => deleteChild(id)}
+                onSchedule={(child) => setScheduleChildId(child.id)}
+                onHelp={(child) => setHelpChildId(child.id)}
+                onSelect={(child) => setProfileChildId(child.id)}
+              />}
+            </section>
 
             <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Barnens nästa steg")}>
               <h2 className="font-display text-base font-bold text-ink">{t("Vad händer nu och sen?")}</h2>
@@ -106,7 +141,6 @@ export default function FamilyFlowPage() {
                 >
                   {t("Hjälp mig med en situation")}
                  </Button>
-                  <Button variant="outline" type="button" onClick={() => setShowChildren(true)} className="press min-h-11 rounded-full px-4 text-sm font-medium">{t("Lägg till barn")}</Button>
               </div>
 
               {showSituation && (
@@ -148,33 +182,6 @@ export default function FamilyFlowPage() {
                 <RecoveryLibrary initialCategory="barn" />
               </CollapsibleSection>
             )}
-
-              <CollapsibleSection id="Barnen" title={t("Barnen")} defaultCollapsed={!showChildren} className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
-              {children.length === 0 && !showChildren && !loading && (
-                <p className="text-sm text-muted-foreground">
-                  {t("Inga barn tillagda än. Du kan använda Familj ändå.")}
-                </p>
-              )}
-              {loading ? (
-                <p className="text-sm text-muted-foreground">{t("Laddar...")}</p>
-              ) : (
-                <ChildProfiles
-                  childrenList={children}
-                  startAdding={showChildren}
-                  onAdd={async (d) =>
-                    addChild(d.name, CHILD_COLORS[0]!, undefined, undefined, {
-                      helps: d.helps,
-                      avatar: d.avatar,
-                    })
-                  }
-                  onUpdate={async (id, d) =>
-                    updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })
-                  }
-                  onDelete={async (id) => deleteChild(id)}
-                  onSchedule={(child) => setScheduleChildId(child.id)}
-                />
-              )}
-            </CollapsibleSection>
 
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Lock size={12} aria-hidden />

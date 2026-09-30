@@ -40,6 +40,11 @@ import ChildSchedule from "@/components/child-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
 import ChildReminderSettings from "@/components/child-reminder-settings";
 import { ACCEPT_DOCUMENTS } from "@/lib/file-formats";
+import ChildProfiles, { ChildProfileDetail } from "@/components/family/child-profiles";
+import VisualChildSchedule from "@/components/family/visual-child-schedule";
+import FamilySituation from "@/components/family/family-situation";
+import type { SituationLogEntry } from "@/components/family/situation-log";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 const KIND_META: Record<ChildItemKind, { label: string; icon: typeof Baby }> = {
   activity: { label: "Aktivitet", icon: CalendarDays },
@@ -66,12 +71,15 @@ function ChildrenContent() {
     error,
     reload,
     addChild,
+    updateChild,
     deleteChild,
     addItem,
+    updateItem,
     toggleItem,
     deleteItem,
     setItemShares,
     uploadDoc,
+    copyDoc,
     openDoc,
     conflict,
     resolveConflict,
@@ -84,6 +92,8 @@ function ChildrenContent() {
   const [childColor, setChildColor] = useState(CHILD_COLORS[0] as string);
   const [childBirth, setChildBirth] = useState("");
   const [selectedChild, setSelectedChild] = useState<string | null>(null);
+  const [view, setView] = useState<"overview" | "profile" | "schedule" | "help" | "details">("overview");
+  const [situationLog, setSituationLog] = useCloudSyncedStorage<SituationLogEntry[]>("myflove-situation-log", []);
   const [filter, setFilter] = useState<"alla" | ChildItemKind>("alla");
   const [addChildOpen, setAddChildOpen] = useState(false);
 
@@ -144,6 +154,11 @@ function ChildrenContent() {
     } catch {
       toast({ description: "Kunde inte lägga till barnet.", variant: "destructive" });
     }
+  };
+
+  const openChild = (id: string, next: typeof view) => {
+    setSelectedChild(id);
+    setView(next);
   };
 
   const scheduleReminder = async (id: string, itemTitle: string, d: string, t: string) => {
@@ -267,8 +282,28 @@ function ChildrenContent() {
   return (
     <div className="space-y-8">
       <ChildConflictDialog conflict={conflict} onResolve={(c) => void resolveConflict(c)} />
-      {/* Barnprofiler – alltid synliga högst upp */}
-      <section className="space-y-3">
+      {view === "overview" && <ChildProfiles
+        childrenList={children}
+        userId={userId}
+        onAdd={async (d) => { await addChild(d.name, CHILD_COLORS[0] ?? "", undefined, undefined, { helps: d.helps, avatar: d.avatar }); }}
+        onUpdate={async (id, d) => { await updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar }); }}
+        onDelete={deleteChild}
+        onSelect={(child) => openChild(child.id, "profile")}
+        onSchedule={(child) => openChild(child.id, "schedule")}
+        onHelp={(child) => openChild(child.id, "help")}
+      />}
+
+      {view !== "overview" && activeChild && <div className="space-y-4">
+        {view === "profile" && <ChildProfileDetail child={activeChild} canEdit={isOwner} onBack={() => setView("overview")} onSchedule={() => setView("schedule")} onHelp={() => setView("help")} onUpdate={async (id, d) => { await updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar }); }} onDelete={deleteChild} />}
+        {view === "help" && <div className="flex items-center gap-3"><Button variant="ghost" type="button" onClick={() => setView("profile")}>← {activeChild.name}</Button><span aria-hidden className="text-2xl">{activeChild.avatar || "💜"}</span><h2 className="truncate font-display text-xl font-bold text-ink">{activeChild.name}</h2></div>}
+        {view === "schedule" && <VisualChildSchedule child={activeChild} children={children} items={items} onClose={() => setView("profile")} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />}
+        {view === "help" && <FamilySituation key={activeChild.id} selectedChildId={activeChild.id} childrenList={[{ id: activeChild.id, name: activeChild.name, helps: activeChild.helps }]} onSaveHelp={(id, helps) => updateChild(id, { helps })} log={(situationLog ?? []).filter((entry) => entry.childId === activeChild.id || (!entry.childId && entry.who === activeChild.name))} onChangeLog={(update) => setSituationLog((prev) => update(prev ?? []))} />}
+        {view === "profile" && <Button variant="link" type="button" onClick={() => setView("details")} className="px-0">Aktiviteter, anteckningar och dokument →</Button>}
+      </div>}
+
+      {/* Befintliga detaljflöden finns kvar bakom barnets profil. */}
+      {view === "details" && <><section className="space-y-3">
+        <Button variant="ghost" type="button" onClick={() => setView("profile")}>← {activeChild?.name ?? "Barn"}</Button>
         <div className="flex gap-2 flex-wrap">
           {children.map((c) => (
             <button
@@ -677,6 +712,7 @@ function ChildrenContent() {
           </CollapsibleSection>
         </>
       )}
+    </>}
     </div>
   );
 }

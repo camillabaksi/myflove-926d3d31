@@ -57,12 +57,15 @@ const VISUAL_ICON: Record<string, PictogramId> = {
  */
 export default function FamilySituation({
   childrenList,
+  selectedChildId,
   onSaveHelp,
   log,
   onChangeLog,
   className,
 }: {
   childrenList: SituationChild[];
+  /** Barnspecifik ingång: välj barnet direkt och behåll det under hela stödet. */
+  selectedChildId?: string;
   /** Spara en observation i barnets befintliga profil ("brukar hjälpa"). */
   onSaveHelp?: (childId: string, helps: string[]) => Promise<unknown> | void;
   /** Situationlogg som ägs av sidan, så "Tidigare situationer" också kan visas i Family Flow. */
@@ -78,7 +81,7 @@ export default function FamilySituation({
   const [step, setStep] = useState<Step>("what");
   const [text, setText] = useState("");
   const [category, setCategory] = useState<SituationCategoryId | null>(null);
-  const [whoIds, setWhoIds] = useState<string[]>([]);
+  const [whoIds, setWhoIds] = useState<string[]>(selectedChildId ? [selectedChildId] : []);
   const [whoSelf, setWhoSelf] = useState(false);
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<SituationAnswers>({});
@@ -103,7 +106,7 @@ export default function FamilySituation({
       const list = prev ?? [];
       const existing = list.find((e) => e.id === id);
       const base: SituationLogEntry = existing ?? {
-        id, at: Date.now(), category: catLabel, text: text.trim().slice(0, 300), who, attempts: [], helped: null,
+         id, at: Date.now(), category: catLabel, text: text.trim().slice(0, 300), who, childId: selectedChildId, attempts: [], helped: null,
       };
       const attempts = base.attempts.some((a) => a.title === title && a.result === "provat")
         ? base.attempts.map((a) => (a.title === title && a.result === "provat" ? { ...a, result } : a))
@@ -142,7 +145,7 @@ export default function FamilySituation({
     setStep("what");
     setText("");
     setCategory(null);
-    setWhoIds([]);
+    setWhoIds(selectedChildId ? [selectedChildId] : []);
     setWhoSelf(false);
     setQIndex(0);
     setAnswers({});
@@ -166,7 +169,7 @@ export default function FamilySituation({
     if (childrenList.length === 0) {
       setWhoSelf(false);
       setStep("questions");
-    } else setStep("who");
+    } else setStep(selectedChildId ? "questions" : "who");
   };
 
   const choose = (s: Strategy) => {
@@ -190,7 +193,7 @@ export default function FamilySituation({
   const back = () => {
     const prev: Partial<Record<Step, Step>> = {
       who: "what",
-      questions: childrenList.length ? "who" : "what",
+      questions: selectedChildId ? "what" : childrenList.length ? "who" : "what",
       capacity: "questions",
       summary: capacity.mode === "lagt" ? "capacity" : "questions",
       options: "summary",
@@ -226,7 +229,7 @@ export default function FamilySituation({
       {step === "what" && (
         <div className="space-y-4">
           <div>
-            <h3 className="font-display text-lg font-bold text-ink">{t("Vad händer?")} 💜</h3>
+            <h3 className="font-display text-lg font-bold text-ink">{selectedChildId ? t("Vad behöver ni hjälp med just nu?") : t("Vad händer?")}</h3>
             <p className="mt-1 text-sm text-muted-foreground">
               {t("Du behöver inte formulera dig perfekt. Berätta bara lite så hjälper Flow dig vidare.")}
             </p>
@@ -257,10 +260,10 @@ export default function FamilySituation({
               {t("Fortsätt")} <ChevronRight size={16} aria-hidden />
             </button>
           </div>
-          <SituationLog
+          {!selectedChildId && <SituationLog
             entries={log ?? []}
             onDelete={(id) => setLog((prev) => (prev ?? []).filter((e) => e.id !== id))}
-          />
+          />}
         </div>
       )}
 
@@ -444,6 +447,11 @@ export default function FamilySituation({
           <h3 className="font-display text-lg font-bold text-ink">
             <Dot dot={current.dot} /> {t(current.title)}
           </h3>
+          {single && single.helps.length > 0 && (
+            <p className="rounded-2xl bg-lavender/30 p-3 text-sm text-ink">
+              {t("Tänk på det som brukar hjälpa")} {single.name}: {single.helps.map((h) => t(h)).join(" · ")}
+            </p>
+          )}
           <ol className="space-y-2 text-sm text-ink">
             {current.steps.map((s, i) => (
               <li key={s} className="flex gap-3">
