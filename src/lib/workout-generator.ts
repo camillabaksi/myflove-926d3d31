@@ -261,7 +261,7 @@ export function generateWorkout(input: WorkoutRequest, now = Date.now()): Workou
     .sort((a, b) => scoreExercise(b, req) - scoreExercise(a, req));
 
   for (const ex of pool) {
-    if (main.length >= (req.energy === "låg" ? 4 : 6)) break;
+    if (main.length >= Math.max(req.energy === "låg" ? 4 : 6, Math.round(req.minutes / 7))) break;
     const block = toBlock(ex, req, "huvuddel");
     const cost = blockSeconds(block);
     if (cost > budget && main.length >= 2) continue;
