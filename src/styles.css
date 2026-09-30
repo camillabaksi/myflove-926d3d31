@@ -81,7 +81,7 @@
   --shadow-focus: 0 0 0 3px hsl(var(--ring) / 0.35);
 }
 
-/* Enstaka personliga hälsningar; normal stil, aldrig kursiv text. */
+/* Personliga hälsningar och namn på egna aktiviteter; normal stil, aldrig kursiv text. */
 @utility font-handwritten {
   font-family: var(--font-handwritten);
   font-style: normal;

@@ -2,6 +2,7 @@
 
 ## Typografi (2026-09-30)
 - [x] Visa tre teckensnitt och använd valt Caveat sparsamt i personliga hälsningar, upprätt och utan ändring av appens övriga text.
+- [x] Visa egna aktivitetsnamn och kalenderposter i Caveat på Hem, i dag-/veckovyn och i uppgiftslistan; behåll tider och kontroller i lättläst standardtypsnitt.
 
 ## UX-förenkling 1.0 (2026-09-27)
 - [x] Förenkla Hem, Hälsa, Mitt batteri, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar med primär handling först och fördjupning bakom klick.

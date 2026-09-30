@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Typografi: egna aktivitetsnamn och kalenderposter visas i upprätt Caveat i dagvy, veckovy, uppgiftslista och på Hem; tider och kontroller behåller standardtypsnitt (2026-09-30)",
     "Typografi: Caveat används sparsamt för hälsningen på Hem och Flows välkomstfråga, utan kursiv stil eller ändring av övrig text (2026-09-30)",
     "Hem: rutan \"Lägg till på hemskärmen\" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen (2026-09-30)",
     "Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild (2026-09-30)",

@@ -219,7 +219,7 @@ export default function Tasks() {
           </button>
 
           <div className="flex-1 min-w-0">
-            <p className="text-base leading-snug">{task.title}</p>
+             <p className="font-handwritten break-words text-2xl font-semibold leading-tight">{task.title}</p>
 
             <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
               {task.time && (
@@ -734,7 +734,7 @@ export default function Tasks() {
                       className="flex items-center justify-between p-4 bg-secondary/30 border border-dashed border-border rounded-2xl"
                     >
                       <div className="flex flex-col">
-                        <span className="text-lg text-muted-foreground">{task.title}</span>
+                         <span className="font-handwritten break-words text-2xl font-semibold leading-tight text-muted-foreground">{task.title}</span>
                         <span className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
                           <CalendarIcon size={16} />
                           Syns igen {task.snoozedUntil}
@@ -808,7 +808,7 @@ export default function Tasks() {
                         <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-lg line-through">{task.title}</span>
+                         <span className="font-handwritten break-words text-2xl font-semibold leading-tight line-through">{task.title}</span>
                         <span className="text-xs text-muted-foreground">
                           {task.dueDate ? describeDay(task.dueDate) : "Ingen dag"}
                           {task.actualEnergy

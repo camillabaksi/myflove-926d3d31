@@ -174,7 +174,7 @@ export default function ChildrenDaySummary() {
                                 </p>
                               </div>
                             </div>
-                            <p className={cn("mt-1.5 break-words text-xs font-semibold leading-snug text-ink", item.completed && "line-through")}>
+                             <p className={cn("font-handwritten mt-1.5 break-words text-xl font-semibold leading-tight text-ink", item.completed && "line-through")}>
                               {item.title}
                             </p>
                           </li>

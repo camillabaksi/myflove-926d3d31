@@ -154,7 +154,7 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
           style={color ? { color } : undefined}
         />
         <div className="min-w-0">
-          <p className="break-words font-display text-xl font-bold leading-snug text-ink">
+          <p className="font-handwritten break-words text-[28px] font-semibold leading-tight text-ink">
             {current.title}
           </p>
           <p className="text-sm text-muted-foreground">

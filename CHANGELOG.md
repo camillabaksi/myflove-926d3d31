@@ -1,4 +1,5 @@
 ## 2026-09-30
+- Typografi: namn på egna aktiviteter och kalenderposter visas i upprätt Caveat i dagvyn, veckovyn, uppgiftslistan och på Hem; tider, knappar och övrig information behåller lättläst standardtypsnitt.
 - Typografi: Caveat används sparsamt för den personliga hälsningen på Hem och frågan hos Flow; övrig text behåller sina tidigare teckensnitt. Ingen kursiv stil.
 - Hem: rutan "Lägg till på hemskärmen" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen.
 - Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild.
