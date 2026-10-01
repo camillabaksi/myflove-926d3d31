@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import QuickflowImageImport from "@/components/quickflow-image-import";
 import {
   Brain,
   Check,
@@ -287,6 +288,9 @@ export function QuickflowCapture({
                 </button>
               )}
             </div>
+
+            {!text.trim() && <QuickflowImageImport />}
+
 
             {isLongNote && longChoice === null && (
               <div className="space-y-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
