@@ -1,4 +1,5 @@
 ## 2026-10-01
+- QuickFlow: nytt "📸 Importera från bild" – ta foto, välj bild eller PDF så läser Flow ut möten, tider, platser, möteslänkar och deadlines. Du granskar, redigerar och väljer vad som blir kalender, påminnelse, uppgift, anteckning eller idé; osäkra datum markeras och möjliga dubbletter varnas innan något sparas. Möteslänkar blir klickbara i kalendern. Originalfilen sparas inte.
 - Landningssidan följer nu den nya skissen: varm krämvit ton, liggande interaktiv exempelvy, tydligare rubrik och tre ljusa funktionskort; se-hur-det-fungerar-knappen spelar befintlig introduktionsfilm.
 - Startsidan har fått en lugnare landningssida med riktig förhandsvisning av dagsvyn, tre kärnfördelar och tydliga vägar till inloggning och registrering.
 - Ta bort: när samma aktivitet finns två gånger (t.ex. en oavslutad kopia från en tidigare dag) tas båda bort samtidigt, så raden inte ser ut att stanna kvar.
