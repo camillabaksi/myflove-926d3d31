@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Landningssidans äldre film har ersatts av en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval och dagens plan (2026-10-01)",
     "Landningssidan: ny knapp \"Se allt som finns i appen\" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)",
     "Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – helt lokalt, inget sparas och inget konto behövs (2026-10-01)",
     "Landningssidans exempelvy är större och luftigare på mobil med tydligare hälsning, energi, mående, uppgifter och inspiration; exemplen är fortsatt fristående från kontodata (2026-10-01)",

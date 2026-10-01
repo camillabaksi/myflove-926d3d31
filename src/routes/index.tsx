@@ -8,7 +8,8 @@ import { DayWindow } from "@/components/landing/day-window";
 import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
 import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import previewVideo from "@/assets/landing-preview.mp4.asset.json";
+import previewVideo from "@/assets/landing-intro-current.mp4.asset.json";
+import previewWebm from "@/assets/landing-intro-current.webm.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -112,7 +113,7 @@ function LandingPage() {
               </Button>
               <Button variant="ghost" size="lg" className="min-h-12 rounded-full px-2 text-foreground hover:text-primary" onClick={() => setVideoOpen(true)}>
                 <span className="grid size-10 shrink-0 place-items-center rounded-full border border-primary text-primary"><Play className="size-4 fill-current" aria-hidden="true" /></span>
-                <span className="text-left leading-tight">Se hur det fungerar <span className="block text-xs font-normal text-muted-foreground">ca 2 min</span></span>
+                 <span className="text-left leading-tight">Se hur det fungerar <span className="block text-xs font-normal text-muted-foreground">ca 24 sek</span></span>
               </Button>
             </div>
             <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted-foreground">
@@ -192,8 +193,8 @@ function LandingPage() {
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
           <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
-          <DialogDescription>En kort introduktion till MyFlove.</DialogDescription>
-          {videoOpen && <video controls autoPlay playsInline src={previewVideo.url} className="aspect-video w-full rounded-xl bg-foreground" aria-label="MyFlove introduktionsfilm" />}
+          <DialogDescription>En kort introduktion till dagens MyFlove.</DialogDescription>
+          {videoOpen && <video controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-foreground" aria-label="MyFlove introduktionsfilm"><source src={previewWebm.url} type="video/webm" /><source src={previewVideo.url} type="video/mp4" /></video>}
         </DialogContent>
       </Dialog>
     </main>
