@@ -141,8 +141,18 @@ function LandingPage() {
                   <h3 className="font-display text-base font-bold sm:text-lg">{feature.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.text}</p>
                 </div>
-                <Button asChild variant="ghost" size="icon" title={`Prova ${feature.title}`} className="self-end rounded-full bg-landing-sand text-primary">
-                  <Link to="/sign-up" aria-label={`Prova ${feature.title}`}><ArrowRight aria-hidden="true" /></Link>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  title={`Prova ${feature.title}`}
+                  aria-label={`Prova ${feature.title} direkt på sidan`}
+                  onClick={() => {
+                    track("landing_demo_opened", { source: feature.id });
+                    setOpenDemo(feature.id);
+                  }}
+                  className="self-end rounded-full bg-landing-sand text-primary"
+                >
+                  <ArrowRight aria-hidden="true" />
                 </Button>
               </article>
             ))}
