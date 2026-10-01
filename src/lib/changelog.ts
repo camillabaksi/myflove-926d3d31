@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-01)",
     "Landningssidans äldre film har ersatts av en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval och dagens plan (2026-10-01)",
     "Landningssidan: ny knapp \"Se allt som finns i appen\" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)",
     "Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – helt lokalt, inget sparas och inget konto behövs (2026-10-01)",
