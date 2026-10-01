@@ -31,18 +31,21 @@ export const Route = createFileRoute("/")({
 
 const FEATURES = [
   {
+    id: "quickflow",
     icon: Zap,
     title: "QuickFlow",
     text: "Få ner tankar, uppgifter och idéer innan de försvinner. Flow hjälper dig att sortera resten.",
     accent: "bg-lavender text-primary",
   },
   {
+    id: "energi",
     icon: BatteryMedium,
     title: "Planering utifrån energi",
     text: "Planera smartare, inte hårdare. Anpassa dagen efter din energi och ditt mående.",
     accent: "bg-lavender text-primary",
   },
   {
+    id: "steg",
     icon: Heart,
     title: "Ett steg i taget",
     text: "Stora mål blir enklare med små steg. MyFlove hjälper dig att fira framsteg – varje dag.",
@@ -53,6 +56,7 @@ const FEATURES = [
 function LandingPage() {
   const navigate = useNavigate();
   const [videoOpen, setVideoOpen] = useState(false);
+  const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
