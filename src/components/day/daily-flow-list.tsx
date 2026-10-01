@@ -85,6 +85,23 @@ export function DailyFlowList({
     return out;
   }, [today, extraItems, orderMap, dayISO]);
 
+  /**
+   * Samma titel + tid visas som en rad. Tar man bort raden ska även dolda
+   * kopior (t.ex. en äldre, oavslutad dag som rullat över) försvinna –
+   * annars dyker kopian upp i samma ögonblick och det ser ut som att
+   * borttagningen inte fungerade.
+   */
+  const duplicatesByKey = useMemo(() => {
+    const map = new Map<string, string[]>();
+    for (const item of [...today, ...extraItems]) {
+      const key = itemKey(item);
+      const ids = map.get(key) ?? [];
+      if (!ids.includes(item.id)) ids.push(item.id);
+      map.set(key, ids);
+    }
+    return map;
+  }, [today, extraItems]);
+
   const move = useCallback(
     (index: number, direction: -1 | 1) => {
       const target = index + direction;
@@ -214,6 +231,7 @@ export function DailyFlowList({
                     </div>
                     <FlowItemActions
                       itemId={item.id}
+                      duplicateIds={duplicatesByKey.get(itemKey(item))}
                       size={14}
                       compact
                       className="h-9 w-9 text-muted-foreground"

@@ -818,7 +818,7 @@ export function useReminders() {
   };
 
   const deleteReminder = (id: string) => {
-    setReminders(reminders.filter((r) => r.id !== id));
+    setReminders((prev) => prev.filter((r) => r.id !== id));
   };
 
   const updateReminder = (
