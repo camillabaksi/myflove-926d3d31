@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { DayWindow } from "@/components/landing/day-window";
+import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import previewVideo from "@/assets/landing-preview.mp4.asset.json";
 
@@ -169,6 +170,7 @@ function LandingPage() {
         </nav>
         <p className="mt-5">© {new Date().getFullYear()} MyFlove</p>
       </footer>
+      <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
           <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
