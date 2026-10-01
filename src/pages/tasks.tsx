@@ -1,3 +1,4 @@
+import { LinkifiedText } from "@/components/linkified-text";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
