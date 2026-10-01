@@ -1,0 +1,279 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+/**
+ * QuickFlow → Importera från bild: Flow läser en bild/PDF/text och
+ * plockar ut kalenderrelaterad information. Hittar aldrig på värden.
+ */
+
+const InputSchema = z
+  .object({
+    today: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    weekday: z.string().max(20),
+    text: z.string().max(30000).optional(),
+    file: z
+      .object({
+        name: z.string().max(200),
+        mime: z.string().max(100),
+        dataUrl: z.string().min(20).max(14_000_000),
+      })
+      .optional(),
+  })
+  .refine((v) => (v.text && v.text.trim().length > 0) || v.file, {
+    message: "Ingen fil eller text",
+  });
+
+export type ImportKind = "calendar" | "reminder" | "note" | "task" | "idea";
+
+export interface ImportedItem {
+  title: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  location: string;
+  address: string;
+  meeting_url: string;
+  contact: string;
+  notes: string;
+  action_required: string;
+  suggested_reminder: string;
+  event_type: string;
+  suggested_kind: ImportKind;
+  date_question: string;
+  confidence: { title: number; date: number; time: number; location: number };
+}
+
+export interface ImportResult {
+  status: "ok" | "empty" | "unreadable" | "error";
+  items: ImportedItem[];
+  message?: string;
+}
+
+const str = { type: "string" } as const;
+const num = { type: "number" } as const;
+const ITEM_KEYS = [
+  "title",
+  "date",
+  "start_time",
+  "end_time",
+  "location",
+  "address",
+  "meeting_url",
+  "contact",
+  "notes",
+  "action_required",
+  "suggested_reminder",
+  "event_type",
+  "suggested_kind",
+  "date_question",
+  "confidence",
+] as const;
+
+const SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: ["readable", "items"],
+  properties: {
+    readable: { type: "boolean" },
+    items: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: [...ITEM_KEYS],
+        properties: {
+          title: str,
+          date: str,
+          start_time: str,
+          end_time: str,
+          location: str,
+          address: str,
+          meeting_url: str,
+          contact: str,
+          notes: str,
+          action_required: str,
+          suggested_reminder: str,
+          event_type: str,
+          suggested_kind: { type: "string", enum: ["calendar", "reminder", "note", "task", "idea"] },
+          date_question: str,
+          confidence: {
+            type: "object",
+            additionalProperties: false,
+            required: ["title", "date", "time", "location"],
+            properties: { title: num, date: num, time: num, location: num },
+          },
+        },
+      },
+    },
+  },
+};
+
+const system = (today: string, weekday: string) => `Du är Flow i appen MyFlove. Du läser en bild, ett foto, en screenshot, en PDF eller text och hittar ALLT som kan höra hemma i en kalender.
+Dagens datum är ${today} (${weekday}). Tolka relativa uttryck ("nästa torsdag", "imorgon") utifrån det.
+
+Absoluta regler:
+- Hitta ALDRIG på datum, tider, länkar, platser eller annat som inte står i källan. Saknas något: tom sträng "".
+- Om datum är tvetydigt (t.ex. "10/10" utan år och oklart format, eller veckodag som inte går ihop med datumet) – lämna date tomt och skriv en kort fråga i date_question, t.ex. "Vilket datum menas med Fredag 10/10?".
+- Ett återkommande veckoschema: skapa en post per tillfälle för den kommande veckan med riktiga datum om veckodagar framgår.
+- Varje separat händelse = en egen post. Hitta alla.
+- date: YYYY-MM-DD. start_time/end_time: HH:MM 24h. Deadline utan klockslag ("senast 12 oktober"): date satt, start_time tomt, suggested_kind "task". "kl 23:59" som deadline får start_time 23:59.
+- Formuleringar som "glöm inte", "kom ihåg", "ta med", "förbered", "deadline", "senast", "skicka innan", "anmäl dig senast" → lägg i action_required. Föreslå suggested_reminder (t.ex. "30 min innan", "1 dag innan") bara om det passar, annars "".
+- meeting_url: Zoom/Teams/Google Meet eller annan möteslänk exakt som den står. location kan då vara "Zoom", "Teams" eller "Google Meet".
+- suggested_kind: "calendar" om det finns ett tydligt datum OCH klockslag för en händelse; "task" för deadlines/saker att göra utan klockslag; "reminder" för "kom ihåg"-saker utan händelse; "note" för allmän info; "idea" för idéer.
+- event_type: kort typ, t.ex. "möte", "lektion", "deadline", "tandläkare", "övrigt".
+- confidence: 0–1 per fält (title, date, time, location). Sätt lågt (<0.7) när du är osäker eller texten är svårläst. 0 om fältet är tomt.
+- title: kort och tydlig, på källans språk, utan datum/tid.
+- readable: false om bilden är för suddig/oläslig att tolka.
+Svara endast enligt JSON-schemat.`;
+
+type Part =
+  | { type: "input_text"; text: string }
+  | { type: "input_image"; image_url: string }
+  | { type: "input_file"; filename: string; file_data: string };
+
+async function readOutputText(res: Response): Promise<string> {
+  const reader = res.body?.getReader();
+  if (!reader) return "";
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let out = "";
+  let refused = false;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const frames = buffer.split("\n\n");
+    buffer = frames.pop() ?? "";
+    for (const frame of frames) {
+      for (const line of frame.split("\n")) {
+        if (!line.startsWith("data:")) continue;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === "[DONE]") continue;
+        try {
+          const ev = JSON.parse(payload) as { type?: string; delta?: string };
+          if (ev.type === "response.output_text.delta" && typeof ev.delta === "string") {
+            out += ev.delta;
+          } else if (ev.type === "response.refusal.delta") {
+            refused = true;
+          }
+        } catch {
+          // ofullständig rad – ignoreras
+        }
+      }
+    }
+  }
+  if (refused && !out) throw new Error("refused");
+  return out;
+}
+
+const clampConf = (n: unknown) => (typeof n === "number" && n >= 0 && n <= 1 ? n : 0);
+const s = (v: unknown, max = 500) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+const KINDS: ImportKind[] = ["calendar", "reminder", "note", "task", "idea"];
+
+function sanitize(raw: unknown): ImportedItem | null {
+  if (!raw || typeof raw !== "object") return null;
+  const r = raw as Record<string, unknown>;
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(s(r.date)) ? s(r.date) : "";
+  const time = (v: unknown) => (/^\d{2}:\d{2}$/.test(s(v)) ? s(v) : "");
+  const url = s(r.meeting_url, 1000);
+  const c = (r.confidence ?? {}) as Record<string, unknown>;
+  const kind = KINDS.includes(r.suggested_kind as ImportKind)
+    ? (r.suggested_kind as ImportKind)
+    : "note";
+  const title = s(r.title, 200);
+  if (!title && !s(r.notes)) return null;
+  return {
+    title: title || s(r.notes, 80),
+    date,
+    start_time: time(r.start_time),
+    end_time: time(r.end_time),
+    location: s(r.location, 200),
+    address: s(r.address, 300),
+    meeting_url: /^https?:\/\//i.test(url) ? url : "",
+    contact: s(r.contact, 200),
+    notes: s(r.notes, 1500),
+    action_required: s(r.action_required, 500),
+    suggested_reminder: s(r.suggested_reminder, 60),
+    event_type: s(r.event_type, 40),
+    suggested_kind: kind,
+    date_question: s(r.date_question, 200),
+    confidence: {
+      title: clampConf(c.title),
+      date: clampConf(c.date),
+      time: clampConf(c.time),
+      location: clampConf(c.location),
+    },
+  };
+}
+
+export const analyzeCalendarImport = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => InputSchema.parse(data))
+  .handler(async ({ data }): Promise<ImportResult> => {
+    const apiKey = process.env["LOVABLE_API_KEY"];
+    if (!apiKey) return { status: "error", items: [], message: "AI är inte konfigurerat." };
+
+    const content: Part[] = [];
+    if (data.text?.trim()) content.push({ type: "input_text", text: data.text });
+    if (data.file) {
+      content.push({ type: "input_text", text: `Bifogad fil: ${data.file.name}` });
+      if (data.file.mime === "application/pdf") {
+        content.push({ type: "input_file", filename: data.file.name, file_data: data.file.dataUrl });
+      } else {
+        content.push({ type: "input_image", image_url: data.file.dataUrl });
+      }
+    }
+
+    let res: Response;
+    try {
+      res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Lovable-API-Key": apiKey,
+          "X-Lovable-AIG-SDK": "fetch",
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-6-astra",
+          stream: true,
+          store: false,
+          reasoning: { effort: "low", summary: "auto" },
+          include: ["reasoning.encrypted_content"],
+          instructions: system(data.today, data.weekday),
+          input: [{ role: "user", content }],
+          text: {
+            format: { type: "json_schema", name: "calendar_import", strict: true, schema: SCHEMA },
+          },
+        }),
+      });
+    } catch {
+      return { status: "error", items: [], message: "Kunde inte nå Flow just nu." };
+    }
+
+    if (!res.ok) {
+      const message =
+        res.status === 429
+          ? "Flow har mycket att göra just nu. Vänta en stund och försök igen."
+          : res.status === 402
+            ? "AI-krediterna är slut för tillfället."
+            : res.status === 400
+              ? "Flow kunde inte läsa filen. Prova en annan bild eller PDF."
+              : "Något gick fel när Flow läste filen.";
+      console.error("calendar-import gateway", res.status, await res.text().catch(() => ""));
+      return { status: "error", items: [], message };
+    }
+
+    try {
+      const raw = await readOutputText(res);
+      const parsed = JSON.parse(raw) as { readable?: boolean; items?: unknown[] };
+      const items = (parsed.items ?? []).map(sanitize).filter((i): i is ImportedItem => !!i);
+      if (parsed.readable === false && items.length === 0) return { status: "unreadable", items };
+      return { status: items.length ? "ok" : "empty", items: items.slice(0, 40) };
+    } catch (error) {
+      if (error instanceof Error && error.message === "refused") {
+        return { status: "error", items: [], message: "Flow kan inte tolka den här filen." };
+      }
+      return { status: "error", items: [], message: "Flow fick ett otydligt svar. Försök igen." };
+    }
+  });
