@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Landningssidan har varm krämvit bakgrund, liggande exempelvy, tre funktionskort och en spelbar introduktionsfilm (2026-10-01)",
     "Startsidan visar nu MyFloves dagsvy, tre tydliga kärnfördelar och enkla vägar till inloggning och registrering (2026-10-01)",
     "Ta bort: dolda kopior med samma namn och tid (t.ex. en oavslutad från en tidigare dag) tas bort tillsammans med raden (2026-10-01)",
     "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",

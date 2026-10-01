@@ -17,6 +17,7 @@ import { Route as GlomtLosenordRouteImport } from './routes/glomt-losenord'
 import { Route as IntegritetRouteImport } from './routes/integritet'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as NyttLosenordRouteImport } from './routes/nytt-losenord'
+import { Route as OmOssRouteImport } from './routes/om-oss'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -132,6 +133,11 @@ const McpRoute = McpRouteImport.update({
 const NyttLosenordRoute = NyttLosenordRouteImport.update({
   id: '/nytt-losenord',
   path: '/nytt-losenord',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OmOssRoute = OmOssRouteImport.update({
+  id: '/om-oss',
+  path: '/om-oss',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignInRoute = SignInRouteImport.update({
@@ -533,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
+  '/om-oss': typeof OmOssRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -619,6 +626,7 @@ export interface FileRoutesByTo {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
+  '/om-oss': typeof OmOssRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -707,6 +715,7 @@ export interface FileRoutesById {
   '/integritet': typeof IntegritetRoute
   '/mcp': typeof McpRoute
   '/nytt-losenord': typeof NyttLosenordRoute
+  '/om-oss': typeof OmOssRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -795,6 +804,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
+    | '/om-oss'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -881,6 +891,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
+    | '/om-oss'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -968,6 +979,7 @@ export interface FileRouteTypes {
     | '/integritet'
     | '/mcp'
     | '/nytt-losenord'
+    | '/om-oss'
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
@@ -1056,6 +1068,7 @@ export interface RootRouteChildren {
   IntegritetRoute: typeof IntegritetRoute
   McpRoute: typeof McpRoute
   NyttLosenordRoute: typeof NyttLosenordRoute
+  OmOssRoute: typeof OmOssRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -1129,6 +1142,13 @@ declare module '@tanstack/react-router' {
       path: '/nytt-losenord'
       fullPath: '/nytt-losenord'
       preLoaderRoute: typeof NyttLosenordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/om-oss': {
+      id: '/om-oss'
+      path: '/om-oss'
+      fullPath: '/om-oss'
+      preLoaderRoute: typeof OmOssRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-in': {
@@ -1814,6 +1834,7 @@ const rootRouteChildren: RootRouteChildren = {
   IntegritetRoute: IntegritetRoute,
   McpRoute: McpRoute,
   NyttLosenordRoute: NyttLosenordRoute,
+  OmOssRoute: OmOssRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
