@@ -221,6 +221,22 @@ export function QuickflowCapture({
     });
   };
 
+  /** Lägg texten med datum/tid direkt i kalendern efter användarens ja. */
+  const saveToCalendar = () => {
+    if (!dateSuggestion) return;
+    addTask(dateSuggestion.title, dateSuggestion.date, {
+      time: dateSuggestion.startTime ?? undefined,
+      endTime: dateSuggestion.endTime ?? undefined,
+      note: "Källa: QuickFlow",
+    });
+    track("quickflow_created", { source: "quickflow", method: "kalender" });
+    setOpen(false);
+    reset();
+    toast.success(t("Inlagd i kalendern. 📅"), {
+      description: `${dateSuggestion.title} – ${dateSuggestion.label}.`,
+    });
+  };
+
   return (
     <>
       {variant === "global" ? null : (
@@ -333,6 +349,39 @@ export function QuickflowCapture({
                     className="w-full rounded-xl sm:flex-1"
                   >
                     {t("Behåll i Quickflow")}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {dateSuggestion && (
+              <div className="space-y-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+                <p className="flex items-start gap-2 text-sm text-ink">
+                  <Calendar size={16} className="mt-0.5 shrink-0 text-primary" />
+                  <span>
+                    <span className="block font-semibold">
+                      {t("Ska jag lägga det här i kalendern?")}
+                    </span>
+                    <span className="block text-muted-foreground">
+                      {dateSuggestion.title} – {dateSuggestion.label}
+                    </span>
+                  </span>
+                </p>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button
+                    type="button"
+                    onClick={saveToCalendar}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    {t("📅 Ja, lägg i kalendern")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setCalDeclined(true)}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    {t("Nej, bara spara")}
                   </Button>
                 </div>
               </div>
