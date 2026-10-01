@@ -116,7 +116,6 @@ function LandingPage() {
           </div>
 
           <div className="relative min-w-0 lg:pl-3">
-            <div className="absolute -inset-x-6 inset-y-4 rounded-[35%] bg-secondary/70" aria-hidden="true" />
             <div className="relative lg:ml-6"><DayWindow /></div>
             <div className="hidden lg:absolute lg:-bottom-4 lg:-left-16 lg:block lg:rotate-[-7deg] lg:text-center lg:font-handwritten lg:text-2xl lg:leading-none lg:text-primary">
               <span aria-hidden="true" className="block rotate-[-16deg] text-5xl">↗</span>
@@ -130,16 +129,16 @@ function LandingPage() {
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
             {FEATURES.map((feature) => (
-              <article key={feature.title} className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-4 rounded-3xl border border-border/60 bg-landing-surface p-5 shadow-soft sm:p-6">
-                <span className={`grid h-13 w-13 shrink-0 place-items-center rounded-full ${feature.accent}`}>
+              <article key={feature.title} className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-3 rounded-3xl border border-border/60 bg-landing-surface p-5 shadow-soft sm:p-6">
+                <span className={`col-span-2 grid h-13 w-13 place-items-center rounded-full ${feature.accent}`}>
                   <feature.icon aria-hidden="true" className="h-6 w-6" strokeWidth={1.8} />
                 </span>
                 <div className="min-w-0">
                   <h3 className="font-display text-base font-bold sm:text-lg">{feature.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.text}</p>
                 </div>
-                <Button asChild variant="ghost" size="icon" title={`Prova ${feature.title}`} aria-label={`Prova ${feature.title}`} className="self-end rounded-full bg-landing-sand text-primary">
-                  <Link to="/sign-up"><ArrowRight aria-hidden="true" /></Link>
+                <Button asChild variant="ghost" size="icon" title={`Prova ${feature.title}`} className="self-end rounded-full bg-landing-sand text-primary">
+                  <Link to="/sign-up" aria-label={`Prova ${feature.title}`}><ArrowRight aria-hidden="true" /></Link>
                 </Button>
               </article>
             ))}

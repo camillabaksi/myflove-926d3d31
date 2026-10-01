@@ -40,7 +40,7 @@ export function DayWindow() {
             <span className="ml-auto text-[10px] font-medium text-muted-foreground">Din dag, i din takt</span>
           </div>
           <div className="mt-3">
-            <h2 className="font-display text-lg font-extrabold leading-tight sm:text-xl">Hej! <span aria-hidden="true">💜</span></h2>
+            <h2 className="flex items-center gap-1 font-display text-lg font-extrabold leading-tight sm:text-xl">Hej! <Heart aria-label="lila hjärta" className="size-4 fill-primary text-primary" /></h2>
             <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">En ny dag, och du gör ditt bästa. Det räcker.</p>
           </div>
 
@@ -53,7 +53,7 @@ export function DayWindow() {
                 </div>
                 <strong className="text-xs">60%</strong>
               </div>
-              <p className="mt-3 text-[9px] text-muted-foreground sm:text-[10px]">Helt okej idag <span aria-hidden="true">♥</span></p>
+              <p className="mt-3 text-[9px] text-muted-foreground sm:text-[10px]">Helt okej idag <Heart className="inline size-2.5 fill-primary text-primary" aria-hidden="true" /></p>
             </div>
             <div className="min-w-0 rounded-xl border border-border/70 bg-card p-2.5 shadow-soft sm:p-3">
               <h3 className="text-[11px] font-bold leading-4">Hur mår du idag?</h3>
@@ -64,7 +64,7 @@ export function DayWindow() {
                   </span>
                 ))}
               </div>
-              <p className="mt-3 text-[9px] text-muted-foreground sm:text-[10px]">Ganska bra <span aria-hidden="true">♥</span></p>
+              <p className="mt-3 text-[9px] text-muted-foreground sm:text-[10px]">Ganska bra <Heart className="inline size-2.5 fill-primary text-primary" aria-hidden="true" /></p>
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export function DayWindow() {
               </ul>
             </div>
             <div className="flex min-w-0 flex-col justify-between rounded-xl bg-secondary/60 p-3 text-[11px] leading-5">
-              <p>En lugnare vardag är också en produktiv vardag. <span aria-hidden="true">💜</span></p>
+              <p>En lugnare vardag är också en produktiv vardag. <Heart className="inline size-3 fill-primary text-primary" aria-label="lila hjärta" /></p>
               <div className="mt-3 flex items-end justify-between gap-1 text-primary">
                 <span className="text-[9px] leading-4">Du klarar mer<br />än du tror.</span>
                 <Sparkles aria-hidden="true" className="size-5 shrink-0" />

@@ -2,7 +2,7 @@
 
 ## Landningssida enligt skiss 2 (2026-10-01)
 - [x] Varm krämvit/sandfärgad startsida, liggande dagsvy och efterfrågad text/navigering.
-- [ ] Kontrollera mobil, dator, länkar och videoknapp.
+- [x] Kontrollera mobil, dator, länkar och videoknapp.
 
 ## Startsida (2026-10-01)
 - [x] Bygg skissinspirerad landningssida med verklig dagsvy, tre kärnfördelar och fungerande inloggning/registrering.
