@@ -178,7 +178,9 @@ export function QuickflowImageImport() {
   const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     e.target.value = "";
-    if (f) void analyze(f);
+    if (!f) return;
+    setOpen(true);
+    void analyze(f);
   };
 
   const update = (key: string, patch: Partial<Draft>) =>
@@ -257,21 +259,35 @@ export function QuickflowImageImport() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="flex w-full items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 text-left shadow-soft transition-all hover:border-primary/40 active:scale-[0.99]"
-      >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-          <ScanLine size={20} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block font-semibold text-ink">📸 Importera från bild</span>
-          <span className="block text-sm text-muted-foreground">
-            Foto, screenshot eller PDF → Flow lägger in det i kalendern.
+      <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <ScanLine size={20} />
           </span>
-        </span>
-      </button>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold text-ink">Importera till kalendern</span>
+            <span className="block text-sm text-muted-foreground">
+              Bild, screenshot, PDF eller dokument → Flow hittar möten och deadlines.
+            </span>
+          </span>
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"
+          >
+            <ImageIcon size={18} className="text-primary" /> Bild
+          </button>
+          <button
+            type="button"
+            onClick={() => docRef.current?.click()}
+            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"
+          >
+            <FileText size={18} className="text-primary" /> PDF / dokument
+          </button>
+        </div>
+      </div>
 
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={onPick} />
       <input ref={imageRef} type="file" accept="image/*,.heic,.heif" hidden onChange={onPick} />
@@ -291,14 +307,14 @@ export function QuickflowImageImport() {
                 ? `Flow hittade ${drafts.length} ${drafts.length === 1 ? "sak" : "saker"} 👀`
                 : stage === "done"
                   ? "Klart! ✨"
-                  : "Importera från bild"}
+                  : "Importera till kalendern"}
             </DialogTitle>
             <p className="text-sm text-muted-foreground">
               {stage === "review"
                 ? "Kolla så att allt ser rätt ut innan jag lägger in dem."
                 : stage === "done"
                   ? `${savedCount} ${savedCount === 1 ? "sak är" : "saker är"} nu inlagda i din kalender.`
-                  : "Skicka hit en bild så kollar jag vad som behöver in i din kalender 👀"}
+                  : "Skicka hit en bild eller ett dokument så kollar jag vad som behöver in i din kalender 👀"}
             </p>
           </DialogHeader>
 

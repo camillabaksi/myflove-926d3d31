@@ -1,4 +1,5 @@
 ## 2026-10-01
+- QuickFlow: PDF och dokument (Word, PowerPoint, Excel, text) kan nu importeras direkt från QuickFlow-kortet med knappen "PDF / dokument" – Flow hittar möten och deadlines på samma sätt som i bilder.
 - Kalender: möten med Zoom-, Teams- eller Meet-länk får en klickbar "Anslut"-knapp direkt på raden i dagsvyn.
 - QuickFlow: nytt "📸 Importera från bild" – ta foto, välj bild eller PDF så läser Flow ut möten, tider, platser, möteslänkar och deadlines. Du granskar, redigerar och väljer vad som blir kalender, påminnelse, uppgift, anteckning eller idé; osäkra datum markeras och möjliga dubbletter varnas innan något sparas. Möteslänkar blir klickbara i kalendern. Originalfilen sparas inte.
 - Landningssidan följer nu den nya skissen: varm krämvit ton, liggande interaktiv exempelvy, tydligare rubrik och tre ljusa funktionskort; se-hur-det-fungerar-knappen spelar befintlig introduktionsfilm.

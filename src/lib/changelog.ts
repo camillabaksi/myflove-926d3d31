@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "QuickFlow: egen knapp för PDF/dokument direkt på importkortet – möten och deadlines hittas som i bilder (2026-10-01)",
     "Kalender: möten med Zoom/Teams/Meet-länk får en klickbar Anslut-knapp direkt i dagsvyn (2026-10-01)",
     "QuickFlow: Importera från bild/PDF – Flow hittar kalenderhändelser, du granskar och godkänner; osäkra datum och dubbletter markeras, möteslänkar blir klickbara (2026-10-01)",
     "Landningssidan har varm krämvit bakgrund, liggande exempelvy, tre funktionskort och en spelbar introduktionsfilm (2026-10-01)",
