@@ -179,6 +179,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   signup_completed: "konto",
   login: "konto",
   onboarding_started: "onboarding",
+  landing_demo_opened: "onboarding",
 
   onboarding_completed: "onboarding",
   onboarding_skipped: "onboarding",

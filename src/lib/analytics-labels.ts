@@ -92,6 +92,7 @@ export const ACTION_LABELS: Record<string, string> = {
   account_deletion_cancelled: "Kontoradering avbruten",
   account_deleted: "Konto raderat",
   onboarding_started: "Onboarding påbörjad",
+  landing_demo_opened: "Prova-på-demo öppnad",
   onboarding_completed: "Onboarding klar",
   onboarding_skipped: "Onboarding hoppad",
 
