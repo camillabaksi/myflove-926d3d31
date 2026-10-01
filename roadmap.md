@@ -1,5 +1,9 @@
 # Roadmap
 
+## Landningssida enligt skiss 2 (2026-10-01)
+- [ ] Varm krämvit/sandfärgad startsida, liggande dagsvy och efterfrågad text/navigering.
+- [ ] Kontrollera mobil, dator, länkar och videoknapp.
+
 ## Startsida (2026-10-01)
 - [x] Bygg skissinspirerad landningssida med verklig dagsvy, tre kärnfördelar och fungerande inloggning/registrering.
 - [x] Kontrollera utseende och länkar i mobil- och datorbredd.

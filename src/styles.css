@@ -51,6 +51,14 @@
   --color-sky: hsl(var(--sky));
   --color-sun: hsl(var(--sun));
 
+  /* Enbart marknadsföringssidan; appens globala lila palett lämnas orörd. */
+  --color-landing-background: var(--landing-background);
+  --color-landing-sand: var(--landing-sand);
+  --color-landing-surface: var(--landing-surface);
+  --color-landing-red: var(--landing-red);
+  --color-landing-yellow: var(--landing-yellow);
+  --color-landing-green: var(--landing-green);
+
   --font-sans:
     "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
@@ -89,6 +97,12 @@
 }
 
 :root {
+  --landing-background: #fdfbf7;
+  --landing-sand: #faf8f5;
+  --landing-surface: #fffefd;
+  --landing-red: #ef7d85;
+  --landing-yellow: #f2c76c;
+  --landing-green: #89c9a0;
   /* MyFlove palette: mjuk lila, vitt, rosa och mint */
   --background: 264 60% 98%;
   --foreground: 260 30% 18%;
