@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import QuickflowImageImport from "@/components/quickflow-image-import";
 import {
   Brain,
+  Calendar,
   Check,
   Loader2,
   Mic,
@@ -24,7 +25,8 @@ import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { detectIntent } from "@/lib/adaptive-activity";
 import { useLang } from "@/hooks/use-language";
 import { useVoiceInput } from "@/hooks/use-voice-input";
-import { useSavedStores } from "@/hooks/use-data";
+import { useSavedStores, useTasks } from "@/hooks/use-data";
+import { parseQuickflowDateTime } from "@/lib/quickflow-datetime";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useQuickflowPrioritization } from "@/hooks/use-quickflow-prioritization";
 import { splitTasks } from "@/lib/quickflow-priority";
@@ -77,6 +79,9 @@ export function QuickflowCapture({
   const { addNote, updateNote } = useNotes();
   const { folders } = useNoteFolders();
   const { savedStores } = useSavedStores();
+  const { addTask } = useTasks();
+  /** Användaren har tackat nej till kalenderförslaget för aktuell text. */
+  const [calDeclined, setCalDeclined] = useState(false);
   const { prioritizeTitles } = useQuickflowPrioritization();
   const navigate = useNavigate();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
@@ -100,6 +105,14 @@ export function QuickflowCapture({
   /** En enda sak med tydlig avsikt kan Flow anpassa efter dagens kapacitet. */
   const adaptable = items.length === 1 && detectIntent(items[0]) !== "generisk" ? items[0] : null;
   const [adaptOpen, setAdaptOpen] = useState(false);
+  /** "tvätta fredag 10-14" → förslag att lägga det direkt i kalendern. */
+  const dateSuggestion = useMemo(
+    () =>
+      items.length === 1 && !calDeclined && edited === null
+        ? parseQuickflowDateTime(items[0])
+        : null,
+    [items, calDeclined, edited],
+  );
 
   // Ny text = nytt förslag från Flow.
   useEffect(() => {
@@ -107,6 +120,7 @@ export function QuickflowCapture({
     setEditingIndex(null);
     setLongChoice(null);
     setFolderOpen(false);
+    setCalDeclined(false);
   }, [text]);
 
   // Bottennavigeringens +, hemskärmens + och desktop-FAB öppnar samma flöde.
@@ -205,6 +219,22 @@ export function QuickflowCapture({
         : t(
             "Hela texten är kvar. Du hittar den under Anteckningar – lägg den i en mapp när du vill.",
           ),
+    });
+  };
+
+  /** Lägg texten med datum/tid direkt i kalendern efter användarens ja. */
+  const saveToCalendar = () => {
+    if (!dateSuggestion) return;
+    addTask(dateSuggestion.title, dateSuggestion.date, {
+      time: dateSuggestion.startTime ?? undefined,
+      endTime: dateSuggestion.endTime ?? undefined,
+      note: "Källa: QuickFlow",
+    });
+    track("quickflow_created", { source: "quickflow", method: "kalender" });
+    setOpen(false);
+    reset();
+    toast.success(t("Inlagd i kalendern. 📅"), {
+      description: `${dateSuggestion.title} – ${dateSuggestion.label}.`,
     });
   };
 
@@ -320,6 +350,39 @@ export function QuickflowCapture({
                     className="w-full rounded-xl sm:flex-1"
                   >
                     {t("Behåll i Quickflow")}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {dateSuggestion && (
+              <div className="space-y-3 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+                <p className="flex items-start gap-2 text-sm text-ink">
+                  <Calendar size={16} className="mt-0.5 shrink-0 text-primary" />
+                  <span>
+                    <span className="block font-semibold">
+                      {t("Ska jag lägga det här i kalendern?")}
+                    </span>
+                    <span className="block text-muted-foreground">
+                      {dateSuggestion.title} – {dateSuggestion.label}
+                    </span>
+                  </span>
+                </p>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button
+                    type="button"
+                    onClick={saveToCalendar}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    {t("📅 Ja, lägg i kalendern")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setCalDeclined(true)}
+                    className="w-full rounded-xl sm:flex-1"
+                  >
+                    {t("Nej, bara spara")}
                   </Button>
                 </div>
               </div>
