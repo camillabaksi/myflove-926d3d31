@@ -60,6 +60,8 @@ export interface FlowItem {
   href?: string;
   /** Diskret koppling till en familjemedlems aktivitet, t.ex. "Bella – Förskola". */
   linkedLabel?: string;
+  /** Klickbar möteslänk (Zoom/Teams/Meet) hämtad ur postens anteckning. */
+  meetingUrl?: string;
 }
 
 export const SOURCE_LABEL: Record<FlowItemSource, string> = {
@@ -209,4 +211,10 @@ export function withinCapacity(
 
 export function areaLabel(area: LifeArea): string {
   return `${AREA_META[area].emoji} ${AREA_META[area].label}`;
+}
+
+const MEETING_URL_RE = /https?:\/\/[^\s<>"')]*(?:zoom\.us|teams\.microsoft\.com|teams\.live\.com|meet\.google\.com)[^\s<>"')]*/i;
+/** Första möteslänken i en anteckning, om någon finns. */
+export function meetingUrlFrom(note?: string): string | undefined {
+  return note?.match(MEETING_URL_RE)?.[0];
 }

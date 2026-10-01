@@ -24,6 +24,7 @@ import {
   sortFlowItems,
   todayISO,
   type FlowItem,
+  meetingUrlFrom,
 } from "@/lib/flow-items";
 
 /**
@@ -113,6 +114,7 @@ export function useFlowItems(dateISO?: string): {
         done: t.completed,
         completable: true,
         href: getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/jobb" : "/tasks",
+        meetingUrl: meetingUrlFrom(t.note),
       });
     }
 
@@ -146,6 +148,7 @@ export function useFlowItems(dateISO?: string): {
         // (möte, läkarbesök, lämning) – därför går den att bocka av.
         completable: true,
         href: "/kalender",
+        meetingUrl: meetingUrlFrom(r.note),
       });
     }
 
