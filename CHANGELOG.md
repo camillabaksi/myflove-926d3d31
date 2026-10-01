@@ -1,4 +1,5 @@
 ## 2026-10-01
+- Landningssidans exempelvy är större och luftigare på mobilen, med tydligare hälsning, energikort, måendekort, uppgifter och lugnt inspirationskort enligt referensbilden. Exemplen är fortfarande fristående från användardata.
 - QuickFlow: skriver du en tid eller ett datum i texten (t.ex. "tvätta fredag 10-14" eller "tandläkaren 12 oktober kl 14") frågar Flow direkt om den ska läggas i kalendern på rätt dag och tid – ett klick räcker, eller så sparas den som vanligt.
 - QuickFlow: PDF och dokument (Word, PowerPoint, Excel, text) kan nu importeras direkt från QuickFlow-kortet med knappen "PDF / dokument" – Flow hittar möten och deadlines på samma sätt som i bilder.
 - Kalender: möten med Zoom-, Teams- eller Meet-länk får en klickbar "Anslut"-knapp direkt på raden i dagsvyn.
