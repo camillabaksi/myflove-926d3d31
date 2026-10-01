@@ -24,7 +24,8 @@ import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { detectIntent } from "@/lib/adaptive-activity";
 import { useLang } from "@/hooks/use-language";
 import { useVoiceInput } from "@/hooks/use-voice-input";
-import { useSavedStores } from "@/hooks/use-data";
+import { useSavedStores, useTasks } from "@/hooks/use-data";
+import { parseQuickflowDateTime } from "@/lib/quickflow-datetime";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useQuickflowPrioritization } from "@/hooks/use-quickflow-prioritization";
 import { splitTasks } from "@/lib/quickflow-priority";
@@ -77,6 +78,9 @@ export function QuickflowCapture({
   const { addNote, updateNote } = useNotes();
   const { folders } = useNoteFolders();
   const { savedStores } = useSavedStores();
+  const { addTask } = useTasks();
+  /** Användaren har tackat nej till kalenderförslaget för aktuell text. */
+  const [calDeclined, setCalDeclined] = useState(false);
   const { prioritizeTitles } = useQuickflowPrioritization();
   const navigate = useNavigate();
   const voice = useVoiceInput((t) => setText((prev) => (prev ? `${prev} ${t}` : t)));
