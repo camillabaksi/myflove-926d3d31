@@ -1,4 +1,5 @@
 ## 2026-10-01
+- Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
 - Landningssidans gamla augustifilm har bytts mot en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval, FlowPlan och dagens lista.
 - Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – besökare kan testa att fånga en tanke, välja energinivå och bocka av steg. Allt är lokalt i webbläsaren; inget sparas och inget konto behövs.
 - Landningssidans exempelvy är större och luftigare på mobilen, med tydligare hälsning, energikort, måendekort, uppgifter och lugnt inspirationskort enligt referensbilden. Exemplen är fortfarande fristående från användardata.
