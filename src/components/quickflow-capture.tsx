@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import QuickflowImageImport from "@/components/quickflow-image-import";
 import {
   Brain,
+  Calendar,
   Check,
   Loader2,
   Mic,
