@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Landningssidan: ny knapp \"Se allt som finns i appen\" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)",
     "Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – helt lokalt, inget sparas och inget konto behövs (2026-10-01)",
     "Landningssidans exempelvy är större och luftigare på mobil med tydligare hälsning, energi, mående, uppgifter och inspiration; exemplen är fortsatt fristående från kontodata (2026-10-01)",
     "QuickFlow: text med datum eller tid (\"tvätta fredag 10-14\", \"12 oktober kl 14\") ger ett direkt förslag att lägga det i kalendern på rätt dag och tid (2026-10-01)",

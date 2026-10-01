@@ -3220,3 +3220,4 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - Fix: vit skärm ersätts av lugn felsida med "Ladda om" (rensar gammal cache).
 
 - 2026-09-25: Språkval (svenska/engelska) finns nu även under Anpassa MyFlove, inte bara Inställningar.
+- 2026-10-01: Landningssidan fick en menyförhandsvisning – "Se allt som finns i appen" visar hela sidomenyn grupperad per område, utan konto.
