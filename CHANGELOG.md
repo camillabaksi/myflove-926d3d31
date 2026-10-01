@@ -1,4 +1,5 @@
 ## 2026-10-01
+- Landningssidan följer nu den nya skissen: varm krämvit ton, liggande interaktiv exempelvy, tydligare rubrik och tre ljusa funktionskort; se-hur-det-fungerar-knappen spelar befintlig introduktionsfilm.
 - Startsidan har fått en lugnare landningssida med riktig förhandsvisning av dagsvyn, tre kärnfördelar och tydliga vägar till inloggning och registrering.
 - Ta bort: när samma aktivitet finns två gånger (t.ex. en oavslutad kopia från en tidigare dag) tas båda bort samtidigt, så raden inte ser ut att stanna kvar.
 - Ta bort/ändra: aktiviteter som tas bort sparas direkt och kan inte längre läggas tillbaka av en äldre molnkopia.

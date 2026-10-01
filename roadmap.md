@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Landningssida enligt skiss 2 (2026-10-01)
-- [ ] Varm krämvit/sandfärgad startsida, liggande dagsvy och efterfrågad text/navigering.
+- [x] Varm krämvit/sandfärgad startsida, liggande dagsvy och efterfrågad text/navigering.
 - [ ] Kontrollera mobil, dator, länkar och videoknapp.
 
 ## Startsida (2026-10-01)
