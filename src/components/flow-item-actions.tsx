@@ -289,7 +289,29 @@ function FlowItemEditDialog({
   };
 
   const remove = () => {
-    const ids = Array.from(new Set([itemId, ...(duplicateIds ?? [])]));
+    /**
+     * Öppna uppgifter med samma namn och tid som redan rullat in i idag
+     * (t.ex. en oavslutad kopia från en tidigare dag) visas som EN rad.
+     * Tas raden bort ska kopiorna följa med, oavsett vilken vy man står i –
+     * annars dyker kopian upp direkt och borttagningen ser misslyckad ut.
+     */
+    const sameTaskIds: string[] = [];
+    if (kind === "uppgift" && source) {
+      const t = source as (typeof tasks)[number];
+      const today = new Date();
+      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      const norm = (s: string) => s.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim();
+      const shownToday = (d?: string) => !d || d <= todayStr;
+      if (shownToday(t.dueDate)) {
+        for (const other of tasks) {
+          if (other.id === t.id || other.completed) continue;
+          if (!shownToday(other.dueDate)) continue;
+          if (norm(other.title) !== norm(t.title) || (other.time ?? "") !== (t.time ?? "")) continue;
+          sameTaskIds.push(`task-${other.id}`);
+        }
+      }
+    }
+    const ids = Array.from(new Set([itemId, ...(duplicateIds ?? []), ...sameTaskIds]));
     for (const id of ids) {
       const target = kindFromId(id);
       if (target.kind === "uppgift") deleteTask(target.realId);
