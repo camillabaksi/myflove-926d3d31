@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Ta bort: dolda kopior med samma namn och tid (t.ex. en oavslutad från en tidigare dag) tas bort tillsammans med raden (2026-10-01)",
     "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",
     "Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla kopia, så gamla påminnelser slutar dyka upp (2026-09-30)",
     "Android: App Bundle 5.6 (versionCode 15) med uppdaterat versionsnummer; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-09-30)",
