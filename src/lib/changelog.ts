@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Startsidan visar nu MyFloves dagsvy, tre tydliga kärnfördelar och enkla vägar till inloggning och registrering (2026-10-01)",
     "Ta bort: dolda kopior med samma namn och tid (t.ex. en oavslutad från en tidigare dag) tas bort tillsammans med raden (2026-10-01)",
     "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",
     "Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla kopia, så gamla påminnelser slutar dyka upp (2026-09-30)",

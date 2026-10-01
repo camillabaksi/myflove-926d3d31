@@ -1,5 +1,9 @@
 # Roadmap
 
+## Startsida (2026-10-01)
+- [x] Bygg skissinspirerad landningssida med verklig dagsvy, tre kärnfördelar och fungerande inloggning/registrering.
+- [ ] Kontrollera utseende och länkar i mobil- och datorbredd.
+
 ## Android App Bundle 5.6 (2026-09-30)
 - [x] Höj versionCode till 15 och versionName till 5.6, bygg och kontrollera AAB.
 - [ ] Signering för Google Play väntar på den befintliga uppladdningsnyckeln; ingen ny nyckel får ersätta den.
