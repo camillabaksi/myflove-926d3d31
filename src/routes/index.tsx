@@ -160,6 +160,21 @@ function LandingPage() {
               </article>
             ))}
           </div>
+
+          <div className="mt-5 flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                track("landing_demo_opened", { source: "meny" });
+                setMenuOpen(true);
+              }}
+              className="inline-flex min-h-12 items-center gap-3 rounded-full border border-border/60 bg-landing-surface px-6 text-sm font-semibold shadow-soft transition-colors hover:text-primary"
+            >
+              <ListChecks aria-hidden="true" className="h-5 w-5 text-primary" strokeWidth={1.8} />
+              Se allt som finns i appen
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </section>
 
@@ -173,6 +188,7 @@ function LandingPage() {
         <p className="mt-5">© {new Date().getFullYear()} MyFlove</p>
       </footer>
       <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
+      <MenuPreviewDialog open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
           <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
