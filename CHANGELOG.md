@@ -1,5 +1,5 @@
 ## 2026-10-01
-- Ta bort/ändra: aktiviteter som tas bort i dialogen sparas nu direkt, så de inte kommer tillbaka.
+- Ta bort/ändra: aktiviteter som tas bort sparas direkt och kan inte längre läggas tillbaka av en äldre molnkopia.
 
 ## 2026-09-30
 - Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla lokala kopia, så gamla medicinpåminnelser slutar dyka upp.
