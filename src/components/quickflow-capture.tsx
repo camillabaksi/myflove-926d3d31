@@ -104,6 +104,14 @@ export function QuickflowCapture({
   /** En enda sak med tydlig avsikt kan Flow anpassa efter dagens kapacitet. */
   const adaptable = items.length === 1 && detectIntent(items[0]) !== "generisk" ? items[0] : null;
   const [adaptOpen, setAdaptOpen] = useState(false);
+  /** "tvätta fredag 10-14" → förslag att lägga det direkt i kalendern. */
+  const dateSuggestion = useMemo(
+    () =>
+      items.length === 1 && !calDeclined && edited === null
+        ? parseQuickflowDateTime(items[0])
+        : null,
+    [items, calDeclined, edited],
+  );
 
   // Ny text = nytt förslag från Flow.
   useEffect(() => {
@@ -111,6 +119,7 @@ export function QuickflowCapture({
     setEditingIndex(null);
     setLongChoice(null);
     setFolderOpen(false);
+    setCalDeclined(false);
   }, [text]);
 
   // Bottennavigeringens +, hemskärmens + och desktop-FAB öppnar samma flöde.
