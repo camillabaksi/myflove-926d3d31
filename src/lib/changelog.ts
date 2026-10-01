@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-09-30";
+export const CHANGELOG_UPDATED = "2026-10-01";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",
     "Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla kopia, så gamla påminnelser slutar dyka upp (2026-09-30)",
     "Android: App Bundle 5.6 (versionCode 15) med uppdaterat versionsnummer; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-09-30)",
     "Barn/Familje Flow: kompakta barnkort med Schema och Hjälp, ⋯-meny för profiländringar och barnspecifik profil med stödchips och sparade övningar. Båda ingångarna öppnar samma visuella schema; gamla detaljer finns kvar bakom profilen (2026-09-30)",

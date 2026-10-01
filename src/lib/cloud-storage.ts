@@ -337,6 +337,13 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
     flushers.add(flush);
     return () => {
       flushers.delete(flush);
+      // En kortlivad instans (t.ex. ändra/ta bort-dialogen) stängs ofta inom
+      // debounce-fönstret. Skriv upp ändringen direkt i stället för att tappa
+      // den – annars kommer borttagna poster tillbaka från molnet.
+      if (dirtyRef.current) {
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        void pushNow();
+      }
     };
   }, [key, pushNow]);
 

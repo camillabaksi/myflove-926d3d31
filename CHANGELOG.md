@@ -1,3 +1,6 @@
+## 2026-10-01
+- Ta bort/ändra: aktiviteter som tas bort i dialogen sparas nu direkt, så de inte kommer tillbaka.
+
 ## 2026-09-30
 - Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla lokala kopia, så gamla medicinpåminnelser slutar dyka upp.
 - Android: ny App Bundle för MyFlove 5.6 (versionCode 15); utan signeringsnyckel behöver den signeras före uppladdning till Google Play.
