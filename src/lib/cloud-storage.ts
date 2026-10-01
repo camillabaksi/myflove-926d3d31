@@ -17,6 +17,54 @@ let inflightUser: Promise<User | null> | null = null;
 // aldrig räknas från varsin gammal React-snapshot och skriver över varandra.
 const sharedValues = new Map<string, unknown>();
 
+// Poster som tagits bort på den här enheten. En molnkopia som ännu inte
+// hunnit få borttagningen får aldrig lägga tillbaka dem.
+const REMOVED_SUFFIX = "__removed";
+const MAX_REMOVED = 300;
+const idOf = (v: unknown): string | null =>
+  !!v && typeof v === "object" && typeof (v as { id?: unknown }).id === "string"
+    ? (v as { id: string }).id
+    : null;
+
+function readRemoved(key: string): string[] {
+  try {
+    const raw = window.localStorage.getItem(key + REMOVED_SUFFIX);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberRemoved(key: string, prev: unknown, next: unknown): void {
+  if (typeof window === "undefined" || !Array.isArray(prev) || !Array.isArray(next)) return;
+  const nextIds = new Set(next.map(idOf).filter((x): x is string => !!x));
+  const removed = prev.map(idOf).filter((x): x is string => !!x && !nextIds.has(x));
+  // Läggs något tillbaka (t.ex. ångra) ska det inte längre räknas som borttaget.
+  const kept = readRemoved(key).filter((id) => !nextIds.has(id));
+  if (removed.length === 0 && kept.length === readRemoved(key).length) return;
+  try {
+    window.localStorage.setItem(
+      key + REMOVED_SUFFIX,
+      JSON.stringify([...kept, ...removed].slice(-MAX_REMOVED)),
+    );
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Tar bort poster som användaren raderat här från ett inkommande molnvärde. */
+export function withoutRemoved<T>(key: string, value: T): T {
+  if (typeof window === "undefined" || !Array.isArray(value)) return value;
+  const removed = new Set(readRemoved(key));
+  if (removed.size === 0) return value;
+  const filtered = value.filter((v) => {
+    const id = idOf(v);
+    return !id || !removed.has(id);
+  });
+  return (filtered.length === value.length ? value : filtered) as T;
+}
+
 export function applyCloudStorageUpdate<T>(current: T, update: T | ((previous: T) => T)): T {
   return update instanceof Function ? update(current) : update;
 }
@@ -371,8 +419,9 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       if (data) {
         const cloudTs = new Date(data.updated_at as string).getTime();
         if (!dirtyRef.current && (cloudTs >= localTs || isLocalEmpty())) {
-          sharedValues.set(key, data.value as T);
-          setValue(data.value as T);
+          const cloudValue = withoutRemoved(key, data.value as T);
+          sharedValues.set(key, cloudValue);
+          setValue(cloudValue);
           setLocalUpdatedAt(cloudTs);
           setLocalSyncedAt(cloudTs);
           hydratedRef.current = true;
@@ -380,7 +429,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
         }
         // Den lokala kopian vinner, men molnet kan innehålla saker som den
         // här enheten aldrig sett. Slå ihop dem i stället för att skriva bort.
-        const merged = mergeMissingCloudEntries(valueRef.current, data.value);
+        const merged = mergeMissingCloudEntries(valueRef.current, withoutRemoved(key, data.value));
         if (merged !== valueRef.current) {
           sharedValues.set(key, merged);
           valueRef.current = merged;
@@ -433,8 +482,9 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
           return;
         }
         if (payload.new.value === undefined) return;
-        sharedValues.set(key, payload.new.value as T);
-        setValue(payload.new.value as T);
+        const incoming = withoutRemoved(key, payload.new.value as T);
+        sharedValues.set(key, incoming);
+        setValue(incoming);
         if (cloudTs > 0) {
           setLocalUpdatedAt(cloudTs);
           setLocalSyncedAt(cloudTs);
@@ -471,8 +521,9 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       if (error || !data || dirtyRef.current) return;
       const cloudTs = new Date(data.updated_at as string).getTime();
       if (cloudTs <= getLocalUpdatedAt()) return;
-      sharedValues.set(key, data.value as T);
-      setValue(data.value as T);
+      const fresh = withoutRemoved(key, data.value as T);
+      sharedValues.set(key, fresh);
+      setValue(fresh);
       setLocalUpdatedAt(cloudTs);
       setLocalSyncedAt(cloudTs);
     };
@@ -504,6 +555,7 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       setLocalUpdatedAt(Date.now());
       const current = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
       const next = applyCloudStorageUpdate(current, v);
+      rememberRemoved(key, current, next);
       sharedValues.set(key, next);
       valueRef.current = next;
       setValue(next);
