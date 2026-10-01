@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, ChevronDown, Circle, Link2 } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, ChevronDown, Circle, Link2, Video } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
@@ -228,6 +228,17 @@ export function DailyFlowList({
                           </span>
                         )}
                       </div>
+                      {item.meetingUrl && (
+                        <a
+                          href={item.meetingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn("mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary", item.completable && "sm:ml-7")}
+                        >
+                          <Video size={13} aria-hidden />
+                          {/zoom\.us/i.test(item.meetingUrl) ? "Anslut till Zoom" : /meet\.google/i.test(item.meetingUrl) ? "Anslut till Meet" : "Anslut till Teams"}
+                        </a>
+                      )}
                     </div>
                     <FlowItemActions
                       itemId={item.id}
