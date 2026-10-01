@@ -1,3 +1,4 @@
+import { LinkifiedText } from "@/components/linkified-text";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
@@ -272,7 +273,9 @@ export default function Tasks() {
             </div>
 
             {task.note && !isOpen && (
-              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{task.note}</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                <LinkifiedText text={task.note} />
+              </p>
             )}
 
             {status === "vantar" && task.waitingOn && (

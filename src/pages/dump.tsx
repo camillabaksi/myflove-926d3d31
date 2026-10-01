@@ -5,6 +5,7 @@ import { track } from "@/lib/analytics";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickflowCapture from "@/components/quickflow-capture";
+import QuickflowImageImport from "@/components/quickflow-image-import";
 import QuickflowPriority from "@/components/quickflow-priority";
 import QuickflowList from "@/components/quickflow-list";
 import InsightQuickflowHint from "@/components/insight-quickflow-hint";
@@ -40,6 +41,7 @@ export default function Dump() {
             >
               <div className="space-y-4">
                 <QuickflowCapture />
+                <QuickflowImageImport />
                 <WhyHint label="quickflow">
                   {t(
                     "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.",
