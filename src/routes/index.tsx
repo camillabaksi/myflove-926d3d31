@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Heart, Leaf, Play, Sparkles, Zap, BatteryMedium } from "lucide-react";
+import { ArrowRight, Heart, Leaf, ListChecks, Play, Sparkles, Zap, BatteryMedium } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { DayWindow } from "@/components/landing/day-window";
 import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
+import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import previewVideo from "@/assets/landing-preview.mp4.asset.json";
 
@@ -58,6 +59,7 @@ function LandingPage() {
   const navigate = useNavigate();
   const [videoOpen, setVideoOpen] = useState(false);
   const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -158,6 +160,21 @@ function LandingPage() {
               </article>
             ))}
           </div>
+
+          <div className="mt-5 flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                track("landing_demo_opened", { source: "meny" });
+                setMenuOpen(true);
+              }}
+              className="inline-flex min-h-12 items-center gap-3 rounded-full border border-border/60 bg-landing-surface px-6 text-sm font-semibold shadow-soft transition-colors hover:text-primary"
+            >
+              <ListChecks aria-hidden="true" className="h-5 w-5 text-primary" strokeWidth={1.8} />
+              Se allt som finns i appen
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </section>
 
@@ -171,6 +188,7 @@ function LandingPage() {
         <p className="mt-5">© {new Date().getFullYear()} MyFlove</p>
       </footer>
       <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
+      <MenuPreviewDialog open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
           <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
