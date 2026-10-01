@@ -90,7 +90,7 @@ function LandingPage() {
       </header>
 
       <section className="relative overflow-hidden bg-landing-background">
-        <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 pt-12 pb-10 sm:px-8 lg:min-h-[525px] lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-7 lg:px-12 lg:pt-8 lg:pb-5">
+        <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 pt-10 pb-10 sm:px-8 lg:min-h-[525px] lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-7 lg:px-12 lg:pt-8 lg:pb-5">
           <div className="relative z-10 max-w-2xl">
             <p className="mb-7 text-[11px] font-bold uppercase tracking-[0.19em] text-primary">En lugnare vardag är möjlig</p>
             <h1 className="font-display text-[2.4rem] leading-[1.15] font-extrabold sm:text-5xl lg:text-[3.2rem] xl:text-[3.65rem]">
@@ -108,7 +108,7 @@ function LandingPage() {
                 <span className="text-left leading-tight">Se hur det fungerar <span className="block text-xs font-normal text-muted-foreground">ca 2 min</span></span>
               </Button>
             </div>
-            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-xs text-muted-foreground sm:text-sm">
+            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2"><Leaf aria-hidden="true" className="h-4 w-4 text-primary" /> Mindre stress</span>
               <span className="inline-flex items-center gap-2"><Heart aria-hidden="true" className="h-4 w-4 text-primary" /> Mer balans</span>
               <span className="inline-flex items-center gap-2"><Sparkles aria-hidden="true" className="h-4 w-4 text-primary" /> En snällare vardag</span>
