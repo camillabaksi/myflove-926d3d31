@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, Heart, Leaf, Play, Sparkles, Zap, BatteryMedium } from "lucide-react";
+import { ArrowRight, Heart, Leaf, ListChecks, Play, Sparkles, Zap, BatteryMedium } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { DayWindow } from "@/components/landing/day-window";
 import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
+import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import previewVideo from "@/assets/landing-preview.mp4.asset.json";
 
@@ -58,6 +59,7 @@ function LandingPage() {
   const navigate = useNavigate();
   const [videoOpen, setVideoOpen] = useState(false);
   const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
