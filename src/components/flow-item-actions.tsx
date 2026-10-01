@@ -66,9 +66,12 @@ export function FlowItemActions({
   size = 16,
   only,
   compact = false,
+  duplicateIds,
   children,
 }: {
   itemId: string;
+  /** Dolda kopior med samma titel och tid som tas bort tillsammans med raden. */
+  duplicateIds?: string[];
   className?: string;
   size?: number;
   /** "edit" när vyn redan har en egen ta bort-knapp. */
@@ -111,7 +114,13 @@ export function FlowItemActions({
             )}
           </DropdownMenuContent>
         </DropdownMenu>
-        {open && <FlowItemEditDialog itemId={itemId} onClose={() => setOpen(false)} />}
+        {open && (
+          <FlowItemEditDialog
+            itemId={itemId}
+            duplicateIds={duplicateIds}
+            onClose={() => setOpen(false)}
+          />
+        )}
       </>
     );
   }
@@ -140,12 +149,26 @@ export function FlowItemActions({
           </button>
         )}
       </div>
-      {open && <FlowItemEditDialog itemId={itemId} onClose={() => setOpen(false)} />}
+      {open && (
+          <FlowItemEditDialog
+            itemId={itemId}
+            duplicateIds={duplicateIds}
+            onClose={() => setOpen(false)}
+          />
+        )}
     </>
   );
 }
 
-function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () => void }) {
+function FlowItemEditDialog({
+  itemId,
+  duplicateIds,
+  onClose,
+}: {
+  itemId: string;
+  duplicateIds?: string[];
+  onClose: () => void;
+}) {
   const { kind, realId } = kindFromId(itemId);
   const { tasks, updateTask, deleteTask } = useTasks();
   const { reminders, updateReminder, deleteReminder } = useReminders();
@@ -266,11 +289,16 @@ function FlowItemEditDialog({ itemId, onClose }: { itemId: string; onClose: () =
   };
 
   const remove = () => {
-    if (kind === "uppgift") deleteTask(realId);
-    else if (kind === "kalender") deleteReminder(realId);
-    else if (kind === "quickflow") removePriority(realId);
-    else if (kind === "tanke") removeThought(realId);
-    else if (kind === "rutin") setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
+    const ids = Array.from(new Set([itemId, ...(duplicateIds ?? [])]));
+    for (const id of ids) {
+      const target = kindFromId(id);
+      if (target.kind === "uppgift") deleteTask(target.realId);
+      else if (target.kind === "kalender") deleteReminder(target.realId);
+      else if (target.kind === "quickflow") removePriority(target.realId);
+      else if (target.kind === "tanke") removeThought(target.realId);
+      else if (target.kind === "rutin")
+        setRoutines((prev) => (prev ?? []).filter((r) => r.id !== target.realId));
+    }
     toast.success("Borttagen");
     onClose();
   };
