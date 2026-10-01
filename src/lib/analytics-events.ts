@@ -30,6 +30,8 @@ export const ANALYTICS_EVENTS = [
   "signup_completed",
   "login",
   "onboarding_started",
+  /** Ett prova-på-demo öppnades på landningssidan. */
+  "landing_demo_opened",
 
   "onboarding_completed",
   "onboarding_skipped",
@@ -177,6 +179,7 @@ const EVENT_SECTION: Record<AnalyticsEventName, string> = {
   signup_completed: "konto",
   login: "konto",
   onboarding_started: "onboarding",
+  landing_demo_opened: "onboarding",
 
   onboarding_completed: "onboarding",
   onboarding_skipped: "onboarding",

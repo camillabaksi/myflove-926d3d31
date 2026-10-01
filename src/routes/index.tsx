@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { DayWindow } from "@/components/landing/day-window";
+import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import previewVideo from "@/assets/landing-preview.mp4.asset.json";
 
@@ -31,18 +32,21 @@ export const Route = createFileRoute("/")({
 
 const FEATURES = [
   {
+    id: "quickflow",
     icon: Zap,
     title: "QuickFlow",
     text: "Få ner tankar, uppgifter och idéer innan de försvinner. Flow hjälper dig att sortera resten.",
     accent: "bg-lavender text-primary",
   },
   {
+    id: "energi",
     icon: BatteryMedium,
     title: "Planering utifrån energi",
     text: "Planera smartare, inte hårdare. Anpassa dagen efter din energi och ditt mående.",
     accent: "bg-lavender text-primary",
   },
   {
+    id: "steg",
     icon: Heart,
     title: "Ett steg i taget",
     text: "Stora mål blir enklare med små steg. MyFlove hjälper dig att fira framsteg – varje dag.",
@@ -53,6 +57,7 @@ const FEATURES = [
 function LandingPage() {
   const navigate = useNavigate();
   const [videoOpen, setVideoOpen] = useState(false);
+  const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -137,8 +142,18 @@ function LandingPage() {
                   <h3 className="font-display text-base font-bold sm:text-lg">{feature.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.text}</p>
                 </div>
-                <Button asChild variant="ghost" size="icon" title={`Prova ${feature.title}`} className="self-end rounded-full bg-landing-sand text-primary">
-                  <Link to="/sign-up" aria-label={`Prova ${feature.title}`}><ArrowRight aria-hidden="true" /></Link>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  title={`Prova ${feature.title}`}
+                  aria-label={`Prova ${feature.title} direkt på sidan`}
+                  onClick={() => {
+                    track("landing_demo_opened", { source: feature.id });
+                    setOpenDemo(feature.id);
+                  }}
+                  className="self-end rounded-full bg-landing-sand text-primary"
+                >
+                  <ArrowRight aria-hidden="true" />
                 </Button>
               </article>
             ))}
@@ -155,6 +170,7 @@ function LandingPage() {
         </nav>
         <p className="mt-5">© {new Date().getFullYear()} MyFlove</p>
       </footer>
+      <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
           <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
