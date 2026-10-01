@@ -272,7 +272,9 @@ export default function Tasks() {
             </div>
 
             {task.note && !isOpen && (
-              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">{task.note}</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                <LinkifiedText text={task.note} />
+              </p>
             )}
 
             {status === "vantar" && task.waitingOn && (

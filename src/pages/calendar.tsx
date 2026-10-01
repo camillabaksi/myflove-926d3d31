@@ -1,4 +1,5 @@
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
+import { LinkifiedText } from "@/components/linkified-text";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isoWeekNumber, isoWeekNumberFromString } from "@/lib/iso-week";
@@ -1044,7 +1045,7 @@ export function CalendarContent() {
                              <div className="font-handwritten truncate text-2xl font-semibold leading-tight">{r.title}</div>
                             {r.note && (
                               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                                {r.note}
+                                <LinkifiedText text={r.note} />
                               </p>
                             )}
                           </div>
@@ -1113,7 +1114,7 @@ export function CalendarContent() {
                             </div>
                             {task.note && (
                               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
-                                {task.note}
+                                <LinkifiedText text={task.note} />
                               </p>
                             )}
                           </div>
