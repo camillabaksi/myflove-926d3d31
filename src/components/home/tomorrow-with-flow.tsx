@@ -79,7 +79,10 @@ export default function TomorrowWithFlow() {
   }, [events, openItems]);
   const travel = useMemo(() => events.map(travelHint).filter((x) => x !== null), [events]);
 
-  if (!isTomorrowPrepHour(new Date().getHours()) || dismissedOn === today) return null;
+  // Testläge: ?kvall=1 i adressen visar kortet oavsett klockslag.
+  const forceEvening =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).has("kvall");
+  if ((!forceEvening && !isTomorrowPrepHour(new Date().getHours())) || dismissedOn === today) return null;
 
   const addPrep = (text: string) => {
     const title = text.trim();
