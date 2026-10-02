@@ -27,6 +27,7 @@ import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { flowPlanContext } from "@/lib/flow-plan";
 import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
+import { useMyFlowMemories } from "@/hooks/use-my-flow";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
 import {
   AREA_META,
@@ -151,6 +152,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
   const personalContext = useFlowPersonalContext();
+  const [chosenMemories, setChosenMemories] = useMyFlowMemories();
+  const [memoryCandidate, setMemoryCandidate] = useState<string | null>(null);
   // Flow kommunicerar FlowPlans nästa steg – aldrig en egen rekommendation.
   const flowPlan = useFlowPlan();
   const { exercises: savedExercises } = useSavedExercises();
@@ -318,6 +321,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     } finally {
       setIsSending(false);
     }
+  };
+
+  const saveChosenMemory = () => {
+    const text = memoryCandidate?.trim().slice(0, 300);
+    if (!text) return;
+    setChosenMemories(prev => prev.some(m => m.text === text) ? prev : [...prev, { id: crypto.randomUUID(), text }]);
+    setMemoryCandidate(null);
   };
 
   const openConversation = (id: string) => {
@@ -679,6 +689,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                             )}
                           </div>
                         </div>
+                        {m.role === "user" && !chosenMemories.some(memory => memory.text === m.content.slice(0, 300)) && (
+                          <div className="flex justify-end"><Button variant="ghost" size="sm" className="h-auto rounded-xl text-xs text-muted-foreground" onClick={() => setMemoryCandidate(m.content.slice(0, 300))}>Vill du att jag kommer ihåg det?</Button></div>
+                        )}
 
                         {ex?.exercises.map((d, i) => (
                           <FlowExerciseDraftCard key={`${m.id}:ex${i}`} draft={d} />
@@ -829,6 +842,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </div>
         </div>
       )}
+      <Dialog open={memoryCandidate !== null} onOpenChange={open => { if (!open) setMemoryCandidate(null); }}>
+        <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Flow?</DialogTitle><DialogDescription>Flow använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
+      </Dialog>
     </>
   );
 }
