@@ -19,6 +19,7 @@ import {
   MoreHorizontal,
   Pencil,
   MessageCircle,
+  Heart,
 } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { FlowMicButton } from "@/components/flow/flow-mic-button";
@@ -650,7 +651,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     <div className="flex justify-start items-end gap-2">
                       <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
                       <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
-                        {GREETING}
+                        {GREETING} <Heart aria-label="hjärta" className="inline size-4 fill-primary text-primary" />
                       </div>
                     </div>
                   )}
