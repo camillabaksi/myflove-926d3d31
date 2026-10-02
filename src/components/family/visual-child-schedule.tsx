@@ -417,7 +417,6 @@ export default function VisualChildSchedule({
     setCopyExtraDates([]);
     setIncludePrivateNote(false);
     setCopying({ scope, item, sourceDate });
-    window.setTimeout(() => document.getElementById("child-copy-panel")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
   };
 
   const saveDayTemplate = (sourceDate: string) => {
