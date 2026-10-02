@@ -57,7 +57,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
         <img src={image} alt={description} width={192} height={218} className={`flow-room-figure absolute z-10 object-contain ${moment === "promenera" ? still ? "flow-room-on-rug" : "flow-room-walking" : "flow-room-seated"}`} />
       </div>
       {!compact && <div className="grid grid-cols-4 gap-1.5" role="group" aria-label="Flow i rummet">
-        {moments.map(({ id, label, icon: Icon }) => <Button key={id} type="button" variant={moment === id ? "secondary" : "ghost"} aria-pressed={moment === id} aria-label={label} title={label} onClick={() => setMoment(id)} className="h-12 min-w-0 rounded-2xl px-1 text-foreground focus-visible:ring-2 focus-visible:ring-ring"><Icon className="size-5 shrink-0" aria-hidden="true" /><span className="sr-only">{label}</span></Button>)}
+        {moments.map(({ id, label, icon: Icon }) => <Button key={id} type="button" variant={moment === id ? "secondary" : "ghost"} aria-pressed={moment === id} aria-label={label} title={label} onClick={() => setMoment(id)} className="h-14 min-w-0 flex-col gap-0.5 rounded-2xl px-1 text-foreground focus-visible:ring-2 focus-visible:ring-ring"><Icon className="size-5 shrink-0" aria-hidden="true" /><span className="text-[10px] leading-none">{id === "promenera" ? "Gå" : id === "te" ? "Te" : id === "filt" ? "Filt" : "Sitta"}</span></Button>)}
       </div>}
     </div>
   );
