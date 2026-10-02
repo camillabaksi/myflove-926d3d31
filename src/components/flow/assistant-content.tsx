@@ -524,7 +524,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
         </aside>
 
-        <div className="space-y-6 min-w-0">
+        <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
+          <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
             <Button asChild variant="outline" className="rounded-2xl"><Link to="/flow">
               <ArrowLeft size={16} />
@@ -629,6 +630,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           >
             <p className="text-sm leading-snug">{coachMessage.text}</p>
           </MyFloveBlock>
+
+          </div>
 
           <MyFloveBlock
             title="Samtal"
