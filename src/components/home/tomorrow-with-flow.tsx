@@ -64,7 +64,7 @@ export default function TomorrowWithFlow() {
         list.push({ id: `t-${task.id}`, title: task.title, time: task.time, endTime: task.endTime, note: task.note });
       }
     }
-    for (const e of external.data ?? []) {
+    for (const e of external.data?.events ?? []) {
       if (e.date === tomorrow) list.push({ id: `e-${e.id}`, title: e.title, time: e.time, endTime: e.endTime, allDay: e.allDay });
     }
     return sortEvents(list);
