@@ -292,7 +292,7 @@ export function activityPresetForTitle(title: string): ActivityBankItem | undefi
   if (exact) return exact;
   return ALL_PICTOGRAMS
     .flatMap((item) => [item.title, ...(item.keywords ?? [])].map((text) => ({ item, text: text.toLocaleLowerCase("sv") })))
-    .filter(({ text }) => new RegExp(`(^|[^a-zåäöéü0-9])${text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}($|[^a-zåäöéü0-9])`, "i").test(normalized))
+    .filter(({ text }) => new RegExp(`(^|[^a-zåäöéü0-9])${text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}`, "i").test(normalized))
     .sort((a, b) => b.text.length - a.text.length)[0]?.item;
 }
 
