@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 import { clearLocalUserData } from "@/lib/local-data";
 import { setDemoSession } from "@/lib/demo-account";
+import { bindAccount, parkActiveData } from "@/lib/account-scope";
+import { ACCOUNT_BOUND_EVENT } from "@/lib/cloud-storage";
 
 type AuthState = {
   user: User | null;
@@ -18,12 +20,37 @@ function notify() {
   listeners.forEach((l) => l());
 }
 
+/**
+ * Knyter enhetens lokala data till den inloggade användaren innan något
+ * visas eller synkas. Byttes kontot laddas sidan om så att inga minnescacher
+ * eller prenumerationer från förra kontot lever kvar. Returnerar false då.
+ */
+function bindSession(session: Session | null, initial: boolean): boolean {
+  const uid = session?.user?.id;
+  if (!uid) return true;
+  const result = bindAccount(uid, { adoptUnowned: initial });
+  if (result === "switched") {
+    window.location.reload();
+    return false;
+  }
+  window.dispatchEvent(new CustomEvent(ACCOUNT_BOUND_EVENT));
+  return true;
+}
+
 if (typeof window !== "undefined") {
   supabase.auth.getSession().then(({ data }) => {
+    if (!bindSession(data.session, true)) return;
     state = { session: data.session, user: data.session?.user ?? null, loading: false };
     notify();
   });
-  supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") {
+      // Sessionen tog slut utan vår egen utloggning (utgången token, annan
+      // flik): parkera kontots data så att nästa person inte ser den.
+      parkActiveData();
+    } else if (!bindSession(session, event === "INITIAL_SESSION")) {
+      return;
+    }
     state = { session, user: session?.user ?? null, loading: false };
     notify();
   });
