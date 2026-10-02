@@ -146,7 +146,10 @@ export function bindAccount(
   if (owner === userId) return "same";
   const active = activeUserDataKeys();
 
-  if (owner === null && options.adoptUnowned) {
+  // Ägarlös aktiv data adopteras bara om kontot inte har ett eget förråd –
+  // annars skulle osynkade ändringar från en offline-utloggning ligga kvar
+  // undanlagda när samma person loggar in igen.
+  if (owner === null && options.adoptUnowned && stashedKeys(userId).length === 0) {
     setDataOwner(userId);
     return "adopted";
   }
