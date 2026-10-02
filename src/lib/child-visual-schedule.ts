@@ -14,6 +14,8 @@ export interface VisualActivityMeta {
   tone: VisualActivityTone;
   /** Optional end time kept in the existing visual metadata envelope. */
   endTime?: string;
+  /** Sista dag en återkommande aktivitet gäller (YYYY-MM-DD). */
+  repeatUntil?: string;
   /** Optional label inside the existing Family area; never a top-level area. */
   familyLabel?: FamilyActivityLabel;
   /**
@@ -128,7 +130,7 @@ export const ACTIVITY_BANK: Record<VisualActivityCategory, ActivityBankItem[]> =
     { title: "Vårdcentral", pictogram: "clinic", category: "vård", tone: "sky", keywords: ["hälsocentral", "mottagning", "vårdbesök"] },
     { title: "Vaccination", pictogram: "vaccination", category: "vård", tone: "sun", keywords: ["vaccin", "spruta"] },
     { title: "Sjuksköterska", pictogram: "nurse", category: "vård", tone: "mint", keywords: ["sköterska", "sjuksköterskebesök"] },
-    { title: "Undersökning", pictogram: "examination", category: "vård", tone: "sun", keywords: ["provtagning", "prov", "blodprov", "test"] },
+    { title: "Undersökning", pictogram: "examination", category: "vård", tone: "sun", keywords: ["provtagning", "blodprov"] },
     { title: "Akut vård", pictogram: "emergency", category: "vård", tone: "blush", keywords: ["akuten", "ambulans", "akutmottagning"] },
     { title: "Samtal", pictogram: "conversation", category: "vård", tone: "lavender", keywords: ["psykolog", "BUP", "kurator", "samtalsbesök"] },
     { title: "Optiker", pictogram: "optician", category: "vård", tone: "sky", keywords: ["syn", "synundersökning", "glasögon"] },
@@ -169,6 +171,7 @@ export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
     category: meta.category,
     tone: meta.tone,
     ...(meta.endTime ? { endTime: meta.endTime } : {}),
+    ...(meta.repeatUntil && /^\d{4}-\d{2}-\d{2}$/.test(meta.repeatUntil) ? { repeatUntil: meta.repeatUntil } : {}),
     ...(meta.category === "familj" && meta.familyLabel ? { familyLabel: meta.familyLabel } : {}),
     ...(typeof meta.parentPresence === "boolean" ? { parentPresence: meta.parentPresence } : {}),
     ...(safeMinutes(meta.prepMinutes, PREP_MINUTE_CHOICES) ? { prepMinutes: meta.prepMinutes } : {}),
@@ -206,6 +209,7 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
         category,
         tone,
         ...(endTime ? { endTime } : {}),
+        ...(typeof candidate.repeatUntil === "string" && /^\d{4}-\d{2}-\d{2}$/.test(candidate.repeatUntil) ? { repeatUntil: candidate.repeatUntil } : {}),
         ...(familyLabel ? { familyLabel } : {}),
         ...(typeof candidate.parentPresence === "boolean" ? { parentPresence: candidate.parentPresence } : {}),
         ...(prepMinutes ? { prepMinutes } : {}),
@@ -222,9 +226,16 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
 
 export type ChildRepeatMode = "none" | "daily" | "weekdays" | "weekly";
 
-export function activityOccursOn(item: { date: string | null; repeat: ChildRepeatMode }, date: string): boolean {
+export function repeatUntilFromNotes(notes?: string | null): string | undefined {
+  if (!notes?.startsWith(META_PREFIX)) return undefined;
+  return decodeVisualNotes(notes).meta.repeatUntil;
+}
+
+export function activityOccursOn(item: { date: string | null; repeat: ChildRepeatMode; notes?: string | null }, date: string): boolean {
   if (!item.date || date < item.date) return false;
   if (item.repeat === "none") return item.date === date;
+  const until = repeatUntilFromNotes(item.notes);
+  if (until && date > until) return false;
   const target = parseISODate(date);
   if (item.repeat === "daily") return true;
   if (item.repeat === "weekdays") return target.getDay() >= 1 && target.getDay() <= 5;
@@ -281,7 +292,7 @@ export function activityPresetForTitle(title: string): ActivityBankItem | undefi
   if (exact) return exact;
   return ALL_PICTOGRAMS
     .flatMap((item) => [item.title, ...(item.keywords ?? [])].map((text) => ({ item, text: text.toLocaleLowerCase("sv") })))
-    .filter(({ text }) => normalized.includes(text))
+    .filter(({ text }) => new RegExp(`(^|[^a-zåäöéü0-9])${text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}($|[^a-zåäöéü0-9])`, "i").test(normalized))
     .sort((a, b) => b.text.length - a.text.length)[0]?.item;
 }
 

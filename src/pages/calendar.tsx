@@ -1,3 +1,4 @@
+import { repeatUntilFromNotes } from "@/lib/child-visual-schedule";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import { LinkifiedText } from "@/components/linkified-text";
 import type { ReactNode } from "react";
@@ -385,7 +386,7 @@ export function CalendarContent() {
     const familyEvents = shows("relationer") ? eventsForDate(dateStr) : [];
     const allChildEvents = shows("barn")
       ? childItems
-          .filter((i) => occursOn(i.date, (i.repeat ?? "none") as RepeatMode, dateStr))
+          .filter((i) => occursOn(i.date, (i.repeat ?? "none") as RepeatMode, dateStr) && !((i.repeat ?? "none") !== "none" && (repeatUntilFromNotes(i.notes) ?? "9999") < dateStr))
           .map((i) => ({ ...i, child: kids.find((c) => c.id === i.child_id) }))
       : [];
 
