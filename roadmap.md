@@ -141,3 +141,6 @@
 - [x] Relevanta riktiga MyFlove-vyer används genom hela Venture Cup-videon (2026-09-20)
 
 - [x] Android AAB 5.3 (versionCode 12) byggd (2026-09-21)
+
+- [ ] Serverstyrd versionshantering för synkkonflikter (ersätter enhetsklockor) – planerat, ej påbörjat
+- [ ] Test på två fysiska telefoner + byte till ett annat konto – kräver användaren

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Äldre data utan konto kan nu läggas till i ditt konto (eller tas bort) via en fråga överst, och osynkade ändringar från en offline-utloggning kommer alltid tillbaka vid ny inloggning (2026-10-02)",
     "Säkerhet och synk: lokal data hålls isär per konto, osynkade ändringar sparas för rätt konto vid utloggning, synken slår ihop ändringar från flera enheter utan att borttagna poster återkommer, känsliga uppgifter skrivs aldrig okrypterat, diskret synkstatus, och Återhämtning nås från Hem även i lågt läge (2026-10-02)",
     "Kalenderimport: PDF:er läses nu som text och Flows svar tolkas även som ren lista – importerade händelser hittas igen (2026-10-02)",
     "AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini (2026-10-02)",

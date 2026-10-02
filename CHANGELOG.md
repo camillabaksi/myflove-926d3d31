@@ -2865,6 +2865,11 @@ och detta projekt följer [Semantic Versioning](https://semver.org/lang/sv/).
 
 ## [Unreleased]
 
+### 2026-10-02 – Återställning av äldre data
+- Fråga överst låter inloggad användare lägga till ägarlös äldre data i sitt konto eller ta bort den.
+- Fix: osynkade ändringar från offline-utloggning lades inte tillbaka vid ny inloggning när enheten startade utan ägare.
+- Verifierat i webbläsare: lågt läge på Hem (390 px) med Återhämtning, två samtidiga enheter med offline/återanslutning/borttagning/samma post, offline-utloggning och återställning.
+
 ### Added
 
 - **Tydligare batteri och "Just nu" på Hem** (2026-09-30): Batterirutan "Hur är läget idag?" har nu stora, färgkodade val (Fullt/Mellan/Lågt) där den valda nivån lyser tydligt, och "Just nu"-kortet har en markant etikett och violett accentlinje så att dagens viktigaste uppgift syns direkt. Genvägen till Mitt batteri är centrerad och tydligare.

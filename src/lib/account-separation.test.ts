@@ -99,3 +99,15 @@ describe("kontoseparering", () => {
     expect(window.localStorage.getItem("myflove-stash:B:myflove-notes")).toBe("[2]");
   });
 });
+
+import { bindAccount as bindAgain, stashKeys as stashAgain, DATA_OWNER_KEY as OWNER_KEY } from "./account-scope";
+describe("återinloggning efter offline-utloggning", () => {
+  it("lägger tillbaka kontots förråd även vid start utan ägare", () => {
+    localStorage.clear();
+    localStorage.setItem("myflow-tasks", JSON.stringify([{ id: "off" }]));
+    stashAgain("user-a", ["myflow-tasks"]);
+    expect(localStorage.getItem(OWNER_KEY)).toBeNull();
+    expect(bindAgain("user-a", { adoptUnowned: true })).toBe("switched");
+    expect(localStorage.getItem("myflow-tasks")).toContain("off");
+  });
+});

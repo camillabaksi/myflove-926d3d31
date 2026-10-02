@@ -146,7 +146,10 @@ export function bindAccount(
   if (owner === userId) return "same";
   const active = activeUserDataKeys();
 
-  if (owner === null && options.adoptUnowned) {
+  // Ägarlös aktiv data adopteras bara om kontot inte har ett eget förråd –
+  // annars skulle osynkade ändringar från en offline-utloggning ligga kvar
+  // undanlagda när samma person loggar in igen.
+  if (owner === null && options.adoptUnowned && stashedKeys(userId).length === 0) {
     setDataOwner(userId);
     return "adopted";
   }
@@ -176,4 +179,76 @@ export function parkActiveData(): void {
 /** Används av utloggningen när synkat innehåll redan raderats lokalt. */
 export function releaseOwner(): void {
   setDataOwner(null);
+}
+
+const META_SUFFIXES = ["__updated_at", "__synced_at", "__base", "__removed"] as const;
+
+function baseKeyOf(key: string): string | null {
+  for (const s of META_SUFFIXES) if (key.endsWith(s)) return null;
+  return key;
+}
+
+/** Antal sparade uppgiftstyper i förrådet för äldre data utan känd ägare. */
+export function unownedStashCount(): number {
+  return stashedKeys(UNOWNED).filter((k) => baseKeyOf(k) !== null).length;
+}
+
+interface WithId {
+  id: string | number;
+}
+
+function isIdArray(v: unknown): v is WithId[] {
+  return (
+    Array.isArray(v) &&
+    v.every((x) => typeof x === "object" && x !== null && "id" in x)
+  );
+}
+
+/**
+ * Användaren har uttryckligen bekräftat att den äldre, ägarlösa datan är
+ * hennes: lägg den i det aktiva (inloggade) utrymmet utan att skriva över
+ * något. Listor med id slås ihop (befintliga poster vinner), saknade värden
+ * läggs till, krockande enskilda värden behåller kontots version. Allt som
+ * läggs till markeras som osynkat så att nästa synk slår ihop det med molnet.
+ */
+export function claimUnownedStash(): { restored: number } {
+  const s = ls();
+  const owner = getDataOwner();
+  if (!s || !owner || owner === UNOWNED) return { restored: 0 };
+  let restored = 0;
+  const now = String(Date.now());
+  for (const key of stashedKeys(UNOWNED)) {
+    const sk = stashKey(UNOWNED, key);
+    const raw = s.getItem(sk);
+    s.removeItem(sk);
+    if (raw === null || baseKeyOf(key) === null) continue;
+    const current = s.getItem(key);
+    let next: string | null = null;
+    if (current === null) {
+      next = raw;
+    } else {
+      try {
+        const a: unknown = JSON.parse(current);
+        const b: unknown = JSON.parse(raw);
+        if (isIdArray(a) && isIdArray(b)) {
+          const ids = new Set(a.map((x) => String(x.id)));
+          const extra = b.filter((x) => !ids.has(String(x.id)));
+          if (extra.length > 0) next = JSON.stringify([...a, ...extra]);
+        }
+      } catch {
+        // Krypterat eller ej JSON: behåll kontots version.
+      }
+    }
+    if (next === null) continue;
+    s.setItem(key, next);
+    s.removeItem(`${key}__synced_at`);
+    s.removeItem(`${key}__base`);
+    s.setItem(`${key}__updated_at`, now);
+    restored++;
+  }
+  return { restored };
+}
+
+export function discardUnownedStash(): void {
+  removeStash(UNOWNED);
 }
