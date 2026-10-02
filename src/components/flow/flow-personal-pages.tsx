@@ -41,7 +41,7 @@ export function FlowMemoriesPage() {
     setOpen(false);
   };
   return <PageFrame title="Det här vet Flow om mig">
-    <p className="text-sm leading-6 text-muted-foreground">Här finns sådant du har valt att låta Flow komma ihåg. Du kan alltid ändra eller ta bort något. 💜</p>
+    <p className="text-sm leading-6 text-muted-foreground">Här finns sådant du har valt att låta Flow komma ihåg. Du kan alltid ändra eller ta bort något. <Heart className="inline size-4 fill-primary text-primary" aria-label="hjärta" /></p>
     {memories.length === 0 ? <p className="rounded-3xl bg-card p-5 text-sm text-muted-foreground">Här finns ingenting än. Du bestämmer om Flow ska komma ihåg något.</p> : <ul className="space-y-2">{memories.map(m => <li key={m.id} className="flex min-w-0 items-center gap-2 rounded-3xl bg-card p-3 shadow-soft"><span className="min-w-0 flex-1 break-words pl-2 text-sm">{m.text}</span><Button size="icon" variant="ghost" aria-label={`Ändra ${m.text}`} title="Ändra" onClick={() => start(m.id, m.text)}><Pencil className="size-4" /></Button><Button size="icon" variant="ghost" aria-label={`Ta bort ${m.text}`} title="Ta bort" onClick={() => setMemories(prev => prev.filter(item => item.id !== m.id))}><Trash2 className="size-4" /></Button></li>)}</ul>}
     <Button onClick={() => start(null)} className="w-full rounded-2xl"><Plus className="size-4" /> Lägg till mer om mig</Button>
     <SaveState />

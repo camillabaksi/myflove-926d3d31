@@ -14,7 +14,7 @@ export function MinFlow() {
   return (
     <main className="mx-auto w-full max-w-3xl space-y-5 px-1 pb-8 sm:px-4" aria-label="Min Flow">
       <header className="space-y-1">
-        <h1 className="font-display text-3xl font-bold text-foreground">Min Flow <span aria-hidden="true">💜</span></h1>
+        <h1 className="font-display text-3xl font-bold text-foreground">Min Flow <Heart className="inline size-6 fill-primary text-primary" aria-label="hjärta" /></h1>
         <p className="text-muted-foreground">En plats för dig, med dig.</p>
       </header>
       <FlowRoom />

@@ -77,7 +77,7 @@ const tomorrowISO = (): string => {
 const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
 const GREETING =
-  "Hej! 💜 Vad behöver du just nu?";
+  "Hej! Vad behöver du just nu?";
 
 const QUICK_PROMPTS = [
   { label: "Få hjälp att planera", prompt: "Hjälp mig planera med FlowPlan utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
@@ -637,8 +637,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             surface="plain"
             className="p-4"
             bodyClassName="space-y-4"
-            collapsible
-            collapseId="assistant::samtal"
+            collapsible={false}
           >
             <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
               {loadingMessages ? (
