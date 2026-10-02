@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup (2026-10-02)",
     "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",
     "Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet (2026-10-02)",
     "Popup-fönster överallt: alla \"Lägg till\"- och \"Ändra\"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Energi, Profil med flera (2026-10-02)",

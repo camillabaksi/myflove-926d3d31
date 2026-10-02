@@ -1,4 +1,5 @@
 ## 2026-10-02
+- Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup.
 - Android: App Bundle 6.0 (versionCode 19) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
 
 ## 2026-10-02
