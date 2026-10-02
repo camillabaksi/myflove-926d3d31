@@ -2,9 +2,17 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 export type FlowTheme = "lavendel" | "rosen" | "kvall";
 export type FlowMotion = "mjuk" | "still";
+export type FlowOutfit = "vanlig" | "troja" | "hoodie" | "pyjamas";
+export type FlowAccessory = "ingen" | "mossa" | "glasogon" | "horlurar" | "harspanne";
 export interface FlowAppearance {
   theme: FlowTheme;
   motion: FlowMotion;
+  outfit?: FlowOutfit;
+  accessory?: FlowAccessory;
+  picture?: "original" | "blommor" | "berg";
+  plant?: "original" | "gron" | "blommor";
+  throwColor?: "original" | "rosa" | "lila";
+  pillowColor?: "original" | "rosa" | "lila";
 }
 export interface FlowMemory {
   id: string;
