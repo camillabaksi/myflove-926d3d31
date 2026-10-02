@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { installIndexedDbMock, resetIndexedDbMock } from "@/test/indexeddb-mock";
+import { installIndexedDbMock, mockOptions, resetIndexedDbMock } from "@/test/indexeddb-mock";
 import {
   __resetSecureLocal,
+  getSecureStatus,
   isSensitiveKey,
   lockSecureLocal,
   secureGetItem,
@@ -66,5 +67,49 @@ describe("krypterad lokal lagring", () => {
     lockSecureLocal();
     expect(raw).not.toContain("ritalin");
     expect(secureGetItem("myflove-medications")).toBeNull();
+  });
+
+  it("långsam nyckel: skriver aldrig klartext medan den laddas", async () => {
+    window.localStorage.clear();
+    resetIndexedDbMock();
+    __resetSecureLocal();
+    mockOptions.delayMs = 50;
+    secureSetItem("myflove-finances", JSON.stringify({ saldo: 777 }));
+    expect(window.localStorage.getItem("myflove-finances")).toBeNull();
+    expect(secureGetItem("myflove-finances")).toBe(JSON.stringify({ saldo: 777 }));
+    await unlockSecureLocal();
+    const raw = window.localStorage.getItem("myflove-finances");
+    expect(raw?.startsWith("enc:v1:")).toBe(true);
+    expect(raw).not.toContain("777");
+    expect(getSecureStatus()).toBe("ready");
+  });
+
+  it("nyckeln går inte att ladda: inget på disk, tydlig status, värdet finns i minnet", async () => {
+    window.localStorage.clear();
+    resetIndexedDbMock();
+    __resetSecureLocal();
+    mockOptions.fail = true;
+    await unlockSecureLocal();
+    secureSetItem("myflove-medications", JSON.stringify(["ritalin"]));
+    expect(window.localStorage.getItem("myflove-medications")).toBeNull();
+    expect(getSecureStatus()).toBe("unavailable");
+    expect(secureGetItem("myflove-medications")).toBe(JSON.stringify(["ritalin"]));
+  });
+
+  it("två flikar som startar samtidigt får samma nyckel", async () => {
+    window.localStorage.clear();
+    resetIndexedDbMock();
+    __resetSecureLocal();
+    const first = unlockSecureLocal();
+    __resetSecureLocal();
+    const second = unlockSecureLocal();
+    await Promise.all([first, second]);
+    secureSetItem("myflow-moods", "[1]");
+    await new Promise((r) => setTimeout(r, 10));
+    const raw = window.localStorage.getItem("myflow-moods") ?? "";
+    __resetSecureLocal();
+    await unlockSecureLocal();
+    expect(raw.startsWith("enc:v1:")).toBe(true);
+    expect(secureGetItem("myflow-moods")).toBe("[1]");
   });
 });
