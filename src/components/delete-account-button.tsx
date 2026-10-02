@@ -24,6 +24,7 @@ export function DeleteAccountButton({ onDeleted, size = "sm", className }: Props
       await del({ data: undefined });
       try {
         await supabase.auth.signOut();
+        await import("@/lib/native-backup").then((m) => m.clearNativeBackup()).catch(() => undefined);
       } catch {
         // ignoreras med flit – felet påverkar inte användaren
       }
