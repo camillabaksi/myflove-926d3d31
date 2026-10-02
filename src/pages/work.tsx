@@ -21,6 +21,12 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { useTasks, type Task } from "@/hooks/use-data";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useProjects } from "@/hooks/use-projects";
 import { breakDownWorkTask } from "@/lib/work.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,6 +92,7 @@ export default function WorkPage() {
   const [details, setDetails] = useState("");
   const [reminderTime, setReminderTime] = useState("09:00");
   const [folder, setFolder] = useState<string>("all");
+  const [taskDialogOpen, setTaskDialogOpen] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
@@ -138,6 +145,7 @@ export default function WorkPage() {
     setTitle("");
     setDueDate("");
     setDetails("");
+    setTaskDialogOpen(false);
   };
 
   const handleBreakDown = async (task: Task) => {
@@ -322,14 +330,23 @@ export default function WorkPage() {
                 </CollapsibleSection>
 
                 {/* Ny arbetsuppgift */}
-                <CollapsibleSection
-                  defaultCollapsed
-                  id="jobbhjalp-ny-uppgift"
-                  title="Ny arbetsuppgift"
-                  headingClassName="font-display text-base text-ink"
-                  className="rounded-2xl border border-border/70 bg-background p-4"
-                >
-                  <form onSubmit={handleAddWorkTask} className="space-y-3">
+                <div className="rounded-2xl border border-border/70 bg-background p-4">
+                  <h3 className="font-display text-base text-ink">Ny arbetsuppgift</h3>
+                  <Button
+                    type="button"
+                    className="mt-3 h-11 rounded-2xl"
+                    onClick={() => setTaskDialogOpen(true)}
+                  >
+                    <Plus size={18} className="mr-1" /> Lägg till uppgift
+                  </Button>
+                </div>
+
+                <Dialog open={taskDialogOpen} onOpenChange={setTaskDialogOpen}>
+                  <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                    <DialogHeader>
+                      <DialogTitle>Ny arbetsuppgift</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleAddWorkTask} className="space-y-3 pt-2">
                     <Input
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
@@ -381,15 +398,16 @@ export default function WorkPage() {
                       Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per
                       uppgift.
                     </p>
-                    <textarea
-                      value={details}
-                      onChange={(e) => setDetails(e.target.value)}
-                      placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
-                      rows={2}
-                      className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
-                    />
-                  </form>
-                </CollapsibleSection>
+                      <textarea
+                        value={details}
+                        onChange={(e) => setDetails(e.target.value)}
+                        placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
+                        rows={2}
+                        className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
+                      />
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </section>
 

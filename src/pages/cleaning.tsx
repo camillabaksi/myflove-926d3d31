@@ -21,6 +21,7 @@ import {
 } from "@/lib/cleaning";
 import { Clock, RotateCcw, Sparkles, ShoppingBasket, Plus, X, ListChecks } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AreaFocus from "@/components/area-focus";
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
@@ -45,6 +46,7 @@ export default function CleaningPage() {
   const [mode, setMode] = useState<CleanMode>("vardag");
   const [newLabel, setNewLabel] = useState("");
   const [newMinutes, setNewMinutes] = useState("10");
+  const [addStepOpen, setAddStepOpen] = useState(false);
   const { toast } = useToast();
 
   const room = CLEAN_ROOMS.find((r) => r.id === roomId)!;
@@ -68,6 +70,7 @@ export default function CleaningPage() {
     setCustom((prev) => ({ ...prev, [listKey]: [...(prev[listKey] ?? []), step] }));
     setNewLabel("");
     toast({ description: "Tillagt i listan 🌱" });
+    setAddStepOpen(false);
   };
 
   const removeStep = (stepId: string) => {
@@ -311,13 +314,30 @@ export default function CleaningPage() {
 
         {/* Lägg till eget steg */}
         <MyFloveWide>
-          <MyFloveBlock
-            title="Lägg till eget steg"
-            subtitle="Dina egna steg sparas per rum och läge"
-            icon={Plus}
-            tone="blush"
-            defaultCollapsed
+          <Button
+            variant="outline"
+            onClick={() => setAddStepOpen(true)}
+            className="w-full gap-1.5 rounded-2xl"
           >
+            <Plus className="h-4 w-4" />
+            Lägg till eget steg
+          </Button>
+          {hiddenIds.length > 0 && (
+            <button
+              type="button"
+              onClick={restoreSteps}
+              className="mt-2 text-xs text-primary hover:underline"
+            >
+              Visa borttagna standardsteg igen ({hiddenIds.length})
+            </button>
+          )}
+        </MyFloveWide>
+
+        <Dialog open={addStepOpen} onOpenChange={setAddStepOpen}>
+          <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Lägg till eget steg</DialogTitle>
+            </DialogHeader>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
                 <Input
@@ -342,18 +362,9 @@ export default function CleaningPage() {
                   Lägg till
                 </Button>
               </div>
-              {hiddenIds.length > 0 && (
-                <button
-                  type="button"
-                  onClick={restoreSteps}
-                  className="text-xs text-primary hover:underline"
-                >
-                  Visa borttagna standardsteg igen ({hiddenIds.length})
-                </button>
-              )}
             </div>
-          </MyFloveBlock>
-        </MyFloveWide>
+          </DialogContent>
+        </Dialog>
 
         <MyFloveWide>
           <p className="flex items-center justify-center gap-2 pb-4 text-center text-sm text-muted-foreground">

@@ -5,6 +5,7 @@ import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useChildren, CHILD_COLORS, type Child } from "@/hooks/use-children";
 import { useToast } from "@/hooks/use-toast";
@@ -33,6 +34,7 @@ export default function ProfilePage() {
   const [newChildName, setNewChildName] = useState("");
   const [newChildColor, setNewChildColor] = useState(CHILD_COLORS[0]);
   const [addingChild, setAddingChild] = useState(false);
+  const [addChildOpen, setAddChildOpen] = useState(false);
   const [editingChildId, setEditingChildId] = useState<string | null>(null);
   const [childDraft, setChildDraft] = useState("");
 
@@ -70,6 +72,7 @@ export default function ProfilePage() {
     try {
       await addChild(trimmed, newChildColor);
       setNewChildName("");
+      setAddChildOpen(false);
       toast({ title: "Tillagt!", description: `${trimmed} finns nu i appen.` });
     } catch {
       toast({ title: "Hoppsan", description: "Det gick inte att spara. Försök igen." });
@@ -213,48 +216,65 @@ export default function ProfilePage() {
               </ul>
             )}
 
-            <form
-              className="mt-3 space-y-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void addChildHandler();
-              }}
+            <Button
+              type="button"
+              className="mt-3 rounded-2xl"
+              onClick={() => setAddChildOpen(true)}
+              data-testid="profile-child-add-open"
             >
-              <div className="flex items-center gap-2">
-                <Input
-                  value={newChildName}
-                  onChange={(e) => setNewChildName(e.target.value)}
-                  placeholder="Barnets namn"
-                  maxLength={40}
-                  className="rounded-2xl"
-                  data-testid="profile-child-input"
-                />
-                <Button
-                  type="submit"
-                  className="rounded-2xl"
-                  disabled={!newChildName.trim() || addingChild}
-                  data-testid="profile-child-add"
+              <Plus size={16} className="mr-1" /> Lägg till barn
+            </Button>
+
+            <Dialog open={addChildOpen} onOpenChange={setAddChildOpen}>
+              <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                <DialogHeader>
+                  <DialogTitle>Lägg till barn</DialogTitle>
+                </DialogHeader>
+                <form
+                  className="space-y-2 pt-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    void addChildHandler();
+                  }}
                 >
-                  <Plus size={16} className="mr-1" /> Lägg till
-                </Button>
-              </div>
-              <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Färg">
-                {CHILD_COLORS.map((color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    role="radio"
-                    aria-checked={newChildColor === color}
-                    aria-label={`Färg ${color}`}
-                    onClick={() => setNewChildColor(color)}
-                    className={`h-6 w-6 rounded-full border-2 transition ${
-                      newChildColor === color ? "border-ink scale-110" : "border-transparent"
-                    }`}
-                    style={{ background: color }}
-                  />
-                ))}
-              </div>
-            </form>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={newChildName}
+                      onChange={(e) => setNewChildName(e.target.value)}
+                      placeholder="Barnets namn"
+                      maxLength={40}
+                      className="rounded-2xl"
+                      autoFocus
+                      data-testid="profile-child-input"
+                    />
+                    <Button
+                      type="submit"
+                      className="rounded-2xl"
+                      disabled={!newChildName.trim() || addingChild}
+                      data-testid="profile-child-add"
+                    >
+                      <Plus size={16} className="mr-1" /> Lägg till
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Färg">
+                    {CHILD_COLORS.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        role="radio"
+                        aria-checked={newChildColor === color}
+                        aria-label={`Färg ${color}`}
+                        onClick={() => setNewChildColor(color)}
+                        className={`h-6 w-6 rounded-full border-2 transition ${
+                          newChildColor === color ? "border-ink scale-110" : "border-transparent"
+                        }`}
+                        style={{ background: color }}
+                      />
+                    ))}
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
           </CollapsibleSection>
         </MyFloveWide>
 

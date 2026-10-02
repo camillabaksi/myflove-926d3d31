@@ -5,6 +5,7 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   GraduationCap,
   Timer,
@@ -89,6 +90,7 @@ export default function StudyflowPage() {
   const [lecturePrep, setLecturePrep] = useState("");
   const { profile: lifeProfile } = useLifeProfile();
   const [newTask, setNewTask] = useState("");
+  const [newTaskDialogOpen, setNewTaskDialogOpen] = useState(false);
 
   const voice = useVoiceInput((t) => setLectureNotes((prev) => (prev ? `${prev} ${t}` : t)));
 
@@ -246,24 +248,41 @@ export default function StudyflowPage() {
                 </div>
               </div>
 
-              <form
-                className="mt-4 flex gap-2"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!newTask.trim()) return;
-                  addTask(newTask.trim(), undefined, { area: "studier" });
-                  setNewTask("");
-                }}
+              <Button
+                type="button"
+                className="mt-4 w-full rounded-full"
+                onClick={() => setNewTaskDialogOpen(true)}
               >
-                <Input
-                  value={newTask}
-                  onChange={(e) => setNewTask(e.target.value)}
-                  placeholder="Lägg till en skoluppgift…"
-                />
-                <Button type="submit" size="icon" aria-label="Lägg till uppgift">
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </form>
+                <Plus className="mr-2 h-4 w-4" /> Lägg till uppgift
+              </Button>
+
+              <Dialog open={newTaskDialogOpen} onOpenChange={setNewTaskDialogOpen}>
+                <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                  <DialogHeader>
+                    <DialogTitle>Lägg till en skoluppgift</DialogTitle>
+                  </DialogHeader>
+                  <form
+                    className="flex gap-2"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!newTask.trim()) return;
+                      addTask(newTask.trim(), undefined, { area: "studier" });
+                      setNewTask("");
+                      setNewTaskDialogOpen(false);
+                    }}
+                  >
+                    <Input
+                      value={newTask}
+                      onChange={(e) => setNewTask(e.target.value)}
+                      placeholder="Lägg till en skoluppgift…"
+                      autoFocus
+                    />
+                    <Button type="submit" size="icon" aria-label="Lägg till uppgift">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </header>
 
             <MySchedule />

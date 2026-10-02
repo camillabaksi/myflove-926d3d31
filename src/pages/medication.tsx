@@ -6,6 +6,7 @@ import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useMedications } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Pill, Plus, Trash2, Check, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getRandomEncouragement } from "@/lib/encouragements";
@@ -32,6 +33,7 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
   const [times, setTimes] = useState<string[]>([""]);
   const [repeat, setRepeat] = useState<RepeatMode>("daily");
   const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [addOpen, setAddOpen] = useState(false);
 
   const updateTime = (index: number, value: string) => {
     setTimes((prev) => prev.map((t, i) => (i === index ? value : t)));
@@ -56,6 +58,7 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
     setTimes([""]);
     setRepeat("daily");
     toast({ description: "Medicin tillagd 💊" });
+    setAddOpen(false);
   };
 
   const handleToggle = (medId: string, time: string, wasTaken: boolean) => {
@@ -78,7 +81,16 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
       )}
 
       <MyFloveWide>
-        <MyFloveBlock title="Ny medicin" icon={Pill}>
+        <Button onClick={() => setAddOpen(true)} className="w-full h-12 rounded-xl">
+          <Plus size={18} className="mr-2" /> Lägg till medicin
+        </Button>
+      </MyFloveWide>
+
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Ny medicin</DialogTitle>
+          </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <input
@@ -164,8 +176,8 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
               <Plus size={18} className="mr-2" /> Spara medicin
             </Button>
           </form>
-        </MyFloveBlock>
-      </MyFloveWide>
+        </DialogContent>
+      </Dialog>
 
       <MyFloveWide>
         {medications.length === 0 ? (

@@ -12,6 +12,7 @@ import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Plus,
   Trash2,
@@ -185,6 +186,7 @@ export default function Shopping() {
   } = useSharedShoppingList();
   const { toast } = useToast();
   const [newItem, setNewItem] = useState("");
+  const [addOpen, setAddOpen] = useState(false);
 
   const {
     isSupported: voiceSupported,
@@ -207,6 +209,7 @@ export default function Shopping() {
     if (newItem.trim()) {
       addItem(newItem.trim());
       setNewItem("");
+      setAddOpen(false);
     }
   };
 
@@ -249,39 +252,51 @@ export default function Shopping() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <form onSubmit={handleSubmit} className="flex gap-3">
-            <Input
-              value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
-              placeholder="T.ex. Mjölk, toalettpapper..."
-              className="h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
-            />
-            {voiceSupported && (
-              <Button
-                type="button"
-                variant={isListening ? "destructive" : "outline"}
-                onClick={toggleListening}
-                className="h-14 px-4 rounded-2xl shadow-sm shrink-0"
-                aria-label={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
-                title={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
-              >
-                {isListening ? <Square size={22} /> : <Mic size={22} />}
-              </Button>
-            )}
-            <Button
-              type="submit"
-              disabled={!newItem.trim()}
-              className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
-            >
-              <Plus size={24} />
-            </Button>
-          </form>
-          {!voiceSupported && (
-            <p className="text-xs text-muted-foreground -mt-4">
-              Röstinmatning stöds inte i denna webbläsare, men du kan alltid skriva.
-            </p>
-          )}
+          <Button onClick={() => setAddOpen(true)} className="h-14 w-full rounded-2xl text-lg shadow-sm">
+            <Plus size={22} className="mr-2" /> Lägg till vara
+          </Button>
         </MyFloveWide>
+
+        <Dialog open={addOpen} onOpenChange={setAddOpen}>
+          <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Lägg till vara</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="flex gap-3">
+              <Input
+                autoFocus
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+                placeholder="T.ex. Mjölk, toalettpapper..."
+                className="h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
+              />
+              {voiceSupported && (
+                <Button
+                  type="button"
+                  variant={isListening ? "destructive" : "outline"}
+                  onClick={toggleListening}
+                  className="h-14 px-4 rounded-2xl shadow-sm shrink-0"
+                  aria-label={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
+                  title={isListening ? "Sluta lyssna" : "Lägg till med rösten"}
+                >
+                  {isListening ? <Square size={22} /> : <Mic size={22} />}
+                </Button>
+              )}
+              <Button
+                type="submit"
+                disabled={!newItem.trim()}
+                className="h-14 px-6 rounded-2xl shadow-sm shrink-0"
+              >
+                <Plus size={24} />
+              </Button>
+            </form>
+            {!voiceSupported && (
+              <p className="text-xs text-muted-foreground">
+                Röstinmatning stöds inte i denna webbläsare, men du kan alltid skriva.
+              </p>
+            )}
+          </DialogContent>
+        </Dialog>
 
         <MyFloveWide span="wide">
           <div className="space-y-6">

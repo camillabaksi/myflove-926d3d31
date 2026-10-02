@@ -3,6 +3,7 @@ import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
 import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useReminders } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
@@ -40,6 +41,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const [time, setTime] = useState("");
   const [repeat, setRepeat] = useState<RepeatMode>("daily");
   const [startDate, setStartDate] = useState(() => todayIso());
+  const [addOpen, setAddOpen] = useState(false);
 
   // Auto-materialize today's reminders from enabled routines (once per day per routine)
   useEffect(() => {
@@ -91,6 +93,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     setTime("");
     setRepeat("daily");
     toast({ description: "Rutin sparad – dyker upp i morgondagens dag också 🌱" });
+    setAddOpen(false);
   };
 
   const addSuggestion = (s: { title: string; time: string }) => {
@@ -182,7 +185,16 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       )}
 
       <MyFloveWide>
-        <MyFloveBlock title="Ny rutin" icon={Repeat}>
+        <Button onClick={() => setAddOpen(true)} className="w-full h-12 rounded-xl">
+          <Plus size={18} className="mr-2" /> Lägg till rutin
+        </Button>
+      </MyFloveWide>
+
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Ny rutin</DialogTitle>
+          </DialogHeader>
           <form onSubmit={handleAdd} className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-3">
               <input
@@ -235,8 +247,8 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
               <Plus size={18} className="mr-2" /> Lägg till rutin
             </Button>
           </form>
-        </MyFloveBlock>
-      </MyFloveWide>
+        </DialogContent>
+      </Dialog>
 
       <MyFloveWide>
         <MyFloveBlock

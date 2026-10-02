@@ -10,6 +10,12 @@ import { useFinances, Transaction } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import BudgetPanel from "@/components/budget-panel";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBalanceBars } from "@/components/myflove/motion";
@@ -28,6 +34,7 @@ export default function Finances() {
   const [note, setNote] = useState("");
   const [billStatus, setBillStatus] = useState<"paid" | "upcoming">("paid");
   const [billDate, setBillDate] = useState(todayIso());
+  const [addOpen, setAddOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +57,7 @@ export default function Finances() {
     setNote("");
     setBillStatus("paid");
     setBillDate(todayIso());
+    setAddOpen(false);
   };
 
   const currentMonth = new Date().getMonth();
@@ -120,11 +128,21 @@ export default function Finances() {
 
         <MyFloveWide>
           <MyFloveBlock title="Ny transaktion" icon={Plus}>
-            <CollapsibleSection
-              title="Lägg till"
-              help="Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker."
-            >
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-3">
+              <p className="text-sm text-muted-foreground">
+                Här skriver du in pengar in eller ut. Välj typ, skriv summa och vad det gällde – det räcker.
+              </p>
+              <Button type="button" className="h-11 rounded-2xl" onClick={() => setAddOpen(true)}>
+                <Plus className="mr-2" size={18} />
+                Lägg till transaktion
+              </Button>
+            </div>
+            <Dialog open={addOpen} onOpenChange={setAddOpen}>
+              <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                <DialogHeader>
+                  <DialogTitle>Ny transaktion</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-6 pt-2">
                 <div className="flex bg-secondary/50 p-1 rounded-xl">
                   <button
                     type="button"
@@ -219,12 +237,13 @@ export default function Finances() {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-medium">
-                  <Plus className="mr-2" size={24} />
-                  Lägg till
-                </Button>
-              </form>
-            </CollapsibleSection>
+                  <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-medium">
+                    <Plus className="mr-2" size={24} />
+                    Lägg till
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </MyFloveBlock>
         </MyFloveWide>
 

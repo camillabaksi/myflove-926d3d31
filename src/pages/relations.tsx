@@ -7,6 +7,12 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useRelations } from "@/hooks/use-relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
@@ -28,8 +34,8 @@ function AddPerson({
   const [type, setType] = useState<RelationTypeId>(RELATION_TYPES[0]!.id);
   const [open, setOpen] = useState(false);
 
-  if (!open) {
-    return (
+  return (
+    <>
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -37,65 +43,70 @@ function AddPerson({
       >
         <Plus size={16} /> Lägg till person
       </button>
-    );
-  }
 
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (!name.trim()) return;
-        onAdd(type, name, note);
-        setName("");
-        setNote("");
-        setOpen(false);
-      }}
-      className="space-y-2 rounded-2xl border border-border bg-secondary/40 p-3"
-    >
-      <Input
-        autoFocus
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Namn – t.ex. Johan"
-        className="h-11 rounded-2xl"
-      />
-      <div className="flex flex-wrap gap-2">
-        {RELATION_TYPES.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setType(t.id)}
-            aria-pressed={type === t.id}
-            className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
-              type === t.id
-                ? "border-primary/50 bg-primary/10 text-ink"
-                : "border-border bg-card text-muted-foreground hover:border-primary/40"
-            }`}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Lägg till person</DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!name.trim()) return;
+              onAdd(type, name, note);
+              setName("");
+              setNote("");
+              setOpen(false);
+            }}
+            className="space-y-2 pt-2"
           >
-            {t.emoji} {t.label}
-          </button>
-        ))}
-      </div>
-      <Input
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="Valfritt: något du vill komma ihåg"
-        className="h-11 rounded-2xl"
-      />
-      <div className="flex gap-2">
-        <Button type="submit" className="h-10 rounded-2xl">
-          Spara
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          className="h-10 rounded-2xl"
-          onClick={() => setOpen(false)}
-        >
-          Avbryt
-        </Button>
-      </div>
-    </form>
+            <Input
+              autoFocus
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Namn – t.ex. Johan"
+              className="h-11 rounded-2xl"
+            />
+            <div className="flex flex-wrap gap-2">
+              {RELATION_TYPES.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setType(t.id)}
+                  aria-pressed={type === t.id}
+                  className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                    type === t.id
+                      ? "border-primary/50 bg-primary/10 text-ink"
+                      : "border-border bg-card text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {t.emoji} {t.label}
+                </button>
+              ))}
+            </div>
+            <Input
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Valfritt: något du vill komma ihåg"
+              className="h-11 rounded-2xl"
+            />
+            <div className="flex gap-2">
+              <Button type="submit" className="h-10 rounded-2xl">
+                Spara
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-10 rounded-2xl"
+                onClick={() => setOpen(false)}
+              >
+                Avbryt
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -115,40 +126,47 @@ function PersonRow({
   const [note, setNote] = useState(person.note ?? "");
   const [energyOpen, setEnergyOpen] = useState(false);
 
-  if (editing) {
-    return (
-      <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="h-10 rounded-2xl"
-        />
-        <Input
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="Valfri information"
-          className="h-10 rounded-2xl"
-        />
-        <div className="flex gap-2">
-          <Button
-            className="h-9 rounded-2xl"
-            onClick={() => {
-              if (!name.trim()) return;
-              onSave({ name: name.trim(), note: note.trim() || undefined });
-              setEditing(false);
-            }}
-          >
-            <Check size={16} className="mr-1" /> Spara
-          </Button>
-          <Button variant="ghost" className="h-9 rounded-2xl" onClick={() => setEditing(false)}>
-            <X size={16} className="mr-1" /> Avbryt
-          </Button>
+  const editDialog = (
+    <Dialog open={editing} onOpenChange={setEditing}>
+      <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+        <DialogHeader>
+          <DialogTitle>Ändra {person.name}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-2 pt-2">
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="h-10 rounded-2xl"
+          />
+          <Input
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Valfri information"
+            className="h-10 rounded-2xl"
+          />
+          <div className="flex gap-2">
+            <Button
+              className="h-9 rounded-2xl"
+              onClick={() => {
+                if (!name.trim()) return;
+                onSave({ name: name.trim(), note: note.trim() || undefined });
+                setEditing(false);
+              }}
+            >
+              <Check size={16} className="mr-1" /> Spara
+            </Button>
+            <Button variant="ghost" className="h-9 rounded-2xl" onClick={() => setEditing(false)}>
+              <X size={16} className="mr-1" /> Avbryt
+            </Button>
+          </div>
         </div>
-      </div>
-    );
-  }
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
+    <>
+      {editDialog}
     <div className="rounded-2xl border border-border bg-card p-3">
       <div className="flex items-center gap-2">
         <span className="text-lg">{relationTypeMeta(person.type).emoji}</span>
@@ -210,6 +228,7 @@ function PersonRow({
         </div>
       )}
     </div>
+    </>
   );
 }
 
