@@ -1,26 +1,115 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useLocalStorage } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
+import { isActiveOwner } from "@/lib/account-scope";
+import { secureGetItem, secureSetItem } from "@/lib/secure-local";
+import { mergeSyncValues, snapshotBase, type SyncBase } from "@/lib/sync-merge";
 import type { User } from "@supabase/supabase-js";
 
-const META_SUFFIX = "__updated_at";
+export { CLOUD_USER_DATA_KEYS } from "@/lib/cloud-keys";
+import { CLOUD_USER_DATA_KEYS } from "@/lib/cloud-keys";
 
-// Varje synkad nyckel behöver veta vem som är inloggad. Utan cache blir det
-// ett nätverksanrop per nyckel (70+ per sidladdning) – vi delar ett svar
-// mellan alla hooks och nollställer det när inloggningen ändras.
+/**
+ * Molnsynk för localStorage-nycklar (tabellen user_kv).
+ *
+ * localStorage är sanningskällan på enheten; molnet är kontots gemensamma
+ * kopia. Metadata per nyckel:
+ * - `__updated_at`  senaste lokala ändring (enhetens klocka)
+ * - `__synced_at`   den lokala ändring som molnet senast bekräftade
+ * - `__base`        värdet (hashat per post) vid senaste bekräftelse
+ * - `__removed`     id:n som tagits bort på den här enheten
+ *
+ * Varje synk hämtar först molnets senaste version, slår ihop enligt
+ * sync-merge.ts och skriver villkorat (bara om molnet inte ändrats sedan
+ * läsningen). Misslyckas skrivningen ligger ändringen kvar som osynkad och
+ * försöks igen – den markeras aldrig som bekräftad.
+ *
+ * Synk körs bara när enhetens data ägs av den inloggade användaren
+ * (account-scope.ts).
+ */
+
+const META_SUFFIX = "__updated_at";
+const SYNCED_SUFFIX = "__synced_at";
+const BASE_SUFFIX = "__base";
+const REMOVED_SUFFIX = "__removed";
+const MAX_REMOVED = 300;
+const DEBOUNCE_MS = 600;
+const RETRY_STEPS_MS = [5_000, 15_000, 60_000];
+const LOCAL_STORAGE_EVENT = "myflow-local-storage";
+export const ACCOUNT_BOUND_EVENT = "myflove-account-bound";
+
+/** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */
+export const CLOUD_KEYS_REGISTRY = "myflove-cloud-keys";
+
+// ---------------------------------------------------------------------------
+// Inloggad användare (delat svar mellan alla hooks)
+
 let cachedUser: { user: User | null } | null = null;
 let inflightUser: Promise<User | null> | null = null;
 
-// Flera vyer använder ibland samma lagringsnyckel samtidigt. Håll därför ett
-// gemensamt, synkront värde per nyckel så att två snabba funktionsuppdateringar
-// aldrig räknas från varsin gammal React-snapshot och skriver över varandra.
-const sharedValues = new Map<string, unknown>();
+/** Den inloggade användaren – men bara om enhetens data tillhör hen. */
+export async function getSyncUser(): Promise<User | null> {
+  const ownerChecked = (u: User | null) => (u && isActiveOwner(u.id) ? u : null);
+  if (cachedUser) return ownerChecked(cachedUser.user);
+  if (!inflightUser) {
+    inflightUser = supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        cachedUser = { user: data.user ?? null };
+        return cachedUser.user;
+      })
+      .catch(() => null)
+      .finally(() => {
+        inflightUser = null;
+      });
+  }
+  return ownerChecked(await inflightUser);
+}
 
-// Poster som tagits bort på den här enheten. En molnkopia som ännu inte
-// hunnit få borttagningen får aldrig lägga tillbaka dem.
-const REMOVED_SUFFIX = "__removed";
-const MAX_REMOVED = 300;
+// Delat, synkront värde per nyckel så att två snabba uppdateringar från olika
+// vyer aldrig räknas från varsin gammal React-snapshot.
+const sharedValues = new Map<string, unknown>();
+const initialValues = new Map<string, unknown>();
+const revisions = new Map<string, number>();
+
+supabase.auth.onAuthStateChange(() => {
+  cachedUser = null;
+  sharedValues.clear();
+});
+
+// ---------------------------------------------------------------------------
+// Små lagringshjälpare
+
+function lsGet(key: string): string | null {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+function lsSet(key: string, value: string): void {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    /* full lagring – metadata uppdateras nästa gång */
+  }
+}
+function readMeta(key: string, suffix: string): number {
+  const raw = lsGet(key + suffix);
+  const n = raw ? Number(raw) : 0;
+  return Number.isFinite(n) ? n : 0;
+}
+
+function readBase(key: string): SyncBase | null {
+  try {
+    const raw = lsGet(key + BASE_SUFFIX);
+    return raw ? (JSON.parse(raw) as SyncBase) : null;
+  } catch {
+    return null;
+  }
+}
+
 const idOf = (v: unknown): string | null =>
   !!v && typeof v === "object" && typeof (v as { id?: unknown }).id === "string"
     ? (v as { id: string }).id
@@ -28,7 +117,7 @@ const idOf = (v: unknown): string | null =>
 
 function readRemoved(key: string): string[] {
   try {
-    const raw = window.localStorage.getItem(key + REMOVED_SUFFIX);
+    const raw = lsGet(key + REMOVED_SUFFIX);
     const parsed: unknown = raw ? JSON.parse(raw) : [];
     return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
   } catch {
@@ -40,17 +129,10 @@ function rememberRemoved(key: string, prev: unknown, next: unknown): void {
   if (typeof window === "undefined" || !Array.isArray(prev) || !Array.isArray(next)) return;
   const nextIds = new Set(next.map(idOf).filter((x): x is string => !!x));
   const removed = prev.map(idOf).filter((x): x is string => !!x && !nextIds.has(x));
-  // Läggs något tillbaka (t.ex. ångra) ska det inte längre räknas som borttaget.
-  const kept = readRemoved(key).filter((id) => !nextIds.has(id));
-  if (removed.length === 0 && kept.length === readRemoved(key).length) return;
-  try {
-    window.localStorage.setItem(
-      key + REMOVED_SUFFIX,
-      JSON.stringify([...kept, ...removed].slice(-MAX_REMOVED)),
-    );
-  } catch {
-    /* ignore */
-  }
+  const before = readRemoved(key);
+  const kept = before.filter((id) => !nextIds.has(id));
+  if (removed.length === 0 && kept.length === before.length) return;
+  lsSet(key + REMOVED_SUFFIX, JSON.stringify([...kept, ...removed].slice(-MAX_REMOVED)));
 }
 
 /** Tar bort poster som användaren raderat här från ett inkommande molnvärde. */
@@ -70,17 +152,12 @@ export function applyCloudStorageUpdate<T>(current: T, update: T | ((previous: T
 }
 
 /**
- * Slår ihop en lokal lista med molnets lista utan att tappa något.
- *
- * Skyddar mot att en enhet med en gammal kopia (t.ex. en flik som legat
- * öppen sedan igår) skriver bort saker som lagts till på en annan enhet.
- * Poster matchas på `id`; molnets extra poster läggs först och lokala
- * ändringar vinner för poster som finns på båda ställena.
+ * Lägger till poster som bara finns i molnet (matchas på id). Behålls för
+ * bakåtkompatibilitet; själva synken använder trevägssammanslagningen.
  */
 export function mergeMissingCloudEntries<T>(local: T, cloud: unknown): T {
   if (!Array.isArray(local) || !Array.isArray(cloud)) return local;
-  const hasId = (v: unknown): v is { id: string } =>
-    !!v && typeof v === "object" && typeof (v as { id?: unknown }).id === "string";
+  const hasId = (v: unknown): v is { id: string } => idOf(v) !== null;
   if (local.length > 0 && !local.every(hasId)) return local;
   if (!cloud.every(hasId)) return local;
   const localIds = new Set((local as unknown[]).filter(hasId).map((v) => v.id));
@@ -89,167 +166,11 @@ export function mergeMissingCloudEntries<T>(local: T, cloud: unknown): T {
   return [...missing, ...(local as unknown[])] as T;
 }
 
-export async function getSyncUser(): Promise<User | null> {
-  if (cachedUser) return cachedUser.user;
-  if (!inflightUser) {
-    inflightUser = supabase.auth
-      .getUser()
-      .then(({ data }) => {
-        cachedUser = { user: data.user ?? null };
-        return cachedUser.user;
-      })
-      .catch(() => null)
-      .finally(() => {
-        inflightUser = null;
-      });
-  }
-  return inflightUser;
-}
-
-supabase.auth.onAuthStateChange(() => {
-  cachedUser = null;
-  sharedValues.clear();
-});
-
-/**
- * Bekräftad molnkopia.
- *
- * `key__updated_at` säger när värdet ändrades lokalt, `key__synced_at` när
- * molnet senast bekräftade en skrivning. Är synced_at äldre än updated_at
- * finns det lokala ändringar som ännu inte nått molnet – då får utloggningen
- * inte radera den lokala kopian (se local-data.ts).
- */
-const SYNCED_SUFFIX = "__synced_at";
-/**
- * Alla lagringsnycklar som kan ligga i user_kv.
- *
- * Detta är medvetet en statisk manifestlista och inte bara ett runtime-register:
- * en sida kan ha skrivit osynkad data i en tidigare session utan att dess hook
- * monteras före utloggning. Registryt nedan behålls som bakåtkompatibel extra
- * information, men den här listan är det säkra skyddet mot pre-mount-race.
- */
-export const CLOUD_USER_DATA_KEYS = new Set([
-  "myflove-saved-exercises",
-  "myflove-rebuild-dismissed",
-  "myflove-timeline-show-untimed",
-  "myflove-flow-intro-seen",
-  "myflow-flowplan",
-  "myflove-home-visited",
-  "myflove-intro-seen",
-  "myflove-bottom-nav-slots",
-  "myflove-bottom-nav-planering-v1",
-  "myflove-simple-mode-chosen",
-  "myflove-simple-mode",
-  "myflow-pomodoro-total-sessions",
-  "myflove-flow-checkin-seen",
-  "myflove-flow-dismissed",
-  "myflove-calendar-view",
-  "myflove-calendar-pictograms",
-  "myflove-calendar-all-in-day-dates",
-  "myflove-calendar-categories",
-  "myflove-insight-intro",
-  "myflow-meal-plans",
-  "myflove-meal-types",
-  "myflove-pause-minutes",
-  "myflove-hide-weight",
-  "myflow-pomodoro-prefs",
-  "myflove-today-view",
-  "myflove-preferred-name",
-  "myflove-day-window",
-  "myflove-day-order",
-  "myflove-capacity-mode",
-  "myflove-capacity-asked",
-  "myflove-day-closed",
-
-  "myflove-day-edges",
-  "myflow-tasks",
-  "myflow-reminders",
-  "myflow-moods",
-  "myflow-shopping",
-  "myflow-focus",
-  "myflow-focus-completed-count",
-  "myflow-dump-ideas",
-  "myflow-saved-stores",
-  "myflow-saved-trips",
-  "myflow-finances",
-  "myflove-flow-usage",
-  "myflove-flow-prefs",
-  "myflove-flow-reset",
-  "myflove-quickflow",
-  "myflove-quickflow-priority",
-  "myflove-quickflow-priority-intro",
-  "myflove-quickflow-rules",
-  "myflove-notes",
-  "myflove-medications",
-  "myflove-medication-log",
-  "myflove-budget",
-  "myflove-routines",
-  "myflove-routines-done",
-  "myflove-training",
-  "myflove-workouts-saved",
-  "myflove-workout-logs",
-  "myflove-workflow-meta",
-  "myflove-workflow-endofday",
-  "myflove-workflow-settings",
-  "myflove-studyflow-meta",
-  "myflove-studyflow-endofday",
-  "myflove-studyflow-settings",
-  "myflove-study-lectures",
-  "myflove-study-schedule-settings",
-  "myflove-study-schedule-auto",
-  "myflove-courses",
-  "myflove-done-log",
-  "myflove-daily-checkin",
-  "myflove-situation",
-  "myflove-situation-log",
-  "myflove-week-goals",
-  "myflove-work-projects",
-  "myflove-flowstudy",
-  "myflove-life-profile",
-  "myflove-work-profile",
-  "myflove-study-profile",
-  "myflove-meal-favorites",
-  "myflove-replan-mode",
-  "myflove-child-schedules",
-  "myflove-child-schedule-files",
-  "myflove-child-reminders",
-  "myflove-child-schedule-templates",
-  "myflove-insight-strategies",
-  "myflove-day-plan",
-  "myflove-adaptive-lead",
-  "myflove-area-customization",
-  "myflove-home-layout",
-  "myflove-relations",
-  "myflove-energy-flow-settings",
-  "myflove-cleaning-done",
-  "myflove-cleaning-custom",
-  "myflove-cleaning-hidden",
-  "myflove-npf-mode",
-  "myflove-view-mode",
-  "myflove-day-window",
-  "myflove-day-edges",
-  "myflove-schedule-files",
-  "myflove-energy-log",
-  "myflove-activity-history",
-  "myflove-energy-pending",
-  "myflove-checkin-10",
-  "myflove-meal-favorites",
-  "myflove-visit-days",
-  "myflove-wake-steps",
-  "myflove-insight-strategies",
-  "myflove-quiet-mode",
-  "myflove-note-folders",
-  "myflove-quickflow-habits",
-]);
-
-/** Lista över nycklar som hanteras av molnsynken (device-nyckel, rensas ej). */
-export const CLOUD_KEYS_REGISTRY = "myflove-cloud-keys";
-
 function readRegistry(): string[] {
   try {
-    const raw = window.localStorage.getItem(CLOUD_KEYS_REGISTRY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? (parsed as string[]) : [];
+    const raw = lsGet(CLOUD_KEYS_REGISTRY);
+    const parsed: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
   } catch {
     return [];
   }
@@ -257,215 +178,386 @@ function readRegistry(): string[] {
 
 function registerCloudKey(key: string) {
   if (typeof window === "undefined") return;
-  try {
-    const keys = readRegistry();
-    if (keys.includes(key)) return;
-    window.localStorage.setItem(CLOUD_KEYS_REGISTRY, JSON.stringify([...keys, key]));
-  } catch {
-    /* utan lagring finns inget register */
-  }
-}
-
-function readMeta(key: string, suffix: string): number {
-  try {
-    const raw = window.localStorage.getItem(key + suffix);
-    return raw ? Number(raw) : 0;
-  } catch {
-    return 0;
-  }
+  const keys = readRegistry();
+  if (keys.includes(key)) return;
+  lsSet(CLOUD_KEYS_REGISTRY, JSON.stringify([...keys, key]));
 }
 
 /** Finns det lokala ändringar för nyckeln som molnet ännu inte bekräftat? */
 export function hasUnsyncedCloudData(key: string): boolean {
   if (typeof window === "undefined") return false;
-  // Använd både registret och den fasta listan. Registret kan sakna en nyckel
-  // om utloggningen sker precis innan en sida hunnit montera sin hook.
   if (!readRegistry().includes(key) && !CLOUD_USER_DATA_KEYS.has(key)) return false;
-  let raw: string | null = null;
-  try {
-    raw = window.localStorage.getItem(key);
-  } catch {
-    return false;
-  }
-  if (raw === null) return false;
+  if (lsGet(key) === null) return false;
   const updated = readMeta(key, META_SUFFIX);
   const synced = readMeta(key, SYNCED_SUFFIX);
-  // Aldrig synkad men har innehåll → betrakta som osynkad.
   if (synced === 0) return true;
   return synced < updated;
 }
 
-/** Alla monterade synkade nycklar – används för en sista flush före utloggning. */
-const flushers = new Set<() => Promise<void>>();
+function currentValue<T>(key: string): T {
+  if (sharedValues.has(key)) return sharedValues.get(key) as T;
+  const initial = initialValues.get(key) as T;
+  try {
+    const raw = secureGetItem(key);
+    return raw ? (JSON.parse(raw) as T) : initial;
+  } catch {
+    return initial;
+  }
+}
 
-/**
- * Skriver upp allt som ligger och väntar i debounce-fönstret. Anropas före
- * utloggning så att ingenting går förlorat bara för att timern inte hann gå.
- */
-export async function flushCloudSync(): Promise<void> {
-  await Promise.all([...flushers].map((f) => f().catch(() => undefined)));
+function isEmptyValue(key: string, value: unknown): boolean {
+  try {
+    return JSON.stringify(value) === JSON.stringify(initialValues.get(key));
+  } catch {
+    return false;
+  }
+}
+
+/** Skriver ett värde från molnet lokalt och låter alla vyer läsa om det. */
+function writeLocal(key: string, value: unknown): void {
+  sharedValues.set(key, value);
+  try {
+    secureSetItem(key, JSON.stringify(value));
+  } catch {
+    /* full lagring – värdet finns i minnet */
+  }
+  window.dispatchEvent(new CustomEvent(LOCAL_STORAGE_EVENT, { detail: { key } }));
+}
+
+function markConfirmed(key: string, editStamp: number, value: unknown): void {
+  lsSet(key + SYNCED_SUFFIX, String(editStamp));
+  if (readMeta(key, META_SUFFIX) < editStamp) lsSet(key + META_SUFFIX, String(editStamp));
+  lsSet(key + BASE_SUFFIX, JSON.stringify(snapshotBase(value)));
+}
+
+// ---------------------------------------------------------------------------
+// Synkstatus (diskret indikator)
+
+export type CloudSyncStatus = "saved" | "pending" | "error";
+const keyStatus = new Map<string, CloudSyncStatus>();
+const statusListeners = new Set<() => void>();
+let aggregate: CloudSyncStatus = "saved";
+
+function setKeyStatus(key: string, s: CloudSyncStatus) {
+  if (keyStatus.get(key) === s) return;
+  keyStatus.set(key, s);
+  const values = [...keyStatus.values()];
+  const next: CloudSyncStatus = values.includes("error")
+    ? "error"
+    : values.includes("pending")
+      ? "pending"
+      : "saved";
+  if (next !== aggregate) {
+    aggregate = next;
+    statusListeners.forEach((l) => l());
+  }
+}
+
+export function getCloudSyncStatus(): CloudSyncStatus {
+  return aggregate;
+}
+
+export function useCloudSyncStatus(): CloudSyncStatus {
+  return useSyncExternalStore(
+    (cb) => {
+      statusListeners.add(cb);
+      return () => statusListeners.delete(cb);
+    },
+    () => aggregate,
+    () => "saved",
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Själva synken – en körning åt gången per nyckel
+
+const running = new Map<string, Promise<void>>();
+const rerun = new Set<string>();
+const debounces = new Map<string, ReturnType<typeof setTimeout>>();
+const retries = new Map<string, { timer: ReturnType<typeof setTimeout>; step: number }>();
+const mountedKeys = new Map<string, number>();
+
+type Row = { value: unknown; updated_at: string };
+
+function scheduleRetry(key: string) {
+  const prev = retries.get(key);
+  if (prev) clearTimeout(prev.timer);
+  const step = Math.min(prev ? prev.step + 1 : 0, RETRY_STEPS_MS.length - 1);
+  const timer = setTimeout(() => {
+    void requestSync(key);
+  }, RETRY_STEPS_MS[step]);
+  retries.set(key, { timer, step });
+}
+
+function clearRetry(key: string) {
+  const prev = retries.get(key);
+  if (prev) clearTimeout(prev.timer);
+  retries.delete(key);
+}
+
+async function syncOnce(key: string): Promise<void> {
+  const user = await getSyncUser();
+  if (!user) {
+    if (hasUnsyncedCloudData(key)) setKeyStatus(key, "pending");
+    return;
+  }
+
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const { data, error } = await supabase
+      .from("user_kv")
+      .select("value, updated_at")
+      .eq("user_id", user.id)
+      .eq("key", key)
+      .maybeSingle();
+    if (!isActiveOwner(user.id)) return; // kontot byttes under tiden
+    if (error) {
+      setKeyStatus(key, hasUnsyncedCloudData(key) ? "error" : "saved");
+      if (hasUnsyncedCloudData(key)) scheduleRetry(key);
+      return;
+    }
+    const row = data as Row | null;
+    const unsynced = hasUnsyncedCloudData(key);
+
+    if (!unsynced) {
+      // Inget lokalt att skicka: molnet är sanningen.
+      if (row) {
+        const cloudValue = withoutRemoved(key, row.value);
+        if (JSON.stringify(cloudValue) !== JSON.stringify(currentValue(key))) {
+          writeLocal(key, cloudValue);
+        }
+        const ts = new Date(row.updated_at).getTime();
+        markConfirmed(key, Math.max(ts, readMeta(key, META_SUFFIX)), cloudValue);
+      }
+      clearRetry(key);
+      setKeyStatus(key, "saved");
+      return;
+    }
+
+    const revision = revisions.get(key) ?? 0;
+    const editStamp = readMeta(key, META_SUFFIX) || Date.now();
+    const local = currentValue(key);
+
+    if (!row && isEmptyValue(key, local)) {
+      markConfirmed(key, editStamp, local);
+      setKeyStatus(key, "saved");
+      return;
+    }
+
+    const merged = row
+      ? mergeSyncValues({
+          base: readBase(key),
+          local,
+          cloud: row.value,
+          removed: new Set(readRemoved(key)),
+          localUpdatedAt: editStamp,
+          cloudUpdatedAt: new Date(row.updated_at).getTime(),
+        })
+      : local;
+
+    let writeError: { code?: string } | null = null;
+    let wrote = false;
+    if (row) {
+      const res = await supabase
+        .from("user_kv")
+        .update({ value: merged as never })
+        .eq("user_id", user.id)
+        .eq("key", key)
+        .eq("updated_at", row.updated_at)
+        .select("updated_at");
+      writeError = res.error;
+      wrote = !res.error && Array.isArray(res.data) && res.data.length > 0;
+    } else {
+      const res = await supabase
+        .from("user_kv")
+        .insert({ user_id: user.id, key, value: merged as never })
+        .select("updated_at");
+      writeError = res.error;
+      wrote = !res.error;
+      if (res.error?.code === "23505") {
+        writeError = null; // en annan enhet hann först – läs om och slå ihop
+      }
+    }
+
+    if (writeError) {
+      setKeyStatus(key, "error");
+      scheduleRetry(key);
+      return;
+    }
+    if (!wrote) continue; // molnet ändrades mellan läsning och skrivning
+
+    // Skrivet. Visa det sammanslagna värdet om ingen ny ändring kommit under tiden.
+    if ((revisions.get(key) ?? 0) === revision) {
+      if (JSON.stringify(merged) !== JSON.stringify(local)) writeLocal(key, merged);
+      markConfirmed(key, editStamp, merged);
+      clearRetry(key);
+      setKeyStatus(key, "saved");
+    } else {
+      // Nya ändringar under skrivningen: basen är det som nu ligger i molnet.
+      lsSet(key + BASE_SUFFIX, JSON.stringify(snapshotBase(merged)));
+      lsSet(key + SYNCED_SUFFIX, String(editStamp));
+      rerun.add(key);
+    }
+    return;
+  }
+  // Fyra krockar i rad: försök igen lite senare.
+  setKeyStatus(key, "pending");
+  scheduleRetry(key);
+}
+
+/** Synkar en nyckel nu (eller direkt efter pågående körning). */
+export function requestSync(key: string): Promise<void> {
+  const d = debounces.get(key);
+  if (d) {
+    clearTimeout(d);
+    debounces.delete(key);
+  }
+  const current = running.get(key);
+  if (current) {
+    rerun.add(key);
+    return current;
+  }
+  const p = (async () => {
+    try {
+      do {
+        rerun.delete(key);
+        await syncOnce(key);
+      } while (rerun.has(key));
+    } catch {
+      setKeyStatus(key, "error");
+      scheduleRetry(key);
+    } finally {
+      running.delete(key);
+    }
+  })();
+  running.set(key, p);
+  return p;
+}
+
+function scheduleSync(key: string) {
+  setKeyStatus(key, "pending");
+  const d = debounces.get(key);
+  if (d) clearTimeout(d);
+  debounces.set(
+    key,
+    setTimeout(() => {
+      debounces.delete(key);
+      void requestSync(key);
+    }, DEBOUNCE_MS),
+  );
 }
 
 /**
- * localStorage-backed state that also syncs to public.user_kv when the user
- * is signed in. Last-write-wins based on a locally tracked updated_at.
- * Offline still works — cloud is best-effort.
+ * Skriver upp allt som väntar (debounce eller osynkat). Anropas före
+ * utloggning så att inget går förlorat bara för att timern inte hann gå.
+ */
+export async function flushCloudSync(): Promise<void> {
+  const keys = new Set<string>([...debounces.keys(), ...mountedKeys.keys()]);
+  await Promise.all(
+    [...keys]
+      .filter((k) => debounces.has(k) || hasUnsyncedCloudData(k) || running.has(k))
+      .map((k) => requestSync(k).catch(() => undefined)),
+  );
+}
+
+// Globala triggers: nätet tillbaka, appen i förgrunden, konto bundet.
+let globalsInstalled = false;
+function installGlobals() {
+  if (globalsInstalled || typeof window === "undefined") return;
+  globalsInstalled = true;
+  let last = 0;
+  const refreshAll = () => {
+    if (document.visibilityState !== "visible") return;
+    const now = Date.now();
+    if (now - last < 3000) return;
+    last = now;
+    for (const key of mountedKeys.keys()) void requestSync(key);
+  };
+  const onOnline = () => {
+    last = 0;
+    for (const key of mountedKeys.keys()) {
+      clearRetry(key);
+      void requestSync(key);
+    }
+  };
+  document.addEventListener("visibilitychange", refreshAll);
+  window.addEventListener("focus", refreshAll);
+  window.addEventListener("online", onOnline);
+  window.addEventListener(ACCOUNT_BOUND_EVENT, onOnline);
+}
+
+function handleIncoming(key: string, payload: { eventType: string; value: unknown }) {
+  // Lokala osynkade ändringar: slå ihop via vanlig synk i stället för att skriva över.
+  if (hasUnsyncedCloudData(key) || debounces.has(key) || running.has(key)) {
+    void requestSync(key);
+    return;
+  }
+  if (payload.eventType === "DELETE") {
+    writeLocal(key, initialValues.get(key));
+    lsSet(key + BASE_SUFFIX, JSON.stringify(snapshotBase(initialValues.get(key))));
+    return;
+  }
+  if (payload.value === undefined) return;
+  const incoming = withoutRemoved(key, payload.value);
+  writeLocal(key, incoming);
+  markConfirmed(key, Math.max(Date.now(), readMeta(key, META_SUFFIX)), incoming);
+  setKeyStatus(key, "saved");
+}
+
+/** Endast för tester. */
+export function __resetCloudSync(): void {
+  for (const d of debounces.values()) clearTimeout(d);
+  for (const r of retries.values()) clearTimeout(r.timer);
+  debounces.clear();
+  retries.clear();
+  running.clear();
+  rerun.clear();
+  sharedValues.clear();
+  keyStatus.clear();
+  revisions.clear();
+  aggregate = "saved";
+  cachedUser = null;
+}
+
+/** Endast för tester: registrera en nyckel utan React. */
+export function __registerKeyForTest(key: string, initial: unknown): void {
+  initialValues.set(key, initial);
+}
+
+/** Lokal ändring utan React (samma väg som hookens setter). */
+export function applyLocalChange<T>(key: string, update: T | ((prev: T) => T)): T {
+  const current = currentValue<T>(key);
+  const next = applyCloudStorageUpdate(current, update);
+  revisions.set(key, (revisions.get(key) ?? 0) + 1);
+  lsSet(key + META_SUFFIX, String(Math.max(Date.now(), readMeta(key, META_SUFFIX) + 1)));
+  rememberRemoved(key, current, next);
+  sharedValues.set(key, next);
+  return next;
+}
+
+/**
+ * localStorage-baserat state som också synkas till user_kv när användaren
+ * är inloggad. Fungerar offline; molnet slås ihop enligt sync-merge.ts.
  */
 export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
+  if (!initialValues.has(key)) initialValues.set(key, initialValue);
   if (!sharedValues.has(key)) sharedValues.set(key, value);
-  const hydratedRef = useRef(false);
-  const dirtyRef = useRef(false);
-  const localRevisionRef = useRef(0);
-  const initialRef = useRef(initialValue);
-  const valueRef = useRef(value);
-  valueRef.current = value;
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const getLocalUpdatedAt = () => readMeta(key, META_SUFFIX);
-
-  const setLocalUpdatedAt = (ts: number) => {
-    try {
-      window.localStorage.setItem(key + META_SUFFIX, String(ts));
-    } catch {
-      /* ignore */
-    }
-  };
-
-  const setLocalSyncedAt = (ts: number) => {
-    try {
-      window.localStorage.setItem(key + SYNCED_SUFFIX, String(ts));
-    } catch {
-      /* ignore */
-    }
-  };
-
-  // Är det lokala värdet fortfarande "tomt" (samma som standardvärdet)?
-  // Då får det aldrig skriva över något i molnet.
-  const isLocalEmpty = () => {
-    try {
-      return JSON.stringify(valueRef.current) === JSON.stringify(initialRef.current);
-    } catch {
-      return false;
-    }
-  };
-
-  /**
-   * Skriver upp nuvarande värde och bekräftar synken först när molnet
-   * svarat utan fel. Vid nätverksfel lämnas synced_at orört, så den lokala
-   * kopian räknas fortfarande som osynkad och skyddas vid utloggning.
-   */
-  const pushNow = useCallback(async () => {
-    const user = await getSyncUser();
-    if (!user) return;
-    const stamp = Date.now();
-    const revision = localRevisionRef.current;
-    setLocalUpdatedAt(stamp);
-    const latestValue = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
-    const { error } = await supabase.from("user_kv").upsert({
-      user_id: user.id,
-      key,
-      value: latestValue as never,
-    });
-    if (!error) {
-      setLocalSyncedAt(stamp);
-      if (localRevisionRef.current === revision) dirtyRef.current = false;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    installGlobals();
+    registerCloudKey(key);
+    mountedKeys.set(key, (mountedKeys.get(key) ?? 0) + 1);
+    void requestSync(key);
+    return () => {
+      const n = (mountedKeys.get(key) ?? 1) - 1;
+      if (n <= 0) mountedKeys.delete(key);
+      else mountedKeys.set(key, n);
+      // Debouncen lever vidare på modulnivå – en dialog som stängs inom
+      // fönstret tappar alltså inte sin ändring.
+    };
   }, [key]);
 
-  // Registrera nyckeln + flush-funktionen så länge hooken är monterad.
-  useEffect(() => {
-    registerCloudKey(key);
-    const flush = async () => {
-      if (!dirtyRef.current) return;
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      await pushNow();
-    };
-    flushers.add(flush);
-    return () => {
-      flushers.delete(flush);
-      // En kortlivad instans (t.ex. ändra/ta bort-dialogen) stängs ofta inom
-      // debounce-fönstret. Skriv upp ändringen direkt i stället för att tappa
-      // den – annars kommer borttagna poster tillbaka från molnet.
-      if (dirtyRef.current) {
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        void pushNow();
-      }
-    };
-  }, [key, pushNow]);
-
-  // Initial hydration from cloud
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const user = await getSyncUser();
-      if (!user || cancelled) return;
-
-      const { data, error } = await supabase
-        .from("user_kv")
-        .select("value, updated_at")
-        .eq("user_id", user.id)
-        .eq("key", key)
-        .maybeSingle();
-
-      if (cancelled) return;
-
-      // Läsningen misslyckades – rör inte molnet, annars riskerar vi att
-      // skriva över riktig data med en tom lista.
-      if (error) return;
-
-      const localTs = getLocalUpdatedAt();
-      if (data) {
-        const cloudTs = new Date(data.updated_at as string).getTime();
-        if (!dirtyRef.current && (cloudTs >= localTs || isLocalEmpty())) {
-          const cloudValue = withoutRemoved(key, data.value as T);
-          sharedValues.set(key, cloudValue);
-          setValue(cloudValue);
-          setLocalUpdatedAt(cloudTs);
-          setLocalSyncedAt(cloudTs);
-          hydratedRef.current = true;
-          return;
-        }
-        // Den lokala kopian vinner, men molnet kan innehålla saker som den
-        // här enheten aldrig sett. Slå ihop dem i stället för att skriva bort.
-        const merged = mergeMissingCloudEntries(valueRef.current, withoutRemoved(key, data.value));
-        if (merged !== valueRef.current) {
-          sharedValues.set(key, merged);
-          valueRef.current = merged;
-          setValue(merged);
-        }
-      }
-
-      hydratedRef.current = true;
-
-      // Inget i molnet och inget lokalt att spara – gör ingenting.
-      if (isLocalEmpty()) return;
-
-      await pushNow();
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, pushNow]);
-
-  // Push local changes to cloud (debounced) – bara efter en avsiktlig ändring.
-  useEffect(() => {
-    if (!hydratedRef.current) return;
-    if (!dirtyRef.current) return;
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      void pushNow();
-    }, 600);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [value, key, pushNow]);
-
-  // Liveuppdatering mellan öppna enheter. Inkommande värden går via den
-  // vanliga localStorage-cachen men markeras inte som lokala ändringar.
+  // Liveuppdatering mellan öppna enheter.
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
@@ -473,97 +565,26 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
       if (!user || cancelled) return;
       unsubscribe = subscribeToAccountTable("user_kv", user.id, (payload) => {
         if (payload.new.key !== key && payload.old.key !== key) return;
-        const cloudUpdatedAt = String(payload.new.updated_at ?? "");
-        const cloudTs = cloudUpdatedAt ? new Date(cloudUpdatedAt).getTime() : 0;
-        if (dirtyRef.current || (cloudTs > 0 && cloudTs <= getLocalUpdatedAt())) return;
-        if (payload.eventType === "DELETE") {
-          sharedValues.set(key, initialRef.current);
-          setValue(initialRef.current);
-          return;
-        }
-        if (payload.new.value === undefined) return;
-        const incoming = withoutRemoved(key, payload.new.value as T);
-        sharedValues.set(key, incoming);
-        setValue(incoming);
-        if (cloudTs > 0) {
-          setLocalUpdatedAt(cloudTs);
-          setLocalSyncedAt(cloudTs);
-        }
+        if (!isActiveOwner(user.id)) return;
+        handleIncoming(key, { eventType: payload.eventType, value: payload.new.value });
       });
     });
     return () => {
       cancelled = true;
       unsubscribe?.();
     };
-    // Local helpers are stable for the lifetime of this hook instance.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, setValue]);
-
-  // Appen kom tillbaka i förgrunden eller nätet återkom: hämta det senaste
-  // från molnet. Telefoner tappar liveanslutningen i bakgrunden, så ändringar
-  // från andra enheter hämtas här direkt i stället för vid nästa omstart.
-  useEffect(() => {
-    let last = 0;
-    const refresh = async () => {
-      if (document.visibilityState !== "visible") return;
-      const nowTs = Date.now();
-      if (nowTs - last < 3000) return;
-      last = nowTs;
-      if (dirtyRef.current) return;
-      const user = await getSyncUser();
-      if (!user) return;
-      const { data, error } = await supabase
-        .from("user_kv")
-        .select("value, updated_at")
-        .eq("user_id", user.id)
-        .eq("key", key)
-        .maybeSingle();
-      if (error || !data || dirtyRef.current) return;
-      const cloudTs = new Date(data.updated_at as string).getTime();
-      if (cloudTs <= getLocalUpdatedAt()) return;
-      const fresh = withoutRemoved(key, data.value as T);
-      sharedValues.set(key, fresh);
-      setValue(fresh);
-      setLocalUpdatedAt(cloudTs);
-      setLocalSyncedAt(cloudTs);
-    };
-    const onVis = () => void refresh();
-    document.addEventListener("visibilitychange", onVis);
-    window.addEventListener("focus", onVis);
-    window.addEventListener("online", onVis);
-    return () => {
-      document.removeEventListener("visibilitychange", onVis);
-      window.removeEventListener("focus", onVis);
-      window.removeEventListener("online", onVis);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, setValue]);
-
-  // Nätet kom tillbaka – försök igen med det som inte hunnit bekräftas.
-  useEffect(() => {
-    const retry = () => {
-      if (hasUnsyncedCloudData(key)) void pushNow();
-    };
-    window.addEventListener("online", retry);
-    return () => window.removeEventListener("online", retry);
-  }, [key, pushNow]);
+  }, [key]);
 
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {
-      dirtyRef.current = true;
-      localRevisionRef.current += 1;
-      setLocalUpdatedAt(Date.now());
-      const current = (sharedValues.get(key) as T | undefined) ?? valueRef.current;
-      const next = applyCloudStorageUpdate(current, v);
-      rememberRemoved(key, current, next);
-      sharedValues.set(key, next);
-      valueRef.current = next;
+      if (sharedValues.get(key) === undefined) sharedValues.set(key, value);
+      const next = applyLocalChange<T>(key, v);
       setValue(next);
+      scheduleSync(key);
     },
-
-    // setLocalUpdatedAt är en lokal setter och behöver inte stå med här.
+    // value används bara som reserv om delat värde saknas.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setValue],
+    [key, setValue],
   );
 
   return [value, setAndStamp] as const;
