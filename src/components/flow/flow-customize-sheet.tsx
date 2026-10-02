@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { FlowRoom } from "@/components/flow/flow-room";
 import { AppearanceChoice } from "@/components/flow/flow-appearance-controls";
 import { useMyFlowAppearance, type FlowAppearance } from "@/hooks/use-my-flow";
-import { flushCloudSync, useCloudSyncStatus } from "@/lib/cloud-storage";
+import { flushCloudSync, getCloudSyncStatus, useCloudSyncStatus } from "@/lib/cloud-storage";
 import shirt from "@/assets/flow-shirt.png";
 import hoodie from "@/assets/flow-hoodie.png";
 import sleep from "@/assets/flow-sleep.png";
@@ -46,7 +46,7 @@ export function FlowCustomizeSheet({ open, onOpenChange }: { open: boolean; onOp
       </div>
       {status === "error" && <p role="alert" className="text-sm text-destructive">Kunde inte spara i molnet. Dina val finns kvar på enheten. Försök igen när du har uppkoppling.</p>}
       <div className="sticky bottom-0 flex gap-2 bg-background py-2">
-        <Button disabled={saving} className="flex-1" onClick={async () => { setSaving(true); setSaved(draft); try { await flushCloudSync(); onOpenChange(false); } finally { setSaving(false); } }}>Spara utseende</Button>
+        <Button disabled={saving} className="flex-1" onClick={async () => { setSaving(true); setSaved(draft); try { await flushCloudSync(); if (getCloudSyncStatus() !== "error") onOpenChange(false); } finally { setSaving(false); } }}>Spara utseende</Button>
         <Button variant="outline" onClick={() => onOpenChange(false)}>Avbryt</Button>
       </div>
     </SheetContent>

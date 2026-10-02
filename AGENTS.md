@@ -13,6 +13,7 @@
 
 Min Flow uses existing account-scoped cloud storage for appearance and explicit memories; this avoids a parallel preference or chat system.
 Flow's room uses the uploaded animation only as a scene-specific visual; the shared FlowMascot remains unchanged elsewhere so existing screens keep their established identity.
+Keep the living Flow room's appearance in the existing account-scoped cloud storage and use one customization sheet for both its home entry and legacy route, so appearance choices stay consistent.
 
 Use the existing Inter and Plus Jakarta Sans typography for functional UI; reserve normal-style Caveat for selected personal greetings so readability stays consistent.
 Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.

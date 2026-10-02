@@ -83,7 +83,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
   }, [greeting]);
 
   const outfit = isNight ? "pyjamas" : selected.outfit ?? "vanlig";
-  const image = isNight ? sleepingImage : moment === "te" && zone === "fatolj" ? teaImage : moment === "filt" && zone === "fatolj" ? blanketImage : outfit === "hoodie" ? hoodieImage : outfit === "troja" ? shirtImage : outfit === "pyjamas" ? sleepingImage : greetingMotion && !still ? wave.url : zone !== "fatolj" && !still ? walkRight.url : still ? stillImage.url : idleAnimation.url;
+  const image = isNight ? sleepingImage : outfit === "hoodie" ? hoodieImage : outfit === "troja" ? shirtImage : outfit === "pyjamas" ? sleepingImage : moment === "te" && zone === "fatolj" ? teaImage : moment === "filt" && zone === "fatolj" ? blanketImage : greetingMotion && !still ? wave.url : zone !== "fatolj" && !still ? walkRight.url : still ? stillImage.url : idleAnimation.url;
   const accessory = selected.accessory && selected.accessory !== "ingen" && !isNight ? accessoryImages[selected.accessory] : null;
   const moveTo = (next: Zone) => { if (isNight) return; setZone(next); setMoment(next === "fatolj" ? "sitta" : "vandra"); };
   const sayHello = () => { setGreeting(isNight ? "Zzz… sov så gott ♡" : "Skönt att du är här ♡"); setGreetingMotion(!isNight && !still); };
@@ -91,7 +91,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
   return <div className="space-y-2">
     <div className={`flow-room-scene relative isolate overflow-hidden rounded-3xl bg-lavender ${compact ? "aspect-[4/3]" : "aspect-[1.45] sm:aspect-[2.15]"}`} data-time={time} data-zone={zone} aria-label="Flows rum, en trygg plats att vila i">
       <img src={room} width={1280} height={800} alt="Ombonat rum med fåtölj, växter och mjuk belysning" className="absolute inset-0 h-full w-full object-cover object-center" />
-      <img src={nightRoom} width={1144} height={736} alt="" className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${time === "natt" ? "opacity-100" : time === "kvall" ? "opacity-60" : "opacity-0"}`} />
+      <img src={nightRoom} width={1144} height={736} alt="" className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${time === "natt" ? "opacity-100 brightness-75" : time === "kvall" ? "opacity-60" : "opacity-0"}`} />
       <div className={`pointer-events-none absolute inset-0 ${selected.theme === "rosen" ? "bg-accent/15" : selected.theme === "kvall" ? "bg-primary/15" : ""}`} />
       {time === "kvall" && <div className="flow-room-lamp pointer-events-none absolute inset-0" />}
       {selected.picture && selected.picture !== "original" && <img src={selected.picture === "blommor" ? flowers : mountains} alt="" className="flow-room-picture pointer-events-none absolute z-[1] object-fill" />}
