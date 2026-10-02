@@ -1,4 +1,5 @@
 ## 2026-10-02
+- Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
 - Barnschema: lägga till och ändra aktivitet öppnas nu i ett popup-fönster i stället för längre ner på sidan.
 - Navigering: varje sida öppnas alltid längst upp.
 - Kalender: aktiviteter hamnar inte längre i Vård bara för att titeln innehåller ord som "test"; ord matchas nu bara från ordets början.
