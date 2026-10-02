@@ -48,7 +48,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
   }, [moment, still]);
 
   const image = moment === "te" ? teaImage : moment === "filt" ? blanketImage : moment === "promenera" && !still ? walkRight.url : still ? stillImage.url : idleAnimation.url;
-  const description = moment === "te" ? "Flow sitter i fåtöljen med en kopp te" : moment === "filt" ? "Flow myser med en filt i fåtöljen" : moment === "promenera" ? "Flow tar några steg på mattan" : "Flow sitter lugnt i fåtöljen";
+  const description = moment === "te" ? "Flow sitter i fåtöljen med en kopp te" : moment === "filt" ? "Flow myser med en filt i fåtöljen" : moment === "promenera" ? still ? "Flow står på mattan" : "Flow tar några steg på mattan" : "Flow sitter lugnt i fåtöljen";
   return (
     <div className="space-y-2">
       <div className={`relative isolate overflow-hidden rounded-3xl ${themeClasses[selected.theme]} ${compact ? "aspect-[4/3]" : "aspect-[1.45] sm:aspect-[2.15]"}`} aria-label="Flows rum, en trygg plats att vila i">
