@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini (2026-10-02)",
     "Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup (2026-10-02)",
     "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",
     "Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet (2026-10-02)",
