@@ -581,8 +581,7 @@ export default function Layout({ children }: LayoutProps) {
     "/idag",
     "/flowplan",
   ]);
-  // Tidigare hette platsen "Planera" men ledde till Flow-hjälpen.
-  // Nu leder den till planeringssidan – en gång, sedan bestämmer du själv.
+  // Behåll tidigare valda navigationsplatser; huvudfliken Flow leder till Min Flow.
   const [navMigrated, setNavMigrated] = useCloudSyncedStorage<boolean>(
     "myflove-bottom-nav-planering-v1",
     false,

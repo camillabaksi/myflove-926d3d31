@@ -75,12 +75,15 @@ const tomorrowISO = (): string => {
 const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
 const GREETING =
-  "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";
+  "Hej! 💜 Vad behöver du just nu?";
 
 const QUICK_PROMPTS = [
-  "Det känns för mycket idag",
-  "Hjälp mig bryta ner en uppgift",
-  "Vad borde jag börja med?",
+  { label: "Få hjälp att planera", prompt: "Hjälp mig planera med FlowPlan utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
+  { label: "Jag känner mig stressad", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
+  { label: "Jag behöver motivation", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
+  { label: "Jag vill ta en paus", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
+  { label: "Jag behöver en lugn stund", prompt: "Jag behöver en lugn stund. Hjälp mig varva ner med en kort övning." },
+  { label: "Något annat…", prompt: null },
 ];
 
 /** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
@@ -511,17 +514,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
         <div className="space-y-6 min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (place && place.path !== "/assistant") void navigate({ to: place.path });
-                else void navigate({ to: "/hem" });
-              }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium shadow-sm transition-transform active:scale-95"
-            >
+            <Button asChild variant="outline" className="rounded-2xl"><Link to="/flow">
               <ArrowLeft size={16} />
-              Tillbaka till {place ? place.label : "Hem"}
-            </button>
+              Min Flow
+            </Link></Button>
           </div>
 
           <nav
@@ -769,17 +765,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
-              {[puzzle.flowPrompt, ...(place ? [place.prompt] : []), ...QUICK_PROMPTS]
-                .filter((p, i, arr) => p && arr.indexOf(p) === i)
-                .map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => void send(p)}
-                    className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-                  >
-                    {p}
-                  </button>
-                ))}
+              {QUICK_PROMPTS.map(({ label, prompt }) => (
+                <Button key={label} variant="outline" className="h-auto min-h-11 whitespace-normal rounded-2xl bg-card px-3 py-2 text-left" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
+              ))}
             </div>
           )}
 
