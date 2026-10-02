@@ -172,6 +172,7 @@ export const analyzeCalendarImport = createServerFn({ method: "POST" })
 
     try {
       const raw = await readOutputText(res);
+      console.error("calendar-import raw output:", raw.slice(0, 2000));
       const parsed = JSON.parse(raw) as { readable?: boolean; items?: unknown[] };
       const items = (parsed.items ?? []).map(sanitize).filter((i): i is ImportedItem => !!i);
       if (parsed.readable === false && items.length === 0) return { status: "unreadable", items };
