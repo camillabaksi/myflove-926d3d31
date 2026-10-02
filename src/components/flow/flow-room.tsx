@@ -16,7 +16,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
       <img src={room} width={1280} height={800} alt="Ombonat rum med fåtölj, växter, böcker och mjuk belysning" className="absolute inset-0 h-full w-full object-cover object-center" />
       <div className={`pointer-events-none absolute inset-0 ${selected.theme === "rosen" ? "bg-accent/15" : selected.theme === "kvall" ? "bg-primary/25" : "bg-transparent"}`} />
       <div className="absolute inset-0 flex items-end justify-center pb-[3%]">
-        <FlowMascot size="lg" mood={selected.motion === "still" ? "none" : "calm"} alive={selected.motion !== "still"} className="drop-shadow-lg" />
+        <FlowMascot size="lg" mood={selected.motion === "still" ? "none" : "calm"} alive={selected.motion !== "still"} motionOverride={selected.motion} className="drop-shadow-lg" />
       </div>
     </div>
   );

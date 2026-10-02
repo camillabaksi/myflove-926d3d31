@@ -132,6 +132,7 @@ export function FlowMascot({
   wave = false,
   mood,
   alive = true,
+  motionOverride,
   status = "idle",
   bump = false,
   className,
@@ -147,6 +148,8 @@ export function FlowMascot({
   mood?: FlowMood;
   /** Levande detaljer: andning, blinkningar och blick som följer. */
   alive?: boolean;
+  /** Förhandsgranskning av osparat rörelseval i Min Flow. */
+  motionOverride?: "mjuk" | "still";
   /** Samtalsstatus: lyssnar när du skriver, tänker vid väntan, andas ut när det är klart. */
   status?: FlowStatus;
   /**
@@ -164,7 +167,7 @@ export function FlowMascot({
   // som styrs via JavaScript och inte fångas av CSS-regeln.
   const { settings: npf } = useNpfSettings();
   const [appearance] = useMyFlowAppearance();
-  const lively = alive && appearance.motion !== "still" && !npf.stillness;
+  const lively = alive && (motionOverride ?? appearance.motion) !== "still" && !npf.stillness;
   const blinking = useFlowBlink(lively, tempo);
   const { ref, tilt } = useFlowGaze(lively);
   // Under tänkandet vandrar blicken uppåt/bort i stället för att följa pekaren.

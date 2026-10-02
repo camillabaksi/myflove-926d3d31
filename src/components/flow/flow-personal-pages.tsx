@@ -54,12 +54,13 @@ export function FlowCustomizePage() {
   const [saved, setSaved] = useMyFlowAppearance();
   const [draft, setDraft] = useState<FlowAppearance>(saved);
   const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
   useEffect(() => setDraft(saved), [saved]);
   return <PageFrame title="Anpassa Flow">
     <FlowRoom appearance={draft} compact />
     <section className="space-y-3"><h2 className="font-semibold">Flows rum</h2><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{FLOW_THEMES.map(theme => <Button key={theme.id} variant="outline" aria-pressed={draft.theme === theme.id} onClick={() => setDraft(prev => ({ ...prev, theme: theme.id }))} className={`h-auto min-h-20 flex-col items-start gap-1 whitespace-normal rounded-2xl bg-card p-3 text-left ${draft.theme === theme.id ? "border-primary ring-2 ring-ring" : ""}`}><span className="font-semibold">{draft.theme === theme.id && <Check className="mr-1 inline size-4" />}{theme.name}</span><span className="text-xs font-normal text-muted-foreground">{theme.description}</span></Button>)}</div></section>
     <section className="space-y-3"><h2 className="font-semibold">Rörelse</h2><div className="grid grid-cols-2 gap-2"><Button variant="outline" aria-pressed={draft.motion === "mjuk"} className={`rounded-2xl ${draft.motion === "mjuk" ? "border-primary ring-2 ring-ring" : ""}`} onClick={() => setDraft(prev => ({ ...prev, motion: "mjuk" }))}>Mjuk rörelse</Button><Button variant="outline" aria-pressed={draft.motion === "still"} className={`rounded-2xl ${draft.motion === "still" ? "border-primary ring-2 ring-ring" : ""}`} onClick={() => setDraft(prev => ({ ...prev, motion: "still" }))}>Ingen rörelse</Button></div></section>
-    <SaveState /><div className="flex gap-2"><Button className="flex-1 rounded-2xl" onClick={() => { setSaved(draft); void navigate({ to: "/flow" }); }}>Spara utseende</Button><Button variant="outline" className="rounded-2xl" onClick={() => void navigate({ to: "/flow" })}>Avbryt</Button></div>
+    <SaveState /><div className="flex gap-2"><Button className="flex-1 rounded-2xl" disabled={saving} onClick={async () => { setSaving(true); setSaved(draft); await flushCloudSync(); setSaving(false); void navigate({ to: "/flow" }); }}>Spara utseende</Button><Button variant="outline" className="rounded-2xl" onClick={() => void navigate({ to: "/flow" })}>Avbryt</Button></div>
   </PageFrame>;
 }
 
