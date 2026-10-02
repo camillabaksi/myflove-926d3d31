@@ -6,6 +6,7 @@ import { MyFloveHeader } from "@/components/myflove";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
   Loader2,
   Send,
