@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { FlowRoom } from "@/components/flow/flow-room";
-import { useCloudSyncStatus, flushCloudSync } from "@/lib/cloud-storage";
+import { useCloudSyncStatus, flushCloudSync, getCloudSyncStatus } from "@/lib/cloud-storage";
 import { DEFAULT_FLOW_APPEARANCE, FLOW_THEMES, useMyFlowAppearance, useMyFlowMemories, type FlowAppearance } from "@/hooks/use-my-flow";
 
 const suggestions = [
@@ -60,14 +60,15 @@ export function FlowCustomizePage() {
     <FlowRoom appearance={draft} compact />
     <section className="space-y-3"><h2 className="font-semibold">Flows rum</h2><div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{FLOW_THEMES.map(theme => <Button key={theme.id} variant="outline" aria-pressed={draft.theme === theme.id} onClick={() => setDraft(prev => ({ ...prev, theme: theme.id }))} className={`h-auto min-h-20 flex-col items-start gap-1 whitespace-normal rounded-2xl bg-card p-3 text-left ${draft.theme === theme.id ? "border-primary ring-2 ring-ring" : ""}`}><span className="font-semibold">{draft.theme === theme.id && <Check className="mr-1 inline size-4" />}{theme.name}</span><span className="text-xs font-normal text-muted-foreground">{theme.description}</span></Button>)}</div></section>
     <section className="space-y-3"><h2 className="font-semibold">Rörelse</h2><div className="grid grid-cols-2 gap-2"><Button variant="outline" aria-pressed={draft.motion === "mjuk"} className={`rounded-2xl ${draft.motion === "mjuk" ? "border-primary ring-2 ring-ring" : ""}`} onClick={() => setDraft(prev => ({ ...prev, motion: "mjuk" }))}>Mjuk rörelse</Button><Button variant="outline" aria-pressed={draft.motion === "still"} className={`rounded-2xl ${draft.motion === "still" ? "border-primary ring-2 ring-ring" : ""}`} onClick={() => setDraft(prev => ({ ...prev, motion: "still" }))}>Ingen rörelse</Button></div></section>
-    <SaveState /><div className="flex gap-2"><Button className="flex-1 rounded-2xl" disabled={saving} onClick={async () => { setSaving(true); setSaved(draft); await flushCloudSync(); setSaving(false); void navigate({ to: "/flow" }); }}>Spara utseende</Button><Button variant="outline" className="rounded-2xl" onClick={() => void navigate({ to: "/flow" })}>Avbryt</Button></div>
+    <SaveState /><div className="flex gap-2"><Button className="flex-1 rounded-2xl" disabled={saving} onClick={async () => { setSaving(true); setSaved(draft); await flushCloudSync(); setSaving(false); if (getCloudSyncStatus() !== "error") void navigate({ to: "/flow" }); }}>Spara utseende</Button><Button variant="outline" className="rounded-2xl" onClick={() => void navigate({ to: "/flow" })}>Avbryt</Button></div>
   </PageFrame>;
 }
 
 export function FlowCollectionPage() {
-  const [saved] = useMyFlowAppearance();
+  const [saved, setSaved] = useMyFlowAppearance();
   return <PageFrame title="Min samling">
     <p className="text-sm text-muted-foreground">Alla rumsteman finns här från början. Välj det som känns bra just nu.</p>
-    <div className="space-y-3">{FLOW_THEMES.map(theme => <div key={theme.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-3xl bg-card p-3 shadow-soft"><div className="min-w-0"><FlowRoom appearance={{ ...DEFAULT_FLOW_APPEARANCE, theme: theme.id, motion: "still" }} compact /><h2 className="mt-2 font-semibold">{theme.name}</h2><p className="text-xs text-muted-foreground">{theme.description}</p></div><Button asChild variant="outline" className="rounded-2xl"><Link to="/flow-anpassa">{saved.theme === theme.id ? "Valt" : "Välj"}</Link></Button></div>)}</div>
+    <div className="space-y-3">{FLOW_THEMES.map(theme => <div key={theme.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-3xl bg-card p-3 shadow-soft"><div className="min-w-0"><FlowRoom appearance={{ ...DEFAULT_FLOW_APPEARANCE, theme: theme.id, motion: "still" }} compact /><h2 className="mt-2 font-semibold">{theme.name}</h2><p className="text-xs text-muted-foreground">{theme.description}</p></div><Button type="button" variant="outline" className="rounded-2xl" disabled={saved.theme === theme.id} onClick={() => setSaved(prev => ({ ...prev, theme: theme.id }))}>{saved.theme === theme.id ? "Valt" : "Välj"}</Button></div>)}</div>
+    <SaveState />
   </PageFrame>;
 }
