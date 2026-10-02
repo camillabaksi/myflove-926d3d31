@@ -1,4 +1,8 @@
 ## 2026-10-02
+
+- Kontoseparering av lokal data, synk med trevägssammanslagning och villkorade skrivningar, tillförlitlig lokal kryptering utan klartextreserv, diskret synkstatus, Återhämtning synlig i lågt läge, regressionstester och uppdaterad ARCHITECTURE.md.
+
+## 2026-10-02
 - Kalenderimport: PDF:er läses nu som text (tidigare skickades de som bild, vilket Flow inte kunde tolka), och Flows svar tolkas även när det kommer som en ren lista – importerade händelser hittas igen.
 
 ## 2026-10-02
