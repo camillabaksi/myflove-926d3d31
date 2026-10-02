@@ -1,5 +1,10 @@
 # Roadmap
 
+## Min Flow: sammanhängande rum (2026-10-02)
+- [x] Bygg grundscen med Flow sittande i fåtöljen och en helscen med hårspänne som enda godkända tillbehör.
+- [x] Dölj inkompatibla poser, kläder, lösa tillbehör och rumsöverlägg utan att radera sparade val.
+- [ ] Verifiera rum och förhandsvisning på flera mobilbredder samt minskad rörelse.
+
 ## Levande Min Flow (2026-10-02)
 - [x] Dag, kväll och natt med manuellt testläge, lugn vandring mellan fyra platser och nattvila.
 - [x] Bottenpanel för val av kläder, accessoarer och rumsdetaljer med förhandsvisning och kontobunden sparning.
