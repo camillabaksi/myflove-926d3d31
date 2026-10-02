@@ -151,10 +151,13 @@ export function bindAccount(
     return "adopted";
   }
 
+  const incoming = stashedKeys(userId);
   if (active.length > 0) stashKeys(owner ?? UNOWNED, active);
   restoreStash(userId);
   setDataOwner(userId);
-  return "switched";
+  // Ingenting flyttades (t.ex. första inloggningen efter en ren utloggning):
+  // ingen omladdning behövs.
+  return active.length > 0 || incoming.length > 0 ? "switched" : "adopted";
 }
 
 /**

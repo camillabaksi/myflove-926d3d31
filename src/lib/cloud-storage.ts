@@ -551,6 +551,11 @@ export function applyLocalChange<T>(key: string, update: T | ((prev: T) => T)): 
   lsSet(key + META_SUFFIX, String(Math.max(Date.now(), readMeta(key, META_SUFFIX) + 1)));
   rememberRemoved(key, current, next);
   sharedValues.set(key, next);
+  try {
+    secureSetItem(key, JSON.stringify(next));
+  } catch {
+    /* full lagring – värdet finns i minnet och skickas till molnet */
+  }
   return next;
 }
 
