@@ -3,7 +3,13 @@ import { useLocalStorage } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
 import { isActiveOwner } from "@/lib/account-scope";
-import { secureGetItem, secureSetItem } from "@/lib/secure-local";
+import {
+  SECURE_UNLOCK_EVENT,
+  isSensitiveKey,
+  secureGetItem,
+  secureSetItem,
+  unlockSecureLocal,
+} from "@/lib/secure-local";
 import { mergeSyncValues, snapshotBase, type SyncBase } from "@/lib/sync-merge";
 import type { User } from "@supabase/supabase-js";
 
@@ -296,6 +302,15 @@ function clearRetry(key: string) {
 }
 
 async function syncOnce(key: string): Promise<void> {
+  if (isSensitiveKey(key)) {
+    await unlockSecureLocal();
+    // Krypterat men oläsbart just nu: skicka aldrig ett "tomt" värde.
+    const raw = lsGet(key);
+    if (raw !== null && raw.startsWith("enc:v1:") && secureGetItem(key) === null) {
+      setKeyStatus(key, "pending");
+      return;
+    }
+  }
   const user = await getSyncUser();
   if (!user) {
     if (hasUnsyncedCloudData(key)) setKeyStatus(key, "pending");
@@ -483,6 +498,11 @@ function installGlobals() {
   window.addEventListener("focus", refreshAll);
   window.addEventListener("online", onOnline);
   window.addEventListener(ACCOUNT_BOUND_EVENT, onOnline);
+  // Värden som lästs före upplåsning eller ändrats i en annan flik ska läsas om.
+  window.addEventListener(SECURE_UNLOCK_EVENT, () => sharedValues.clear());
+  window.addEventListener("storage", (e) => {
+    if (e.key) sharedValues.delete(e.key);
+  });
 }
 
 function handleIncoming(key: string, payload: { eventType: string; value: unknown }) {
@@ -541,7 +561,6 @@ export function applyLocalChange<T>(key: string, update: T | ((prev: T) => T)): 
 export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useLocalStorage<T>(key, initialValue);
   if (!initialValues.has(key)) initialValues.set(key, initialValue);
-  if (!sharedValues.has(key)) sharedValues.set(key, value);
 
   useEffect(() => {
     installGlobals();
@@ -577,13 +596,10 @@ export function useCloudSyncedStorage<T>(key: string, initialValue: T) {
 
   const setAndStamp = useCallback(
     (v: T | ((prev: T) => T)) => {
-      if (sharedValues.get(key) === undefined) sharedValues.set(key, value);
       const next = applyLocalChange<T>(key, v);
       setValue(next);
       scheduleSync(key);
     },
-    // value används bara som reserv om delat värde saknas.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [key, setValue],
   );
 
