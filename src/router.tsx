@@ -9,7 +9,7 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    scrollRestoration: true,
+    scrollRestoration: false,
     defaultPreloadStaleTime: 0,
     defaultViewTransition: true,
     // Utan detta blir varje renderingsfel en vit skärm.

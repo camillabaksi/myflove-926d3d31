@@ -185,6 +185,11 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
+  const mainScrollRef = React.useRef<HTMLDivElement>(null);
+  React.useLayoutEffect(() => {
+    mainScrollRef.current?.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0 });
+  }, [location]);
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const {
@@ -865,6 +870,7 @@ export default function Layout({ children }: LayoutProps) {
         )}
 
         <div
+          ref={mainScrollRef}
           className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={CATEGORY_THEMES[location] as React.CSSProperties}
         >
