@@ -5,7 +5,7 @@
 - [x] Dölj inkompatibla poser, kläder, lösa tillbehör och rumsöverlägg utan att radera sparade val.
 - [ ] Skapa en riktig sittande pose av samma Flow, integrerad med dynans perspektiv och ljus. Dagens godkända figur har en stående pose.
 - [ ] Skapa ett hårspänne anpassat till denna pose och en helscen som inte ändrar Flows päls eller ansikte.
-- [ ] Verifiera rum och förhandsvisning på flera mobilbredder samt minskad rörelse.
+- [x] Verifiera rum och förhandsvisning på 360, 390 och 430 px samt minskad rörelse.
 
 ## Levande Min Flow (2026-10-02)
 - [x] Dag, kväll och natt med manuellt testläge, lugn vandring mellan fyra platser och nattvila.

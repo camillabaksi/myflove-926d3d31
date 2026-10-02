@@ -1058,8 +1058,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Rum och sittande Flow är en enda bild: samma beskärning och koordinater på alla skärmar. */
 .flow-room-art { transition: filter 1s ease-in-out; }
+.flow-room-scene[data-time="dag"][data-theme="rosen"] .flow-room-art { filter: sepia(.16) saturate(1.08); }
+.flow-room-scene[data-time="dag"][data-theme="kvall"] .flow-room-art { filter: brightness(.83) sepia(.12); }
 .flow-room-scene[data-time="kvall"] .flow-room-art { filter: brightness(.83) sepia(.12); }
+.flow-room-scene[data-time="kvall"][data-theme="rosen"] .flow-room-art { filter: brightness(.84) sepia(.22) saturate(1.08); }
+.flow-room-scene[data-time="kvall"][data-theme="kvall"] .flow-room-art { filter: brightness(.76) sepia(.16); }
 .flow-room-scene[data-time="natt"] .flow-room-art { filter: brightness(.58) saturate(.8); }
+.flow-room-scene[data-time="natt"][data-theme="rosen"] .flow-room-art { filter: brightness(.61) sepia(.12) saturate(.85); }
+.flow-room-scene[data-time="natt"][data-theme="kvall"] .flow-room-art { filter: brightness(.52) saturate(.78); }
 .flow-room-greet { left: 39%; top: 32%; width: 23%; height: 29%; }
 @media (prefers-reduced-motion: reduce) { .flow-room-art { transition: none; } }
 

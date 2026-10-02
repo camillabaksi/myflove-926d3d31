@@ -37,7 +37,7 @@ export function FlowRoom({ appearance, compact = false }: { appearance?: FlowApp
   }, [greeting]);
 
   return <div className="space-y-2">
-    <div className="flow-room-scene relative isolate aspect-[1264/848] overflow-hidden rounded-3xl bg-lavender" data-time={time} aria-label="Flows rum, en trygg plats att vila i">
+    <div className="flow-room-scene relative isolate aspect-[1264/848] overflow-hidden rounded-3xl bg-lavender" data-time={time} data-theme={selected.theme} aria-label="Flows rum, en trygg plats att vila i">
       <img src={roomSceneImage(selected)} width={1264} height={848} alt="Flow vilar med sitt rosa hjärta i fåtöljen i ett ombonat rum" className="flow-room-art absolute inset-0 h-full w-full" />
       <Button type="button" variant="ghost" onClick={() => setGreeting(true)} aria-label="Hälsa på Flow" className="flow-room-greet absolute z-[2] rounded-full bg-transparent p-0 hover:bg-transparent focus-visible:ring-2 focus-visible:ring-ring" />
       {greeting && <p role="status" className="absolute right-2 top-2 z-[3] max-w-[55%] rounded-2xl bg-card/95 px-3 py-2 text-xs font-medium text-foreground shadow-soft">{time === "natt" ? "En lugn stund tillsammans ♡" : "Skönt att du är här ♡"}</p>}
