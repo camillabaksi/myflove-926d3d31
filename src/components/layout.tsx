@@ -1,5 +1,6 @@
 import * as React from "react";
 import { SyncStatusNote } from "@/components/sync-status-note";
+import { UnownedDataPrompt } from "@/components/unowned-data-prompt";
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { Link as RouterLink, useRouter } from "@tanstack/react-router";
@@ -720,6 +721,7 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
         <DemoBanner isDemo={isDemo} />
         <SyncStatusNote />
+        <UnownedDataPrompt />
 
         {/* Mobile Header */}
         <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
