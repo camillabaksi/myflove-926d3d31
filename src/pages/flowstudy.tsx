@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Brain,
   Sparkles,
@@ -65,6 +66,7 @@ export function StudyBuddyContent() {
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const [newMaterialOpen, setNewMaterialOpen] = useState(false);
 
   const [openSetId, setOpenSetId] = useState<string | null>(null);
   const [mode, setMode] = useState<"cards" | "quiz" | null>(null);
@@ -133,6 +135,7 @@ export function StudyBuddyContent() {
       setText("");
       setFile(null);
       setExamDateInput("");
+      setNewMaterialOpen(false);
       setOpenSetId(record.id);
       setMode(cards.length > 0 ? "cards" : "quiz");
       toast({
@@ -180,9 +183,20 @@ export function StudyBuddyContent() {
       )}
 
       {/* Nytt material */}
-      <div className="bg-card border border-border rounded-2xl p-5">
-        <CollapsibleSection title="Nytt studiematerial" headingClassName="text-lg font-semibold">
-          <form onSubmit={handleGenerate} className="space-y-3">
+      <Button
+        type="button"
+        onClick={() => setNewMaterialOpen(true)}
+        className="h-12 rounded-xl px-5"
+      >
+        <PlusCircle size={16} className="mr-2" /> Nytt studiematerial
+      </Button>
+
+      <Dialog open={newMaterialOpen} onOpenChange={setNewMaterialOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Nytt studiematerial</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleGenerate} className="space-y-3 pt-2">
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -336,8 +350,8 @@ export function StudyBuddyContent() {
               repetition sist.
             </p>
           </form>
-        </CollapsibleSection>
-      </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Studiematerial */}
       <CollapsibleSection title="Ditt material" headingClassName="text-lg font-semibold">
@@ -451,7 +465,14 @@ export function StudyBuddyContent() {
                 </Button>
               </div>
 
-              {addingId === set.id && (
+              <Dialog
+                open={addingId === set.id}
+                onOpenChange={(open) => setAddingId(open ? set.id : null)}
+              >
+                <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                  <DialogHeader>
+                    <DialogTitle>Lägg till i setet</DialogTitle>
+                  </DialogHeader>
                 <AddMaterialForm
                   onCancel={() => setAddingId(null)}
                   onSubmit={async (payload) => {
@@ -478,7 +499,8 @@ export function StudyBuddyContent() {
                     });
                   }}
                 />
-              )}
+                </DialogContent>
+              </Dialog>
 
               {isOpen && mode === "cards" && openSet && (
                 <FlashcardRunner

@@ -4,6 +4,7 @@ import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Flame, Plus, ThumbsUp, Loader2, AlertTriangle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type Status = "new" | "reviewing" | "planned" | "done" | "ignored";
 
@@ -303,10 +304,14 @@ export default function FrictionIndexPage() {
               </div>
             </MyFloveBlock>
 
-            {showForm && (
+            <Dialog open={showForm} onOpenChange={(open) => setShowForm(open)}>
+              <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                <DialogHeader>
+                  <DialogTitle>Lämna feedback</DialogTitle>
+                </DialogHeader>
               <form
                 onSubmit={submit}
-                className="bg-card border border-border rounded-3xl p-5 space-y-4 shadow-sm"
+                className="space-y-4 pt-2"
               >
                 <div>
                   <label className="text-sm font-medium block mb-1">Vad skaver?</label>
@@ -396,7 +401,8 @@ export default function FrictionIndexPage() {
                   {saving ? <Loader2 size={16} className="animate-spin mr-1" /> : null} Spara
                 </Button>
               </form>
-            )}
+              </DialogContent>
+            </Dialog>
 
             {loading ? (
               <p className="text-muted-foreground text-sm">Laddar…</p>

@@ -29,6 +29,7 @@ import {
 } from "@/components/myflove";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useFlowScore } from "@/hooks/use-flowscore";
@@ -124,6 +125,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   const [friction, setFriction] = useState(2);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
 
   const today = useMemo(() => entries.filter((e) => isSameDay(e.occurredAt)), [entries]);
   const catTrends = useMemo(() => categoryTrends(entries, 14), [entries]);
@@ -149,6 +151,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       });
       setTitle("");
       setNote("");
+      setAddOpen(false);
       toast({ description: t("Tack – det räknas med i din kapacitet idag.") });
     } catch {
       toast({ description: t("Kunde inte spara just nu. Försök igen."), variant: "destructive" });
@@ -373,10 +376,19 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           icon={Activity}
           title={t("Lägg till något som påverkar")}
           subtitle={t("Sömn, ljud, en konflikt, egen tid eller en promenad.")}
-          collapsible
-          defaultCollapsed
-          status={t("Öppna för att skriva fritt")}
         >
+          <MyFloveButton onClick={() => setAddOpen(true)}>
+            {t("Lägg till något som påverkar")}
+          </MyFloveButton>
+        </MyFloveBlock>
+      </MyFloveWide>
+
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>{t("Lägg till något som påverkar")}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
           {presets.length > 0 && (
             <div className="space-y-2">
               <div className="text-sm font-medium text-ink">{t("Snabbknappar")}</div>
@@ -518,8 +530,9 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
               {t("Spara som snabbknapp")}
             </button>
           </div>
-        </MyFloveBlock>
-      </MyFloveWide>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <MyFloveWide span="wide">
         <MyFloveBlock
