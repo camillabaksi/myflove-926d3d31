@@ -1056,37 +1056,43 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
 }
 
-/* Flow bor i rummet: fåtöljens sittdyna och mattan delar en stabil scen. */
+/* Rumsscenen använder relativa koordinater så varje plats fungerar på mobil. */
 .flow-room-figure {
-  width: clamp(104px, 30%, 190px);
-  height: auto;
-  max-height: 48%;
-  filter: drop-shadow(0 5px 5px hsl(var(--forest-deep) / 0.16));
+  width: 30%; height: 44%;
+  left: 50%; bottom: 19%;
+  transform: translateX(-50%) scale(.88);
+  transition: left 1.2s ease-in-out, bottom 1.2s ease-in-out, transform 1.2s ease-in-out;
+  filter: drop-shadow(0 5px 5px hsl(var(--forest-deep) / .2));
 }
-.flow-room-seated {
-  left: 50%;
-  bottom: 19%;
-  transform: translateX(-50%);
-}
-.flow-room-on-rug {
-  left: 70%;
-  bottom: 2%;
-  transform: translateX(-50%);
-}
-@keyframes flow-room-stroll {
-  0% { left: 50%; bottom: 19%; transform: translateX(-50%) scale(0.9); }
-  18% { left: 61%; bottom: 3%; transform: translateX(-50%) scale(1); }
-  70% { left: 76%; bottom: 3%; transform: translateX(-50%) scale(1); }
-  100% { left: 50%; bottom: 19%; transform: translateX(-50%) scale(0.9); }
-}
-.flow-room-walking {
-  left: 50%;
-  bottom: 19%;
-  animation: flow-room-stroll 3.6s ease-in-out both;
-}
+.flow-room-figure[data-zone="matta"] { left: 70%; bottom: 1%; transform: translateX(-50%); }
+.flow-room-figure[data-zone="vaxter"] { left: 18%; bottom: 13%; transform: translateX(-50%) scale(.65); }
+.flow-room-figure[data-zone="hylla"] { left: 83%; bottom: 15%; transform: translateX(-50%) scale(.7); }
+.flow-room-contact-shadow { position: absolute; width: 60%; height: 8%; border-radius: 50%; left: 20%; bottom: 0; background: hsl(var(--forest-deep) / .24); filter: blur(5px); }
+.flow-room-target { background: transparent; }
+.flow-room-target-fatolj { left: 31%; top: 37%; width: 38%; height: 47%; }
+.flow-room-target-matta { left: 49%; bottom: 0; width: 45%; height: 18%; }
+.flow-room-target-vaxter { left: 2%; top: 29%; width: 25%; height: 52%; }
+.flow-room-target-hylla { right: 0; top: 33%; width: 23%; height: 48%; }
+.flow-room-figure { pointer-events: none; }
+.flow-room-figure button { pointer-events: auto; }
+.flow-room-lamp { background: radial-gradient(ellipse at 19% 36%, hsl(var(--sun) / .58), transparent 35%); }
+.flow-room-picture { left: 37%; top: 7%; width: 17%; height: 29%; }
+.flow-room-plant { left: 66%; top: 3%; width: 11%; height: 24%; }
+.flow-room-throw { left: 60%; top: 55%; width: 10%; height: 23%; border-radius: 35% 20% 45% 22%; opacity: .7; transform: rotate(-8deg); mix-blend-mode: multiply; }
+.flow-room-pillow { left: 35%; top: 52%; width: 12%; height: 14%; border-radius: 28%; opacity: .7; transform: rotate(-18deg); mix-blend-mode: multiply; }
+.flow-room-accessory { top: 0; left: 25%; width: 50%; height: 29%; }
+.flow-room-accessory-glasogon { top: 27%; left: 29%; width: 43%; height: 18%; }
+.flow-room-accessory-horlurar { top: 10%; left: 18%; width: 64%; height: 43%; }
+.flow-room-accessory-harspanne { top: 10%; left: 55%; width: 26%; height: 17%; }
+.flow-room-hop { animation: flow-room-hop .7s ease-out; }
+.flow-room-sleep:not(.flow-room-still) { animation: flow-room-breathe 4s ease-in-out infinite; transform-origin: center bottom; }
+@keyframes flow-room-hop { 50% { transform: translateY(-10%); } }
+@keyframes flow-room-breathe { 50% { translate: 0 -2%; } }
 @media (prefers-reduced-motion: reduce) {
-  .flow-room-walking { animation: none !important; }
+  .flow-room-figure { transition: none !important; }
+  .flow-room-hop, .flow-room-sleep { animation: none !important; }
 }
+.flow-room-still { transition: none !important; animation: none !important; }
 
 /* ------------------------------------------------------------------
    Living UI – varje funktion har sitt eget lilla liv.
