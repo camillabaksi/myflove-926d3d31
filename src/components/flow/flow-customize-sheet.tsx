@@ -5,7 +5,6 @@ import { FlowRoom } from "@/components/flow/flow-room";
 import { AppearanceChoice } from "@/components/flow/flow-appearance-controls";
 import { FLOW_THEMES, useMyFlowAppearance, type FlowAppearance } from "@/hooks/use-my-flow";
 import { flushCloudSync, getCloudSyncStatus, useCloudSyncStatus } from "@/lib/cloud-storage";
-import seatedRoomClip from "@/assets/flow-room-seated-clip.png";
 
 export function FlowCustomizeSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const [saved, setSaved] = useMyFlowAppearance();
@@ -25,7 +24,7 @@ export function FlowCustomizeSheet({ open, onOpenChange }: { open: boolean; onOp
       <div className="mx-auto my-3 max-w-sm"><FlowRoom appearance={draft} compact /></div>
       <div role="tabpanel" className="space-y-4 pb-4">
         {tab === "flow" ? <>
-          <AppearanceChoice title="Accessoar" value={draft.accessory === "harspanne" ? "harspanne" : "ingen"} onChange={value => change("accessory", value)} options={[{ value: "ingen", label: "Ingen" }, { value: "harspanne", label: "Hårspänne", image: seatedRoomClip }]} />
+          <p className="rounded-2xl bg-secondary/60 p-3 text-sm text-muted-foreground">Flow vilar här precis som han är. Kläder och tillbehör kommer när de passar honom i rummet.</p>
         </> : <>
           <AppearanceChoice title="Stämning" value={draft.theme} onChange={value => change("theme", value)} options={FLOW_THEMES.map(theme => ({ value: theme.id, label: theme.name }))} />
         </>}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun, Sunset } from "lucide-react";
 import seatedRoom from "@/assets/flow-room-seated.jpg";
-import seatedRoomClip from "@/assets/flow-room-seated-clip.png";
 import { Button } from "@/components/ui/button";
 import { useMyFlowAppearance, type FlowAppearance } from "@/hooks/use-my-flow";
 
@@ -11,10 +10,10 @@ export function roomTimeAt(hour: number): RoomTime {
   return hour >= 7 && hour < 18 ? "dag" : hour >= 18 && hour < 22 ? "kvall" : "natt";
 }
 
-/** The seated room and its fitted accessory are complete images with identical framing.
- * Unsupported saved outfits/accessories remain in storage but are never approximated in the scene. */
-export function roomSceneImage(appearance: FlowAppearance): string {
-  return appearance.accessory === "harspanne" ? seatedRoomClip : seatedRoom;
+/** Keep the approved character in one scene until pose-specific clothing and accessories exist.
+ * Legacy choices remain stored, but must not be rendered as approximate overlays. */
+export function roomSceneImage(_appearance: FlowAppearance): string {
+  return seatedRoom;
 }
 
 export function FlowRoom({ appearance, compact = false }: { appearance?: FlowAppearance; compact?: boolean }) {

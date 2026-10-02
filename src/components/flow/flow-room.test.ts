@@ -22,7 +22,7 @@ describe("Flows sammanhängande rum", () => {
   it("visar samma grundscen för äldre kläder och inkompatibla tillbehör", () => {
     expect(roomSceneImage({ ...base, outfit: "hoodie", accessory: "glasogon" })).toBe(roomSceneImage(base));
   });
-  it("byter enbart till den poseanpassade scenen med hårspänne", () => {
-    expect(roomSceneImage({ ...base, accessory: "harspanne" })).not.toBe(roomSceneImage(base));
+  it("visar samma godkända figur även för tidigare sparat hårspänne", () => {
+    expect(roomSceneImage({ ...base, accessory: "harspanne" })).toBe(roomSceneImage(base));
   });
 });

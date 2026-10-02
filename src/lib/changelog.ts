@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
-    "Min Flow: en sammanhängande viloscen med Flow i fåtöljen och ett särskilt anpassat hårspänne; ofärdiga kläder, poser och överlägg döljs utan att sparade val raderas (2026-10-02)",
+    "Min Flow: den godkända Flow-figuren visas i fåtöljen; tidigare figurvariant och missanpassade tillbehör döljs utan att sparade val raderas. Poseanpassade resurser återstår (2026-10-02)",
     "Flow i rummet är helt täckande även när han går, med mjuka kanter, verklig skugga och ljus som följer rummet (2026-10-02)",
     "Min Flow: rummet följer dag, kväll och natt; Flow kan utforska fyra platser och vila i pyjamas på natten. En bottenpanel för kläder, accessoarer och rumsdetaljer visar ändringar innan de sparas (2026-10-02)",
     "Flow bor nu i rummet: sitter i fåtöljen, tar en kort promenad på mattan, dricker te eller myser med filt; uppladdad GIF och stillhetsval används (2026-10-02)",

@@ -1,8 +1,10 @@
 # Roadmap
 
 ## Min Flow: sammanhängande rum (2026-10-02)
-- [x] Bygg grundscen med Flow sittande i fåtöljen och en helscen med hårspänne som enda godkända tillbehör.
+- [x] Ersätt avvikande Flow i fåtöljen med den godkända figuren i en enda fast scen.
 - [x] Dölj inkompatibla poser, kläder, lösa tillbehör och rumsöverlägg utan att radera sparade val.
+- [ ] Skapa en riktig sittande pose av samma Flow, integrerad med dynans perspektiv och ljus. Dagens godkända figur har en stående pose.
+- [ ] Skapa ett hårspänne anpassat till denna pose och en helscen som inte ändrar Flows päls eller ansikte.
 - [ ] Verifiera rum och förhandsvisning på flera mobilbredder samt minskad rörelse.
 
 ## Levande Min Flow (2026-10-02)
