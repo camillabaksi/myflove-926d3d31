@@ -1067,7 +1067,13 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .flow-room-figure[data-zone="matta"] { left: 70%; bottom: 1%; transform: translateX(-50%); }
 .flow-room-figure[data-zone="vaxter"] { left: 18%; bottom: 13%; transform: translateX(-50%) scale(.65); }
 .flow-room-figure[data-zone="hylla"] { left: 83%; bottom: 15%; transform: translateX(-50%) scale(.7); }
-.flow-room-contact-shadow { position: absolute; width: 60%; height: 8%; border-radius: 50%; left: 20%; bottom: 0; background: hsl(var(--forest-deep) / .24); filter: blur(5px); }
+.flow-room-contact-shadow { position: absolute; width: 64%; height: 9%; left: 18%; bottom: 1%; border-radius: 50%; background: radial-gradient(ellipse at center, hsl(var(--forest-deep) / .42) 0%, hsl(var(--forest-deep) / .2) 45%, transparent 72%); filter: blur(2px); transition: transform .35s ease-out, opacity .35s ease-out; }
+.flow-room-figure:has(.flow-room-hop) .flow-room-contact-shadow { animation: flow-room-shadow-hop .7s ease-out; }
+@keyframes flow-room-shadow-hop { 50% { transform: scale(.75); opacity: .55; } }
+/* Flow tar emot rummets ljus så han ser ut att stå i det, inte ovanpå det. */
+.flow-room-figure img { filter: saturate(.94) contrast(1.03); transition: filter 1s ease-in-out; }
+.flow-room-scene[data-time="kvall"] .flow-room-figure img { filter: brightness(.9) sepia(.16) saturate(1.02) contrast(1.03); }
+.flow-room-scene[data-time="natt"] .flow-room-figure img { filter: brightness(.7) saturate(.82) contrast(1.02); }
 .flow-room-target { background: transparent; }
 .flow-room-target-fatolj { left: 31%; top: 37%; width: 38%; height: 47%; }
 .flow-room-target-matta { left: 49%; bottom: 0; width: 45%; height: 18%; }
