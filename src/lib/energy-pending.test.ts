@@ -39,9 +39,18 @@ const { ensurePendingUuids, isUuid, splitAlreadyMigrated, migratePendingEnergy }
 beforeEach(() => {
   cloudRows.length = 0;
   failNext = 0;
+  window.localStorage.setItem("myflove-data-owner", "u1");
 });
 
 describe("väntande energiloggar", () => {
+  it("flyttar aldrig kön till ett konto som inte äger enhetens data", async () => {
+    const pending = [{ id: "1", level: 3, logged_at: "2026-09-01T10:00:00.000Z" }];
+    const result = await migratePendingEnergy("u2", pending, []);
+    expect(result.migrated).toEqual([]);
+    expect(result.remaining).toEqual(pending);
+    expect(cloudRows.length).toBe(0);
+  });
+
   it("ger äldre poster utan UUID varsitt eget UUID", () => {
     const { entries, changed } = ensurePendingUuids([
       { id: "1", level: 3, logged_at: "2026-09-01T10:00:00.000Z" },

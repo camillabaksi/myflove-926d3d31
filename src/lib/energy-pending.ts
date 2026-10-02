@@ -15,6 +15,7 @@
  * lyckades men den lokala rensningen hann inte) aldrig skapar dubbletter.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { isActiveOwner } from "@/lib/account-scope";
 
 export const PENDING_ENERGY_KEY = "myflove-energy-pending";
 
@@ -100,6 +101,8 @@ export async function migratePendingEnergy(
   cloud: { id?: string }[],
 ): Promise<MigrationResult> {
   if (pending.length === 0) return { migrated: [], remaining: [], inserted: [], normalized: [] };
+  // Kön får bara flyttas till kontot som äger enhetens data.
+  if (!isActiveOwner(userId)) return { migrated: [], remaining: pending, inserted: [], normalized: pending };
 
   const { entries } = ensurePendingUuids(pending);
 

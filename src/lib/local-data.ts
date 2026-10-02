@@ -1,65 +1,50 @@
 /**
  * Lokal användardata på enheten.
  *
- * MyFlove sparar en hel del i localStorage (energi, mående, medicin,
- * rutiner, ekonomi, anteckningar) för att appen ska fungera offline och
- * kännas snabb. Allt sådant är personligt och får inte ligga kvar när
- * någon loggar ut på en delad enhet.
+ * MyFlove sparar mycket i localStorage för att fungera offline. Den datan
+ * tillhör alltid ett konto (se account-scope.ts). Vid utloggning:
  *
- * Här samlas rensningen på ett ställe. Serverdata rörs aldrig – bara den
- * lokala kopian på just den här enheten.
+ * 1. En sista skrivning till molnet görs medan sessionen lever.
+ * 2. Allt som molnet bekräftat raderas lokalt.
+ * 3. Allt som INTE är bekräftat (offline, nätverksfel, väntande energiloggar)
+ *    flyttas till kontots eget förråd. Det visas eller synkas aldrig för
+ *    någon annan och läggs tillbaka när samma konto loggar in igen.
  *
- * Det känsligaste (energi, mående, medicin, ekonomi) ligger dessutom
- * krypterat på disken – se secure-local.ts.
+ * Känsliga värden (energi, mående, medicin, ekonomi) ligger krypterade på
+ * disken – se secure-local.ts. Förrådet innehåller samma chiffertext.
  */
 import { lockSecureLocal, secureGetItem, unlockSecureLocal } from "@/lib/secure-local";
-import { CLOUD_KEYS_REGISTRY, flushCloudSync, hasUnsyncedCloudData } from "@/lib/cloud-storage";
+import { flushCloudSync, hasUnsyncedCloudData } from "@/lib/cloud-storage";
 import { PENDING_ENERGY_KEY } from "@/lib/energy-pending";
+import {
+  getDataOwner,
+  hasAnyStash,
+  isUserDataKey,
+  releaseOwner,
+  removeStash,
+  stashKeys,
+} from "@/lib/account-scope";
 
-/** Prefix som alltid räknas som användarens egen data. */
-const USER_DATA_PREFIXES = ["myflove", "myflow", "flow-", "sb-"];
+export { isUserDataKey };
 
-/** Nycklar som bara beskriver enheten/visningen och får vara kvar. */
-const DEVICE_KEYS = new Set<string>([
-  "myflove-alarm-enabled",
-  "myflove-theme",
-  "myflove-text-size",
-  // Konto- och dagsdata synkas via useCloudSyncedStorage och ska därför
-  // inte ligga kvar när nästa person loggar in på samma enhet.
-  // Personalisering: tema, alarmsignal och alarmformat hör till enheten.
-  "myflove-alarm-sound",
-  "myflove-alarm-format",
-  // Registret över molnsynkade nycklar beskriver bara synkläget, inte data.
-  CLOUD_KEYS_REGISTRY,
-]);
-
-export function isUserDataKey(key: string): boolean {
-  if (DEVICE_KEYS.has(key)) return false;
-  const lower = key.toLowerCase();
-  return USER_DATA_PREFIXES.some((p) => lower.startsWith(p));
-}
+const META_SUFFIXES = ["__updated_at", "__synced_at", "__removed", "__base"];
 
 /** Ligger det energiloggar och väntar på att flyttas upp till kontot? */
 function hasPendingEnergy(): boolean {
   try {
-    // Säkerställ att en krypterad pending-kö är upplåst innan den bedöms.
-    // `clearLocalUserData` väntar på detta före anropet; fallbacken skyddar
-    // ändå konservativt om upplåsningen inte är klar.
     const raw = secureGetItem(PENDING_ENERGY_KEY);
-    if (!raw) return false;
-    const parsed = JSON.parse(raw);
+    if (raw === null) {
+      // Krypterat men inte upplåst går inte att bedöma – behåll.
+      return window.localStorage.getItem(PENDING_ENERGY_KEY) !== null;
+    }
+    const parsed: unknown = JSON.parse(raw);
     return Array.isArray(parsed) && parsed.length > 0;
   } catch {
-    // Går det inte att läsa vet vi inte om det finns data – behåll den.
     return true;
   }
 }
 
-/**
- * Nycklar som INTE får rensas vid utloggning eftersom deras innehåll ännu
- * inte är bekräftat sparat i molnet. Bättre att data ligger kvar på enheten
- * en stund till än att den försvinner för alltid.
- */
+/** Nycklar vars innehåll ännu inte är bekräftat sparat i molnet. */
 export function unsafeToClearKeys(): string[] {
   if (typeof window === "undefined") return [];
   const keep: string[] = [];
@@ -77,25 +62,18 @@ export function unsafeToClearKeys(): string[] {
 }
 
 /**
- * Rensar lokal användardata på enheten. Anropas vid utloggning så att nästa
- * person som använder samma enhet inte ser något privat.
+ * Rensar det aktiva lokala utrymmet vid utloggning. Osynkat flyttas till
+ * kontots förråd i stället för att ligga kvar synligt för nästa person.
  *
- * Innan rensningen görs en sista skrivning till molnet. Allt som molnet inte
- * hunnit bekräfta – t.ex. vid offline eller nätverksfel – lämnas kvar och
- * synkas nästa gång användaren loggar in. Ingen data raderas för att
- * "städa"; bara det som bevisligen finns kvar på kontot tas bort lokalt.
+ * `force` (kontoradering): allt för kontot raderas, även förrådet.
  */
 export async function clearLocalUserData(options?: { force?: boolean }): Promise<void> {
   if (typeof window === "undefined") return;
-
   const force = options?.force === true;
+  const owner = getDataOwner();
 
-  // Lås upp eventuell krypterad pending-kö innan vi avgör vad som får
-  // rensas. Detta är no-op när WebCrypto/IndexedDB inte finns.
-  if (!force) await unlockSecureLocal();
-
-  // Sista chansen att få upp det som ligger i debounce-fönstret.
   if (!force) {
+    await unlockSecureLocal();
     try {
       await flushCloudSync();
     } catch {
@@ -103,27 +81,30 @@ export async function clearLocalUserData(options?: { force?: boolean }): Promise
     }
   }
 
-  // Vid kontoradering finns inget moln att spara till – då rensas allt.
   const keep = new Set(force ? [] : unsafeToClearKeys());
-  // Metadata för skyddade nycklar måste också vara kvar för att synken ska
-  // kunna avgöra läget nästa gång.
-  for (const key of [...keep]) {
-    keep.add(key + "__updated_at");
-    keep.add(key + "__synced_at");
-  }
+  for (const key of [...keep]) for (const s of META_SUFFIXES) keep.add(key + s);
 
   try {
-    const keys: string[] = [];
+    const all: string[] = [];
     for (let i = 0; i < window.localStorage.length; i++) {
       const key = window.localStorage.key(i);
-      if (key && isUserDataKey(key) && !keep.has(key)) keys.push(key);
+      if (key && isUserDataKey(key)) all.push(key);
     }
-    for (const key of keys) window.localStorage.removeItem(key);
+    const toStash = all.filter((k) => keep.has(k) && window.localStorage.getItem(k) !== null);
+    if (toStash.length > 0) {
+      // Utan känd ägare (äldre installation) hamnar det i ett ägarlöst förråd
+      // som aldrig visas för något konto automatiskt.
+      stashKeys(owner ?? "unowned", toStash);
+    }
+    for (const key of all) if (!keep.has(key)) window.localStorage.removeItem(key);
+    if (force && owner) removeStash(owner);
   } catch {
     /* utan lagring finns inget att rensa */
   }
 
-  lockSecureLocal([...keep]);
+  releaseOwner();
+  // Nyckeln behövs så länge något förråd innehåller chiffertext.
+  lockSecureLocal({ keepKey: hasAnyStash() });
 
   try {
     window.sessionStorage.clear();

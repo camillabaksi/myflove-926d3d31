@@ -7,6 +7,9 @@ type Listener = (() => void) | null;
 
 const stores = new Map<string, Map<string, unknown>>();
 
+/** Styr attrappen: långsam öppning eller helt blockerad IndexedDB. */
+export const mockOptions = { delayMs: 0, fail: false };
+
 function later(fn: () => void) {
   setTimeout(fn, 0);
 }
@@ -29,13 +32,14 @@ export function installIndexedDbMock(): void {
     open(name: string) {
       const req: {
         result?: unknown;
-        error: null;
+        error: unknown;
         onupgradeneeded: Listener;
         onsuccess: Listener;
         onerror: Listener;
       } = { error: null, onupgradeneeded: null, onsuccess: null, onerror: null };
 
       const db = {
+        close: () => undefined,
         objectStoreNames: {
           contains: (store: string) => stores.has(`${name}:${store}`),
         },
@@ -50,13 +54,18 @@ export function installIndexedDbMock(): void {
             onerror: null,
             error: null,
           };
+          // Transaktionen blir klar när dess förfrågningar hunnit köras.
+          later(() => later(() => tx.oncomplete?.()));
           return {
             ...tx,
             objectStore: () => ({
               get: (id: string) => makeRequest(() => map.get(id)),
               put: (value: unknown, id: string) => {
                 map.set(id, value);
-                later(() => tx.oncomplete?.());
+                return makeRequest(() => undefined);
+              },
+              add: (value: unknown, id: string) => {
+                if (!map.has(id)) map.set(id, value);
                 return makeRequest(() => undefined);
               },
             }),
@@ -77,10 +86,17 @@ export function installIndexedDbMock(): void {
       };
 
       req.result = db;
-      later(() => {
+      const finish = () => {
+        if (mockOptions.fail) {
+          req.error = new Error("blocked");
+          req.onerror?.();
+          return;
+        }
         req.onupgradeneeded?.();
         req.onsuccess?.();
-      });
+      };
+      if (mockOptions.delayMs > 0) setTimeout(finish, mockOptions.delayMs);
+      else later(finish);
       return req;
     },
     deleteDatabase(name: string) {
@@ -100,4 +116,6 @@ export function installIndexedDbMock(): void {
 
 export function resetIndexedDbMock(): void {
   stores.clear();
+  mockOptions.delayMs = 0;
+  mockOptions.fail = false;
 }

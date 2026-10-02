@@ -74,7 +74,7 @@ MyFlove har tre parallella state-lager, valda efter datans känslighet/delningsb
 
 1. **Lokal komponent-state** (`useState`/`useMemo`) — tillfälligt UI-state som mobilmeny, redigeringsläge för bottennav (`layout.tsx`).
 2. **`localStorage`-backad state** (`lib/storage.ts` → `useLocalStorage`) — persisterar per enhet (t.ex. shoppinglista, humörloggar, ekonomitransaktioner). Synkas mellan flikar/komponenter via ett custom `myflow-local-storage`-event samt native `storage`-eventet.
-3. **Molnsynkad state** (`lib/cloud-storage.ts` → `useCloudSyncedStorage`) — bygger ovanpå `useLocalStorage` men pushar/hämtar också värdet till/från Supabase-tabellen `user_kv` (per `user_id` + `key`), med "last-write-wins" baserat på en lokalt sparad `updated_at`-tidsstämpel. Appen fungerar offline-first: `localStorage` är sanningskällan, molnet är best-effort och debouncead (600 ms) vid skrivning. Används för data som ska följa användaren mellan enheter, t.ex. `tasks` och `reminders` (se `hooks/use-data.ts`).
+3. **Molnsynkad state** (`lib/cloud-storage.ts` → `useCloudSyncedStorage`) — `localStorage` är sanningskällan på enheten; varje nyckel synkas till `user_kv`. Varje synk läser först molnets senaste version, gör en trevägssammanslagning mot senast bekräftade bas (`lib/sync-merge.ts`) och skriver villkorat på `updated_at` (krock → läs om). Debounce 600 ms på modulnivå, så att en stängd dialog inte tappar sin ändring. Misslyckade skrivningar markeras aldrig som bekräftade och försöks igen (5 s/15 s/60 s, vid `online` och när appen kommer i förgrunden). Synkläget visas diskret i `components/sync-status-note.tsx`.
 
 **Server-/nätverksdata:**
 
@@ -126,8 +126,8 @@ Säkerheten vilar på **tre lager**. Det är viktigt att förstå vad varje lage
 
 ### Kända säkerhetsrisker
 
-- **Känslig data i klartext på enheten.** Humör, medicin, ekonomi och hälsodata ligger okrypterat i `localStorage`. Det är ett medvetet pris för offline-first, men innebär att vem som helst med åtkomst till enheten eller till en XSS-bugg kan läsa allt.
-- **`localStorage` rensas inte vid utloggning.** `signOut()` (`compat/clerk.tsx`) anropar endast `supabase.auth.signOut()`. På en delad enhet ligger föregående användares data kvar och kan dessutom synkas upp till nästa användares `user_kv`. Detta bör åtgärdas genom att rensa app-nycklar vid `SIGNED_OUT`.
+- **Lokal kryptering (`lib/secure-local.ts`).** Energi, mående, medicin och ekonomi skrivs AES-GCM-krypterat till `localStorage`; nyckeln är en icke-exporterbar CryptoKey i IndexedDB som skapas atomärt i en readwrite-transaktion (flikar som startar samtidigt får samma nyckel). Innan nyckeln är redo hålls skrivningar i minnet; går IndexedDB inte att använda skrivs aldrig klartext – värdet stannar i minnet och användaren får ett besked. Skyddet gäller lagrad data (kopierade filer, backup); det skyddar **inte** mot skadlig kod i samma origin, som kan använda nyckeln via WebCrypto.
+- **Kontoseparering (`lib/account-scope.ts`).** Lokal data ägs alltid av ett konto (`myflove-data-owner`). Synk och energimigrering körs bara när ägaren är den inloggade användaren. Utloggning (`lib/local-data.ts`): sista flush, bekräftad data raderas, osynkad flyttas till kontots förråd `myflove-stash:<userId>:*`. Inloggning som ett annat konto flyttar undan aktiv data och lägger tillbaka det kontots förråd, följt av omladdning. Ägarlös data från äldre versioner adopteras bara av en redan inloggad session vid start; annars läggs den i förrådet `unowned` och visas/synkas inte. Utgången session (SIGNED_OUT utan utloggning) parkerar allt hos ägaren.
 - **Miljövariabler:** endast `VITE_`-prefixade variabler får innehålla publika värden — de bakas in i klientbundlen. Serverhemligheter (AI-gateway-nyckel, service role, VAPID-nycklar) läses via `process.env` i `.server.ts`/`.functions.ts`.
 
 ## 7. Felhantering
@@ -142,7 +142,7 @@ Säkerheten vilar på **tre lager**. Det är viktigt att förstå vad varje lage
 - **SSR av/på per route:** flera appsidor sätter `ssr: false` eftersom deras data ändå ligger i `localStorage`. Det ger snabbare TTFB men innebär att sidan visar tom skärm tills JS laddats — undvik att sätta `ssr: false` på publika marknadsföringssidor där SEO spelar roll.
 - **TanStack Query** hanterar cache och deduplicering av nätverksanrop; sätt `staleTime` medvetet i stället för att förlita sig på default (0), som annars refetchar vid varje fokusbyte.
 - **Molnsynk är debouncead (600 ms)** och skriver hela värdet för en nyckel som en JSON-blob. För stora listor (uppgifter, transaktioner) växer varje skrivning linjärt med datamängden — nycklar med mycket data bör på sikt flyttas till egna tabeller med radnivåuppdateringar i stället för `user_kv`.
-- **Kända flaskhalsar:** `useCloudSyncedStorage` anropar `supabase.auth.getUser()` vid varje synkning (nätverksanrop per push); `layout.tsx` monterar flera globala alarm-hooks (pendling, medicin, närhet) på varje sida oavsett om sidan behöver dem.
+- **Kända flaskhalsar:** `useCloudSyncedStorage` läser molnet före varje skrivning (ett extra anrop per synk); `layout.tsx` monterar flera globala alarm-hooks (pendling, medicin, närhet) på varje sida oavsett om sidan behöver dem.
 - **Bundlestorlek:** `recharts`, `framer-motion` och Remotion-relaterat är tunga. Sidor som bara ibland behöver diagram bör lazy-loada dem via `React.lazy`.
 
 ## 9. Testning
@@ -173,7 +173,7 @@ Behåll testerna nära berörd logik och kör hela Vitest-sviten inför release.
 
 | Område                   | Problem                                                                                                                                  | Möjlig åtgärd                                                              |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| Synkkonflikter           | Last-write-wins per nyckel. Redigerar man på två enheter offline försvinner den ena ändringen tyst.                                      | Per-post-tidsstämplar eller CRDT-liknande sammanslagning för listdata.     |
+| Synkkonflikter           | Trevägssammanslagning per post: nya poster behålls, borttagning vinner, ändring på en sida gäller, ändring på båda → senaste ändringen av nyckeln vinner (enhetsklockor kan skilja). Övriga värden: senaste vinner. | Per-post-tidsstämplar om fältvisa konflikter blir ett problem. |
 | `user_kv` som datamodell | Hela domänen lagras som JSON-blobbar, vilket omöjliggör frågor, index och partiella uppdateringar på serversidan.                        | Flytta datatunga domäner (uppgifter, transaktioner) till riktiga tabeller. |
 | Två routingsystem        | `wouter`-shimmet ovanpå TanStack Router betyder att prefetch, typade länkar och `beforeLoad`-integration går förlorade i komponentkoden. | Migrera successivt till TanStack Routers `<Link>`.                         |
 | Clerk-shimmet            | Namnet antyder ett beroende som inte finns och missleder både utvecklare och dokumentation.                                              | Byt namn till t.ex. `compat/auth.tsx` och uppdatera `CLAUDE.md`.           |

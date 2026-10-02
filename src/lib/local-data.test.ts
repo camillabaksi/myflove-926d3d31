@@ -5,13 +5,17 @@ describe("lokal användardata", () => {
   beforeEach(() => {
     window.localStorage.clear();
     window.sessionStorage.clear();
+    window.localStorage.setItem("myflove-data-owner", "user-a");
   });
+
+  const stashed = (key: string) => window.localStorage.getItem(`myflove-stash:user-a:${key}`);
 
   it("räknar personlig data som användardata", () => {
     expect(isUserDataKey("myflove-energy-flow")).toBe(true);
     expect(isUserDataKey("myflove-medications")).toBe(true);
     expect(isUserDataKey("myflow-home-shortcuts")).toBe(true);
-    expect(isUserDataKey("sb-abc-auth-token")).toBe(true);
+    // Inloggningssessionen sköts av auth-klienten och flyttas aldrig.
+    expect(isUserDataKey("sb-abc-auth-token")).toBe(false);
   });
 
   it("lämnar enhetsinställningar i fred", () => {
@@ -80,7 +84,9 @@ describe("lokal användardata", () => {
 
     await clearLocalUserData();
 
-    expect(window.localStorage.getItem("myflow-dump-ideas")).not.toBeNull();
+    // Osynkat flyttas till kontots eget förråd – inte synligt för nästa person.
+    expect(window.localStorage.getItem("myflow-dump-ideas")).toBeNull();
+    expect(stashed("myflow-dump-ideas")).not.toBeNull();
   });
 
   it("rensar data som molnet bekräftat", async () => {
@@ -101,7 +107,9 @@ describe("lokal användardata", () => {
 
     await clearLocalUserData();
 
-    expect(window.localStorage.getItem("myflove-medications")).not.toBeNull();
+    // Osynkat flyttas till kontots eget förråd – inte synligt för nästa person.
+    expect(window.localStorage.getItem("myflove-medications")).toBeNull();
+    expect(stashed("myflove-medications")).not.toBeNull();
   });
 
   it("skyddar osynkad data även när sidans hook aldrig hunnit registrera nyckeln", async () => {
@@ -111,15 +119,22 @@ describe("lokal användardata", () => {
 
     await clearLocalUserData();
 
-    expect(window.localStorage.getItem("myflove-cleaning-done")).not.toBeNull();
+    // Osynkat flyttas till kontots eget förråd – inte synligt för nästa person.
+    expect(window.localStorage.getItem("myflove-cleaning-done")).toBeNull();
+    expect(stashed("myflove-cleaning-done")).not.toBeNull();
   });
 
   it("rensar allt vid kontoradering", async () => {
     window.localStorage.setItem("myflove-medications", JSON.stringify(["ritalin"]));
     window.localStorage.setItem("myflove-medications__updated_at", String(Date.now()));
 
+    window.localStorage.setItem("myflove-stash:user-a:myflove-notes", "[]");
+    window.localStorage.setItem("myflove-stash:user-b:myflove-notes", "[1]");
     await clearLocalUserData({ force: true });
 
     expect(window.localStorage.getItem("myflove-medications")).toBeNull();
+    expect(stashed("myflove-notes")).toBeNull();
+    // Andra kontons förråd på samma enhet rörs inte.
+    expect(window.localStorage.getItem("myflove-stash:user-b:myflove-notes")).toBe("[1]");
   });
 });
