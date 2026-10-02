@@ -1,5 +1,9 @@
 ## 2026-10-02
 
+- Min Flow öppnas från Flow-fliken med Flows rum, befintlig chatt, frivilliga redigerbara minnen, rumsteman och samling. QuickFlow är en separat genväg. Utseende och minnen följer kontot; lokala minnen krypteras.
+
+## 2026-10-02
+
 - Kontoseparering av lokal data, synk med trevägssammanslagning och villkorade skrivningar, tillförlitlig lokal kryptering utan klartextreserv, diskret synkstatus, Återhämtning synlig i lågt läge, regressionstester och uppdaterad ARCHITECTURE.md.
 
 ## 2026-10-02

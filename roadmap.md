@@ -1,5 +1,11 @@
 # Roadmap
 
+## Min Flow etapp 1 (2026-10-02)
+- [x] Visa Min Flow under Flow-fliken och behåll QuickFlow separat.
+- [x] Återanvänd chatt och kontobunden synk för frivilliga minnen och utseende.
+- [x] Visa rumsteman och valfri rörelse utan belöningssystem.
+- [ ] Verifiera mobil, minskad rörelse, chatt, sparning och navigering i förhandsvisningen.
+
 ## Landningssida enligt skiss 2 (2026-10-01)
 - [x] Varm krämvit/sandfärgad startsida, liggande dagsvy och efterfrågad text/navigering.
 - [x] Kontrollera mobil, dator, länkar och videoknapp.

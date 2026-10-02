@@ -11,6 +11,8 @@
 
 <!-- LOVABLE:END -->
 
+Min Flow uses existing account-scoped cloud storage for appearance and explicit memories; this avoids a parallel preference or chat system.
+
 Use the existing Inter and Plus Jakarta Sans typography for functional UI; reserve normal-style Caveat for selected personal greetings so readability stays consistent.
 Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.

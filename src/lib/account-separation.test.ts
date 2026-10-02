@@ -70,6 +70,20 @@ describe("kontoseparering", () => {
     expect(window.localStorage.getItem(`myflove-stash:A:${TASKS}`)).toContain("t1");
   });
 
+  it("Flow-val och minnen följer bara rätt konto vid offline-utloggning", async () => {
+    bindAccount("A", { adoptUnowned: false });
+    writeUnsynced("myflove-flow-appearance", { theme: "kvall", motion: "still" });
+    writeUnsynced("myflove-flow-memories", [{ id: "m1", text: "Min egen önskan" }]);
+    await clearLocalUserData();
+    bindAccount("B", { adoptUnowned: false });
+    expect(localStorage.getItem("myflove-flow-appearance")).toBeNull();
+    expect(localStorage.getItem("myflove-flow-memories")).toBeNull();
+    await clearLocalUserData();
+    bindAccount("A", { adoptUnowned: false });
+    expect(localStorage.getItem("myflove-flow-appearance")).toContain("kvall");
+    expect(localStorage.getItem("myflove-flow-memories")).toContain("Min egen önskan");
+  });
+
   it("ägarlös äldre data adopteras av en redan inloggad session", () => {
     writeUnsynced(TASKS, [{ id: "legacy" }]);
     expect(bindAccount("A", { adoptUnowned: true })).toBe("adopted");
