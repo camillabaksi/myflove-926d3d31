@@ -1,5 +1,12 @@
 # Roadmap
 
+## Min Flow: sammanhängande rum (2026-10-02)
+- [x] Ersätt avvikande Flow i fåtöljen med den godkända figuren i en enda fast scen.
+- [x] Dölj inkompatibla poser, kläder, lösa tillbehör och rumsöverlägg utan att radera sparade val.
+- [ ] Skapa en riktig sittande pose av samma Flow, integrerad med dynans perspektiv och ljus. Dagens godkända figur har en stående pose.
+- [ ] Skapa ett hårspänne anpassat till denna pose och en helscen som inte ändrar Flows päls eller ansikte.
+- [x] Verifiera rum och förhandsvisning på 360, 390 och 430 px samt minskad rörelse.
+
 ## Levande Min Flow (2026-10-02)
 - [x] Dag, kväll och natt med manuellt testläge, lugn vandring mellan fyra platser och nattvila.
 - [x] Bottenpanel för val av kläder, accessoarer och rumsdetaljer med förhandsvisning och kontobunden sparning.

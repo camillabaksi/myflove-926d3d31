@@ -1,5 +1,6 @@
 ## 2026-10-02
 
+- Min Flow: rummet använder nu samma godkända Flow-figur som resten av appen, placerad i fåtöljen med kontaktskugga. Den tidigare varianten bytte identitet och hårspännet skadade pälsen; båda visas därför inte. Tillbehör och alternativa poser väntar på kompatibla resurser. Sparade val och övriga funktioner bevaras.
 - Flow i rummet är helt täckande även när han går, har mjukare kanter utan ljus kant, en mjukare skugga under fötterna och tar emot rummets ljus (varmare på kvällen, dämpad på natten).
 - Min Flow har nu en automatisk dygnsrytm: Flow rör sig lugnt mellan fåtölj, matta, växter och hylla på dagen, varvar ned på kvällen och vilar i pyjamas på natten. Tiden kan förhandsvisas manuellt; kläder, accessoarer och rumsdetaljer väljs i en panel och sparas först vid aktivt val. Minskad rörelse respekteras.
 - Flow är nu en del av rummet: sitter i fåtöljen, kan ta en kort promenad på mattan, dricka te eller mysa med filt. Rörelserna bygger på den uppladdade GIF:en; stillhet och minskad rörelse respekteras.

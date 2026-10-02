@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { roomTimeAt } from "./flow-room";
+import { roomSceneImage, roomTimeAt } from "./flow-room";
 
 describe("Flows dygnsrytm", () => {
   it("byter till dag klockan 07 och kväll klockan 18", () => {
@@ -14,5 +14,15 @@ describe("Flows dygnsrytm", () => {
     expect(roomTimeAt(22)).toBe("natt");
     expect(roomTimeAt(23)).toBe("natt");
     expect(roomTimeAt(0)).toBe("natt");
+  });
+});
+
+describe("Flows sammanhängande rum", () => {
+  const base = { theme: "lavendel", motion: "mjuk" } as const;
+  it("visar samma grundscen för äldre kläder och inkompatibla tillbehör", () => {
+    expect(roomSceneImage({ ...base, outfit: "hoodie", accessory: "glasogon" })).toBe(roomSceneImage(base));
+  });
+  it("visar samma godkända figur även för tidigare sparat hårspänne", () => {
+    expect(roomSceneImage({ ...base, accessory: "harspanne" })).toBe(roomSceneImage(base));
   });
 });
