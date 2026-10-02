@@ -172,9 +172,14 @@ export const analyzeCalendarImport = createServerFn({ method: "POST" })
 
     try {
       const raw = await readOutputText(res);
-      const parsed = JSON.parse(raw) as { readable?: boolean; items?: unknown[] };
-      const items = (parsed.items ?? []).map(sanitize).filter((i): i is ImportedItem => !!i);
-      if (parsed.readable === false && items.length === 0) return { status: "unreadable", items };
+      const parsed = JSON.parse(raw) as
+        | { readable?: boolean; items?: unknown[] }
+        | unknown[];
+      // Gemini svarar ibland med en ren lista i stället för { items: [...] }.
+      const rawItems = Array.isArray(parsed) ? parsed : (parsed.items ?? []);
+      const readable = Array.isArray(parsed) ? undefined : parsed.readable;
+      const items = rawItems.map(sanitize).filter((i): i is ImportedItem => !!i);
+      if (readable === false && items.length === 0) return { status: "unreadable", items };
       return { status: items.length ? "ok" : "empty", items: items.slice(0, 40) };
     } catch (error) {
       if (error instanceof Error && error.message === "refused") {
