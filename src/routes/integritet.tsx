@@ -164,7 +164,7 @@ export function LegalShell({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-[#F8F5FE] text-[#2A2140] px-6 py-16">
+    <main className="min-h-screen bg-background text-foreground px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <Link to="/" className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
           ← MyFlove

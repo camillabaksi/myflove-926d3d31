@@ -45,11 +45,11 @@ const STATUS_LABELS: Record<Status, string> = {
 };
 
 const STATUS_COLORS: Record<Status, string> = {
-  new: "bg-blue-100 text-blue-800",
-  reviewing: "bg-yellow-100 text-yellow-800",
-  planned: "bg-purple-100 text-purple-800",
-  done: "bg-green-100 text-green-800",
-  ignored: "bg-gray-100 text-gray-600",
+  new: "bg-primary/10 text-primary",
+  reviewing: "bg-accent/30 text-ink",
+  planned: "bg-secondary text-ink",
+  done: "bg-success/15 text-ink",
+  ignored: "bg-muted text-muted-foreground",
 };
 
 // Blueprint 2.0 §6.1

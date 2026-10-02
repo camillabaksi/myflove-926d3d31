@@ -35,7 +35,7 @@ const AREAS: {
     what: "Rutiner och dagens doser.",
   },
   {
-    href: "/morgonstart",
+    href: "/daglig-rutin",
     icon: Sunrise,
     title: "Morgonstart",
     what: "En lugn start på dagen.",
