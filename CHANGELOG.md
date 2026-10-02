@@ -1,4 +1,5 @@
 ## 2026-10-02
+- Popup-fönster överallt: alla "Lägg till"- och "Ändra"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Studieflöde, Arbetsflöde, Energi (påverkan), Profil (lägg till barn) och feedback. Ingen skrollning längre ner på sidan behövs.
 - Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
 - Barnschema: lägga till och ändra aktivitet öppnas nu i ett popup-fönster i stället för längre ner på sidan.
 - Navigering: varje sida öppnas alltid längst upp.
