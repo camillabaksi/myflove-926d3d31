@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Imorgon med Flow – kvällens förberedelse av det vi redan vet, utan energiprognos; ny morgoncheck sätter dagens läge (2026-10-02)",
     "Min Flow är tillfälligt borttagen – Flow-fliken öppnar chatten direkt; sparade val och minnen ligger kvar (2026-10-02)",
     "Min Flow: den godkända Flow-figuren visas i fåtöljen; tidigare figurvariant och missanpassade tillbehör döljs utan att sparade val raderas. Poseanpassade resurser återstår (2026-10-02)",
     "Flow i rummet är helt täckande även när han går, med mjuka kanter, verklig skugga och ljus som följer rummet (2026-10-02)",

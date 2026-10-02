@@ -1,5 +1,7 @@
 ## 2026-10-02
 
+- Imorgon med Flow: på kvällen visar Hem morgondagens kalender, förslag som bara bygger på det du själv skrivit (kalender och QuickFlow), restid om den finns, och enkla kvällsuppgifter med påminnelse. Ingen fråga om morgondagens energi – i stället en morgoncheck ("Hur känns det idag?") som sätter dagens läge.
+
 - Min Flow är tillfälligt borttagen: Flow-fliken öppnar Flow-chatten direkt, och sidorna Minnen, Samling och Anpassa är avstängda. Sparade val och minnen ligger kvar och kan tas fram igen.
 
 ## 2026-10-02
