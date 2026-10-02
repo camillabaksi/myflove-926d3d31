@@ -1056,6 +1056,38 @@ html[data-npf-less="true"] [data-npf="optional"] {
   }
 }
 
+/* Flow bor i rummet: fåtöljens sittdyna och mattan delar en stabil scen. */
+.flow-room-figure {
+  width: clamp(84px, 25%, 172px);
+  height: auto;
+  max-height: 48%;
+  filter: drop-shadow(0 5px 5px hsl(var(--forest-deep) / 0.16));
+}
+.flow-room-seated {
+  left: 50%;
+  bottom: 19%;
+  transform: translateX(-50%);
+}
+.flow-room-on-rug {
+  left: 70%;
+  bottom: 2%;
+  transform: translateX(-50%);
+}
+@keyframes flow-room-stroll {
+  0% { left: 50%; bottom: 19%; transform: translateX(-50%) scale(0.9); }
+  18% { left: 61%; bottom: 3%; transform: translateX(-50%) scale(1); }
+  70% { left: 76%; bottom: 3%; transform: translateX(-50%) scale(1); }
+  100% { left: 50%; bottom: 19%; transform: translateX(-50%) scale(0.9); }
+}
+.flow-room-walking {
+  left: 50%;
+  bottom: 19%;
+  animation: flow-room-stroll 3.6s ease-in-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-room-walking { animation: none !important; }
+}
+
 /* ------------------------------------------------------------------
    Living UI – varje funktion har sitt eget lilla liv.
    Alla kontinuerliga rörelser stängs av vid reduce motion (nedan).
