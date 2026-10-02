@@ -23,7 +23,10 @@ export default function MorningCheckin() {
   const [answeredOn, setAnsweredOn] = useCloudSyncedStorage<string>("myflove-morning-checkin", "");
   const hour = new Date().getHours();
   const today = todayISO();
-  if (hour < 4 || hour >= 12 || chosenToday || answeredOn === today) return null;
+  // Testläge: ?morgon=1 i adressen visar kortet oavsett klockslag.
+  const forceMorning =
+    typeof window !== "undefined" && new URLSearchParams(window.location.search).has("morgon");
+  if ((!forceMorning && (hour < 4 || hour >= 12)) || chosenToday || answeredOn === today) return null;
 
   const answer = (a: MorningAnswer) => {
     setMode(MORNING_TO_CAPACITY[a]);
