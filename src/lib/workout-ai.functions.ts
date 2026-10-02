@@ -43,31 +43,6 @@ const PlanSchema = z.object({
 
 export type AiWorkoutPlanResult = z.infer<typeof PlanSchema>;
 
-const JSON_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["title", "note", "blocks"],
-  properties: {
-    title: { type: "string" },
-    note: { type: "string" },
-    blocks: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["exerciseId", "section", "sets", "reps", "seconds", "restSeconds"],
-        properties: {
-          exerciseId: { type: "string" },
-          section: { type: "string", enum: ["uppvärmning", "huvuddel", "nedvarvning"] },
-          sets: { type: "integer" },
-          reps: { type: ["integer", "null"] },
-          seconds: { type: ["integer", "null"] },
-          restSeconds: { type: "integer" },
-        },
-      },
-    },
-  },
-} as const;
 
 const SYSTEM = `Du är Flow – MyFloves lugna, icke-dömande träningskompanjon.
 Du bygger ett enskilt träningspass av övningar som redan finns i listan.

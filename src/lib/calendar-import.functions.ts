@@ -50,64 +50,6 @@ export interface ImportResult {
   message?: string;
 }
 
-const str = { type: "string" } as const;
-const num = { type: "number" } as const;
-const ITEM_KEYS = [
-  "title",
-  "date",
-  "start_time",
-  "end_time",
-  "location",
-  "address",
-  "meeting_url",
-  "contact",
-  "notes",
-  "action_required",
-  "suggested_reminder",
-  "event_type",
-  "suggested_kind",
-  "date_question",
-  "confidence",
-] as const;
-
-const SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["readable", "items"],
-  properties: {
-    readable: { type: "boolean" },
-    items: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: [...ITEM_KEYS],
-        properties: {
-          title: str,
-          date: str,
-          start_time: str,
-          end_time: str,
-          location: str,
-          address: str,
-          meeting_url: str,
-          contact: str,
-          notes: str,
-          action_required: str,
-          suggested_reminder: str,
-          event_type: str,
-          suggested_kind: { type: "string", enum: ["calendar", "reminder", "note", "task", "idea"] },
-          date_question: str,
-          confidence: {
-            type: "object",
-            additionalProperties: false,
-            required: ["title", "date", "time", "location"],
-            properties: { title: num, date: num, time: num, location: num },
-          },
-        },
-      },
-    },
-  },
-};
 
 const system = (today: string, weekday: string) => `Du är Flow i appen MyFlove. Du läser en bild, ett foto, en screenshot, en PDF eller text och hittar ALLT som kan höra hemma i en kalender.
 Dagens datum är ${today} (${weekday}). Tolka relativa uttryck ("nästa torsdag", "imorgon") utifrån det.
