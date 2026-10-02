@@ -4,17 +4,19 @@ import Page from "@/pages/flow";
 export const Route = createFileRoute("/_app/flow")({
   head: () => ({
     meta: [
-      { title: "Flow hjälper – ett nästa steg i taget | MyFlove" },
+      { title: "Min Flow – MyFlove" },
       {
         name: "description",
         content:
-          "Flow hjälper dig att hitta ett lugnt nästa steg när du kört fast, utan att planera hela dagen.",
+          "Min Flow är din plats för samtal, personliga val och lugnt stöd.",
       },
-      { property: "og:title", content: "Flow hjälper – ett nästa steg i taget | MyFlove" },
+      { property: "og:title", content: "Min Flow – MyFlove" },
       {
         property: "og:description",
-        content: "Ett lugnt nästa steg när du behöver hjälp att komma vidare.",
+        content: "En plats för dig, med dig.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

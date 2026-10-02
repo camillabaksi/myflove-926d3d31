@@ -10,6 +10,7 @@ import FlowEntry from "@/components/flow/flow-entry";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
+import { MinFlow } from "@/components/flow/min-flow";
 
 /**
  * En enda Flow-vy: hjälpen, planeringen och chatten är lägen i samma sida.
@@ -46,27 +47,11 @@ export default function FlowView({
 
   return (
     <Layout>
-      <FlowTabs active={tab} onChange={changeTab} />
+      {tab !== "flow" && <FlowTabs active={tab} onChange={changeTab} />}
       {tab === "flow" && (
         <MyFlovePageGrid area="flow">
           <MyFloveWide>
-            <main className="mx-auto w-full max-w-xl" aria-label="Flow – vad passar bäst just nu">
-               <FlowEntry onPlan={() => changeTab("planera")} onChat={() => changeTab("chatt")} />
-               <Button
-                 variant="outline"
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-                 className="mt-4 flex h-auto w-full items-center justify-start gap-3 rounded-2xl px-4 py-3 text-left"
-              >
-                 <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Brain size={22} strokeWidth={2.4} />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-semibold">QuickFlow</span>
-                   <span className="block text-sm text-muted-foreground">Få ut det ur huvudet direkt</span>
-                </span>
-               </Button>
-            </main>
+            <MinFlow />
           </MyFloveWide>
         </MyFlovePageGrid>
       )}
