@@ -15,6 +15,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",
     "Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet (2026-10-02)",
     "Popup-fönster överallt: alla \"Lägg till\"- och \"Ändra\"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Energi, Profil med flera (2026-10-02)",
+    "Android: App Bundle 6.0 (versionCode 19) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
     "Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
     "Barnschema: lägga till/ändra aktivitet öppnas i popup-fönster (2026-10-02)",
     "Navigering: varje sida öppnas längst upp (2026-10-02)",
