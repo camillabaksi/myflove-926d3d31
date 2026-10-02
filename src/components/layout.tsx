@@ -500,9 +500,9 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "flowflow",
         label: "Flow",
-        hint: "Chatt, planering, QuickFlow och anteckningar",
+        hint: "Min Flow, chatt och planering",
         icon: Sparkles,
-        hrefs: ["/flow", "/assistant", "/flowplan", "/quickflow", "/anteckningar", "/tasks"],
+        hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar", "/tasks"],
       },
       {
         id: "healthflow",
@@ -581,8 +581,7 @@ export default function Layout({ children }: LayoutProps) {
     "/idag",
     "/flowplan",
   ]);
-  // Tidigare hette platsen "Planera" men ledde till Flow-hjälpen.
-  // Nu leder den till planeringssidan – en gång, sedan bestämmer du själv.
+  // Behåll tidigare valda navigationsplatser; huvudfliken Flow leder till Min Flow.
   const [navMigrated, setNavMigrated] = useCloudSyncedStorage<boolean>(
     "myflove-bottom-nav-planering-v1",
     false,

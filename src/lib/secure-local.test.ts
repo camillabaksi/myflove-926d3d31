@@ -24,6 +24,7 @@ describe("krypterad lokal lagring", () => {
     expect(isSensitiveKey("myflow-moods")).toBe(true);
     expect(isSensitiveKey("myflove-medications")).toBe(true);
     expect(isSensitiveKey("myflove-finances")).toBe(true);
+    expect(isSensitiveKey("myflove-flow-memories")).toBe(true);
     expect(isSensitiveKey("myflove-theme")).toBe(false);
   });
 
@@ -43,6 +44,16 @@ describe("krypterad lokal lagring", () => {
   it("lämnar ofarliga nycklar i klartext", () => {
     secureSetItem("myflove-theme", '"dark"');
     expect(window.localStorage.getItem("myflove-theme")).toBe('"dark"');
+  });
+
+  it("Flow-minnen krypteras på enheten", async () => {
+    secureSetItem("myflove-flow-memories", JSON.stringify([{ id: "m1", text: "Jag vill ha lugn" }]));
+    await unlockSecureLocal();
+    await new Promise((r) => setTimeout(r, 0));
+    const raw = localStorage.getItem("myflove-flow-memories");
+    expect(raw?.startsWith("enc:v1:")).toBe(true);
+    expect(raw).not.toContain("Jag vill ha lugn");
+    expect(secureGetItem("myflove-flow-memories")).toContain("Jag vill ha lugn");
   });
 
   it("krypterar gammal klartext vid uppstart", async () => {

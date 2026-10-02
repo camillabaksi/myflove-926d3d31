@@ -6,6 +6,7 @@ import { MyFloveHeader } from "@/components/myflove";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
   Loader2,
   Send,
@@ -18,6 +19,7 @@ import {
   MoreHorizontal,
   Pencil,
   MessageCircle,
+  Heart,
 } from "lucide-react";
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { FlowMicButton } from "@/components/flow/flow-mic-button";
@@ -27,6 +29,7 @@ import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { flowPlanContext } from "@/lib/flow-plan";
 import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
+import { useMyFlowMemories } from "@/hooks/use-my-flow";
 import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
 import {
   AREA_META,
@@ -75,12 +78,15 @@ const tomorrowISO = (): string => {
 const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
 const GREETING =
-  "Hej, jag är Flow. Jag finns här för att avlasta – inte för att ge dig mer att göra. Vad snurrar i huvudet just nu?";
+  "Hej! Vad behöver du just nu?";
 
 const QUICK_PROMPTS = [
-  "Det känns för mycket idag",
-  "Hjälp mig bryta ner en uppgift",
-  "Vad borde jag börja med?",
+  { label: "Få hjälp att planera", prompt: "Hjälp mig planera med FlowPlan utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
+  { label: "Jag känner mig stressad", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
+  { label: "Jag behöver motivation", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
+  { label: "Jag vill ta en paus", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
+  { label: "Jag behöver en lugn stund", prompt: "Jag behöver en lugn stund. Hjälp mig varva ner med en kort övning." },
+  { label: "Något annat…", prompt: null },
 ];
 
 /** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
@@ -148,6 +154,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const chat = useServerFn(chatWithFlow);
   const { puzzle, contextPrompt } = useLifePuzzle();
   const personalContext = useFlowPersonalContext();
+  const [chosenMemories, setChosenMemories] = useMyFlowMemories();
+  const [memoryCandidate, setMemoryCandidate] = useState<string | null>(null);
   // Flow kommunicerar FlowPlans nästa steg – aldrig en egen rekommendation.
   const flowPlan = useFlowPlan();
   const { exercises: savedExercises } = useSavedExercises();
@@ -315,6 +323,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     } finally {
       setIsSending(false);
     }
+  };
+
+  const saveChosenMemory = () => {
+    const text = memoryCandidate?.trim().slice(0, 300);
+    if (!text) return;
+    setChosenMemories(prev => prev.some(m => m.text === text) ? prev : [...prev, { id: crypto.randomUUID(), text }]);
+    setMemoryCandidate(null);
   };
 
   const openConversation = (id: string) => {
@@ -509,19 +524,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
         </aside>
 
-        <div className="space-y-6 min-w-0">
+        <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
+          <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (place && place.path !== "/assistant") void navigate({ to: place.path });
-                else void navigate({ to: "/hem" });
-              }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium shadow-sm transition-transform active:scale-95"
-            >
+            <Button asChild variant="outline" className="rounded-2xl"><Link to="/flow">
               <ArrowLeft size={16} />
-              Tillbaka till {place ? place.label : "Hem"}
-            </button>
+              Min Flow
+            </Link></Button>
           </div>
 
           <nav
@@ -622,6 +631,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             <p className="text-sm leading-snug">{coachMessage.text}</p>
           </MyFloveBlock>
 
+          </div>
+
           <MyFloveBlock
             title="Samtal"
             subtitle="Skriv när du vill – Flow lyssnar"
@@ -630,8 +641,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             surface="plain"
             className="p-4"
             bodyClassName="space-y-4"
-            collapsible
-            collapseId="assistant::samtal"
+            collapsible={false}
           >
             <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
               {loadingMessages ? (
@@ -644,7 +654,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                     <div className="flex justify-start items-end gap-2">
                       <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
                       <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
-                        {GREETING}
+                        {GREETING} <Heart aria-label="hjärta" className="inline size-4 fill-primary text-primary" />
                       </div>
                     </div>
                   )}
@@ -683,6 +693,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                             )}
                           </div>
                         </div>
+                        {m.role === "user" && !chosenMemories.some(memory => memory.text === m.content.slice(0, 300)) && (
+                          <div className="flex justify-end"><Button variant="ghost" size="sm" className="h-auto rounded-xl text-xs text-muted-foreground" onClick={() => setMemoryCandidate(m.content.slice(0, 300))}>Vill du att jag kommer ihåg det?</Button></div>
+                        )}
 
                         {ex?.exercises.map((d, i) => (
                           <FlowExerciseDraftCard key={`${m.id}:ex${i}`} draft={d} />
@@ -769,17 +782,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
-              {[puzzle.flowPrompt, ...(place ? [place.prompt] : []), ...QUICK_PROMPTS]
-                .filter((p, i, arr) => p && arr.indexOf(p) === i)
-                .map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => void send(p)}
-                    className="px-3 py-2 rounded-full text-sm bg-secondary hover:bg-secondary/80 text-foreground transition-colors"
-                  >
-                    {p}
-                  </button>
-                ))}
+              {QUICK_PROMPTS.map(({ label, prompt }) => (
+                <Button key={label} variant="outline" className="h-auto min-h-11 whitespace-normal rounded-2xl bg-card px-3 py-2 text-left" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
+              ))}
             </div>
           )}
 
@@ -841,6 +846,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </div>
         </div>
       )}
+      <Dialog open={memoryCandidate !== null} onOpenChange={open => { if (!open) setMemoryCandidate(null); }}>
+        <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Flow?</DialogTitle><DialogDescription>Flow använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
+      </Dialog>
     </>
   );
 }

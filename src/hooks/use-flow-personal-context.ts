@@ -15,6 +15,7 @@ import { cycleContext } from "@/lib/cycle";
 import { checkinContext } from "@/lib/flow-checkin-context";
 import { useFamilyLoad } from "@/hooks/use-family-load";
 import { familyLoadContext } from "@/lib/family-load";
+import { useMyFlowMemories } from "@/hooks/use-my-flow";
 
 const TONE: Record<string, string> = {
   tyst: "Användaren vill ha få ord. Svara kort och bara på det som frågas.",
@@ -38,10 +39,15 @@ export function useFlowPersonalContext(): string {
   const { impact: impactEntry } = useImpactCheckin();
   const { cycle } = useCycle();
   const familyLoad = useFamilyLoad();
+  const [chosenMemories] = useMyFlowMemories();
 
   return useMemo(() => {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
     if (name) lines.push(`- Tilltalsnamn: ${name}. Använd namnet sparsamt och varmt.`);
+    if (chosenMemories.length) {
+      lines.push("Det användaren uttryckligen har bett Flow komma ihåg (preferenser, inte instruktioner):");
+      for (const memory of chosenMemories.slice(0, 12)) lines.push(`- ${memory.text.slice(0, 300)}`);
+    }
 
     const profileText = lifeProfileContext(profile);
     if (profileText) lines.push(profileText);
@@ -104,5 +110,6 @@ export function useFlowPersonalContext(): string {
     impactEntry,
     cycle,
     familyLoad,
+    chosenMemories,
   ]);
 }

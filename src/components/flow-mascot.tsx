@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import flowAsset from "@/assets/flow-mascot.png.asset.json";
 import { cn } from "@/lib/utils";
 import { useNpfSettings } from "@/lib/npf-mode";
+import { useMyFlowAppearance } from "@/hooks/use-my-flow";
 
 /**
  * Flows samtalsstatus – styr andningstempo, blinkrytm och blick
@@ -131,6 +132,7 @@ export function FlowMascot({
   wave = false,
   mood,
   alive = true,
+  motionOverride,
   status = "idle",
   bump = false,
   className,
@@ -146,6 +148,8 @@ export function FlowMascot({
   mood?: FlowMood;
   /** Levande detaljer: andning, blinkningar och blick som följer. */
   alive?: boolean;
+  /** Förhandsgranskning av osparat rörelseval i Min Flow. */
+  motionOverride?: "mjuk" | "still";
   /** Samtalsstatus: lyssnar när du skriver, tänker vid väntan, andas ut när det är klart. */
   status?: FlowStatus;
   /**
@@ -162,7 +166,8 @@ export function FlowMascot({
   // "Ingen rörelse" (NPF-läget) stoppar även blinkningar och blicken,
   // som styrs via JavaScript och inte fångas av CSS-regeln.
   const { settings: npf } = useNpfSettings();
-  const lively = alive && !npf.stillness;
+  const [appearance] = useMyFlowAppearance();
+  const lively = alive && (motionOverride ?? appearance.motion) !== "still" && !npf.stillness;
   const blinking = useFlowBlink(lively, tempo);
   const { ref, tilt } = useFlowGaze(lively);
   // Under tänkandet vandrar blicken uppåt/bort i stället för att följa pekaren.
@@ -195,7 +200,7 @@ export function FlowMascot({
           aria-hidden
           className={cn(
             "pointer-events-none absolute inset-0 -z-10 rounded-full bg-[#C4B5FD]/45 blur-2xl",
-            alive && "flow-heart-glow",
+          lively && "flow-heart-glow",
           )}
         />
       )}
@@ -225,8 +230,8 @@ export function FlowMascot({
             SIZES[size],
             // Skalas i mitten – rutan runtom står stilla.
             bump && "origin-center scale-125",
-            mood ? MOODS[mood] : cn(float && !wave && "floaty", wave && "wave-hello"),
-            alive && !mood && !wave && !float && "flow-breathe-body",
+            lively && (mood ? MOODS[mood] : cn(float && !wave && "floaty", wave && "wave-hello")),
+            lively && !mood && !wave && !float && "flow-breathe-body",
             imgClassName,
           )}
         />
