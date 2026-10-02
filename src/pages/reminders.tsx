@@ -5,6 +5,7 @@ import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import PushStatusCard from "@/components/push-status-card";
@@ -81,59 +82,6 @@ function ReminderRow({
     setEditing(true);
   };
 
-  if (editing) {
-    return (
-      <li className="rounded-2xl border border-border bg-card p-4 shadow-soft space-y-3">
-        <input
-          className={inputClass}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Vad gäller det?"
-        />
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
-          <input
-            className={inputClass}
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <input
-            className={inputClass}
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-          />
-        </div>
-        <input
-          className={inputClass}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="Anteckning (valfritt)"
-        />
-        <div className="flex gap-2">
-          <Button
-            className="rounded-xl"
-            onClick={() => {
-              if (!title.trim() || !date) return;
-              onSave({
-                title: title.trim(),
-                date,
-                time: time || undefined,
-                note: note.trim() || undefined,
-              });
-              setEditing(false);
-            }}
-          >
-            <Check size={16} className="mr-1.5" /> Spara
-          </Button>
-          <Button variant="ghost" className="rounded-xl" onClick={() => setEditing(false)}>
-            <X size={16} className="mr-1.5" /> Avbryt
-          </Button>
-        </div>
-      </li>
-    );
-  }
-
   return (
     <li
       className={`rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
@@ -176,6 +124,62 @@ function ReminderRow({
           <Trash2 size={14} className="mr-1.5" /> Ta bort
         </Button>
       </div>
+
+      <Dialog open={editing} onOpenChange={setEditing}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Ändra påminnelse</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <input
+              className={inputClass}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Vad gäller det?"
+            />
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+              <input
+                className={inputClass}
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <input
+                className={inputClass}
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+              />
+            </div>
+            <input
+              className={inputClass}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Anteckning (valfritt)"
+            />
+            <div className="flex gap-2">
+              <Button
+                className="rounded-xl"
+                onClick={() => {
+                  if (!title.trim() || !date) return;
+                  onSave({
+                    title: title.trim(),
+                    date,
+                    time: time || undefined,
+                    note: note.trim() || undefined,
+                  });
+                  setEditing(false);
+                }}
+              >
+                <Check size={16} className="mr-1.5" /> Spara
+              </Button>
+              <Button variant="ghost" className="rounded-xl" onClick={() => setEditing(false)}>
+                <X size={16} className="mr-1.5" /> Avbryt
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </li>
   );
 }
@@ -191,6 +195,7 @@ export default function RemindersPage() {
   } = useReminders();
   const { toast } = useToast();
   useReminderSync();
+  const [addOpen, setAddOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(todayIso());
   const [time, setTime] = useState("");
@@ -240,6 +245,7 @@ export default function RemindersPage() {
     setTime("");
     setNote("");
     toast({ description: "Påminnelsen är tillagd 🔔" });
+    setAddOpen(false);
   };
 
   return (
@@ -281,7 +287,16 @@ export default function RemindersPage() {
         </MyFloveBlock>
 
         <MyFloveWide>
-          <MyFloveBlock title="Ny påminnelse" subtitle="Fyll i vad och när" icon={Plus}>
+          <Button onClick={() => setAddOpen(true)} className="h-12 w-full rounded-xl">
+            <Plus size={18} className="mr-2" /> Lägg till påminnelse
+          </Button>
+        </MyFloveWide>
+
+        <Dialog open={addOpen} onOpenChange={setAddOpen}>
+          <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+            <DialogHeader>
+              <DialogTitle>Ny påminnelse</DialogTitle>
+            </DialogHeader>
             <form onSubmit={handleAdd} className="space-y-3">
               <input
                 className={inputClass}
@@ -338,8 +353,8 @@ export default function RemindersPage() {
                 <Plus size={18} className="mr-2" /> Lägg till påminnelse
               </Button>
             </form>
-          </MyFloveBlock>
-        </MyFloveWide>
+          </DialogContent>
+        </Dialog>
 
         <MyFloveWide>
           <MyFloveBlock

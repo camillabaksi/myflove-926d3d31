@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Zap,
   Timer,
@@ -79,6 +80,7 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
   const [meetingNotes, setMeetingNotes] = useState("");
   const [meetingAgenda, setMeetingAgenda] = useState("");
   const [newTask, setNewTask] = useState("");
+  const [newTaskDialogOpen, setNewTaskDialogOpen] = useState(false);
 
   const voice = useVoiceInput((t) => setMeetingNotes((prev) => (prev ? `${prev} ${t}` : t)));
 
@@ -230,24 +232,41 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
               />
             )}
 
-            <form
-              className="mt-4 flex gap-2"
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!newTask.trim()) return;
-                addTask(newTask.trim(), undefined, { area: "jobb" });
-                setNewTask("");
-              }}
+            <Button
+              type="button"
+              className="mt-4 w-full rounded-full"
+              onClick={() => setNewTaskDialogOpen(true)}
             >
-              <Input
-                value={newTask}
-                onChange={(e) => setNewTask(e.target.value)}
-                placeholder="Lägg till en arbetsuppgift…"
-              />
-              <Button type="submit" size="icon" aria-label="Lägg till uppgift">
-                <Plus className="h-4 w-4" />
-              </Button>
-            </form>
+              <Plus className="mr-2 h-4 w-4" /> Lägg till uppgift
+            </Button>
+
+            <Dialog open={newTaskDialogOpen} onOpenChange={setNewTaskDialogOpen}>
+              <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+                <DialogHeader>
+                  <DialogTitle>Lägg till en arbetsuppgift</DialogTitle>
+                </DialogHeader>
+                <form
+                  className="flex gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!newTask.trim()) return;
+                    addTask(newTask.trim(), undefined, { area: "jobb" });
+                    setNewTask("");
+                    setNewTaskDialogOpen(false);
+                  }}
+                >
+                  <Input
+                    value={newTask}
+                    onChange={(e) => setNewTask(e.target.value)}
+                    placeholder="Lägg till en arbetsuppgift…"
+                    autoFocus
+                  />
+                  <Button type="submit" size="icon" aria-label="Lägg till uppgift">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </header>
 
           <Button variant="secondary" className="w-full rounded-full" onClick={() => recalc(false)}>

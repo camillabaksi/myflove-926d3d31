@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   GraduationCap,
   Plus,
@@ -83,6 +84,7 @@ export function StudiesSection() {
   const [details, setDetails] = useState("");
   const [reminderTime, setReminderTime] = useState("09:00");
   const [folder, setFolder] = useState<string>("all");
+  const [assignmentDialogOpen, setAssignmentDialogOpen] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [intros, setIntros] = useState<Record<string, string>>({});
@@ -135,6 +137,7 @@ export function StudiesSection() {
     setTitle("");
     setDueDate("");
     setDetails("");
+    setAssignmentDialogOpen(false);
   };
 
   const handleBreakDown = async (task: Task) => {
@@ -327,67 +330,78 @@ export function StudiesSection() {
       </CollapsibleSection>
 
       {/* Ny inlämning */}
-      <CollapsibleSection
-        title="Ny skoluppgift"
-        headingClassName="text-lg font-semibold"
-        className="bg-card border border-border rounded-2xl p-5"
-      >
-        <form onSubmit={handleAddAssignment} className="space-y-3">
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Vad ska göras? T.ex. Inlämning: fallbeskrivning"
-            className="h-12 rounded-xl bg-secondary/50 border-transparent"
-          />
-          <div className="flex flex-wrap gap-3">
-            <label className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CalendarDays size={16} />
-              <Input
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="h-11 rounded-xl bg-background w-44"
-              />
-            </label>
-            <select
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-              className="h-11 rounded-xl border border-border bg-background px-3 text-sm"
-              aria-label="Välj kurs"
-            >
-              <option value="">Ingen kurs</option>
-              {activeCourses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
-            </select>
-            <label className="flex items-center gap-2 text-sm text-muted-foreground">
-              <BellRing size={16} />
-              <Input
-                type="time"
-                value={reminderTime}
-                onChange={(e) => setReminderTime(e.target.value)}
-                aria-label="Klockslag för deadline-påminnelser"
-                className="h-11 rounded-xl bg-background w-28"
-              />
-            </label>
-            <Button type="submit" disabled={!title.trim()} className="h-11 rounded-xl px-5">
-              <Plus size={18} className="mr-1" /> Lägg till
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per uppgift.
-          </p>
-          <textarea
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-            placeholder="Valfritt: klistra in instruktionen så kan Flow dela upp den bättre."
-            rows={2}
-            className="w-full rounded-xl border border-border bg-background p-3 text-sm"
-          />
-        </form>
-      </CollapsibleSection>
+      <section className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-lg font-semibold text-ink">Ny skoluppgift</h2>
+          <p className="text-sm text-muted-foreground">Lägg till en inlämning eller deadline.</p>
+        </div>
+        <Button type="button" className="h-11 rounded-xl px-5" onClick={() => setAssignmentDialogOpen(true)}>
+          <Plus size={18} className="mr-1" /> Lägg till
+        </Button>
+      </section>
+
+      <Dialog open={assignmentDialogOpen} onOpenChange={setAssignmentDialogOpen}>
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogHeader>
+            <DialogTitle>Ny skoluppgift</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddAssignment} className="space-y-3">
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Vad ska göras? T.ex. Inlämning: fallbeskrivning"
+              className="h-12 rounded-xl bg-secondary/50 border-transparent"
+            />
+            <div className="flex flex-wrap gap-3">
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CalendarDays size={16} />
+                <Input
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="h-11 rounded-xl bg-background w-44"
+                />
+              </label>
+              <select
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+                className="h-11 rounded-xl border border-border bg-background px-3 text-sm"
+                aria-label="Välj kurs"
+              >
+                <option value="">Ingen kurs</option>
+                {activeCourses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <BellRing size={16} />
+                <Input
+                  type="time"
+                  value={reminderTime}
+                  onChange={(e) => setReminderTime(e.target.value)}
+                  aria-label="Klockslag för deadline-påminnelser"
+                  className="h-11 rounded-xl bg-background w-28"
+                />
+              </label>
+              <Button type="submit" disabled={!title.trim()} className="h-11 rounded-xl px-5">
+                <Plus size={18} className="mr-1" /> Lägg till
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Med deadline får du automatiskt notis 7, 3 och 1 dag innan – du kan ändra per uppgift.
+            </p>
+            <textarea
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+              placeholder="Valfritt: klistra in instruktionen så kan Flow dela upp den bättre."
+              rows={2}
+              className="w-full rounded-xl border border-border bg-background p-3 text-sm"
+            />
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Inlämningar */}
       <CollapsibleSection
