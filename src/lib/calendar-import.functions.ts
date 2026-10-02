@@ -127,44 +127,17 @@ Absoluta regler:
 - readable: false om bilden är för suddig/oläslig att tolka.
 Svara endast enligt JSON-schemat.`;
 
-type Part =
-  | { type: "input_text"; text: string }
-  | { type: "input_image"; image_url: string }
-  | { type: "input_file"; filename: string; file_data: string };
+type ChatContent =
+  | { type: "text"; text: string }
+  | { type: "image_url"; image_url: { url: string } };
 
 async function readOutputText(res: Response): Promise<string> {
-  const reader = res.body?.getReader();
-  if (!reader) return "";
-  const decoder = new TextDecoder();
-  let buffer = "";
-  let out = "";
-  let refused = false;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const frames = buffer.split("\n\n");
-    buffer = frames.pop() ?? "";
-    for (const frame of frames) {
-      for (const line of frame.split("\n")) {
-        if (!line.startsWith("data:")) continue;
-        const payload = line.slice(5).trim();
-        if (!payload || payload === "[DONE]") continue;
-        try {
-          const ev = JSON.parse(payload) as { type?: string; delta?: string };
-          if (ev.type === "response.output_text.delta" && typeof ev.delta === "string") {
-            out += ev.delta;
-          } else if (ev.type === "response.refusal.delta") {
-            refused = true;
-          }
-        } catch {
-          // ofullständig rad – ignoreras
-        }
-      }
-    }
-  }
-  if (refused && !out) throw new Error("refused");
-  return out;
+  const json = (await res.json()) as {
+    choices?: Array<{ message?: { content?: string | null } }>;
+  };
+  return (json.choices?.[0]?.message?.content ?? "")
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "");
 }
 
 const clampConf = (n: unknown) => (typeof n === "number" && n >= 0 && n <= 1 ? n : 0);
@@ -214,37 +187,28 @@ export const analyzeCalendarImport = createServerFn({ method: "POST" })
     const apiKey = process.env["LOVABLE_API_KEY"];
     if (!apiKey) return { status: "error", items: [], message: "AI är inte konfigurerat." };
 
-    const content: Part[] = [];
-    if (data.text?.trim()) content.push({ type: "input_text", text: data.text });
+    const content: ChatContent[] = [];
+    if (data.text?.trim()) content.push({ type: "text", text: data.text });
     if (data.file) {
-      content.push({ type: "input_text", text: `Bifogad fil: ${data.file.name}` });
-      if (data.file.mime === "application/pdf") {
-        content.push({ type: "input_file", filename: data.file.name, file_data: data.file.dataUrl });
-      } else {
-        content.push({ type: "input_image", image_url: data.file.dataUrl });
-      }
+      content.push({ type: "text", text: `Bifogad fil: ${data.file.name}` });
+      content.push({ type: "image_url", image_url: { url: data.file.dataUrl } });
     }
 
     let res: Response;
     try {
-      res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+      res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Lovable-API-Key": apiKey,
-          "X-Lovable-AIG-SDK": "fetch",
         },
         body: JSON.stringify({
-          model: "openai/gpt-6-astra",
-          stream: true,
-          store: false,
-          reasoning: { effort: "low", summary: "auto" },
-          include: ["reasoning.encrypted_content"],
-          instructions: system(data.today, data.weekday),
-          input: [{ role: "user", content }],
-          text: {
-            format: { type: "json_schema", name: "calendar_import", strict: true, schema: SCHEMA },
-          },
+          model: "google/gemini-3.8-flash",
+          messages: [
+            { role: "system", content: system(data.today, data.weekday) },
+            { role: "user", content },
+          ],
+          response_format: { type: "json_object" },
         }),
       });
     } catch {

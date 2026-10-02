@@ -125,63 +125,30 @@ export const generateAiWorkout = createServerFn({ method: "POST" })
       .filter(Boolean)
       .join("\n");
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Lovable-API-Key": apiKey,
-        "X-Lovable-AIG-SDK": "fetch",
       },
       body: JSON.stringify({
-        model: "openai/gpt-6-astra",
-        stream: true,
-        store: false,
-        reasoning: { effort: "low" },
-        instructions: SYSTEM,
-        input: [{ role: "user", content: [{ type: "input_text", text: userPrompt }] }],
-        text: {
-          format: {
-            type: "json_schema",
-            name: "workout_plan",
-            strict: true,
-            schema: JSON_SCHEMA,
-          },
-        },
+        model: "google/gemini-3.8-flash",
+        messages: [
+          { role: "system", content: SYSTEM },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: { type: "json_object" },
       }),
     });
 
     if (res.status === 429) throw new Response("För många frågor just nu.", { status: 429 });
     if (res.status === 402) throw new Response("AI-krediterna är slut.", { status: 402 });
-    if (!res.ok || !res.body) throw new Error(`AI-fel: ${res.status}`);
+    if (!res.ok) throw new Error(`AI-fel: ${res.status}`);
 
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-    let text = "";
-    while (true) {
-      const chunk = await reader.read();
-      if (chunk.done) break;
-      buffer += decoder.decode(chunk.value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-      for (const line of lines) {
-        if (!line.startsWith("data:")) continue;
-        const payload = line.slice(5).trim();
-        if (!payload || payload === "[DONE]") continue;
-        try {
-          const event = JSON.parse(payload) as {
-            type?: string;
-            delta?: string;
-            response?: { output_text?: string };
-          };
-          if (event.type === "response.output_text.delta" && event.delta) text += event.delta;
-          else if (event.type === "response.completed" && event.response?.output_text)
-            text = event.response.output_text;
-        } catch {
-          // Ofullständig rad – hoppa över.
-        }
-      }
-    }
+    const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+    const text = (json.choices?.[0]?.message?.content ?? "")
+      .replace(/^```(?:json)?/i, "")
+      .replace(/```$/, "");
 
     if (!text.trim()) throw new Error("AI:n svarade tomt.");
     let parsed: unknown;
