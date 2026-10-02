@@ -1,0 +1,18 @@
+import { describe, expect, it } from "vitest";
+import { roomTimeAt } from "./flow-room";
+
+describe("Flows dygnsrytm", () => {
+  it("byter till dag klockan 07 och kväll klockan 18", () => {
+    expect(roomTimeAt(6)).toBe("natt");
+    expect(roomTimeAt(7)).toBe("dag");
+    expect(roomTimeAt(17)).toBe("dag");
+    expect(roomTimeAt(18)).toBe("kvall");
+    expect(roomTimeAt(21)).toBe("kvall");
+  });
+
+  it("låter Flow vila från klockan 22 till före 07", () => {
+    expect(roomTimeAt(22)).toBe("natt");
+    expect(roomTimeAt(23)).toBe("natt");
+    expect(roomTimeAt(0)).toBe("natt");
+  });
+});
