@@ -102,7 +102,7 @@ export async function migratePendingEnergy(
 ): Promise<MigrationResult> {
   if (pending.length === 0) return { migrated: [], remaining: [], inserted: [], normalized: [] };
   // Kön får bara flyttas till kontot som äger enhetens data.
-  if (!isActiveOwner(userId)) return { migrated: [], remaining: pending, inserted: [], normalized: [] };
+  if (!isActiveOwner(userId)) return { migrated: [], remaining: pending, inserted: [], normalized: pending };
 
   const { entries } = ensurePendingUuids(pending);
 
