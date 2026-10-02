@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Min Flow: rummet följer dag, kväll och natt; Flow kan utforska fyra platser och vila i pyjamas på natten. En bottenpanel för kläder, accessoarer och rumsdetaljer visar ändringar innan de sparas (2026-10-02)",
     "Flow bor nu i rummet: sitter i fåtöljen, tar en kort promenad på mattan, dricker te eller myser med filt; uppladdad GIF och stillhetsval används (2026-10-02)",
     "Min Flow: ett tryggt rum, befintlig chatt, frivilliga minnen, tre rumsteman som kan väljas i samlingen och valfri rörelse; chatten prioriterar samtalet på mobil och QuickFlow ligger kvar separat (2026-10-02)",
     "Äldre data utan konto kan nu läggas till i ditt konto (eller tas bort) via en fråga överst, och osynkade ändringar från en offline-utloggning kommer alltid tillbaka vid ny inloggning (2026-10-02)",

@@ -1,5 +1,10 @@
 # Roadmap
 
+## Levande Min Flow (2026-10-02)
+- [x] Dag, kväll och natt med manuellt testläge, lugn vandring mellan fyra platser och nattvila.
+- [x] Bottenpanel för val av kläder, accessoarer och rumsdetaljer med förhandsvisning och kontobunden sparning.
+- [x] Kontrollera mobil, minskad rörelse och äldre länk till anpassningen.
+
 ## Flow i rummet (2026-10-02)
 - [x] Använd uppladdad Flow-animation som integrerad figur i fåtöljen och låt Flow röra sig i rummet.
 - [x] Lägg till lugna, frivilliga te- och filtstunder med alternativ för minskad rörelse.
