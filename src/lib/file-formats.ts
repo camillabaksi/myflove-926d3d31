@@ -206,9 +206,36 @@ async function readOfficeText(file: File, maxChars = 30000): Promise<string> {
   return text.length > maxChars ? `${text.slice(0, maxChars)}\n…` : text;
 }
 
+/** Läs ut text ur en PDF med pdfjs (laddas först när en PDF väljs). */
+async function readPdfText(file: File, maxChars = 30000): Promise<string> {
+  const [pdfjs, workerUrl] = await Promise.all([
+    import("pdfjs-dist"),
+    import("pdfjs-dist/build/pdf.worker.min.mjs?url").then((m) => m.default),
+  ]);
+  pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+  const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  const parts: string[] = [];
+  for (let p = 1; p <= doc.numPages; p++) {
+    const page = await doc.getPage(p);
+    const content = await page.getTextContent();
+    const line = content.items
+      .map((item) => ("str" in item ? item.str : ""))
+      .join(" ")
+      .trim();
+    if (line) parts.push(line);
+  }
+  const text = parts.join("\n").trim();
+  if (!text) {
+    throw new Error(
+      "PDF:en verkar vara en skannad bild utan text. Ta gärna en skärmbild av den istället – då kan Flow läsa den.",
+    );
+  }
+  return text.length > maxChars ? `${text.slice(0, maxChars)}\n…` : text;
+}
+
 /**
- * Gör en uppladdad fil klar för Flow: textfiler och Office-dokument blir text,
- * bilder och PDF skickas som fil. Övriga format ger ett vänligt fel.
+ * Gör en uppladdad fil klar för Flow: textfiler, Office-dokument och PDF:er blir
+ * text, bilder skickas som fil. Övriga format ger ett vänligt fel.
  */
 export async function prepareUpload(file: File): Promise<PreparedUpload> {
   if (file.size > MAX_FILE_MB * 1024 * 1024) {
@@ -220,12 +247,15 @@ export async function prepareUpload(file: File): Promise<PreparedUpload> {
   if (isTextFile(file)) {
     return { kind: "text", text: await readFileAsText(file) };
   }
-  if (isImageFile(file) || isPdfFile(file)) {
+  if (isPdfFile(file)) {
+    return { kind: "text", text: await readPdfText(file) };
+  }
+  if (isImageFile(file)) {
     return {
       kind: "file",
       file: {
         name: file.name,
-        mime: file.type || (isPdfFile(file) ? "application/pdf" : "image/jpeg"),
+        mime: file.type || "image/jpeg",
         dataUrl: await readFileAsDataUrl(file),
       },
     };
