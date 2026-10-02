@@ -1,3 +1,7 @@
+## 2026-10-02
+- Kalender: aktiviteter hamnar inte längre i Vård bara för att titeln innehåller ord som "test"; ord matchas nu bara från ordets början.
+- Barnschema: att ta bort en återkommande aktivitet från en viss dag tar bara bort den dagen och framåt – tidigare dagar sparas.
+
 ## 2026-10-01
 - Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
 - Landningssidans gamla augustifilm har bytts mot en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval, FlowPlan och dagens lista.
