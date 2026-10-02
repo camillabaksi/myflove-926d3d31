@@ -111,6 +111,7 @@ function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   useEffect(() => {
     initCacheBusting();
+    void import("@/lib/native-backup").then((m) => m.initNativeBackup());
   }, []);
   // Kopplar enhetens anonyma id till kontot en gång, så interna test kan filtreras bort.
   useAnalyticsClaim();
