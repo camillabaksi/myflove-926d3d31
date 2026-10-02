@@ -1,6 +1,6 @@
 ## 2026-10-02
 
-- Flow i rummet är nu tydligare: de animerade bilderna har fått en opak kropp medan bakgrunden fortfarande är genomskinlig.
+- Flow i rummet är nu helt täckande: hålen i hjärtat, pannan, nosen och ögonglansen (där rummet syntes igenom) är ifyllda i alla animationsrutor.
 - Min Flow har nu en automatisk dygnsrytm: Flow rör sig lugnt mellan fåtölj, matta, växter och hylla på dagen, varvar ned på kvällen och vilar i pyjamas på natten. Tiden kan förhandsvisas manuellt; kläder, accessoarer och rumsdetaljer väljs i en panel och sparas först vid aktivt val. Minskad rörelse respekteras.
 - Flow är nu en del av rummet: sitter i fåtöljen, kan ta en kort promenad på mattan, dricka te eller mysa med filt. Rörelserna bygger på den uppladdade GIF:en; stillhet och minskad rörelse respekteras.
 - Min Flow öppnas från Flow-fliken med Flows rum, befintlig chatt, frivilliga redigerbara minnen, rumsteman och samling. QuickFlow är en separat genväg. Utseende och minnen följer kontot; lokala minnen krypteras. Teman kan väljas direkt i samlingen, och chatten visar samtalet före detaljerna på mobil.
