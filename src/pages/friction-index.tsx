@@ -48,7 +48,7 @@ const STATUS_COLORS: Record<Status, string> = {
   new: "bg-primary/10 text-primary",
   reviewing: "bg-accent/30 text-ink",
   planned: "bg-secondary text-ink",
-  done: "bg-success/15 text-ink",
+  done: "bg-primary/20 text-primary",
   ignored: "bg-muted text-muted-foreground",
 };
 

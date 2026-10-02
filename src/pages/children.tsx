@@ -365,7 +365,7 @@ function ChildrenContent() {
                     borderColor: childColor === c ? "var(--foreground)" : "transparent",
                   }}
                 >
-                  {childColor === c && <Check size={14} className="text-white drop-shadow" />}
+                  {childColor === c && <Check size={14} className="text-primary-foreground drop-shadow" />}
                 </button>
               ))}
             </div>

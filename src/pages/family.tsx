@@ -47,7 +47,7 @@ function ColorPicker({ value, onChange }: { value: string; onChange: (c: string)
             borderColor: value === c.value ? "var(--foreground)" : "transparent",
           }}
         >
-          {value === c.value && <Check size={16} className="text-white drop-shadow" />}
+          {value === c.value && <Check size={16} className="text-primary-foreground drop-shadow" />}
         </button>
       ))}
     </div>
