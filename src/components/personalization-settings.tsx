@@ -148,7 +148,7 @@ export function PersonalizationSettings() {
                   className="grid size-6 place-items-center rounded-full"
                   style={{ backgroundColor: theme.swatch }}
                 >
-                  {active ? <Check size={13} className="text-white" /> : null}
+                  {active ? <Check size={13} className="text-primary-foreground" /> : null}
                 </span>
                 <span className="font-medium leading-tight text-ink">{theme.label}</span>
               </Button>

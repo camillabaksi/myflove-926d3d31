@@ -254,7 +254,7 @@ export default function Layout({ children }: LayoutProps) {
   const navItems: NavItem[] = [
     {
       href: "/hem",
-      label: "Översikt",
+      label: "Hem",
       icon: Home,
       hint: "Dagen, energin och nästa steg",
       essential: true,
@@ -299,7 +299,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/stop-paus",
       label: "Stop-paus",
       icon: Hand,
-      hint: "🛑 En paus mellan impuls och beslut",
+      hint: "En paus mellan impuls och beslut",
     },
 
     {
@@ -313,12 +313,6 @@ export default function Layout({ children }: LayoutProps) {
       label: "Rutiner & medicin",
       icon: Sun,
       hint: "Fasta rutiner och dagens doser",
-    },
-    {
-      href: "/morgonstart",
-      label: "Morgonstart",
-      icon: Sun,
-      hint: "Kom igång på morgonen – finns under rutiner",
     },
 
     {
@@ -427,12 +421,6 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Hjälp, planering och chatt på ett ställe",
       essential: true,
     },
-    {
-      href: "/assistant",
-      label: "Chatta med Flow",
-      icon: MessageCircle,
-      hint: "Chatten i Flow",
-    },
 
     {
       href: "/friktionsindex",
@@ -525,7 +513,6 @@ export default function Layout({ children }: LayoutProps) {
           "/energifloede",
           "/traning",
           "/daglig-rutin",
-          "/morgonstart",
         ],
       },
       {
@@ -828,7 +815,7 @@ export default function Layout({ children }: LayoutProps) {
                     aria-label={`Påminn om ${alert.name} igen om 10 minuter`}
                     className="inline-flex items-center gap-1 rounded-pill bg-secondary px-3 py-1.5 text-xs font-medium text-ink transition-opacity hover:opacity-80"
                   >
-                    ⏰ 10 min
+                    10 min
                   </button>
                   <button
                     type="button"

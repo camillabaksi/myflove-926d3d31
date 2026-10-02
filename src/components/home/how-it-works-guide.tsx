@@ -68,7 +68,7 @@ export default function HowItWorksGuide() {
     {
       n: 4,
       kicker: t("Gör"),
-      title: t("Min dag"),
+      title: t("Idag"),
       text: t("Se möten och vardagssaker på samma plats."),
       href: "/idag",
       icon: CalendarDays,
