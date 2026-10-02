@@ -32,7 +32,7 @@ export function installIndexedDbMock(): void {
     open(name: string) {
       const req: {
         result?: unknown;
-        error: null;
+        error: unknown;
         onupgradeneeded: Listener;
         onsuccess: Listener;
         onerror: Listener;
@@ -88,7 +88,7 @@ export function installIndexedDbMock(): void {
       req.result = db;
       const finish = () => {
         if (mockOptions.fail) {
-          req.error = new Error("blocked") as unknown as null;
+          req.error = new Error("blocked");
           req.onerror?.();
           return;
         }
