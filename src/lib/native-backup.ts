@@ -63,3 +63,12 @@ export async function initNativeBackup(): Promise<void> {
   });
   window.addEventListener("pagehide", () => void save());
 }
+
+/** Raderar telefonens kopia, t.ex. när kontot tas bort. */
+export async function clearNativeBackup(): Promise<void> {
+  if (typeof window === "undefined") return;
+  const { Capacitor } = await import("@capacitor/core");
+  if (!Capacitor.isNativePlatform()) return;
+  const { Preferences } = await import("@capacitor/preferences");
+  await Preferences.remove({ key: BACKUP_KEY });
+}

@@ -1,4 +1,5 @@
 ## 2026-10-02
+- Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den.
 - Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet.
 - Popup-fönster överallt: alla "Lägg till"- och "Ändra"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Studieflöde, Arbetsflöde, Energi (påverkan), Profil (lägg till barn) och feedback. Ingen skrollning längre ner på sidan behövs.
 - Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play.
