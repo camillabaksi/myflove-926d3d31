@@ -99,6 +99,6 @@ export const EVENING_ANSWERS: { id: EveningAnswer; label: string; emoji: string 
 /** Ett kort, varmt svar – aldrig en värdering av dagen. */
 export function eveningReply(answer: EveningAnswer): string {
   if (answer === "lattare") return "Vad fint. Det tar vi med oss till imorgon.";
-  if (answer === "tyngre") return "Tack för att du berättar. Vi tar med det i morgondagens plan.";
+  if (answer === "tyngre") return "Tack för att du berättar. Imorgon känner vi efter på nytt.";
   return "Tack. Nu vet MyFlove lite mer om hur dina dagar blir.";
 }

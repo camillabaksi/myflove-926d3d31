@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
+import TomorrowWithFlow from "@/components/home/tomorrow-with-flow";
+import MorningCheckin from "@/components/home/morning-checkin";
 
 import CapacityPlanCard from "@/components/home/capacity-plan-card";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
@@ -230,7 +232,9 @@ export default function Home() {
             )}
 
             <div className="mt-4 space-y-4">
+              <MorningCheckin />
               <NowCard onAdd={() => setAddOpen(true)} />
+              {!isLowCapacity && <TomorrowWithFlow />}
               {shows("lage") && <CapacityPlanCard />}
               {!isLowCapacity && shows("checklista") && (
               <CollapsibleSection

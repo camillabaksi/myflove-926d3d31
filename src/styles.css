@@ -1808,3 +1808,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
     opacity: 0.9;
   }
 }
+
+/* Imorgon med Flow – lampan släcks mjukt. */
+@media (prefers-reduced-motion: no-preference) {
+  .tomorrow-lamp {
+    animation: tomorrow-lamp-dim 2.4s ease-in-out forwards;
+  }
+}
+@keyframes tomorrow-lamp-dim {
+  from { box-shadow: 0 0 40px 8px color-mix(in oklab, var(--primary) 35%, transparent); }
+  to { box-shadow: 0 0 0 0 transparent; opacity: 0.85; }
+}
