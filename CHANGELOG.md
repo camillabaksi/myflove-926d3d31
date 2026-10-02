@@ -1,4 +1,6 @@
 ## 2026-10-02
+- Barnschema: lägga till och ändra aktivitet öppnas nu i ett popup-fönster i stället för längre ner på sidan.
+- Navigering: varje sida öppnas alltid längst upp.
 - Kalender: aktiviteter hamnar inte längre i Vård bara för att titeln innehåller ord som "test"; ord matchas nu bara från ordets början.
 - Barnschema: att ta bort en återkommande aktivitet från en viss dag tar bara bort den dagen och framåt – tidigare dagar sparas.
 

@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Barnschema: lägga till/ändra aktivitet öppnas i popup-fönster (2026-10-02)",
+    "Navigering: varje sida öppnas längst upp (2026-10-02)",
     "Kalender: aktiviteter hamnar inte längre felaktigt i Vård på grund av ord som \"test\" (2026-10-02)",
     "Barnschema: borttagning av en återkommande aktivitet från en dag behåller tidigare dagar (2026-10-02)",
     "Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-01)",
