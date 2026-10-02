@@ -6,12 +6,14 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-01";
+export const CHANGELOG_UPDATED = "2026-10-02";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Kalender: aktiviteter hamnar inte längre felaktigt i Vård på grund av ord som \"test\" (2026-10-02)",
+    "Barnschema: borttagning av en återkommande aktivitet från en dag behåller tidigare dagar (2026-10-02)",
     "Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-01)",
     "Landningssidans äldre film har ersatts av en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval och dagens plan (2026-10-01)",
     "Landningssidan: ny knapp \"Se allt som finns i appen\" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)",
