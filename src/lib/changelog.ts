@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
-    "Flow i rummet är helt täckande: hålen i hjärtat, pannan, nosen och ögonen är ifyllda (2026-10-02)",
+    "Flow i rummet är helt täckande även när han går, med mjuka kanter, verklig skugga och ljus som följer rummet (2026-10-02)",
     "Min Flow: rummet följer dag, kväll och natt; Flow kan utforska fyra platser och vila i pyjamas på natten. En bottenpanel för kläder, accessoarer och rumsdetaljer visar ändringar innan de sparas (2026-10-02)",
     "Flow bor nu i rummet: sitter i fåtöljen, tar en kort promenad på mattan, dricker te eller myser med filt; uppladdad GIF och stillhetsval används (2026-10-02)",
     "Min Flow: ett tryggt rum, befintlig chatt, frivilliga minnen, tre rumsteman som kan väljas i samlingen och valfri rörelse; chatten prioriterar samtalet på mobil och QuickFlow ligger kvar separat (2026-10-02)",
