@@ -1,5 +1,10 @@
 # Roadmap
 
+## Flow i rummet (2026-10-02)
+- [x] Använd uppladdad Flow-animation som integrerad figur i fåtöljen och låt Flow röra sig i rummet.
+- [x] Lägg till lugna, frivilliga te- och filtstunder med alternativ för minskad rörelse.
+- [x] Kontrollera rummet på mobil och uppdatera ändringsloggarna.
+
 ## Min Flow etapp 1 (2026-10-02)
 - [x] Visa Min Flow under Flow-fliken och behåll QuickFlow separat.
 - [x] Återanvänd chatt och kontobunden synk för frivilliga minnen och utseende.
