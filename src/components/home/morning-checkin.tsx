@@ -7,9 +7,9 @@ import { track } from "@/lib/analytics";
 import { MORNING_TO_CAPACITY, type MorningAnswer } from "@/lib/tomorrow-prep";
 
 const OPTIONS: { id: MorningAnswer; label: string; dot: string }[] = [
-  { id: "energi", label: "Jag har energi", dot: "bg-success" },
-  { id: "lagom", label: "Jag har lagom", dot: "bg-warning" },
-  { id: "lite", label: "Jag har lite", dot: "bg-destructive" },
+  { id: "energi", label: "Jag har energi", dot: "bg-primary" },
+  { id: "lagom", label: "Jag har lagom", dot: "bg-accent" },
+  { id: "lite", label: "Jag har lite", dot: "bg-destructive/70" },
   { id: "forsiktigt", label: "Idag får vi ta det väldigt försiktigt", dot: "bg-muted-foreground" },
 ];
 

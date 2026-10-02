@@ -234,7 +234,7 @@ export default function Home() {
             <div className="mt-4 space-y-4">
               <MorningCheckin />
               <NowCard onAdd={() => setAddOpen(true)} />
-              {!isLowCapacity && <TomorrowWithFlow />}
+              <TomorrowWithFlow />
               {shows("lage") && <CapacityPlanCard />}
               {!isLowCapacity && shows("checklista") && (
               <CollapsibleSection
