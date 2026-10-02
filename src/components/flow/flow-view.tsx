@@ -7,9 +7,8 @@ import { track } from "@/lib/analytics";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
-import { MinFlow } from "@/components/flow/min-flow";
 
-/** /flow är Min Flow; befintlig FlowPlan och chatt behåller sina adresser. */
+/** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
 export default function FlowView({
   initialTab = "flow",
   chatId,
@@ -39,7 +38,7 @@ export default function FlowView({
       {tab === "flow" && (
         <MyFlovePageGrid area="flow">
           <MyFloveWide>
-            <MinFlow />
+            <AssistantContent chatId={chatId} />
           </MyFloveWide>
         </MyFlovePageGrid>
       )}

@@ -41,10 +41,7 @@ import { Route as AppFamiljRouteImport } from './routes/_app.familj'
 import { Route as AppFamiljeflowRouteImport } from './routes/_app.familjeflow'
 import { Route as AppFinancesRouteImport } from './routes/_app.finances'
 import { Route as AppFlowRouteImport } from './routes/_app.flow'
-import { Route as AppFlowAnpassaRouteImport } from './routes/_app.flow-anpassa'
 import { Route as AppFlowInstallningarRouteImport } from './routes/_app.flow-installningar'
-import { Route as AppFlowMinnenRouteImport } from './routes/_app.flow-minnen'
-import { Route as AppFlowSamlingRouteImport } from './routes/_app.flow-samling'
 import { Route as AppFlowplanRouteImport } from './routes/_app.flowplan'
 import { Route as AppFlowscoreRouteImport } from './routes/_app.flowscore'
 import { Route as AppFlowstudyRouteImport } from './routes/_app.flowstudy'
@@ -260,24 +257,9 @@ const AppFlowRoute = AppFlowRouteImport.update({
   path: '/flow',
   getParentRoute: () => AppRoute,
 } as any)
-const AppFlowAnpassaRoute = AppFlowAnpassaRouteImport.update({
-  id: '/flow-anpassa',
-  path: '/flow-anpassa',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppFlowInstallningarRoute = AppFlowInstallningarRouteImport.update({
   id: '/flow-installningar',
   path: '/flow-installningar',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFlowMinnenRoute = AppFlowMinnenRouteImport.update({
-  id: '/flow-minnen',
-  path: '/flow-minnen',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppFlowSamlingRoute = AppFlowSamlingRouteImport.update({
-  id: '/flow-samling',
-  path: '/flow-samling',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFlowplanRoute = AppFlowplanRouteImport.update({
@@ -581,10 +563,7 @@ export interface FileRoutesByFullPath {
   '/familjeflow': typeof AppFamiljeflowRoute
   '/finances': typeof AppFinancesRoute
   '/flow': typeof AppFlowRoute
-  '/flow-anpassa': typeof AppFlowAnpassaRoute
   '/flow-installningar': typeof AppFlowInstallningarRoute
-  '/flow-minnen': typeof AppFlowMinnenRoute
-  '/flow-samling': typeof AppFlowSamlingRoute
   '/flowplan': typeof AppFlowplanRoute
   '/flowscore': typeof AppFlowscoreRoute
   '/flowstudy': typeof AppFlowstudyRoute
@@ -671,10 +650,7 @@ export interface FileRoutesByTo {
   '/familjeflow': typeof AppFamiljeflowRoute
   '/finances': typeof AppFinancesRoute
   '/flow': typeof AppFlowRoute
-  '/flow-anpassa': typeof AppFlowAnpassaRoute
   '/flow-installningar': typeof AppFlowInstallningarRoute
-  '/flow-minnen': typeof AppFlowMinnenRoute
-  '/flow-samling': typeof AppFlowSamlingRoute
   '/flowplan': typeof AppFlowplanRoute
   '/flowscore': typeof AppFlowscoreRoute
   '/flowstudy': typeof AppFlowstudyRoute
@@ -763,10 +739,7 @@ export interface FileRoutesById {
   '/_app/familjeflow': typeof AppFamiljeflowRoute
   '/_app/finances': typeof AppFinancesRoute
   '/_app/flow': typeof AppFlowRoute
-  '/_app/flow-anpassa': typeof AppFlowAnpassaRoute
   '/_app/flow-installningar': typeof AppFlowInstallningarRoute
-  '/_app/flow-minnen': typeof AppFlowMinnenRoute
-  '/_app/flow-samling': typeof AppFlowSamlingRoute
   '/_app/flowplan': typeof AppFlowplanRoute
   '/_app/flowscore': typeof AppFlowscoreRoute
   '/_app/flowstudy': typeof AppFlowstudyRoute
@@ -855,10 +828,7 @@ export interface FileRouteTypes {
     | '/familjeflow'
     | '/finances'
     | '/flow'
-    | '/flow-anpassa'
     | '/flow-installningar'
-    | '/flow-minnen'
-    | '/flow-samling'
     | '/flowplan'
     | '/flowscore'
     | '/flowstudy'
@@ -945,10 +915,7 @@ export interface FileRouteTypes {
     | '/familjeflow'
     | '/finances'
     | '/flow'
-    | '/flow-anpassa'
     | '/flow-installningar'
-    | '/flow-minnen'
-    | '/flow-samling'
     | '/flowplan'
     | '/flowscore'
     | '/flowstudy'
@@ -1036,10 +1003,7 @@ export interface FileRouteTypes {
     | '/_app/familjeflow'
     | '/_app/finances'
     | '/_app/flow'
-    | '/_app/flow-anpassa'
     | '/_app/flow-installningar'
-    | '/_app/flow-minnen'
-    | '/_app/flow-samling'
     | '/_app/flowplan'
     | '/_app/flowscore'
     | '/_app/flowstudy'
@@ -1348,32 +1312,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFlowRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/flow-anpassa': {
-      id: '/_app/flow-anpassa'
-      path: '/flow-anpassa'
-      fullPath: '/flow-anpassa'
-      preLoaderRoute: typeof AppFlowAnpassaRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/flow-installningar': {
       id: '/_app/flow-installningar'
       path: '/flow-installningar'
       fullPath: '/flow-installningar'
       preLoaderRoute: typeof AppFlowInstallningarRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/flow-minnen': {
-      id: '/_app/flow-minnen'
-      path: '/flow-minnen'
-      fullPath: '/flow-minnen'
-      preLoaderRoute: typeof AppFlowMinnenRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/flow-samling': {
-      id: '/_app/flow-samling'
-      path: '/flow-samling'
-      fullPath: '/flow-samling'
-      preLoaderRoute: typeof AppFlowSamlingRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/flowplan': {
@@ -1768,10 +1711,7 @@ interface AppRouteChildren {
   AppFamiljeflowRoute: typeof AppFamiljeflowRoute
   AppFinancesRoute: typeof AppFinancesRoute
   AppFlowRoute: typeof AppFlowRoute
-  AppFlowAnpassaRoute: typeof AppFlowAnpassaRoute
   AppFlowInstallningarRoute: typeof AppFlowInstallningarRoute
-  AppFlowMinnenRoute: typeof AppFlowMinnenRoute
-  AppFlowSamlingRoute: typeof AppFlowSamlingRoute
   AppFlowplanRoute: typeof AppFlowplanRoute
   AppFlowscoreRoute: typeof AppFlowscoreRoute
   AppFlowstudyRoute: typeof AppFlowstudyRoute
@@ -1836,10 +1776,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFamiljeflowRoute: AppFamiljeflowRoute,
   AppFinancesRoute: AppFinancesRoute,
   AppFlowRoute: AppFlowRoute,
-  AppFlowAnpassaRoute: AppFlowAnpassaRoute,
   AppFlowInstallningarRoute: AppFlowInstallningarRoute,
-  AppFlowMinnenRoute: AppFlowMinnenRoute,
-  AppFlowSamlingRoute: AppFlowSamlingRoute,
   AppFlowplanRoute: AppFlowplanRoute,
   AppFlowscoreRoute: AppFlowscoreRoute,
   AppFlowstudyRoute: AppFlowstudyRoute,

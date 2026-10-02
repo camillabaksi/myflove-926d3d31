@@ -527,9 +527,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
           <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
-            <Button asChild variant="outline" className="rounded-2xl"><Link to="/flow">
+<Button asChild variant="outline" className="rounded-2xl"><Link to="/hem">
               <ArrowLeft size={16} />
-              Min Flow
+              Hem
             </Link></Button>
           </div>
 

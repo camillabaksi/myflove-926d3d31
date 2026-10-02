@@ -500,7 +500,7 @@ export default function Layout({ children }: LayoutProps) {
       {
         id: "flowflow",
         label: "Flow",
-        hint: "Min Flow, chatt och planering",
+        hint: "Chatt och planering",
         icon: Sparkles,
         hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar", "/tasks"],
       },
