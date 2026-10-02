@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Kalenderimport: PDF:er läses nu som text och Flows svar tolkas även som ren lista – importerade händelser hittas igen (2026-10-02)",
     "AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini (2026-10-02)",
     "Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup (2026-10-02)",
     "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",

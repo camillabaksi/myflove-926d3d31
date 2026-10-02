@@ -1,4 +1,7 @@
 ## 2026-10-02
+- Kalenderimport: PDF:er läses nu som text (tidigare skickades de som bild, vilket Flow inte kunde tolka), och Flows svar tolkas även när det kommer som en ren lista – importerade händelser hittas igen.
+
+## 2026-10-02
 - AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini.
 
 ## 2026-10-02
