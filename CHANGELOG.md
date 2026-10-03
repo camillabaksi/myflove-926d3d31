@@ -1,5 +1,7 @@
 ## 2026-10-03
 
+- iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen. Ingen annan appkonfiguration har ändrats.
+
 - Mobilprojektet: Capacitor-appen använder nu app-ID `se.myflove.app` (matchar Apple Developer), och iOS-mappen är förberedd i projektet. Android bygger fortfarande med `app.myflove.mobile` och den publicerade webben påverkas inte.
 
 - iOS: lade till codemagic.yaml för signerat App Store/TestFlight-bygge via Codemagic och ett delat Xcode-schema "App". Inga ändringar i appen, Android eller webben.
