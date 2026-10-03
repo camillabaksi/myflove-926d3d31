@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-02";
+export const CHANGELOG_UPDATED = "2026-10-03";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Mobilprojektet: Capacitor-appen använder nu app-ID \"se.myflove.app\" (matchar Apple Developer) och iOS-mappen är förberedd; Android bygger fortfarande med \"app.myflove.mobile\" (2026-10-03)",
     "Imorgon med Flow – kvällens förberedelse av det vi redan vet, utan energiprognos; ny morgoncheck sätter dagens läge (2026-10-02)",
     "Min Flow är tillfälligt borttagen – Flow-fliken öppnar chatten direkt; sparade val och minnen ligger kvar (2026-10-02)",
     "Min Flow: den godkända Flow-figuren visas i fåtöljen; tidigare figurvariant och missanpassade tillbehör döljs utan att sparade val raderas. Poseanpassade resurser återstår (2026-10-02)",

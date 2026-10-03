@@ -6,7 +6,7 @@ native-projektet när du ändrar ikoner, splash, plugins eller bundle-ID —
 allt annat (UI, funktioner, buggfixar) uppdateras automatiskt när du
 republiserar webben i Lovable.
 
-- **Bundle ID (App Store & Play):** `app.myflove.mobile`
+- **Bundle ID:** iOS (App Store): `se.myflove.app` · Android (Google Play): `app.myflove.mobile`
 - **App-namn:** MyFlove
 - **Konfig:** `capacitor.config.ts`
 
@@ -82,7 +82,7 @@ App Store Connect.
 ### App Store (iOS)
 
 1. Skaffa **Apple Developer Program** (99 USD/år): https://developer.apple.com
-2. I App Store Connect: skapa app med bundle-ID `app.myflove.mobile`.
+2. I App Store Connect: skapa app med bundle-ID `se.myflove.app`.
 3. I Xcode: välj **Any iOS Device (arm64)** → **Product → Archive** → Distribute App
    → App Store Connect → Upload.
 4. I App Store Connect: fyll i metadata, skärmdumpar (6.7" och 5.5" iPhone krävs),
