@@ -16,7 +16,6 @@ workflows:
         XCODE_PROJECT: "ios/App/App.xcodeproj"
         XCODE_SCHEME: "App"
         BUNDLE_ID: "se.myflove.app"
-        APP_STORE_APPLE_ID: "" # valfritt: appens Apple ID (siffror) från App Store Connect
       node: 22
       xcode: latest
     scripts:
@@ -38,13 +37,10 @@ workflows:
           app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
           keychain add-certificates
           xcode-project use-profiles --project "$XCODE_PROJECT"
-      - name: Höj byggnummer
-        script: |
-          cd ios/App
-          agvtool new-version -all $(($BUILD_NUMBER + 1))
       - name: Bygg .ipa
         script: |
-          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME" \
+            --archive-xcargs "CURRENT_PROJECT_VERSION=$BUILD_NUMBER"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
