@@ -2,7 +2,6 @@
 
 - Mobilprojektet: Capacitor-appen använder nu app-ID `se.myflove.app` (matchar Apple Developer), och iOS-mappen är förberedd i projektet. Android bygger fortfarande med `app.myflove.mobile` och den publicerade webben påverkas inte.
 
-## 2026-10-03
 - iOS: lade till codemagic.yaml för signerat App Store/TestFlight-bygge via Codemagic och ett delat Xcode-schema "App". Inga ändringar i appen, Android eller webben.
 
 ## 2026-10-02
