@@ -14,7 +14,7 @@ const config: CapacitorConfig = {
   appName: "MyFlove",
   webDir: "mobile-webroot",
   server: {
-    url: "https://myflove.lovable.app",
+    url: "https://www.myflove.se",
     cleartext: false,
   },
   ios: {
