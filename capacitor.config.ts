@@ -10,7 +10,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  * kör `bunx cap sync`.
  */
 const config: CapacitorConfig = {
-  appId: "app.myflove.mobile",
+  appId: "se.myflove.app",
   appName: "MyFlove",
   webDir: "mobile-webroot",
   server: {

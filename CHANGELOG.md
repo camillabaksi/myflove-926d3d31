@@ -1,3 +1,7 @@
+## 2026-10-03
+
+- Mobilprojektet: Capacitor-appen använder nu app-ID `se.myflove.app` (matchar Apple Developer), och iOS-mappen är förberedd i projektet. Android bygger fortfarande med `app.myflove.mobile` och den publicerade webben påverkas inte.
+
 ## 2026-10-02
 
 - Imorgon med Flow: på kvällen visar Hem morgondagens kalender, förslag som bara bygger på det du själv skrivit (kalender och QuickFlow), restid om den finns, och enkla kvällsuppgifter med påminnelse. Ingen fråga om morgondagens energi – i stället en morgoncheck ("Hur känns det idag?") som sätter dagens läge.
