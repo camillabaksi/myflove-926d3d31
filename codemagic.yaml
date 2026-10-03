@@ -1,0 +1,54 @@
+# Codemagic – iOS-bygge för MyFlove (Capacitor, Swift Package Manager, ingen CocoaPods).
+# Inga hemligheter här: Apple-nyckeln läggs in som integration i Codemagic (Teams → Integrations).
+workflows:
+  ios-release:
+    name: MyFlove iOS (App Store / TestFlight)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      # Namnet på App Store Connect API-nyckeln du skapar i Codemagic.
+      app_store_connect: MyFlove ASC
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: se.myflove.app
+      vars:
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+        BUNDLE_ID: "se.myflove.app"
+        APP_STORE_APPLE_ID: "" # valfritt: appens Apple ID (siffror) från App Store Connect
+      node: 22
+      xcode: latest
+    scripts:
+      - name: Installera bun och JavaScript-beroenden
+        script: |
+          curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun install --frozen-lockfile || bun install
+      - name: Synka Capacitor iOS
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          bunx cap sync ios
+      - name: Hämta Swift-paket
+        script: |
+          xcodebuild -resolvePackageDependencies -project "$XCODE_PROJECT" -scheme "$XCODE_SCHEME"
+      - name: Sätt upp kodsignering
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files "$BUNDLE_ID" --type IOS_APP_STORE --create
+          keychain add-certificates
+          xcode-project use-profiles --project "$XCODE_PROJECT"
+      - name: Höj byggnummer
+        script: |
+          cd ios/App
+          agvtool new-version -all $(($BUILD_NUMBER + 1))
+      - name: Bygg .ipa
+        script: |
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
