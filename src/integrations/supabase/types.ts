@@ -126,16 +126,19 @@ export type Database = {
         Row: {
           created_at: string
           item_id: string
+          notify: boolean
           user_id: string
         }
         Insert: {
           created_at?: string
           item_id: string
+          notify?: boolean
           user_id: string
         }
         Update: {
           created_at?: string
           item_id?: string
+          notify?: boolean
           user_id?: string
         }
         Relationships: [
@@ -1058,6 +1061,10 @@ export type Database = {
       join_household_by_code: {
         Args: { _code: string; _color: string; _display_name: string }
         Returns: string
+      }
+      set_child_item_share_notify: {
+        Args: { _item_id: string; _notify: boolean; _user_id: string }
+        Returns: undefined
       }
       share_child_item: {
         Args: { _item_id: string; _user_ids: string[] }

@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Lock, Users } from "lucide-react";
+import { Bell, BellOff, Lock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useChildren, type ChildItem, type FamilyMember } from "@/hooks/use-children";
@@ -10,7 +10,7 @@ import { useChildren, type ChildItem, type FamilyMember } from "@/hooks/use-chil
  * Återanvänder befintlig barn-/delningslogik (share_child_item) – inget nytt datasystem.
  */
 export default function FamilySharing({ members }: { members: FamilyMember[] }) {
-  const { userId, children, items, loading, setItemShares } = useChildren();
+  const { userId, children, items, loading, setItemShares, setItemShareNotify } = useChildren();
   const { toast } = useToast();
   const [open, setOpen] = useState<string | null>(null);
   const [onlyShared, setOnlyShared] = useState(false);
@@ -44,6 +44,14 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
         ? item.sharedWith.filter((u) => u !== memberId)
         : [...item.sharedWith, memberId],
     );
+
+  const toggleNotify = async (item: ChildItem, memberId: string) => {
+    try {
+      await setItemShareNotify(item.id, memberId, !item.shareNotify[memberId]);
+    } catch {
+      toast({ description: "Kunde inte spara notisvalet just nu.", variant: "destructive" });
+    }
+  };
 
   return (
     <section className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
@@ -127,27 +135,55 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
                     <div className="flex flex-wrap gap-2">
                       {others.map((m) => {
                         const on = item.sharedWith.includes(m.user_id);
+                        const notify = on && item.shareNotify[m.user_id] === true;
                         return (
-                          <button
-                            key={m.user_id}
-                            type="button"
-                            onClick={() => toggle(item, m.user_id)}
-                            aria-pressed={on}
-                            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${
-                              on
-                                ? "border-primary bg-primary/10 text-primary"
-                                : "border-border text-muted-foreground"
-                            }`}
-                          >
-                            <span
-                              className="h-2.5 w-2.5 rounded-full"
-                              style={{ backgroundColor: m.color }}
-                            />
-                            {m.display_name}
-                          </button>
+                          <div key={m.user_id} className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => toggle(item, m.user_id)}
+                              aria-pressed={on}
+                              className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${
+                                on
+                                  ? "border-primary bg-primary/10 text-primary"
+                                  : "border-border text-muted-foreground"
+                              }`}
+                            >
+                              <span
+                                className="h-2.5 w-2.5 rounded-full"
+                                style={{ backgroundColor: m.color }}
+                              />
+                              {m.display_name}
+                            </button>
+                            {on && (
+                              <button
+                                type="button"
+                                onClick={() => toggleNotify(item, m.user_id)}
+                                aria-pressed={notify}
+                                aria-label={`Notiser om ${item.title} till ${m.display_name}`}
+                                title={
+                                  notify
+                                    ? `${m.display_name} får notiser om detta`
+                                    : `${m.display_name} ser detta men får inga notiser`
+                                }
+                                className={`flex items-center justify-center rounded-full border h-8 w-8 ${
+                                  notify
+                                    ? "border-primary bg-primary/10 text-primary"
+                                    : "border-border text-muted-foreground"
+                                }`}
+                              >
+                                {notify ? <Bell size={14} /> : <BellOff size={14} />}
+                              </button>
+                            )}
+                          </div>
                         );
                       })}
                     </div>
+                    {item.sharedWith.length > 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        Klockan bredvid ett namn styr om den personen får notiser om saken. Från
+                        början är notiser av – du väljer själv vilka som ska få dem.
+                      </p>
+                    )}
                     <div className="flex flex-wrap gap-2">
                       <Button
                         type="button"

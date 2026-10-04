@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Notiser: den som delar en barnaktivitet väljer själv vilka mottagare som får notiser om den – båda sidor måste säga ja (2026-10-04)",
     "Notiser: kvällshälsningen avstängd, alla skickade notiser loggas och du väljer vems delade familjesaker du får notiser om (2026-10-04)",
     "Notiser: barnpåminnelser avstängda som standard och aldrig för delade barn (2026-10-04)",
     "Notiser: bara larm och påminnelser du själv bett om – inga automatiska puffar, väder eller hälsningar (2026-10-04)",

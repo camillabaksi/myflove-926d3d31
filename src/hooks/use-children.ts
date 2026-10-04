@@ -41,6 +41,8 @@ export interface ChildItem {
   updated_at: string;
   /** Vilka användare denna sak är delad med (bara ägaren ser hela listan) */
   sharedWith: string[];
+  /** Ägarens val: vilka mottagare som får notiser om saken (user_id -> på/av) */
+  shareNotify: Record<string, boolean>;
 }
 
 export interface FamilyMember {
@@ -129,14 +131,16 @@ async function loadAll(): Promise<void> {
               "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
             )
             .order("created_at", { ascending: false }),
-          supabase.from("child_item_shares").select("item_id, user_id"),
+          supabase.from("child_item_shares").select("item_id, user_id, notify"),
         ]);
       if (kidsErr) throw kidsErr;
       if (rowsErr) throw rowsErr;
 
       const shareMap = new Map<string, string[]>();
+      const notifyMap = new Map<string, Record<string, boolean>>();
       for (const s of shares ?? []) {
         shareMap.set(s.item_id, [...(shareMap.get(s.item_id) ?? []), s.user_id]);
+        notifyMap.set(s.item_id, { ...(notifyMap.get(s.item_id) ?? {}), [s.user_id]: s.notify });
       }
 
       // Familjemedlemmar att dela med – användaren kan vara med i flera familjer,
@@ -162,9 +166,10 @@ async function loadAll(): Promise<void> {
       setState({
         userId: uid,
         children: (kids ?? []) as Child[],
-        items: ((rows ?? []) as Omit<ChildItem, "sharedWith">[]).map((r) => ({
+        items: ((rows ?? []) as Omit<ChildItem, "sharedWith" | "shareNotify">[]).map((r) => ({
           ...r,
           sharedWith: shareMap.get(r.id) ?? [],
+          shareNotify: notifyMap.get(r.id) ?? {},
         })),
         members,
       });
@@ -236,11 +241,12 @@ async function fetchServerItem(id: string): Promise<ChildItem | null> {
   if (!data) return null;
   const { data: shares } = await supabase
     .from("child_item_shares")
-    .select("user_id")
+    .select("user_id, notify")
     .eq("item_id", id);
   return {
-    ...(data as Omit<ChildItem, "sharedWith">),
+    ...(data as Omit<ChildItem, "sharedWith" | "shareNotify">),
     sharedWith: (shares ?? []).map((s) => s.user_id),
+    shareNotify: Object.fromEntries((shares ?? []).map((s) => [s.user_id, s.notify])),
   };
 }
 
@@ -334,7 +340,11 @@ export function useChildren() {
       )
       .single();
     if (err) throw err;
-    const created = { ...(data as Omit<ChildItem, "sharedWith">), sharedWith: [] as string[] };
+    const created = {
+      ...(data as Omit<ChildItem, "sharedWith" | "shareNotify">),
+      sharedWith: [] as string[],
+      shareNotify: {} as Record<string, boolean>,
+    };
     setState((prev) => ({ items: [created, ...prev.items] }));
     return created.id;
   };
@@ -426,6 +436,24 @@ export function useChildren() {
     }
   };
 
+  /** Ägaren väljer om en mottagare ska få notiser om den delade saken. */
+  const setItemShareNotify = async (itemId: string, userId: string, notify: boolean) => {
+    setState((prev) => ({
+      items: prev.items.map((i) =>
+        i.id === itemId ? { ...i, shareNotify: { ...i.shareNotify, [userId]: notify } } : i,
+      ),
+    }));
+    const { error: err } = await supabase.rpc("set_child_item_share_notify", {
+      _item_id: itemId,
+      _user_id: userId,
+      _notify: notify,
+    });
+    if (err) {
+      await loadAll();
+      throw err;
+    }
+  };
+
   const uploadDoc = async (childId: string, file: File) => {
     const path = `${childId}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`;
     const { error: err } = await supabase.storage.from("child-docs").upload(path, file);
@@ -468,6 +496,7 @@ export function useChildren() {
     toggleItem,
     deleteItem,
     setItemShares,
+    setItemShareNotify,
     uploadDoc,
     copyDoc,
     openDoc,
