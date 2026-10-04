@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Notiser: barnpåminnelser avstängda som standard och aldrig för delade barn (2026-10-04)",
     "Notiser: bara larm och påminnelser du själv bett om – inga automatiska puffar, väder eller hälsningar (2026-10-04)",
     "Ljud: Morgonstartens klang respekterar avstängt/tyst larm (2026-10-04)",
     "Notiser: tomma konton får inte längre Flows fråga om orken (2026-10-04)",

@@ -14,9 +14,9 @@ export interface ChildReminderSettings {
 export const CHILD_REMINDER_KEY = "myflove-child-reminders";
 
 export const DEFAULT_CHILD_REMINDERS: ChildReminderSettings = {
-  enabled: true,
+  enabled: false,
   minutesBefore: 30,
-  morningSummary: true,
+  morningSummary: false,
   morningTime: "07:00",
 };
 
