@@ -1,4 +1,6 @@
 import { Fragment, type ReactNode } from "react";
+import { CalendarClock, CheckCircle2, ListTree, Pencil, Plus, Sprout, Trash2 } from "lucide-react";
+import type { FlowActionKind } from "@/lib/flow-actions";
 
 /** Visar Flows svar med fetstil och punktlistor i stället för råa stjärntecken. */
 function inline(text: string): ReactNode[] {
@@ -39,4 +41,20 @@ export function FlowRichText({ text }: { text: string }) {
       })}
     </>
   );
+}
+
+const ACTION_ICONS = {
+  flytta: CalendarClock,
+  forenkla: Sprout,
+  dela: ListTree,
+  klar: CheckCircle2,
+  ny: Plus,
+  andra: Pencil,
+  "ta-bort": Trash2,
+} as const;
+
+/** Pictogram för Flows förslagskort – samma ikonstil som resten av appen. */
+export function FlowActionIcon({ kind }: { kind: FlowActionKind }) {
+  const Icon = ACTION_ICONS[kind];
+  return <Icon aria-hidden size={16} className="mr-1 inline -mt-0.5 text-primary" />;
 }
