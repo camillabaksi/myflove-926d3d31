@@ -24,6 +24,7 @@ import {
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { FlowMicButton } from "@/components/flow/flow-mic-button";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
+import { FlowRichText, FlowActionIcon } from "@/components/flow/flow-rich-text";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
@@ -52,7 +53,6 @@ import {
 } from "@/hooks/use-flow-chats";
 import { todayISO } from "@/lib/day";
 import {
-  ACTION_EMOJI,
   ACTION_LABEL,
   actionCta,
   matchTask,
@@ -180,7 +180,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     setPlace(placeFor(home[area]));
   };
 
-  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask } = useTasks();
+  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask, setTaskTime } =
+    useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
 
   /** Uppgifterna Flow får referera till – bara titel och id, inget privat. */
@@ -190,6 +191,13 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     .join("\n");
 
   const runAction = (key: string, action: FlowAction) => {
+    if (action.kind === "ny") {
+      if (!action.title) return;
+      const date = action.date && action.date >= todayStr() ? action.date : undefined;
+      addTask(action.title, date, action.time ? { time: action.time } : undefined);
+      setDoneActions((p) => ({ ...p, [key]: "Tillagd." }));
+      return;
+    }
     const task = matchTask(action, activeTasks);
     if (!task) {
       setDoneActions((p) => ({ ...p, [key]: "Jag hittar inte uppgiften längre." }));
@@ -210,6 +218,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         ...p,
         [key]: date === tomorrowISO() ? "Flyttad till imorgon." : `Flyttad till ${date}.`,
       }));
+    } else if (action.kind === "andra") {
+      if (action.title && action.title !== task.title) updateTask(task.id, { title: action.title });
+      if (action.date && action.date >= todayStr()) setTaskDueDate(task.id, action.date);
+      if (action.time) setTaskTime(task.id, action.time);
+      setDoneActions((p) => ({ ...p, [key]: "Ändrad." }));
+    } else if (action.kind === "ta-bort") {
+      deleteTask(task.id);
+      setDoneActions((p) => ({ ...p, [key]: "Borttagen." }));
     } else if (action.kind === "forenkla") {
       updateTask(task.id, { friction: "small" });
       setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
@@ -685,7 +701,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                 : "bg-secondary text-foreground rounded-bl-sm"
                             }`}
                           >
-                            {parsed.text}
+                            {m.role === "assistant" ? <FlowRichText text={parsed.text} /> : parsed.text}
                             {m.role === "assistant" && parsed.text.trim().length > 0 && (
                               <div className="mt-1 flex justify-end">
                                 <FlowSpeakButton text={parsed.text} />
@@ -712,10 +728,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                               className="ml-10 max-w-[80%] rounded-2xl border border-border bg-card p-3"
                             >
                               <p className="text-sm font-medium text-foreground">
-                                <span aria-hidden>{ACTION_EMOJI[a.kind]}</span>{" "}
+                                <FlowActionIcon kind={a.kind} />{" "}
                                 {a.label ?? ACTION_LABEL[a.kind]}
                               </p>
-                              {a.taskTitle && (
+                              {(a.title || a.date || a.time) && a.kind !== "flytta" && (
+                                <p className="truncate text-xs text-muted-foreground">
+                                  {[a.title, a.date, a.time].filter(Boolean).join(" · ")}
+                                </p>
+                              )}
+                              {a.taskTitle && a.kind !== "ny" && (
                                 <p className="truncate text-xs text-muted-foreground">
                                   {a.taskTitle}
                                 </p>

@@ -632,7 +632,7 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/flow"), pick("/halsa"), pick("/aterhamtning")].filter(
+    return [pick("/hem"), pick("/flow"), pick("/quickflow"), pick("/halsa"), pick("/aterhamtning")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -760,13 +760,6 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
             );
           })}
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-[13px] font-medium text-primary transition-transform active:scale-95"
-          >
-            <Brain size={14} /> QuickFlow
-          </button>
         </div>
 
         <div className="hidden md:flex items-center justify-between px-6 pt-2">
@@ -912,10 +905,10 @@ export default function Layout({ children }: LayoutProps) {
       <QuickflowCapture variant="global" />
 
       {/* Mobile Bottom Bar – Översikt · Flow · Hälsa · Återhämtning · Mer
-          QuickFlow ligger inne i Flow (och som flytande knapp), inte som egen punkt. */}
+          QuickFlow har en egen punkt, så den alltid är lätt att hitta. */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
         <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
-          {primaryNav.slice(0, 4).map((item) =>
+          {primaryNav.slice(0, 5).map((item) =>
             item.href === "/halsa" ? (
               // Hälsa i bottennavet öppnar samma kategorivyn som Mer → Hälsa,
               // så båda vägarna leder till samma vy.

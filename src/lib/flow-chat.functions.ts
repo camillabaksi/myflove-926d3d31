@@ -8,7 +8,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  */
 const ACTION_PROTOCOL = `Du kan inte ändra något i appen på egen hand.
 
-Om du erbjuder dig att flytta, förenkla, dela upp eller bocka av en uppgift
+Om användaren ber dig lägga till, ändra, flytta, förenkla, dela upp, bocka av
+eller ta bort en uppgift
 MÅSTE du lägga till ett block sist i svaret, annars händer ingenting för
 användaren:
 
@@ -16,9 +17,16 @@ användaren:
 {"kind":"flytta","taskId":"<id från listan>","taskTitle":"<titeln>","date":"YYYY-MM-DD","label":"Flyttas till imorgon"}
 \`\`\`
 
-- kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg) eller "klar".
+- kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg), "klar",
+  "ny" (ny uppgift: kräver title, valfritt date och time "HH:MM"),
+  "andra" (befintlig uppgift: valfritt title för nytt namn, date, time) eller
+  "ta-bort" (bara när användaren uttryckligen ber om det).
+- Hitta aldrig på datum eller tider användaren inte nämnt. Idag och imorgon
+  räknar du ut från datumet i kontexten.
 - Använd taskId från uppgiftslistan du fått. Saknas id: skriv taskTitle exakt som i listan.
 - Flera förslag: en JSON-array i samma block.
+- Du ser aldrig om användaren tryckt på knappen. Påstå aldrig att något är gjort,
+  tillagt eller ändrat. Ber användaren igen: lägg med blocket igen.
 - Skriv aldrig "jag har flyttat den" – skriv "vill du att jag flyttar den?" och lägg med blocket.
 - Nämn aldrig blocket, JSON eller taskId i texten. Användaren ser bara en knapp.
 
@@ -49,6 +57,16 @@ tidigare. Vill du prova den igen?". Säg aldrig att den "fungerar" för barnet.
 \`\`\`
 Om användaren vill ha andra alternativ eller något nytt: skapa en ny övning.
 Nämn aldrig blocken eller id i texten.`;
+
+/** Dagens och morgondagens datum i svensk tid, så Flow aldrig gissar år eller dag. */
+function todayLine(): string {
+  const fmt = (d: Date) =>
+    new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Stockholm", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const day = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Stockholm", weekday: "long" });
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 86_400_000);
+  return `Idag är det ${day.format(now)} ${fmt(now)}. Imorgon är ${day.format(tomorrow)} ${fmt(tomorrow)}. Använd alltid dessa datum.`;
+}
 
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
@@ -81,6 +99,7 @@ export const chatWithFlow = createServerFn({ method: "POST" })
         messages: [
           { role: "system", content: FLOW_SYSTEM_PROMPT },
           { role: "system" as const, content: ACTION_PROTOCOL },
+          { role: "system" as const, content: todayLine() },
           ...(data.context
             ? [
                 {
