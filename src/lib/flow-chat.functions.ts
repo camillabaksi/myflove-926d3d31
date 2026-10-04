@@ -56,6 +56,16 @@ tidigare. Vill du prova den igen?". Säg aldrig att den "fungerar" för barnet.
 Om användaren vill ha andra alternativ eller något nytt: skapa en ny övning.
 Nämn aldrig blocken eller id i texten.`;
 
+/** Dagens och morgondagens datum i svensk tid, så Flow aldrig gissar år eller dag. */
+function todayLine(): string {
+  const fmt = (d: Date) =>
+    new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Stockholm", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const day = new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Stockholm", weekday: "long" });
+  const now = new Date();
+  const tomorrow = new Date(now.getTime() + 86_400_000);
+  return `Idag är det ${day.format(now)} ${fmt(now)}. Imorgon är ${day.format(tomorrow)} ${fmt(tomorrow)}. Använd alltid dessa datum.`;
+}
+
 const MessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
   content: z.string(),
@@ -87,6 +97,7 @@ export const chatWithFlow = createServerFn({ method: "POST" })
         messages: [
           { role: "system", content: FLOW_SYSTEM_PROMPT },
           { role: "system" as const, content: ACTION_PROTOCOL },
+          { role: "system" as const, content: todayLine() },
           ...(data.context
             ? [
                 {

@@ -24,7 +24,7 @@ import {
 import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { FlowMicButton } from "@/components/flow/flow-mic-button";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
-import { FlowRichText } from "@/components/flow/flow-rich-text";
+import { FlowRichText, FlowActionIcon } from "@/components/flow/flow-rich-text";
 import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
@@ -729,7 +729,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                               className="ml-10 max-w-[80%] rounded-2xl border border-border bg-card p-3"
                             >
                               <p className="text-sm font-medium text-foreground">
-                                <span aria-hidden>{ACTION_EMOJI[a.kind]}</span>{" "}
+                                <FlowActionIcon kind={a.kind} />{" "}
                                 {a.label ?? ACTION_LABEL[a.kind]}
                               </p>
                               {(a.title || a.date || a.time) && a.kind !== "flytta" && (
