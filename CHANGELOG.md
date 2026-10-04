@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Ljud: kort pip vid första trycket i iPhone-appen borttaget på riktigt – ljudet låses nu upp med en helt tyst ljudfil i stället för larmsignalen, eftersom iPhone ignorerar både sänkt volym och ljudlöst läge för appens ljud.
+
 - Ljud: larmljudet spelades i full volym på iPhone vid första trycket i appen (ljudet skulle låsas upp tyst, men iPhone ignorerar volymändringen). Nu sker det helt tyst. Morgonstartens klang spelar heller aldrig av sig själv om man inte slagit på Morgonstart.
 
 - Notiser: den som delar en barnaktivitet väljer nu själv vilka mottagare som får notiser om den – en klocka bredvid varje namn under Dela. Från början är notiser av för alla mottagare, och mottagaren måste dessutom själv ha valt att ta emot notiser från den som delar. Båda måste säga ja innan någon notis skickas.
