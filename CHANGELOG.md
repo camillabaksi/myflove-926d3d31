@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Notiser: barnpåminnelser och barnens morgonöversikt är avstängda som standard, och notiser skickas bara för barn och aktiviteter man själv äger – aldrig för det som delats via familjen.
+
 - Notiser: MyFlove skickar bara notiser och larm som man själv bett om. Flows automatiska puffar, belöningsnotiser, morgonväder och dagliga hälsningar är avstängda som standard, och aktiviteter med klockslag ger bara notis om man valt en påminnelse. Färre olästa notiser betyder också ingen prick på appikonen.
 
 - Ljud: Morgonstartens klang spelar inte längre av sig själv när larmljudet är avstängt eller satt till tyst.
