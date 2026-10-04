@@ -18,6 +18,8 @@ export interface FlowNudgeInput {
   capacityMode?: "fullt" | "mellan" | "lagt";
   /** Första "Måste idag"-saken från prioritetsmotorn. */
   firstMustDo?: string | null;
+  /** Har användaren lagt in något eget? Tomma konton får inga puffar. */
+  hasOwnContent?: boolean;
 }
 
 export interface FlowNudge {
@@ -57,7 +59,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
   const nudges: FlowNudge[] = [];
 
   // 1) Ingen ork loggad idag – en enda enkel fråga, mitt på förmiddagen.
-  if (orkValue10 == null) {
+  if (orkValue10 == null && input.hasOwnContent !== false) {
     nudges.push({
       key: `flow-ork-${day}`,
       title: "Hur är orken idag? 🔋",

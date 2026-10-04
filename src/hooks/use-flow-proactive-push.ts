@@ -56,6 +56,7 @@ export function useFlowProactivePush(): void {
       timedTodayCount,
       capacityMode: flowPlan.mode,
       firstMustDo,
+      hasOwnContent: tasks.length > 0 || openItems.length > 0,
     });
 
     const run = async () => {
@@ -81,5 +82,5 @@ export function useFlowProactivePush(): void {
     };
 
     void run();
-  }, [energyValue, openItems.length, timedTodayCount, sync, tick, flowPlan.mode, firstMustDo]);
+  }, [energyValue, openItems.length, timedTodayCount, sync, tick, flowPlan.mode, firstMustDo, tasks.length]);
 }
