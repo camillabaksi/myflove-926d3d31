@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Mobilappar: genomgång av iPhone- och Android-appen. Säkerhetskopian i telefonen hör nu till ett konto och återställs bara till samma konto; den raderas vid utloggning. Kalenderkoppling ger ett tydligt besked i appen i stället för "popup blockerades". Mikrofon, kamera, bilder och plats har nu behörighetstexter (iPhone 1.1) och behörigheter (Android 6.3, versionCode 22); äldre iPhone-appar får en uppmaning att uppdatera i stället för att krascha. Notiskortet ber inte längre appanvändare lägga MyFlove på hemskärmen.
+
 - Ljud: kort pip vid första trycket i iPhone-appen borttaget på riktigt – ljudet låses nu upp med en helt tyst ljudfil i stället för larmsignalen, eftersom iPhone ignorerar både sänkt volym och ljudlöst läge för appens ljud.
 
 - Ljud: larmljudet spelades i full volym på iPhone vid första trycket i appen (ljudet skulle låsas upp tyst, men iPhone ignorerar volymändringen). Nu sker det helt tyst. Morgonstartens klang spelar heller aldrig av sig själv om man inte slagit på Morgonstart.
