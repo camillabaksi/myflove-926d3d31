@@ -98,17 +98,19 @@ export function initAlarmAudioUnlock(): void {
   const unlock = () => {
     const el = ensureAudio();
     if (!el) return;
-    const prevVol = el.volume;
-    el.volume = 0;
+    // OBS: på iPhone går `volume` inte att ändra från webbsidan – volume = 0
+    // ignoreras och larmet hördes i full volym vid första trycket i appen.
+    // `muted` fungerar däremot överallt, så upplåsningen blir helt tyst.
+    el.muted = true;
     el.play()
       .then(() => {
         el.pause();
         el.currentTime = 0;
-        el.volume = prevVol;
+        el.muted = false;
         unlocked = true;
       })
       .catch(() => {
-        el.volume = prevVol;
+        el.muted = false;
       });
     window.removeEventListener("pointerdown", unlock);
     window.removeEventListener("keydown", unlock);
@@ -145,6 +147,7 @@ export function playAlarmSound(): void {
   if (!el) return;
   try {
     el.currentTime = 0;
+    el.muted = false;
     el.volume = 1;
     void el.play().catch(() => {
       // Antagligen blockerat p.g.a. saknad user gesture.
@@ -160,6 +163,7 @@ export function playAlarmPreview(soundId?: AlarmSoundId): void {
   if (!el) return;
   try {
     el.currentTime = 0;
+    el.muted = false;
     el.volume = 1;
     void el.play().catch(() => {});
   } catch {
