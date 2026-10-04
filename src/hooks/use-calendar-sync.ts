@@ -69,6 +69,14 @@ export function useCalendarConnection() {
 
   const connect = useMutation({
     mutationFn: async (provider: CalendarProvider) => {
+      // I Android/iOS-appen finns inga popup-fönster (och Google tillåter inte
+      // inloggning i en app-webbvy). Kopplingen görs en gång på myflove.se.
+      const { Capacitor } = await import("@capacitor/core");
+      if (Capacitor.isNativePlatform()) {
+        throw new Error(
+          "Koppla kalendern på myflove.se i webbläsaren en gång – sedan syns den här i appen också.",
+        );
+      }
       const popup = window.open("", "myflove-kalender", "width=600,height=720");
       if (!popup) throw new Error("Popup blockerades. Tillåt popup-fönster och försök igen.");
       let code: string | null;
