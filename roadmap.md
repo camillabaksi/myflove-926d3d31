@@ -1,5 +1,9 @@
 # Roadmap
 
+## Pitchmaterial i uppladdade filmens design (2026-10-04)
+- [x] Anpassa svensk och engelsk pitch samt Living Blueprint till filmens lavendel/rosa formspråk, skrivstilsaccenter och grundarporträtt.
+- [x] Bevara innehåll och tidigare filer; granska alla 22 sidor i varje nytt dokument och samla version 6.4 i Files.
+
 ## Pitchdeck och Living Blueprint 6.3 (2026-10-04)
 - [x] Uppdatera svenska och engelska versioner med grundarporträtt, befintliga produktbilder och nya Flow-funktioner.
 - [x] Redovisa daterad webb- och kontostatistik med källor och tydliga begränsningar.
