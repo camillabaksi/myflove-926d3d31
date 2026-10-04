@@ -80,7 +80,7 @@ export const sendTestPush = createServerFn({ method: "POST" })
         title: "MyFlove",
         body: "Notiser är på 🌿 Du får dem även när appen är stängd.",
         url: "/hem",
-      });
+      }, { userId, source: "test" });
       if (result === "ok") sent++;
     }
     return { sent };
