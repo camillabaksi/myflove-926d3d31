@@ -632,7 +632,7 @@ export default function Layout({ children }: LayoutProps) {
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/flow"), pick("/halsa"), pick("/aterhamtning")].filter(
+    return [pick("/hem"), pick("/flow"), pick("/quickflow"), pick("/halsa"), pick("/aterhamtning")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
