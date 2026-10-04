@@ -25,7 +25,7 @@ export function FlowMicButton({
     recorderRef.current = null;
     const message = error instanceof Error ? error.message : "Något gick fel";
     if (message.includes("NotAllowedError") || message.includes("Permission")) {
-      onError?.("Jag får inte använda mikrofonen – tillåt den i webbläsaren och prova igen");
+      onError?.("Jag får inte använda mikrofonen – tillåt den i webbläsaren eller telefonens inställningar och prova igen");
     } else {
       onError?.(message);
     }

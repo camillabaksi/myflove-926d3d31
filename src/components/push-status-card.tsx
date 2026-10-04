@@ -1,3 +1,4 @@
+import { isNativeShell } from "@/lib/native-caps";
 import { useCallback, useEffect, useState } from "react";
 import { Bell, BellOff, Loader2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -157,8 +158,14 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
       <div className={wrap}>
         <p className="font-medium text-foreground">Notiser</p>
         <p className="text-sm text-muted-foreground">
-          Den här webbläsaren kan inte visa notiser. På iPhone: öppna MyFlove i Safari, välj Dela →{" "}
-          <em>Lägg till på hemskärmen</em>, och öppna appen från ikonen.
+          {isNativeShell() ? (
+            "I MyFlove-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
+          ) : (
+            <>
+              Den här webbläsaren kan inte visa notiser. På iPhone: öppna MyFlove i Safari, välj
+              Dela → <em>Lägg till på hemskärmen</em>, och öppna appen från ikonen.
+            </>
+          )}
         </p>
       </div>
     );
