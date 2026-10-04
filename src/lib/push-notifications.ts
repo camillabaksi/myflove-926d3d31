@@ -1,5 +1,5 @@
 import { isQuietNow } from "@/lib/quiet-mode";
-import { buildAlarmWav } from "@/lib/alarm-sounds";
+import { buildAlarmWav, buildSilentWav } from "@/lib/alarm-sounds";
 import { getAlarmFormat, getAlarmSoundId, type AlarmSoundId } from "@/lib/personalization";
 export type NotificationPermissionState = "granted" | "denied" | "default" | "unsupported";
 
@@ -97,21 +97,34 @@ export function initAlarmAudioUnlock(): void {
   unlockBound = true;
   const unlock = () => {
     const el = ensureAudio();
-    if (!el) return;
-    // OBS: på iPhone går `volume` inte att ändra från webbsidan – volume = 0
-    // ignoreras och larmet hördes i full volym vid första trycket i appen.
-    // `muted` fungerar däremot överallt, så upplåsningen blir helt tyst.
-    el.muted = true;
+    if (!el || !audioUrl) return;
+    // Upplåsningen spelar en HELT TYST ljudfil – aldrig larmsignalen.
+    // På iPhone (TestFlight) ignoreras både volume = 0 och muted, så att spela
+    // själva larmet "tyst" gav ett kort pip vid första trycket i appen.
+    const alarmUrl = audioUrl;
+    let silentUrl: string;
+    try {
+      silentUrl = URL.createObjectURL(buildSilentWav());
+    } catch {
+      return;
+    }
+    const restore = () => {
+      try {
+        el.pause();
+        el.src = alarmUrl;
+        el.load();
+      } catch {
+        // ignore
+      }
+      URL.revokeObjectURL(silentUrl);
+    };
+    el.src = silentUrl;
     el.play()
       .then(() => {
-        el.pause();
-        el.currentTime = 0;
-        el.muted = false;
         unlocked = true;
+        restore();
       })
-      .catch(() => {
-        el.muted = false;
-      });
+      .catch(restore);
     window.removeEventListener("pointerdown", unlock);
     window.removeEventListener("keydown", unlock);
     window.removeEventListener("touchstart", unlock);
@@ -146,6 +159,7 @@ export function playAlarmSound(): void {
   const el = ensureAudio();
   if (!el) return;
   try {
+    if (audioUrl && el.src !== audioUrl) el.src = audioUrl;
     el.currentTime = 0;
     el.muted = false;
     el.volume = 1;
@@ -162,6 +176,7 @@ export function playAlarmPreview(soundId?: AlarmSoundId): void {
   const el = ensureAudio(soundId);
   if (!el) return;
   try {
+    if (audioUrl && el.src !== audioUrl) el.src = audioUrl;
     el.currentTime = 0;
     el.muted = false;
     el.volume = 1;

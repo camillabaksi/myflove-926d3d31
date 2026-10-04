@@ -179,3 +179,8 @@ export function buildAlarmWav(id: AlarmSoundId): Blob {
 
   return encodeWav(samples, sampleRate);
 }
+
+/** Helt tyst WAV (0,1 s) – används bara för att låsa upp ljudet utan att något hörs. */
+export function buildSilentWav(): Blob {
+  return encodeWav(new Float32Array(4410), 44100);
+}
