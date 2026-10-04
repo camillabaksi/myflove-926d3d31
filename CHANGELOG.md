@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Ljud: Morgonstartens klang spelar inte längre av sig själv när larmljudet är avstängt eller satt till tyst.
+
 - Notiser: Flow skickar inte längre frågan "Hur är orken idag?" till konton där man inte lagt in något själv.
 
 - Notiser: aktiviteter med klockslag spelar inte längre larmljud när de börjar, om man inte själv valt en påminnelse. Notisen kommer tyst.
