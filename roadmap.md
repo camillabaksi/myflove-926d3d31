@@ -1,5 +1,10 @@
 # Roadmap
 
+## Pitchdeck och Living Blueprint 6.3 (2026-10-04)
+- [x] Uppdatera svenska och engelska versioner med grundarporträtt, befintliga produktbilder och nya Flow-funktioner.
+- [x] Redovisa daterad webb- och kontostatistik med källor och tydliga begränsningar.
+- [x] Leverera redigerbara presentationer och blueprint-dokument samt sidgranskade PDF:er i Files.
+
 ## Felsökning Android + iOS från grunden (2026-10-04)
 - [ ] Ljud, larm, vibration och notiser i mobilappen – bara det man bett om.
 - [ ] Inloggning, kontobyte och data i mobilappen.
