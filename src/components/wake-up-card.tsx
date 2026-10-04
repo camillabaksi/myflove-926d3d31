@@ -70,8 +70,9 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
   };
 
   // Öppnar man sidan från notisen får man en mjuk klang i stället för tystnad.
+  // Bara om man själv slagit på Morgonstart – annars aldrig något ljud.
   useEffect(() => {
-    if (!prefs || acked) return;
+    if (!prefs || acked || !prefs.wake_enabled) return;
     startSound();
     return () => stopSound();
     // eslint-disable-next-line react-hooks/exhaustive-deps
