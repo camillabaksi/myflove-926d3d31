@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Loader2, Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { startVoiceRecording, transcribeAudio, type VoiceRecorder } from "@/lib/flow-voice-input";
+import { deviceAccessReady, UPDATE_APP_FOR_DEVICE_ACCESS } from "@/lib/native-caps";
 
 type MicState = "idle" | "recording" | "transcribing";
 
@@ -32,6 +33,11 @@ export function FlowMicButton({
 
   const handleClick = async () => {
     if (state === "idle") {
+      // Äldre iPhone-app saknar mikrofonbehörighet – då skulle appen krascha.
+      if (!(await deviceAccessReady())) {
+        onError?.(UPDATE_APP_FOR_DEVICE_ACCESS);
+        return;
+      }
       try {
         recorderRef.current = await startVoiceRecording();
         setState("recording");
