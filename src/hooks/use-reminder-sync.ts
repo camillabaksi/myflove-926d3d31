@@ -92,7 +92,7 @@ export function useReminderSync() {
     studySettings.lectureReminderMinutes,
     childSchedules ?? {},
     childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed]),
-    children.map((c) => [c.id, c.name]),
+    children.map((c) => [c.id, c.name, c.owner_id]),
     childReminders,
     adaptiveLead,
   ]);
@@ -300,7 +300,11 @@ export function useReminderSync() {
 
       // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
       if (childReminders.enabled) {
-        const nameOf = new Map(children.map((c) => [c.id, c.name]));
+        // Bara barn/aktiviteter man själv äger – delat från familj ger aldrig notis.
+        const myId = data.user.id;
+        const nameOf = new Map(
+          children.filter((c) => c.owner_id === myId).map((c) => [c.id, c.name]),
+        );
         const childLead = applyAdaptiveLead(
           Math.max(0, childReminders.minutesBefore ?? 0),
           adaptiveLead,
@@ -344,6 +348,7 @@ export function useReminderSync() {
 
         for (const i of childItems) {
           if (i.completed || !i.time || !i.date) continue;
+          if (i.owner_id !== myId) continue;
           if (!horizonDates.includes(i.date)) continue;
           const who = nameOf.get(i.child_id);
           if (!who) continue;
