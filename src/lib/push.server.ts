@@ -41,7 +41,49 @@ function getVapid(): VapidKeys {
  *  - "gone"     – subscription is dead (404/410) → caller should delete it
  *  - "error"    – transient error
  */
+/** Vem notisen gäller och varför – sparas i push_delivery_log för spårning. */
+export type PushLogMeta = { userId: string; source: string; ref?: string | null };
+
 export async function sendPushTo(
+  sub: StoredSubscription,
+  notification: PushNotificationBody,
+  meta?: PushLogMeta,
+): Promise<"ok" | "gone" | "error"> {
+  const result = await deliverPush(sub, notification);
+  if (meta) await logPush(sub, notification, meta, result);
+  return result;
+}
+
+async function logPush(
+  sub: StoredSubscription,
+  n: PushNotificationBody,
+  meta: PushLogMeta,
+  result: "ok" | "gone" | "error",
+): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    let host = "okänd";
+    try {
+      host = new URL(sub.endpoint).host;
+    } catch {
+      // ogiltig adress – logga ändå
+    }
+    await supabaseAdmin.from("push_delivery_log").insert({
+      user_id: meta.userId,
+      source: meta.source,
+      ref: meta.ref ?? null,
+      tag: n.tag ?? null,
+      title: n.title,
+      endpoint_host: host,
+      endpoint_tail: sub.endpoint.slice(-12),
+      result,
+    });
+  } catch (err) {
+    console.error("[push] log failed", err);
+  }
+}
+
+async function deliverPush(
   sub: StoredSubscription,
   notification: PushNotificationBody,
 ): Promise<"ok" | "gone" | "error"> {

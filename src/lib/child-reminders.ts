@@ -9,6 +9,8 @@ export interface ChildReminderSettings {
   morningSummary: boolean;
   /** Klockslag för morgonöversikten, HH:MM */
   morningTime: string;
+  /** Familjemedlemmar (user id) vars delade barn/aktiviteter man vill få notiser om. */
+  familyFrom: string[];
 }
 
 export const CHILD_REMINDER_KEY = "myflove-child-reminders";
@@ -18,6 +20,7 @@ export const DEFAULT_CHILD_REMINDERS: ChildReminderSettings = {
   minutesBefore: 30,
   morningSummary: false,
   morningTime: "07:00",
+  familyFrom: [],
 };
 
 export function useChildReminderSettings() {

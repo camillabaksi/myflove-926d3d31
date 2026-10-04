@@ -672,6 +672,45 @@ export type Database = {
         }
         Relationships: []
       }
+      push_delivery_log: {
+        Row: {
+          created_at: string
+          endpoint_host: string
+          endpoint_tail: string
+          id: number
+          ref: string | null
+          result: string
+          source: string
+          tag: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint_host: string
+          endpoint_tail: string
+          id?: never
+          ref?: string | null
+          result: string
+          source: string
+          tag?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          endpoint_host?: string
+          endpoint_tail?: string
+          id?: never
+          ref?: string | null
+          result?: string
+          source?: string
+          tag?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       push_preferences: {
         Row: {
           last_lat: number | null

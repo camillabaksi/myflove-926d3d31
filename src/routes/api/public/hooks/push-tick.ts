@@ -70,7 +70,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 url: r.url ?? "/hem",
                 tag: `${r.kind}-${r.id}`,
                 itemKey: r.client_key,
-              });
+              }, { userId, source: `reminder:${r.kind}`, ref: r.client_key });
               if (res === "ok") {
                 anyOk = true;
                 sentCount++;
@@ -136,7 +136,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                   body: msg,
                   url: "/hem",
                   tag: `weather-${now.toDateString()}`,
-                });
+                }, { userId: p.user_id, source: "weather" });
                 if (r === "ok") sentCount++;
                 if (r === "gone") {
                   await supabaseAdmin
@@ -209,7 +209,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
               body: note.body,
               url: "/hem",
               tag: `personal-${slot}`,
-            });
+            }, { userId: p.user_id, source: isMorning ? "personal-morning" : "personal-evening" });
             if (r === "ok") sentCount++;
             if (r === "gone") {
               await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
@@ -260,7 +260,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
               tag: `wake-${localDate}`,
               requireInteraction: note.requireInteraction,
               vibrate: note.vibrate,
-            });
+            }, { userId: p.user_id, source: "wake", ref: `stage-${stage}` });
             if (r === "ok") sentCount++;
             if (r === "gone") {
               await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);

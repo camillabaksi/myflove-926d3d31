@@ -4,11 +4,17 @@ import { Switch } from "@/components/ui/switch";
 import CollapsibleSection from "@/components/collapsible-section";
 import HelpHint from "@/components/help-hint";
 import { useChildReminderSettings } from "@/lib/child-reminders";
+import { useChildren } from "@/hooks/use-children";
 
 const LEADS = [0, 10, 15, 30, 60];
 
 export default function ChildReminderSettings() {
   const { settings, update } = useChildReminderSettings();
+  const { members } = useChildren();
+  const toggleFrom = (id: string, on: boolean) => {
+    const rest = settings.familyFrom.filter((x) => x !== id);
+    update({ familyFrom: on ? [...rest, id] : rest });
+  };
 
   return (
     <section className="surface-card p-5">
@@ -66,6 +72,35 @@ export default function ChildReminderSettings() {
                 aria-label="Morgonöversikt över barnens dag"
               />
             </label>
+
+            <div className="space-y-2">
+              <p className="text-sm">Notiser om det familjen delar</p>
+              <p className="text-xs text-muted-foreground">
+                Du får bara notiser om dina egna barn och aktiviteter. Välj vems delade saker du
+                också vill bli påmind om. Det du väljer gäller bara din telefon.
+              </p>
+              {members.length === 0 ? (
+                <p className="text-xs text-muted-foreground">Ingen i familjen ännu.</p>
+              ) : (
+                members.map((m) => (
+                  <label key={m.user_id} className="flex items-center justify-between gap-3">
+                    <span className="text-sm flex items-center gap-2">
+                      <span
+                        aria-hidden
+                        className="inline-block h-3 w-3 rounded-full"
+                        style={{ backgroundColor: m.color }}
+                      />
+                      {m.display_name}
+                    </span>
+                    <Switch
+                      checked={settings.familyFrom.includes(m.user_id)}
+                      onCheckedChange={(v) => toggleFrom(m.user_id, v)}
+                      aria-label={`Notiser om det ${m.display_name} delar`}
+                    />
+                  </label>
+                ))
+              )}
+            </div>
 
             {settings.morningSummary && (
               <label className="flex items-center justify-between gap-3">
