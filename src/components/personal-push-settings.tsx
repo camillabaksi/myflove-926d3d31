@@ -16,7 +16,7 @@ type Prefs = {
 };
 
 const DEFAULTS: Prefs = {
-  personal_enabled: true,
+  personal_enabled: false,
   personal_time: "08:00",
   personal_evening_enabled: false,
   personal_evening_time: "20:30",

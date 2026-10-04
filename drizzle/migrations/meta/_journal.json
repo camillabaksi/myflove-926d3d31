@@ -92,6 +92,13 @@
       "when": 1790613107659,
       "tag": "0012_tighten_analytics_insert",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1791108708444,
+      "tag": "0013_opt_in_notifications",
+      "breakpoints": true
     }
   ]
 }

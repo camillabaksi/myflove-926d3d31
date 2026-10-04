@@ -58,10 +58,8 @@ import { initPersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
-import { useAchievementPush } from "@/hooks/use-achievement-push";
 import { usePurgeRevisions } from "@/hooks/use-purge-revisions";
 import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
-import { useFlowProactivePush } from "@/hooks/use-flow-proactive-push";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
@@ -204,10 +202,8 @@ export default function Layout({ children }: LayoutProps) {
   const { alerts: proximityAlerts, dismissAlert: dismissProximityAlert } =
     useShoppingProximityAlerts();
   useNotificationScheduler();
-  useAchievementPush();
   usePurgeRevisions();
   usePushSubscriptionSync();
-  useFlowProactivePush();
   useNotificationActions();
 
   const { isAdmin } = useIsAdmin();
