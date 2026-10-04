@@ -24,6 +24,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { toast } from "sonner";
+import { deviceAccessReady, UPDATE_APP_FOR_DEVICE_ACCESS } from "@/lib/native-caps";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
