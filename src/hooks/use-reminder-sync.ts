@@ -300,10 +300,11 @@ export function useReminderSync() {
 
       // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
       if (childReminders.enabled) {
-        // Bara barn/aktiviteter man själv äger – delat från familj ger aldrig notis.
+        // Egna barn/aktiviteter, plus delat från familjemedlemmar man själv valt.
         const myId = data.user.id;
+        const allowedOwners = new Set<string>([myId, ...(childReminders.familyFrom ?? [])]);
         const nameOf = new Map(
-          children.filter((c) => c.owner_id === myId).map((c) => [c.id, c.name]),
+          children.filter((c) => allowedOwners.has(c.owner_id)).map((c) => [c.id, c.name]),
         );
         const childLead = applyAdaptiveLead(
           Math.max(0, childReminders.minutesBefore ?? 0),
@@ -348,7 +349,7 @@ export function useReminderSync() {
 
         for (const i of childItems) {
           if (i.completed || !i.time || !i.date) continue;
-          if (i.owner_id !== myId) continue;
+          if (!allowedOwners.has(i.owner_id)) continue;
           if (!horizonDates.includes(i.date)) continue;
           const who = nameOf.get(i.child_id);
           if (!who) continue;
