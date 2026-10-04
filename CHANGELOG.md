@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Notiser: kvällshälsningen är nu också avstängd för alla och från början. Varje notis som servern skickar sparas (konto, typ, telefon, resultat) så att oväntade notiser kan spåras. Under Barn kan man välja vems delade barn och aktiviteter i familjen man vill få notiser om – standard är ingen.
+
 - Notiser: barnpåminnelser och barnens morgonöversikt är avstängda som standard, och notiser skickas bara för barn och aktiviteter man själv äger – aldrig för det som delats via familjen.
 
 - Notiser: MyFlove skickar bara notiser och larm som man själv bett om. Flows automatiska puffar, belöningsnotiser, morgonväder och dagliga hälsningar är avstängda som standard, och aktiviteter med klockslag ger bara notis om man valt en påminnelse. Färre olästa notiser betyder också ingen prick på appikonen.
