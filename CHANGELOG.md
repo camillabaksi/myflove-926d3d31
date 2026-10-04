@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Notiser: MyFlove skickar bara notiser och larm som man själv bett om. Flows automatiska puffar, belöningsnotiser, morgonväder och dagliga hälsningar är avstängda som standard, och aktiviteter med klockslag ger bara notis om man valt en påminnelse. Färre olästa notiser betyder också ingen prick på appikonen.
+
 - Ljud: Morgonstartens klang spelar inte längre av sig själv när larmljudet är avstängt eller satt till tyst.
 
 - Notiser: Flow skickar inte längre frågan "Hur är orken idag?" till konton där man inte lagt in något själv.

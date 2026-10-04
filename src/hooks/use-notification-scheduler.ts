@@ -37,17 +37,17 @@ export function useNotificationScheduler() {
         const target = parseHM(t.time);
         if (target === null) continue;
 
+        // Ingen notis alls om användaren inte själv bett om påminnelse.
+        if (t.reminderMinutesBefore == null) continue;
+
         if (target === nowMinutes) {
           const key = `task-${t.id}-${todayStr}-start`;
           if (!firedRef.current.has(key)) {
             firedRef.current.add(key);
-            // Larmljud bara när användaren själv bett om påminnelse –
-            // en aktivitet med klockslag ska inte låta av sig själv.
             sendPushNotification(t.title, {
               body: `Dags nu (${t.time})`,
               tag: key,
               itemKey: `task:${t.id}`,
-              silentAlarm: !t.reminderMinutesBefore,
             });
           }
         }

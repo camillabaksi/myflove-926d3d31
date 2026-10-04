@@ -134,6 +134,8 @@ export function useReminderSync() {
       // Timed tasks
       for (const t of tasks) {
         if (t.completed || !t.time || !t.dueDate) continue;
+        // Bara aktiviteter där användaren själv valt påminnelse ger notis.
+        if (t.reminderMinutesBefore == null) continue;
         if (!taskDates.includes(t.dueDate)) continue;
         const when = combineDateTime(t.dueDate, t.time);
         if (!when) continue;
