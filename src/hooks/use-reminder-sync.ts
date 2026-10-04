@@ -350,6 +350,9 @@ export function useReminderSync() {
         for (const i of childItems) {
           if (i.completed || !i.time || !i.date) continue;
           if (!allowedOwners.has(i.owner_id)) continue;
+          // Delat från någon annan: ägaren måste ha slagit på notiser till mig,
+          // utöver att jag själv valt att ta emot från den personen.
+          if (i.owner_id !== myId && i.shareNotify?.[myId] !== true) continue;
           if (!horizonDates.includes(i.date)) continue;
           const who = nameOf.get(i.child_id);
           if (!who) continue;
