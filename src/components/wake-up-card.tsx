@@ -5,6 +5,7 @@ import { Check, Sunrise, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getPushPreferences } from "@/lib/push.functions";
 import { acknowledgeWake } from "@/lib/push.functions";
+import { isAlarmMuted } from "@/lib/push-notifications";
 import { playGentleWake, type GentleWakeHandle } from "@/lib/gentle-wake-sound";
 import { DEFAULT_WAKE_STEPS, hhmmToMinutes, localDateKey, localMinutesOfDay } from "@/lib/wake-up";
 
@@ -59,7 +60,9 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
     setPlaying(false);
   };
 
-  const startSound = () => {
+  const startSound = (manual = false) => {
+    // Avstängt larm ska vara tyst – bara ett eget tryck på högtalaren spelar.
+    if (!manual && isAlarmMuted()) return;
     soundRef.current?.stop();
     soundRef.current = playGentleWake();
     setPlaying(true);
@@ -116,7 +119,7 @@ export function WakeUpCard({ always = false }: { always?: boolean }) {
         </div>
         <button
           type="button"
-          onClick={() => (playing ? stopSound() : startSound())}
+          onClick={() => (playing ? stopSound() : startSound(true))}
           aria-label={playing ? "Stäng av den mjuka klangen" : "Spela mjuk väckning"}
           className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted"
         >

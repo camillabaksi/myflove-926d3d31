@@ -130,6 +130,11 @@ function vibrateAlarm(): void {
   }
 }
 
+/** Har användaren stängt av larmljud (av-knapp eller format "tyst")? */
+export function isAlarmMuted(): boolean {
+  return getAlarmFormat() === "tyst" || getAlarmFormat() === "vibration" || !isAlarmSoundEnabled();
+}
+
 export function playAlarmSound(): void {
   const format = getAlarmFormat();
   if (format === "tyst") return;
