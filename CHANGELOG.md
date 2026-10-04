@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Notiser: den som delar en barnaktivitet väljer nu själv vilka mottagare som får notiser om den – en klocka bredvid varje namn under Dela. Från början är notiser av för alla mottagare, och mottagaren måste dessutom själv ha valt att ta emot notiser från den som delar. Båda måste säga ja innan någon notis skickas.
+
 - Notiser: kvällshälsningen är nu också avstängd för alla och från början. Varje notis som servern skickar sparas (konto, typ, telefon, resultat) så att oväntade notiser kan spåras. Under Barn kan man välja vems delade barn och aktiviteter i familjen man vill få notiser om – standard är ingen.
 
 - Notiser: barnpåminnelser och barnens morgonöversikt är avstängda som standard, och notiser skickas bara för barn och aktiviteter man själv äger – aldrig för det som delats via familjen.
