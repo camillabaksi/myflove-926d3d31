@@ -1,3 +1,7 @@
+## 2026-10-04
+
+- Android: appikonen matchar nu den bifogade MyFlove-ikonen i alla storlekar, inklusive adaptiv och rund ikon. Ny App Bundle 6.2 (versionCode 21) för uppdatering i Google Play; signeras med befintlig uppladdningsnyckel.
+
 ## 2026-10-03
 
 - iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen. Ingen annan appkonfiguration har ändrats.

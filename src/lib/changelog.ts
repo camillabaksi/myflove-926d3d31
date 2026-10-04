@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-03";
+export const CHANGELOG_UPDATED = "2026-10-04";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Android: appikonen matchar den bifogade MyFlove-ikonen; App Bundle 6.2 (versionCode 21) för Google Play (2026-10-04)",
     "iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen (2026-10-03)",
     "Mobilprojektet: Capacitor-appen använder nu app-ID \"se.myflove.app\" (matchar Apple Developer) och iOS-mappen är förberedd; Android bygger fortfarande med \"app.myflove.mobile\" (2026-10-03)",
     "Imorgon med Flow – kvällens förberedelse av det vi redan vet, utan energiprognos; ny morgoncheck sätter dagens läge (2026-10-02)",
