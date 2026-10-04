@@ -3,7 +3,16 @@
 // Flow får aldrig ändra något själv. Den föreslår – användaren trycker på
 // knappen. Först då flyttas, förenklas eller delas en uppgift.
 
-export type FlowActionKind = "flytta" | "forenkla" | "dela" | "klar";
+export type FlowActionKind =
+  | "flytta"
+  | "forenkla"
+  | "dela"
+  | "klar"
+  | "ny"
+  | "andra"
+  | "ta-bort";
+
+const KINDS: FlowActionKind[] = ["flytta", "forenkla", "dela", "klar", "ny", "andra", "ta-bort"];
 
 export interface FlowAction {
   kind: FlowActionKind;
@@ -15,6 +24,10 @@ export interface FlowAction {
   date?: string;
   /** Små delsteg för "dela". */
   steps?: string[];
+  /** Ny titel ("ny" och "andra"). */
+  title?: string;
+  /** HH:MM ("ny" och "andra"). */
+  time?: string;
   /** Kort beskrivning som visas på knappkortet. */
   label?: string;
 }
@@ -33,8 +46,11 @@ const asString = (v: unknown): string | undefined =>
 function toAction(raw: unknown): FlowAction | null {
   if (!raw || typeof raw !== "object") return null;
   const o = raw as Record<string, unknown>;
-  const kind = asString(o.kind)?.toLowerCase();
-  if (kind !== "flytta" && kind !== "forenkla" && kind !== "dela" && kind !== "klar") return null;
+  const kind = asString(o.kind)?.toLowerCase() as FlowActionKind | undefined;
+  if (!kind || !KINDS.includes(kind)) return null;
+  const time = asString(o.time);
+  const title = asString(o.title)?.slice(0, 240);
+  if (kind === "ny" && !title) return null;
   const steps = Array.isArray(o.steps)
     ? o.steps.map((s) => asString(s)).filter((s): s is string => !!s)
     : undefined;
@@ -46,6 +62,8 @@ function toAction(raw: unknown): FlowAction | null {
     date: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined,
     steps: steps?.length ? steps.slice(0, 5) : undefined,
     label: asString(o.label),
+    title,
+    time: time && /^([01]\d|2[0-3]):[0-5]\d$/.test(time) ? time : undefined,
   };
 }
 
@@ -105,6 +123,9 @@ export const ACTION_LABEL: Record<FlowActionKind, string> = {
   forenkla: "Gör den mindre",
   dela: "Dela upp i små steg",
   klar: "Markera som klar",
+  ny: "Lägg till uppgift",
+  andra: "Ändra uppgiften",
+  "ta-bort": "Ta bort uppgiften",
 };
 
 export const ACTION_EMOJI: Record<FlowActionKind, string> = {
@@ -112,6 +133,9 @@ export const ACTION_EMOJI: Record<FlowActionKind, string> = {
   forenkla: "🌱",
   dela: "🪄",
   klar: "✅",
+  ny: "➕",
+  andra: "✏️",
+  "ta-bort": "🗑️",
 };
 
 export function actionCta(action: FlowAction): string {
@@ -124,5 +148,11 @@ export function actionCta(action: FlowAction): string {
       return "Ja, dela upp den";
     case "klar":
       return "Ja, den är klar";
+    case "ny":
+      return "Ja, lägg till";
+    case "andra":
+      return "Ja, ändra";
+    case "ta-bort":
+      return "Ja, ta bort";
   }
 }

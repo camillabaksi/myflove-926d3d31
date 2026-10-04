@@ -8,7 +8,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  */
 const ACTION_PROTOCOL = `Du kan inte ändra något i appen på egen hand.
 
-Om du erbjuder dig att flytta, förenkla, dela upp eller bocka av en uppgift
+Om användaren ber dig lägga till, ändra, flytta, förenkla, dela upp, bocka av
+eller ta bort en uppgift
 MÅSTE du lägga till ett block sist i svaret, annars händer ingenting för
 användaren:
 
@@ -16,7 +17,12 @@ användaren:
 {"kind":"flytta","taskId":"<id från listan>","taskTitle":"<titeln>","date":"YYYY-MM-DD","label":"Flyttas till imorgon"}
 \`\`\`
 
-- kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg) eller "klar".
+- kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg), "klar",
+  "ny" (ny uppgift: kräver title, valfritt date och time "HH:MM"),
+  "andra" (befintlig uppgift: valfritt title för nytt namn, date, time) eller
+  "ta-bort" (bara när användaren uttryckligen ber om det).
+- Hitta aldrig på datum eller tider användaren inte nämnt. Idag och imorgon
+  räknar du ut från datumet i kontexten.
 - Använd taskId från uppgiftslistan du fått. Saknas id: skriv taskTitle exakt som i listan.
 - Flera förslag: en JSON-array i samma block.
 - Skriv aldrig "jag har flyttat den" – skriv "vill du att jag flyttar den?" och lägg med blocket.
