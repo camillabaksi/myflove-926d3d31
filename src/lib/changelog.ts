@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Flow i chatten: lägg till, ändra och ta bort uppgifter efter ditt godkännande; snyggare text; QuickFlow i nedre raden (2026-10-04)",
     "Mobilappar: säkerhetskopia per konto, tydlig kalenderkoppling och behörigheter för mikrofon/kamera/plats (iPhone 1.1, Android 6.3) (2026-10-04)",
     "Ljud: inget pip längre när iPhone-appen öppnas – tyst upplåsning utan larmsignalen (2026-10-04)",
     "Ljud: inget larmljud längre vid första trycket i appen på iPhone; Morgonstartens klang bara om Morgonstart är påslagen (2026-10-04)",
