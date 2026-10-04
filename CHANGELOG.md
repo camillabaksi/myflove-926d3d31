@@ -1,5 +1,7 @@
 ## 2026-10-04
 
+- Notiser: Flow skickar inte längre frågan "Hur är orken idag?" till konton där man inte lagt in något själv.
+
 - Notiser: aktiviteter med klockslag spelar inte längre larmljud när de börjar, om man inte själv valt en påminnelse. Notisen kommer tyst.
 
 - Android: appikonen matchar nu den bifogade MyFlove-ikonen i alla storlekar, inklusive adaptiv och rund ikon. Ny App Bundle 6.2 (versionCode 21) för uppdatering i Google Play; signeras med befintlig uppladdningsnyckel.
