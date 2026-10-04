@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useTasks, useReminders, useDumpIdeas } from "@/hooks/use-data";
 import { useNotes } from "@/hooks/use-notes";
 import { todayISO } from "@/lib/day";
+import { deviceAccessReady, UPDATE_APP_FOR_DEVICE_ACCESS } from "@/lib/native-caps";
 import { prepareUpload, isImageFile, isPdfFile, ACCEPT_DOCUMENTS } from "@/lib/file-formats";
 import {
   analyzeCalendarImport,
@@ -332,7 +333,16 @@ export function QuickflowImageImport() {
                   <button
                     key={label}
                     type="button"
-                    onClick={() => ref.current?.click()}
+                    onClick={() => {
+                      if (ref !== cameraRef) {
+                        ref.current?.click();
+                        return;
+                      }
+                      // Äldre iPhone-app saknar kamerabehörighet och skulle krascha.
+                      void deviceAccessReady().then((ok) =>
+                        ok ? cameraRef.current?.click() : setErrorMsg(UPDATE_APP_FOR_DEVICE_ACCESS),
+                      );
+                    }}
                     className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4 text-left font-medium text-ink hover:border-primary/50 sm:flex-col sm:text-center"
                   >
                     <Icon size={22} className="text-primary" />

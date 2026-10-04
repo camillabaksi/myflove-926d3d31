@@ -1,3 +1,4 @@
+import { isNativeShell } from "@/lib/native-caps";
 import { useEffect, useState } from "react";
 import { Bell, BellOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,8 +57,9 @@ export function EnablePushButton() {
   if (supported === false) {
     return (
       <div className="rounded-2xl bg-card p-4 text-sm text-muted-foreground">
-        Din webbläsare stödjer inte push-notiser. Installera MyFlove på hemskärmen (iPhone: Dela →
-        Lägg till på hemskärmen) och öppna sedan igen.
+        {isNativeShell()
+          ? "I MyFlove-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
+          : "Din webbläsare stödjer inte push-notiser. Installera MyFlove på hemskärmen (iPhone: Dela → Lägg till på hemskärmen) och öppna sedan igen."}
       </div>
     );
   }

@@ -93,6 +93,10 @@ export function useClerk() {
       // ligger kvar lokalt och synkas vid nästa inloggning.
       await clearLocalUserData();
       setDemoSession(false);
+      // Telefonens kopia får inte lägga tillbaka kontots data efter utloggning.
+      await import("@/lib/native-backup")
+        .then((m) => m.clearNativeBackup())
+        .catch(() => undefined);
       await supabase.auth.signOut();
       if (typeof window !== "undefined") window.location.href = "/sign-in";
     },

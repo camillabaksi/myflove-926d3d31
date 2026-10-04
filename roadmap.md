@@ -1,5 +1,11 @@
 # Roadmap
 
+## Felsökning Android + iOS från grunden (2026-10-04)
+- [ ] Ljud, larm, vibration och notiser i mobilappen – bara det man bett om.
+- [ ] Inloggning, kontobyte och data i mobilappen.
+- [ ] Utseende, knappar, länkar och skärmkanter i mobilappen.
+- [ ] Rätta tydliga fel, kontrollera, uppdatera ändringsloggar.
+
 ## Min Flow: sammanhängande rum (2026-10-02)
 - [x] Ersätt avvikande Flow i fåtöljen med den godkända figuren i en enda fast scen.
 - [x] Dölj inkompatibla poser, kläder, lösa tillbehör och rumsöverlägg utan att radera sparade val.

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+    "Mobilappar: säkerhetskopia per konto, tydlig kalenderkoppling och behörigheter för mikrofon/kamera/plats (iPhone 1.1, Android 6.3) (2026-10-04)",
     "Ljud: inget pip längre när iPhone-appen öppnas – tyst upplåsning utan larmsignalen (2026-10-04)",
     "Ljud: inget larmljud längre vid första trycket i appen på iPhone; Morgonstartens klang bara om Morgonstart är påslagen (2026-10-04)",
     "Notiser: den som delar en barnaktivitet väljer själv vilka mottagare som får notiser om den – båda sidor måste säga ja (2026-10-04)",
