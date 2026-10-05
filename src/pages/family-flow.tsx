@@ -193,10 +193,10 @@ export default function FamilyFlowPage() {
             </p>
 
             <p className="text-sm text-muted-foreground">
-              <Link href="/barn" className="underline underline-offset-2 hover:text-foreground">
+              {!isChildAccount && <><Link href="/barn" className="underline underline-offset-2 hover:text-foreground">
                 {t("Barnens scheman och dokument")}
               </Link>
-              {" · "}
+              {" · "}</>}
               <Link href="/familj" className="underline underline-offset-2 hover:text-foreground">
                 {t("Dela listor och kalender")}
               </Link>

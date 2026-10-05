@@ -262,9 +262,12 @@ export default function ChildProfiles({
 }
 
 /** Fördjupning för ett barn, med samma profil och sparade övningar som i övriga appen. */
-export function ChildProfileDetail({ child, canEdit = true, onBack, onSchedule, onHelp, onUpdate, onDelete }: {
+export function ChildProfileDetail({ child, canEdit = true, members = [], onLinkAccount, onBack, onSchedule, onHelp, onUpdate, onDelete }: {
   child: Child;
   canEdit?: boolean;
+  /** Familjemedlemmar som kan vara barnets eget konto (endast föräldern ser valet). */
+  members?: FamilyMember[];
+  onLinkAccount?: (id: string, accountUserId: string | null) => Promise<void>;
   onBack: () => void;
   onSchedule: () => void;
   onHelp: () => void;
@@ -304,6 +307,14 @@ export function ChildProfileDetail({ child, canEdit = true, onBack, onSchedule, 
         {child.helps.length ? child.helps.map((help) => <span key={help} className="max-w-full break-words rounded-2xl bg-secondary px-3 py-2 text-sm text-ink"><Check size={14} className="mr-1 inline text-primary" aria-hidden />{t(help)}</span>) : <p className="text-sm text-muted-foreground">{t("Inget stöd sparat än")}</p>}
         {canEdit && <Button type="button" variant="link" onClick={() => { setEditing(true); setSection(null); }} className="h-9 px-2">{t("Ändra stöd")}</Button>}
       </div>}
+      {canEdit && onLinkAccount && members.length > 0 && <label className="block space-y-1 rounded-2xl border border-border bg-card px-4 py-3 text-sm">
+        <span className="font-semibold text-ink">{t("Barnets eget konto")}</span>
+        <span className="block text-xs text-muted-foreground">{t("Barnet ser sin egen kalender, men aldrig stöd eller anteckningar du sparat här.")}</span>
+        <select className="mt-1 min-h-11 w-full rounded-xl border border-border bg-background px-3 text-ink" value={child.account_user_id ?? ""} onChange={(event) => { void onLinkAccount(child.id, event.target.value || null).catch(() => undefined); }}>
+          <option value="">{t("Inget eget konto")}</option>
+          {members.map((m) => <option key={m.user_id} value={m.user_id}>{m.display_name}</option>)}
+        </select>
+      </label>}
       <Button type="button" variant="outline" onClick={onHelp} className="flex h-auto min-h-14 w-full justify-between rounded-2xl px-4 py-3 text-left"><span className="flex min-w-0 items-center gap-3"><HeartHandshake size={20} className="shrink-0" aria-hidden /><span className="break-words whitespace-normal">{t("Hjälp mig med en situation")}</span></span><ChevronRight size={18} className="shrink-0" aria-hidden /></Button>
       <Button type="button" variant="outline" onClick={() => setSection(section === "exercises" ? null : "exercises")} aria-expanded={section === "exercises"} className="flex min-h-14 w-full justify-between rounded-2xl px-4 text-left"><span className="flex min-w-0 items-center gap-3"><Leaf size={20} className="shrink-0" aria-hidden /><span className="truncate">{t("Sparade övningar")}</span>{saved.length > 0 && <span className="text-muted-foreground">({saved.length})</span>}</span><ChevronRight size={18} className="shrink-0" aria-hidden /></Button>
       {section === "exercises" && <div className="space-y-2 py-2">
