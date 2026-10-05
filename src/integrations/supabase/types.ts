@@ -164,6 +164,7 @@ export type Database = {
           owner_id: string
           remind: boolean
           repeat: string
+          share_family: boolean
           time: string | null
           title: string
           updated_at: string
@@ -180,6 +181,7 @@ export type Database = {
           owner_id?: string
           remind?: boolean
           repeat?: string
+          share_family?: boolean
           time?: string | null
           title: string
           updated_at?: string
@@ -196,6 +198,7 @@ export type Database = {
           owner_id?: string
           remind?: boolean
           repeat?: string
+          share_family?: boolean
           time?: string | null
           title?: string
           updated_at?: string
@@ -396,6 +399,7 @@ export type Database = {
           created_at: string
           editors: string[] | null
           user_id: string
+          viewers: string[] | null
         }
         Insert: {
           area: string
@@ -403,6 +407,7 @@ export type Database = {
           created_at?: string
           editors?: string[] | null
           user_id: string
+          viewers?: string[] | null
         }
         Update: {
           area?: string
@@ -410,6 +415,7 @@ export type Database = {
           created_at?: string
           editors?: string[] | null
           user_id?: string
+          viewers?: string[] | null
         }
         Relationships: []
       }
@@ -989,6 +995,10 @@ export type Database = {
           total_users: number
         }[]
       }
+      can_edit_family_area: {
+        Args: { _area: string; _owner: string; _uid: string }
+        Returns: boolean
+      }
       can_read_child_doc: {
         Args: { _path: string; _user_id: string }
         Returns: boolean
@@ -1120,6 +1130,7 @@ export type Database = {
         Args: { _code: string; _color: string; _display_name: string }
         Returns: string
       }
+      same_household: { Args: { _a: string; _b: string }; Returns: boolean }
       set_child_item_share_notify: {
         Args: { _item_id: string; _notify: boolean; _user_id: string }
         Returns: undefined
