@@ -19,6 +19,11 @@ export interface Child {
   helps: string[];
   /** Valfri avatar (emoji eller bild-url). */
   avatar: string | null;
+  /**
+   * Barnets eget inloggade konto (om det har ett). Ger INTE barnet läsrätt
+   * till profilen – barnet ser bara sin egen barnvy.
+   */
+  account_user_id?: string | null;
 }
 
 
@@ -80,16 +85,26 @@ interface ChildrenState {
   children: Child[];
   items: ChildItem[];
   members: FamilyMember[];
+  /** Barnprofiler som är kopplade till den inloggades EGET konto (säkra fält). */
+  selfProfiles: Child[];
+  /** Aktiviteter i den egna barnvyn, utan förälderns privata anteckningar. */
+  selfItems: ChildItem[];
   loading: boolean;
   error: string | null;
   conflict: ChildItemConflict | null;
 }
 
+const EMPTY_DATA = {
+  children: [] as Child[],
+  items: [] as ChildItem[],
+  members: [] as FamilyMember[],
+  selfProfiles: [] as Child[],
+  selfItems: [] as ChildItem[],
+};
+
 let state: ChildrenState = {
   userId: null,
-  children: [],
-  items: [],
-  members: [],
+  ...EMPTY_DATA,
   loading: true,
   error: null,
   conflict: null,
@@ -115,7 +130,7 @@ async function loadAll(): Promise<void> {
       const { data: auth } = await supabase.auth.getUser();
       const uid = auth.user?.id ?? null;
       if (!uid) {
-        setState({ userId: null, children: [], items: [], members: [] });
+        setState({ ...EMPTY_DATA, userId: null });
         return;
       }
 
@@ -123,7 +138,7 @@ async function loadAll(): Promise<void> {
         await Promise.all([
           supabase
             .from("children")
-            .select("id, owner_id, name, birthdate, color, note, helps, avatar")
+            .select("id, owner_id, name, birthdate, color, note, helps, avatar, account_user_id")
             .order("created_at"),
           supabase
             .from("child_items")
@@ -163,6 +178,45 @@ async function loadAll(): Promise<void> {
         members = Array.from(seen.values());
       }
 
+      // Barnkonto: egen barnvy via säkra RPC:er – aldrig förälderns profilfält.
+      const [{ data: selfRows }, { data: selfSched }] = await Promise.all([
+        supabase.rpc("get_my_child_profiles"),
+        supabase.rpc("get_my_child_schedule"),
+      ]);
+      const selfProfiles: Child[] = (selfRows ?? []).map((r) => ({
+        id: r.id,
+        owner_id: r.owner_id,
+        name: r.name,
+        color: r.color,
+        avatar: r.avatar,
+        birthdate: r.birthdate,
+        note: null,
+        helps: [],
+        account_user_id: uid,
+      }));
+      const selfItems: ChildItem[] = (selfSched ?? []).map((r) => ({
+        id: r.id,
+        child_id: r.child_id,
+        owner_id: r.owner_id,
+        kind: r.kind as ChildItemKind,
+        title: r.title,
+        notes: r.notes,
+        date: r.date,
+        time: r.time,
+        completed: r.completed,
+        remind: false,
+        repeat: r.repeat as ChildItem["repeat"],
+        file_path: r.file_path,
+        created_at: r.created_at,
+        updated_at: r.updated_at,
+        sharedWith: [],
+        shareNotify: {},
+      }));
+
+      // Ett annat konto hann logga in medan vi hämtade: släng resultatet.
+      const { data: again } = await supabase.auth.getSession();
+      if ((again.session?.user.id ?? null) !== uid) return;
+
       setState({
         userId: uid,
         children: (kids ?? []) as Child[],
@@ -172,6 +226,8 @@ async function loadAll(): Promise<void> {
           shareNotify: notifyMap.get(r.id) ?? {},
         })),
         members,
+        selfProfiles,
+        selfItems,
       });
     } catch (e) {
       setState({ error: e instanceof Error ? e.message : "Kunde inte hämta barn-informationen." });
@@ -196,7 +252,22 @@ function onResume() {
   void loadAll();
 }
 
+/** Kontobyte: töm minnet direkt så att inget från förra kontot visas. */
+let authBound = false;
+function bindAuthReset() {
+  if (authBound) return;
+  authBound = true;
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+    const uid = session?.user.id ?? null;
+    if (uid === state.userId && event !== "SIGNED_OUT") return;
+    setState({ ...EMPTY_DATA, userId: null, conflict: null });
+    if (uid) void loadAll();
+  });
+}
+
 function subscribeRealtime() {
+  bindAuthReset();
   subscribers += 1;
   if (channel) return;
   // Hämta om när appen kommer tillbaka – liveanslutningen kan ha tappats.
@@ -477,11 +548,25 @@ export function useChildren() {
     return data.signedUrl;
   };
 
+  /** Endast ägaren kan koppla en barnprofil till barnets eget konto (RLS: owner-only). */
+  const setChildAccount = async (id: string, accountUserId: string | null) => {
+    const { error: err } = await supabase
+      .from("children")
+      .update({ account_user_id: accountUserId })
+      .eq("id", id);
+    if (err) throw err;
+    await loadAll();
+  };
+
   return {
     userId: snapshot.userId,
     children: snapshot.children,
     items: snapshot.items,
     members: snapshot.members,
+    selfProfiles: snapshot.selfProfiles,
+    selfItems: snapshot.selfItems,
+    isChildAccount: snapshot.selfProfiles.length > 0,
+    setChildAccount,
     loading: snapshot.loading,
     error: snapshot.error,
     conflict: snapshot.conflict,

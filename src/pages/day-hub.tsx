@@ -4,6 +4,7 @@ import Layout from "@/components/layout";
 import { CalendarContent } from "@/pages/calendar";
 import { TodayContent } from "@/pages/today";
 import AddToDay from "@/components/day/add-to-day";
+import OwnChildCalendar from "@/components/family/own-child-calendar";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { CalendarDays, Heart, Plus } from "lucide-react";
@@ -57,7 +58,7 @@ export function DayHub({ tab }: { tab: DayTab }) {
       </nav>
 
       {tab === "idag" && <TodayContent />}
-      {tab === "kalender" && <CalendarContent />}
+      {tab === "kalender" && <><OwnChildCalendar /><CalendarContent /></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
   );

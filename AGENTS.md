@@ -21,3 +21,4 @@ Use a direct document navigation for the desktop sidebar's Träning link so an a
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Never fall back to plaintext for sensitive local keys; keep them in memory and surface a status instead, because encryption at rest must not depend on startup timing.
+A child profile's linked account (children.account_user_id) never gets row access to children/child_items; it reads only safe fields via get_my_child_profiles/get_my_child_schedule, so parent-only data is enforced by the database, not the UI.

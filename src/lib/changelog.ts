@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-04";
+export const CHANGELOG_UPDATED = "2026-10-05";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familj: barnets eget konto ser sin kalender direkt, aldrig förälderns privata uppgifter om barnet (2026-10-05)",
       "Flow i chatten: lägg till, ändra och ta bort uppgifter efter ditt godkännande; snyggare text; QuickFlow i nedre raden (2026-10-04)",
     "Mobilappar: säkerhetskopia per konto, tydlig kalenderkoppling och behörigheter för mikrofon/kamera/plats (iPhone 1.1, Android 6.3) (2026-10-04)",
     "Ljud: inget pip längre när iPhone-appen öppnas – tyst upplåsning utan larmsignalen (2026-10-04)",
