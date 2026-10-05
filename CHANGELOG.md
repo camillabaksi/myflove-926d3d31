@@ -1,3 +1,7 @@
+## 2026-10-05
+
+- Familj/barnkonto: en barnprofil kan kopplas till barnets eget konto. Barnet ser då sin visuella kalender direkt under Kalender (bara titta), men aldrig förälderns stöd, anteckningar, dokument eller syskons profiler – spärrat i databasen, inte bara dolt. Familj visar inte föräldraadministration för barnkonton.
+
 ## 2026-10-04
 
 - Flow: i chatten kan Flow nu också föreslå att lägga till, ändra (namn, dag, tid) och ta bort uppgifter – inget händer förrän du trycker på knappen. Flow får dagens datum direkt och påstår aldrig att något redan är gjort. Svaren visar fetstil och punktlistor i stället för stjärntecken, och förslagskorten har ikoner. QuickFlow har fått en egen knapp i raden längst ner.
