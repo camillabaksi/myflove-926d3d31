@@ -89,6 +89,8 @@ interface ChildrenState {
   selfProfiles: Child[];
   /** Aktiviteter i den egna barnvyn, utan förälderns privata anteckningar. */
   selfItems: ChildItem[];
+  /** Poster som en förälder uttryckligen delat med detta kopplade konto (säkra fält). */
+  sharedToMe: ChildItem[];
   loading: boolean;
   error: string | null;
   conflict: ChildItemConflict | null;
@@ -100,6 +102,7 @@ const EMPTY_DATA = {
   members: [] as FamilyMember[],
   selfProfiles: [] as Child[],
   selfItems: [] as ChildItem[],
+  sharedToMe: [] as ChildItem[],
 };
 
 let state: ChildrenState = {
@@ -179,9 +182,10 @@ async function loadAll(): Promise<void> {
       }
 
       // Barnkonto: egen barnvy via säkra RPC:er – aldrig förälderns profilfält.
-      const [{ data: selfRows }, { data: selfSched }] = await Promise.all([
+      const [{ data: selfRows }, { data: selfSched }, { data: sharedRows }] = await Promise.all([
         supabase.rpc("get_my_child_profiles"),
         supabase.rpc("get_my_child_schedule"),
+        supabase.rpc("get_my_shared_child_items"),
       ]);
       const selfProfiles: Child[] = (selfRows ?? []).map((r) => ({
         id: r.id,
@@ -194,7 +198,8 @@ async function loadAll(): Promise<void> {
         helps: [],
         account_user_id: uid,
       }));
-      const selfItems: ChildItem[] = (selfSched ?? []).map((r) => ({
+      type SafeItemRow = NonNullable<typeof selfSched>[number];
+      const toSafeItem = (r: SafeItemRow): ChildItem => ({
         id: r.id,
         child_id: r.child_id,
         owner_id: r.owner_id,
@@ -211,7 +216,9 @@ async function loadAll(): Promise<void> {
         updated_at: r.updated_at,
         sharedWith: [],
         shareNotify: {},
-      }));
+      });
+      const selfItems: ChildItem[] = (selfSched ?? []).map(toSafeItem);
+      const sharedToMe: ChildItem[] = (sharedRows ?? []).map(toSafeItem);
 
       // Ett annat konto hann logga in medan vi hämtade: släng resultatet.
       const { data: again } = await supabase.auth.getSession();
@@ -228,6 +235,7 @@ async function loadAll(): Promise<void> {
         members,
         selfProfiles,
         selfItems,
+        sharedToMe,
       });
     } catch (e) {
       setState({ error: e instanceof Error ? e.message : "Kunde inte hämta barn-informationen." });
@@ -565,6 +573,7 @@ export function useChildren() {
     members: snapshot.members,
     selfProfiles: snapshot.selfProfiles,
     selfItems: snapshot.selfItems,
+    sharedToMe: snapshot.sharedToMe,
     isChildAccount: snapshot.selfProfiles.length > 0,
     setChildAccount,
     loading: snapshot.loading,
