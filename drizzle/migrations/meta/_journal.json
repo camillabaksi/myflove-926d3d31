@@ -127,6 +127,13 @@
       "when": 1791169826142,
       "tag": "0017_child_schedule_prefix_fix",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1791176442165,
+      "tag": "0018_child_account_explicit_shares",
+      "breakpoints": true
     }
   ]
 }

@@ -1083,6 +1083,24 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_my_shared_child_items: {
+        Args: never
+        Returns: {
+          child_id: string
+          completed: boolean
+          created_at: string
+          date: string
+          file_path: string
+          id: string
+          kind: string
+          notes: string
+          owner_id: string
+          repeat: string
+          time: string
+          title: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
