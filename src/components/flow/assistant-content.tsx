@@ -63,6 +63,7 @@ import { parseExerciseBlocks, savedExercisesContext } from "@/lib/saved-exercise
 import { FlowSpeakButton } from "@/components/flow/flow-speak-button";
 import { useSavedExercises } from "@/hooks/use-saved-exercises";
 import { useChildren } from "@/hooks/use-children";
+import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { FlowExerciseDraftCard, FlowSavedSuggestionCard } from "@/components/recovery/flow-exercise-cards";
 import { relativeDayLabel } from "@/lib/flow-chat-history";
 import { track } from "@/lib/analytics";
@@ -190,7 +191,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     .map((t) => `- id:${t.id} · ${t.title}${t.dueDate ? ` (datum ${t.dueDate})` : ""}`)
     .join("\n");
 
+  const shopping = useSharedShoppingList();
+
   const runAction = (key: string, action: FlowAction) => {
+    if (action.kind === "handla") {
+      const items = [action.title, ...(action.steps ?? [])].filter((t): t is string => !!t);
+      items.forEach((t) => shopping.addItem(t));
+      setDoneActions((p) => ({ ...p, [key]: "Tillagd i inköpslistan." }));
+      return;
+    }
     if (action.kind === "ny") {
       if (!action.title) return;
       const date = action.date && action.date >= todayStr() ? action.date : undefined;

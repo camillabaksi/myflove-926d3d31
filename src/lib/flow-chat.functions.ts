@@ -20,7 +20,9 @@ användaren:
 - kind: "flytta" (kräver date), "forenkla", "dela" (kräver steps: 2–3 korta steg), "klar",
   "ny" (ny uppgift: kräver title, valfritt date och time "HH:MM"),
   "andra" (befintlig uppgift: valfritt title för nytt namn, date, time) eller
-  "ta-bort" (bara när användaren uttryckligen ber om det).
+  "ta-bort" (bara när användaren uttryckligen ber om det) eller
+  "handla" (lägg på inköpslistan: title = första varan, steps = övriga varor;
+  använd ALDRIG "ny" för varor som ska köpas).
 - Hitta aldrig på datum eller tider användaren inte nämnt. Idag och imorgon
   räknar du ut från datumet i kontexten.
 - Använd taskId från uppgiftslistan du fått. Saknas id: skriv taskTitle exakt som i listan.
