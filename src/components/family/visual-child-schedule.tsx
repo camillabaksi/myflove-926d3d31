@@ -237,6 +237,7 @@ export default function VisualChildSchedule({
     : t(CATEGORY_LABELS[meta.category]);
 
   const openAdd = (preset?: ActivityBankItem, date = mode === "today" ? dayDate : anchor) => {
+    if (readOnly) return;
     setEditing(null);
     setDraft({ ...defaultDraft(date), ...(preset ? { title: preset.title, meta: preset } : {}) });
     setAdding(true);
@@ -256,6 +257,7 @@ export default function VisualChildSchedule({
   };
 
   const openEdit = (item: ChildItem, occurrence?: string) => {
+    if (readOnly) return;
     setEditingDate(occurrence ?? null);
     const decoded = decodeVisualNotes(item.notes);
     setDraft({ title: item.title, date: item.date ?? today, time: item.time?.slice(0, 5) ?? "", endTime: decoded.meta.endTime ?? "", repeat: item.repeat, note: decoded.note, meta: decoded.meta, file: null });
@@ -317,6 +319,7 @@ export default function VisualChildSchedule({
   };
 
   const markDone = async (item: ChildItem) => {
+    if (readOnly) return;
     await toggleItem(item.id, !item.completed);
     if (!item.completed) emitActivityDone({ id: `child-${item.id}`, title: item.title, ...(item.date ? { dueDate: item.date } : {}) });
   };
@@ -326,6 +329,7 @@ export default function VisualChildSchedule({
   };
 
   const openMove = (ids: string[]) => {
+    if (readOnly) return;
     const selected = childItems.filter((item) => ids.includes(item.id));
     if (!selected.length) return;
     const first = [...selected].sort((a, b) => (a.date ?? "").localeCompare(b.date ?? "") || (a.time ?? "99:99").localeCompare(b.time ?? "99:99"))[0];
@@ -373,6 +377,7 @@ export default function VisualChildSchedule({
   };
 
   const moveByDrop = async (item: ChildItem, targetDate: string) => {
+    if (readOnly) return;
     if (item.date === targetDate) return;
     await updateItem(item.id, { date: targetDate });
     toast.success(t("Aktiviteten har flyttats."));
@@ -415,6 +420,7 @@ export default function VisualChildSchedule({
   };
 
   const openCopy = (scope: "activity" | "day" | "week", item?: ChildItem, sourceDate?: string) => {
+    if (readOnly) return;
     const sourceAnchor = item?.date ?? sourceDate ?? dates[0] ?? today;
     setCopyDate(addDaysISO(sourceAnchor, scope === "week" ? 7 : 1));
     setCopyChildId(child.id);
