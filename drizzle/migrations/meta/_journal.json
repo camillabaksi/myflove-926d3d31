@@ -120,6 +120,13 @@
       "when": 1791169809126,
       "tag": "0016_child_account_separation",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1791169826142,
+      "tag": "0017_child_schedule_prefix_fix",
+      "breakpoints": true
     }
   ]
 }
