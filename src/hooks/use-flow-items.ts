@@ -44,15 +44,15 @@ export function useFlowItems(dateISO?: string): {
   todayDone: FlowItem[];
   toggleItem: (item: FlowItem) => void;
 } {
-  const { tasks, toggleTask } = useTasks();
-  const { reminders, toggleReminder } = useReminders();
+  const { tasks, toggleTask, deleteTask } = useTasks();
+  const { reminders, toggleReminder, deleteReminder } = useReminders();
   const { lectures } = useStudySchedule();
   const targetDay = dateISO ?? todayISO();
   const isTodayView = targetDay === todayISO();
   const childEvents = useChildEvents(targetDay);
   const { toggleItem: toggleChildItem } = useChildren();
-  const { items: quickflowItems, complete, uncomplete } = useQuickflow();
-  const { items: priorityItems, update: updatePriority } = usePriorityList();
+  const { items: quickflowItems, complete, uncomplete, remove: removeQuickflow } = useQuickflow();
+  const { items: priorityItems, update: updatePriority, remove: removePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const { isInstanceDone, setInstanceDone } = useInstanceStatus();
