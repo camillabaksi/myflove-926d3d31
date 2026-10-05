@@ -129,18 +129,20 @@ export default function FamilyAreaSharing() {
   const [perms, setPerms] = useState<Set<string>>(new Set());
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [editors, setEditors] = useState<Map<Area, string[] | null>>(new Map());
+  const [viewers, setViewers] = useState<Map<Area, string[] | null>>(new Map());
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
 
   const load = useCallback(async () => {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
     const [{ data: own }, { data: rows }, { data: p }, { data: hm }] = await Promise.all([
-      supabase.from("family_share_areas").select("area, can_edit, editors").eq("user_id", u.user.id),
+      supabase.from("family_share_areas").select("area, can_edit, editors, viewers").eq("user_id", u.user.id),
       supabase.rpc("get_family_shared_data"),
       supabase.rpc("get_family_share_permissions"),
       supabase.from("household_members").select("user_id, display_name"),
     ]);
     setEditors(new Map((own ?? []).map((r) => [r.area as Area, r.editors ?? null])));
+    setViewers(new Map((own ?? []).map((r) => [r.area as Area, r.viewers ?? null])));
     const seen = new Map<string, string>();
     for (const m of hm ?? []) if (m.user_id !== u.user.id) seen.set(m.user_id, m.display_name);
     setMembers([...seen.entries()].map(([id, name]) => ({ id, name })));
@@ -181,6 +183,19 @@ export default function FamilyAreaSharing() {
     const { error } = await supabase.from("family_share_areas").update({ editors: list }).eq("user_id", u.user.id).eq("area", area);
     if (error) {
       setEditors(prev);
+      toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
+    }
+  };
+
+  /** null = hela familjen (även framtida medlemmar). */
+  const setAreaViewers = async (area: Area, list: string[] | null) => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    const prev = viewers;
+    setViewers(new Map(viewers).set(area, list));
+    const { error } = await supabase.from("family_share_areas").update({ viewers: list }).eq("user_id", u.user.id).eq("area", area);
+    if (error) {
+      setViewers(prev);
       toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
     }
   };
@@ -247,6 +262,40 @@ export default function FamilyAreaSharing() {
                   </button>
                 ))}
               </div>
+              {level !== "off" && members.length > 0 && (() => {
+                const list = viewers.get(id) ?? null;
+                const chip = (on: boolean) =>
+                  `rounded-full px-2.5 py-1 text-xs border ${on ? "bg-primary/15 border-primary text-ink" : "border-border text-muted-foreground bg-card"}`;
+                return (
+                  <div className="mt-2 space-y-1">
+                    <p className="text-xs text-muted-foreground">Vem får se?</p>
+                    <div className="flex flex-wrap gap-1">
+                      <button type="button" aria-pressed={list === null} className={chip(list === null)} onClick={() => setAreaViewers(id, null)}>Hela familjen</button>
+                      {members.map((m) => {
+                        const on = list !== null && list.includes(m.id);
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            aria-pressed={on}
+                            className={chip(on)}
+                            onClick={() => {
+                              const base = list ?? [];
+                              const next = on ? base.filter((x) => x !== m.id) : [...base, m.id];
+                              void setAreaViewers(id, next.length === 0 ? null : next);
+                            }}
+                          >
+                            {m.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">
+                      {list === null ? "Gäller även de som går med i familjen senare." : "Övriga i familjen ser inte detta."}
+                    </p>
+                  </div>
+                );
+              })()}
               {level === "edit" && members.length > 0 && (() => {
                 const list = editors.get(id) ?? null;
                 const chip = (on: boolean) =>
