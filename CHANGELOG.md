@@ -1,6 +1,6 @@
 ## 2026-10-05
 
-- Familj/barnkonto: en barnprofil kan kopplas till barnets eget konto. Barnet ser då sin visuella kalender direkt under Kalender (bara titta), men aldrig förälderns stöd, anteckningar, dokument eller syskons profiler – spärrat i databasen, inte bara dolt. Familj visar inte föräldraadministration för barnkonton.
+- Familj/barnkonto: en barnprofil kan kopplas till barnets eget konto. Barnet ser då sin visuella kalender direkt under Kalender (bara titta), men aldrig förälderns stöd, anteckningar, dokument eller syskons profiler – spärrat i databasen, inte bara dolt. Kopplingen begränsar bara förälderns barnprofiler: det kopplade kontot behåller alla egna verktyg på Familj (egna barnprofiler, situationshjälp). Det föräldern uttryckligen delar med kontot visas i rutan "Delat med dig" under Kalender – bara den posten, utan privata anteckningar, och aldrig dubbelt med schemat.
 
 ## 2026-10-04
 
