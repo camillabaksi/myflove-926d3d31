@@ -238,6 +238,7 @@ export type Database = {
       }
       children: {
         Row: {
+          account_user_id: string | null
           avatar: string | null
           birthdate: string | null
           color: string
@@ -250,6 +251,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          account_user_id?: string | null
           avatar?: string | null
           birthdate?: string | null
           color?: string
@@ -262,6 +264,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          account_user_id?: string | null
           avatar?: string | null
           birthdate?: string | null
           color?: string
@@ -986,6 +989,10 @@ export type Database = {
           total_users: number
         }[]
       }
+      can_read_child_doc: {
+        Args: { _path: string; _user_id: string }
+        Returns: boolean
+      }
       can_view_child: {
         Args: { _child_id: string; _user_id: string }
         Returns: boolean
@@ -1047,11 +1054,44 @@ export type Database = {
           vote_count: number
         }[]
       }
+      get_my_child_profiles: {
+        Args: never
+        Returns: {
+          avatar: string
+          birthdate: string
+          color: string
+          id: string
+          name: string
+          owner_id: string
+        }[]
+      }
+      get_my_child_schedule: {
+        Args: never
+        Returns: {
+          child_id: string
+          completed: boolean
+          created_at: string
+          date: string
+          file_path: string
+          id: string
+          kind: string
+          notes: string
+          owner_id: string
+          repeat: string
+          time: string
+          title: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_child_account_of_owner: {
+        Args: { _owner: string; _uid: string }
         Returns: boolean
       }
       is_household_member: {
