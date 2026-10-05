@@ -226,6 +226,45 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
         >
           {t("Inte nu")}
         </Button>
+        {confirmingDelete ? (
+          <>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                if (deleteItem(current)) {
+                  setConfirmingDelete(false);
+                  setJustDone(false);
+                  setHelping(false);
+                } else {
+                  // Källan går inte att ta bort här – visa ingen falsk bekräftelse.
+                  setConfirmingDelete(false);
+                }
+              }}
+              className="min-h-11 rounded-full"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden /> {t("Ja, ta bort")}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setConfirmingDelete(false)}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Behåll")}
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setConfirmingDelete(true)}
+            aria-label={t("Ta bort aktiviteten")}
+            className="min-h-11 rounded-full text-muted-foreground"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden /> {t("Ta bort")}
+          </Button>
+        )}
       </div>
       {!helping && (
         <button
