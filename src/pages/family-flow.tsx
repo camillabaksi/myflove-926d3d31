@@ -44,6 +44,9 @@ export default function FamilyFlowPage() {
     uploadDoc,
     copyDoc,
     openDoc,
+    isChildAccount,
+    members,
+    setChildAccount,
   } = useChildren();
   const [showSituation, setShowSituation] = useState(false);
   // Situationen (och dess logg) delas mellan flödet och översikten på sidan.
@@ -103,7 +106,8 @@ export default function FamilyFlowPage() {
               </p>
             </header>
 
-            <section aria-label={t("Barnen")} className="space-y-3">
+            {isChildAccount && <Link href="/kalender" className="flex min-h-14 items-center justify-between rounded-2xl border border-border bg-card px-4 font-semibold text-ink shadow-soft"><span>{t("Min kalender")}</span><span aria-hidden>›</span></Link>}
+            {!isChildAccount && <section aria-label={t("Barnen")} className="space-y-3">
               <h2 className="font-display text-lg font-bold text-ink">{t("Barnen")}</h2>
               {children.length === 0 && !loading && <p className="text-sm text-muted-foreground">{t("Inga barn tillagda än. Du kan använda Familj ändå.")}</p>}
               {loading ? <p className="text-sm text-muted-foreground">{t("Laddar...")}</p> : <ChildProfiles
