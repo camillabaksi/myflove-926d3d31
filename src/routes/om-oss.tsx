@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/om-oss")({
   head: () => ({
     meta: [
-      { title: "Om MyFlove – en lugnare vardag" },
+      { title: "Om MyFlove – your flow, with love" },
       { name: "description", content: "MyFlove hjälper dig att samla tankar, planera efter din energi och ta ett steg i taget." },
-      { property: "og:title", content: "Om MyFlove – en lugnare vardag" },
+      { property: "og:title", content: "Om MyFlove – your flow, with love" },
       { property: "og:description", content: "Ett mjukare sätt att planera vardagen, med omtanke om din energi och ditt fokus." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -1,5 +1,7 @@
 ## 2026-10-05
 
+- Landningssidan har nu en svensk/engelsk språkväxling, även för förhandsvisningarnas dialoger. Sloganen i webben och pitch-/blueprintdokumenten är "your flow, with love".
+
 - Familj/Dela: för kalender och listor väljer du "Hela familjen" (gäller även nya medlemmar) eller utvalda personer. För varje barnsak (aktivitet, uppgift, dokument) väljer du "Hela familjen" eller utvalda personer; barns egna konton är märkta "barnets konto" och ser bara själva saken, aldrig dina anteckningar eller barnprofilen. Spärrat i databasen.
 
 - Familj/barnkonto: en barnprofil kan kopplas till barnets eget konto. Barnet ser då sin visuella kalender direkt under Kalender (bara titta), men aldrig förälderns stöd, anteckningar, dokument eller syskons profiler – spärrat i databasen, inte bara dolt. Kopplingen begränsar bara förälderns barnprofiler: det kopplade kontot behåller alla egna verktyg på Familj (egna barnprofiler, situationshjälp). Det föräldern uttryckligen delar med kontot visas i rutan "Delat med dig" under Kalender – bara den posten, utan privata anteckningar, och aldrig dubbelt med schemat.

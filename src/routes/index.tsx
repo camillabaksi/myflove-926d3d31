@@ -8,6 +8,7 @@ import { DayWindow } from "@/components/landing/day-window";
 import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feature-demos";
 import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { LandingTranslateProvider } from "@/components/auto-translate-provider";
 import previewVideo from "@/assets/landing-intro-current.mp4.asset.json";
 import previewWebm from "@/assets/landing-intro-current.webm.asset.json";
 
@@ -58,6 +59,14 @@ const FEATURES = [
 
 function LandingPage() {
   const navigate = useNavigate();
+  const [lang, setLang] = useState<"sv" | "en">(() => {
+    if (typeof window === "undefined") return "sv";
+    try { return window.localStorage.getItem("myflove-landing-language") === "en" ? "en" : "sv"; } catch { return "sv"; }
+  });
+  const chooseLang = (next: "sv" | "en") => {
+    setLang(next);
+    try { window.localStorage.setItem("myflove-landing-language", next); } catch { /* storage unavailable */ }
+  };
   const [videoOpen, setVideoOpen] = useState(false);
   const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -86,8 +95,12 @@ function LandingPage() {
             <Link to="/om-oss" className="text-sm font-medium text-muted-foreground hover:text-primary">Om oss</Link>
           </nav>
           <div className="flex items-center justify-end gap-1 sm:gap-3">
-            <Button asChild variant="ghost" className="px-2 text-xs font-semibold text-foreground hover:text-primary sm:px-4 sm:text-sm"><Link to="/sign-in">Logga in</Link></Button>
-            <Button asChild size="lg" className="min-h-10 rounded-full px-4 shadow-soft sm:px-7"><Link to="/sign-up">Kom igång</Link></Button>
+            <div className="flex shrink-0 items-center gap-0.5" role="group" aria-label="Language / Språk" data-no-translate>
+              <Button type="button" variant="ghost" size="sm" aria-label="Svenska" title="Svenska" aria-pressed={lang === "sv"} onClick={() => chooseLang("sv")} className={`h-9 px-2 text-xs ${lang === "sv" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}>SV</Button>
+              <Button type="button" variant="ghost" size="sm" aria-label="English" title="English" aria-pressed={lang === "en"} onClick={() => chooseLang("en")} className={`h-9 px-2 text-xs ${lang === "en" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}>EN</Button>
+            </div>
+              <Button asChild variant="ghost" className="px-2 text-xs font-semibold text-foreground hover:text-primary sm:px-4 sm:text-sm"><Link to="/sign-in">Logga in</Link></Button>
+            <Button asChild size="lg" className="min-h-10 rounded-full px-3 shadow-soft sm:px-7"><Link to="/sign-up">Kom igång</Link></Button>
           </div>
         </div>
         <nav aria-label="Mobil meny" className="flex justify-center gap-6 border-t border-border/50 px-4 py-2 text-xs font-medium text-muted-foreground lg:hidden">
@@ -100,7 +113,7 @@ function LandingPage() {
       <section className="relative overflow-hidden bg-landing-background">
         <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 pt-10 pb-10 sm:px-8 lg:min-h-[525px] lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-7 lg:px-12 lg:pt-8 lg:pb-5">
           <div className="relative z-10 max-w-2xl">
-            <p className="mb-7 text-[11px] font-bold uppercase tracking-[0.19em] text-primary">En lugnare vardag är möjlig</p>
+            <p className="mb-7 text-[11px] font-bold uppercase tracking-[0.19em] text-primary">your flow, with love</p>
             <h1 className="font-display text-[2.4rem] leading-[1.15] font-extrabold sm:text-5xl lg:text-[3.2rem] xl:text-[3.65rem]">
               Vardagen ska kräva <span className="text-primary">mindre</span> av hjärnan
             </h1>
@@ -197,6 +210,7 @@ function LandingPage() {
           {videoOpen && <video controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-foreground" aria-label="MyFlove introduktionsfilm"><source src={previewWebm.url} type="video/webm" /><source src={previewVideo.url} type="video/mp4" /></video>}
         </DialogContent>
       </Dialog>
+      <LandingTranslateProvider lang={lang} />
     </main>
   );
 }

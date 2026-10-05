@@ -178,8 +178,7 @@ export function MenuPreviewDialog({
           Så ser menyn ut i MyFlove
         </DialogTitle>
         <DialogDescription className="text-sm leading-6 text-muted-foreground">
-          Allt du kan göra i appen – grupperat så det är lätt att hitta. Skapa
-          ett konto för att börja använda dem.
+          Allt du kan göra i appen – grupperat så det är lätt att hitta. Skapa ett konto för att börja använda dem.
         </DialogDescription>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
