@@ -43,16 +43,22 @@ export function useFlowItems(dateISO?: string): {
   /** Dagens saker som redan är genomförda. */
   todayDone: FlowItem[];
   toggleItem: (item: FlowItem) => void;
+  /**
+   * Tar bort saken helt från sin källa. Returnerar false om källan inte
+   * går att ta bort härifrån (rutiner, lektioner, barnaktiviteter och
+   * återkommande kalenderposter hanteras i sina egna vyer).
+   */
+  deleteItem: (item: FlowItem) => boolean;
 } {
-  const { tasks, toggleTask } = useTasks();
-  const { reminders, toggleReminder } = useReminders();
+  const { tasks, toggleTask, deleteTask } = useTasks();
+  const { reminders, toggleReminder, deleteReminder } = useReminders();
   const { lectures } = useStudySchedule();
   const targetDay = dateISO ?? todayISO();
   const isTodayView = targetDay === todayISO();
   const childEvents = useChildEvents(targetDay);
   const { toggleItem: toggleChildItem } = useChildren();
-  const { items: quickflowItems, complete, uncomplete } = useQuickflow();
-  const { items: priorityItems, update: updatePriority } = usePriorityList();
+  const { items: quickflowItems, complete, uncomplete, remove: removeQuickflow } = useQuickflow();
+  const { items: priorityItems, update: updatePriority, remove: removePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const { isInstanceDone, setInstanceDone } = useInstanceStatus();
@@ -401,5 +407,38 @@ export function useFlowItems(dateISO?: string): {
     ],
   );
 
-  return { items, today, todayOpen, todayDone, toggleItem };
+  /**
+   * EN borttagning för hela appen – varje källa raderar sin egen post.
+   * Rutiner, lektioner, barnaktiviteter och återkommande kalenderposter
+   * returnerar false: de ska ändras i sin egen vy, inte försvinna tyst.
+   */
+  const deleteItem = useCallback(
+    (item: FlowItem): boolean => {
+      const rest = item.id.slice(item.id.indexOf("-") + 1);
+      if (item.id.startsWith("task-")) {
+        deleteTask(rest);
+        return true;
+      }
+      if (item.id.startsWith("rem-")) {
+        const reminder = reminders.find((r) => r.id === rest);
+        // Återkommande poster tas bort i kalendern, så inte alla
+        // framtida förekomster försvinner av ett misstag här.
+        if (reminder && (reminder.repeat ?? "none") !== "none") return false;
+        deleteReminder(rest);
+        return true;
+      }
+      if (item.id.startsWith("qf-")) {
+        removeQuickflow(rest);
+        return true;
+      }
+      if (item.id.startsWith("prio-")) {
+        removePriority(item.id.slice(5));
+        return true;
+      }
+      return false;
+    },
+    [deleteTask, deleteReminder, reminders, removeQuickflow, removePriority],
+  );
+
+  return { items, today, todayOpen, todayDone, toggleItem, deleteItem };
 }

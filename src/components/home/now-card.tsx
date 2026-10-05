@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "wouter";
-import { CheckCircle2, Clock, Plus, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock, Plus, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import StartHelper from "@/components/home/start-helper";
@@ -32,8 +32,10 @@ function useNowMinutes(): number {
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const { t } = useLang();
-  const { toggleItem } = useFlowItems();
+  const { toggleItem, deleteItem } = useFlowItems();
   const [skipped, setSkipped] = useState<string[]>([]);
+  // Tvåstegsbekräftelse: första trycket frågar, andra tar bort.
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   // FlowPlan är enda källan för "vad nu" – samma som Nästa steg och Flow.
   const plan = useFlowPlan(skipped);
   const [justDone, setJustDone] = useState(false);
@@ -52,6 +54,11 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
     minsLeft !== null &&
     minsLeft <= PREP_WINDOW_MIN &&
     prepDismissed !== current.id;
+  // Ny aktivitet i rutan = återställ borttagningsbekräftelsen.
+  const currentId = current?.id ?? null;
+  useEffect(() => {
+    setConfirmingDelete(false);
+  }, [currentId]);
 
 
   if (landing !== "none") {
@@ -224,6 +231,45 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
         >
           {t("Inte nu")}
         </Button>
+        {confirmingDelete ? (
+          <>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                if (deleteItem(current)) {
+                  setConfirmingDelete(false);
+                  setJustDone(false);
+                  setHelping(false);
+                } else {
+                  // Källan går inte att ta bort här – visa ingen falsk bekräftelse.
+                  setConfirmingDelete(false);
+                }
+              }}
+              className="min-h-11 rounded-full"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden /> {t("Ja, ta bort")}
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setConfirmingDelete(false)}
+              className="min-h-11 rounded-full text-muted-foreground"
+            >
+              {t("Behåll")}
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setConfirmingDelete(true)}
+            aria-label={t("Ta bort aktiviteten")}
+            className="min-h-11 rounded-full text-muted-foreground"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden /> {t("Ta bort")}
+          </Button>
+        )}
       </div>
       {!helping && (
         <button
