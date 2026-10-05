@@ -282,7 +282,7 @@ export default function FamilyAreaSharing() {
                             onClick={() => {
                               const base = list ?? [];
                               const next = on ? base.filter((x) => x !== m.id) : [...base, m.id];
-                              void setAreaViewers(id, next.length === 0 ? null : next);
+                              void setAreaViewers(id, next);
                             }}
                           >
                             {m.name}
@@ -291,7 +291,7 @@ export default function FamilyAreaSharing() {
                       })}
                     </div>
                     <p className="text-[11px] text-muted-foreground">
-                      {list === null ? "Gäller även de som går med i familjen senare." : "Övriga i familjen ser inte detta."}
+                      {list === null ? "Gäller även de som går med i familjen senare." : list.length === 0 ? "Ingen vald – ingen i familjen ser detta än." : "Övriga i familjen ser inte detta."}
                     </p>
                   </div>
                 );
