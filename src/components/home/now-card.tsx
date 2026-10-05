@@ -54,6 +54,11 @@ export default function NowCard({ onAdd }: { onAdd: () => void }) {
     minsLeft !== null &&
     minsLeft <= PREP_WINDOW_MIN &&
     prepDismissed !== current.id;
+  // Ny aktivitet i rutan = återställ borttagningsbekräftelsen.
+  const currentId = current?.id ?? null;
+  useEffect(() => {
+    setConfirmingDelete(false);
+  }, [currentId]);
 
 
   if (landing !== "none") {
