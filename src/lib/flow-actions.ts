@@ -10,9 +10,10 @@ export type FlowActionKind =
   | "klar"
   | "ny"
   | "andra"
-  | "ta-bort";
+  | "ta-bort"
+  | "handla";
 
-const KINDS: FlowActionKind[] = ["flytta", "forenkla", "dela", "klar", "ny", "andra", "ta-bort"];
+const KINDS: FlowActionKind[] = ["flytta", "forenkla", "dela", "klar", "ny", "andra", "ta-bort", "handla"];
 
 export interface FlowAction {
   kind: FlowActionKind;
@@ -50,7 +51,7 @@ function toAction(raw: unknown): FlowAction | null {
   if (!kind || !KINDS.includes(kind)) return null;
   const time = asString(o.time);
   const title = asString(o.title)?.slice(0, 240);
-  if (kind === "ny" && !title) return null;
+  if ((kind === "ny" || kind === "handla") && !title) return null;
   const steps = Array.isArray(o.steps)
     ? o.steps.map((s) => asString(s)).filter((s): s is string => !!s)
     : undefined;
@@ -126,6 +127,7 @@ export const ACTION_LABEL: Record<FlowActionKind, string> = {
   ny: "Lägg till uppgift",
   andra: "Ändra uppgiften",
   "ta-bort": "Ta bort uppgiften",
+  handla: "Lägg på inköpslistan",
 };
 
 export const ACTION_EMOJI: Record<FlowActionKind, string> = {
@@ -136,6 +138,7 @@ export const ACTION_EMOJI: Record<FlowActionKind, string> = {
   ny: "➕",
   andra: "✏️",
   "ta-bort": "🗑️",
+  handla: "🛒",
 };
 
 export function actionCta(action: FlowAction): string {
@@ -154,5 +157,7 @@ export function actionCta(action: FlowAction): string {
       return "Ja, ändra";
     case "ta-bort":
       return "Ja, ta bort";
+    case "handla":
+      return "Ja, lägg till";
   }
 }

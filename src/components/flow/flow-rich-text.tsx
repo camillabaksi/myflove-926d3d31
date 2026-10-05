@@ -1,5 +1,6 @@
 import { Fragment, type ReactNode } from "react";
-import { CalendarClock, CheckCircle2, ListTree, Pencil, Plus, Sprout, Trash2 } from "lucide-react";
+import { CalendarClock, CheckCircle2, ListTree, Pencil, Plus, Sprout, ShoppingBasket,
+  Trash2 } from "lucide-react";
 import type { FlowActionKind } from "@/lib/flow-actions";
 
 /** Visar Flows svar med fetstil och punktlistor i stället för råa stjärntecken. */
@@ -51,6 +52,7 @@ const ACTION_ICONS = {
   ny: Plus,
   andra: Pencil,
   "ta-bort": Trash2,
+  handla: ShoppingBasket,
 } as const;
 
 /** Pictogram för Flows förslagskort – samma ikonstil som resten av appen. */
