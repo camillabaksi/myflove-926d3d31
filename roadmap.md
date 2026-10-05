@@ -1,5 +1,9 @@
 # Roadmap
 
+## Slogan och engelska på landningssidan (2026-10-05)
+- [ ] Byt slogan i aktuell landningssida och senaste pitchdeck/blueprint utan att ändra originalen.
+- [ ] Ge besökare språkval och översätt hela landningssidans exempel och dialoger till engelska; kontrollera mobil och dator.
+
 ## Pitchmaterial i uppladdade filmens design (2026-10-04)
 - [x] Anpassa svensk och engelsk pitch samt Living Blueprint till filmens lavendel/rosa formspråk, skrivstilsaccenter och grundarporträtt.
 - [x] Bevara innehåll och tidigare filer; granska alla 22 sidor i varje nytt dokument och samla version 6.4 i Files.

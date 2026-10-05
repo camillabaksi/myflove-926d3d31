@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Landningssidan: svensk/engelsk språkväxling och ny slogan 'your flow, with love' (2026-10-05)",
       "Familj: barnets eget konto ser sin kalender direkt, aldrig förälderns privata uppgifter om barnet (2026-10-05)",
       "Familj/Dela: välj hela familjen eller utvalda personer för listor och barnsaker (2026-10-05)",
       "Familj: kopplat konto behåller egna verktyg; uttryckligt delade poster visas under \"Delat med dig\" (2026-10-05)",

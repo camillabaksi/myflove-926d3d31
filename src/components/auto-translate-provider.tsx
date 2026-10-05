@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLang } from "@/hooks/use-language";
+import { LANDING_EN } from "@/lib/landing-translations";
 import {
   isTranslatable,
   lookupEnglish,
@@ -78,6 +79,15 @@ function restoreSwedish() {
 
 export default function AutoTranslateProvider() {
   const { lang } = useLang();
+  return <TranslationObserver lang={lang} publicOnly={false} />;
+}
+
+/** Public pages do not need account sync or the remote translation service. */
+export function LandingTranslateProvider({ lang }: { lang: "sv" | "en" }) {
+  return <TranslationObserver lang={lang} publicOnly />;
+}
+
+function TranslationObserver({ lang, publicOnly }: { lang: "sv" | "en"; publicOnly: boolean }) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -100,10 +110,10 @@ export default function AutoTranslateProvider() {
       const trailing = source.match(/\s*$/)?.[0] ?? "";
       const core = source.trim();
 
-      const en = lookupEnglish(core);
+      const en = publicOnly ? (LANDING_EN[core] ?? null) : lookupEnglish(core);
       if (!en) {
         originals.set(node, source);
-        queueForTranslation(core);
+        if (!publicOnly) queueForTranslation(core);
         return;
       }
       if (en === core) return;
@@ -121,11 +131,11 @@ export default function AutoTranslateProvider() {
         const store = attrOriginals.get(el) ?? {};
         const source = store[attr] ?? value;
         if (!isTranslatable(source)) continue;
-        const en = lookupEnglish(source.trim());
+        const en = publicOnly ? (LANDING_EN[source.trim()] ?? null) : lookupEnglish(source.trim());
         if (!en) {
           store[attr] = source;
           attrOriginals.set(el, store);
-          queueForTranslation(source.trim());
+          if (!publicOnly) queueForTranslation(source.trim());
           continue;
         }
         if (en === source || en === value) continue;
@@ -191,7 +201,7 @@ export default function AutoTranslateProvider() {
       off();
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [lang]);
+  }, [lang, publicOnly]);
 
   return null;
 }
