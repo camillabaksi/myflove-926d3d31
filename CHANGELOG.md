@@ -1,5 +1,7 @@
 ## 2026-10-05
 
+- Just nu-kortet på Hem har fått en "Ta bort"-knapp med tvåstegsbekräftelse ("Ja, ta bort" / "Behåll"). Uppgifter, kalenderposter, tankar och QuickFlow-poster tas bort från sin källa; rutiner, lektioner, barnaktiviteter och återkommande kalenderposter ändras fortfarande i sin egen vy.
+
 - Landningssidan har nu en svensk/engelsk språkväxling, även för förhandsvisningarnas dialoger. Sloganen i webben och pitch-/blueprintdokumenten är "your flow, with love".
 
 - Familj/Dela: för kalender och listor väljer du "Hela familjen" (gäller även nya medlemmar) eller utvalda personer. För varje barnsak (aktivitet, uppgift, dokument) väljer du "Hela familjen" eller utvalda personer; barns egna konton är märkta "barnets konto" och ser bara själva saken, aldrig dina anteckningar eller barnprofilen. Spärrat i databasen.
