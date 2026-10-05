@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "wouter";
-import { CheckCircle2, Clock, Plus, Sparkles } from "lucide-react";
+import { CheckCircle2, Clock, Plus, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import StartHelper from "@/components/home/start-helper";
@@ -32,8 +32,10 @@ function useNowMinutes(): number {
 /** "Just nu" – ÖPPNA → NU → GÖR → KLAR → NÄSTA. */
 export default function NowCard({ onAdd }: { onAdd: () => void }) {
   const { t } = useLang();
-  const { toggleItem } = useFlowItems();
+  const { toggleItem, deleteItem } = useFlowItems();
   const [skipped, setSkipped] = useState<string[]>([]);
+  // Tvåstegsbekräftelse: första trycket frågar, andra tar bort.
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   // FlowPlan är enda källan för "vad nu" – samma som Nästa steg och Flow.
   const plan = useFlowPlan(skipped);
   const [justDone, setJustDone] = useState(false);
