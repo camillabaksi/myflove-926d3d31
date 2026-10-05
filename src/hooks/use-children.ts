@@ -48,6 +48,8 @@ export interface ChildItem {
   sharedWith: string[];
   /** Ägarens val: vilka mottagare som får notiser om saken (user_id -> på/av) */
   shareNotify: Record<string, boolean>;
+  /** Delad med hela familjen, även framtida medlemmar (bara ägaren kan ändra). */
+  share_family?: boolean;
 }
 
 export interface FamilyMember {
@@ -146,7 +148,7 @@ async function loadAll(): Promise<void> {
           supabase
             .from("child_items")
             .select(
-              "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
+              "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family",
             )
             .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id, notify"),
@@ -313,7 +315,7 @@ async function fetchServerItem(id: string): Promise<ChildItem | null> {
   const { data } = await supabase
     .from("child_items")
     .select(
-      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
+      "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family",
     )
     .eq("id", id)
     .maybeSingle();
@@ -415,7 +417,7 @@ export function useChildren() {
         file_path: input.filePath || null,
       })
       .select(
-        "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at",
+        "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family",
       )
       .single();
     if (err) throw err;
@@ -515,6 +517,21 @@ export function useChildren() {
     }
   };
 
+  /** Hela familjen (true) eller bara utvalda personer (false). */
+  const setItemShareFamily = async (itemId: string, shareFamily: boolean) => {
+    setState((prev) => ({
+      items: prev.items.map((i) => (i.id === itemId ? { ...i, share_family: shareFamily } : i)),
+    }));
+    const { error: err } = await supabase
+      .from("child_items")
+      .update({ share_family: shareFamily })
+      .eq("id", itemId);
+    if (err) {
+      await loadAll();
+      throw err;
+    }
+  };
+
   /** Ägaren väljer om en mottagare ska få notiser om den delade saken. */
   const setItemShareNotify = async (itemId: string, userId: string, notify: boolean) => {
     setState((prev) => ({
@@ -590,6 +607,7 @@ export function useChildren() {
     toggleItem,
     deleteItem,
     setItemShares,
+    setItemShareFamily,
     setItemShareNotify,
     uploadDoc,
     copyDoc,
