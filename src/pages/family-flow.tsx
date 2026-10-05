@@ -88,7 +88,7 @@ export default function FamilyFlowPage() {
 
   if (profileChild) {
     return <Layout><MyFlovePageGrid area="hem"><MyFloveWide>
-      <ChildProfileDetail child={profileChild} canEdit={profileChild.owner_id === userId} onBack={() => setProfileChildId(null)} onSchedule={() => setScheduleChildId(profileChild.id)} onHelp={() => setHelpChildId(profileChild.id)} onUpdate={async (id, d) => updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })} onDelete={deleteChild} />
+      <ChildProfileDetail child={profileChild} canEdit={profileChild.owner_id === userId} members={members} onLinkAccount={setChildAccount} onBack={() => setProfileChildId(null)} onSchedule={() => setScheduleChildId(profileChild.id)} onHelp={() => setHelpChildId(profileChild.id)} onUpdate={async (id, d) => updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar })} onDelete={deleteChild} />
     </MyFloveWide></MyFlovePageGrid></Layout>;
   }
 
@@ -120,7 +120,7 @@ export default function FamilyFlowPage() {
                 onHelp={(child) => setHelpChildId(child.id)}
                 onSelect={(child) => setProfileChildId(child.id)}
               />}
-            </section>
+            </section>}
 
             <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Barnens nästa steg")}>
               <h2 className="font-display text-base font-bold text-ink">{t("Vad händer nu och sen?")}</h2>
@@ -132,10 +132,10 @@ export default function FamilyFlowPage() {
                   </div>
                 ))}</div>
               )}
-              <Button variant="link" className="mt-2 px-0" asChild><Link href="/barn">{t("Visa barnens dagar")}</Link></Button>
+              {!isChildAccount && <Button variant="link" className="mt-2 px-0" asChild><Link href="/barn">{t("Visa barnens dagar")}</Link></Button>}
             </section>
 
-            <section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
+            {!isChildAccount && <><section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
               <h2 className="text-base font-semibold text-ink">{t("Vad behöver fungera idag?")}</h2>
               <div className="flex flex-wrap gap-2">
                  <Button
@@ -163,7 +163,7 @@ export default function FamilyFlowPage() {
               onDelete={(id) =>
                 setSituationLog((prev) => (prev ?? []).filter((e) => e.id !== id))
               }
-            /></CollapsibleSection>
+            /></CollapsibleSection></>}
 
 
             {children.length > 0 && (
