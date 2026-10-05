@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLang } from "@/hooks/use-language";
 import { useToast } from "@/hooks/use-toast";
-import { CHILD_COLORS, type Child } from "@/hooks/use-children";
+import { CHILD_COLORS, type Child, type FamilyMember } from "@/hooks/use-children";
 import { CHILD_HELP_OPTIONS } from "@/lib/family-flow";
 import { cn } from "@/lib/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";

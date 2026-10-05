@@ -67,6 +67,7 @@ function ChildrenContent() {
     children,
     items,
     members,
+    setChildAccount,
     loading,
     error,
     reload,
