@@ -43,6 +43,12 @@ export function useFlowItems(dateISO?: string): {
   /** Dagens saker som redan är genomförda. */
   todayDone: FlowItem[];
   toggleItem: (item: FlowItem) => void;
+  /**
+   * Tar bort saken helt från sin källa. Returnerar false om källan inte
+   * går att ta bort härifrån (rutiner, lektioner, barnaktiviteter och
+   * återkommande kalenderposter hanteras i sina egna vyer).
+   */
+  deleteItem: (item: FlowItem) => boolean;
 } {
   const { tasks, toggleTask, deleteTask } = useTasks();
   const { reminders, toggleReminder, deleteReminder } = useReminders();
