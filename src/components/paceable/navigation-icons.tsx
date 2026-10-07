@@ -24,7 +24,7 @@ export function ThoughtsIcon({ size = 24, strokeWidth = 1.8, ...props }: IconPro
   return <svg {...shared(size, strokeWidth)} {...props}><path d="M7.2 5.8c1.3-1.5 4.3-1.9 6-.7 2.2-.4 4.5 1.1 4.7 3.2 1.6 1 2 3.2.7 4.7-.9 1.1-2.2 1.6-3.6 1.5-1.7 1.7-5.2 1.8-7 .2-2 .2-3.9-1.2-4-3.2-1.2-1.3-.8-3.4.7-4.3.5-.8 1.4-1.3 2.5-1.4Z" /><circle cx="6" cy="18" r="1.2" /><circle cx="3.4" cy="20.5" r=".55" /></svg>;
 }
 
-/** Ett öppet, organiskt eget utrymme med en liten öppning snett upptill. */
+/** Öppen rymdform: en böljande kontur som sveper inåt och lämnar en liten öppning snett upptill. */
 export function MyPlaceIcon({ size = 24, strokeWidth = 1.8, ...props }: IconProps) {
-  return <svg {...shared(size, strokeWidth)} {...props}><path d="M11.8 4.3C8.1 3.7 4.7 6.1 4.1 10.1c-.7 4.5 1.5 8.4 5.7 9.2 4.5.9 8.8-1.2 9.7-5.2.7-3.1-.7-6.4-3.9-8.3" /></svg>;
+  return <svg {...shared(size, strokeWidth)} {...props}><path d="M14.8 5.4C11 3.4 5.6 5.6 4.9 10.6 4.3 15 7.6 18.6 12 18.8c4.2.2 7.6-1.8 7.5-4.2-.1-1.8-2.9-1.6-3.9-2.9-.7-.9-.4-2.1.3-2.9" /></svg>;
 }

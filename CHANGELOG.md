@@ -1,5 +1,6 @@
 ## 2026-10-07
 
+- **Min plats-ikon**: Navigationen använder valt förslag B, Öppen rymdform.
 - **Paceable etapp 1D – tre slutdetaljer**: Min plats har en öppen organisk navkontur. Endast Idags aktivitetsrader får separatorer, liten områdesprick och sekundär metadata utan kapselkort/skugga/stor ikon. Checkbox/meny har 44 px tryckyta; klara poster behåller checkmark och genomstrykning utan animation. Svensk datumrubrik visar Onsdag 7 oktober. Färger, övriga ytor, Core, funktioner och data oförändrade. Ingen publicering.
 
 - **Paceable etapp 1C – egen färgidentitet**: Primärvyerna använder nu varm ivory, aubergine och flera mjuka accenter utan stark lila som universell handling eller markering. Capacity har en egen dämpad, oföränderlig ton; Kalenderns val är neutrala och tydliga. Antalet punkter och Pace-bladet är borttagna på Idag. Min plats har enklare öppna kurvor och tydligare beskrivning. Tankar är luftigare, använder Tankar-symbolen och har neutral importtext. Kalenderns många Hem-prickar verifierades som verkliga återkommande rutiner och var redan deduplicerade per område. Ingen Core-, data- eller routeändring. Ingen publicering.
