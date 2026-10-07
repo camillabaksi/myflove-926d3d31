@@ -24,7 +24,7 @@ export interface MyFloveBlockProps {
   /** Liten etikett ovanför rubriken, t.ex. "LOGGA". */
   eyebrow?: React.ReactNode;
   /** Ikon i rubrikraden – samma ikonsystem som resten av appen. */
-  icon?: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+  icon?: LucideIcon;
   /** Färgton på ikonrutan. */
   tone?: MyFloveTone;
   /** Knapp eller liknande längst till höger i rubrikraden. */
