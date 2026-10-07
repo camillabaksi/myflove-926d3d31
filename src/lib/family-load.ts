@@ -16,7 +16,7 @@ export interface FamilyLoadItem {
   endTime?: string;
   title: string;
   childName: string;
-  /** Odefinierad betyder "inte angivet" och räknas som att den gäller dig. */
+  /** Only explicitly chosen presence belongs to the parent's commitments. */
   requiresParent?: boolean;
   prepMinutes?: number;
   travelMinutes?: number;
@@ -71,7 +71,7 @@ export function itemMinutes(item: FamilyLoadItem): number {
 }
 
 export function requiresParent(item: FamilyLoadItem): boolean {
-  return item.requiresParent !== false;
+  return item.requiresParent === true;
 }
 
 export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {

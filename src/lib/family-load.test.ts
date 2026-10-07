@@ -18,13 +18,13 @@ describe("familjens belastning", () => {
     expect(load.upcoming).toHaveLength(1);
   });
 
-  it("saknad markering räknas som att den gäller föräldern", () => {
+  it("saknad markering räknas inte som att den gäller föräldern", () => {
     const load = buildFamilyLoad({
       items: [{ ...base, time: "15:00", title: "Träning" }],
       capacity: "medel",
       nowMinutes: 10 * 60,
     });
-    expect(load.requiring).toBe(1);
+    expect(load.requiring).toBe(0);
   });
 
   it("lägger till förberedelse och resa i tiden", () => {
@@ -35,7 +35,7 @@ describe("familjens belastning", () => {
 
   it("låg kapacitet gör en enda aktivitet krävande", () => {
     const load = buildFamilyLoad({
-      items: [{ ...base, time: "16:00", title: "Tandläkare" }],
+      items: [{ ...base, time: "16:00", title: "Tandläkare", requiresParent: true }],
       capacity: "låg",
       nowMinutes: 12 * 60,
       batteryPercent: 20,
@@ -52,7 +52,7 @@ describe("familjens belastning", () => {
 
   it("sätter aldrig energivärden i kontexten", () => {
     const load = buildFamilyLoad({
-      items: [{ ...base, time: "16:00", title: "Tandläkare", travelMinutes: 15, recoveryAfter: true }],
+      items: [{ ...base, time: "16:00", title: "Tandläkare", requiresParent: true, travelMinutes: 15, recoveryAfter: true }],
       capacity: "medel",
       nowMinutes: 600,
     });
