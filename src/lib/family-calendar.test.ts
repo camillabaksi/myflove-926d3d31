@@ -47,6 +47,16 @@ describe("family calendar layer", () => {
     expect(projectFamilyCalendar("2026-10-07", [child("bella")], [], schedules, "other")).toEqual([]);
     expect(JSON.stringify(projectFamilyCalendar("2026-10-07", [child("bella")], [], schedules, "parent"))).not.toContain("teacher");
   });
+  it("includes repeated activities until their registered end date, without expanding history", () => {
+    const activity = { ...item("a", "bella"), repeat: "weekdays" as const, notes: encodeVisualNotes({ pictogram: "school", category: "skola", tone: "sky", repeatUntil: "2026-10-09" }) };
+    expect(projectFamilyCalendar("2026-10-08", [child("bella")], [activity], {}, "parent")).toHaveLength(1);
+    expect(projectFamilyCalendar("2026-10-12", [child("bella")], [activity], {}, "parent")).toHaveLength(0);
+  });
+  it("honors registered travel/preparation without inventing missing durations", () => {
+    const context = { ...own("pickup", "16:30", "17:00"), source: "child" as const, requiresParent: true, prepMinutes: 10, travelMinutes: 15 };
+    expect(familyPlanningContext([context], "16:00", "16:15").presence).toHaveLength(1);
+    expect(familyPlanningContext([{ ...context, endTime: undefined }], "17:30", "18:00").presence).toHaveLength(0);
+  });
   it("advances by time even when activities were marked complete and separates untimed items", () => {
     const school = { time: "08:00", completed: true, notes: encodeVisualNotes({ pictogram: "school", category: "skola", tone: "sky", endTime: "14:00" }) };
     const sport = { time: "14:00", completed: false, notes: encodeVisualNotes({ pictogram: "exercise", category: "träning", tone: "mint", endTime: "15:00" }) };

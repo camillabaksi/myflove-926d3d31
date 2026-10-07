@@ -31,6 +31,7 @@ describe("familjens belastning", () => {
     expect(
       itemMinutes({ ...base, title: "Tandläkare", time: "16:00", endTime: "17:00", prepMinutes: 10, travelMinutes: 15 }),
     ).toBe(85);
+    expect(itemMinutes({ ...base, title: "Hämtning", time: "16:00" })).toBe(0);
   });
 
   it("låg kapacitet gör en enda aktivitet krävande", () => {
