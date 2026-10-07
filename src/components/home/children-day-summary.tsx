@@ -38,6 +38,7 @@ export default function ChildrenDaySummary() {
   if (!loading && visibleChildren.length === 0) return null;
 
   const markDone = async (item: ChildItem, child: Child) => {
+    if (item.kind !== "task") return;
     const done = !item.completed;
     try {
       await toggleItem(item.id, done);
@@ -128,7 +129,7 @@ export default function ChildrenDaySummary() {
                             key={item.id}
                             className={cn(
                               "min-w-0 rounded-2xl border border-border/50 bg-background/75 p-2",
-                              item.completed && "bg-muted/35 opacity-65",
+                              item.kind === "task" && item.completed && "bg-muted/35 opacity-65",
                             )}
                           >
                             <div className="flex min-w-0 items-center gap-1.5">
@@ -166,7 +167,7 @@ export default function ChildrenDaySummary() {
                                 </p>
                               </div>
                             </div>
-                             <p className={cn("font-handwritten mt-1.5 break-words text-xl font-semibold leading-tight text-ink", item.completed && "line-through")}>
+                             <p className={cn("font-handwritten mt-1.5 break-words text-xl font-semibold leading-tight text-ink", item.kind === "task" && item.completed && "line-through")}>
                               {item.title}
                             </p>
                           </li>

@@ -4,7 +4,6 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { childEventsForMyDay, linkLabelsByTask } from "@/lib/family-perspective";
-import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { normalizeQuickflowText } from "@/lib/quickflow";
@@ -56,7 +55,6 @@ export function useFlowItems(dateISO?: string): {
   const targetDay = dateISO ?? todayISO();
   const isTodayView = targetDay === todayISO();
   const childEvents = useChildEvents(targetDay);
-  const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete, remove: removeQuickflow } = useQuickflow();
   const { items: priorityItems, update: updatePriority, remove: removePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
@@ -395,7 +393,6 @@ export function useFlowItems(dateISO?: string): {
       reminders,
       setInstanceDone,
       targetDay,
-      toggleChildItem,
       complete,
       uncomplete,
       toggleDone,
