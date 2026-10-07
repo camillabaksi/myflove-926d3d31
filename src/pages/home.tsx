@@ -3,9 +3,7 @@ import QuickAddSheet from "@/components/quick-add-sheet";
 import NowCard from "@/components/home/now-card";
 import CloseDay from "@/components/home/close-day";
 import TomorrowWithFlow from "@/components/home/tomorrow-with-flow";
-import MorningCheckin from "@/components/home/morning-checkin";
 
-import CapacityPlanCard from "@/components/home/capacity-plan-card";
 import HomePriorityActions from "@/components/home/priority-actions";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -22,7 +20,6 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useNotes } from "@/hooks/use-notes";
@@ -60,8 +57,6 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   const { name, setName, lastVisit } = useUserProfile();
   const { t } = useLang();
-  const { mode: capacityMode } = useCapacityMode();
-  const isLowCapacity = capacityMode === "lagt";
   const [editingName, setEditingName] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(name);
@@ -199,11 +194,9 @@ export default function Home() {
             )}
 
             <div className="mt-4 space-y-4">
-              <MorningCheckin />
               <NowCard onAdd={() => setAddOpen(true)} />
               <TomorrowWithFlow />
-              {shows("lage") && <CapacityPlanCard />}
-              {!isLowCapacity && shows("checklista") && (
+              {shows("checklista") && (
               <CollapsibleSection
                 id="home-daily-checklist"
                 title={t("Dagens checklista")}
@@ -216,7 +209,7 @@ export default function Home() {
               </CollapsibleSection>
               )}
 
-              {!isLowCapacity && shows("barnens-dag") && (
+              {shows("barnens-dag") && (
                 <div data-npf="optional">
                   <ChildrenDaySummary />
                 </div>

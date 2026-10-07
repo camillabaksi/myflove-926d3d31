@@ -22,7 +22,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
-  const { t } = useLang();
+  const { t, locale } = useLang();
   const { name } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
   useEffect(() => {
@@ -38,7 +38,7 @@ export function TodayContent() {
   const calendarEntries = applyFamilyPresence(days[today] ?? [], familyPreferences);
   const pace = deriveDayPace({ date: today, today, capacity: dayCapacity.percent, entries: calendarEntries });
   const { today: todaysItems } = useFlowItems();
-  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString("sv-SE", {
+  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString(locale, {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -52,7 +52,6 @@ export function TodayContent() {
         <h1 className="mt-1 font-handwritten break-words text-4xl font-semibold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
         <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
         <TodayCapacity percent={dayCapacity.percent} />
-        </section>
       </MyFloveWide>
 
       <MyFloveWide>

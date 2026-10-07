@@ -11,7 +11,6 @@ import { MyFloveBlock } from "@/components/myflove/block";
 import { useLang } from "@/hooks/use-language";
 
 import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
 
 const MOODS = MOOD_FACES;
 
@@ -102,7 +101,6 @@ export default function SimpleCheckin({
   };
 
   const ork = orkFromValue10(battery);
-  const { setMode: setCapacity } = useCapacityMode();
 
   return (
     <MyFloveBlock
@@ -144,7 +142,6 @@ export default function SimpleCheckin({
               onClick={() => {
                 markStarted("battery");
                 setBattery(l.value10);
-                setCapacity(l.id);
               }}
               className={cn(
                 "flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-medium transition-all",
