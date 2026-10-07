@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "wouter";
 import { ArrowDown, ArrowRight, ArrowUp, CheckCircle2, ChevronDown, Circle, Link2, Video } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
@@ -37,6 +37,7 @@ export function DailyFlowList({
   onCompleted,
   previewCount,
   dayHeadings = false,
+  presentation = "card",
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -45,7 +46,10 @@ export function DailyFlowList({
   previewCount?: number;
   /** Lugn översikt på Min dag, utan att skapa ytterligare en lista. */
   dayHeadings?: boolean;
+  /** Today-only presentation; no changes to data or actions. */
+  presentation?: "card" | "integrated";
 }) {
+  const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
   const [expanded, setExpanded] = useState(false);
 
@@ -174,27 +178,27 @@ export function DailyFlowList({
                   <span className="h-px flex-1 bg-primary/40" aria-hidden />
                 </div>
               )}
-              <MyFloveTransition transitionKey={String(item.done)}>
+              <ActivityRowTransition quiet={integrated} transitionKey={String(item.done)}>
                 <div
                   className={cn(
-                    "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
-                    item.done && "bg-muted/35 opacity-70",
+                    integrated ? "relative min-w-0 py-2" : "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
+                    !integrated && item.done && "bg-muted/35 opacity-70",
                   )}
-                  style={visualColor ? { borderLeft: `4px solid ${visualColor}` } : undefined}
+                  style={!integrated && visualColor ? { borderLeft: `4px solid ${visualColor}` } : undefined}
                 >
-                  <div className="grid min-w-0 grid-cols-[2.5rem_2.75rem_minmax(0,1fr)_auto] items-center gap-2 sm:grid-cols-[3rem_3rem_minmax(0,1fr)_auto] sm:gap-3">
+                  <div className={cn("grid min-w-0 items-center", integrated ? "grid-cols-[2.5rem_0.5rem_minmax(0,1fr)_2.75rem] gap-1.5 sm:gap-2" : "grid-cols-[2.5rem_2.75rem_minmax(0,1fr)_auto] gap-2 sm:grid-cols-[3rem_3rem_minmax(0,1fr)_auto] sm:gap-3")}>
                     <span className="text-center text-xs font-semibold tabular-nums text-muted-foreground sm:text-sm">
                       {item.time ?? ""}
                     </span>
-                    <ActivityPictogram
+                    {integrated ? <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" style={visualColor ? { backgroundColor: visualColor } : undefined} aria-hidden /> : <ActivityPictogram
                       id={visual.pictogram}
                       tone={visual.tone}
                       className="h-11 w-11 rounded-xl sm:h-12 sm:w-12"
                       iconClassName="h-6 w-6 sm:h-7 sm:w-7"
                       style={visualColor ? { color: visualColor } : undefined}
-                    />
+                    />}
                     <div className="min-w-0">
-                      <div className="flex min-w-0 items-start gap-1">
+                      <div className={cn("flex min-w-0 gap-1", integrated ? "items-center" : "items-start")}>
                         {item.completable && (
                           <Button
                             type="button"
@@ -206,17 +210,17 @@ export function DailyFlowList({
                               if (!wasDone) onCompleted?.(item);
                             }}
                             aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
-                            className="-ml-1 h-8 w-8 rounded-full text-muted-foreground hover:text-primary"
+                            className={cn("-ml-1 shrink-0 rounded-full text-muted-foreground hover:text-primary", integrated ? "h-11 w-11" : "h-8 w-8")}
                           >
-                            {item.done ? <CheckCircle2 className="text-primary" /> : <Circle />}
+                            {item.done ? <CheckCircle2 className={integrated ? "text-muted-foreground" : "text-primary"} /> : <Circle />}
                           </Button>
                         )}
-                        <p className={cn("font-display min-w-0 flex-1 break-words pt-0.5 text-xl font-semibold leading-tight text-ink", item.done && "line-through")}>
+                        <p className={cn("font-display min-w-0 flex-1 break-words leading-snug", integrated ? "text-base font-semibold text-ink" : "pt-0.5 text-xl font-semibold text-ink", item.done && "line-through", integrated && item.done && "font-normal text-muted-foreground")}>
                           {item.title}
                         </p>
                       </div>
-                      <div className={cn("mt-1 flex min-w-0 flex-wrap items-center gap-1.5", item.completable && "sm:pl-7")}>
-                        <span className="rounded-full border px-2 py-0.5 text-[10px] font-semibold" style={visualChip}>
+                      <div className={cn("flex min-w-0 flex-wrap items-center gap-1.5", integrated ? "mt-0.5" : "mt-1", item.completable && (integrated ? "pl-11" : "sm:pl-7"))}>
+                        <span className={integrated ? "text-xs text-muted-foreground" : "rounded-full border px-2 py-0.5 text-[10px] font-semibold"} style={integrated ? undefined : visualChip}>
                           {visual.label}
                         </span>
                         <span className="text-[10px] font-medium text-muted-foreground">
@@ -235,7 +239,7 @@ export function DailyFlowList({
                           href={item.meetingUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={cn("mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary", item.completable && "sm:ml-7")}
+                          className={cn("mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary", item.completable && (integrated ? "ml-11" : "sm:ml-7"))}
                         >
                           <Video size={13} aria-hidden />
                           {/zoom\.us/i.test(item.meetingUrl) ? "Anslut till Zoom" : /meet\.google/i.test(item.meetingUrl) ? "Anslut till Meet" : "Anslut till Teams"}
@@ -247,7 +251,7 @@ export function DailyFlowList({
                       duplicateIds={duplicatesByKey.get(itemKey(item))}
                       size={14}
                       compact
-                      className="h-9 w-9 text-muted-foreground"
+                      className={cn("text-muted-foreground", integrated ? "h-11 w-11" : "h-9 w-9")}
                     >
                       <DropdownMenuItem onSelect={() => move(index, -1)} disabled={index === 0}>
                         <ArrowUp /> Flytta upp
@@ -265,7 +269,7 @@ export function DailyFlowList({
                     </FlowItemActions>
                   </div>
                 </div>
-              </MyFloveTransition>
+              </ActivityRowTransition>
             </li>
           );
         })}
@@ -304,6 +308,10 @@ export function DailyFlowList({
       </Dialog>
     </>
   );
+}
+
+function ActivityRowTransition({ quiet, transitionKey, children }: { quiet: boolean; transitionKey: string; children: ReactNode }) {
+  return quiet ? <>{children}</> : <MyFloveTransition transitionKey={transitionKey}>{children}</MyFloveTransition>;
 }
 
 export default DailyFlowList;
