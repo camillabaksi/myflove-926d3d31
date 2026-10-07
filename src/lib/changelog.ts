@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Familjelager i kalendern (2026-10-07): Min dag, Min dag + familj och Familjeöversikt med barnval och grupperade aktiviteter. Barnens tider är diskret kontext utan avbockning eller automatisk belastning; Behöver mig är uttryckligt och beaktas i planeringen. Barnschemats Nu/Sedan/Sen följer tiden utan prestationskrav. Befintliga uppgifter, lagring och rättigheter bevaras. Ingen publicering.",
       "Kalender, områdesfärger (2026-10-07): mjuka områdesfärger på bakgrund, kant och ikon i månad, vecka och dag, med områdesnamn och färgnyckel. QuickFlows sparade område följer med; energipåverkan ändrar inte områdesfärgen. Aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Hem, fyra kompakta rutor (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow direkt under hälsningen. Samma incheckningsbaserade batterivärde som kalendern, eller – utan data. Befintlig måendelogg, Just nu, aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Samlad kalender (2026-10-07): filter, veckomål och frivillig incheckning integreras i den visuella kalendern; kalenderkoppling och dagens befintliga verktyg får tydliga knappar. Ingen dubbel kalender eller konkurrerande batteri; aktiviteter och behörigheter bevaras. Inte publicerat.",

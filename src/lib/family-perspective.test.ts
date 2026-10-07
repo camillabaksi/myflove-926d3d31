@@ -102,6 +102,12 @@ describe("Kopplingar", () => {
 });
 
 describe("Nu/Nästa", () => {
+  it("barnets tidsfokus beror inte på tidigare klar-markering", () => {
+    const entries: TimelineEntry[] = [{ key: "school", personId: "child", time: "08:00", endTime: "14:00", title: "Skola", completed: true }, { key: "sport", personId: "child", time: "14:00", endTime: "15:00", title: "Idrott" }];
+    expect(nowNextFor(entries, 630)).toEqual({ now: "school", next: "sport" });
+    expect(nowNextFor(entries, 840)).toEqual({ now: "sport", next: null });
+    expect(nowNextFor(entries, 901)).toEqual({ now: null, next: null });
+  });
   it("väljer pågående och nästa utifrån tid", () => {
     const entries = [me("08:00", "A", "a"), me("09:00", "B", "b"), me("10:00", "C", "c")];
     expect(nowNextFor(entries, 8 * 60 + 30)).toEqual({ now: "task-a", next: "task-b" });

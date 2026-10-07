@@ -199,8 +199,8 @@ export function useFlowItems(dateISO?: string): {
         daysUntil: 0,
         priority: priorityFor({ time: e.time, daysUntil: 0, fixed: true }),
         nextStep: e.place ? `Plats: ${e.place}` : undefined,
-        done: e.itemId ? !!e.completed : isDone(id),
-        completable: true,
+        done: false,
+        completable: false,
         href: "/barn",
         linkedLabel: `${e.childName} – ${e.title}`,
       });

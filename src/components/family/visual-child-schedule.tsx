@@ -30,12 +30,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useLang } from "@/hooks/use-language";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { addDaysISO, parseISODate, todayISO } from "@/lib/day";
-import { capacityFromScore } from "@/lib/adaptive-activity";
 import {
   ACTIVITY_BANK,
   CATEGORY_LABELS,
@@ -51,7 +49,6 @@ import {
   encodeVisualNotes,
   PREP_MINUTE_CHOICES,
   TRAVEL_MINUTE_CHOICES,
-  getScheduleGuidance,
   pictogramForActivity,
   searchActivityBank,
   shiftEndTime,
@@ -69,7 +66,6 @@ import {
 } from "@/lib/child-visual-schedule";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import type { ChildScheduleTemplate } from "@/lib/child-schedule-templates";
-import { emitActivityDone } from "@/lib/activity-energy-event";
 import type { Child, ChildItem, ChildItemPatch } from "@/hooks/use-children";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 import { isoWeekNumberFromString } from "@/lib/iso-week";
@@ -167,9 +163,6 @@ export default function VisualChildSchedule({
   readOnly?: boolean;
 }) {
   const { t, locale } = useLang();
-  const capacity = useCapacityMode();
-  // Kapacitetsläget (användarens val) är källan – inte FlowScore.
-  const flow = { score: capacity.percent, capacityMinutes: capacity.minutes, suggestedTasks: capacity.suggestedTasks };
   const { openItems: quickItems, absorb } = useQuickflow();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);
@@ -224,11 +217,11 @@ export default function VisualChildSchedule({
   const todaySchoolEntries = schoolEntries
     .filter((entry) => entry.weekday === todayWeekday)
     .sort((a, b) => a.start.localeCompare(b.start));
-  const openToday = todayItems.filter((item) => !item.completed);
+  const schoolAsActivities: ChildItem[] = todaySchoolEntries.map(entry => ({ id: `school-${entry.id}`, child_id: child.id, owner_id: child.owner_id, kind: "activity", title: entry.title, date: dayDate, time: entry.start, notes: encodeVisualNotes({ pictogram: "school", category: "skola", tone: "sky", endTime: entry.end }), completed: false, remind: false, repeat: "weekly", file_path: null, created_at: "", updated_at: "", sharedWith: [], shareNotify: {} }));
+  const openToday = [...todayItems, ...schoolAsActivities];
   const { current, next } = isViewingToday ? pickNowNext(openToday, nowMinutes) : { current: null, next: null };
+  const later = openToday.filter(item => item.time && item.id !== next?.id && minutesUntilTime(item.time, nowMinutes) > 0).sort((a, b) => (a.time ?? "").localeCompare(b.time ?? ""))[0];
   const nextPrompt = next?.time ? transitionPrompt(next.title, minutesUntilTime(next.time, nowMinutes)) : null;
-  const score = typeof flow?.score === "number" ? flow.score : null;
-  const guidance = getScheduleGuidance(openToday.length, capacityFromScore(score));
   const wantsWarning = child.helps.includes("Förvarna vid förändringar");
   const quickMatches = quickItems.filter((item) => item.text.toLocaleLowerCase("sv").includes(child.name.toLocaleLowerCase("sv")));
   const pickerItems = useMemo(() => searchActivityBank(search, pickerCategory === "alla" ? undefined : pickerCategory), [search, pickerCategory]);
@@ -248,7 +241,9 @@ export default function VisualChildSchedule({
     const index = list.findIndex((item) => item.id === id);
     const target = index + direction;
     if (index < 0 || target < 0 || target >= list.length) return;
-    [list[index], list[target]] = [list[target]!, list[index]!];
+    const source = list[index], destination = list[target];
+    if (!source || !destination) return;
+    [list[index], list[target]] = [destination, source];
     for (const [position, item] of list.entries()) {
       const decoded = decodeVisualNotes(item.notes);
       if (decoded.meta.order === position) continue;
@@ -321,7 +316,6 @@ export default function VisualChildSchedule({
   const markDone = async (item: ChildItem) => {
     if (readOnly) return;
     await toggleItem(item.id, !item.completed);
-    if (!item.completed) emitActivityDone({ id: `child-${item.id}`, title: item.title, ...(item.date ? { dueDate: item.date } : {}) });
   };
 
   const toggleSelected = (id: string) => {
@@ -513,32 +507,25 @@ export default function VisualChildSchedule({
 
       {mode === "today" ? (
         <div className="space-y-5">
-          {current ? (
+          {(current || next) ? (
             <section className="space-y-3 rounded-2xl border border-border bg-card p-3" aria-label={t("Nu och nästa") }>
               <div className="flex items-center gap-3">
-                <span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
+                {current && <><span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
                 <ActivityVisual item={current} openDoc={openDoc} />
                  <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="font-display text-lg font-bold text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
-                {!readOnly && <Button type="button" onClick={() => void markDone(current)} className="h-11 rounded-full px-4"><Check size={18} /> {t("Klar")}</Button>}
+                </>}
               </div>
               {next && (
                 <div className="border-t border-primary/15 pt-3">
-                  <p className="text-xs font-bold uppercase text-muted-foreground">{t("Nästa")}</p>
+                  <p className="text-xs font-bold uppercase text-muted-foreground">{t("Sedan")}</p>
                    <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
                   {wantsWarning && nextPrompt && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{nextPrompt}</p>}
                 </div>
               )}
+              {later && <div className="border-t border-border pt-3"><p className="text-xs font-bold uppercase text-muted-foreground">{t("Sen")}</p><p className="mt-1 font-semibold">{later.title}</p><p className="text-sm text-muted-foreground">{later.time?.slice(0, 5)}</p></div>}
             </section>
           ) : (
-            <div className="rounded-2xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{isViewingToday ? t(todayItems.length ? "Allt är klart för idag." : "Inget inlagt idag än.") : t(todayItems.length ? "Allt är klart för dagen." : "Inget inlagt den här dagen än.")}</p></div>
-          )}
-
-          {guidance.message && (
-            <section className="rounded-2xl border border-border bg-blush/35 p-4">
-              <p className="font-semibold text-ink"><Sparkles size={16} className="mr-1 inline text-primary" />{t(guidance.message)}</p>
-              {guidance.recovery && <p className="mt-1 text-sm text-muted-foreground">{t(guidance.recovery)}</p>}
-              {!readOnly && <Button type="button" variant="outline" onClick={() => openAdd(ACTIVITY_BANK.återhämtning.find((item) => item.pictogram === "quiet"), today)} className="mt-3 h-11 rounded-2xl">{t("Lägg in lugn stund")}</Button>}
-            </section>
+            <div className="rounded-2xl bg-mint/45 p-5 text-center"><CheckCircle2 className="mx-auto mb-2 text-primary" /><p className="font-semibold text-ink">{isViewingToday ? t(todayItems.length ? "Dagens tider har passerat. Schemat finns kvar nedan." : "Inget inlagt idag än.") : t(todayItems.length ? "Dagens schema finns nedan." : "Inget inlagt den här dagen än.")}</p></div>
           )}
 
           {todaySchoolEntries.length > 0 && (
@@ -557,16 +544,16 @@ export default function VisualChildSchedule({
           )}
 
           <div className="space-y-4">
-            {(["Morgon", "Dag", "Efter skolan", "Kväll"] as const).map((part) => {
-              const partItems = todayItems.filter((item) => dayPart(item.time) === part);
+            {(["Morgon", "Dag", "Efter skolan", "Kväll", "Utan tid"] as const).map((part) => {
+              const partItems = todayItems.filter((item) => (item.time ? dayPart(item.time) : "Utan tid") === part);
               if (partItems.length === 0) return null;
                return <section key={part}><h3 className="mb-2 text-sm font-bold text-ink">{t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
                 const isCurrent = current?.id === item.id;
                 const isNext = next?.id === item.id;
                  const category = decodeVisualNotes(item.notes).meta.category;
-                 return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", CATEGORY_STYLES[category].subtle, item.completed && "opacity-60", (isCurrent || isNext) && "ring-1 ring-primary/30")}>
-                   {selectionMode ? <Button type="button" variant={selectedIds.includes(item.id) ? "default" : "outline"} size="icon" onClick={() => toggleSelected(item.id)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t("Välj aktivitet")}><Check size={16} /></Button> : <Button type="button" variant="ghost" size="icon" disabled={readOnly} onClick={() => void markDone(item)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t(item.completed ? "Markera som inte klar" : "Markera som klar")}>{item.completed ? <CheckCircle2 className="text-primary" /> : isCurrent ? <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">›</span> : <span className="h-5 w-5 rounded-full border-2 border-muted-foreground" />}</Button>}
-                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={cn("font-semibold text-ink", item.completed && "line-through")}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Kräver dig")}` : ""}</p></div>{!selectionMode && !readOnly && <div className="flex shrink-0"><div className="flex flex-col"><Button type="button" variant="ghost" size="icon" disabled={todayItems[0]?.id === item.id} onClick={() => void reorderItem(item.id, -1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta upp")}><ChevronUp size={14} /></Button><Button type="button" variant="ghost" size="icon" disabled={todayItems[todayItems.length - 1]?.id === item.id} onClick={() => void reorderItem(item.id, 1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta ner")}><ChevronDown size={14} /></Button></div><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item, dayDate)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
+                 return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", CATEGORY_STYLES[category].subtle, (isCurrent || isNext) && "ring-1 ring-primary/30")}>
+                   {selectionMode ? <Button type="button" variant={selectedIds.includes(item.id) ? "default" : "outline"} size="icon" onClick={() => toggleSelected(item.id)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t("Välj aktivitet")}><Check size={16} /></Button> : null}
+                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={"font-semibold text-ink"}>{item.title}</p><p className="text-xs text-muted-foreground">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""} · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Behöver mig")}` : ""}</p></div>{!selectionMode && !readOnly && <div className="flex shrink-0"><div className="flex flex-col"><Button type="button" variant="ghost" size="icon" disabled={todayItems[0]?.id === item.id} onClick={() => void reorderItem(item.id, -1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta upp")}><ChevronUp size={14} /></Button><Button type="button" variant="ghost" size="icon" disabled={todayItems[todayItems.length - 1]?.id === item.id} onClick={() => void reorderItem(item.id, 1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta ner")}><ChevronDown size={14} /></Button></div><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item, dayDate)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
               })}</ul></section>;
             })}
           </div>
@@ -582,7 +569,7 @@ export default function VisualChildSchedule({
             {dates.map((date, index) => {
                const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
                const recurring = schoolEntries.filter((entry) => entry.weekday === index);
-                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 rounded-xl p-1 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex items-start justify-between gap-0.5"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="min-w-0 flex-1 rounded-md text-center hover:bg-card/60"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-6 w-6 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-sky bg-sky/30 p-1 text-center shadow-sm"><ActivityPictogram id="school" tone="sky" className="mx-auto h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={`${item.id}-${date}`} type="button" variant="ghost" draggable={!selectionMode && !readOnly} onDragStart={(event) => event.dataTransfer.setData("text/plain", item.id)} onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border p-1 text-center shadow-sm", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary", item.completed && "opacity-50")}><ActivityPictogram id={pictogramForActivity(item.title, meta.pictogram)} tone={meta.tone} className="h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><span className={cn("block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs", item.completed && "line-through")}>{item.title}</span><span className="hidden text-[8px] text-muted-foreground sm:block">{contextLabel(meta)}</span></Button>; })}{!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}</div></section>;
+                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 rounded-xl p-1 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex items-start justify-between gap-0.5"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="min-w-0 flex-1 rounded-md text-center hover:bg-card/60"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-6 w-6 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-sky bg-sky/30 p-1 text-center shadow-sm"><ActivityPictogram id="school" tone="sky" className="mx-auto h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={`${item.id}-${date}`} type="button" variant="ghost" draggable={!selectionMode && !readOnly} onDragStart={(event) => event.dataTransfer.setData("text/plain", item.id)} onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border p-1 text-center shadow-sm", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}><ActivityPictogram id={pictogramForActivity(item.title, meta.pictogram)} tone={meta.tone} className="h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><span className={"block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs"}>{item.title}</span><span className="hidden text-[8px] text-muted-foreground sm:block">{contextLabel(meta)}</span></Button>; })}{!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}</div></section>;
             })}
           </div>
           {!readOnly && <><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-11 w-full rounded-xl"><Plus size={16} /> {t("Lägg till aktivitet")}</Button>
@@ -620,18 +607,18 @@ export default function VisualChildSchedule({
           <DialogTitle className="sr-only">{t(editing ? "Ändra aktivitet" : "Lägg till aktivitet")}</DialogTitle>
         <form onSubmit={saveDraft} className="min-w-0 space-y-4">
           <h3 className="pr-8 font-display text-lg font-bold text-ink">{t(editing ? "Ändra aktivitet" : "Lägg till aktivitet")}</h3>
-          <Accordion type="single" collapsible defaultValue={editing ? undefined : "bank"} className="rounded-2xl border border-border bg-card px-3"><AccordionItem value="bank" className="border-0"><AccordionTrigger>{t(editing ? "Byt pictogram" : "Pictogram")}</AccordionTrigger><AccordionContent><div className="space-y-3"><div className="relative"><Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" /><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("Sök aktivitet") } className="h-11 rounded-xl pl-9" /></div><div className="flex gap-1.5 overflow-x-auto pb-1"><Button type="button" variant={pickerCategory === "alla" ? "default" : "outline"} onClick={() => setPickerCategory("alla")} className="h-9 shrink-0 rounded-full px-3">{t("Alla")}</Button>{CATEGORY_KEYS.map((category) => <Button key={category} type="button" variant={pickerCategory === category ? "default" : "outline"} onClick={() => setPickerCategory(category)} className="h-9 shrink-0 rounded-full px-3">{t(CATEGORY_LABELS[category])}</Button>)}</div><div className="grid max-h-[40dvh] grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-4">{pickerItems.map((preset) => <Button key={`${preset.category}-${preset.title}`} type="button" variant="outline" onClick={() => setDraft((currentDraft) => ({ ...currentDraft, ...(!editing ? { title: preset.title } : {}), meta: { ...preset, ...(currentDraft.endTime ? { endTime: currentDraft.endTime } : {}) } }))} className={cn("h-auto min-h-20 min-w-0 flex-col whitespace-normal rounded-xl px-1 py-2", CATEGORY_STYLES[preset.category].subtle, draft.meta.pictogram === preset.pictogram && "ring-2 ring-primary")}><ActivityPictogram id={preset.pictogram} tone={preset.tone} className="h-10 w-10" iconClassName="h-6 w-6" /><span className="text-xs">{t(preset.title)}</span></Button>)}</div>{pickerItems.length === 0 && <p className="py-3 text-center text-sm text-muted-foreground">{t("Inga pictogram hittades.")}</p>}</div></AccordionContent></AccordionItem></Accordion>
+          <Accordion type="single" collapsible defaultValue={editing ? undefined : "bank"} className="rounded-2xl border border-border bg-card px-3"><AccordionItem value="bank" className="border-0"><AccordionTrigger>{t(editing ? "Byt pictogram" : "Pictogram")}</AccordionTrigger><AccordionContent><div className="space-y-3"><div className="relative"><Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" /><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("Sök aktivitet") } className="h-11 rounded-xl pl-9" /></div><div className="flex gap-1.5 overflow-x-auto pb-1"><Button type="button" variant={pickerCategory === "alla" ? "default" : "outline"} onClick={() => setPickerCategory("alla")} className="h-9 shrink-0 rounded-full px-3">{t("Alla")}</Button>{CATEGORY_KEYS.map((category) => <Button key={category} type="button" variant={pickerCategory === category ? "default" : "outline"} onClick={() => setPickerCategory(category)} className="h-9 shrink-0 rounded-full px-3">{t(CATEGORY_LABELS[category])}</Button>)}</div><div className="grid max-h-[40dvh] grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-4">{pickerItems.map((preset) => <Button key={`${preset.category}-${preset.title}`} type="button" variant="outline" onClick={() => setDraft((currentDraft) => ({ ...currentDraft, ...(!editing ? { title: preset.title } : {}), meta: { ...currentDraft.meta, ...preset, ...(currentDraft.endTime ? { endTime: currentDraft.endTime } : {}) } }))} className={cn("h-auto min-h-20 min-w-0 flex-col whitespace-normal rounded-xl px-1 py-2", CATEGORY_STYLES[preset.category].subtle, draft.meta.pictogram === preset.pictogram && "ring-2 ring-primary")}><ActivityPictogram id={preset.pictogram} tone={preset.tone} className="h-10 w-10" iconClassName="h-6 w-6" /><span className="text-xs">{t(preset.title)}</span></Button>)}</div>{pickerItems.length === 0 && <p className="py-3 text-center text-sm text-muted-foreground">{t("Inga pictogram hittades.")}</p>}</div></AccordionContent></AccordionItem></Accordion>
           <Input value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder={t("Aktivitetens namn")} className="h-12 rounded-2xl" />
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3"><label className="col-span-2 space-y-1 text-sm font-medium text-ink sm:col-span-1"><span>{t("Dag")}</span><Input type="date" value={draft.date} onChange={(event) => setDraft({ ...draft, date: event.target.value })} className="h-12 rounded-2xl" />{/^\d{4}-\d{2}-\d{2}$/.test(draft.date) && <span className="block text-xs font-semibold text-primary">{new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(draft.date))}</span>}</label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Starttid")}</span><Input type="time" value={draft.time} onChange={(event) => setDraft({ ...draft, time: event.target.value })} className="h-12 rounded-2xl" /></label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Sluttid")}</span><Input type="time" value={draft.endTime} onChange={(event) => setDraft({ ...draft, endTime: event.target.value })} className="h-12 rounded-2xl" /></label></div>
           <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"><ActivityPictogram id={draft.meta.pictogram} tone={draft.meta.tone} /><div><p className="text-sm font-semibold text-ink">{t("Valt pictogram")}</p><p className="text-xs text-muted-foreground">{t(CATEGORY_LABELS[draft.meta.category])}</p></div></div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2"><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Område")}</span><select value={draft.meta.category} onChange={(event) => { const category = event.target.value as VisualActivityCategory; setDraft({ ...draft, meta: { ...draft.meta, category, ...(category === "familj" ? { familyLabel: draft.meta.familyLabel ?? "shared" } : { familyLabel: undefined }) } }); }} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES[draft.meta.category].subtle)}>{CATEGORY_KEYS.map((category) => <option key={category} value={category}>{t(CATEGORY_LABELS[category])}</option>)}</select></label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Återkommer")}</span><select value={draft.repeat} onChange={(event) => setDraft({ ...draft, repeat: event.target.value as ChildRepeatMode })} className="h-12 w-full rounded-2xl border border-border bg-card px-3"><option value="none">{t("Inte återkommande")}</option><option value="daily">{t("Varje dag")}</option><option value="weekdays">{t("Vardagar")}</option><option value="weekly">{t("Varje vecka")}</option></select></label></div>
           {draft.meta.category === "familj" && <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Gäller inom Familj")}</span><select value={draft.meta.familyLabel ?? "shared"} onChange={(event) => setDraft({ ...draft, meta: { ...draft.meta, familyLabel: event.target.value as FamilyActivityLabel } })} className={cn("h-12 w-full rounded-2xl border px-3", CATEGORY_STYLES.familj.subtle)}><option value="child">{t(`Barn · ${child.name}`)}</option><option value="shared">{t("Familj gemensamt")}</option><option value="caregiver">{t("Förälder/omsorg")}</option></select></label>}
           <div className="space-y-3 rounded-2xl border border-border bg-muted/40 p-3">
-            <p className="text-sm font-semibold text-ink">{t("Kräver mig")}</p>
+            <p className="text-sm font-semibold text-ink">{t("Behöver mig")}</p>
             <p className="text-xs text-muted-foreground">{t("Frivilligt. Handlar om dig, inte om barnet.")}</p>
             <label className="flex items-center justify-between gap-2 text-sm text-ink">
               <span>{t("Jag behöver vara med")}</span>
-              <Switch checked={draft.meta.parentPresence !== false} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, parentPresence: checked } })} />
+              <Switch checked={draft.meta.parentPresence === true} onCheckedChange={(checked) => setDraft({ ...draft, meta: { ...draft.meta, parentPresence: checked } })} />
             </label>
             <div className="grid grid-cols-2 gap-2">
               <label className="space-y-1 text-sm font-medium text-ink"><span>{t("Förberedelse")}</span>
@@ -658,7 +645,7 @@ export default function VisualChildSchedule({
           <div className="grid grid-cols-2 gap-2"><Button type="button" variant="outline" onClick={() => void deviceAccessReady().then((ok) => (ok ? cameraRef.current?.click() : toast.error(UPDATE_APP_FOR_DEVICE_ACCESS)))} className="h-12 rounded-2xl"><Camera size={17} /> {t("Ta foto")}</Button><Button type="button" variant="outline" onClick={() => galleryRef.current?.click()} className="h-12 rounded-2xl"><ImagePlus size={17} /> {t("Egna bilder")}</Button></div>
           {draft.file && <p className="truncate text-xs text-muted-foreground">{draft.file.name}</p>}
           <p className="text-xs text-muted-foreground">{t("Bilden är privat och öppnas bara med en tillfällig säker länk.")}</p>
-          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim()} className="h-12 rounded-2xl">{saving ? t("Sparar...") : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
+          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim()} className="h-12 rounded-2xl">{saving ? t("Sparar...") : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="ghost" onClick={() => void markDone(editing)} className="h-12 rounded-2xl"><Check size={16} />{t(editing.completed ? "Ångra klar-markering" : "Markera klar (valfritt)")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
           <p className="flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays size={13} /> {t("Aktiviteten visas också i familjens vanliga dag och kalender.")}</p>
         </form>
         </DialogContent>

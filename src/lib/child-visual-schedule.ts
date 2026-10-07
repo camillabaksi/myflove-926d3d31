@@ -339,15 +339,16 @@ export function transitionPrompt(title: string, minutes: number): string | null 
  * (vars sluttid inte passerat); annars första öppna. Nästa = första öppna
  * aktivitet som startar efter nu.
  */
-export function pickNowNext<T extends { time: string | null; notes?: string | null }>(open: T[], nowMinutes: number): { current: T | null; next: T | null } {
-  const started = open.filter((item) => {
-    if (!item.time) return false;
-    if (minutesUntilTime(item.time, nowMinutes) > 0) return false;
-    const end = decodeVisualNotes(item.notes ?? null).meta.endTime;
-    return !end || minutesUntilTime(end, nowMinutes) > 0;
-  });
-  const current = started[started.length - 1] ?? open.find((item) => !item.time) ?? open.find((item) => item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? open[0] ?? null;
-  const next = open.find((item) => item !== current && item.time && minutesUntilTime(item.time, nowMinutes) > 0) ?? null;
+export function pickNowNext<T extends { time: string | null; notes?: string | null }>(items: T[], nowMinutes: number): { current: T | null; next: T | null } {
+  const timed = items.filter(item => minutesFromTime(item.time) !== null).sort((a, b) => (a.time ?? "").localeCompare(b.time ?? ""));
+  const current = timed.filter((item, index) => {
+    const start = minutesFromTime(item.time);
+    const explicitEnd = minutesFromTime(decodeVisualNotes(item.notes).meta.endTime);
+    const nextStart = minutesFromTime(timed[index + 1]?.time);
+    const end = explicitEnd ?? nextStart;
+    return start !== null && start <= nowMinutes && (end === null || end > nowMinutes);
+  }).at(-1) ?? null;
+  const next = timed.find(item => (minutesFromTime(item.time) ?? -1) > nowMinutes) ?? null;
   return { current, next };
 }
 

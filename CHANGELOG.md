@@ -1,5 +1,7 @@
 ## 2026-10-07
 
+- **Familjelager i kalendern** (2026-10-07): Min dag, Min dag + familj och Familjeöversikt, med barnval och gruppering av identiska aktiviteter. Egna aktiviteter prioriteras, barnens tider är diskret kontext utan avbockning eller automatisk belastning. Behöver mig kräver uttrycklig närvaromarkering och beaktas vid planeringsfrågor och säkra tidsluckor. Barnschemats Nu/Sedan/Sen följer tiden utan krav på klar-markering; barnaktiviteter ger inga föräldraprestationer. Befintlig lagring, kontoseparering och rättigheter bevaras. Belastningen är fortsatt kvalitativ, utan nya procentberäkningar. Ingen publicering.
+
 - **Kalender, områdesfärger** (2026-10-07): Aktiviteter får mjukt tonad bakgrund, färgad kant och ikon efter sitt befintliga livsområde i månad, vecka och dag. Områdesnamn och en kompakt färgnyckel kompletterar färgerna. QuickFlows sparade område följer med; energipåverkan ändrar inte områdesfärgen. Aktiviteter och behörigheter är oförändrade. Ingen publicering.
 
 - **Hem, fyra kompakta rutor** (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow ligger direkt under hälsningen. Batteriet visar samma incheckningsbaserade värde som kalendern, eller ”–” när data saknas. Måendeloggen öppnar det befintliga formuläret; Just nu och övrigt innehåll finns kvar. Aktiviteter, energiberäkning och behörigheter är oförändrade. Ingen publicering.

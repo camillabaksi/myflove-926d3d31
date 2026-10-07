@@ -7,7 +7,8 @@ import { usePriorityList } from "@/hooks/use-priority-list";
 import { useChildren } from "@/hooks/use-children";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { occursOn, type Routine } from "@/lib/recurrence";
-import { repeatUntilFromNotes } from "@/lib/child-visual-schedule";
+import { projectFamilyCalendar } from "@/lib/family-calendar";
+import type { ChildScheduleEntry } from "@/components/child-schedule";
 import { useCalendarConnection, useExternalEvents } from "@/hooks/use-calendar-sync";
 import { useGetMyHousehold, useListFamilyEvents, getGetMyHouseholdQueryKey, getListFamilyEventsQueryKey } from "@workspace/api-client-react";
 import { projectCalendar, type CalendarEntry } from "@/lib/visual-calendar";
@@ -23,7 +24,8 @@ export function useVisualCalendar(dates: string[]) {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const [doneLog] = useCloudSyncedStorage<Record<string, string[]>>("myflove-done-log", {});
   const { items: childItems, children } = useChildren();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
+  const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>("myflove-child-schedules", {});
   const { data: household } = useGetMyHousehold({ query: { queryKey: getGetMyHouseholdQueryKey(), enabled: !!isSignedIn } });
   const { data: family = [] } = useListFamilyEvents({ query: { queryKey: getListFamilyEventsQueryKey(), enabled: !!isSignedIn && !!household?.id } });
   const connection = useCalendarConnection();
@@ -43,14 +45,7 @@ export function useVisualCalendar(dates: string[]) {
         id: `f-${e.id}`, sourceId: String(e.id), source: "family", title: e.title,
         date, time: e.time ?? undefined, editable: false, done: false, href: "/familj", label: "Familj",
       });
-      // These are existing RLS-visible items, never the linked account's private parent profile.
-      for (const e of childItems) {
-        if (e.kind !== "activity" || !occursOn(e.date, e.repeat, date)) continue;
-        if (e.repeat !== "none" && (repeatUntilFromNotes(e.notes) ?? "9999") < date) continue;
-        out.push({ id: `c-${e.id}`, sourceId: e.id, source: "child", title: e.title,
-          date, time: e.time?.slice(0, 5), done: e.completed, editable: false,
-          href: "/barn", label: children.find(c => c.id === e.child_id)?.name ?? "Delad aktivitet" });
-      }
+      out.push(...projectFamilyCalendar(date, children, childItems, schedules, user?.id));
       for (const e of external.data?.events ?? []) if (e.date === date) out.push({
         id: `external-${e.provider}-${e.id}`, sourceId: e.id, source: "external", title: e.title,
         date, time: e.time, endTime: e.endTime, done: false, editable: false,
@@ -61,6 +56,11 @@ export function useVisualCalendar(dates: string[]) {
       result[date] = [...unique.values()].sort((a, b) => (a.time ?? "99").localeCompare(b.time ?? "99"));
     }
     return result;
-  }, [dates, tasks, reminders, lectures, quickflow, priority, routines, doneLog, childItems, children, family, external.data, isInstanceDone]);
-  return { days, externalError: external.error, externalLoading: external.isFetching };
+  }, [dates, tasks, reminders, lectures, quickflow, priority, routines, doneLog, childItems, children, family, external.data, isInstanceDone, schedules, user?.id]);
+  const familyMembers = useMemo(() => {
+    const members = new Map(children.map(c => [c.id, { id: c.id, name: c.name }]));
+    for (const item of childItems) if (item.kind === "activity" && !members.has(item.child_id)) members.set(item.child_id, { id: item.child_id, name: "Delad barnaktivitet" });
+    return [...members.values()];
+  }, [children, childItems]);
+  return { days, familyMembers, externalError: external.error, externalLoading: external.isFetching };
 }
