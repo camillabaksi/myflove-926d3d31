@@ -481,7 +481,7 @@ export function CalendarContent() {
   }));
 
   return (
-    <CalendarPlanner tools={
+    <CalendarPlanner onDateChange={setSelectedDateStr} tools={
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
         <div>
