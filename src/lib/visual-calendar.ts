@@ -23,7 +23,14 @@ export interface CalendarEntry {
   recurring?: boolean;
   href?: string;
   label?: string;
+  familyMembers?: Array<{ id: string; name: string }>;
+  requiresParent?: boolean;
+  parentTaskId?: string;
+  prepMinutes?: number;
+  travelMinutes?: number;
 }
+export function isFamilyEntry(entry: CalendarEntry): boolean { return entry.source === "child" || entry.source === "family"; }
+export function requiresCalendarTime(entry: CalendarEntry): boolean { return !isFamilyEntry(entry) || entry.requiresParent === true; }
 export function calendarDate(date: Date): string { return todayISO(date); }
 export function shiftDate(date: string, days: number): string {
   const d = new Date(`${date}T12:00:00`);
@@ -117,7 +124,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
 export interface CalendarGap { start: number; end: number; minutes: number }
 /** Only claim gaps after known end times; unknown durations are not guessed. */
 export function calendarGaps(items: CalendarEntry[]): CalendarGap[] {
-  const timed = items.filter(i => minuteOf(i.time) !== null).sort((a, b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0));
+  const timed = items.filter(i => requiresCalendarTime(i) && minuteOf(i.time) !== null).sort((a, b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0));
   const gaps: CalendarGap[] = [];
   let end: number | null = null;
   let uncertain = false;
@@ -132,7 +139,7 @@ export function calendarGaps(items: CalendarEntry[]): CalendarGap[] {
   return gaps;
 }
 export function calendarLoad(items: CalendarEntry[]): { label: string; segments: number; unknown: number } {
-  const open = items.filter(i => !i.done);
+  const open = items.filter(i => !i.done && requiresCalendarTime(i));
   const known = open.filter(i => i.energyImpact && i.energyImpact !== "unknown");
   const unknown = open.length - known.length;
   const drains = known.filter(i => i.energyImpact === "drains" || i.energyImpact === "both");
