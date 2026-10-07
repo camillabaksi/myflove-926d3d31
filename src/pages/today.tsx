@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { Bell, Plus } from "lucide-react";
+import { Bell, Plus, Sun } from "lucide-react";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
@@ -48,42 +49,47 @@ export function TodayContent() {
     <MyFlovePageGrid area="idag">
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
-        <p className="text-xs font-semibold uppercase text-primary">{t("Din dag, i din takt")}</p>
-        <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
-        <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
-        <TodayCapacity percent={dayCapacity.percent} />
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
+            <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
+            <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
+          </div>
+          <PaceableStones compact className="mt-1 h-10 w-20 shrink-0" />
+        </div>
+        <div className="mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="rounded-3xl border border-border bg-card px-4 py-5 shadow-soft sm:px-5" aria-labelledby="your-day-title">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 pb-3">
+        <section className="pt-4" aria-labelledby="your-day-title">
+          <header className="flex flex-wrap items-end justify-between gap-3 pb-2">
             <div>
-              <h2 id="your-day-title" className="font-display text-xl font-bold text-ink">{t("Din dag")}</h2>
+              <h2 id="your-day-title" className="font-display text-2xl font-bold text-ink">{t("Din dag")}</h2>
               <p className="text-xs text-muted-foreground">
                 {todaysItems.length} {todaysItems.length === 1 ? t("punkt") : t("punkter")}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-1">
               <Button asChild size="sm" className="rounded-full">
                 <Link href="/lagg-till">
                   <Plus size={15} /> {t("Lägg till")}
                 </Link>
               </Button>
-              <Button asChild size="sm" variant="outline" className="rounded-full">
+              <Button asChild size="sm" variant="ghost" className="rounded-full text-muted-foreground hover:text-ink">
                 <Link href="/paminnelser">
                   <Bell size={15} /> {t("Påminnelse")}
                 </Link>
               </Button>
-              <CopyDayButton date={today} className="inline-flex h-9 items-center gap-1.5 rounded-full border border-input bg-background px-3 text-sm font-medium hover:bg-secondary/50" />
+              <CopyDayButton date={today} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-ink" />
             </div>
           </header>
-          <div className="pt-3">
-             <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings />} />
+          <div className="pt-2">
+            <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings />} />
           </div>
         </section>
       </MyFloveWide>
 
-      <MyFloveWide>
+      <MyFloveWide className="pt-4">
         <TodayPace pace={pace} />
       </MyFloveWide>
     </MyFlovePageGrid>
