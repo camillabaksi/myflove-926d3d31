@@ -13,7 +13,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
-import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
 
 /**

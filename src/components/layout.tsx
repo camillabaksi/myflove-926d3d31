@@ -476,7 +476,7 @@ export default function Layout({ children }: LayoutProps) {
       href: "/installningar",
       label: "Inställningar",
       icon: Settings2,
-      hint: "Anpassa MyFlove, konto och appens inställningar",
+      hint: "Anpassa Paceable, konto och appens inställningar",
       essential: true,
     },
   ].map((i) => ({ ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) }));
@@ -1087,7 +1087,7 @@ export default function Layout({ children }: LayoutProps) {
                       href: "/installningar",
                       label: "Inställningar",
                       icon: Settings2,
-                      hint: "Anpassa MyFlove, konto och appens inställningar",
+                      hint: "Anpassa Paceable, konto och appens inställningar",
                     }}
                     isActive={location === "/installningar"}
                     onClick={closeMenu}

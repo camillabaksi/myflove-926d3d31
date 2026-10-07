@@ -30,6 +30,7 @@ export const EN: Record<string, string> = {
   Idag: "Today",
   Tankar: "Thoughts",
   "Min plats": "My space",
+  "Anpassa Paceable, konto och appens inställningar": "Customise Paceable, your account and app settings",
   "Huvudnavigation": "Main navigation",
   Hälsa: "Health",
   "Mitt batteri": "My battery",
