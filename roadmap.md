@@ -1,5 +1,12 @@
 # Roadmap
 
+## Paceable etapp 1C — slutlig visuell polish (2026-10-07)
+- [x] Separera CTA-, selected-, navigation- och Capacity-färger utan att skapa en ny universell huvudfärg.
+- [x] Förenkla Idag, Pace, Min plats-symbol/header och Tankars presentation/copy utan Core- eller dataändring.
+- [x] Verifiera kalenderprickarnas orsak och korrigera endast ett påvisat presentationsfel.
+- [x] Kör tester, typkontroll och preview-bygge; kontrollera 360/390 px och desktop, reduced motion, fokus och kontrast.
+- [x] Ta nya 390 px-skärmbilder av Idag, Kalender, Tankar, Min plats samt närbild av Min plats aktiv. Ingen publicering.
+
 ## Paceable rebrand etapp 1 (2026-10-07)
 - [x] Ta emot visuell riktning och skyddsgränser; kartlägg befintlig design/navigation för en konkret plan.
 - [x] Visa implementationsplan och invänta godkännande — godkänd med förtydliganden om aktiv QuickFlow-route, återanvändbara SVG-stenar och visuell stoppregel.

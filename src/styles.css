@@ -53,6 +53,7 @@
   --color-sky: hsl(var(--sky));
   --color-sun: hsl(var(--sun));
   --color-sun-ink: hsl(var(--sun-ink));
+  --color-capacity: hsl(var(--capacity));
 
   /* Enbart marknadsföringssidan; appens globala lila palett lämnas orörd. */
   --color-landing-background: var(--landing-background);
@@ -157,6 +158,7 @@
   --sun: 45 82% 88%;
   --sun-ink: 38 78% 46%;
   --sand: 37 30% 88%;
+  --capacity: 267 27% 73%;
   --stone-lavender: #cfc0e4;
   --stone-apricot: #eaa88f;
   --stone-sage: #aecdb4;
@@ -177,6 +179,43 @@
   --border-strong: 2px solid hsl(var(--border));
   --border-dashed: 2px dashed hsl(var(--border));
   --border-accent: 2px solid hsl(var(--primary) / 0.35);
+}
+
+/* Primary Paceable surfaces stay consistent without changing saved legacy themes. */
+[data-paceable-surface="true"] {
+  --background: 45 29% 97%;
+  --foreground: 276 19% 21%;
+  --card: 40 100% 99%;
+  --card-foreground: 276 19% 21%;
+  --primary: 276 19% 21%;
+  --primary-foreground: 45 29% 97%;
+  --secondary: 37 30% 94%;
+  --secondary-foreground: 276 19% 21%;
+  --accent: 267 32% 93%;
+  --accent-foreground: 276 19% 21%;
+  --ring: 276 19% 21%;
+  --lavender: 267 32% 92%;
+  --capacity: 267 27% 73%;
+}
+
+.dark [data-paceable-surface="true"] {
+  --background: 276 16% 10%;
+  --foreground: 40 24% 93%;
+  --card: 276 13% 14%;
+  --card-foreground: 40 24% 93%;
+  --primary: 40 24% 93%;
+  --primary-foreground: 276 24% 13%;
+  --secondary: 276 12% 19%;
+  --secondary-foreground: 40 24% 93%;
+  --accent: 264 18% 23%;
+  --accent-foreground: 40 24% 93%;
+  --ring: 267 30% 72%;
+  --lavender: 264 18% 23%;
+  --capacity: 267 24% 64%;
+}
+
+.paceable-my-place-header {
+  background-image: linear-gradient(135deg, hsl(var(--sky) / 0.48), hsl(var(--card)) 55%, hsl(var(--blush) / 0.38));
 }
 
 @keyframes calm-breathe {

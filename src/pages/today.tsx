@@ -11,7 +11,6 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import { Button } from "@/components/ui/button";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
-import { useFlowItems } from "@/hooks/use-flow-items";
 import { useLang } from "@/hooks/use-language";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useVisualCalendar } from "@/hooks/use-visual-calendar";
@@ -38,7 +37,6 @@ export function TodayContent() {
   const dayCapacity = capacityOf(today);
   const calendarEntries = applyFamilyPresence(days[today] ?? [], familyPreferences);
   const pace = deriveDayPace({ date: today, today, capacity: dayCapacity.percent, entries: calendarEntries });
-  const { today: todaysItems } = useFlowItems();
   const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString(locale, {
     weekday: "long",
     day: "numeric",
@@ -65,9 +63,6 @@ export function TodayContent() {
           <header className="flex flex-wrap items-end justify-between gap-3 pb-2">
             <div>
               <h2 id="your-day-title" className="font-display text-2xl font-bold text-ink">{t("Din dag")}</h2>
-              <p className="text-xs text-muted-foreground">
-                {todaysItems.length} {todaysItems.length === 1 ? t("punkt") : t("punkter")}
-              </p>
             </div>
             <div className="flex flex-wrap items-center gap-1">
               <Button asChild size="sm" className="rounded-full">

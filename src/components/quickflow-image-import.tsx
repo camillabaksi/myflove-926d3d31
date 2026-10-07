@@ -268,7 +268,7 @@ export function QuickflowImageImport() {
           <span className="min-w-0 flex-1">
             <span className="block font-semibold text-ink">Importera till kalendern</span>
             <span className="block text-sm text-muted-foreground">
-              Bild, screenshot, PDF eller dokument → Flow hittar möten och deadlines.
+              Bild, screenshot, PDF eller dokument. Möten och deadlines kan identifieras i innehållet.
             </span>
           </span>
         </div>

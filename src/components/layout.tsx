@@ -164,7 +164,6 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
   "/pomodoro": T.terracotta,
   "/fokus": T.terracotta,
   "/finances": T.gold,
-  "/kalender": T.ink,
   "/flowplan": T.ink,
   "/flow": T.ink,
   "/flowscore": T.ink,
@@ -184,6 +183,8 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
     "--accent-foreground": "285 45% 30%",
   },
 };
+
+const PACEABLE_PATHS = new Set(["/idag", "/kalender", "/quickflow", "/halsa"]);
 
 import QuickflowFab from "@/components/quickflow-fab";
 import QuickflowCapture from "@/components/quickflow-capture";
@@ -644,7 +645,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
+    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
       {/* Desktop Sidebar */}
       <nav className="hidden md:flex flex-col w-56 border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto">
         <div className="mb-5 flex items-center justify-between gap-2 px-1 py-1">
@@ -858,7 +859,7 @@ export default function Layout({ children }: LayoutProps) {
         <div
           ref={mainScrollRef}
           className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
-          style={CATEGORY_THEMES[location] as React.CSSProperties}
+          style={PACEABLE_PATHS.has(location) ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
@@ -929,7 +930,7 @@ export default function Layout({ children }: LayoutProps) {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-current={mobileMenuOpen ? "page" : undefined}
             className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
-              mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
+              mobileMenuOpen ? "text-ink" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <span
@@ -1169,7 +1170,7 @@ function BottomNavLink({
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
-        active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+        active ? "text-ink" : "text-muted-foreground hover:text-foreground"
       }`}
     >
       <span

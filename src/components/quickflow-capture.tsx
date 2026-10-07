@@ -3,7 +3,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import QuickflowImageImport from "@/components/quickflow-image-import";
 import {
-  Brain,
   Calendar,
   Check,
   Loader2,
@@ -17,6 +16,7 @@ import {
   Clock,
   Zap,
 } from "lucide-react";
+import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -257,11 +257,11 @@ export function QuickflowCapture({
                 : "w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0"
             }
           >
-            <Brain size={24} />
+            <ThoughtsIcon size={24} />
           </span>
           {variant === "compact" ? (
             <>
-              <Brain size={16} /> {t("Skriv eller prata")}
+              <ThoughtsIcon size={16} /> {t("Skriv eller prata")}
             </>
           ) : (
             <span className="flex-1 min-w-0">
