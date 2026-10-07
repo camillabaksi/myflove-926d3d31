@@ -1,5 +1,11 @@
 # Roadmap
 
+## Paceable etapp 1D — detaljpolish (2026-10-07)
+- [ ] Visa avgränsad plan och invänta godkännande.
+- [ ] Ändra endast Min plats-navsymbol, Idags aktivitetsrader och svensk datumtypografi; bevara Etapp 1C och all funktionalitet.
+- [ ] Verifiera hela testsviten, separat typkontroll, automatiskt bygge och Idag/nav på mobil och desktop.
+- [ ] Dokumentera och leverera tre nya 390 px-bilder efter verifiering; inga ändringar därefter och ingen publicering.
+
 ## Paceable etapp 1C — slutlig visuell polish (2026-10-07)
 - [x] Separera CTA-, selected-, navigation- och Capacity-färger utan att skapa en ny universell huvudfärg.
 - [x] Förenkla Idag, Pace, Min plats-symbol/header och Tankars presentation/copy utan Core- eller dataändring.
