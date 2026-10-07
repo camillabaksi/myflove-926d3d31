@@ -1,3 +1,8 @@
+## 2026-10-07
+
+- **Visuell kalender** (2026-10-07): Månad, vecka och dag visar gemensamma befintliga datakällor med tidsblock, oschemalagda saker, kända tidsluckor och kapacitetsläge utan påhittade procenttal. Egna engångsposter kan planeras/flyttas med ångra; energipåverkan är valfri och notiser slås inte på automatiskt. Familjens behörigheter och separat skrivskyddat föräldraschema bevaras. Ingenting publicerat.
+- Kalendergranskning: överlapp samlas i öppningsbara grupper, korta poster får läsbara tryckytor, vald dag följer med till äldre kalenderval och registrerad energi visas separat. Upprepade avbockningar använder befintlig journal. Datum/luft/överlapplogik och mobil-/datorvyer kontrollerade; inga testposter sparade i användarkontot. Draghandtag för längd och fullständig skriv-/fler-enhetsverifiering ingår inte i denna etapp.
+
 ## 2026-10-05
 
 - Just nu-kortet på Hem har fått en "Ta bort"-knapp med tvåstegsbekräftelse ("Ja, ta bort" / "Behåll"). Uppgifter, kalenderposter, tankar och QuickFlow-poster tas bort från sin källa; rutiner, lektioner, barnaktiviteter och återkommande kalenderposter ändras fortfarande i sin egen vy.

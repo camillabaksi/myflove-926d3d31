@@ -768,6 +768,7 @@ export interface Reminder {
   endDate?: string;
   time?: string; // HH:MM
   endTime?: string; // HH:MM, valfri sluttid
+  energyImpact?: Task["energyImpact"];
   completed: boolean;
   createdAt: number;
   repeat?: RepeatMode; // default 'none'
@@ -790,6 +791,7 @@ export function useReminders() {
     note?: string,
     area?: LifeArea,
     endDate?: string,
+    energyImpact?: Task["energyImpact"],
   ) => {
     setReminders([
       {
@@ -799,6 +801,7 @@ export function useReminders() {
         endDate: endDate && endDate > date ? endDate : undefined,
         time,
         endTime,
+        energyImpact,
         completed: false,
         createdAt: Date.now(),
         repeat,
@@ -829,14 +832,15 @@ export function useReminders() {
       endDate?: string | undefined;
       time?: string | undefined;
       endTime?: string | undefined;
+      energyImpact?: Task["energyImpact"];
       repeat?: RepeatMode;
       remindMinutesBefore?: number | undefined;
       note?: string | undefined;
       area?: LifeArea;
     },
   ) => {
-    setReminders(
-      reminders.map((r) => {
+    setReminders((prev) =>
+      prev.map((r) => {
         if (r.id !== id) return r;
         const next: Reminder = { ...r, ...patch };
         if (next.endDate && next.endDate <= next.date) next.endDate = undefined;

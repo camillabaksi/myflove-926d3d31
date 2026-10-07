@@ -35,7 +35,7 @@ export function DayHub({ tab }: { tab: DayTab }) {
 
   return (
     <Layout>
-      <nav
+      {tab !== "kalender" && <nav
         aria-label={t("Dagens planering")}
         className="mb-4 grid grid-cols-3 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
       >
@@ -55,10 +55,10 @@ export function DayHub({ tab }: { tab: DayTab }) {
             </Link>
           );
         })}
-      </nav>
+      </nav>}
 
       {tab === "idag" && <TodayContent />}
-      {tab === "kalender" && <><OwnChildCalendar /><CalendarContent /></>}
+      {tab === "kalender" && <><CalendarContent /><div className="mt-6"><OwnChildCalendar /></div></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
   );
