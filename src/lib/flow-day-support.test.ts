@@ -17,7 +17,7 @@ describe("contextual Flow support", () => {
     expect(flowDaySupport(Array.from({ length: 5 }, () => ({ ...own, energyImpact: "drains" as const })), null).prioritize).toBe(true);
   });
   it("recognizes recovery and only claims gaps from known times", () => {
-    expect(flowDaySupport([{ ...own, energyImpact: "gives" }], null).message).toContain("återhämtning");
+    expect(flowDaySupport([{ ...own, energyImpact: "gives" }], null).message).toContain("ger energi");
     expect(flowDaySupport([{ ...own, time: "08:00" }, { ...own, time: "10:00" }], null).message).not.toContain("luft");
     expect(flowDaySupport([{ ...own, time: "08:00", endTime: "09:00" }, { ...own, time: "10:00", endTime: "11:00" }], null).message).toContain("luft");
   });

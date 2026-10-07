@@ -351,7 +351,7 @@ export function useFlowItems(dateISO?: string): {
   /** EN avcheckning för hela appen – varje källa uppdaterar sin egen status. */
   const toggleItem = useCallback(
     (item: FlowItem) => {
-      if (!item.completable) return;
+      if (!item.completable || item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-")) return;
       // Uppgifter skickar sin egen signal i useTasks – övriga källor gör det här.
       if (!item.done && !item.id.startsWith("task-")) {
         emitActivityDone({
@@ -372,10 +372,6 @@ export function useFlowItems(dateISO?: string): {
           return;
         }
         return toggleReminder(rest);
-      }
-      if (item.id.startsWith("childitem-")) {
-        void toggleChildItem(rest, !item.done);
-        return;
       }
       if (item.id.startsWith("prio-")) {
         const pid = item.id.slice(5);
