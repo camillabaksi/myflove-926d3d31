@@ -53,6 +53,8 @@ import {
   Hand,
   Wind,
 } from "lucide-react";
+import { MyPlaceIcon, ThoughtsIcon, TodayHorizonIcon } from "@/components/paceable/navigation-icons";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -76,6 +78,9 @@ const FLOW_HIDDEN_PATHS = new Set([
   "/",
   "/hem",
   "/idag",
+  "/kalender",
+  "/quickflow",
+  "/halsa",
   "/flow",
   "/pitch",
   "/admin",
@@ -245,7 +250,7 @@ export default function Layout({ children }: LayoutProps) {
   type NavItem = {
     href: string;
     label: string;
-    icon: typeof Home;
+    icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
     hint: string;
     essential?: boolean;
   };
@@ -261,14 +266,14 @@ export default function Layout({ children }: LayoutProps) {
     {
       href: "/idag",
       label: "Idag",
-      icon: CalendarDays,
+      icon: TodayHorizonIcon,
       hint: "Vad som händer idag – hela dagens lista",
       essential: true,
     },
     {
       href: "/halsa",
-      label: "Hälsa",
-      icon: HeartPulse,
+      label: "Min plats",
+      icon: MyPlaceIcon,
       hint: "Energi, mående, träning, medicin och vila",
       essential: true,
     },
@@ -315,8 +320,8 @@ export default function Layout({ children }: LayoutProps) {
 
     {
       href: "/quickflow",
-      label: "QuickFlow",
-      icon: Brain,
+      label: "Tankar",
+      icon: ThoughtsIcon,
       hint: "Fånga något snabbt – sortera sedan",
       essential: true,
     },
@@ -627,12 +632,11 @@ export default function Layout({ children }: LayoutProps) {
   }, [navSearch, navItems]);
 
   /**
-   * Huvudnavigationen: Översikt · Flow · Hälsa · Återhämtning,
-   * med allt annat under "Mer". Samma för alla, oavsett konto eller läge.
+   * Paceables huvudnavigation. Adresser och lagring behålls oförändrade.
    */
   const primaryNav = useMemo(() => {
     const pick = (href: string) => navItems.find((i) => i.href === href);
-    return [pick("/hem"), pick("/flow"), pick("/quickflow"), pick("/halsa"), pick("/aterhamtning")].filter(
+    return [pick("/idag"), pick("/kalender"), pick("/quickflow"), pick("/halsa")].filter(
       Boolean,
     ) as typeof navItems;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -642,9 +646,10 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-52 border-r border-border bg-card p-3 shrink-0 overflow-y-auto">
-        <div className="mb-4 px-2 py-1">
-          <h1 className="text-xl font-bold text-primary tracking-tight">MyFlove</h1>
+      <nav className="hidden md:flex flex-col w-56 border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto">
+        <div className="mb-5 flex items-center justify-between gap-2 px-1 py-1">
+          <h1 className="font-display text-xl font-bold text-foreground">Paceable</h1>
+          <PaceableStones compact className="w-16" />
         </div>
         <div className="space-y-4">
           {categories.map((cat) => (
@@ -732,13 +737,13 @@ export default function Layout({ children }: LayoutProps) {
           ) : (
             <span aria-hidden className="w-2 shrink-0" />
           )}
-          <h1 className="min-w-0 flex-1 truncate text-center text-xl font-bold tracking-tight text-primary">
-            MyFlove
+          <h1 className="min-w-0 flex-1 truncate text-center font-display text-xl font-bold text-foreground">
+            Paceable
           </h1>
           <ViewCollapseToggle />
         </header>
 
-        <div className="hidden md:flex items-center gap-1.5 px-6 pt-4">
+        <nav aria-label={t("Huvudnavigation")} className="hidden md:flex items-center gap-1.5 px-6 pt-4">
           {primaryNav.map((item) => {
             const active =
               item.href === "/flow"
@@ -749,18 +754,19 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
+                aria-current={active ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-card text-muted-foreground border border-border hover:text-foreground"
+                    ? "bg-lavender text-foreground"
+                    : "text-muted-foreground hover:bg-card hover:text-foreground"
                 }`}
               >
-                <Icon size={14} />
+                <Icon size={18} strokeWidth={1.8} />
                 {item.label}
               </Link>
             );
           })}
-        </div>
+        </nav>
 
         <div className="hidden md:flex items-center justify-between px-6 pt-2">
           {canGoBack ? (
@@ -893,7 +899,7 @@ export default function Layout({ children }: LayoutProps) {
               </a>
             </div>
             <p className="mt-3 text-center text-[10px] text-muted-foreground/70">
-              © {new Date().getFullYear()} MyFlove
+              © {new Date().getFullYear()} Paceable
             </p>
           </footer>
         </div>
@@ -904,46 +910,16 @@ export default function Layout({ children }: LayoutProps) {
           öppnar alla samma flöde via händelsen "myflove:quickflow". */}
       <QuickflowCapture variant="global" />
 
-      {/* Mobile Bottom Bar – Översikt · Flow · Hälsa · Återhämtning · Mer
-          QuickFlow har en egen punkt, så den alltid är lätt att hitta. */}
+      {/* Paceable mobile navigation. Technical routes remain unchanged. */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
-        <div className="flex items-end justify-around px-1 pt-1.5 pb-1">
-          {primaryNav.slice(0, 5).map((item) =>
-            item.href === "/halsa" ? (
-              // Hälsa i bottennavet öppnar samma kategorivyn som Mer → Hälsa,
-              // så båda vägarna leder till samma vy.
-              <button
-                key={item.href}
-                type="button"
-                onClick={() => {
-                  setNavSearch("");
-                  setOpenCategory("healthflow");
-                  setMobileMenuOpen(true);
-                }}
-                className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
-                  location === "/halsa" || location.startsWith("/halsa/")
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <span
-                  className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
-                    location === "/halsa" || location.startsWith("/halsa/") ? "bg-primary/12" : ""
-                  }`}
-                >
-                  <item.icon size={22} strokeWidth={location === "/halsa" ? 2.6 : 2} />
-                </span>
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </button>
-            ) : (
+        <div className="grid grid-cols-5 items-end px-1 pb-1 pt-1.5">
+          {primaryNav.map((item) =>
             <BottomNavLink
               key={item.href}
               item={item}
               active={location === item.href || location.startsWith(`${item.href}/`)}
               onClick={() => setMobileMenuOpen(false)}
-              label={item.href === "/assistant" ? "Flow" : item.label}
             />
-            ),
           )}
 
 
@@ -951,16 +927,17 @@ export default function Layout({ children }: LayoutProps) {
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
+            aria-current={mobileMenuOpen ? "page" : undefined}
+            className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
               mobileMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <span
               className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
-                mobileMenuOpen ? "bg-primary/12" : ""
+                mobileMenuOpen ? "bg-lavender" : ""
               }`}
             >
-              <Menu size={22} strokeWidth={mobileMenuOpen ? 2.6 : 2} />
+              <Menu size={22} strokeWidth={1.8} />
             </span>
             <span className="text-[10px] font-medium">{t("Mer")}</span>
           </button>
@@ -1185,16 +1162,17 @@ function BottomNavLink({
     <Link
       href={item.href}
       onClick={onClick}
-      className={`flex flex-col items-center gap-1 rounded-2xl px-1.5 py-1.5 min-w-[3.2rem] press ${
+      aria-current={active ? "page" : undefined}
+      className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
         active ? "text-primary" : "text-muted-foreground hover:text-foreground"
       }`}
     >
       <span
         className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
-          active ? "bg-primary/12" : ""
+          active ? "bg-lavender" : ""
         }`}
       >
-        <Icon size={22} strokeWidth={active ? 2.6 : 2} />
+        <Icon size={22} strokeWidth={1.8} />
       </span>
       <span className="text-[10px] font-medium">{label ?? item.label}</span>
     </Link>
