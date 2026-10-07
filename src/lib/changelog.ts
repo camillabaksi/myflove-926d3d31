@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-05";
+export const CHANGELOG_UPDATED = "2026-10-07";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Visuell kalender (2026-10-07): Månad, vecka och dag med gemensamma befintliga datakällor, tidsblock, oschemalagt, kända tidsluckor och kapacitetsläge utan påhittade procenttal. Egna engångsposter kan planeras/flyttas med ångra; energipåverkan är valfri och notiser slås inte på automatiskt. Familjbehörigheter och separat skrivskyddat föräldraschema bevaras. Ingenting publicerat.",
       "Hem: Just nu-kortet kan nu ta bort aktiviteten med en tvåstegsbekräftelse (2026-10-05)",
       "Landningssidan: svensk/engelsk språkväxling och ny slogan 'your flow, with love' (2026-10-05)",
       "Familj: barnets eget konto ser sin kalender direkt, aldrig förälderns privata uppgifter om barnet (2026-10-05)",

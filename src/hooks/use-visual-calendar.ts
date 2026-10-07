@@ -44,7 +44,7 @@ export function useVisualCalendar(dates: string[]) {
           date, time: e.time?.slice(0, 5), done: e.completed, editable: false,
           href: "/barn", label: children.find(c => c.id === e.child_id)?.name ?? "Delad aktivitet" });
       }
-      for (const e of external.data ?? []) if (e.date === date) out.push({
+      for (const e of external.data?.events ?? []) if (e.date === date) out.push({
         id: `external-${e.provider}-${e.id}`, sourceId: e.id, source: "external", title: e.title,
         date, time: e.time, endTime: e.endTime, done: false, editable: false,
         label: e.provider === "google" ? "Google Kalender" : "Outlook",

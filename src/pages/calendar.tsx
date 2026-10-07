@@ -1,4 +1,5 @@
 import { repeatUntilFromNotes } from "@/lib/child-visual-schedule";
+import CalendarPlanner from "@/components/calendar/calendar-planner";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import { LinkifiedText } from "@/components/linkified-text";
 import type { ReactNode } from "react";
@@ -480,6 +481,7 @@ export function CalendarContent() {
   }));
 
   return (
+    <CalendarPlanner tools={
     <MyFlovePageGrid area="kalender">
       <MyFloveWide>
         <div>
@@ -1511,5 +1513,6 @@ export function CalendarContent() {
         </DialogContent>
       </Dialog>
     </MyFlovePageGrid>
+    } />
   );
 }
