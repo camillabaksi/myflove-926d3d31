@@ -2,7 +2,8 @@
 
 ## Kalenderns områdesfärger (2026-10-07)
 - [x] Använd befintliga livsområden för mjuka färgmarkeringar i alla tre kalendervyer; behåll områdesnamn och ikoner.
-- [ ] Kontrollera färger, kvarvarande aktiviteter och ändringsloggar. Ingen publicering beställd.
+- [x] Kontrollera färger, kvarvarande aktiviteter och ändringsloggar. Ingen publicering beställd.
+- Kontrollerat i månad/vecka/dag med befintliga aktiviteter, färgnyckel och mobil 411 px utan sidöverflöde; tretton tester godkända och inga sidfel. Inga aktiviteter ändrade eller sparade.
 
 ## Startsidans viktigaste delar (2026-10-07)
 - [x] Välj kompakt layout för kalender, dagens energibatteri, måendelogg och QuickFlow.
