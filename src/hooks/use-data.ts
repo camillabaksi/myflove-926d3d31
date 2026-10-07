@@ -839,8 +839,8 @@ export function useReminders() {
       area?: LifeArea;
     },
   ) => {
-    setReminders(
-      reminders.map((r) => {
+    setReminders((prev) =>
+      prev.map((r) => {
         if (r.id !== id) return r;
         const next: Reminder = { ...r, ...patch };
         if (next.endDate && next.endDate <= next.date) next.endDate = undefined;

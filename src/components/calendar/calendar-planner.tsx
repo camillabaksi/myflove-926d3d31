@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type DragEvent } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
 import { Link } from "wouter";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import { useLang } from "@/hooks/use-language";
 import { buildFlowPlan } from "@/lib/flow-plan";
 import { calendarDate, calendarGaps, calendarLoad, layoutCalendar, minuteOf, periodDates, shiftDate, timeOf, type CalendarEntry, type CalendarSource, type CalendarView } from "@/lib/visual-calendar";
 import { cn } from "@/lib/utils";
+import { getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 const TONES: Record<CalendarSource, string> = {
   task: "bg-lavender/70 border-primary/20", reminder: "bg-blush/70 border-accent/30",
@@ -43,7 +44,7 @@ function entryStyle(start: number, end: number, lane: number, lanes: number, fir
   return { top: `${(start - first) * 1.7}px`, height: `${Math.max(44, (end - start) * 1.7 - 4)}px`, left: `${lane / lanes * 100}%`, width: `${100 / lanes}%` };
 }
 
-export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
+export default function CalendarPlanner({ tools }: { tools: (date: string) => ReactNode }) {
   const { t, locale } = useLang();
   const { user } = useUser();
   const owner = user?.id;
@@ -51,13 +52,16 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
   const [date, setDate] = useState(today);
   const [view, setView] = useState<CalendarView>("manad");
   const dates = useMemo(() => periodDates(date, view), [date, view]);
-  const { days, externalError } = useVisualCalendar(dates);
+  const { days: allDays, externalError } = useVisualCalendar(dates);
+  const [visible, setVisible] = useCloudSyncedStorage<string[]>("myflove-calendar-categories", ["privat", "relationer", "barn", "jobb", "studier"]);
+  const days = useMemo(() => Object.fromEntries(Object.entries(allDays).map(([d, items]) => [d, items.filter(e => visible.includes(e.source === "child" ? "barn" : e.source === "family" ? "relationer" : e.source === "study" || e.area === "studier" ? "studier" : e.area === "jobb" ? "jobb" : "privat") || (e.source === "family" && visible.includes("familj")))])), [allDays, visible]);
   const entries = days[date] ?? [];
   const { tasks, addTask, updateTask } = useTasks();
   const { reminders, addReminder, updateReminder } = useReminders();
   const { today: flowItems, toggleItem } = useFlowItems(date);
   const capacity = useCapacityMode();
   const [details, setDetails] = useState<CalendarEntry | null>(null);
+  const [cluster, setCluster] = useState<CalendarEntry[]>([]);
   const [adding, setAdding] = useState(false);
   const [title, setTitle] = useState("");
   const [kind, setKind] = useState("task");
@@ -71,7 +75,7 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
   const [suggestions, setSuggestions] = useState(false);
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => { const tick = () => { const d = new Date(); setNow(d.getHours() * 60 + d.getMinutes()); }; tick(); const timer = setInterval(tick, 30000); return () => clearInterval(timer); }, []);
-  useEffect(() => { setDetails(null); setAdding(false); setPlanning(false); setSuggestions(false); setDismissed(null); }, [owner]);
+  useEffect(() => { setDetails(null); setCluster([]); setAdding(false); setPlanning(false); setSuggestions(false); setDismissed(null); }, [owner]);
   const timed = entries.filter(e => !!e.time);
   const untimed = entries.filter(e => !e.time);
   const gaps = calendarGaps(timed);
@@ -91,7 +95,7 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
     setImpact(entry.energyImpact ?? "unknown");
   };
   const moveEntry = (entry: CalendarEntry, nextDate: string, nextTime: string, minutes: string, nextImpact = entry.energyImpact) => {
-    if (!owner || !entry.editable || entry.recurring) return;
+    if (!owner || !entry.editable || entry.recurring || document.documentElement.dataset.calendarOwner !== owner) return;
     const start = minuteOf(nextTime);
     const duration = Number(minutes);
     if (nextTime && start === null || minutes && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
@@ -102,20 +106,23 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
       if (!beforeTask) return;
       updateTask(entry.sourceId, { dueDate: nextDate, time: nextTime, endTime, energyImpact: nextImpact });
     } else if (entry.source === "reminder") {
-      if (!beforeReminder) return;
+      if (!beforeReminder || beforeReminder.repeat && beforeReminder.repeat !== "none" || beforeReminder.endDate) return;
       updateReminder(entry.sourceId, { date: nextDate, time: nextTime, endTime, energyImpact: nextImpact });
     } else return;
     setDetails(null);
     toast.success(nextTime ? `${t("Flyttad till")} ${nextDate} · ${nextTime}` : t("Tiden borttagen"), { action: { label: t("Ångra"), onClick: () => {
       // Scope callbacks to the still-signed-in owner; restore only scheduling fields.
       if (document.documentElement.dataset.calendarOwner !== owner) return;
-      if (beforeTask && entry.source === "task") updateTask(entry.sourceId, { dueDate: beforeTask.dueDate, time: beforeTask.time ?? "", endTime: beforeTask.endTime, energyImpact: beforeTask.energyImpact });
-      if (beforeReminder && entry.source === "reminder") updateReminder(entry.sourceId, { date: beforeReminder.date, time: beforeReminder.time ?? "", endTime: beforeReminder.endTime, energyImpact: beforeReminder.energyImpact });
+      void getSyncUser().then(current => {
+        if (current?.id !== owner || document.documentElement.dataset.calendarOwner !== owner) return;
+        if (beforeTask && entry.source === "task") updateTask(entry.sourceId, { dueDate: beforeTask.dueDate, time: beforeTask.time ?? "", endTime: beforeTask.endTime, energyImpact: beforeTask.energyImpact, reminderMinutesBefore: beforeTask.reminderMinutesBefore });
+        if (beforeReminder && entry.source === "reminder") updateReminder(entry.sourceId, { date: beforeReminder.date, time: beforeReminder.time ?? "", endTime: beforeReminder.endTime, energyImpact: beforeReminder.energyImpact, remindMinutesBefore: beforeReminder.remindMinutesBefore });
+      });
     } } });
   };
   useEffect(() => { document.documentElement.dataset.calendarOwner = owner ?? ""; return () => { delete document.documentElement.dataset.calendarOwner; }; }, [owner]);
   const saveNew = () => {
-    if (!title.trim() || !editDate || !owner) return;
+    if (!title.trim() || !editDate || !owner || document.documentElement.dataset.calendarOwner !== owner) return;
     const start = minuteOf(time), duration = Number(length);
     if (time && start === null || length && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
     const end = start !== null && duration > 0 ? timeOf(start + duration) : undefined;
@@ -138,12 +145,13 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
     event.dataTransfer.setData("application/myflove-calendar", entry.id); event.dataTransfer.effectAllowed = "move";
   }} onClick={() => openDetails(entry)} className={cn("h-full min-h-11 w-full items-start justify-start gap-1.5 overflow-hidden whitespace-normal rounded-xl border px-2 py-1.5 text-left font-normal text-foreground", entry.energyImpact === "gives" ? "border-sage/30 bg-mint/65" : TONES[entry.source], entry.done && "opacity-65")} aria-label={`${entry.title}, ${entry.time ?? t("Ingen tid ännu")}${entry.endTime ? `–${entry.endTime}` : ""}${entry.label ? `, ${entry.label}` : ""}`}>
     <EntryIcon entry={entry} size={compact ? 14 : 18} />
-    <span className="min-w-0 flex-1"><span className={cn("block break-words text-xs font-semibold leading-snug", !compact && "text-sm", entry.done && "line-through")}>{entry.title}</span><span className="block text-[11px] leading-snug text-muted-foreground">{entry.time}{entry.endTime && `–${entry.endTime}`}</span>{!compact && entry.label && <span className="block text-[11px] text-muted-foreground">{t(entry.label)}</span>}</span>
+    <span className="min-w-0 flex-1"><span className={cn("block truncate text-xs font-semibold leading-snug", !compact && "text-sm", entry.done && "line-through")}>{entry.title}</span><span className="block text-[11px] leading-snug text-muted-foreground">{entry.time}{entry.endTime && `–${entry.endTime}`}</span>{!compact && entry.label && <span className="block truncate text-[11px] text-muted-foreground">{t(entry.label)}</span>}</span>
     {entry.done && <Check size={14} className="shrink-0" aria-hidden />}
   </Button>;
   const timeline = (day: string, dayItems: CalendarEntry[], compact: boolean) => {
     const blocks = layoutCalendar(dayItems);
-    const starts = blocks.map(b => b.start), ends = blocks.map(b => b.end);
+    const periodBlocks = view === "vecka" ? layoutCalendar(Object.values(days).flat()) : blocks;
+    const starts = periodBlocks.map(b => b.start), ends = periodBlocks.map(b => b.end);
     const first = Math.floor(Math.min(480, ...starts) / 60) * 60;
     const last = Math.min(1440, Math.ceil(Math.max(1080, ...ends) / 60) * 60);
     const height = (last - first) * 1.7;
@@ -152,16 +160,16 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
     }}>
       {Array.from({ length: (last - first) / 60 + 1 }, (_, i) => first + i * 60).map(m => <div key={m} className="pointer-events-none absolute left-0 right-0 border-t border-border/45" style={{ top: (m - first) * 1.7 }}><span className="absolute -left-12 -top-2 w-10 text-right text-[11px] text-muted-foreground">{m === 1440 ? "24:00" : timeOf(m)}</span></div>)}
       {!compact && calendarGaps(dayItems).map(gap => <div key={gap.start} className="absolute left-2 right-1 flex items-center gap-2 rounded-xl border border-dashed border-sage/35 bg-mint/40 px-3 text-xs text-foreground" style={{ top: (gap.start - first) * 1.7 + 2, height: Math.max(30, gap.minutes * 1.7 - 6) }}><Leaf size={15} aria-hidden />{gap.minutes} {t("min luft")}</div>)}
-      {blocks.map(block => <div key={block.item.id} className="absolute pl-1 pr-1" style={entryStyle(block.start, block.end, block.lane, block.lanes, first)}>{blockButton(block.item, compact)}</div>)}
+      {blocks.map(block => block.lanes > (compact ? 1 : 2) ? block.lane === 0 && <div key={block.item.id} className="absolute left-1 right-1" style={{ top: (block.start - first) * 1.7, height: 50 }}><Button variant="secondary" className="h-full w-full min-w-0 justify-start rounded-xl border border-border px-2 text-xs" onClick={() => setCluster(blocks.filter(b => b.start < block.end && b.end > block.start).map(b => b.item))}><CalendarDays size={14} /><span className="truncate">{block.item.time} · {blocks.filter(b => b.start < block.end && b.end > block.start).length} {t("aktiviteter")}</span></Button></div> : <div key={block.item.id} className="absolute pl-1 pr-1" style={entryStyle(block.start, block.end, block.lane, block.lanes, first)}>{blockButton(block.item, compact)}</div>)}
       {day === today && now !== null && now >= first && now <= last && <div className="pointer-events-none absolute left-0 right-0 z-10 border-t-2 border-accent" style={{ top: (now - first) * 1.7 }}><span className="absolute -left-11 -top-3 rounded-full bg-accent px-1.5 py-1 text-[10px] font-semibold text-accent-foreground">{t("NU")}</span></div>}
     </div>;
   };
   const balance = <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Dagens balans")}>
     <h2 className="font-display text-sm font-bold">{t(date === today ? "Din kapacitet idag" : "Dagens planering")}</h2>
     {date === today ? <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4"><div className="grid size-20 shrink-0 place-items-center rounded-full border-[7px] border-mint bg-card"><span className="text-sm font-bold">{capacity.chosen ? t(capacity.mode === "fullt" ? "Fullt" : capacity.mode === "mellan" ? "Mellan" : "Lågt") : "—"}</span></div><div className="min-w-0"><p className="text-xs text-muted-foreground">{t("Uppskattad belastning")}</p><p className="mt-1 text-sm font-semibold">{t(load.label)}</p><div className="mt-2"><Segments entries={entries} /></div></div></div> : <div className="mt-3 flex items-center justify-between gap-2"><span className="text-sm">{t(load.label)}</span><Segments entries={entries} /></div>}
-    {date === today && <div className="mt-3 grid grid-cols-3 gap-1" role="group" aria-label={t("Kapacitetsläge")}>
+    {date === today && <details className="mt-2"><summary className="cursor-pointer py-2 text-xs text-primary">{t("Ändra kapacitetsläge")}</summary><div className="grid grid-cols-3 gap-1" role="group" aria-label={t("Kapacitetsläge")}>
       {(["fullt", "mellan", "lagt"] as const).map(mode => <Button key={mode} variant="ghost" className={cn("min-h-11 rounded-xl px-1 text-xs", capacity.chosen && capacity.mode === mode ? "bg-lavender text-primary" : "text-muted-foreground")} aria-pressed={capacity.chosen && capacity.mode === mode} onClick={() => capacity.setMode(mode)}>{t(mode === "fullt" ? "Fullt" : mode === "mellan" ? "Mellan" : "Lågt")}</Button>)}
-    </div>}
+    </div></details>}
     <div className="mt-3 flex gap-2 rounded-2xl bg-lavender/50 p-3 text-xs leading-relaxed"><Heart size={15} className="shrink-0 text-primary" aria-hidden /><span>{t(!entries.length ? "Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats." : load.segments >= 3 ? "Det ser ut som en ganska full dag. Vill du se om vi kan skapa lite mer luft?" : gaps.length ? "Det finns lite luft mellan aktiviteterna." : "En sak i taget, i din takt.")}</span></div>
     {load.unknown > 0 && <details className="mt-2 text-xs text-muted-foreground"><summary className="cursor-pointer py-2">{t("Om uppskattningen")}</summary><p>{load.unknown} {t("poster saknar uppskattad energipåverkan. Belastningen är ett stöd, inte ett mått på hur du mår.")}</p></details>}
   </section>;
@@ -180,7 +188,8 @@ export default function CalendarPlanner({ tools }: { tools: React.ReactNode }) {
       </Button>; })}</div><section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><div className="flex items-center justify-between gap-2"><h2 className="font-display text-sm font-bold capitalize">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</h2><Button size="icon" variant="ghost" className="min-h-11 min-w-11 text-primary" aria-label={t("Öppna dagen")} onClick={() => setView("dag")}><ArrowRight size={18} /></Button></div><ul className="mt-2 space-y-2">{entries.slice(0, 3).map(e => <li key={e.id}>{blockButton(e)}</li>)}</ul>{!entries.length && <p className="py-4 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}{entries.length > 3 && <Button variant="ghost" onClick={() => setView("dag")} className="mt-2 text-primary">+{entries.length - 3} {t("till")}</Button>}</section></>}
     {view === "vecka" && <div className="overflow-x-auto rounded-3xl border border-border/60 bg-card p-2 shadow-soft"><div className="grid min-w-[1050px] grid-cols-7 gap-2"><div className="col-span-7 grid grid-cols-7 gap-2">{dates.map(d => <Button key={d} variant="ghost" onClick={() => { setDate(d); setView("dag"); }} className={cn("sticky top-0 z-20 h-auto min-h-16 flex-col rounded-xl bg-card", d === today && "border border-primary", d === date && "bg-lavender")}><span className="text-xs">{dateHeading(d)}</span><Segments entries={days[d] ?? []} /></Button>)}</div>{dates.map(d => <div key={d} className="min-w-0">{timeline(d, days[d] ?? [], true)}{(days[d] ?? []).filter(e => !e.time).map(e => <div className="mt-2" key={e.id}>{blockButton(e, true)}</div>)}</div>)}</div></div>}
     {view === "dag" && <><div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_280px]"><div className="min-w-0 space-y-4">{balance}{date === today && plan.now && <div className="grid grid-cols-2 gap-3 rounded-2xl bg-lavender/40 p-3"><div className="min-w-0"><p className="text-xs text-muted-foreground">{t("Just nu")}</p><p className="mt-1 break-words text-sm font-semibold">{plan.now.item.title}</p></div>{plan.next && <div className="min-w-0"><p className="text-xs text-muted-foreground">{t("Härnäst")}</p><p className="mt-1 break-words text-sm">{plan.next.item.title}</p></div>}</div>}<div className="lg:hidden">{todo}</div>{timed.length > 0 ? <section aria-label={t("Dagens tidslinje")} className="rounded-3xl border border-border/60 bg-card px-3 py-6 shadow-soft">{timeline(date, timed, false)}</section> : <div className="py-6 text-center text-sm text-muted-foreground"><Leaf className="mx-auto mb-2 text-primary" size={24} />{t("Ingen tid bokad. Det får finnas luft.")}</div>}</div><aside className="space-y-4"><div className="hidden lg:block">{todo}</div>{intensive && dismissed !== date && <section className="rounded-3xl border border-primary/20 bg-lavender/60 p-4"><h2 className="flex items-center gap-2 text-sm font-bold"><Heart size={16} className="text-primary" />{t("Flow ser att…")}</h2><p className="mt-3 text-sm">{t("Flera aktiviteter som tar energi ligger på dagen. Vill du se om det finns plats för återhämtning?")}</p><Button className="mt-3 w-full rounded-2xl" onClick={() => setSuggestions(true)}>{t("Hitta plats")}</Button><Button variant="ghost" className="mt-1 w-full" onClick={() => setDismissed(date)}>{t("Inte nu")}</Button></section>}</aside></div></>}
-    <details className="rounded-3xl border border-border/60 bg-card/60 p-4"><summary className="flex cursor-pointer items-center gap-2 py-2 text-sm font-medium"><MoreHorizontal size={18} />{t("Fler kalenderval")}</summary><div className="mt-3"><CopyDayButton date={date} />{tools}</div></details>
+    <details className="rounded-3xl border border-border/60 bg-card/60 p-4"><summary className="flex cursor-pointer items-center gap-2 py-2 text-sm font-medium"><MoreHorizontal size={18} />{t("Fler kalenderval")}</summary><div className="mt-3 space-y-3"><div className="flex flex-wrap gap-2" role="group" aria-label={t("Visa kategorier")}>{[["privat", "Privat"], ["relationer", "Relationer"], ["barn", "Barn"], ["jobb", "Jobb"], ["studier", "Studier"]].map(([id, label]) => <Button key={id} size="sm" variant="outline" className="min-h-11" aria-pressed={visible.includes(id ?? "")} onClick={() => setVisible(prev => prev.includes(id ?? "") ? prev.filter(x => x !== id) : [...prev, id ?? "privat"])}>{t(label ?? "")}</Button>)}</div><CopyDayButton date={date} />{tools(date)}</div></details>
+    <Dialog open={cluster.length > 0} onOpenChange={open => { if (!open) setCluster([]); }}><DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Aktiviteter vid samma tid")}</DialogTitle><DialogDescription>{date}</DialogDescription></DialogHeader><ul className="space-y-2">{cluster.map(e => <li key={e.id} onClick={() => setCluster([])}>{blockButton(e)}</li>)}</ul></DialogContent></Dialog>
     <Dialog open={adding} onOpenChange={setAdding}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader><div className="space-y-4"><div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div><label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => setTitle(e.target.value)} maxLength={240} /></label>{scheduleFields}{energyFields}{time && <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} />{t("Påminn mig vid start")}</label>}<Button className="w-full min-h-11 rounded-2xl" disabled={!title.trim() || !editDate} onClick={saveNew}><Plus size={16} />{t("Lägg till")}</Button></div></DialogContent></Dialog>
     <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle className="break-words">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4">{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && !details.recurring && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Planera tid")}</Button>}{details.source === "task" && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{(details.source === "task" || details.source === "reminder" || details.source === "routine" || details.source === "quickflow" || details.source === "priority") && <div className="flex items-center justify-between gap-2">{(() => { const match = flowItems.find(i => i.id === details.id); return match?.completable ? <Button variant="outline" className="min-h-11" onClick={() => { toggleItem(match); setDetails(null); }}><Check size={16} />{t(match.done ? "Ångra klart" : "Markera klar")}</Button> : null; })()}<FlowItemActions itemId={details.id} /></div>}{details.href && <Button asChild variant="outline" className="min-h-11 w-full"><Link href={details.href}>{t("Öppna där aktiviteten hör hemma")}<ArrowRight size={16} /></Link></Button>}</>}</div>}</DialogContent></Dialog>
     <Dialog open={suggestions} onOpenChange={setSuggestions}><DialogContent className="rounded-3xl"><DialogHeader><DialogTitle>{t("Lite mer luft")}</DialogTitle><DialogDescription>{t("Inget ändras förrän du själv väljer.")}</DialogDescription></DialogHeader>{gaps.filter(g => g.minutes >= 20).slice(0, 3).map(g => <Button key={g.start} variant="outline" className="h-auto min-h-14 justify-start whitespace-normal rounded-2xl text-left" onClick={() => { setSuggestions(false); setEditDate(date); setTime(timeOf(g.start)); setLength("20"); setTitle(t("Återhämtning")); setKind("recovery"); setImpact("gives"); setNotify(false); setAdding(true); }}><Leaf size={18} />{t("Lägg 20 min återhämtning")} · {timeOf(g.start)}</Button>)}{!gaps.length && <p className="text-sm text-muted-foreground">{t("Jag ser ingen säker lucka med kända sluttider. Du kan själv ändra en aktivitet eller planera återhämtning.")}</p>}</DialogContent></Dialog>

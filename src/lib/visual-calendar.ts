@@ -19,6 +19,7 @@ export interface CalendarEntry {
   friction?: Task["friction"];
   done: boolean;
   editable: boolean;
+  area?: string;
   recurring?: boolean;
   href?: string;
   label?: string;
@@ -75,7 +76,8 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       out.push({ id: `task-${task.id}`, sourceId: task.id, source: "task", date, title: task.title,
         time: task.dueDate && task.dueDate < date ? undefined : task.time,
         endTime: task.dueDate && task.dueDate < date ? undefined : task.endTime,
-        energyImpact: task.energyImpact, friction: task.friction, done: task.completed, editable: true,
+        energyImpact: task.energyImpact, friction: task.friction, area: task.area, done: task.completed, editable: !task.syncKey,
+        href: task.syncKey ? "/studyflow" : undefined,
         label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "QuickFlow" : undefined });
     }
     for (const r of data.reminders) {
@@ -83,7 +85,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       const middle = !!r.endDate && r.date !== date;
       out.push({ id: `rem-${r.id}`, sourceId: r.id, source: "reminder", date, title: r.title,
         time: middle ? undefined : r.time, endTime: middle ? undefined : r.endTime,
-        energyImpact: r.energyImpact, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
+        energyImpact: r.energyImpact, area: r.area, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
         recurring: (r.repeat ?? "none") !== "none" || !!r.endDate });
     }
     for (const r of data.routines) if (r.enabled && routineOccursOn(r, date)) {
@@ -144,7 +146,8 @@ export function layoutCalendar(items: CalendarEntry[]): Array<{ item: CalendarEn
     const start = minuteOf(item.time);
     if (start === null) return [];
     const finish = minuteOf(item.endTime);
-    return [{ item, start, end: finish !== null && finish > start ? finish : start + 15, lane: 0, lanes: 1 }];
+    // Visual minimum for readable touch targets, not an asserted duration.
+    return [{ item, start, end: Math.max(start + 32, finish !== null && finish > start ? finish : start), lane: 0, lanes: 1 }];
   }).sort((a, b) => a.start - b.start || b.end - a.end);
   let group: typeof sorted = [];
   let groupEnd = -1;
