@@ -205,7 +205,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       <Button variant="outline" className="min-h-11 rounded-2xl text-xs" onClick={() => setUtility("connection")}><Link2 size={16} className="text-primary" />{t("Kalenderkoppling")}</Button>
       <Button variant="outline" className="min-h-11 rounded-2xl text-xs" onClick={() => setUtility("day")}><MoreHorizontal size={16} className="text-primary" />{t("Dagens verktyg")}</Button>
     </div>
-    {view !== "dag" && checkin}
+    {view !== "dag" && date === today && checkin}
     {externalError && <p role="status" className="text-sm text-muted-foreground">{t("Den externa kalendern kunde inte hämtas just nu. Dina MyFlove-poster finns kvar.")}</p>}
     {view === "manad" && <><div className="grid grid-cols-7 gap-1.5" role="group" aria-label={t("Månadskalender")}>
       {dates.slice(0, 7).map(d => <span key={`heading-${d}`} className="py-1 text-center text-[11px] text-muted-foreground">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>)}

@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Samlad kalender (2026-10-07)
-- [ ] Integrera veckomål, incheckning, filter och kalenderkoppling i den visuella kalendern utan dubbla översikter; bevara dagens befintliga verktyg.
-- [ ] Kontrollera layout, verktyg och kvarvarande aktiviteter; uppdatera ändringsloggar. Ingen publicering beställd.
+- [x] Integrera veckomål, incheckning, filter och kalenderkoppling i den visuella kalendern utan dubbla översikter; bevara dagens befintliga verktyg.
+- [x] Kontrollera layout, verktyg och kvarvarande aktiviteter; uppdatera ändringsloggar. Ingen publicering beställd.
 
 ## Kalender: sex publiceringssteg (2026-10-07)
 - [ ] Månadsvy: förtydligad och kontrollerad (8 tester, skärm och inga sidfel); publicering beställd, inväntar bekräftad driftsättning.
