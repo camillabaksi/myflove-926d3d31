@@ -3,6 +3,7 @@ import { renderHook } from "@testing-library/react";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import type { Task } from "@/hooks/use-data";
 import { todayISO } from "@/lib/flow-items";
+import type { FlowItem } from "@/lib/flow-items";
 
 const toggleTask = vi.fn();
 
@@ -46,6 +47,14 @@ const isoDaysAgo = (days: number): string => {
 };
 
 describe("useFlowItems – sena uppgifter följer med in i idag", () => {
+  it("rejects completion for child schedules even with an incorrect task flag", () => {
+    toggleTask.mockClear();
+    const { result } = renderHook(() => useFlowItems());
+    result.current.toggleItem({ id: "task-child", title: "Frukost", source: "barn", area: "barn", emoji: "", priority: "idag", completable: true } as FlowItem);
+    expect(toggleTask).not.toHaveBeenCalled();
+    result.current.toggleItem({ id: "task-parent", title: "Packa väskan", source: "uppgift", area: "barn", emoji: "", priority: "idag", completable: true } as FlowItem);
+    expect(toggleTask).toHaveBeenCalledWith("parent");
+  });
   it("en öppen uppgift med klockslag från igår syns i dagens lista", () => {
     const yesterday = isoDaysAgo(1);
     tasks = [

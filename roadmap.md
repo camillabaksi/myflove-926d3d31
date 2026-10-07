@@ -1,5 +1,12 @@
 # Roadmap
 
+## Lugnare månad, barnschema och Flow (2026-10-07)
+- [x] Beskriv befintliga datumrutor, färger, avbockningsvägar och Flow-stöd före ändring.
+- [x] Förenkla månad till datum, verklig kapacitet idag/historiskt och en prick per område; inget framtidsbatteri.
+- [x] Gör barnschema helt utan avbockning i alla vyer, med tidsstyrt fokus; behåll egna uppgifter.
+- [x] Förfina ett situationsanpassat Flow-stöd, testa mobil/dator och uppdatera dokumentation. Ingen publicering eller DB/RLS-ändring.
+- Verifierat med befintliga aktiviteter: framtidsbatterier 0, högst fyra prickar, barnets Idag/schema/editor utan klar-knappar och egna uppgifter fortsatt avbockningsbara. Mobil utan sidöverflöde, inga sidfel, 63 tester godkända och senaste bygge OK. Ingen testaktivitet sparad.
+
 ## Familjelager i kalendern (2026-10-07)
 - [x] Kartlägg befintliga kalenderposter, barnschema, närvarometadata och rättigheter; beskriv lösningen före implementation.
 - [x] Bygg familjelager med lägen, val av barn, gruppering, visuellt sekundära block och uttrycklig Behöver mig; bevara kapacitet och egna uppgifter.

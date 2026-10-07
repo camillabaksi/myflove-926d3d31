@@ -65,9 +65,11 @@ export function DailyFlowList({
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
     for (const item of [...today, ...extraItems]) {
-      const key = itemKey(item);
+      const schedule = item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-");
+      const projected = schedule ? { ...item, done: false, completable: false } : item;
+      const key = itemKey(projected);
       const previous = merged.get(key);
-      if (!previous || (item.done && !previous.done)) merged.set(key, item);
+      if (!previous || (projected.done && !previous.done)) merged.set(key, projected);
     }
     const sorted = sortAsDay([...merged.values()]);
     const saved = orderMap[dayISO];

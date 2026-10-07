@@ -4,7 +4,6 @@ import { useTasks, useReminders } from "@/hooks/use-data";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { childEventsForMyDay, linkLabelsByTask } from "@/lib/family-perspective";
-import { useChildren } from "@/hooks/use-children";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { usePriorityList } from "@/hooks/use-priority-list";
 import { normalizeQuickflowText } from "@/lib/quickflow";
@@ -56,7 +55,6 @@ export function useFlowItems(dateISO?: string): {
   const targetDay = dateISO ?? todayISO();
   const isTodayView = targetDay === todayISO();
   const childEvents = useChildEvents(targetDay);
-  const { toggleItem: toggleChildItem } = useChildren();
   const { items: quickflowItems, complete, uncomplete, remove: removeQuickflow } = useQuickflow();
   const { items: priorityItems, update: updatePriority, remove: removePriority } = usePriorityList();
   const { suggestFor } = useFrictionLibrary();
@@ -351,7 +349,7 @@ export function useFlowItems(dateISO?: string): {
   /** EN avcheckning för hela appen – varje källa uppdaterar sin egen status. */
   const toggleItem = useCallback(
     (item: FlowItem) => {
-      if (!item.completable) return;
+      if (!item.completable || item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-")) return;
       // Uppgifter skickar sin egen signal i useTasks – övriga källor gör det här.
       if (!item.done && !item.id.startsWith("task-")) {
         emitActivityDone({
@@ -372,10 +370,6 @@ export function useFlowItems(dateISO?: string): {
           return;
         }
         return toggleReminder(rest);
-      }
-      if (item.id.startsWith("childitem-")) {
-        void toggleChildItem(rest, !item.done);
-        return;
       }
       if (item.id.startsWith("prio-")) {
         const pid = item.id.slice(5);
@@ -399,7 +393,6 @@ export function useFlowItems(dateISO?: string): {
       reminders,
       setInstanceDone,
       targetDay,
-      toggleChildItem,
       complete,
       uncomplete,
       toggleDone,

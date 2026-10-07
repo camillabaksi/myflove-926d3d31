@@ -51,6 +51,7 @@ export function kindFromId(id: string): { kind: EditableKind; realId: string } {
 const EXTERNAL_HOME: Record<string, { label: string; href: string }> = {
   "lec-": { label: "schemat i Studier", href: "/studyflow" },
   "child-": { label: "barnens schema", href: "/barn" },
+  "childitem-": { label: "barnens schema", href: "/barn" },
   "c-": { label: "barnens schema", href: "/barn" },
   "f-": { label: "familjens kalender", href: "/familj" },
 };
@@ -321,7 +322,7 @@ function FlowItemEditDialog({
       else if (target.kind === "rutin")
         setRoutines((prev) => (prev ?? []).filter((r) => r.id !== target.realId));
     }
-    toast.success("Borttagen");
+    toast.success("Borttagen", { description: "En sak mindre att hålla i huvudet. Planen får förändras." });
     onClose();
   };
 

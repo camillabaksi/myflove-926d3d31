@@ -129,7 +129,7 @@ function ChildrenContent() {
         .filter((i) => i.child_id === activeChildId)
         .filter((i) => (filter === "alla" ? true : i.kind === filter))
         .sort((a, b) => {
-          if (a.completed !== b.completed) return a.completed ? 1 : -1;
+          if (a.kind === "task" && b.kind === "task" && a.completed !== b.completed) return a.completed ? 1 : -1;
           return (a.date ?? "9999").localeCompare(b.date ?? "9999");
         }),
     [items, activeChildId, filter],
@@ -223,6 +223,7 @@ function ChildrenContent() {
   };
 
   const handleToggle = async (item: ChildItem, e: React.MouseEvent) => {
+    if (item.kind !== "task" || item.owner_id !== userId) return;
     const next = !item.completed;
     if (next) celebrateFromEvent(e);
     await toggleItem(item.id, next);
@@ -386,7 +387,7 @@ function ChildrenContent() {
                   <li
                     key={`${e.time}-${e.title}-${i}`}
                     className={`flex items-start gap-3 rounded-2xl border border-border bg-card px-3 py-2 text-sm ${
-                      e.completed ? "text-muted-foreground line-through" : "text-ink"
+                      "text-ink"
                     }`}
                   >
                     <span className="font-mono text-xs pt-0.5 text-muted-foreground">{e.time}</span>
@@ -547,7 +548,7 @@ function ChildrenContent() {
                   return (
                     <li key={item.id} className="surface-card p-4 space-y-2">
                       <div className="flex items-start gap-3">
-                        {item.kind === "task" || item.kind === "activity" ? (
+                        {item.kind === "task" ? (
                           <button
                             type="button"
                             onClick={(e) => handleToggle(item, e)}
@@ -562,7 +563,7 @@ function ChildrenContent() {
                         )}
                         <div className="flex-1 min-w-0">
                           <div
-                            className={`font-medium ${item.completed ? "line-through text-muted-foreground" : ""}`}
+                            className={`font-medium ${item.kind === "task" && item.completed ? "line-through text-muted-foreground" : ""}`}
                           >
                             {item.title}
                           </div>
