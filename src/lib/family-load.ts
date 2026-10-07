@@ -61,12 +61,10 @@ function toMinutes(hhmm: string): number {
   return Number(h) * 60 + Number(m ?? 0);
 }
 
-const DEFAULT_LENGTH = 45;
-
 /** Räknar hur mycket en aktivitet faktiskt tar av dagen, med prep och resa. */
 export function itemMinutes(item: FamilyLoadItem): number {
   const start = toMinutes(item.time);
-  const end = item.endTime ? Math.max(toMinutes(item.endTime), start + 15) : start + DEFAULT_LENGTH;
+  const end = item.endTime ? Math.max(toMinutes(item.endTime), start) : start;
   return end - start + (item.prepMinutes ?? 0) + (item.travelMinutes ?? 0);
 }
 
@@ -78,7 +76,7 @@ export function buildFamilyLoad(input: FamilyLoadInput): FamilyLoadSummary {
   const now = input.nowMinutes ?? 0;
   const items = [...input.items].sort((a, b) => a.time.localeCompare(b.time));
   const mine = items.filter(requiresParent);
-  const upcoming = mine.filter((i) => !i.completed && toMinutes(i.time) + DEFAULT_LENGTH >= now);
+  const upcoming = mine.filter((i) => toMinutes(i.endTime ?? i.time) >= now);
   const committedMinutes = upcoming.reduce((sum, i) => sum + itemMinutes(i), 0);
 
   const first = upcoming[0];

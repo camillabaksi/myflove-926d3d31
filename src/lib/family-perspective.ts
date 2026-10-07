@@ -149,13 +149,13 @@ function toMinutes(hhmm: string): number {
 
 /** Nu/Nästa för en persons poster utifrån faktisk tid. */
 export function nowNextFor(entries: TimelineEntry[], nowMinutes: number): { now: string | null; next: string | null } {
-  const sorted = [...entries].filter((e) => !e.completed).sort((a, b) => a.time.localeCompare(b.time));
+  const sorted = [...entries].filter((e) => e.personId !== ME_ID || !e.completed).sort((a, b) => a.time.localeCompare(b.time));
   let now: string | null = null;
   let next: string | null = null;
   sorted.forEach((e, i) => {
     const start = toMinutes(e.time);
     const following = sorted[i + 1];
-    const end = e.endTime ? toMinutes(e.endTime) : following ? toMinutes(following.time) : start + 45;
+    const end = e.endTime ? toMinutes(e.endTime) : following ? toMinutes(following.time) : e.personId === ME_ID ? start + 45 : 1440;
     if (start <= nowMinutes && nowMinutes < end) now = e.key;
     if (!next && start > nowMinutes) next = e.key;
   });
