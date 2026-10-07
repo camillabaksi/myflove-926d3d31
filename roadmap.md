@@ -2,6 +2,7 @@
 
 ## Kalender: sex publiceringssteg (2026-10-07)
 - [ ] Månadsvy: förtydligad och kontrollerad (8 tester, skärm och inga sidfel); publicering beställd, inväntar bekräftad driftsättning.
+- [x] Veckovy mobil 1–3 dagar med svep (2026-10-07).
 - [x] Veckovy: publicering beställd 2026-10-07 tillsammans med dagsvy.
 - [x] Dagsvy med drag-and-drop, tidslinje, energibalans och att få gjort: publicering beställd 2026-10-07.
 - [ ] Tidslinje: kontrollera tidsblock och luft, publicera.
