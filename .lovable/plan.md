@@ -1,42 +1,42 @@
-# Paceable etapp 1 — visuell polish efter referensbilden
+# Paceable etapp 1C — sista visuella polishen
 
-Bilden används som riktning för stilen, inte som mall. Kapacitetsringen och rött/grönt för energi tas inte med. Den horisontella kapacitetsvisningen ligger kvar. Ingen logik, data, sökvägar eller lagring ändras, och inget publiceras.
+## Mål och avgränsning
+Paceable känns igen genom varm ivory, aubergine-text, den lilla mjuka accentpaletten, stenarna och formerna — inte genom en ny ensam huvudfärg. Endast presentation ändras. Ingen publicering, migration eller förändring av Core, kalenderdata, familjeskydd, sparning, routes eller tekniska identifierare.
 
-## 1. Ikonen för Min plats
-- Den nuvarande ikonen med tre staplade vågor ersätts av två spegelvända, öppna kurvor som formar omslutande händer. Tunn linje och mycket tom yta, inga fingrar och ingen cirkel runt. Linjetjockleken blir densamma som för övriga ikoner.
-- Ikonerna för Idag, Tankar och Mer justeras så att alla har samma linjetjocklek och storlek som i bilden.
+## 1. Färger som faktiskt används
+- De nuvarande grundfärgerna är redan ivory/plommon, men äldre utseendeteman överstyr dem till lila och Kalender har dessutom en egen lila överstyrning. Ge de omarbetade appytorna uttryckliga Paceable-färgtokens som inte tar över eller skriver om användarens sparade utseendeval. Behåll äldre ytor oförändrade.
+- Tydliga huvudhandlingar får plum med läsbar kontrast; sekundära handlingar neutral yta/plum-text. Ingen mekanisk ändring av alla knappar.
+- Aktiv navigation behåller en subtil lavender wash, men ikon/text får plum. Kalenderns vyval och valda datum använder mjuk yta, tunn kontur och tydlig vikt/markering tillsammans med befintliga tillgänglighetsegenskaper.
+- Capacity behåller horisontell form och procent, men får en separat dämpad lavender-ton som är konstant oavsett procent. Den delar inte CTA-färg.
+- Behåll de små flerfärgade accenterna; inga nya status- eller prestationsfärger.
 
-## 2. Idag: ta bort den dubbla menyn
-- Raden med Idag · Kalender · Lägg till högst upp på dagssidan tas bort.
-- "+ Lägg till" blir en lugn knapp vid rubriken Din dag. Den öppnar samma Lägg till-sida som i dag.
+## 2. Idag och Min plats
+- Ta bort antal punkter under Din dag, utan att ändra listan eller data.
+- Ta bort enbart bladikonen vid Dagens Pace; behåll sage-ytan, texterna och nivåerna.
+- Behåll de tre små stenarna vid hälsningen utan upprepning längre ned.
+- Förenkla Min plats-symbolen till två öppna spegelvända kurvor utan fingrar, mittspets eller inre detaljer. Bedöm den i faktisk 24 px menystorlek.
+- Behåll Min plats-ingångar och färgade ikonbakgrunder. Dämpa headerns färgskiftning och byt undertitel till ”Din plats för energi, återhämtning och det som påverkar dagen.”
 
-## 3. Idag: mindre som en instrumentpanel
-- Samma ordning: hälsning/datum, kapacitet, Din dag, Pace, stöd.
-- Din dag blir sidans huvudinnehåll: ingen yttre ram, bara rubrik, mer luft och raderna direkt på sidan.
-- Kort inuti kort tas bort. Pace och stöd blir lättare ytor med mer avstånd emellan.
-- Avbockning, familjeval, påminnelser och Lägg till fungerar som förut.
+## 3. Kalenderprickarna
+- Kontrollera med samma granskningskonto vilka verkliga poster som ger Hem-prickarna över månaden. Den nuvarande presentationen deduplicerar redan områden med en mängd av unika värden; återkommande aktiva rutiner projiceras på de dagar där de förekommer.
+- Om de många prickarna beror på verkligt återkommande innehåll: behåll dem och rapportera orsaken. Inga rutiner eller områden döljs för att få en tommare kalender.
+- Korrigera endast ett påvisat presentationsfel: högst en prick per förekommande område, inga prickar utan innehåll; behåll befintlig gräns om fyra prickar och resten-antal, familjesammanfattning och åtkomliga etiketter.
+- Kalendergeometri, filter, tidslinje, drag/drop, undo och barnens read-only-schema lämnas orörda.
 
-## 4. Kalender: lugnare kontroller
-- Valet för Familj och "Visa i kalendern" blir en enda diskret rad.
-- Kalenderkoppling och Dagens verktyg blir små textknappar under kalendern, inte stora knappar ovanför den.
-- Kalenderns funktioner, filter och familjedelning ändras inte.
-
-## 5. Flow-texter på Idag, Kalender, Tankar och Min plats
-- "Frivilligt – det hjälper Flow att anpassa dagen." blir "Frivilligt – hjälper Paceable att förstå vad som påverkar din dag."
-- Min plats: "Prata med Flow" och dess förklaring får neutral text, till exempel "Prata om din dag". Länken leder till samma ställe.
-- Andra synliga MyFlove/Flow-texter på de fyra sidorna listas i slutrapporten. Inget byts automatiskt utöver dessa två.
-
-## 6. Färgbalans (ungefär 80 % lugnt, 20 % färg)
-- Små accenter i salvia, aprikos, solgult och himmelsblått: ikonbakgrunder på Min plats-raderna, ett diskret tecken på Pace-ytan och en sol i hälsningen.
-- Färgerna anger aldrig bra eller dåligt och ger ingen ny betydelse att lära sig.
-
-## 7. Paceable-stenarna
-- Samma tre stenformer används på högst två ställen: liten bredvid hälsningen på Idag och liten i Min plats-rubriken.
-- Inga stora bilder. Stenarna tas bort där de inte tillför något.
-- Rörelsen stängs av när enheten är inställd på minskad rörelse.
+## 4. Tankar
+- Lätta upp startsidan med färre kapslade ramar och mer luft, utan att försvaga klickytor eller flytta funktioner.
+- Använd befintlig organisk Tankar-symbol i stället för hjärnan som sidans huvudsymbol. Ingen ny ikonfamilj.
+- Neutralisera ”Flow hittar möten och deadlines” både på startsidan och i capture-dialogen, inklusive relevanta översättningar.
+- Lämna ”Tankar utan krav bor i en egen del under Flow.” till den senare strukturetappen och redovisa kvarvarande Flow-text.
+- Skriv/säg → tolkning → granska/redigera → välj destination → godkänn och befintlig lagring är oförändrat.
 
 ## Tekniska detaljer
-- Ändras: `navigation-icons.tsx`, `day-hub.tsx` (fliksraden), `today.tsx` och dagens komponenter (bara ytor och avstånd), kontrollerna i `calendar-planner.tsx`/`calendar.tsx` (bara presentation, ingen geometri eller hantering av händelser), `impact-checkin.tsx` och översättningar i `i18n`, `health.tsx`, tokens i `styles.css`.
-- Rörs inte: day-capacity, day-pace, calendarLoad/Gaps, familjeprojektionen, lagringsnycklar, ID:n och sökvägar.
-- Verifiering: testsviten, typkontroll och bygge, samt Playwright på /idag, /kalender, /quickflow och /halsa på mobil (390 och 360 px) och dator. Inget överflöde och inga konsolfel.
-- CHANGELOG och changelog.ts uppdateras.
+- Presentation berör vid behov `styles.css`, `layout.tsx`, `capacity-battery.tsx`, `navigation-icons.tsx`, `today.tsx`, `today-pace.tsx`, `health.tsx`, `calendar-planner.tsx`, `dump.tsx`, import-/capture-presentation och relevanta översättningar.
+- Bevara `personalization`-lagring och temaval; nya presentationsroller isoleras från äldre överstyrningar. Ingen ändring av Capacity/Pace/Load/Gaps, familjeprojektion/dedup, parser, originalposter eller auth.
+- Dokumentera presentationsgränsen i AGENTS.md och uppdatera båda changelog-filerna efter implementation.
+
+## Verifiering och granskning
+- Kör hela befintliga testsviten och separat typkontroll; kontrollera plattformens automatiska bygge, utan att starta ett manuellt produktionsbygge.
+- Kontrollera Idag, Kalender, Tankar och Min plats på 360/390 px och desktop med samma konto: textpassning, sidscroll, navigation, aktiva lägen, synlig fokusmarkering och kontrast i ljus/mörk vy.
+- Kontrollera reduced motion, faktisk 24 px Min plats-symbol och regressioner för Core/familj/read-only och osparad Tankar-granskning.
+- Slutrapport: ändrade färgtokens och ytor, CTA/selected/Capacity-separation, kalenderprickarnas verifierade orsak, textändringar, tester och kvarstående begränsningar. Appen lämnas opublicerad för din sista visuella kontroll; fysiska iOS/Android-enheter ingår inte i sandboxkontrollen.
