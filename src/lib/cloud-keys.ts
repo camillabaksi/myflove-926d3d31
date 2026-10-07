@@ -25,6 +25,7 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-calendar-pictograms",
   "myflove-calendar-all-in-day-dates",
   "myflove-calendar-categories",
+  "myflove-calendar-family-layer",
   "myflove-insight-intro",
   "myflow-meal-plans",
   "myflove-meal-types",

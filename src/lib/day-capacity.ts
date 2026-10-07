@@ -31,7 +31,10 @@ const localDate = (iso: string) => {
  * Planerade aktiviteter och klockan påverkar aldrig värdet; framtida dagar
  * utan egen registrering ger null (visas som "–").
  */
-export function dayCapacity(date: string, edges: DayEdges | null | undefined, logs: EnergyLogEntry[] | null | undefined): DayCapacity {
+export function dayCapacity(date: string, edges: DayEdges | null | undefined, logs: EnergyLogEntry[] | null | undefined, today?: string): DayCapacity {
+  const now = new Date();
+  const currentDate = today ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  if (date > currentDate) return { percent: null, source: null, morning: null, reportedLevel: null };
   const m = edges?.[date]?.morning;
   const morning = typeof m === "number" && Number.isFinite(m) ? Math.round(edgeToPercent(m)) : null;
   const latest = (logs ?? [])

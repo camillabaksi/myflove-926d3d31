@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BatteryMedium, Brain, CalendarDays, Heart } from "lucide-react";
+import { ArrowRight, Battery, Brain, CalendarDays, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { CapacityBattery } from "@/components/calendar/capacity-battery";
@@ -32,7 +32,7 @@ export default function HomePriorityActions({ onQuickflow }: { onQuickflow: () =
         </Link>
       </Button>
       <Button variant="outline" className={`${tile} border-border/60 bg-card/90 text-ink`} data-testid="home-widget-capacity" onClick={() => open("capacity")}>
-        <CapacityBattery percent={capacity.percent} size="sm" className="min-h-8 [&>span:last-child]:text-xl" />
+        {capacity.percent === null ? <span className="flex h-8 items-center gap-2 text-primary"><Battery aria-hidden /><span className="text-xs font-semibold">{t("Checka in")}</span></span> : <CapacityBattery percent={capacity.percent} size="sm" className="min-h-8 [&>span:last-child]:text-xl" />}
         <span className="min-w-0"><span className="block font-display text-sm font-bold">{t("Din kapacitet idag")}</span><span className="mt-1 block text-xs font-normal text-muted-foreground">{capacity.percent == null ? t("Ingen incheckning idag") : t("Utifrån din incheckning")}</span></span>
       </Button>
       <Button variant="outline" className={`${tile} border-border/60 bg-blush/40 text-ink`} data-testid="home-widget-mood" onClick={() => open("checkin")}>
@@ -49,7 +49,7 @@ export default function HomePriorityActions({ onQuickflow }: { onQuickflow: () =
         <DialogTitle className="pr-6 font-display">{dialog === "checkin" ? t("Logga hur du mår") : t("Din kapacitet idag")}</DialogTitle>
         <DialogDescription>{dialog === "checkin" ? t("Din energi och ditt mående just nu.") : t("Samma kapacitet som i kalendern, utifrån din egen incheckning idag.")}</DialogDescription>
         {dialog === "checkin" ? <SimpleCheckin source="hem" /> : <div className="space-y-4">
-          <CapacityBattery percent={capacity.percent} size="lg" className="w-full" />
+          {capacity.percent !== null && <CapacityBattery percent={capacity.percent} size="lg" className="w-full" />}
           <p className="text-sm text-muted-foreground">{capacity.source === "morning" ? t("Värdet kommer från din morgonincheckning idag.") : capacity.source === "energy-log" ? t("Värdet kommer från din senaste energilogg idag.") : t("Du har ingen incheckning idag ännu. Därför visas inget procenttal.")}</p>
           <p className="text-sm text-muted-foreground">{t("Planerade aktiviteter visas som belastning i kalendern och ändrar inte den här kapaciteten.")}</p>
           <Button className="min-h-11 w-full" onClick={() => setDialog("checkin")}><Heart aria-hidden />{t("Logga energi & mående")}</Button>

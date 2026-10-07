@@ -1,10 +1,12 @@
 # Roadmap
 
 ## Paceable Core v1 (2026-10-07)
-- [ ] Kartlägg återanvändning, Today-vägar, Capacity Mode, lagring och familjeskydd; presentera implementationsplan före appändring.
-- [ ] Konsolidera primär Today med registrerad Capacity, befintlig kvalitativ Load och transparent Pace; behåll tekniska identifierare och legacy-data.
-- [ ] Lägg till frivillig hjälp att göra dagen lättare utan automatiska ändringar; bevara barnschema read-only.
-- [ ] Kontrollera unknown/future, familj, språk och mobil/dator; uppdatera dokumentation och rapportera legacy/risker. Ingen publicering.
+- [x] Kartlägg återanvändning, Today-vägar, Capacity Mode, lagring och familjeskydd; presentera implementationsplan före appändring.
+- [x] Konsolidera primär Today med registrerad Capacity, befintlig kvalitativ Load och transparent Pace; behåll tekniska identifierare och legacy-data.
+- [x] Lägg till frivillig hjälp att göra dagen lättare utan automatiska ändringar; bevara barnschema read-only.
+- [x] Kontrollera unknown/future, familj, språk och mobil/dator; uppdatera dokumentation och rapportera legacy/risker. Ingen publicering.
+- [x] Leverera slutrapportens 17 punkter, inklusive fysisk iOS-/Android-begränsning.
+- Verifierat: Capacity-prioritet och framtidsspärr, deterministisk Pace, okänd Load/längd, tidsluckor/överlapp, recovery och familjededuplicering täcks av tester. `/idag`, `/hem`, `/kalender` och `/min-dag` kontrollerades inloggat i 390/768/1280 px utan overflow eller sidfel; redirecten består, mode-/prestationsytor saknas och öppnade granskningsdialoger ändrar inget. Fysiska iOS-/Android-enheter är inte testade. Ingen databas-, RLS-, auth-, route-, nyckel-, mobil-ID- eller publiceringsändring.
 
 ## Lugnare månad, barnschema och Flow (2026-10-07)
 - [x] Beskriv befintliga datumrutor, färger, avbockningsvägar och Flow-stöd före ändring.

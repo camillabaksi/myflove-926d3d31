@@ -3,7 +3,6 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useAdaptiveActivity } from "@/hooks/use-adaptive-activity";
 import { useLang } from "@/hooks/use-language";
-import { CAPACITY_META } from "@/lib/priority-engine";
 
 /**
  * "Dagens fokus" – samma lugna mall på alla områdessidor.
@@ -43,7 +42,7 @@ export default function AreaFocus({
       </p>
       <p className="mt-1 font-display text-lg font-bold text-ink">{t(suggestion.suggestion)}</p>
       <p className="mt-1 text-sm text-muted-foreground">
-        {CAPACITY_META[mode].dot} {t(CAPACITY_META[mode].label)} · {t(suggestion.firstStep)}
+        {t(suggestion.firstStep)}
       </p>
       {low && lowHint && <p className="mt-1 text-sm text-muted-foreground">{t(lowHint)}</p>}
       {href && (

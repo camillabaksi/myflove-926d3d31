@@ -4,8 +4,6 @@ import { ArrowRight, Battery, Dumbbell, Pill, Sunrise, MessageCircle } from "luc
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import CollapsibleSection from "@/components/collapsible-section";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { CAPACITY_META } from "@/lib/priority-engine";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -43,7 +41,6 @@ const AREAS: {
 ];
 
 export default function HealthPage() {
-  const { mode } = useCapacityMode();
   const { t } = useLang();
   useEffect(() => {
     track("health_viewed", { source: "sida" });
@@ -64,7 +61,7 @@ export default function HealthPage() {
         <MyFloveWide className="space-y-2">
           <Link href="/mitt-batteri" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <Battery className="h-7 w-7 shrink-0 text-primary" aria-hidden />
-            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">Dagens val: {t(CAPACITY_META[mode].label)}. Logga hur du mår eller se ditt energimönster.</span></span>
+            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-primary" aria-hidden />
           </Link>
         </MyFloveWide>

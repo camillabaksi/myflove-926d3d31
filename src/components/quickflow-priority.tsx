@@ -17,7 +17,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { MyFloveBlock } from "@/components/myflove/block";
-import { CAPACITY_META } from "@/lib/priority-engine";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import WhyHint from "@/components/why-hint";
@@ -52,7 +51,7 @@ export function QuickflowPriority() {
   const { t } = useLang();
   const { openItems, doneItems, intro, add, update, remove, move, clear, splitItem } =
     usePriorityList();
-  const { percent, mode: capacityMode } = useCapacityMode();
+  const { percent } = useCapacityMode();
   const capacityContext = useCapacityContext();
   const { tasks, addTask, updateTask } = useTasks();
   const { toast } = useToast();
@@ -170,14 +169,6 @@ export function QuickflowPriority() {
         >
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              {typeof energyPercent === "number" && (
-                <span
-                  className="inline-flex items-center gap-1 rounded-full border-2 border-border/60 bg-card px-2.5 py-1 text-xs font-medium"
-                  aria-label={`${t("Kapacitetsläge:")} ${t(CAPACITY_META[capacityMode].label)}`}
-                >
-                  {CAPACITY_META[capacityMode].dot} {t(CAPACITY_META[capacityMode].label)}
-                </span>
-              )}
               {intro ? (
                 <p className="min-w-0 flex-1 text-sm text-muted-foreground">{intro}</p>
               ) : (

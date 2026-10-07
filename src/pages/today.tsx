@@ -1,107 +1,64 @@
-import { CopyDayButton } from "@/components/day/copy-day-dialog";
-import { track } from "@/lib/analytics";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import CollapsibleSection from "@/components/collapsible-section";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import EnergyBattery from "@/components/energy-battery";
+import { Bell, Plus } from "lucide-react";
+import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
-import { useFlowItems } from "@/hooks/use-flow-items";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
-
-import { assessToday } from "@/lib/flow-engine";
-import { useCapacityMode } from "@/hooks/use-capacity-mode";
-import { useFlowPlan } from "@/hooks/use-flow-plan";
-import { CAPACITY_META } from "@/lib/priority-engine";
-import { todayISO as todayStr } from "@/lib/day";
-import { Bell, CalendarDays, Heart, ListOrdered, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useLang } from "@/hooks/use-language";
+import { TodayCapacity } from "@/components/day/today-capacity";
+import { TodayPace } from "@/components/day/today-pace";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickAddSheet from "@/components/quick-add-sheet";
-import JourneySteps from "@/components/journey/journey-steps";
-import NextStepCard from "@/components/journey/next-step-card";
-import WeekReviewCard from "@/components/week-review-card";
-import { useWeekReview } from "@/hooks/use-activity-history";
-import { weekStartISO } from "@/lib/week-review";
-import { parseISODate } from "@/lib/day";
-import { FlowMascot } from "@/components/flow-mascot";
-import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { Button } from "@/components/ui/button";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
+import { useFlowItems } from "@/hooks/use-flow-items";
+import { useLang } from "@/hooks/use-language";
+import { useUserProfile } from "@/hooks/use-user-profile";
 import { useVisualCalendar } from "@/hooks/use-visual-calendar";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { applyFamilyPresence, DEFAULT_FAMILY_LAYER, type FamilyLayerPreferences } from "@/lib/family-calendar";
-import { flowDaySupport } from "@/lib/flow-day-support";
+import { deriveDayPace } from "@/lib/day-pace";
+import { todayISO } from "@/lib/day";
+import { track } from "@/lib/analytics";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
-/**
- * ❤️ Idag – appens huvudupplevelse för dagen.
- * Här bor allt som förut låg i "Min dag" och "Daily Flow": batteriet,
- * dagens tidslinje, energiflödet och dagens lista.
- *
- * Två vyer på SAMMA data:
- *  🌊 Flow  – den levande dagen: nu, energi och nästa steg.
- *  📋 Lista – allt som ska göras idag, avbockningsbart.
- */
+/** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
-  const { t } = useLang();
+  const { t, locale } = useLang();
+  const { name } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
 
-  const today = todayStr();
+  const today = todayISO();
   const dates = useMemo(() => [today], [today]);
   const { days } = useVisualCalendar(dates);
   const [familyPreferences] = useCloudSyncedStorage<FamilyLayerPreferences>("myflove-calendar-family-layer", DEFAULT_FAMILY_LAYER);
   const capacityOf = useDayCapacity();
   const dayCapacity = capacityOf(today);
-  const support = flowDaySupport(applyFamilyPresence(days[today] ?? [], familyPreferences), dayCapacity.percent);
-  const [supportDismissed, setSupportDismissed] = useState(false);
-  const isSunday = parseISODate(today).getDay() === 0;
-  const weekReview = useWeekReview(weekStartISO(today));
-  const { reading, items: batteryItems } = useEnergyBattery();
-
+  const calendarEntries = applyFamilyPresence(days[today] ?? [], familyPreferences);
+  const pace = deriveDayPace({ date: today, today, capacity: dayCapacity.percent, entries: calendarEntries });
   const { today: todaysItems } = useFlowItems();
-  // Hur mycket som ryms avgörs av FlowPlan (prioritet + kapacitetsläge) –
-  // inte av FlowScore eller batteriet.
-  const flowPlan = useFlowPlan();
-  const capacity = useCapacityMode();
-
-  /** Dagens belastning – samma bedömning som Flow → IDAG. */
-  const load = useMemo(() => assessToday(reading, batteryItems), [reading, batteryItems]);
-
-  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString("sv-SE", {
-    weekday: "short",
+  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString(locale, {
+    weekday: "long",
     day: "numeric",
+    month: "long",
   });
 
   return (
     <MyFlovePageGrid area="idag">
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
-        <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
-          <Heart className="h-7 w-7 text-primary" /> {t("Idag")}
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t("Vad händer idag och vad behöver du göra?")}
-        </p>
+        <p className="text-xs font-semibold uppercase text-primary">{t("Din dag, i din takt")}</p>
+        <h1 className="mt-1 font-handwritten break-words text-4xl font-semibold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
+        <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
+        <TodayCapacity percent={dayCapacity.percent} />
       </MyFloveWide>
 
       <MyFloveWide>
-        <section aria-label={t("Dagens kapacitet och Flow")} className="flex flex-wrap items-center gap-x-5 gap-y-3 border-y border-border/60 py-3">
-          <div className="min-w-0">
-            <p className="mb-1 text-xs font-semibold text-ink">{t("Din kapacitet idag")}</p>
-            {dayCapacity.percent !== null ? <CapacityBattery percent={dayCapacity.percent} size="sm" /> : <p className="text-xs text-muted-foreground">{t("Ingen egen incheckning idag.")}</p>}
-          </div>
-          {!supportDismissed && <div className="flex min-w-0 flex-1 items-center gap-3" data-testid="today-flow-support"><FlowMascot size="xs" alive={false} /><div className="min-w-0"><p className="text-sm leading-relaxed text-ink">{t(support.message)}</p>{support.prioritize && <div className="mt-2 flex flex-wrap gap-2"><Button asChild variant="outline" size="sm"><Link href="/flowplan">{t("Hjälp mig prioritera")}</Link></Button><Button variant="ghost" size="sm" onClick={() => setSupportDismissed(true)}>{t("Inte nu")}</Button></div>}</div></div>}
-        </section>
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <section className="rounded-3xl border-2 border-border/60 bg-card px-4 py-4 shadow-soft sm:px-5">
+        <section className="rounded-3xl border border-border/60 bg-card px-4 py-4 shadow-soft sm:px-5" aria-labelledby="your-day-title">
           <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 pb-3">
             <div>
-              <p className="font-display text-xl font-bold capitalize text-ink">{dateLabel}</p>
+              <h2 id="your-day-title" className="font-display text-xl font-bold text-ink">{t("Din dag")}</h2>
               <p className="text-xs text-muted-foreground">
                 {todaysItems.length} {todaysItems.length === 1 ? t("punkt") : t("punkter")}
               </p>
@@ -121,73 +78,13 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-3">
-             <FamilyDayPerspectives myDay={<DailyFlowList dayHeadings />} />
+             <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings />} />
           </div>
         </section>
       </MyFloveWide>
 
       <MyFloveWide>
-        <CollapsibleSection
-          id="today-day-deep-dive"
-          title={t("Din dag – när du vill fördjupa")}
-          description={t("Se dagens steg och nästa rimliga sak.")}
-          defaultCollapsed
-          className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
-          headingClassName="text-base font-semibold text-ink"
-        >
-          <div className="space-y-4">
-            <JourneySteps onAddOpen={() => setAddOpen(true)} />
-            <NextStepCard />
-            {isSunday && <WeekReviewCard review={weekReview} />}
-          </div>
-        </CollapsibleSection>
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <CollapsibleSection
-          id="today-support"
-          defaultCollapsed
-          title={t("Planering och energi")}
-          description={t("Öppna om du vill se batteriet, dagens ordning eller planera om.")}
-          className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
-          headingClassName="text-base font-semibold text-ink"
-        >
-          <div className="space-y-4 pt-2">
-            <EnergyBattery
-              href="/mitt-batteri"
-              onNavigate={() => track("battery_opened", { source: "idag" })}
-            />
-            <div className="rounded-2xl bg-secondary/30 p-4">
-              <p className="text-sm font-semibold text-ink">
-                {CAPACITY_META[capacity.mode].dot} {t("Dagens kapacitet")}: {t(CAPACITY_META[capacity.mode].label)}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{t(CAPACITY_META[capacity.mode].meaning)}</p>
-            </div>
-            {flowPlan.order.length > 0 && (
-              <div className="rounded-2xl bg-secondary/30 p-4">
-                <p className="mb-2 flex items-center gap-2 text-sm font-semibold text-ink">
-                  <ListOrdered size={16} className="text-primary" /> {t("Dagens ordning")}
-                </p>
-                <ol className="space-y-1.5 text-sm text-foreground">
-                  {(capacity.mode === "lagt" ? flowPlan.order.slice(0, 1) : flowPlan.order).map((step, index) => (
-                    <li key={step.item.id}>
-                      {index === 0 ? `${t("Nu")}: ` : `${t("Sedan")}: `}{step.item.title}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-            <div className="rounded-2xl bg-secondary/30 p-4 text-sm text-foreground">
-              <p>{load.summary}</p>
-              <Link
-                href="/flow"
-                className="mt-2 inline-flex items-center gap-2 text-primary hover:underline"
-              >
-                <CalendarDays size={15} /> {t("Öppna Flow för mer stöd")}
-              </Link>
-            </div>
-          </div>
-        </CollapsibleSection>
+        <TodayPace pace={pace} />
       </MyFloveWide>
     </MyFlovePageGrid>
   );
