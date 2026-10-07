@@ -2,9 +2,10 @@
 
 ## Paceable rebrand etapp 1 (2026-10-07)
 - [x] Ta emot visuell riktning och skyddsgränser; kartlägg befintlig design/navigation för en konkret plan.
-- [ ] Visa implementationsplan och invänta godkännande — appkod får inte ändras före godkännandet.
-- [ ] Efter godkännande: design tokens, app shell/navigation, Idag, Tankar, Min plats, Kalender, Mer och sparsamma stenar; bevara Core och tekniska identifierare.
-- [ ] Efter implementation: regressionstester, mobil/dator/tillgänglighet, dokumentation och slutrapport. Ingen publicering eller native-/SEO-rebrand.
+- [x] Visa implementationsplan och invänta godkännande — godkänd med förtydliganden om aktiv QuickFlow-route, återanvändbara SVG-stenar och visuell stoppregel.
+- [x] Efter godkännande: design tokens, app shell/navigation, Idag, Tankar, Min plats, Kalender, Mer och sparsamma stenar; bevara Core och tekniska identifierare.
+- [x] Efter implementation: regressionstester, mobil/dator/tillgänglighet, dokumentation och slutrapport. Ingen publicering eller native-/SEO-rebrand.
+- Verifierat: `/idag`, `/kalender`, `/quickflow`, `/halsa`, `/hem` och `/min-dag` kontrollerade inloggat i 390/1280 px utan sidöverflöde; `/min-dag` redirectar fortsatt till `/idag`. Femdelad mobilnavigation, Paceable-varumärke och återanvända Tankar/Min plats-vägar syns. Typecheck, riktade Core/familjetester och bygge är godkända. Hela sviten gav 494/495 godkända; ett befintligt krypteringslagringstest var instabilt och berörs inte av rebranden. Ingen publicering eller fysisk enhetstest.
 
 ## Paceable Core v1 (2026-10-07)
 - [x] Kartlägg återanvändning, Today-vägar, Capacity Mode, lagring och familjeskydd; presentera implementationsplan före appändring.

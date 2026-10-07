@@ -123,7 +123,7 @@ export default function Home() {
                 <p className="mb-1 text-xs font-semibold uppercase text-primary">
                   {t("Din dag, i din takt")}
                 </p>
-                <h1 className="font-handwritten break-words text-4xl font-semibold leading-tight text-ink sm:text-5xl">
+                <h1 className="break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
                   {name ? `${t("Hej")} ${name}` : t("Hej")}
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">

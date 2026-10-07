@@ -17,7 +17,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   return <>
-    <section className="border-y border-border/60 py-4" aria-labelledby="today-capacity-title">
+    <section className="rounded-3xl border border-border bg-card p-5 shadow-soft" aria-labelledby="today-capacity-title">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <p id="today-capacity-title" className="text-xs font-semibold uppercase text-muted-foreground">{t("Din kapacitet idag")}</p>
@@ -29,7 +29,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
             <p className="mt-2 text-sm text-muted-foreground">{t(capacityCopy(percent))}</p>
           </>}
         </div>
-        {percent === null && <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-lavender text-primary" aria-hidden><Battery size={20} /></span>}
+        {percent === null && <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary" aria-hidden><Battery size={20} /></span>}
       </div>
       {percent === null && <Button variant="outline" className="mt-4 min-h-11 rounded-2xl" onClick={() => setOpen(true)}><Heart size={16} />{t("Checka in")}</Button>}
     </section>

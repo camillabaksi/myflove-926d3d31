@@ -53,7 +53,7 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         <div
           ref={ref}
           data-collapsed={collapsed ? "true" : undefined}
-          className={cn("rounded-xl border bg-card text-card-foreground shadow", className)}
+          className={cn("rounded-3xl border border-border bg-card text-card-foreground shadow-soft", className)}
           {...props}
         >
           {children}
@@ -84,16 +84,16 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
         {showToggle && (
           <button
             type="button"
-            onClick={ctx!.toggle}
-            aria-expanded={!ctx!.collapsed}
-            aria-label={ctx!.collapsed ? "Visa" : "Minimera"}
-            title={ctx!.collapsed ? "Visa" : "Minimera"}
-            className="absolute right-3 top-3 rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            onClick={ctx?.toggle}
+            aria-expanded={!ctx?.collapsed}
+            aria-label={ctx?.collapsed ? "Visa" : "Minimera"}
+            title={ctx?.collapsed ? "Visa" : "Minimera"}
+            className="absolute right-3 top-3 grid min-h-11 min-w-11 place-items-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <ChevronDown
               size={16}
               aria-hidden="true"
-              className={cn("transition-transform", ctx!.collapsed && "-rotate-90")}
+              className={cn("transition-transform", ctx?.collapsed && "-rotate-90")}
             />
           </button>
         )}

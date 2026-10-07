@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotebookPen, Sparkles } from "lucide-react";
+import { Brain, NotebookPen } from "lucide-react";
 import { track } from "@/lib/analytics";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -13,6 +13,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 
 /**
  * QuickFlow = få ut saker ur huvudet → Flow delar upp → du granskar →
@@ -31,12 +32,13 @@ export default function Dump() {
         <MyFloveWide>
           <div className="space-y-8">
             <MyFloveBlock
-              title={t("Vad snurrar i huvudet?")}
-              subtitle={t("Skriv eller prata fritt – Flow hjälper dig sortera sen.")}
-              eyebrow="QuickFlow"
-              icon={Sparkles}
-              tone="sun"
-              surface="sun"
+              title={t("Vad har du i huvudet?")}
+              subtitle={t("Skriv eller säg det som det är.")}
+              eyebrow={t("Tankar")}
+              icon={Brain}
+              tone="lavender"
+              surface="plain"
+              action={<PaceableStones compact />}
               className="pop-in"
             >
               <div className="space-y-4">
@@ -85,7 +87,7 @@ export default function Dump() {
                 <CollapsibleSection
                   title={
                     <span className="flex items-center gap-2">
-                      <Sparkles size={20} /> {t("Mina sorteringsregler")}
+                      <Brain size={20} /> {t("Mina sorteringsregler")}
                     </span>
                   }
                   id="QuickFlow-regler"

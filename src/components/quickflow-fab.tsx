@@ -1,4 +1,4 @@
-import { Brain } from "lucide-react";
+import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
 
 /**
  * QuickFlow-knappen på desktop – öppnar samma QuickFlow-flöde som allt annat
@@ -9,10 +9,10 @@ export default function QuickflowFab() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-      aria-label="QuickFlow – få ut det ur huvudet"
-      className="hidden md:inline-flex fixed right-4 bottom-8 z-40 items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-3.5 font-semibold shadow-lifted press"
+      aria-label="Tankar – få ut det ur huvudet"
+      className="hidden"
     >
-      <Brain size={18} /> QuickFlow
+      <ThoughtsIcon size={18} /> Tankar
     </button>
   );
 }
