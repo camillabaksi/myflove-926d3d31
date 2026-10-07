@@ -58,7 +58,7 @@ export default function Dump() {
               defaultCollapsed
               title={t("Det du fått ur huvudet")}
               description={t(
-                "Flow har sorterat det du dumpat efter viktighet, brådska och ditt batteri. Du bestämmer alltid själv.",
+                "Förslagen är sorterade efter viktighet, brådska och din kapacitet. Du bestämmer alltid själv.",
               )}
               className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
               headingClassName="text-base font-semibold text-ink"

@@ -318,7 +318,7 @@ export const EN_BATTERY: Record<string, string> = {
 
   // Påverkan & menscykel
   "Vad påverkar din kapacitet?": "What is affecting your capacity?",
-  "Frivilligt – det hjälper Flow att anpassa dagen.": "Optional – it helps Flow adapt your day.",
+  "Frivilligt – hjälper Paceable att förstå vad som påverkar din dag.": "Optional – helps Paceable understand what affects your day.",
   "Lägg till om något påverkar dig idag.": "Add anything affecting you today.",
   "Kropp & hälsa": "Body & health",
   "Känslor & tankar": "Feelings & thoughts",
