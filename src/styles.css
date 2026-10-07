@@ -48,6 +48,8 @@
   --color-lavender: hsl(var(--lavender));
   --color-blush: hsl(var(--blush));
   --color-mint: hsl(var(--mint));
+  --color-honey: hsl(var(--honey));
+  --color-coral: hsl(var(--coral));
   --color-sky: hsl(var(--sky));
   --color-sun: hsl(var(--sun));
 
@@ -148,6 +150,8 @@
   --lavender: 264 72% 93%;
   --blush: 335 78% 93%;
   --mint: 158 52% 89%;
+  --honey: 38 90% 80%;
+  --coral: 10 85% 84%;
   --sky: 202 78% 92%;
   --sun: 44 90% 90%;
 
@@ -415,6 +419,8 @@ html[data-npf-still="true"] .home-ambient-glow {
   --lavender: 264 26% 24%;
   --blush: 335 26% 26%;
   --mint: 158 22% 22%;
+  --honey: 36 40% 32%;
+  --coral: 8 40% 34%;
   --sky: 202 26% 24%;
   --sun: 44 28% 24%;
 
