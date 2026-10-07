@@ -1,9 +1,10 @@
 # Roadmap
 
 ## Familjelager i kalendern (2026-10-07)
-- [ ] Kartlägg befintliga kalenderposter, barnschema, närvarometadata och rättigheter; beskriv lösningen före implementation.
-- [ ] Bygg familjelager med lägen, val av barn, gruppering, visuellt sekundära block och uttrycklig Behöver mig; bevara kapacitet och egna uppgifter.
-- [ ] Gör barnschemats NU/SEDAN/SEN tidsstyrt utan prestationskrav; kontrollera tester, mobil/dator och dokumentera. Ingen publicering.
+- [x] Kartlägg befintliga kalenderposter, barnschema, närvarometadata och rättigheter; beskriv lösningen före implementation.
+- [x] Bygg familjelager med lägen, val av barn, gruppering, visuellt sekundära block och uttrycklig Behöver mig; bevara kapacitet och egna uppgifter.
+- [x] Gör barnschemats NU/SEDAN/SEN tidsstyrt utan prestationskrav; kontrollera tester, mobil/dator och dokumentera. Ingen publicering.
+- Verifierat på mobil och dator: familjeläget kan stängas av, barn kan väljas och egna aktiviteter finns kvar; familjekontext kräver användarens val vid planering. Sextio tester godkända och senaste bygge OK. Ingen databas-/RLS-ändring eller publicering.
 
 ## Kalenderns områdesfärger (2026-10-07)
 - [x] Använd befintliga livsområden för mjuka färgmarkeringar i alla tre kalendervyer; behåll områdesnamn och ikoner.
