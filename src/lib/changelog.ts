@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Hem, fyra kompakta rutor (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow direkt under hälsningen. Samma incheckningsbaserade batterivärde som kalendern, eller – utan data. Befintlig måendelogg, Just nu, aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Samlad kalender (2026-10-07): filter, veckomål och frivillig incheckning integreras i den visuella kalendern; kalenderkoppling och dagens befintliga verktyg får tydliga knappar. Ingen dubbel kalender eller konkurrerande batteri; aktiviteter och behörigheter bevaras. Inte publicerat.",
       "Kalender, kapacitetsbatteri (2026-10-07): dagens kapacitet visas som batteri med procent i alla vyer, bara från egen incheckning; planerad belastning visas separat.",
       "Kalender, veckovy på mobil (2026-10-07): veckan visar 1, 2 eller 3 dagar beroende på skärmbredd och sveps horisontellt dag för dag; datorn visar hela veckan. Minskad rörelse respekteras.",
