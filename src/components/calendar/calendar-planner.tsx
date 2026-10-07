@@ -177,7 +177,7 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
     <h2 className="font-display text-sm font-bold">{t(date === today ? "Din kapacitet idag" : "Dagens planering")}</h2>
     <button type="button" onClick={() => setCapInfo(date)} className="mt-3 block w-full rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${t("Kapacitet")}: ${dayCap.percent == null ? t("ingen egen incheckning") : `${dayCap.percent} %`}. ${t("Visa vad den bygger på")}`}>
       <span className="block text-xs text-muted-foreground">{t("Kapacitet")}</span>
-      <CapacityBattery percent={dayCap.percent} size="lg" className="mt-1 w-full" />
+      <CapacityBattery percent={dayCap.percent} size="lg" className="mt-1 w-full" />{dayCap.percent == null && <span className="mt-1 block text-xs text-muted-foreground">{t(date > today ? "Kapacitet visas när du checkat in den dagen." : "Ingen egen incheckning för dagen.")}</span>}
     </button>
     <div className="mt-3 flex items-center justify-between gap-2"><div className="min-w-0"><p className="text-xs text-muted-foreground">{t("Planerad belastning")}</p><p className="mt-0.5 text-sm font-semibold">{t(load.label)}</p></div><Segments entries={entries} /></div>
     <div className="mt-3 flex gap-2 rounded-2xl bg-lavender/50 p-3 text-xs leading-relaxed"><Heart size={15} className="shrink-0 text-primary" aria-hidden /><span>{t(!entries.length ? "Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats." : load.segments >= 3 ? "Det ser ut som en ganska full dag. Vill du se om vi kan skapa lite mer luft?" : gaps.length ? "Det finns lite luft mellan aktiviteterna." : "En sak i taget, i din takt.")}</span></div>
