@@ -1,5 +1,14 @@
 # Roadmap
 
+## Kalender: sex publiceringssteg (2026-10-07)
+- [ ] Månadsvy: förtydligad och kontrollerad (8 tester, skärm och inga sidfel); publicering beställd, inväntar bekräftad driftsättning.
+- [ ] Veckovy: anpassa dagkolumner och svepning, kontrollera och publicera.
+- [ ] Dagsvy: prioritera nu/härnäst, kontrollera och publicera.
+- [ ] Tidslinje: kontrollera tidsblock och luft, publicera.
+- [ ] Energibalans: tydlig jämförelse utan falsk precision, kontrollera och publicera.
+- [ ] Att få gjort: direkt avbockning och tidsplanering, kontrollera och publicera.
+- Nästa steg väntar på att månadsvyns publicering blir klar; vid kontroll serverades ännu tidigare version. Ändra inte nästa steg före bekräftad publicering.
+
 ## Visuell kalender (2026-10-07)
 - [x] Kartlägg befintlig kalender, datakällor, kapacitetsberäkning och behörighetsgränser; presentera plan före implementation.
 - [x] Bygg gemensam perioddata och mockupens månad/vecka/dag utan parallella modeller.
