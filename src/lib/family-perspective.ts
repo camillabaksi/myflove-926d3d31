@@ -74,7 +74,7 @@ export function entriesFromChildEvents(events: ChildEvent[]): TimelineEntry[] {
     ...(e.linkGroup ? { linkGroup: e.linkGroup } : {}),
     ...(e.parentTaskId ? { parentTaskId: e.parentTaskId } : {}),
     ...(e.itemId ? { itemId: e.itemId } : {}),
-    ...(e.completed ? { completed: true } : {}),
+    // Schedule completion is intentionally not projected into the parent's day.
   }));
 }
 
@@ -149,7 +149,7 @@ function toMinutes(hhmm: string): number {
 
 /** Nu/Nästa för en persons poster utifrån faktisk tid. */
 export function nowNextFor(entries: TimelineEntry[], nowMinutes: number): { now: string | null; next: string | null } {
-  const sorted = [...entries].filter((e) => e.personId !== ME_ID || !e.completed).sort((a, b) => a.time.localeCompare(b.time));
+  const sorted = [...entries].filter((e) => /^([01]\d|2[0-3]):[0-5]\d/.test(e.time) && (e.personId !== ME_ID || !e.completed)).sort((a, b) => a.time.localeCompare(b.time));
   let now: string | null = null;
   let next: string | null = null;
   sorted.forEach((e, i) => {

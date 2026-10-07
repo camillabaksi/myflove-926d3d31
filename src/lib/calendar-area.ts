@@ -1,5 +1,5 @@
 import { AREA_META, LEGACY_AREA_MAP, type LifeArea } from "@/lib/life-areas";
-import type { CalendarEntry } from "@/lib/visual-calendar";
+import { isFamilyEntry, type CalendarEntry } from "@/lib/visual-calendar";
 
 /** Presentation only: preserve explicit areas and use known sources, not titles. */
 export function calendarArea(entry: CalendarEntry): LifeArea | "external" {
@@ -15,4 +15,13 @@ export function calendarArea(entry: CalendarEntry): LifeArea | "external" {
 
 export function calendarAreaLabel(area: LifeArea | "external"): string {
   return area === "external" ? "Extern kalender" : AREA_META[area].label;
+}
+
+/** Month summarizes areas, never activity volume; all family context is one area. */
+export function calendarMonthAreas(entries: CalendarEntry[]): Array<LifeArea | "external"> {
+  return [...new Set(entries.map(e => isFamilyEntry(e) ? "privat" as const : calendarArea(e)))];
+}
+
+export function calendarMonthCapacity(date: string, today: string, percent: number | null): number | null {
+  return date > today ? null : percent;
 }

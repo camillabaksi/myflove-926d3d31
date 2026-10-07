@@ -166,19 +166,11 @@ export default function FamilyDayPerspectives({
     toast.success("Kopplingen är borttagen. Aktiviteterna finns kvar.");
   };
 
-  // Klarmarkering + samma "Hur kändes det?" som resten av appen.
+  // Only an owned parent's task can be completed; child rows are schedules.
   const toggleDone = async (entry: TimelineEntry) => {
+    if (entry.personId !== ME_ID || !entry.taskId || entry.itemId) return;
     const done = !entry.completed;
-    if (entry.itemId) {
-      try {
-        await updateItem(entry.itemId, { completed: done }, { force: true });
-      } catch {
-        toast.error("Det gick inte att spara just nu. Försök igen.");
-        return;
-      }
-    } else if (entry.taskId) {
-      toggleTask(entry.taskId);
-    } else return;
+    toggleTask(entry.taskId);
     if (done) {
       const who = entry.personId === ME_ID ? "" : ` (${personById.get(entry.personId)?.name ?? "barn"})`;
       emitActivityDone({ id: entry.key, title: `${entry.title}${who}`, dueDate: dayISO });
@@ -233,13 +225,13 @@ export default function FamilyDayPerspectives({
       <div
         className={cn(
           "flex min-w-0 items-center gap-2 rounded-2xl border border-border/60 bg-card px-2.5 py-2 shadow-sm",
-          entry.completed && "bg-muted/35 opacity-70",
+          entry.personId === ME_ID && entry.completed && "bg-muted/35 opacity-70",
           status === "Nu" && "ring-2 ring-primary/40",
         )}
         style={color ? { borderLeft: `4px solid ${color}` } : undefined}
       >
-        {(entry.itemId || entry.taskId) && (
-          <button
+        {entry.personId === ME_ID && entry.taskId && !entry.itemId && (
+          <Button variant="ghost" size="icon"
             type="button"
             onClick={() => void toggleDone(entry)}
             aria-pressed={!!entry.completed}
@@ -250,12 +242,12 @@ export default function FamilyDayPerspectives({
             )}
           >
             <Check size={15} strokeWidth={3} />
-          </button>
+          </Button>
         )}
         {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time}</span>}
         <ActivityPictogram id={visual.pictogram} tone={visual.tone} className={compact ? "h-8 w-8 rounded-lg" : "h-10 w-10 rounded-xl"} iconClassName={compact ? "h-4 w-4" : "h-5 w-5"} style={color ? { color } : undefined} />
         <div className="min-w-0 flex-1">
-          <p className={cn("break-words text-sm font-semibold leading-snug text-ink", entry.completed && "line-through")}>{entry.title}</p>
+          <p className={cn("break-words text-sm font-semibold leading-snug text-ink", entry.personId === ME_ID && entry.completed && "line-through")}>{entry.title}</p>
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
             <span>{visual.label}</span>
             {status && <span className="rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">{status}</span>}
