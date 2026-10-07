@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isoWeekNumber, isoWeekNumberFromString } from "@/lib/iso-week";
 import WeekGoals from "@/components/week-goals";
-import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { parseISODate } from "@/lib/day";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
@@ -46,11 +45,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import CollapsibleSection from "@/components/collapsible-section";
 import CalendarAccount, { type CalendarPushItem } from "@/components/calendar-account";
 import { QuickAddInline, type QuickAddResult } from "@/components/task-quick-add";
 import DailyFlowList from "@/components/day/daily-flow-list";
-import EnergyBattery from "@/components/energy-battery";
 import type { FlowItem } from "@/lib/flow-items";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -481,334 +478,12 @@ export function CalendarContent() {
   }));
 
   return (
-    <CalendarPlanner onDateChange={setSelectedDateStr} tools={
-    <MyFlovePageGrid area="kalender">
-      <MyFloveWide>
-        <div>
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">
-            {t("Kalender")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("Översikt över dina dagar. Inga stressiga detaljer.")}
-          </p>
-        </div>
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <EnergyBattery widget href="/mitt-batteri" />
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <WeekGoals />
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <div className="bg-card rounded-3xl border-2 area-border shadow-soft overflow-hidden">
-          <div className="p-6 pb-2">
-            <CollapsibleSection
-              title={periodLabel}
-              id="månadsöversikt"
-              defaultCollapsed
-              description={t("Öppna för att välja månad, vecka eller dag och filtrera kategorier.")}
-              help={t("Välj månad, vecka eller dag – och kryssa i vilka kategorier du vill se.")}
-              headingClassName="text-xl font-medium capitalize"
-              actions={
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={stepBack}
-                    aria-label={t("Föregående")}
-                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
-                  >
-                    <ChevronLeft size={24} />
-                  </button>
-                  <button
-                    onClick={stepForward}
-                    aria-label={t("Nästa")}
-                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
-                  >
-                    <ChevronRight size={24} />
-                  </button>
-                </div>
-              }
-            >
-              <div className="flex flex-wrap items-center gap-2 pt-2">
-                <div
-                  role="group"
-                  aria-label={t("Välj vy")}
-                  className="inline-flex items-center gap-1 rounded-full border border-border/60 bg-secondary/40 p-1"
-                >
-                  {(
-                    [
-                      ["manad", "Månad"],
-                      ["vecka", "Vecka"],
-                      ["dag", "Dag"],
-                    ] as const
-                  ).map(([id, label]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => {
-                        setView(id);
-                        if (id !== "manad" && selectedDateStr)
-                          setCurrentDate(new Date(`${selectedDateStr}T12:00:00`));
-                      }}
-                      aria-pressed={view === id}
-                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                        view === id
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {t(label)}
-                    </button>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const now = new Date();
-                    setCurrentDate(now);
-                    setSelectedDateStr(fmtDate(now));
-                  }}
-                  className="rounded-full border border-border/60 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
-                >
-                  {t("Idag")}
-                </button>
-              </div>
-
-              <div
-                className="flex flex-wrap items-center gap-2 pt-3"
-                role="group"
-                aria-label={t("Visa kategorier")}
-              >
-                {CATEGORIES.map((c) => {
-                  const active = shows(c.id);
-                  return (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => toggleCategory(c.id)}
-                      aria-pressed={active}
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                        active ? "text-foreground" : "text-muted-foreground/60 border-border/50"
-                      }`}
-                      style={
-                        active
-                          ? { backgroundColor: `${c.color}22`, borderColor: `${c.color}66` }
-                          : undefined
-                      }
-                    >
-                      <span
-                        className="w-2 h-2 rounded-full"
-                        style={{
-                          backgroundColor: active ? c.color : "hsl(var(--muted-foreground))",
-                        }}
-                      />
-                      {t(c.label)}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {view === "manad" && (
-                <div className="pt-2">
-                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1 mb-2 text-center text-sm font-medium text-muted-foreground">
-                    <div className="text-xs" title={t("Veckonummer")}>
-                      {t("v.")}
-                    </div>
-                    <div>{t("Må")}</div>
-                    <div>{t("Ti")}</div>
-                    <div>{t("On")}</div>
-                    <div>{t("To")}</div>
-                    <div>{t("Fr")}</div>
-                    <div>{t("Lö")}</div>
-                    <div>{t("Sö")}</div>
-                  </div>
-
-                  <div className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1">
-                    {days.flatMap((dateStr, index) => {
-                      const cells: ReactNode[] = [];
-                      if (index % 7 === 0) {
-                        const rowDate = days.slice(index, index + 7).find(Boolean);
-                        cells.push(
-                          <div
-                            key={`wk-${index}`}
-                            className="flex items-center justify-center text-[11px] font-medium text-muted-foreground"
-                          >
-                            {rowDate ? isoWeekNumberFromString(rowDate) : ""}
-                          </div>,
-                        );
-                      }
-                      if (!dateStr) {
-                        cells.push(<div key={`empty-${index}`} className="aspect-square" />);
-                        return cells;
-                      }
-
-
-                      const dNum = parseInt(dateStr.split("-")[2], 10);
-                      const isSelected = dateStr === selectedDateStr;
-                      const isToday = dateStr === todayStr;
-                      const items = getItemsForDate(dateStr);
-                      const hasItems =
-                        items.focus ||
-                        items.tasks.length > 0 ||
-                        items.reminders.length > 0 ||
-                        items.familyEvents.length > 0 ||
-                        items.childEvents.length > 0 ||
-                        items.recurring.length > 0;
-
-                      cells.push(
-                        <button
-                          key={dateStr}
-                          onClick={() => setSelectedDateStr(dateStr)}
-                          className={`aspect-square flex flex-col items-center justify-center rounded-2xl relative transition-all ${
-                            isSelected
-                              ? "bg-primary text-primary-foreground shadow-sm scale-105 z-10 font-bold"
-                              : isToday
-                                ? "bg-primary/10 text-primary font-bold"
-                                : "hover:bg-secondary text-foreground"
-                          }`}
-                        >
-                          <span className="text-lg">{dNum}</span>
-                          {hasItems && (
-                            <div className="absolute bottom-1.5 flex gap-1">
-                              {items.focus && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-accent"}`}
-                                />
-                              )}
-                              {items.reminders.length > 0 && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/80" : "bg-primary"}`}
-                                />
-                              )}
-                              {items.tasks.length > 0 && (
-                                <div
-                                  className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white/60" : "bg-muted-foreground"}`}
-                                />
-                              )}
-                              {items.childEvents.slice(0, 3).map((e, i) => (
-                                <div
-                                  key={`child-${i}`}
-                                  className="w-1.5 h-1.5 rounded-full"
-                                  style={{
-                                    backgroundColor: isSelected
-                                      ? "white"
-                                      : (e.child?.color ?? DEFAULT_CHILD_COLOR),
-                                  }}
-                                />
-                              ))}
-                              {items.familyEvents.slice(0, 3).map((e, i) => (
-                                <div
-                                  key={`fam-${i}`}
-                                  className="w-1.5 h-1.5 rounded-full"
-                                  style={{
-                                    backgroundColor: isSelected
-                                      ? "white"
-                                      : (e.member?.color ?? DEFAULT_MEMBER_COLOR),
-                                  }}
-                                />
-                              ))}
-                              {items.recurring.length > 0 && (
-                                <div
-                                  className={`w-1 h-1 rounded-full ${isSelected ? "bg-white/50" : "bg-muted-foreground/40"}`}
-                                  title={t("Återkommande")}
-                                />
-                              )}
-                            </div>
-                          )}
-                        </button>,
-                      );
-                      return cells;
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {view === "vecka" && (
-                <div className="pt-2 grid grid-cols-1 sm:grid-cols-7 gap-2">
-                  {weekDays.map((dateStr) => {
-                    const d = new Date(`${dateStr}T12:00:00`);
-                    const items = getItemsForDate(dateStr);
-                    const entries = [
-                      ...items.childEvents.map((e) => ({
-                        id: `c-${e.id}`,
-                        title: e.title,
-                        time: e.time ?? "",
-                        color: e.child?.color ?? DEFAULT_CHILD_COLOR,
-                      })),
-                      ...items.familyEvents.map((e) => ({
-                        id: `f-${e.id}`,
-                        title: e.title,
-                        time: e.time ?? "",
-                        color: e.member?.color ?? DEFAULT_MEMBER_COLOR,
-                      })),
-                      ...items.reminders.map((r) => ({
-                        id: `r-${r.id}`,
-                        title: r.title,
-                        time: r.time ?? "",
-                        color: "hsl(var(--primary))",
-                      })),
-                      // Återkommande hållpunkter och rutiner syns även i veckovyn.
-                      ...items.recurring.map((r) => ({
-                        id: r.id,
-                        title: `↻ ${r.title}`,
-                        time: r.time,
-                        color: r.color ?? "hsl(var(--muted-foreground))",
-                      })),
-                      ...items.tasks.map((t) => ({
-                        id: `t-${t.id}`,
-                        title: t.title,
-                        time: t.time ?? "",
-                        color: "hsl(var(--muted-foreground))",
-                      })),
-                    ].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
-                    const isSelected = dateStr === selectedDateStr;
-                    return (
-                      <button
-                        key={dateStr}
-                        onClick={() => setSelectedDateStr(dateStr)}
-                        className={`text-left rounded-2xl border p-2 min-h-24 transition-colors ${
-                          isSelected
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:bg-secondary"
-                        }`}
-                      >
-                        <div
-                          className={`text-xs font-medium mb-1 ${dateStr === todayStr ? "text-primary" : "text-muted-foreground"}`}
-                        >
-                          {d.toLocaleDateString(locale, { weekday: "short", day: "numeric" })}
-                        </div>
-                        <div className="space-y-1">
-                          {entries.slice(0, 4).map((e) => (
-                            <div
-                              key={e.id}
-                              className="flex items-center gap-1.5 text-xs text-foreground"
-                            >
-                              <span
-                                className="w-1.5 h-1.5 rounded-full shrink-0"
-                                style={{ backgroundColor: e.color }}
-                              />
-                              {e.time && <span className="shrink-0 text-xs">{e.time}</span>}
-                              <span className="font-handwritten min-w-0 truncate text-lg font-semibold leading-none">{e.title}</span>
-                            </div>
-                          ))}
-                          {entries.length > 4 && (
-                            <div className="text-xs text-muted-foreground">
-                              +{entries.length - 4} {t("till")}
-                            </div>
-                          )}
-                          {entries.length === 0 && (
-                            <div className="text-xs text-muted-foreground/60">–</div>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </CollapsibleSection>
-
+    <CalendarPlanner
+      onDateChange={setSelectedDateStr}
+      weekGoals={<WeekGoals />}
+      checkin={<ImpactCheckin />}
+      connection={selectedDateStr ? <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} /> : null}
+      tools={<>
             {selectedDateStr && (
               <div className="animate-in fade-in slide-in-from-bottom-4 mt-5 space-y-4 border-t border-border/60 pt-5 duration-500">
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -870,7 +545,6 @@ export function CalendarContent() {
                   />
                 )}
 
-                {allInDay && selectedDateStr === todayStr && <ImpactCheckin />}
 
                 {allInDay && (
                   <div className="rounded-3xl border border-border/60 bg-card px-4 shadow-soft sm:px-5">
@@ -1157,11 +831,6 @@ export function CalendarContent() {
                 )}
               </div>
             )}
-          </div>
-        </div>
-
-        {selectedDateStr && <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} />}
-
         <Dialog open={isAddingReminder} onOpenChange={setIsAddingReminder}>
           <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl">
             <DialogHeader>
@@ -1458,7 +1127,6 @@ export function CalendarContent() {
             )}
           </DialogContent>
         </Dialog>
-      </MyFloveWide>
 
       {/* Ändra vilka barn som ingår i en redan sparad, sammanfogad händelse. */}
       <Dialog open={!!editChildGroup} onOpenChange={(open) => !open && setEditChildGroup(null)}>
@@ -1512,7 +1180,6 @@ export function CalendarContent() {
           </div>
         </DialogContent>
       </Dialog>
-    </MyFlovePageGrid>
-    } />
+    </>} />
   );
 }
