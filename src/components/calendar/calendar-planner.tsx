@@ -69,8 +69,6 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
   const dayCap = capacityOf(date);
   const [capInfo, setCapInfo] = useState<string | null>(null);
   const infoCap = capInfo ? capacityOf(capInfo) : null;
-  const [energyLogs] = useCloudSyncedStorage<Array<{ level: number; logged_at: string }>>("myflove-energy-log", []);
-  const reportedEnergy = energyLogs.filter(e => calendarDate(new Date(e.logged_at)) === date).sort((a, b) => b.logged_at.localeCompare(a.logged_at))[0];
   const [details, setDetails] = useState<CalendarEntry | null>(null);
   const [cluster, setCluster] = useState<CalendarEntry[]>([]);
   const [adding, setAdding] = useState(false);
