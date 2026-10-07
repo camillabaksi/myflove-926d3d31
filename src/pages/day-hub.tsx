@@ -36,7 +36,7 @@ export function DayHub({ tab }: { tab: DayTab }) {
 
   return (
     <Layout>
-      {tab !== "kalender" && <nav
+      {tab === "lagg-till" && <nav
         aria-label={t("Dagens planering")}
         className="mb-4 grid grid-cols-3 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
       >

@@ -24,6 +24,7 @@ export function ThoughtsIcon({ size = 24, strokeWidth = 1.8, ...props }: IconPro
   return <svg {...shared(size, strokeWidth)} {...props}><path d="M7.2 5.8c1.3-1.5 4.3-1.9 6-.7 2.2-.4 4.5 1.1 4.7 3.2 1.6 1 2 3.2.7 4.7-.9 1.1-2.2 1.6-3.6 1.5-1.7 1.7-5.2 1.8-7 .2-2 .2-3.9-1.2-4-3.2-1.2-1.3-.8-3.4.7-4.3.5-.8 1.4-1.3 2.5-1.4Z" /><circle cx="6" cy="18" r="1.2" /><circle cx="3.4" cy="20.5" r=".55" /></svg>;
 }
 
+/** Två spegelvända, öppna händer som omsluter ett tomt utrymme. */
 export function MyPlaceIcon({ size = 24, strokeWidth = 1.8, ...props }: IconProps) {
-  return <svg {...shared(size, strokeWidth)} {...props}><path d="M3.5 15.8c2.1 2.6 5.1 4 8.5 4s6.4-1.4 8.5-4" /><path d="M5.3 13.1c1.7 1.8 4 2.8 6.7 2.8s5-1 6.7-2.8" /><path d="M7.7 10.6c1.1 1 2.5 1.6 4.3 1.6s3.2-.6 4.3-1.6" /></svg>;
+  return <svg {...shared(size, strokeWidth)} {...props}><path d="M10.6 20C7 18.8 4.4 15.6 4.4 11.6c0-2.6.9-4.9 2.4-6.6" /><path d="M6.8 5c.9.9 1.2 2.2.9 3.4" /><path d="M13.4 20c3.6-1.2 6.2-4.4 6.2-8.4 0-2.6-.9-4.9-2.4-6.6" /><path d="M17.2 5c-.9.9-1.2 2.2-.9 3.4" /></svg>;
 }
