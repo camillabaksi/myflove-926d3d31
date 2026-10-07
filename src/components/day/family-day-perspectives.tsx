@@ -14,7 +14,7 @@ import { useChildren } from "@/hooks/use-children";
 import { useTasks } from "@/hooks/use-data";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { newLinkGroup, withLinkMeta } from "@/lib/activity-links";
-import { decodeVisualNotes, localNowMinutes } from "@/lib/child-visual-schedule";
+import { activityOccursOn, decodeVisualNotes, localNowMinutes } from "@/lib/child-visual-schedule";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import {
   buildParallelTimeline,
@@ -92,7 +92,10 @@ export default function FamilyDayPerspectives({
         })),
     [myItems],
   );
-  const childEntries = useMemo(() => entriesFromChildEvents(childEvents), [childEvents]);
+  const childEntries = useMemo(() => [
+    ...entriesFromChildEvents(childEvents),
+    ...childItems.filter(i => i.kind === "activity" && !i.time && activityOccursOn(i, dayISO)).map(i => ({ key: `childitem-${i.id}`, personId: i.child_id, time: "", title: i.title, itemId: i.id })),
+  ], [childEvents, childItems, dayISO]);
   const allEntries = useMemo(() => [...myEntries, ...childEntries], [myEntries, childEntries]);
   const myItemByKey = useMemo(() => new Map(myItems.map((i) => [i.id, i])), [myItems]);
   const childItemById = useMemo(() => new Map(childItems.map((i) => [i.id, i])), [childItems]);
@@ -244,7 +247,7 @@ export default function FamilyDayPerspectives({
             <Check size={15} strokeWidth={3} />
           </Button>
         )}
-        {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time}</span>}
+        {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time || "Idag"}</span>}
         <ActivityPictogram id={visual.pictogram} tone={visual.tone} className={compact ? "h-8 w-8 rounded-lg" : "h-10 w-10 rounded-xl"} iconClassName={compact ? "h-4 w-4" : "h-5 w-5"} style={color ? { color } : undefined} />
         <div className="min-w-0 flex-1">
           <p className={cn("break-words text-sm font-semibold leading-snug text-ink", entry.personId === ME_ID && entry.completed && "line-through")}>{entry.title}</p>
@@ -273,7 +276,7 @@ export default function FamilyDayPerspectives({
   };
 
   const PersonDay = ({ personId }: { personId: string }) => {
-    const own = allEntries.filter((e) => e.personId === personId).sort((a, b) => a.time.localeCompare(b.time));
+    const own = allEntries.filter((e) => e.personId === personId).sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
     if (own.length === 0) return <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget med klockslag den här dagen.</p>;
     return (
       <ul className="space-y-2">

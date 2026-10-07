@@ -93,7 +93,7 @@ export function TodayContent() {
             <p className="mb-1 text-xs font-semibold text-ink">{t("Din kapacitet idag")}</p>
             {dayCapacity.percent !== null ? <CapacityBattery percent={dayCapacity.percent} size="sm" /> : <p className="text-xs text-muted-foreground">{t("Ingen egen incheckning idag.")}</p>}
           </div>
-          {!supportDismissed && <div className="flex min-w-0 flex-1 items-center gap-3" data-testid="today-flow-support"><FlowMascot size="xs" alive={false} /><div className="min-w-0"><p className="text-sm leading-relaxed text-ink">{t(support.message)}</p>{support.prioritize && <div className="mt-2 flex flex-wrap gap-2"><Button asChild variant="outline" size="sm"><Link href="/planera">{t("Hjälp mig prioritera")}</Link></Button><Button variant="ghost" size="sm" onClick={() => setSupportDismissed(true)}>{t("Inte nu")}</Button></div>}</div></div>}
+          {!supportDismissed && <div className="flex min-w-0 flex-1 items-center gap-3" data-testid="today-flow-support"><FlowMascot size="xs" alive={false} /><div className="min-w-0"><p className="text-sm leading-relaxed text-ink">{t(support.message)}</p>{support.prioritize && <div className="mt-2 flex flex-wrap gap-2"><Button asChild variant="outline" size="sm"><Link href="/flowplan">{t("Hjälp mig prioritera")}</Link></Button><Button variant="ghost" size="sm" onClick={() => setSupportDismissed(true)}>{t("Inte nu")}</Button></div>}</div></div>}
         </section>
       </MyFloveWide>
 

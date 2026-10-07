@@ -102,6 +102,11 @@ describe("Kopplingar", () => {
 });
 
 describe("Nu/Nästa", () => {
+  it("ignores untimed entries for focus and discards legacy child completion", () => {
+    const events = entriesFromChildEvents([ev({ childId: "b1", time: "08:00", title: "Frukost", completed: true }), ev({ childId: "b1", time: "", title: "Packa" })]);
+    expect(events[0]?.completed).toBeUndefined();
+    expect(nowNextFor(events, 480)).toEqual({ now: events[0]?.key, next: null });
+  });
   it("barnets tidsfokus beror inte på tidigare klar-markering", () => {
     const entries: TimelineEntry[] = [{ key: "school", personId: "child", time: "08:00", endTime: "14:00", title: "Skola", completed: true }, { key: "sport", personId: "child", time: "14:00", endTime: "15:00", title: "Idrott" }];
     expect(nowNextFor(entries, 630)).toEqual({ now: "school", next: "sport" });

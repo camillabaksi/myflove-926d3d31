@@ -138,7 +138,7 @@ export default function FamilySituation({
   );
   const single = kids.length === 1 ? kids[0]! : null;
   const nextEvent = single
-    ? events.find((e) => e.childId === single.id && !e.completed && e.time >= nowHHMM())
+    ? events.find((e) => e.childId === single.id && e.time >= nowHHMM())
     : null;
 
   const reset = () => {
