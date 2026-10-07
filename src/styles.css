@@ -34,7 +34,7 @@
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  /* Brand accents from the MyFlove preview palette */
+  /* Paceable stage 1: semantic calm-energy palette */
   --color-ink: hsl(var(--ink));
   --color-cream: hsl(var(--cream));
   --color-sage: hsl(var(--sage));
@@ -105,55 +105,60 @@
   --landing-red: #ef7d85;
   --landing-yellow: #f2c76c;
   --landing-green: #89c9a0;
-  /* MyFlove palette: mjuk lila, vitt, rosa och mint */
-  --background: 264 60% 98%;
-  --foreground: 260 30% 18%;
-  --border: 264 35% 91%;
+  /* Paceable palette: warm light base, plum type, restrained colour boosts. */
+  --background: 45 29% 97%;
+  --foreground: 276 19% 21%;
+  --border: 291 12% 89%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 260 30% 18%;
+  --card: 40 100% 99%;
+  --card-foreground: 276 19% 21%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 260 30% 18%;
+  --popover: 40 100% 99%;
+  --popover-foreground: 276 19% 21%;
 
-  --primary: 258 68% 62%;
+  --primary: 276 19% 21%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 262 55% 95%;
-  --secondary-foreground: 260 32% 26%;
+  --secondary: 267 45% 91%;
+  --secondary-foreground: 276 19% 21%;
 
-  --muted: 264 40% 95%;
-  --muted-foreground: 258 14% 48%;
+  --muted: 37 30% 94%;
+  --muted-foreground: 282 8% 43%;
 
-  --accent: 327 70% 94%;
-  --accent-foreground: 327 45% 38%;
+  --accent: 267 45% 91%;
+  --accent-foreground: 276 19% 21%;
 
   --destructive: 352 70% 58%;
   --destructive-foreground: 0 0% 100%;
 
-  --input: 264 32% 92%;
-  --ring: 258 68% 62%;
+  --input: 291 12% 89%;
+  --ring: 276 19% 21%;
 
   --radius: 1.5rem;
 
   /* Raw brand tokens */
-  --ink: 260 30% 18%;
-  --cream: 264 60% 98%;
-  --sage: 155 45% 66%;
-  --gold: 40 92% 62%;
-  --terracotta: 327 75% 66%;
-  --terracotta-soft: 285 60% 72%;
-  --forest: 258 68% 62%;
-  --forest-deep: 258 52% 34%;
+  --ink: 276 19% 21%;
+  --cream: 45 29% 97%;
+  --sage: 128 25% 82%;
+  --gold: 45 82% 72%;
+  --terracotta: 15 76% 80%;
+  --terracotta-soft: 15 76% 88%;
+  --forest: 276 19% 21%;
+  --forest-deep: 276 24% 16%;
 
   /* Pasteller */
-  --lavender: 264 72% 93%;
-  --blush: 335 78% 93%;
-  --mint: 158 52% 89%;
-  --honey: 38 90% 80%;
-  --coral: 10 85% 84%;
-  --sky: 202 78% 92%;
-  --sun: 44 90% 90%;
+  --lavender: 267 45% 91%;
+  --blush: 15 76% 91%;
+  --mint: 128 25% 90%;
+  --honey: 45 82% 84%;
+  --coral: 15 76% 80%;
+  --sky: 203 54% 89%;
+  --sun: 45 82% 88%;
+  --sand: 37 30% 88%;
+  --stone-lavender: #cfc0e4;
+  --stone-apricot: #eaa88f;
+  --stone-sage: #aecdb4;
+  --stone-highlight: #fffefc;
 
   --gradient-hero: linear-gradient(
     135deg,
@@ -161,9 +166,9 @@
     hsl(276 65% 94%) 50%,
     hsl(327 70% 95%) 100%
   );
-  --shadow-soft: 0 1px 2px hsl(258 40% 30% / 0.04), 0 12px 28px -18px hsl(258 45% 35% / 0.25);
-  --shadow-lifted: 0 2px 4px hsl(258 40% 30% / 0.05), 0 24px 48px -24px hsl(258 45% 35% / 0.3);
-  --shadow-float-value: 0 18px 40px -20px hsl(258 45% 35% / 0.35);
+  --shadow-soft: 0 1px 2px hsl(276 19% 21% / 0.03), 0 12px 30px -22px hsl(276 19% 21% / 0.2);
+  --shadow-lifted: 0 2px 5px hsl(276 19% 21% / 0.04), 0 24px 52px -30px hsl(276 19% 21% / 0.25);
+  --shadow-float-value: 0 18px 40px -24px hsl(276 19% 21% / 0.25);
 
   /* Kantlinjer – gemensamma stilar för kort, avdelare och fokus */
   --border-hairline: 2px solid hsl(var(--border) / 0.7);
@@ -282,11 +287,6 @@
 
 @utility app-shell-bg {
   background-color: hsl(var(--background));
-  background-image:
-    radial-gradient(circle at 12% 8%, hsl(var(--lavender) / 0.85), transparent 55%),
-    radial-gradient(circle at 88% 92%, hsl(var(--blush) / 0.7), transparent 55%),
-    linear-gradient(180deg, hsl(264 60% 98%), hsl(268 52% 95%));
-  background-attachment: fixed;
 }
 
 @utility home-main-surface {
@@ -378,24 +378,24 @@ html[data-npf-still="true"] .home-ambient-glow {
 }
 
 .dark {
-  --background: 260 30% 10%;
-  --foreground: 264 40% 95%;
-  --border: 260 18% 22%;
+  --background: 276 16% 10%;
+  --foreground: 40 24% 93%;
+  --border: 282 10% 25%;
 
-  --card: 260 26% 14%;
-  --card-foreground: 264 40% 95%;
+  --card: 276 14% 14%;
+  --card-foreground: 40 24% 93%;
 
-  --popover: 260 26% 14%;
-  --popover-foreground: 264 40% 95%;
+  --popover: 276 14% 14%;
+  --popover-foreground: 40 24% 93%;
 
-  --primary: 258 78% 72%;
-  --primary-foreground: 260 40% 12%;
+  --primary: 267 45% 80%;
+  --primary-foreground: 276 24% 13%;
 
   --secondary: 260 18% 22%;
   --secondary-foreground: 264 35% 92%;
 
   --muted: 260 16% 20%;
-  --muted-foreground: 264 14% 70%;
+  --muted-foreground: 291 9% 72%;
 
   --accent: 327 30% 26%;
   --accent-foreground: 327 70% 86%;
@@ -406,7 +406,7 @@ html[data-npf-still="true"] .home-ambient-glow {
   --input: 260 16% 24%;
   --ring: 258 78% 72%;
 
-  --ink: 264 40% 95%;
+  --ink: 40 24% 93%;
   --cream: 260 26% 14%;
   --sage: 155 35% 60%;
   --gold: 40 85% 66%;
@@ -423,6 +423,11 @@ html[data-npf-still="true"] .home-ambient-glow {
   --coral: 8 40% 34%;
   --sky: 202 26% 24%;
   --sun: 44 28% 24%;
+  --sand: 37 16% 25%;
+  --stone-lavender: #8f7ca9;
+  --stone-apricot: #aa725f;
+  --stone-sage: #78947e;
+  --stone-highlight: #f7f2eb;
 
   --gradient-hero: linear-gradient(
     135deg,
@@ -461,7 +466,7 @@ html[data-npf-still="true"] .home-ambient-glow {
   h6 {
     font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: -0.025em;
+    letter-spacing: 0;
   }
 
   /* GLOBAL LAYOUTSTANDARD – ingen "tvingad vertikal text".
@@ -506,6 +511,21 @@ html[data-npf-still="true"] .home-ambient-glow {
   border: var(--border-hairline);
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
+}
+
+@keyframes paceable-settle {
+  0% { transform: translateY(2px); }
+  50% { transform: translateY(0); }
+  100% { transform: translateY(2px); }
+}
+
+.paceable-stone { transform-origin: center bottom; }
+.paceable-stone-one { animation: paceable-settle 8s ease-in-out infinite; }
+.paceable-stone-two { animation: paceable-settle 9s ease-in-out 700ms infinite reverse; }
+.paceable-stone-three { animation: paceable-settle 10s ease-in-out 1.2s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .paceable-stone { animation: none !important; }
 }
 
 @utility surface-panel {
