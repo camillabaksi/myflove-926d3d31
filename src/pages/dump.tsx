@@ -87,7 +87,7 @@ export default function Dump() {
                 <CollapsibleSection
                   title={
                     <span className="flex items-center gap-2">
-                      <ThoughtsIcon size={20} /> {t("Mina sorteringsregler")}
+                      <Brain size={20} /> {t("Mina sorteringsregler")}
                     </span>
                   }
                   id="QuickFlow-regler"
