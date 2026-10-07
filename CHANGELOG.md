@@ -1,5 +1,7 @@
 ## 2026-10-07
 
+- **Kalender, steg 1 – Månadsvy** (2026-10-07): Vald dag får en mjuk lavendelmarkering som skiljer sig från dagens datum och bevarar ikonernas kontrast. Befintliga vyer och data behålls.
+
 - **Visuell kalender** (2026-10-07): Månad, vecka och dag visar gemensamma befintliga datakällor med tidsblock, oschemalagda saker, kända tidsluckor och kapacitetsläge utan påhittade procenttal. Egna engångsposter kan planeras/flyttas med ångra; energipåverkan är valfri och notiser slås inte på automatiskt. Familjens behörigheter och separat skrivskyddat föräldraschema bevaras. Ingenting publicerat.
 - Kalendergranskning: överlapp samlas i öppningsbara grupper, korta poster får läsbara tryckytor, vald dag följer med till äldre kalenderval och registrerad energi visas separat. Upprepade avbockningar använder befintlig journal. Datum/luft/överlapplogik och mobil-/datorvyer kontrollerade; inga testposter sparade i användarkontot. Draghandtag för längd och fullständig skriv-/fler-enhetsverifiering ingår inte i denna etapp.
 

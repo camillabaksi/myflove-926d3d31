@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Kalender, steg 1 – Månadsvy (2026-10-07): mjuk lavendelmarkering av vald dag, separat från dagens datum, med bibehållen ikonkontrast. Befintliga vyer och data behålls.",
       "Visuell kalender (2026-10-07): Månad, vecka och dag med gemensamma befintliga datakällor, tidsblock, oschemalagt, kända tidsluckor och kapacitetsläge utan påhittade procenttal. Egna engångsposter kan planeras/flyttas med ångra; energipåverkan är valfri och notiser slås inte på automatiskt. Familjbehörigheter och separat skrivskyddat föräldraschema bevaras. Ingenting publicerat.",
       "Kalendergranskning (2026-10-07): öppningsbara överlappsgrupper, läsbara tryckytor, gemensam vald dag och separat registrerad energi. Befintlig avbockningsjournal återanvänds. Datum/luft/överlapp samt mobil/dator kontrollerade utan sparade testposter; draghandtag för längd och fullständig skriv-/fler-enhetsverifiering återstår.",
       "Hem: Just nu-kortet kan nu ta bort aktiviteten med en tvåstegsbekräftelse (2026-10-05)",
