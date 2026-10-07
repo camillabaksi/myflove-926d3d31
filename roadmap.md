@@ -1,10 +1,11 @@
 # Roadmap
 
 ## Visuell kalender (2026-10-07)
-- [ ] Kartlägg befintlig kalender, datakällor, kapacitetsberäkning och behörighetsgränser; presentera plan före implementation.
-- [ ] Bygg gemensam perioddata och mockupens månad/vecka/dag utan parallella modeller.
-- [ ] Inför säkra tidsblock, luft, oschemalagt, snabbplanering och godkända Flow-förslag.
-- [ ] Verifiera mobil/dator, mutationer/ångra, synk, familjeintegritet och tillgänglighet; uppdatera dokumentation och ändringsloggar. Publicera inte.
+- [x] Kartlägg befintlig kalender, datakällor, kapacitetsberäkning och behörighetsgränser; presentera plan före implementation.
+- [x] Bygg gemensam perioddata och mockupens månad/vecka/dag utan parallella modeller.
+- [x] Inför tidsblock, luft utifrån kända sluttider, oschemalagt, snabbplanering och godkända Flow-förslag; flytt/längd via formulär samt musdragning av egna engångsposter.
+- [x] Granska mobil/dator, periodlogik, överlapp, avbockningskällor och kontogränser; uppdatera dokumentation och ändringsloggar. Publicera inte.
+- Begränsningar: inga sparande teständringar i användarens konto; flytt/ångra och fler-enhetssynk behöver isolerat testkonto för fullständig ändringsverifiering. Extern Google-läsning avvisades av leverantören och behöver återanslutning. Fysiska telefoner är inte testade. Längd ändras via formulär, inte draghandtag. Befintliga konto-/familjedokument har inte serverpaginering.
 
 ## Slogan och engelska på landningssidan (2026-10-05)
 - [ ] Byt slogan i aktuell landningssida och senaste pitchdeck/blueprint utan att ändra originalen.

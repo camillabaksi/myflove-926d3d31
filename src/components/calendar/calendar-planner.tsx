@@ -84,7 +84,7 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
   const untimed = entries.filter(e => !e.time);
   const gaps = calendarGaps(timed);
   const load = calendarLoad(entries);
-  const plan = useMemo(() => buildFlowPlan(flowItems.filter(i => !i.done).map(i => ({ ...i, fixed: i.source !== "uppgift", movable: i.source === "uppgift" })), { today: date, mode: capacity.mode, nowMinutes: now ?? 0 }), [flowItems, date, capacity.mode, now]);
+  const plan = useMemo(() => buildFlowPlan(flowItems.filter(i => !i.done && entries.some(e => e.id === i.id)).map(i => ({ ...i, time: entries.find(e => e.id === i.id)?.time, fixed: i.source !== "uppgift", movable: i.source === "uppgift" })), { today: date, mode: capacity.mode, nowMinutes: now ?? 0 }), [flowItems, entries, date, capacity.mode, now]);
   const intensive = timed.filter(e => e.energyImpact === "drains" && !e.done).length >= 3;
   const period = new Date(`${date}T12:00:00`).toLocaleDateString(locale, view === "manad" ? { month: "long", year: "numeric" } : { weekday: "long", day: "numeric", month: "long" });
   const step = (direction: number) => {

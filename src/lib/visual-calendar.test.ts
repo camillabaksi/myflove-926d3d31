@@ -49,4 +49,12 @@ describe("visual calendar", () => {
     expect(groups[0]?.blocks).toHaveLength(3);
     expect(groups[0]?.end).toBe(660);
   });
+  it("keeps overdue tasks unscheduled today and generated study tasks read-only", () => {
+    const tasks = [{ id: "overdue", title: "Ärende", completed: false, createdAt: 0, dueDate: "2026-10-06", time: "09:00" }, { id: "study", title: "Lektion", completed: false, createdAt: 0, dueDate: "2026-10-07", syncKey: "studyflow:lecture:x:2026-10-07" }];
+    const days = projectCalendar(["2026-10-06", "2026-10-07", "2026-10-08"], { ...empty, tasks }, "2026-10-07");
+    expect(days["2026-10-06"]?.[0]?.time).toBe("09:00");
+    expect(days["2026-10-07"]?.[0]?.time).toBeUndefined();
+    expect(days["2026-10-07"]?.[1]?.editable).toBe(false);
+    expect(days["2026-10-08"]).toEqual([]);
+  });
 });
