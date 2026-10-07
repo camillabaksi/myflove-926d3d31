@@ -2,8 +2,8 @@
 
 ## Kalender: sex publiceringssteg (2026-10-07)
 - [ ] Månadsvy: förtydligad och kontrollerad (8 tester, skärm och inga sidfel); publicering beställd, inväntar bekräftad driftsättning.
-- [ ] Veckovy: anpassa dagkolumner och svepning, kontrollera och publicera.
-- [ ] Dagsvy: prioritera nu/härnäst, kontrollera och publicera.
+- [x] Veckovy: publicering beställd 2026-10-07 tillsammans med dagsvy.
+- [x] Dagsvy med drag-and-drop, tidslinje, energibalans och att få gjort: publicering beställd 2026-10-07.
 - [ ] Tidslinje: kontrollera tidsblock och luft, publicera.
 - [ ] Energibalans: tydlig jämförelse utan falsk precision, kontrollera och publicera.
 - [ ] Att få gjort: direkt avbockning och tidsplanering, kontrollera och publicera.
