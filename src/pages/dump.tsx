@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { NotebookPen } from "lucide-react";
+import { Brain, NotebookPen } from "lucide-react";
 import { track } from "@/lib/analytics";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -36,7 +36,7 @@ export default function Dump() {
               title={t("Vad har du i huvudet?")}
               subtitle={t("Skriv eller säg det som det är.")}
               eyebrow={t("Tankar")}
-              icon={ThoughtsIcon}
+              icon={Brain}
               tone="lavender"
               surface="plain"
               action={<PaceableStones compact />}

@@ -1109,7 +1109,12 @@ function NavRow({
   onClick,
   tint,
 }: {
-  item: { href: string; label: string; icon: typeof Home; hint: string };
+  item: {
+    href: string;
+    label: string;
+    icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
+    hint: string;
+  };
   isActive: boolean;
   onClick: () => void;
   tint?: string;

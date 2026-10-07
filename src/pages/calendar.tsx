@@ -580,7 +580,7 @@ export function CalendarContent() {
                           style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
                         />
                         {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
-                        <span className="font-handwritten text-lg font-semibold leading-none">{r.title}</span>
+                        <span className="font-display text-lg font-semibold leading-none">{r.title}</span>
                         {r.time && ` · ${r.time}`}
                       </span>
                     ))}
@@ -627,7 +627,7 @@ export function CalendarContent() {
                                 {e.sharedWith.length > 0 && ` · ${t("delad")}`}
                               </div>
                               <div
-                                 className={`font-handwritten truncate text-2xl font-semibold leading-tight ${e.completed ? "line-through opacity-60" : ""}`}
+                                 className={`font-display truncate text-2xl font-semibold leading-tight ${e.completed ? "line-through opacity-60" : ""}`}
                               >
                                 {e.title}
                               </div>
@@ -668,7 +668,7 @@ export function CalendarContent() {
                               {e.member?.displayName ?? t("Familj")}{" "}
                               {e.time && `${t("kl")} ${e.time}`}
                             </div>
-                             <div className="font-handwritten break-words text-2xl font-semibold leading-tight">{e.title}</div>
+                             <div className="font-display break-words text-2xl font-semibold leading-tight">{e.title}</div>
                           </div>
                         </div>
                         <button
@@ -694,7 +694,7 @@ export function CalendarContent() {
                           <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
                             {t("Viktigast idag")}
                           </div>
-                           <div className="font-handwritten break-words text-2xl font-semibold leading-tight">{selectedItems.focus.text}</div>
+                           <div className="font-display break-words text-2xl font-semibold leading-tight">{selectedItems.focus.text}</div>
                         </div>
                       </div>
                     )}
@@ -719,7 +719,7 @@ export function CalendarContent() {
                                 : t("Påminnelse")}{" "}
                               {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                             </div>
-                             <div className="font-handwritten truncate text-2xl font-semibold leading-tight">{r.title}</div>
+                             <div className="font-display truncate text-2xl font-semibold leading-tight">{r.title}</div>
                             {r.note && (
                               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
                                 <LinkifiedText text={r.note} />
@@ -785,7 +785,7 @@ export function CalendarContent() {
                               </div>
                             )}
                             <div
-                               className={`font-handwritten truncate text-2xl font-semibold leading-tight ${task.completed ? "line-through text-muted-foreground" : ""}`}
+                               className={`font-display truncate text-2xl font-semibold leading-tight ${task.completed ? "line-through text-muted-foreground" : ""}`}
                             >
                               {task.title}
                             </div>
