@@ -2,7 +2,7 @@
 
 ## Paceable rebrand etapp 1 (2026-10-07)
 - [x] Ta emot visuell riktning och skyddsgränser; kartlägg befintlig design/navigation för en konkret plan.
-- [ ] Visa implementationsplan och invänta godkännande — appkod får inte ändras före godkännandet.
+- [x] Visa implementationsplan och invänta godkännande — godkänd med förtydliganden om aktiv QuickFlow-route, återanvändbara SVG-stenar och visuell stoppregel.
 - [ ] Efter godkännande: design tokens, app shell/navigation, Idag, Tankar, Min plats, Kalender, Mer och sparsamma stenar; bevara Core och tekniska identifierare.
 - [ ] Efter implementation: regressionstester, mobil/dator/tillgänglighet, dokumentation och slutrapport. Ingen publicering eller native-/SEO-rebrand.
 
