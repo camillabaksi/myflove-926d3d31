@@ -120,11 +120,13 @@ export function calendarGaps(items: CalendarEntry[]): CalendarGap[] {
   const timed = items.filter(i => minuteOf(i.time) !== null).sort((a, b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0));
   const gaps: CalendarGap[] = [];
   let end: number | null = null;
+  let uncertain = false;
   for (const item of timed) {
     const start = minuteOf(item.time);
     const itemEnd = minuteOf(item.endTime);
     if (start === null) continue;
-    if (end !== null && start - end >= 20) gaps.push({ start: end, end: start, minutes: start - end });
+    if (!uncertain && end !== null && start - end >= 20) gaps.push({ start: end, end: start, minutes: start - end });
+    if (itemEnd === null || itemEnd <= start) uncertain = true;
     end = itemEnd !== null && itemEnd > start ? Math.max(end ?? 0, itemEnd) : null;
   }
   return gaps;

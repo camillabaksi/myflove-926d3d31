@@ -1,0 +1,46 @@
+import { describe, expect, it } from "vitest";
+import { calendarGaps, calendarLoad, layoutCalendar, minuteOf, periodDates, projectCalendar, type CalendarEntry, type CalendarSources } from "./visual-calendar";
+
+const entry = (id: string, time: string, endTime?: string): CalendarEntry => ({ id, sourceId: id, source: "task", date: "2026-10-07", title: id, time, endTime, done: false, editable: true });
+const empty: CalendarSources = { tasks: [], reminders: [], lectures: [], routines: [], quickflow: [], priority: [] };
+describe("visual calendar", () => {
+  it("uses Monday-first month and week periods", () => {
+    expect(periodDates("2026-10-07", "vecka")).toEqual(["2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11"]);
+    const month = periodDates("2026-10-07", "manad");
+    expect(month[0]).toBe("2026-09-28");
+    expect(month.at(-1)).toBe("2026-11-01");
+    expect(month).toHaveLength(35);
+    expect(periodDates("2026-10-07", "dag")).toEqual(["2026-10-07"]);
+  });
+  it("rejects invalid times", () => {
+    expect(minuteOf("24:00")).toBeNull();
+    expect(minuteOf("12:60")).toBeNull();
+    expect(minuteOf("9:00")).toBeNull();
+    expect(minuteOf("09:30")).toBe(570);
+  });
+  it("shows only gaps backed by known finish times", () => {
+    expect(calendarGaps([entry("a", "09:00", "09:30"), entry("b", "10:15", "11:00")])).toEqual([{ start: 570, end: 615, minutes: 45 }]);
+    expect(calendarGaps([entry("a", "09:00"), entry("b", "09:15", "09:30"), entry("c", "10:30")])).toEqual([]);
+    expect(calendarGaps([entry("a", "09:00", "11:00"), entry("b", "09:15", "10:00"), entry("c", "11:45")])).toEqual([{ start: 660, end: 705, minutes: 45 }]);
+  });
+  it("does not invent energy for unknown activities", () => {
+    expect(calendarLoad([entry("a", "09:00")])).toEqual({ label: "Inte uppskattad", segments: 0, unknown: 1 });
+    expect(calendarLoad([]).segments).toBe(0);
+    expect(calendarLoad([{ ...entry("a", "09:00"), energyImpact: "gives" }]).label).toBe("Låg");
+  });
+  it("preserves original records while projecting routines", () => {
+    const data = { ...empty, routines: [{ id: "r", title: "Medicin", enabled: true, time: "09:00", repeat: "daily" as const }] };
+    const original = JSON.stringify(data);
+    const days = projectCalendar(["2026-10-07", "2026-10-08"], data, "2026-10-07");
+    expect(days["2026-10-07"]?.[0]?.sourceId).toBe("r");
+    expect(days["2026-10-08"]?.[0]?.editable).toBe(false);
+    expect(JSON.stringify(data)).toBe(original);
+  });
+  it("separates overlapping blocks and gives short events stable touch geometry", () => {
+    const blocks = layoutCalendar([entry("a", "09:00", "10:00"), entry("b", "09:15", "09:30"), entry("c", "10:00", "10:30")]);
+    expect(blocks[0]?.lanes).toBe(2);
+    expect(blocks[1]?.lane).toBe(1);
+    expect(blocks[2]?.lanes).toBe(1);
+    expect(layoutCalendar([entry("a", "09:00")])[0]?.end).toBe(572);
+  });
+});
