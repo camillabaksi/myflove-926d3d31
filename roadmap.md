@@ -1,5 +1,9 @@
 # Roadmap
 
+## Startsidans viktigaste delar (2026-10-07)
+- [ ] Välj kompakt layout för kalender, dagens energibatteri, måendelogg och QuickFlow.
+- [ ] Återanvänd befintliga uppgifter och handlingar, kontrollera startsidan och uppdatera ändringsloggar. Ingen publicering beställd.
+
 ## Samlad kalender (2026-10-07)
 - [x] Integrera veckomål, incheckning, filter och kalenderkoppling i den visuella kalendern utan dubbla översikter; bevara dagens befintliga verktyg.
 - [x] Kontrollera layout, verktyg och kvarvarande aktiviteter; uppdatera ändringsloggar. Ingen publicering beställd.
