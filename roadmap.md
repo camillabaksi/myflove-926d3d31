@@ -1,5 +1,11 @@
 # Roadmap
 
+## Visuell kalender (2026-10-07)
+- [ ] Kartlägg befintlig kalender, datakällor, kapacitetsberäkning och behörighetsgränser; presentera plan före implementation.
+- [ ] Bygg gemensam perioddata och mockupens månad/vecka/dag utan parallella modeller.
+- [ ] Inför säkra tidsblock, luft, oschemalagt, snabbplanering och godkända Flow-förslag.
+- [ ] Verifiera mobil/dator, mutationer/ångra, synk, familjeintegritet och tillgänglighet; uppdatera dokumentation och ändringsloggar. Publicera inte.
+
 ## Slogan och engelska på landningssidan (2026-10-05)
 - [ ] Byt slogan i aktuell landningssida och senaste pitchdeck/blueprint utan att ändra originalen.
 - [ ] Ge besökare språkval och översätt hela landningssidans exempel och dialoger till engelska; kontrollera mobil och dator.
