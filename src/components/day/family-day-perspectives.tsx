@@ -92,7 +92,7 @@ export default function FamilyDayPerspectives({
         })),
     [myItems],
   );
-  const childEntries = useMemo(() => [
+  const childEntries = useMemo<TimelineEntry[]>(() => [
     ...entriesFromChildEvents(childEvents),
     ...childItems.filter(i => i.kind === "activity" && !i.time && activityOccursOn(i, dayISO)).map(i => ({ key: `childitem-${i.id}`, personId: i.child_id, time: "", title: i.title, itemId: i.id })),
   ], [childEvents, childItems, dayISO]);
