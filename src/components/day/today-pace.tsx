@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { CalendarDays, Clock, ExternalLink, ListFilter, UserRound } from "lucide-react";
+import { CalendarDays, Clock, ExternalLink, Leaf, ListFilter, UserRound } from "lucide-react";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
