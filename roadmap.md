@@ -1,8 +1,8 @@
 # Roadmap
 
 ## Paceable etapp 1D — detaljpolish (2026-10-07)
-- [ ] Visa avgränsad plan och invänta godkännande.
-- [ ] Ändra endast Min plats-navsymbol, Idags aktivitetsrader och svensk datumtypografi; bevara Etapp 1C och all funktionalitet.
+- [x] Visa avgränsad plan och invänta godkännande.
+- [x] Ändra endast Min plats-navsymbol, Idags aktivitetsrader och svensk datumtypografi; bevara Etapp 1C och all funktionalitet.
 - [ ] Verifiera hela testsviten, separat typkontroll, automatiskt bygge och Idag/nav på mobil och desktop.
 - [ ] Dokumentera och leverera tre nya 390 px-bilder efter verifiering; inga ändringar därefter och ingen publicering.
 

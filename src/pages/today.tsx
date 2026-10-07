@@ -17,6 +17,7 @@ import { useVisualCalendar } from "@/hooks/use-visual-calendar";
 import { applyFamilyPresence, DEFAULT_FAMILY_LAYER, type FamilyLayerPreferences } from "@/lib/family-calendar";
 import { deriveDayPace } from "@/lib/day-pace";
 import { todayISO } from "@/lib/day";
+import { dateHeadingLabel } from "@/lib/date-presentation";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
@@ -51,7 +52,7 @@ export function TodayContent() {
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
             <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
-            <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
           </div>
           <PaceableStones compact className="mt-1 h-10 w-20 shrink-0" />
         </div>
@@ -79,7 +80,7 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-2">
-            <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings />} />
+            <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" />} />
           </div>
         </section>
       </MyFloveWide>
