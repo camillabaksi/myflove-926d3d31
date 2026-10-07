@@ -52,6 +52,7 @@
   --color-coral: hsl(var(--coral));
   --color-sky: hsl(var(--sky));
   --color-sun: hsl(var(--sun));
+  --color-sun-ink: hsl(var(--sun-ink));
 
   /* Enbart marknadsföringssidan; appens globala lila palett lämnas orörd. */
   --color-landing-background: var(--landing-background);
@@ -154,6 +155,7 @@
   --coral: 15 76% 80%;
   --sky: 203 54% 89%;
   --sun: 45 82% 88%;
+  --sun-ink: 38 78% 46%;
   --sand: 37 30% 88%;
   --stone-lavender: #cfc0e4;
   --stone-apricot: #eaa88f;
@@ -423,6 +425,7 @@ html[data-npf-still="true"] .home-ambient-glow {
   --coral: 8 40% 34%;
   --sky: 202 26% 24%;
   --sun: 44 28% 24%;
+  --sun-ink: 44 80% 66%;
   --sand: 37 16% 25%;
   --stone-lavender: #8f7ca9;
   --stone-apricot: #aa725f;

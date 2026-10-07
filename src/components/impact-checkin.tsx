@@ -101,7 +101,7 @@ export default function ImpactCheckin() {
     <ExpandableBlock
       title={t("Vad påverkar din kapacitet?")}
       titleText={t("Vad påverkar din kapacitet?")}
-      subtitle={t("Frivilligt – det hjälper Flow att anpassa dagen.")}
+      subtitle={t("Frivilligt – hjälper Paceable att förstå vad som påverkar din dag.")}
       summary={summary}
       icon={CloudRain}
       tone="blush"
