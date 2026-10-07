@@ -7,7 +7,6 @@ import { PersonAvatar } from "@/components/day/person-switcher";
 import { Button } from "@/components/ui/button";
 import { useChildren, type Child, type ChildItem } from "@/hooks/use-children";
 import { useLang } from "@/hooks/use-language";
-import { emitActivityDone } from "@/lib/activity-energy-event";
 import {
   activityOccursOn,
   CATEGORY_LABELS,
@@ -42,13 +41,6 @@ export default function ChildrenDaySummary() {
     const done = !item.completed;
     try {
       await toggleItem(item.id, done);
-      if (done) {
-        emitActivityDone({
-          id: `child-${item.id}`,
-          title: `${item.title} (${child.name})`,
-          dueDate: day,
-        });
-      }
     } catch {
       toast.error(t("Det gick inte att spara just nu. Försök igen."));
     }
@@ -140,7 +132,7 @@ export default function ChildrenDaySummary() {
                             )}
                           >
                             <div className="flex min-w-0 items-center gap-1.5">
-                              <Button
+                              {item.kind === "task" && <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
@@ -156,7 +148,7 @@ export default function ChildrenDaySummary() {
                                 )}
                               >
                                 <Check size={14} strokeWidth={3} aria-hidden />
-                              </Button>
+                              </Button>}
                               <ActivityPictogram
                                 id={pictogramForActivity(item.title, meta.pictogram)}
                                 tone={meta.tone}
