@@ -1,5 +1,7 @@
 ## 2026-10-07
 
+- **Kalender, områdesfärger** (2026-10-07): Aktiviteter får mjukt tonad bakgrund, färgad kant och ikon efter sitt befintliga livsområde i månad, vecka och dag. Områdesnamn och en kompakt färgnyckel kompletterar färgerna. QuickFlows sparade område följer med; energipåverkan ändrar inte områdesfärgen. Aktiviteter och behörigheter är oförändrade. Ingen publicering.
+
 - **Hem, fyra kompakta rutor** (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow ligger direkt under hälsningen. Batteriet visar samma incheckningsbaserade värde som kalendern, eller ”–” när data saknas. Måendeloggen öppnar det befintliga formuläret; Just nu och övrigt innehåll finns kvar. Aktiviteter, energiberäkning och behörigheter är oförändrade. Ingen publicering.
 
 - **Samlad kalender** (2026-10-07): Innehållet från fler kalenderval integreras i den visuella kalendern. Filter och tydliga knappar för kalenderkoppling och dagens verktyg ligger vid periodvalet; veckomål visas direkt och dagens frivilliga incheckning ligger nära kapaciteten. Den dubbla äldre kalenderöversikten och det konkurrerande batteriet visas inte längre. Befintlig dagslista, bildstöd, påminnelser och kopiering finns kvar under Dagens verktyg. Aktiviteter, lagring, energiberäkning och familjebehörigheter är oförändrade. Ingen publicering.

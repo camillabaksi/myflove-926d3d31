@@ -104,7 +104,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       if (q.done ? !completedBelongsToDay(date, planned, q.doneAt) : planned ? planned !== date : date !== today) continue;
       const time = q.remindAt ? timeOf(new Date(q.remindAt).getHours() * 60 + new Date(q.remindAt).getMinutes()) : undefined;
       out.push({ id: `qf-${q.id}`, sourceId: q.id, source: "quickflow", date, title: q.text, time,
-        done: !!q.done, editable: false, href: "/quickflow", label: "QuickFlow" });
+        area: q.area, done: !!q.done, editable: false, href: "/quickflow", label: "QuickFlow" });
     }
     if (date === today) for (const p of data.priority) {
       if (linked.has(p.id) || p.done && !completedBelongsToDay(date, undefined, p.doneAt)) continue;

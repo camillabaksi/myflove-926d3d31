@@ -1558,6 +1558,50 @@ html[data-npf-less="true"] [data-npf="optional"] {
   background-color: hsl(var(--area, var(--primary)));
 }
 
+/* Calendar life-area accents follow the existing AREA_META hues. */
+:root {
+  --calendar-vardag: 150 45% 42%;
+  --calendar-privat: 327 62% 62%;
+  --calendar-studier: 265 60% 60%;
+  --calendar-barn: 20 70% 58%;
+  --calendar-jobb: 212 72% 52%;
+  --calendar-halsa: 28 85% 55%;
+  --calendar-ekonomi: 45 85% 48%;
+  --calendar-socialt: 350 72% 62%;
+  --calendar-egentid: 285 45% 55%;
+  --calendar-external: 240 10% 55%;
+}
+.dark {
+  --calendar-vardag: 150 45% 65%;
+  --calendar-privat: 327 62% 75%;
+  --calendar-studier: 265 60% 75%;
+  --calendar-barn: 20 70% 72%;
+  --calendar-jobb: 212 72% 70%;
+  --calendar-halsa: 28 85% 72%;
+  --calendar-ekonomi: 45 85% 68%;
+  --calendar-socialt: 350 72% 76%;
+  --calendar-egentid: 285 45% 72%;
+  --calendar-external: 240 10% 72%;
+}
+[data-calendar-area="vardag"] { --calendar-area: var(--calendar-vardag); }
+[data-calendar-area="privat"] { --calendar-area: var(--calendar-privat); }
+[data-calendar-area="studier"] { --calendar-area: var(--calendar-studier); }
+[data-calendar-area="barn"] { --calendar-area: var(--calendar-barn); }
+[data-calendar-area="jobb"] { --calendar-area: var(--calendar-jobb); }
+[data-calendar-area="halsa"] { --calendar-area: var(--calendar-halsa); }
+[data-calendar-area="ekonomi"] { --calendar-area: var(--calendar-ekonomi); }
+[data-calendar-area="socialt"] { --calendar-area: var(--calendar-socialt); }
+[data-calendar-area="egentid"] { --calendar-area: var(--calendar-egentid); }
+[data-calendar-area="external"] { --calendar-area: var(--calendar-external); }
+@utility calendar-area-text { color: hsl(var(--calendar-area)); }
+@utility calendar-area-dot { background-color: hsl(var(--calendar-area)); }
+@utility calendar-area-surface {
+  background-color: color-mix(in srgb, hsl(var(--calendar-area)) 12%, hsl(var(--card)));
+  border-color: hsl(var(--calendar-area) / 0.3);
+  border-left-color: hsl(var(--calendar-area));
+  &:hover { background-color: color-mix(in srgb, hsl(var(--calendar-area)) 20%, hsl(var(--card))); }
+}
+
 @utility area-hero {
   background-image: linear-gradient(
     135deg,

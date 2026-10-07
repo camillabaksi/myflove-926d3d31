@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Kalender, områdesfärger (2026-10-07): mjuka områdesfärger på bakgrund, kant och ikon i månad, vecka och dag, med områdesnamn och färgnyckel. QuickFlows sparade område följer med; energipåverkan ändrar inte områdesfärgen. Aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Hem, fyra kompakta rutor (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow direkt under hälsningen. Samma incheckningsbaserade batterivärde som kalendern, eller – utan data. Befintlig måendelogg, Just nu, aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Samlad kalender (2026-10-07): filter, veckomål och frivillig incheckning integreras i den visuella kalendern; kalenderkoppling och dagens befintliga verktyg får tydliga knappar. Ingen dubbel kalender eller konkurrerande batteri; aktiviteter och behörigheter bevaras. Inte publicerat.",
       "Kalender, kapacitetsbatteri (2026-10-07): dagens kapacitet visas som batteri med procent i alla vyer, bara från egen incheckning; planerad belastning visas separat.",
