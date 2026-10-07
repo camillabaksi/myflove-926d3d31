@@ -1,5 +1,11 @@
 # Roadmap
 
+## Paceable rebrand etapp 1 (2026-10-07)
+- [x] Ta emot visuell riktning och skyddsgränser; kartlägg befintlig design/navigation för en konkret plan.
+- [ ] Visa implementationsplan och invänta godkännande — appkod får inte ändras före godkännandet.
+- [ ] Efter godkännande: design tokens, app shell/navigation, Idag, Tankar, Min plats, Kalender, Mer och sparsamma stenar; bevara Core och tekniska identifierare.
+- [ ] Efter implementation: regressionstester, mobil/dator/tillgänglighet, dokumentation och slutrapport. Ingen publicering eller native-/SEO-rebrand.
+
 ## Paceable Core v1 (2026-10-07)
 - [x] Kartlägg återanvändning, Today-vägar, Capacity Mode, lagring och familjeskydd; presentera implementationsplan före appändring.
 - [x] Konsolidera primär Today med registrerad Capacity, befintlig kvalitativ Load och transparent Pace; behåll tekniska identifierare och legacy-data.
