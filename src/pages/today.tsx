@@ -25,6 +25,13 @@ import WeekReviewCard from "@/components/week-review-card";
 import { useWeekReview } from "@/hooks/use-activity-history";
 import { weekStartISO } from "@/lib/week-review";
 import { parseISODate } from "@/lib/day";
+import { FlowMascot } from "@/components/flow-mascot";
+import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { useDayCapacity } from "@/hooks/use-day-capacity";
+import { useVisualCalendar } from "@/hooks/use-visual-calendar";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { applyFamilyPresence, DEFAULT_FAMILY_LAYER, type FamilyLayerPreferences } from "@/lib/family-calendar";
+import { flowDaySupport } from "@/lib/flow-day-support";
 
 /**
  * ❤️ Idag – appens huvudupplevelse för dagen.
@@ -43,6 +50,13 @@ export function TodayContent() {
   }, []);
 
   const today = todayStr();
+  const dates = useMemo(() => [today], [today]);
+  const { days } = useVisualCalendar(dates);
+  const [familyPreferences] = useCloudSyncedStorage<FamilyLayerPreferences>("myflove-calendar-family-layer", DEFAULT_FAMILY_LAYER);
+  const capacityOf = useDayCapacity();
+  const dayCapacity = capacityOf(today);
+  const support = flowDaySupport(applyFamilyPresence(days[today] ?? [], familyPreferences), dayCapacity.percent);
+  const [supportDismissed, setSupportDismissed] = useState(false);
   const isSunday = parseISODate(today).getDay() === 0;
   const weekReview = useWeekReview(weekStartISO(today));
   const { reading, items: batteryItems } = useEnergyBattery();
@@ -71,6 +85,16 @@ export function TodayContent() {
         <p className="mt-1 text-sm text-muted-foreground">
           {t("Vad händer idag och vad behöver du göra?")}
         </p>
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <section aria-label={t("Dagens kapacitet och Flow")} className="flex flex-wrap items-center gap-x-5 gap-y-3 border-y border-border/60 py-3">
+          <div className="min-w-0">
+            <p className="mb-1 text-xs font-semibold text-ink">{t("Din kapacitet idag")}</p>
+            {dayCapacity.percent !== null ? <CapacityBattery percent={dayCapacity.percent} size="sm" /> : <p className="text-xs text-muted-foreground">{t("Ingen egen incheckning idag.")}</p>}
+          </div>
+          {!supportDismissed && <div className="flex min-w-0 flex-1 items-center gap-3" data-testid="today-flow-support"><FlowMascot size="xs" alive={false} /><div className="min-w-0"><p className="text-sm leading-relaxed text-ink">{t(support.message)}</p>{support.prioritize && <div className="mt-2 flex flex-wrap gap-2"><Button asChild variant="outline" size="sm"><Link href="/planera">{t("Hjälp mig prioritera")}</Link></Button><Button variant="ghost" size="sm" onClick={() => setSupportDismissed(true)}>{t("Inte nu")}</Button></div>}</div></div>}
+        </section>
       </MyFloveWide>
 
       <MyFloveWide>

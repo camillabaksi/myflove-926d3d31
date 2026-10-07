@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Lugnare månad, barnschema och Flow (2026-10-07): datum, verklig kapacitet idag/historiskt och unika befintliga områdesprickar, en enda för familjen. Inget framtidsbatteri. Barnschema saknar avbockning även på Idag och i barnprofil/schemaeditor. Idag visar samma kapacitet och ett situationsanpassat Flow-stöd utan prestationskrav. Befintliga uppgifter och rättigheter bevaras; ingen publicering.",
       "Familjelager i kalendern (2026-10-07): Min dag, Min dag + familj och Familjeöversikt med barnval och grupperade aktiviteter. Barnens tider är diskret kontext utan avbockning eller automatisk belastning; Behöver mig är uttryckligt och beaktas i planeringen. Barnschemats Nu/Sedan/Sen följer tiden utan prestationskrav. Befintliga uppgifter, lagring och rättigheter bevaras. Ingen publicering.",
       "Kalender, områdesfärger (2026-10-07): mjuka områdesfärger på bakgrund, kant och ikon i månad, vecka och dag, med områdesnamn och färgnyckel. QuickFlows sparade område följer med; energipåverkan ändrar inte områdesfärgen. Aktiviteter och behörigheter bevaras. Ingen publicering.",
       "Hem, fyra kompakta rutor (2026-10-07): Kalender, dagens kapacitetsbatteri, Logga hur du mår och QuickFlow direkt under hälsningen. Samma incheckningsbaserade batterivärde som kalendern, eller – utan data. Befintlig måendelogg, Just nu, aktiviteter och behörigheter bevaras. Ingen publicering.",
