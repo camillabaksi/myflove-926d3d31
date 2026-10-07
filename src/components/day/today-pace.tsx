@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { CalendarDays, Clock, ExternalLink, Leaf, ListFilter, UserRound } from "lucide-react";
-import { FlowMascot } from "@/components/flow-mascot";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useLang } from "@/hooks/use-language";
@@ -35,7 +35,7 @@ export function TodayPace({ pace }: { pace: DayPace }) {
   const fixed = pace.planningEntries.filter(entry => entry.time);
   const presence = pace.planningEntries.filter(entry => isFamilyEntry(entry) && entry.requiresParent);
   return <>
-    <section className="space-y-4 border-t border-border/60 pt-5" aria-labelledby="today-pace-title" data-testid="today-pace">
+    <section className="space-y-4 rounded-3xl border border-border bg-card p-5 shadow-soft" aria-labelledby="today-pace-title" data-testid="today-pace">
       <div>
         <p id="today-pace-title" className="text-xs font-semibold uppercase text-muted-foreground">{t("Dagens Pace")}</p>
         {pace.level && <h2 className="mt-1 font-display text-2xl font-bold text-ink">{t(LABEL[pace.level])}</h2>}
@@ -44,7 +44,7 @@ export function TodayPace({ pace }: { pace: DayPace }) {
       </div>
       {canReview && <Button variant="outline" className="min-h-11 rounded-2xl" onClick={() => setLighterOpen(true)}><ListFilter size={16} />{t("Gör dagen lättare")}</Button>}
       {pace.level === "gentle" && !canReview && <p className="text-xs text-muted-foreground">{t("Det här kan vara en krävande dag även om inget går att flytta.")}</p>}
-      <div className="flex items-center gap-3" data-testid="today-flow-support"><FlowMascot size="xs" alive={false} /><p className="text-sm text-ink">{t(flowMessage(pace))}</p></div>
+      <div className="flex items-center gap-3 border-t border-border/60 pt-3" data-testid="today-flow-support"><PaceableStones compact className="shrink-0" /><p className="text-sm text-ink">{t(flowMessage(pace))}</p></div>
     </section>
     <Dialog open={lighterOpen} onOpenChange={setLighterOpen}>
       <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">

@@ -266,10 +266,10 @@ export function QuickflowCapture({
           ) : (
             <span className="flex-1 min-w-0">
               <span className="block text-lg font-semibold text-ink">
-                {t("＋ Skriv eller prata med Flow")}
+                {t("Skriv eller säg det som det är")}
               </span>
               <span className="block text-sm text-muted-foreground">
-                {t("Dumpa allt – Flow delar upp och hjälper dig prioritera.")}
+                {t("Du granskar alltid förslaget innan något sparas.")}
               </span>
             </span>
           )}
@@ -285,9 +285,9 @@ export function QuickflowCapture({
       >
         <DialogContent className="max-h-[85dvh] max-w-[720px] overflow-y-auto overflow-x-hidden">
           <DialogHeader>
-            <DialogTitle>{t("Vad behöver du få ur huvudet?")}</DialogTitle>
+            <DialogTitle>{t("Vad har du i huvudet?")}</DialogTitle>
             <p className="text-sm text-muted-foreground">
-              {t("Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.")}
+              {t("Skriv eller säg det som det är.")}
             </p>
           </DialogHeader>
 
@@ -310,7 +310,7 @@ export function QuickflowCapture({
                   aria-label={voice.isListening ? t("Sluta lyssna") : t("Prata in")}
                   className={`absolute right-2 top-2 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                     voice.isListening
-                      ? "bg-destructive text-destructive-foreground animate-pulse"
+                      ? "bg-coral text-foreground"
                       : "bg-secondary text-muted-foreground hover:text-foreground"
                   }`}
                 >

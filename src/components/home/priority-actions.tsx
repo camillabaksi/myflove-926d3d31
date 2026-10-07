@@ -41,7 +41,7 @@ export default function HomePriorityActions({ onQuickflow }: { onQuickflow: () =
       </Button>
       <Button className={`${tile} text-primary-foreground`} data-testid="home-widget-quickflow" onClick={onQuickflow}>
         <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-foreground/15"><Brain aria-hidden /></span>
-        <span className="min-w-0"><span className="block font-display text-sm font-bold">QuickFlow</span><span className="mt-1 block text-xs font-normal text-primary-foreground/90">{t("Fånga en tanke")}</span></span>
+        <span className="min-w-0"><span className="block font-display text-sm font-bold">{t("Tankar")}</span><span className="mt-1 block text-xs font-normal text-primary-foreground/90">{t("Fånga en tanke")}</span></span>
       </Button>
     </nav>
     <Dialog open={dialog !== null} onOpenChange={(isOpen) => { if (!isOpen) setDialog(null); }}>

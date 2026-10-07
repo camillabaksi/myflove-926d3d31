@@ -49,13 +49,13 @@ export function TodayContent() {
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
         <p className="text-xs font-semibold uppercase text-primary">{t("Din dag, i din takt")}</p>
-        <h1 className="mt-1 font-handwritten break-words text-4xl font-semibold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
+        <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
         <p className="mt-1 capitalize text-sm text-muted-foreground">{dateLabel}</p>
         <TodayCapacity percent={dayCapacity.percent} />
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="rounded-3xl border border-border/60 bg-card px-4 py-4 shadow-soft sm:px-5" aria-labelledby="your-day-title">
+        <section className="rounded-3xl border border-border bg-card px-4 py-5 shadow-soft sm:px-5" aria-labelledby="your-day-title">
           <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 pb-3">
             <div>
               <h2 id="your-day-title" className="font-display text-xl font-bold text-ink">{t("Din dag")}</h2>

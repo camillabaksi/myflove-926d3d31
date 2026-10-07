@@ -7,12 +7,13 @@ import AddToDay from "@/components/day/add-to-day";
 import OwnChildCalendar from "@/components/family/own-child-calendar";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
-import { CalendarDays, Heart, Plus } from "lucide-react";
+import { CalendarDays, Plus } from "lucide-react";
+import { TodayHorizonIcon } from "@/components/paceable/navigation-icons";
 
 export type DayTab = "idag" | "kalender" | "lagg-till";
 
-const TABS: { id: DayTab; href: string; label: string; icon: typeof Heart }[] = [
-  { id: "idag", href: "/idag", label: "Idag", icon: Heart },
+const TABS: { id: DayTab; href: string; label: string; icon: React.ComponentType<{ size?: number }> }[] = [
+  { id: "idag", href: "/idag", label: "Idag", icon: TodayHorizonIcon },
   { id: "kalender", href: "/kalender", label: "Kalender", icon: CalendarDays },
   { id: "lagg-till", href: "/lagg-till", label: "Lägg till", icon: Plus },
 ];

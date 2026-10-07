@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Battery, Dumbbell, Pill, Sunrise, MessageCircle } from "lucide-react";
+import { ArrowRight, Battery, Dumbbell, Pill, Sunrise, MessageCircle, Heart } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 
 /**
  * ❤️ Hälsa – ett samlat hem för allt som handlar om hur du mår.
@@ -51,17 +52,30 @@ export default function HealthPage() {
       <MyFlovePageGrid area="halsa">
         <MyFloveWide>
           <MyFloveHeader
-            title="Hälsa"
+            title="Min plats"
             area="halsa"
             emojiKey="wellness"
-            description="Hur är läget idag?"
+            description="Hur du mår, i din egen takt."
           />
+        </MyFloveWide>
+
+        <MyFloveWide className="flex items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 shadow-soft">
+          <div><p className="font-display text-lg font-bold text-ink">{t("En lugn plats för dig")}</p><p className="mt-1 text-sm text-muted-foreground">{t("Checka in, se dina mönster eller hitta återhämtning.")}</p></div>
+          <PaceableStones className="shrink-0" />
         </MyFloveWide>
 
         <MyFloveWide className="space-y-2">
           <Link href="/mitt-batteri" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <Battery className="h-7 w-7 shrink-0 text-primary" aria-hidden />
             <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
+            <ArrowRight className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+          </Link>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <Link href="/aterhamtning" className="press flex items-center gap-3 rounded-3xl border border-border bg-card p-4 shadow-soft">
+            <Heart className="h-7 w-7 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">{t("Återhämtning")}</span><span className="block text-sm text-muted-foreground">{t("Välj en paus som passar just nu.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-primary" aria-hidden />
           </Link>
         </MyFloveWide>

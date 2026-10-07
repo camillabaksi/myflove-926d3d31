@@ -28,6 +28,9 @@ export const EN: Record<string, string> = {
   // ── Navigation ──────────────────────────────────────────────────────────
   Hem: "Home",
   Idag: "Today",
+  Tankar: "Thoughts",
+  "Min plats": "My space",
+  "Huvudnavigation": "Main navigation",
   Hälsa: "Health",
   "Mitt batteri": "My battery",
   "Energins historik": "Energy history",
@@ -100,6 +103,12 @@ export const EN: Record<string, string> = {
   "Anpassa hemskärmen": "Customise home screen",
   "Anpassa appen": "Customise the app",
   Mer: "More",
+  "Vad har du i huvudet?": "What's on your mind?",
+  "Skriv eller säg det som det är.": "Write or say it as it is.",
+  "Du granskar alltid förslaget innan något sparas.": "You always review the suggestion before anything is saved.",
+  "En lugn plats för dig": "A calm space for you",
+  "Checka in, se dina mönster eller hitta återhämtning.": "Check in, see your patterns or find recovery.",
+  "Välj en paus som passar just nu.": "Choose a pause that fits right now.",
 
   // Navigationens hjälptexter
   "Din överblick över dagen": "Your overview of the day",
