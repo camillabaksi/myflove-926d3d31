@@ -216,12 +216,12 @@ export default function Home() {
               )}
 
               {/* Kvällen: en varm avslutning utan skuld. */}
-              {!isLowCapacity && <CollapsibleSection id="home-close-day" title={t("Stäng dagen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><CloseDay /></CollapsibleSection>}
+              <CollapsibleSection id="home-close-day" title={t("Stäng dagen")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><CloseDay /></CollapsibleSection>
             </div>
 
 
             <div data-npf="optional">
-              {!isLowCapacity && hasSavedItems && (
+              {hasSavedItems && (
                 <Link
                   href={savedItemsHref}
                   data-testid="home-saved-items-reminder"
@@ -245,7 +245,7 @@ export default function Home() {
 
             {/* Återhämtning – en lugn, tydligt centrerad trygghetsväg. Finns
                 kvar även i lågt läge: där behövs den som mest. */}
-            <div className={isLowCapacity ? "mt-3 flex w-full justify-center" : "mt-4 flex w-full justify-center"}>
+            <div className="mt-4 flex w-full justify-center">
               <Link
                 href="/aterhamtning"
                 onClick={() => track("home_widget_opened", { source: "paus" })}
@@ -261,14 +261,14 @@ export default function Home() {
 
         {/* Kvällscheck – frivillig, dyker upp när dagen lider mot sitt slut. */}
 
-        {!isLowCapacity && shows("kvall") && new Date().getHours() >= 18 && (
+        {shows("kvall") && new Date().getHours() >= 18 && (
           <MyFloveWide style={{ order: 0.7 }} className="min-w-0" data-npf="optional">
             <CollapsibleSection id="home-evening-check" title={t("Kvällscheck")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><EveningCheck /></CollapsibleSection>
           </MyFloveWide>
         )}
 
         {/* Allt annat ligger kvar – men ur vägen tills du vill se det. */}
-        {!isLowCapacity && <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
+        <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="mer-i-myflove"
             title={t("Mer i MyFlove")}
@@ -301,10 +301,10 @@ export default function Home() {
               )}
             </div>
           </CollapsibleSection>
-        </MyFloveWide>}
+        </MyFloveWide>
 
         {/* Områdesväljare – litet, längst ner */}
-        {!isLowCapacity && shows("omrade") && (
+        {shows("omrade") && (
           <MyFloveWide style={pos("omrade")} className="space-y-2 pt-2" data-npf="optional">
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
@@ -315,9 +315,9 @@ export default function Home() {
           </MyFloveWide>
         )}
 
-        {!isLowCapacity && <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2" data-npf="optional">
+        <MyFloveWide style={{ order: 98 }} className="space-y-3 pt-2" data-npf="optional">
           <AreaOnboarding />
-        </MyFloveWide>}
+        </MyFloveWide>
 
         <MyFloveWide style={{ order: 100 }} className="min-w-0 pb-2">
           <HowItWorksGuide />
@@ -336,14 +336,14 @@ export default function Home() {
         </MyFloveWide>
 
         {/* "Lägg till på hemskärmen" – allra längst ner. */}
-        {!isLowCapacity && <MyFloveWide
+        <MyFloveWide
           style={{ order: 102 }}
           data-testid="home-install-note"
           className="pb-2"
           data-npf="optional"
         >
           <PwaInstallCard compact />
-        </MyFloveWide>}
+        </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
   );
