@@ -1,5 +1,11 @@
 # Roadmap
 
+## Paceable Core v1 (2026-10-07)
+- [ ] Kartlägg återanvändning, Today-vägar, Capacity Mode, lagring och familjeskydd; presentera implementationsplan före appändring.
+- [ ] Konsolidera primär Today med registrerad Capacity, befintlig kvalitativ Load och transparent Pace; behåll tekniska identifierare och legacy-data.
+- [ ] Lägg till frivillig hjälp att göra dagen lättare utan automatiska ändringar; bevara barnschema read-only.
+- [ ] Kontrollera unknown/future, familj, språk och mobil/dator; uppdatera dokumentation och rapportera legacy/risker. Ingen publicering.
+
 ## Lugnare månad, barnschema och Flow (2026-10-07)
 - [x] Beskriv befintliga datumrutor, färger, avbockningsvägar och Flow-stöd före ändring.
 - [x] Förenkla månad till datum, verklig kapacitet idag/historiskt och en prick per område; inget framtidsbatteri.
