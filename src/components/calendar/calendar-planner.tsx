@@ -14,9 +14,10 @@ import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useVisualCalendar } from "@/hooks/use-visual-calendar";
 import { useLang } from "@/hooks/use-language";
 import { buildFlowPlan } from "@/lib/flow-plan";
-import { calendarDate, calendarGaps, calendarLoad, layoutCalendar, minuteOf, periodDates, shiftDate, timeOf, type CalendarEntry, type CalendarSource, type CalendarView } from "@/lib/visual-calendar";
+import { calendarClusters, calendarDate, calendarGaps, calendarLoad, layoutCalendar, minuteOf, periodDates, shiftDate, timeOf, type CalendarEntry, type CalendarSource, type CalendarView } from "@/lib/visual-calendar";
 import { cn } from "@/lib/utils";
 import { getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { isActiveOwner } from "@/lib/account-scope";
 
 const TONES: Record<CalendarSource, string> = {
   task: "bg-lavender/70 border-primary/20", reminder: "bg-blush/70 border-accent/30",
@@ -61,6 +62,8 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
   const { reminders, addReminder, updateReminder } = useReminders();
   const { today: flowItems, toggleItem } = useFlowItems(date);
   const capacity = useCapacityMode();
+  const [energyLogs] = useCloudSyncedStorage<Array<{ level: number; logged_at: string }>>("myflove-energy-log", []);
+  const reportedEnergy = energyLogs.filter(e => calendarDate(new Date(e.logged_at)) === date).sort((a, b) => b.logged_at.localeCompare(a.logged_at))[0];
   const [details, setDetails] = useState<CalendarEntry | null>(null);
   const [cluster, setCluster] = useState<CalendarEntry[]>([]);
   const [adding, setAdding] = useState(false);
@@ -96,7 +99,7 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
     setImpact(entry.energyImpact ?? "unknown");
   };
   const moveEntry = (entry: CalendarEntry, nextDate: string, nextTime: string, minutes: string, nextImpact = entry.energyImpact) => {
-    if (!owner || !entry.editable || entry.recurring || document.documentElement.dataset.calendarOwner !== owner) return;
+    if (!owner || !isActiveOwner(owner) || !entry.editable || entry.recurring || document.documentElement.dataset.calendarOwner !== owner) return;
     const start = minuteOf(nextTime);
     const duration = Number(minutes);
     if (nextTime && start === null || minutes && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
@@ -104,7 +107,7 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
     const beforeTask = tasks.find(e => e.id === entry.sourceId);
     const beforeReminder = reminders.find(e => e.id === entry.sourceId);
     if (entry.source === "task") {
-      if (!beforeTask) return;
+      if (!beforeTask || beforeTask.syncKey) return;
       updateTask(entry.sourceId, { dueDate: nextDate, time: nextTime, endTime, energyImpact: nextImpact });
     } else if (entry.source === "reminder") {
       if (!beforeReminder || beforeReminder.repeat && beforeReminder.repeat !== "none" || beforeReminder.endDate) return;
@@ -123,7 +126,7 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
   };
   useEffect(() => { document.documentElement.dataset.calendarOwner = owner ?? ""; return () => { delete document.documentElement.dataset.calendarOwner; }; }, [owner]);
   const saveNew = () => {
-    if (!title.trim() || !editDate || !owner || document.documentElement.dataset.calendarOwner !== owner) return;
+    if (!title.trim() || !editDate || !owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner) return;
     const start = minuteOf(time), duration = Number(length);
     if (time && start === null || length && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
     const end = start !== null && duration > 0 ? timeOf(start + duration) : undefined;
@@ -161,12 +164,13 @@ export default function CalendarPlanner({ tools, onDateChange }: { tools: ReactN
     }}>
       {Array.from({ length: (last - first) / 60 + 1 }, (_, i) => first + i * 60).map(m => <div key={m} className="pointer-events-none absolute left-0 right-0 border-t border-border/45" style={{ top: (m - first) * 1.7 }}><span className="absolute -left-12 -top-2 w-10 text-right text-[11px] text-muted-foreground">{m === 1440 ? "24:00" : timeOf(m)}</span></div>)}
       {!compact && calendarGaps(dayItems).map(gap => <div key={gap.start} className="absolute left-2 right-1 flex items-center gap-2 rounded-xl border border-dashed border-sage/35 bg-mint/40 px-3 text-xs text-foreground" style={{ top: (gap.start - first) * 1.7 + 2, height: Math.max(30, gap.minutes * 1.7 - 6) }}><Leaf size={15} aria-hidden />{gap.minutes} {t("min luft")}</div>)}
-      {blocks.map(block => block.lanes > (compact ? 1 : 2) ? block.lane === 0 && <div key={block.item.id} className="absolute left-1 right-1" style={{ top: (block.start - first) * 1.7, height: 50 }}><Button variant="secondary" className="h-full w-full min-w-0 justify-start rounded-xl border border-border px-2 text-xs" onClick={() => setCluster(blocks.filter(b => b.start < block.end && b.end > block.start).map(b => b.item))}><CalendarDays size={14} /><span className="truncate">{block.item.time} · {blocks.filter(b => b.start < block.end && b.end > block.start).length} {t("aktiviteter")}</span></Button></div> : <div key={block.item.id} className="absolute pl-1 pr-1" style={entryStyle(block.start, block.end, block.lane, block.lanes, first)}>{blockButton(block.item, compact)}</div>)}
+      {calendarClusters(blocks).map(group => group.blocks.some(b => b.lanes > (compact ? 1 : 2)) ? <div key={group.blocks[0]?.item.id} className="absolute left-1 right-1" style={{ top: (group.start - first) * 1.7, height: Math.max(50, (group.end - group.start) * 1.7 - 4) }}><Button variant="secondary" className="h-full w-full min-w-0 items-start justify-start rounded-xl border border-border px-2 text-xs" onClick={() => setCluster(group.blocks.map(b => b.item))}><CalendarDays size={14} /><span className="truncate">{timeOf(group.start)} · {group.blocks.length} {t("aktiviteter")}</span></Button></div> : group.blocks.map(block => <div key={block.item.id} className="absolute pl-1 pr-1" style={entryStyle(block.start, block.end, block.lane, block.lanes, first)}>{blockButton(block.item, compact)}</div>))}
       {day === today && now !== null && now >= first && now <= last && <div className="pointer-events-none absolute left-0 right-0 z-10 border-t-2 border-accent" style={{ top: (now - first) * 1.7 }}><span className="absolute -left-11 -top-3 rounded-full bg-accent px-1.5 py-1 text-[10px] font-semibold text-accent-foreground">{t("NU")}</span></div>}
     </div>;
   };
   const balance = <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Dagens balans")}>
     <h2 className="font-display text-sm font-bold">{t(date === today ? "Din kapacitet idag" : "Dagens planering")}</h2>
+    <p className="mt-2 text-xs text-muted-foreground">{t("Din registrerade energi")}: {reportedEnergy ? `${reportedEnergy.level}/5` : t("Inte registrerad")}</p>
     {date === today ? <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4"><div className="grid size-20 shrink-0 place-items-center rounded-full border-[7px] border-mint bg-card"><span className="text-sm font-bold">{capacity.chosen ? t(capacity.mode === "fullt" ? "Fullt" : capacity.mode === "mellan" ? "Mellan" : "Lågt") : "—"}</span></div><div className="min-w-0"><p className="text-xs text-muted-foreground">{t("Uppskattad belastning")}</p><p className="mt-1 text-sm font-semibold">{t(load.label)}</p><div className="mt-2"><Segments entries={entries} /></div></div></div> : <div className="mt-3 flex items-center justify-between gap-2"><span className="text-sm">{t(load.label)}</span><Segments entries={entries} /></div>}
     {date === today && <details className="mt-2"><summary className="cursor-pointer py-2 text-xs text-primary">{t("Ändra kapacitetsläge")}</summary><div className="grid grid-cols-3 gap-1" role="group" aria-label={t("Kapacitetsläge")}>
       {(["fullt", "mellan", "lagt"] as const).map(mode => <Button key={mode} variant="ghost" className={cn("min-h-11 rounded-xl px-1 text-xs", capacity.chosen && capacity.mode === mode ? "bg-lavender text-primary" : "text-muted-foreground")} aria-pressed={capacity.chosen && capacity.mode === mode} onClick={() => capacity.setMode(mode)}>{t(mode === "fullt" ? "Fullt" : mode === "mellan" ? "Mellan" : "Lågt")}</Button>)}

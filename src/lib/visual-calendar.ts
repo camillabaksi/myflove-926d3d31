@@ -168,3 +168,16 @@ export function layoutCalendar(items: CalendarEntry[]): Array<{ item: CalendarEn
   }
   flush(); return sorted;
 }
+
+/** Connected overlap groups retain every item, including transitive overlaps. */
+export function calendarClusters(blocks: ReturnType<typeof layoutCalendar>) {
+  const groups: Array<{ start: number; end: number; blocks: typeof blocks }> = [];
+  for (const block of blocks) {
+    const last = groups.at(-1);
+    if (last && block.start < last.end) {
+      last.blocks.push(block);
+      last.end = Math.max(last.end, block.end);
+    } else groups.push({ start: block.start, end: block.end, blocks: [block] });
+  }
+  return groups;
+}
