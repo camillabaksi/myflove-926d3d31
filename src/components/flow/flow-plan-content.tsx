@@ -1,5 +1,4 @@
 import { CheckCircle2, ListOrdered, Sparkles } from "lucide-react";
-import CapacitySelector from "@/components/capacity-selector";
 import DayAdjust from "@/components/journey/day-adjust";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeader } from "@/components/myflove";
@@ -24,10 +23,6 @@ export function FlowPlanContent() {
           emojiKey="flowplan"
           description={t("Se vad som är Nu, Sedan och vad som kan vänta.")}
         />
-      </MyFloveWide>
-
-      <MyFloveWide>
-        <CapacitySelector />
       </MyFloveWide>
 
       <MyFloveBlock

@@ -8,10 +8,10 @@ export const Route = createFileRoute("/_app/idag")({
       {
         name: "description",
         content:
-          "Allt som hör till idag på ett ställe: energibatteri, dagens plan och det du redan hunnit med.",
+          "Dagens faktiska kapacitet, din egen plan och en varsam Pace-tolkning på ett ställe.",
       },
       { property: "og:title", content: "Idag – dagens planering | MyFlove" },
-      { property: "og:description", content: "Se vad som behöver hända idag och öppna dagens fördjupning när du vill." },
+      { property: "og:description", content: "Se vad du har att röra dig med, vad dagen bär och hur planen passar din kapacitet." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
