@@ -141,7 +141,6 @@ export default function VisualChildSchedule({
   onClose,
   addItem,
   updateItem,
-  toggleItem,
   deleteItem,
   uploadDoc,
   copyDoc,
@@ -313,11 +312,6 @@ export default function VisualChildSchedule({
     }
   };
 
-  const markDone = async (item: ChildItem) => {
-    if (readOnly) return;
-    await toggleItem(item.id, !item.completed);
-  };
-
   const toggleSelected = (id: string) => {
     setSelectedIds((current) => current.includes(id) ? current.filter((selectedId) => selectedId !== id) : [...current, id]);
   };
@@ -470,7 +464,7 @@ export default function VisualChildSchedule({
         {!readOnly && <Button type="button" variant={selectionMode ? "default" : "outline"} onClick={() => { setSelectionMode((currentMode) => !currentMode); setSelectedIds([]); }} className="h-10 rounded-xl px-3"><Check size={15} /><span className="hidden sm:inline">{t(selectionMode ? "Klar" : "Välj flera")}</span></Button>}
       </header>
 
-      {mode === "today" && <p className="flex items-center justify-center gap-2 rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary"><Heart size={15} fill="currentColor" /> {t("Du klarar det! Ett steg i taget.")} <Heart size={15} fill="currentColor" /></p>}
+      {mode === "today" && <p className="flex items-center justify-center gap-2 rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary"><Heart size={15} fill="currentColor" /> {t("En sak i taget, i din takt.")} <Heart size={15} fill="currentColor" /></p>}
 
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
         <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>
@@ -645,7 +639,7 @@ export default function VisualChildSchedule({
           <div className="grid grid-cols-2 gap-2"><Button type="button" variant="outline" onClick={() => void deviceAccessReady().then((ok) => (ok ? cameraRef.current?.click() : toast.error(UPDATE_APP_FOR_DEVICE_ACCESS)))} className="h-12 rounded-2xl"><Camera size={17} /> {t("Ta foto")}</Button><Button type="button" variant="outline" onClick={() => galleryRef.current?.click()} className="h-12 rounded-2xl"><ImagePlus size={17} /> {t("Egna bilder")}</Button></div>
           {draft.file && <p className="truncate text-xs text-muted-foreground">{draft.file.name}</p>}
           <p className="text-xs text-muted-foreground">{t("Bilden är privat och öppnas bara med en tillfällig säker länk.")}</p>
-          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim()} className="h-12 rounded-2xl">{saving ? t("Sparar...") : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="ghost" onClick={() => void markDone(editing)} className="h-12 rounded-2xl"><Check size={16} />{t(editing.completed ? "Ångra klar-markering" : "Markera klar (valfritt)")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
+          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim()} className="h-12 rounded-2xl">{saving ? t("Sparar...") : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
           <p className="flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays size={13} /> {t("Aktiviteten visas också i familjens vanliga dag och kalender.")}</p>
         </form>
         </DialogContent>
