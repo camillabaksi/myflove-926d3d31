@@ -29,7 +29,7 @@ describe("visual calendar", () => {
     expect(calendarLoad([{ ...entry("a", "09:00"), energyImpact: "gives" }]).label).toBe("Låg");
   });
   it("preserves original records while projecting routines", () => {
-    const data = { ...empty, routines: [{ id: "r", title: "Medicin", enabled: true, time: "09:00", repeat: "daily" as const }] };
+    const data = { ...empty, routines: [{ id: "r", title: "Medicin", enabled: true, time: "09:00", createdAt: 0, repeat: "daily" as const }] };
     const original = JSON.stringify(data);
     const days = projectCalendar(["2026-10-07", "2026-10-08"], data, "2026-10-07");
     expect(days["2026-10-07"]?.[0]?.sourceId).toBe("r");
