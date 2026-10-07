@@ -1,5 +1,7 @@
 ## 2026-10-07
 
+- **Kalender, kapacitetsbatteri** (2026-10-07): Dagens kapacitet visas som batteri med procent överst i kalendern, i månadsrutor, veckodagar och dagsvyn. Värdet bygger bara på egen incheckning för dagen; framtida dagar utan data visar "–". Planerad belastning visas separat och ändrar aldrig kapaciteten. Ingenting publicerat.
+
 - **Kalender, steg 1 – Månadsvy** (2026-10-07): Vald dag får en mjuk lavendelmarkering som skiljer sig från dagens datum och bevarar ikonernas kontrast. Befintliga vyer och data behålls.
 
 - **Visuell kalender** (2026-10-07): Månad, vecka och dag visar gemensamma befintliga datakällor med tidsblock, oschemalagda saker, kända tidsluckor och kapacitetsläge utan påhittade procenttal. Egna engångsposter kan planeras/flyttas med ångra; energipåverkan är valfri och notiser slås inte på automatiskt. Familjens behörigheter och separat skrivskyddat föräldraschema bevaras. Ingenting publicerat.
