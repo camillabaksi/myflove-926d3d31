@@ -43,7 +43,7 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
 }
 
 export function applyFamilyPresence(entries: CalendarEntry[], prefs: FamilyLayerPreferences): CalendarEntry[] {
-  return entries.map(e => isFamilyEntry(e) ? { ...e, requiresParent: prefs.presence[e.id] ?? e.requiresParent === true } : e);
+  return entries.map(e => isFamilyEntry(e) ? { ...e, requiresParent: prefs.presence[e.id] ?? (e.requiresParent === true) } : e);
 }
 /** Group only identical calendar information with identical responsibility; preserve original IDs. */
 export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerPreferences): CalendarEntry[] {

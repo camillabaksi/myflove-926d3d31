@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useChildren } from "@/hooks/use-children";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { decodeVisualNotes } from "@/lib/child-visual-schedule";
+import { activityOccursOn, decodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
 const SCHEDULE_KEY = "myflove-child-schedules";
@@ -15,7 +15,7 @@ export interface ChildEvent {
   childName: string;
   childId: string;
   place?: string;
-  /** Id på barnaktiviteten när den kommer från barnens lista (kan bockas av). */
+  /** Original ID; context is never a parent's completable task. */
   itemId?: string;
   completed?: boolean;
   /** Förälderns egen markering – aldrig ett energivärde. */
@@ -52,12 +52,12 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
       if (!childName) continue;
       for (const e of entries ?? []) {
         if (e.weekday !== weekday) continue;
-        out.push({ time: e.start, title: e.title, childName, childId, place: e.location });
+        out.push({ time: e.start, endTime: e.end, title: e.title, childName, childId, place: e.location, requiresParent: false });
       }
     }
 
     for (const i of items) {
-      if (!i.time || i.date !== today) continue;
+      if (i.kind !== "activity" || !i.time || !activityOccursOn(i, today)) continue;
       const childName = nameOf.get(i.child_id);
       if (!childName) continue;
       const { meta } = decodeVisualNotes(i.notes);

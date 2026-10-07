@@ -1602,6 +1602,20 @@ html[data-npf-less="true"] [data-npf="optional"] {
   &:hover { background-color: color-mix(in srgb, hsl(var(--calendar-area)) 20%, hsl(var(--card))); }
 }
 
+/* Family context remains readable but visually secondary to the owner's blocks. */
+[data-family-entry] {
+  background-color: color-mix(in srgb, hsl(var(--lavender)) 14%, hsl(var(--card)));
+  border-color: hsl(var(--primary) / 0.12);
+  border-left-color: hsl(var(--primary) / 0.2);
+  color: hsl(var(--muted-foreground));
+}
+[data-family-entry="presence"] {
+  background-color: color-mix(in srgb, hsl(var(--lavender)) 32%, hsl(var(--card)));
+  border-left-color: hsl(var(--primary) / 0.5);
+}
+[data-family-entry]:hover { background-color: color-mix(in srgb, hsl(var(--lavender)) 28%, hsl(var(--card))); }
+[data-family-entry] .calendar-area-text { color: hsl(var(--primary) / 0.7); }
+
 @utility area-hero {
   background-image: linear-gradient(
     135deg,

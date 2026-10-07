@@ -7,11 +7,11 @@ export const Route = createFileRoute("/_app/kalender")({
       { title: "Kalender – MyFlove" },
       {
         name: "description",
-        content: "Din kalender med uppgifter, påminnelser och synk mot Google Kalender/Outlook.",
+        content: "Din egen dag främst: visuell kalender, kapacitet och diskret familjelager med val av barn och Behöver mig.",
       },
       { name: "robots", content: "noindex, nofollow" },
       { property: "og:title", content: "Visuell kalender – MyFlove" },
-      { property: "og:description", content: "Månad, vecka och dag med visuell planering, kapacitet och plats för återhämtning." },
+      { property: "og:description", content: "Månad, vecka och dag med kapacitet, egna aktiviteter och familjen som ett lugnt lager av sammanhang." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
