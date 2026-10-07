@@ -1,5 +1,7 @@
 ## 2026-10-07
 
+- **Samlad kalender** (2026-10-07): Innehållet från fler kalenderval integreras i den visuella kalendern. Filter och tydliga knappar för kalenderkoppling och dagens verktyg ligger vid periodvalet; veckomål visas direkt och dagens frivilliga incheckning ligger nära kapaciteten. Den dubbla äldre kalenderöversikten och det konkurrerande batteriet visas inte längre. Befintlig dagslista, bildstöd, påminnelser och kopiering finns kvar under Dagens verktyg. Aktiviteter, lagring, energiberäkning och familjebehörigheter är oförändrade. Ingen publicering.
+
 - **Kalender, kapacitetsbatteri** (2026-10-07): Dagens kapacitet visas som batteri med procent överst i kalendern, i månadsrutor, veckodagar och dagsvyn. Värdet bygger bara på egen incheckning för dagen; framtida dagar utan data visar "–". Planerad belastning visas separat och ändrar aldrig kapaciteten. Ingenting publicerat.
 
 - **Kalender, steg 1 – Månadsvy** (2026-10-07): Vald dag får en mjuk lavendelmarkering som skiljer sig från dagens datum och bevarar ikonernas kontrast. Befintliga vyer och data behålls.

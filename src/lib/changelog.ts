@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Samlad kalender (2026-10-07): filter, veckomål och frivillig incheckning integreras i den visuella kalendern; kalenderkoppling och dagens befintliga verktyg får tydliga knappar. Ingen dubbel kalender eller konkurrerande batteri; aktiviteter och behörigheter bevaras. Inte publicerat.",
       "Kalender, kapacitetsbatteri (2026-10-07): dagens kapacitet visas som batteri med procent i alla vyer, bara från egen incheckning; planerad belastning visas separat.",
       "Kalender, veckovy på mobil (2026-10-07): veckan visar 1, 2 eller 3 dagar beroende på skärmbredd och sveps horisontellt dag för dag; datorn visar hela veckan. Minskad rörelse respekteras.",
       "Kalender, steg 1 – Månadsvy (2026-10-07): mjuk lavendelmarkering av vald dag, separat från dagens datum, med bibehållen ikonkontrast. Befintliga vyer och data behålls.",
