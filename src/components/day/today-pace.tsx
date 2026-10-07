@@ -37,7 +37,7 @@ export function TodayPace({ pace }: { pace: DayPace }) {
   return <>
     <section className="space-y-4 rounded-3xl bg-sage/35 p-5" aria-labelledby="today-pace-title" data-testid="today-pace">
       <div>
-        <p id="today-pace-title" className="flex items-center gap-1.5 text-xs font-semibold uppercase text-muted-foreground"><Leaf size={14} className="text-primary" aria-hidden />{t("Dagens Pace")}</p>
+        <p id="today-pace-title" className="text-xs font-semibold uppercase text-muted-foreground">{t("Dagens Pace")}</p>
         {pace.level && <h2 className="mt-1 font-display text-2xl font-bold text-ink">{t(LABEL[pace.level])}</h2>}
         <p className="mt-1 max-w-2xl text-sm leading-relaxed text-muted-foreground">{t(paceMessage(pace))}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("Planerad belastning")}: {t(pace.load.label)}{pace.load.unknown > 0 ? ` · ${pace.load.unknown} ${t("utan energiuppskattning")}` : ""}</p>

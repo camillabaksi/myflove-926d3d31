@@ -7,7 +7,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { PaceableStones } from "@/components/paceable/paceable-stones";
 
 /**
  * ❤️ Hälsa – ett samlat hem för allt som handlar om hur du mår.
@@ -55,7 +54,8 @@ export default function HealthPage() {
             title="Min plats"
             area="halsa"
             emojiKey="wellness"
-            description="Hur du mår, i din egen takt."
+            description="Din plats för energi, återhämtning och det som påverkar dagen."
+            className="paceable-my-place-header shadow-soft"
           />
         </MyFloveWide>
 

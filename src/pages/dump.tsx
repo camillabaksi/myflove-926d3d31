@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Brain, NotebookPen } from "lucide-react";
 import { track } from "@/lib/analytics";
 import Layout from "@/components/layout";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickflowCapture from "@/components/quickflow-capture";
 import QuickflowImageImport from "@/components/quickflow-image-import";
 import QuickflowPriority from "@/components/quickflow-priority";
@@ -14,6 +14,7 @@ import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
+import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
 
 /**
  * QuickFlow = få ut saker ur huvudet → Flow delar upp → du granskar →
@@ -31,16 +32,16 @@ export default function Dump() {
       <MyFlovePageGrid>
         <MyFloveWide>
           <div className="space-y-8">
-            <MyFloveBlock
-              title={t("Vad har du i huvudet?")}
-              subtitle={t("Skriv eller säg det som det är.")}
-              eyebrow={t("Tankar")}
-              icon={Brain}
-              tone="lavender"
-              surface="plain"
-              action={<PaceableStones compact />}
-              className="pop-in"
-            >
+            <section className="pop-in space-y-5" aria-labelledby="thoughts-title">
+              <header className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <span className="mb-3 grid h-9 w-9 place-items-center rounded-2xl bg-lavender text-ink" aria-hidden><ThoughtsIcon size={20} /></span>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">{t("Tankar")}</p>
+                  <h1 id="thoughts-title" className="mt-1 font-display text-3xl font-bold text-ink">{t("Vad har du i huvudet?")}</h1>
+                  <p className="mt-1 text-base text-muted-foreground">{t("Skriv eller säg det som det är.")}</p>
+                </div>
+                <PaceableStones compact />
+              </header>
               <div className="space-y-4">
                 <QuickflowCapture />
                 <QuickflowImageImport />
@@ -50,7 +51,7 @@ export default function Dump() {
                   )}
                 </WhyHint>
               </div>
-            </MyFloveBlock>
+            </section>
 
             {/* Allt som redan är ur huvudet ligger kvar – men ur vägen tills du vill se det. */}
             <CollapsibleSection
