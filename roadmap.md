@@ -1,5 +1,9 @@
 # Roadmap
 
+## Kalenderns områdesfärger (2026-10-07)
+- [x] Använd befintliga livsområden för mjuka färgmarkeringar i alla tre kalendervyer; behåll områdesnamn och ikoner.
+- [ ] Kontrollera färger, kvarvarande aktiviteter och ändringsloggar. Ingen publicering beställd.
+
 ## Startsidans viktigaste delar (2026-10-07)
 - [x] Välj kompakt layout för kalender, dagens energibatteri, måendelogg och QuickFlow.
 - [x] Återanvänd befintliga uppgifter och handlingar, kontrollera startsidan och uppdatera ändringsloggar. Ingen publicering beställd.
