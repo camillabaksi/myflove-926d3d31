@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Paceable-stenarna på Idag lite större (2026-10-08): stenarna bredvid hälsningen är nu 126×74 px efter att ha varit 104×68 px. De ligger i sidans eget flöde med luft runt sig, utan att gå in i texten, och hälsningen bryts på två rader. Verifierat i 390 px utan horisontell overflow. Ingen funktions- eller dataändring; ingen publicering.",
       "Större Paceable-stenar på Idag (2026-10-08): stenarna vid hälsningen är tydligt större och ligger på en egen rad ovanför hälsningen, så de inte ser ut som en liten rad bredvid texten. Stenbilden är beskuren så stenarna fyller ytan. Verifierat i 390 px. Ingen funktions- eller dataändring; ingen publicering.",
       "Min plats-ikon (2026-10-07): navigationen använder valt förslag B, Öppen rymdform.",
       "Paceable etapp 1D (2026-10-07): öppen organisk Min plats-navkontur, lättare Idag-rader med liten områdesprick och separatorer. Checkbox/meny har 44 px tryckyta; klara poster har checkmark/genomstrykning utan animation. Svensk datumrubrik visar Onsdag 7 oktober. Etapp 1C:s färger, övriga ytor, Core och data oförändrade. Ingen publicering.",

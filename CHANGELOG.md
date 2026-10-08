@@ -1,5 +1,7 @@
 ## 2026-10-08
+- Idag: Paceable-stenarna bredvid hälsningen är lite större (126×74 px) och ligger med luft runt sig utan att gå in i texten. Verifierat i 390 px.
 - Idag: hälsningen något mindre (ca 37 px) och Paceable-stenarna ca 80 % stora, placerade bredvid hälsningen.
+
 
 - **Större Paceable-stenar på Idag**: Stenarna vid hälsningen är tydligt större (176×112 px) och ligger på en egen rad ovanför hälsningen, så de inte längre ser ut som en liten rad bredvid texten och hälsningen får plats på en rad. Stenbilden är beskuren så stenarna fyller ytan. Verifierat i 390 px. Ingen funktions- eller dataändring. Ingen publicering.
 
