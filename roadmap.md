@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Uppgifter – sammanhållet Paceable-uttryck (2026-10-08)
-- [ ] Granska sidans egna visuella avvikelser och delade komponenter; visa avgränsad plan före appkodändring.
+- [x] Granskat sidans egna visuella avvikelser och delade komponenter; avgränsad plan framtagen före appkodändring.
 - [ ] Efter godkännande: endast Uppgifters presentation, befintliga funktioner och övriga sidor oförändrade.
 - [ ] Kontrollera mobil/desktop, båda teman, 200 % text och relevanta tester; uppdatera båda ändringsloggarna. Ingen publicering utan separat godkännande.
 
