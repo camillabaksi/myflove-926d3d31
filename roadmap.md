@@ -2,7 +2,8 @@
 
 ## Tankars två ytor (2026-10-08)
 - [x] Godkänd plan, enbart capture-yta och inline-hjälp vid import; stenarna orörda.
-- [ ] Verifiera vyer, funktioner och tester; leverera fyra bilder utan publicering.
+- [x] 501 tester och bygge godkända; 360/390/430/desktop, light/dark, 200 % textskalning utan dokumentoverflow, fokus och hjälpöppning verifierade. Capture-dialog och befintlig röstkontroll öppnas; importknappar finns. Faktisk inspelning och import/sparning ej end-to-end-testade.
+- [x] Fyra bilder levererade; stenbildens kontrollsumma identisk och övre 390 px-området pixelidentiskt med tidigare leverans. Stenar fortfarande 76×48 px, samma position; ingen publicering eller fler visuella ändringar.
 
 ## Endast Tankars stenstorlek (2026-10-08)
 - [x] Godkänd plan och endast stenbildens rendering 1,9× större; befintlig behållare och övrig layout orörda.
