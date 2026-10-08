@@ -87,9 +87,10 @@ describe("Mer navigation presentation", () => {
     expect(container.querySelectorAll('a[href="/assistant"]')).toHaveLength(0);
   });
 
-  it("omits empty direct sections without removing the existing tools menu", () => {
+  it("omits empty subcategories without removing the existing tools menu", () => {
     show([item("/installningar")]);
-    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("region", { name: group.title })).toBeNull();
+    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title) })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "STÖD & SAMTAL" })).toBeNull();
     expect(screen.getByRole("button", { name: /Fler funktioner/ })).toBeInTheDocument();
   });
 });
