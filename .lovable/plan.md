@@ -1,36 +1,55 @@
-# Kompakt kapacitetsstöd i mobilkalendern
+# Paceable — logotyper och webbikoner
 
-## Resultat
-Endast mobilens befintliga ”Vad påverkar din kapacitet?” får en kompakt presentation. Kalendern kommer tidigare när stödet är stängt. Ingen publicering.
+## 1. Kvalitetsbedömning: produktionsbyte pausat
+De båda ZIP-filerna är granskade. Det nya paketet förbättrar transparens och ikonernas format, men är **inte ett fullgott originalpaket**.
 
-## Stängt och utfällt läge
-- Stängt som standard när kalendern öppnas, utan att automatiskt stänga en pågående registrering.
-- Hela raden öppnar/stänger: befintlig ikon, rubriken, ”Lägg till vid behov” och tydlig ned-/uppåtpil.
-- Befintliga rosa/aprikosa ytor, rundning, diskret kant och subtil skugga. Ingen ny dekor eller illustration.
-- Utfällt visas exakt dagens formulär direkt under rubriken, inklusive befintliga förklaringar. Referensbildens exempelalternativ införs inte.
-- Osparade val bevaras när raden stängs och öppnas; ingen ny lagring införs. Samma validering och sparfunktion används.
+| Material | Bekräftat resultat | Beslut |
+|---|---|---|
+| Första paketets logotyper | Ogenomskinlig presentationsbakgrund; huvudlogotyp 970 × 325 px. | Används endast som referens. |
+| Första paketets ikoner | Uppskalade små utsnitt; ljus ytterkant och redan inbakade rundade hörn. | Används inte som produktionsikoner. |
+| Nya huvudlogotypen | Transparent PNG, 1900 × 560 px, slogan med rätt text. Läsanvisningen anger att ordmärket har satts om i DejaVu Serif och inte är en exakt kopia av tidigare ordmärke. Stor transparent marginal till höger. | Inte automatiskt likställd med godkänt original. |
+| Nya stensymbolen | 285 × 289 px. Frilagd från presentationsbild; ljus bakgrundsrest vid stenarnas bas och ljusa/jämna kantrester runt delar av konturen. | Behöver ett rent godkänt original. |
+| Nya ljusa/mörka ikonerna | Kvadratiska, utan inbakade rundade hörn, i 32/64/180/192/512/1024 px. Samma stenformation återanvänds. Den mörka visar tydligt en ljus fläck vid basen och ljusa konturer. Läsanvisningen bekräftar cirka 300 px faktisk källupplösning. | Används inte som produktionsikoner i nuvarande skick. |
 
-## Placering och skydd
-- Samma placering i månad, vecka och dag; Veckans mål flyttas inte.
-- Desktopplacering, kontrollrader och Etapp 2A:s textförstoring bevaras. Andra sidor och den delade expanderbara komponentens standardbeteende lämnas oförändrade.
-- Capacity/Load/Pace, familj, kalendergeometri, tidsblock, drag/drop, undo, aktiviteter, data, synk, kryptering, notiser, navigation, identifierare och stenar ändras inte.
+**Stoppregel:** Ingen friläggning, omritning, typsnittsersättning, AI-generering eller uppskalning används för att skapa ett nytt påstått original. Genomförandet börjar först efter planens godkännande och leverans/granskning av rena, godkända produktionsfiler. Planens godkännande gör inte de nuvarande ikonfilerna produktionsdugliga.
 
-## Tillgänglighet
-- Befintlig knappkomponent med minst 44 px klickhöjd, synligt fokus samt öppet/stängt tillstånd och koppling till innehållet för skärmläsare.
-- Naturlig radbrytning och innehållsanpassad höjd vid 200 %; ingen textminskning, kapning eller horisontell sidscroll.
-- Stängt formulär är inte åtkomligt via tangentbord, men dess osparade val bevaras.
+Behövs: liggande godkänd logotyp med rena kanter och avsedd typografi, läsbar version för mörkt läge, samt ljus och lavendelbaserad kvadratisk ikon utan bakgrundsrester. Helst vektor eller verkligt skarpt rasteroriginal med samma stensymbol. Ingen ny variant skapas av mig.
 
-## Tekniskt genomförande
-- Lägg till uttryckligt opt-in-läge för mobilkalendern i `src/components/impact-checkin.tsx`; samma formulär återanvänds och andra anrop behåller dagens presentation.
-- Aktivera läget vid befintliga `checkin={<ImpactCheckin />}` i `src/pages/calendar.tsx`. Återanvänd befintlig mobil/desktopgräns (768 px), inte textstorleken, för att avgränsa presentationen.
-- Undvik ändringar i `ExpandableBlock`, collapse-lagring och den befintliga desktoplösningen. Bevara en formulärinstans och dess pågående val vid öppning/stängning och kontrollera byte mellan kalendervyer.
-- Använd befintliga tokens och endast lokalt avgränsade stilar vid behov. Inga paket, serverändringar eller migreringar.
-- Uppdatera riktade tester, AGENTS.md, roadmap, CHANGELOG.md och `src/lib/changelog.ts`.
+## 2. Avgränsad varumärkesuppdatering
+När kvalitetskravet är uppfyllt:
+- Återanvänd den levererade liggande logotypen där produktens varumärke redan visas: sidomeny, mobilens relevanta apphuvud, inloggning, registrering och befintliga introduktionsytor. Behåll alla handlingar och navigationsmål.
+- Publika startsidans befintliga varumärkesplats och sidfot får samma godkända logotyp/namn. Ingen ombyggnad av startsidan eller ändring av dess interaktiva exempel.
+- Byt produktnamn i berörda välkomst- och installationsmeddelanden till Paceable. Funktioner som Flow, QuickFlow och Min Flow behåller namn och innehåll.
+- Slogan skrivs exakt **”Ditt liv, i din takt.”** där en faktisk varumärkesslogan visas. Ingen automatisk ersättning av funktionell stödtext eller samtliga rubriker.
+- Logotypens inbyggda typografi används som bild; appens befintliga typsnitt ändras inte. Proportioner bevaras utan sträckning, filter, beskärning eller omfärgning.
+- Tidigare logotyper ersätts i varumärkesplatser, även på tillgängliga äldre sidor. Befintliga illustrationsstenar vid Idag/Tankar och Flow-maskoten i funktioner lämnas orörda enligt tidigare bildlås; de är inte produktlogotyper.
 
-## Verifiering och leverans
-- Ta före/efter-bilder med samma konto och innehåll.
-- Månad, vecka och dag vid 360/390/430 px med normal och 200 % text: kompakt rad, komplett formulär, bibehållna osparade val, fokus/tangentbord och ingen sidscroll.
-- Kontrollera sparfunktionen med isolerad testdata eller kontrollerad testdubbel, inte genom att skriva över användarens registrering; redovisa om verklig kontosparning inte har testats.
-- Jämför desktop vid 1024/1440 px, även textförstoring, och kontrollera att Veckans mål och övriga kontroller är oförändrade.
-- Kör befintliga tester och kontrollera arbetsmiljöns automatiska bygg-/typkontrollsignal; redovisa eventuella begränsningar.
-- Visa mobil månad stängd/öppen, mobil vecka/dag samt desktopkontroll. Rapportera ändrade filer och resultat. Publicera inte.
+## 3. Webbikoner och plattformsgränser
+- Favicon: godkänd ljus/mörk ikon med temaval där webbläsaren stöder det, samt ljus fallback. Kontrollera faktiskt byte och läsbarhet vid 16–64 px.
+- PWA: ljus godkänd ikon som kompatibel standard i manifestet, 192 och 512 px. Namn/short_name ändras till Paceable och slogan används i relevant beskrivning; start_url, scope och övrigt beteende lämnas oförändrat.
+- Apple-hemskärmsikon: godkänd ljus ikon i 180 px som kompatibel standard.
+- **Automatiskt mörkt/ljust byte av redan installerad PWA-/Apple-hemskärmsikon utlovas inte.** Manifestets vanliga ikonfält ger inte ett tillförlitligt plattformsöverskridande temabyte. Webbläsarflikens ikon och appens visade logotyp är separata från hemskärmsikonen.
+- Använd inte en vanlig ikon som maskable utan kontroll av att hela stensymbolen ryms inom säker beskärningsyta. Vid otillräcklig marginal behövs levererat godkänt maskable-original; ingen stenformation modifieras.
+- Ändra inga notisfiler. Nuvarande generiska notisikon kan visuellt följa med om den refererar samma webbikonadress; specifika ikonlänkar och allt notisbeteende bevaras.
+- Native-ikoner, splash, butiksnamn och Android/iOS-projekt ingår inte.
+
+## 4. Tekniskt genomförande och berörda filer
+- Ny gemensam, liten logotypkomponent i `src/components/paceable/` och godkända bildpekare i `src/assets/`. Ingen migration av andra befintliga medier.
+- Presentation: `src/components/layout.tsx`, `src/routes/sign-in.tsx`, `src/routes/sign-up.tsx`, `src/components/flow-onboarding.tsx`, `src/components/intro-tour.tsx` och relevanta befintliga varumärkesplatser som hittas vid slutlig inventering.
+- Publikt varumärke: `src/routes/index.tsx` och berörda strängar i `src/lib/landing-translations.ts`; ändra inte övrigt innehåll eller översättningsfunktion.
+- Installationsnamn: `src/components/pwa-install-button.tsx` och `src/components/pwa-install-card.tsx`.
+- Webbikoner: `public/manifest.webmanifest`, nya faviconfiler i `public/` och länkar i `src/routes/__root.tsx`. Övriga uppladdade webbmedier lagras genom befintligt assetflöde.
+- Berörda sidors titlar och delningsbeskrivningar uppdateras till korrekt produktnamn, utan domänbyte eller ändring av verifieringsuppgifter. Ingen ny delningsbild tillverkas och ingen tidigare logotypbild exponeras via gamla delningstaggar på dessa sidor.
+- `AGENTS.md`, `roadmap.md`, `CHANGELOG.md` och `src/lib/changelog.ts` dokumenterar genomförandet och datum.
+
+## 5. Skydd
+Ingen generell omdesign, färg-/kort-/knapp-/navigationsändring. Kalender, Capacity/Load/Pace, familj, sparning, kontodata, autentisering, notisinställningar och annan funktionalitet förblir oförändrade. Ingen ändring av identifierare, bundle ID, package name, URL-schema, domäner, backend, tabeller, lagringsnycklar eller interna MyFlove/Flow-namn. Inga nya paket och ingen publicering.
+
+## 6. Kontroll och slutrapport
+- Före/efter på inloggning, registrering, introduktion, sidomeny/apphuvud och publik varumärkesplats vid 360/390/430 samt 1024/1440 px, i ljust och mörkt läge; även 200 % text och synligt fokus.
+- Samma symbol, oförändrade proportioner, läsbart ordmärke/slogan och inga ljusa kantrester på mörk bakgrund.
+- Sök och visuell kontroll av att gamla produktlogotyper saknas i användargränssnittets varumärkesplatser; skilj uttryckligen från bevarade Flow-funktionsbilder och interna namn.
+- Kontrollera faviconens fallback och temabyte, manifest-/ikonlänkar och maskable-säkerhet. Redovisa separat vad som kräver fysisk iPhone/Android och vad redan installerade appar kan behöva tid att uppdatera.
+- Kör berörda tester och granska automatisk byggsignal. Rapportera exakt vilka filer/platser som ändrats med skärmbilder och eventuella återstående begränsningar.
+
+**Nuvarande status:** Endast granskning och plan. Ingen appkod, produktionsikon eller publicering ändrad. Genomförandet väntar på godkännande samt godtagbara original.
