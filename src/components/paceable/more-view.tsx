@@ -137,16 +137,6 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {flowSamtal && section("STÖD & SAMTAL", flowSamtal)}
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
-      {MORE_GROUPS.slice(0, 4).map((group, index) => {
-        const entries = visible(group.hrefs);
-        const meta = [
-          { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
-          { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
-          { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
-          { icon: Home, tone: "blush", hint: "Vardagen hemma" },
-        ][index];
-        return entries.length ? <section key={group.title} className="pace-more-section" aria-label={t(group.title)}>{card(group.title, meta.hint, meta.icon, meta.tone, undefined, `direct-${group.title}`, rows(entries))}</section> : null;
-      })}
       {section("FLER VERKTYG", <>
         {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_GROUPS.map((group) => {
           const entries = visible(group.hrefs);
