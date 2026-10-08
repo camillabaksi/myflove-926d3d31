@@ -2,9 +2,9 @@
 
 ## Resultat av inventeringen
 
-**Rekommendation: börja med alternativ B, en isolerad 2D-prototyp av den exakta godkända stensymbolen.** Det bevarar identiteten bäst och kräver minst resurser. Alternativ A ger verkligt djup och föränderliga kontaktskuggor, men kräver ny, separat godkänd modellering.
+**Rekommendation: börja med alternativ B, en isolerad 2D-prototyp med bild 2 som exakt visuell förlaga.** Det bevarar identiteten bäst och kräver minst resurser. Alternativ A ger verkligt djup och föränderliga kontaktskuggor, men kräver ny, separat godkänd modellering.
 
-Ingen ny konceptbild finns identifierad i det aktuella meddelandet. Därför är jämförelsen nedan mot dina beskrivna krav, inte en verifierad matchning mot konceptbilden. Bilden behöver bifogas igen före visuellt godkännande.
+**Referenserna är nu granskade:** bild 1 (`a_clean_soft_pastel_friendly_ui_illustration_co.png`, 1536 × 1024 RGB) styr endast känslan av naturligt material, mjukt ljus och lugn närvaro. Bild 2 (`Paceable_stensymbol.png`) är exakt förlaga för former, färger, proportioner och stapling. Bild 1:s sidoordnade formationer, ljusbågar, glitter, växter, fem tillstånd och prestationscopy som ”när du gjort något” överförs inte. Den visar stillbilder, inte verifierad rörelse.
 
 Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen maskot skapas nu.
 
@@ -12,7 +12,8 @@ Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen masko
 
 | Källa | Innehåll | Begränsning/användning |
 |---|---|---|
-| Godkänt `Paceable_Lovable_korrigerat_paket.zip`: `symbols/paceable-stones-exact-1024.png` | 1024 × 1024 RGBA, transparent bakgrund; salviagrön underst, persika i mitten, lavendel överst | Exakt original, **en sammansatt rasterbild**, inte tre lager. Rekommenderad källa för Pace. |
+| **Bild 2: `Paceable_stensymbol.png`** | **235 × 200 RGB**, staplade originalstenar med ljus bakgrund och markskugga | Exakt visuell förlaga enligt senaste beslutet. Sammansatt bild, ingen transparens eller separata lager. Lämplig för en liten första originaltrogen demonstration, inte stor skarp presentation. |
+| Godkänt `Paceable_Lovable_korrigerat_paket.zip`: `symbols/paceable-stones-exact-1024.png` | 1024 × 1024 RGBA, transparent bakgrund; salviagrön underst, persika i mitten, lavendel överst | Tidigare godkänt original, **en sammansatt rasterbild**, inte tre lager. Visuellt samma typ av stapling; pixelidentitet med nya bild 2 är inte verifierad. Används inte automatiskt i dess ställe. |
 | Samma ZIP: `symbols/paceable-stones-trimmed.png` | 684 × 727 RGBA | Samma symbol med borttagna transparenta marginaler, inte en ny formation eller separat stenresurs. |
 | `src/assets/paceable-brand/paceable-horizontal-{light,dark}.png.asset.json` | Godkända liggande logotyper; originalbilder 1861 × 695 RGBA | Text, slogan och stenar i samma bild. Helt oförändrade; inte animationskälla. |
 | `src/assets/paceable-brand/paceable-compact-{light,dark}.png.asset.json` | Godkända kompakta logotyper, 1287 × 470 respektive 1277 × 465 RGBA | Logotyper, inte frilagda stenar. Lämnas oförändrade. |
@@ -21,6 +22,8 @@ Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen masko
 | `PaceableStones` standard-SVG | Tre förenklade stenformer | Inte originalsymbolen och inte en fotorealistisk modell; inget substitut för Pace. |
 
 **Inga tre separat godkända stenlager, 3D-modeller eller materialkartor har hittats i det godkända paketet.** Originalsymbolen har redan stenstruktur, ljus och kontaktpartier inbakade i bilden. PNG-upplösningen är inte ett mått på tredimensionell detalj eller vektorkvalitet.
+
+**Källbegränsning för bild 2:** dess bakgrund följer med vid visning i mörkt läge. Första demonstrationen kan visa den oförändrad på en avgränsad ljus yta i båda teman; det är inte en färdig integrerad mörkerlösning. För skarp, fristående Pace behövs en högupplöst transparent originalexport av exakt bild 2, eller uttrycklig bekräftelse att ZIP-symbolen får vara dess produktionskälla. Ingen AI-uppskalning, bakgrundsborttagning eller ny stenbild görs nu.
 
 ## 2. Teknikjämförelse
 
@@ -66,10 +69,10 @@ Pace följeslagaren hålls åtskild från **Din takt** i namn och kod. Befintlig
 
 ## 5. Minsta isolerade prototyp efter godkännande
 
-1. Bekräfta konceptbilden och den staplade originalsymbolen som exakt visuell källa.
+1. Bild 1 är inspiration och bild 2 exakt förlaga. Godkänn B och liten oförändrad bild-2-demo; för större/transparant presentation krävs motsvarande originalexport eller godkännande av ZIP-källan.
 2. Skapa en fristående lokal demonstrationsyta **utanför appens källkod och navigation**, under en temporär prototypmapp. Ingen anslutning till konto, data, familj, chatt eller publicerad app.
 3. Visa samma originalbild i ljust/mörkt på små/stora ytor, statisk samt de fyra tillstånden. Befintlig logotyp visas bara som oförändrad referens om den behövs.
 4. Kontrollera mobil/desktop, 200 % text i omgivande exempel, reducerad rörelse och statiskt val. Granska bildens skärpa, silhuett, färger, kontaktpartier och ljusriktning. Redovisa filstorlek och rörelseprestanda; fysiska iOS/Android-enheter behöver separat kontroll.
 5. Visa skärmbilder och en kort inspelning för **visuellt godkännande**. Ingen integration eller maskotersättning följer automatiskt av teknikgodkännandet.
 
-**Beslut att godkänna:** B med den oförändrade sammansatta originalsymbolen som första pilot. Separata stenlager och 3D är senare, uttryckliga beslut. Ingen implementation eller publicering sker nu.
+**Beslut att godkänna:** B med oförändrad bild 2 som liten första pilot, med ovanstående bakgrunds-/upplösningsbegränsningar. Separata stenlager, annan produktionskälla och 3D är senare, uttryckliga beslut. Ingen implementation eller publicering sker nu.
