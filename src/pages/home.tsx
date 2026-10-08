@@ -114,7 +114,7 @@ export default function Home() {
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
 
-      <MyFlovePageGrid className="gap-5 xl:grid-cols-6">
+      <MyFlovePageGrid className="pace-home-page gap-5 xl:grid-cols-6">
         <MyFloveWide className="home-ambient-shell" data-glow-level={glowLevel}>
           <section className="home-main-surface pop-in" aria-label={t("Din lugna start")}>
             <div className="home-ambient-glow" aria-hidden />
@@ -123,7 +123,7 @@ export default function Home() {
                 <p className="mb-1 text-xs font-semibold uppercase text-primary">
                   {t("Din dag, i din takt")}
                 </p>
-                <h1 className="break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
+                <h1 className="pace-app-title break-words text-4xl leading-tight text-ink sm:text-5xl">
                   {name ? `${t("Hej")} ${name}` : t("Hej")}
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">

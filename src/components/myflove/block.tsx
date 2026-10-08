@@ -135,6 +135,7 @@ export function MyFloveBlock({
         "flex min-w-0 h-auto flex-col gap-3 rounded-3xl border border-border p-4 shadow-soft data-[expanded='false']:min-h-[10rem] data-[expanded='false']:max-h-[12rem] data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
+        !area && (!surface || surface === "plain") && "pace-app-card",
         span && "col-span-full",
         className,
       )}

@@ -284,11 +284,7 @@ export default function InsightPage() {
     <Layout>
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28 page-enter">
         <header
-          className="rounded-3xl border-2 border-border/60 p-5 shadow-soft"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--mint) / 0.8) 100%)",
-          }}
+          className="pace-app-header rounded-3xl border-2 border-border/60 p-5 shadow-soft"
         >
           <div className="flex items-start gap-3">
             <button
@@ -301,7 +297,7 @@ export default function InsightPage() {
             </button>
             <MyFloveInsightGather emoji="🧠" />
             <div className="min-w-0 flex-1">
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
                 MyFlove Insight
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">

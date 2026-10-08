@@ -80,7 +80,7 @@ export default function History() {
         <MyFloveWide>
           <div className="space-y-6">
             <header>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
                 {t("Historik")}
               </h1>
               <p className="mt-1 text-muted-foreground">

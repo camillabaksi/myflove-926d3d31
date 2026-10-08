@@ -580,18 +580,14 @@ export default function Tasks() {
       <MyFlovePageGrid className="page-enter">
         <MyFloveWide>
           <div
-            className="rounded-3xl border-2 border-border/60 p-5 shadow-soft"
-            style={{
-              backgroundImage:
-                "linear-gradient(135deg, hsl(var(--lavender)) 0%, hsl(var(--cream)) 60%, hsl(var(--blush) / 0.8) 100%)",
-            }}
+            className="pace-app-header rounded-3xl border-2 border-border/60 p-5 shadow-soft"
           >
             <div className="flex items-start gap-3">
               <span aria-hidden className="text-3xl leading-none">
                 ✅
               </span>
               <div className="min-w-0">
-                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+                <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
                   Alla uppgifter
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">

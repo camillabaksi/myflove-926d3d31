@@ -3,7 +3,8 @@
 ## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
 - [x] Omfattning bekräftad: även Äldre Hem och Flow ingår; befintlig godkänd identitet, inga funktionsändringar.
 - [x] Inventering och före-bilder av Hem/Flow; avgränsad genomförandeplan framtagen.
-- [ ] Genomförande och verifiering väntar på godkännande av planen; ingen publicering.
+- [x] Godkänd plan genomförd med gemensam avgränsning för Hem/Flow, befintliga neutrala kort och lokala dekorativa rubrik-/chattjusteringar; ingen publicering.
+- [ ] Slutverifiera mobil/desktop, båda teman, 200 % text, kontrast, dialogfokus, chattrullning, primärvyskydd och hela testsviten.
 
 ## Visningsnamn på Idag (2026-10-08)
 - [x] Plan godkänd; ⋯-meny, dialog, bekräftad synk, ingen sparad e-postgissning, tester. Ingen publicering.
