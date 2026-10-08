@@ -7,31 +7,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import PwaInstallButton from "@/components/pwa-install-button";
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Skapa konto – MyFlove" },
+      { title: "Skapa konto – Paceable" },
       {
         name: "description",
         content:
-          "Skapa konto på MyFlove – ett lugnare hem för hjärnan för dig med ADHD, autism eller mycket i huvudet.",
+          "Skapa konto på Paceable – ett lugnare hem för hjärnan för dig med ADHD, autism eller mycket i huvudet.",
       },
-      { property: "og:title", content: "Skapa konto – MyFlove" },
+      { property: "og:title", content: "Skapa konto – Paceable" },
       {
         property: "og:description",
-        content: "Skapa konto på MyFlove – ett lugnare hem för hjärnan, gratis att prova.",
+        content: "Skapa konto på Paceable – ett lugnare hem för hjärnan, gratis att prova.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Skapa konto – MyFlove" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { name: "twitter:title", content: "Skapa konto – Paceable" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-up" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-up" }],
@@ -100,8 +96,9 @@ function SignUpPage() {
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
+        <BrandLogo className="mx-auto mb-6 w-full max-w-xs" />
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">Skapa konto</h1>
-        <p className="mb-6 text-sm text-muted-foreground">Kom igång med MyFlove på en minut.</p>
+        <p className="mb-6 text-sm text-muted-foreground">Kom igång med Paceable på en minut.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-post</Label>

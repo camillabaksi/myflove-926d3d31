@@ -175,7 +175,7 @@ export function MenuPreviewDialog({
     <Dialog open={open} onOpenChange={(next) => (!next ? onClose() : undefined)}>
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto bg-landing-background p-5 sm:p-7">
         <DialogTitle className="font-display text-xl font-extrabold sm:text-2xl">
-          Så ser menyn ut i MyFlove
+          Så ser menyn ut i Paceable
         </DialogTitle>
         <DialogDescription className="text-sm leading-6 text-muted-foreground">
           Allt du kan göra i appen – grupperat så det är lätt att hitta. Skapa ett konto för att börja använda dem.

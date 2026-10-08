@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import { useState } from "react";
 import { BatteryMedium, CalendarDays, Check, Heart, House, Leaf, ListTodo, Smile, Sparkles } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,18 +16,18 @@ export function DayWindow() {
   const [done, setDone] = useState<number[]>([0, 1]);
 
   return (
-    <div className="w-full overflow-hidden rounded-3xl border border-border/80 bg-landing-surface shadow-lifted" aria-label="Illustrativ förhandsvisning av MyFlove">
+    <div className="w-full overflow-hidden rounded-3xl border border-border/80 bg-landing-surface shadow-lifted" aria-label="Illustrativ förhandsvisning av Paceable">
       <div className="flex h-11 items-center justify-between border-b border-border/60 bg-landing-sand px-4 sm:h-9">
         <div className="flex gap-1.5" aria-hidden="true">
           <span className="size-2.5 rounded-full bg-landing-red sm:size-2" />
           <span className="size-2.5 rounded-full bg-landing-yellow sm:size-2" />
           <span className="size-2.5 rounded-full bg-landing-green sm:size-2" />
         </div>
-        <span className="text-xs font-medium text-muted-foreground sm:text-[10px]">En glimt av MyFlove</span>
+        <span className="text-xs font-medium text-muted-foreground sm:text-[10px]">En glimt av Paceable</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-[112px_minmax(0,1fr)]">
         <aside className="hidden border-r border-border/60 bg-landing-sand/60 p-3 sm:block">
-          <div className="flex items-center gap-1 text-xs font-extrabold text-foreground"><Heart aria-hidden="true" className="size-4 fill-primary text-primary" /> MyFlove</div>
+          <BrandLogo compact lightSurface className="w-full" />
           <div className="mt-8 space-y-1 text-[10px] font-medium text-muted-foreground">
             <div className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-2 text-primary"><House className="size-3" aria-hidden="true" /> Översikt</div>
             <div className="flex items-center gap-2 px-2 py-2"><CalendarDays className="size-3" aria-hidden="true" /> Min dag</div>
@@ -36,7 +37,7 @@ export function DayWindow() {
         </aside>
         <div className="min-w-0 p-4 sm:p-4">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-primary sm:hidden">MyFlove</span>
+            <span className="text-xs font-semibold text-primary sm:hidden">Paceable</span>
             <span className="ml-auto text-xs font-medium text-muted-foreground sm:text-[10px]">Din dag, i din takt</span>
           </div>
           <div className="mt-5 sm:mt-3">

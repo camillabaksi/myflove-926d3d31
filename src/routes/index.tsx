@@ -9,18 +9,19 @@ import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feat
 import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { LandingTranslateProvider } from "@/components/auto-translate-provider";
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import previewVideo from "@/assets/landing-intro-current.mp4.asset.json";
 import previewWebm from "@/assets/landing-intro-current.webm.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MyFlove – Vardagen ska kräva mindre av hjärnan" },
+      { title: "Paceable – Vardagen ska kräva mindre av hjärnan" },
       {
         name: "description",
-        content: "MyFlove hjälper dig fånga tankar, planera efter din energi och ta ett steg i taget. Ett mjukare sätt att få vardagen att gå ihop.",
+        content: "Paceable hjälper dig fånga tankar, planera efter din energi och ta ett steg i taget. Ett mjukare sätt att få vardagen att gå ihop.",
       },
-      { property: "og:title", content: "MyFlove – Vardagen ska kräva mindre av hjärnan" },
+      { property: "og:title", content: "Paceable – Vardagen ska kräva mindre av hjärnan" },
       {
         property: "og:description",
         content: "Fånga tankar med QuickFlow, planera efter din dagsform och fokusera på nästa rimliga steg.",
@@ -52,7 +53,7 @@ const FEATURES = [
     id: "steg",
     icon: Heart,
     title: "Ett steg i taget",
-    text: "Stora mål blir enklare med små steg. MyFlove hjälper dig att fira framsteg – varje dag.",
+    text: "Stora mål blir enklare med små steg. Paceable hjälper dig att fira framsteg – varje dag.",
     accent: "bg-lavender text-primary",
   },
 ] as const;
@@ -85,9 +86,9 @@ function LandingPage() {
     <main className="min-h-screen overflow-x-hidden bg-landing-background text-foreground">
       <header className="relative z-10 bg-landing-background">
         <div className="mx-auto grid min-h-18 max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:px-12">
-          <Link to="/" aria-label="MyFlove, startsida" className="flex shrink-0 items-center gap-2.5">
-            <Heart aria-hidden="true" className="h-8 w-8 fill-primary text-primary" strokeWidth={1.6} />
-            <span className="font-display text-xl font-extrabold sm:text-2xl">MyFlove</span>
+          <Link to="/" aria-label="Paceable, startsida" className="flex shrink-0 items-center gap-2.5">
+            <BrandLogo compact lightSurface className="w-28 max-w-full sm:w-40 lg:hidden" />
+            <BrandLogo lightSurface className="hidden w-64 max-w-full lg:block" />
           </Link>
           <nav aria-label="Huvudmeny" className="hidden items-center gap-7 lg:flex">
             <Link to="/" className="text-sm font-semibold hover:text-primary">Hem</Link>
@@ -113,16 +114,16 @@ function LandingPage() {
       <section className="relative overflow-hidden bg-landing-background">
         <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 pt-10 pb-10 sm:px-8 lg:min-h-[525px] lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-7 lg:px-12 lg:pt-8 lg:pb-5">
           <div className="relative z-10 max-w-2xl">
-            <p className="mb-7 text-[11px] font-bold uppercase tracking-[0.19em] text-primary">your flow, with love</p>
+            <p className="mb-7 text-[11px] font-bold text-primary" data-no-translate>Ditt liv, i din takt.</p>
             <h1 className="font-display text-[2.4rem] leading-[1.15] font-extrabold sm:text-5xl lg:text-[3.2rem] xl:text-[3.65rem]">
               Vardagen ska kräva <span className="text-primary">mindre</span> av hjärnan
             </h1>
             <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              MyFlove är en vardagsplanerare för dig med en full hjärna. Vi hjälper dig att planera med omtanke, få struktur utan stress och fokusera på det som faktiskt känns bra.
+              Paceable är en vardagsplanerare för dig med en full hjärna. Vi hjälper dig att planera med omtanke, få struktur utan stress och fokusera på det som faktiskt känns bra.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="min-h-12 rounded-full px-7 text-base shadow-soft">
-                <Link to="/sign-up">Prova MyFlove <ArrowRight aria-hidden="true" /></Link>
+                <Link to="/sign-up">Prova Paceable <ArrowRight aria-hidden="true" /></Link>
               </Button>
               <Button variant="ghost" size="lg" className="min-h-12 rounded-full px-2 text-foreground hover:text-primary" onClick={() => setVideoOpen(true)}>
                 <span className="grid size-10 shrink-0 place-items-center rounded-full border border-primary text-primary"><Play className="size-4 fill-current" aria-hidden="true" /></span>
@@ -146,7 +147,7 @@ function LandingPage() {
         </div>
       </section>
 
-      <section id="funktioner" aria-label="MyFloves funktioner" className="scroll-mt-8 bg-landing-background pb-16 pt-4 sm:pt-8">
+      <section id="funktioner" aria-label="Paceables funktioner" className="scroll-mt-8 bg-landing-background pb-16 pt-4 sm:pt-8">
         <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
           <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
             {FEATURES.map((feature) => (
@@ -193,21 +194,21 @@ function LandingPage() {
       </section>
 
       <footer className="border-t border-border bg-landing-sand px-5 py-8 text-center text-xs text-muted-foreground">
-        <nav aria-label="Mer om MyFlove" className="flex flex-wrap justify-center gap-x-5 gap-y-3">
+        <nav aria-label="Mer om Paceable" className="flex flex-wrap justify-center gap-x-5 gap-y-3">
           <Link to="/guide/adhd-planner-for-adults" className="hover:text-primary">ADHD-planerare för vuxna</Link>
           <Link to="/integritet" className="hover:text-primary">Integritet</Link>
           <Link to="/villkor" className="hover:text-primary">Villkor</Link>
           <Link to="/cookies" className="hover:text-primary">Cookies</Link>
         </nav>
-        <p className="mt-5">© {new Date().getFullYear()} MyFlove</p>
+        <p className="mt-5">© {new Date().getFullYear()} Paceable</p>
       </footer>
       <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
       <MenuPreviewDialog open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
         <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
-          <DialogTitle>Se hur MyFlove fungerar</DialogTitle>
-          <DialogDescription>En kort introduktion till dagens MyFlove.</DialogDescription>
-          {videoOpen && <video controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-foreground" aria-label="MyFlove introduktionsfilm"><source src={previewWebm.url} type="video/webm" /><source src={previewVideo.url} type="video/mp4" /></video>}
+          <DialogTitle>Se hur Paceable fungerar</DialogTitle>
+          <DialogDescription>En kort introduktion till dagens Paceable.</DialogDescription>
+          {videoOpen && <video controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-foreground" aria-label="Paceable introduktionsfilm"><source src={previewWebm.url} type="video/webm" /><source src={previewVideo.url} type="video/mp4" /></video>}
         </DialogContent>
       </Dialog>
       <LandingTranslateProvider lang={lang} />

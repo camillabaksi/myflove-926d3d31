@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -6,7 +7,7 @@ import { FLOW_GOALS, useFlowPrefs, type FlowGoalId } from "@/hooks/use-daily-flo
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /**
- * Frågan "vad vill du att MyFlove hjälper dig med?".
+ * Frågan "vad vill du att Paceable hjälper dig med?".
  * Visas först vid ett senare besök – första gången ska appen bara ge nytta.
  */
 export default function FlowOnboarding() {
@@ -34,10 +35,11 @@ export default function FlowOnboarding() {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && setDismissed(true)}>
       <DialogContent className="sm:max-w-md rounded-3xl">
+        <BrandLogo compact className="mx-auto w-40" />
         <DialogHeader>
           <DialogTitle>
             {step === 1
-              ? "Vad vill du att MyFlove främst ska hjälpa dig med?"
+              ? "Vad vill du att Paceable främst ska hjälpa dig med?"
               : "Vad vill du börja med?"}
           </DialogTitle>
         </DialogHeader>

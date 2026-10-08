@@ -8,7 +8,7 @@ import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 /**
- * "Lägg till MyFlove på hemskärmen"
+ * "Lägg till Paceable på hemskärmen"
  * Riktig installationsprompt där webbläsaren stödjer den, annars en mjuk
  * instruktion för iOS/Safari. Döljs helt när appen redan är installerad.
  * `compact` gör den till en liten, diskret notering (används längst ner på Hem).
@@ -61,7 +61,7 @@ export default function PwaInstallCard({
   return (
     <section
       data-pwa-install
-      aria-label="Lägg till MyFlove på hemskärmen"
+      aria-label="Lägg till Paceable på hemskärmen"
       className={cn(
         "rounded-3xl border-2 border-primary/20 bg-card p-4 shadow-lifted space-y-3",
         className,
@@ -71,13 +71,13 @@ export default function PwaInstallCard({
         <FlowMascot size="xs" mood="wave" bump className="flow-alive shrink-0" />
         <p className="min-w-0 flex-1 text-pretty text-sm leading-relaxed text-muted-foreground">
           <span className="font-semibold text-foreground">Ha Flow nära till hands 💜</span>
-          <span className="mt-0.5 block">MyFlove kan ligga direkt på din hemskärm.</span>
+          <span className="mt-0.5 block">Paceable kan ligga direkt på din hemskärm.</span>
         </p>
       </div>
 
       <Button className="w-full rounded-full" onClick={startInstall}>
         <Download className="mr-2 size-4" />
-        Lägg till MyFlove på hemskärmen
+        Lägg till Paceable på hemskärmen
       </Button>
 
       {showInstallHelp && (
@@ -92,7 +92,7 @@ export default function PwaInstallCard({
             <X className="size-3.5" />
           </Button>
           <p className="pr-6 font-medium text-foreground">
-            {isIos ? "Så gör du på iPhone eller iPad:" : "Så lägger du till MyFlove:"}
+            {isIos ? "Så gör du på iPhone eller iPad:" : "Så lägger du till Paceable:"}
           </p>
           {isIos ? (
             <ol className="mt-1.5 space-y-1">
@@ -117,7 +117,7 @@ export default function PwaInstallCard({
               </li>
             </ol>
           )}
-          <p className="mt-2">Sen ligger MyFlove som en riktig app – och jag med. 💜</p>
+          <p className="mt-2">Sen ligger Paceable som en riktig app – och jag med. 💜</p>
         </div>
       )}
     </section>

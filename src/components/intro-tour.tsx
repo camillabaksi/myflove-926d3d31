@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import { useEffect, useState } from "react";
 import { Brain, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
@@ -30,9 +31,10 @@ export default function IntroTour() {
   return (
     <Dialog open onOpenChange={(open) => !open && finish(false)}>
       <DialogContent className="max-w-sm rounded-3xl p-6 text-center">
+        <BrandLogo compact className="mx-auto w-40" />
         <DialogTitle className="text-2xl font-bold text-ink">Vad snurrar i huvudet?</DialogTitle>
         <DialogDescription className="text-sm leading-relaxed text-muted-foreground">
-          Börja med en enda sak. Du behöver inte förstå hela MyFlove nu.
+          Börja med en enda sak. Du behöver inte förstå hela Paceable nu.
         </DialogDescription>
 
         <div className="absolute right-3 top-3 z-10">

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Paceables webbvarumärke (2026-10-08): godkända ljusa/mörka huvud- och kompaktlogotyper från korrigerat paket, exakt slogan Ditt liv, i din takt. samt favicon/PWA/Apple Touch Icon. Endast varumärkesplatser och installationsnamn ändrade; inga maskable-ikoner, native-, navigations-, data- eller funktionsändringar. Ingen publicering.",
       "Mobilkalenderns kapacitetsstöd (2026-10-08): kompakt rosa helrad med Lägg till vid behov och samma formulär. Osparade val bevaras i tillfällig sidstatus vid hopfällning och Månad/Vecka/Dag utan autosparning eller ny lagring. Veckans mål, desktop och Core oförändrade; ingen publicering.",
       "Startsida (2026-10-08): inloggade användare, inloggning, registrering, nytt lösenord, introduktionsturen, Tillbaka utan historik och generella notiser landar på /idag i stället för /hem. Specifika notislänkar och /hem under Mer → Äldre funktioner bevaras; design, Core och data oförändrade; ingen publicering.",
       "Etapp 2A tillgänglighet (2026-10-08): lokal textstorleks- och utrymmesanpassning för hälsning, batterier, kalenderkontroller, dagsvy och fria aktivitetsrader. Normallayouten och tidsgeometrin bevaras. Fasta veckoblock har kvarstående läsbarhetsbegränsningar vid 200 %; ingen publicering.",

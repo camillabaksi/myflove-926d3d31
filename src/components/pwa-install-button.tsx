@@ -14,16 +14,16 @@ import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 /**
- * Alltid synlig knapp för att lägga till MyFlove på hemskärmen.
+ * Alltid synlig knapp för att lägga till Paceable på hemskärmen.
  * Fungerar oavsett webbläsare: riktig prompt när den finns, annars en
  * instruktionsruta i appen (ingen popup som kan blockeras).
  */
 export default function PwaInstallButton({
   className,
-  label = "Lägg till MyFlove på hemskärmen",
+  label = "Lägg till Paceable på hemskärmen",
   variant = "default",
   row = false,
-  hint = "Öppna MyFlove snabbare när du behöver Flow.",
+  hint = "Öppna Paceable snabbare när du behöver Flow.",
 }: {
   className?: string;
   label?: string;
@@ -78,7 +78,7 @@ export default function PwaInstallButton({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <FlowMascot size="xs" mood="wave" bump />
-              {t("Så lägger du till MyFlove")}
+              {t("Så lägger du till Paceable")}
             </DialogTitle>
             <DialogDescription>
               {t("Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.")}
