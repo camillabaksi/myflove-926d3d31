@@ -1,5 +1,8 @@
 # Roadmap
 
+## Visningsnamn på Idag (2026-10-08)
+- [x] Plan godkänd; ⋯-meny, dialog, bekräftad synk, ingen sparad e-postgissning, tester. Ingen publicering.
+
 ## Paceables logotyper och webbikoner (2026-10-08)
 - [x] Granska första ZIP-filen och flagga bakgrund, uppskalning och skillnader mellan symbolversioner.
 - [x] Granska det nya rena filpaketet: kvarvarande ljusa kant-/bakgrundsrester, uppskalad stensymbol och omsatt ordmärke rapporterade.
