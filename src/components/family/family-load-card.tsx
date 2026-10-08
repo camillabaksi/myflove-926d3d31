@@ -47,7 +47,7 @@ export default function FamilyLoadCard({ className = "" }: { className?: string 
             href="/flow"
             className="press min-h-11 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
           >
-            {t("Prata med Flow")}
+            {t("Prata med Pace")}
           </Link>
           <Link
             href="/aterhamtning"

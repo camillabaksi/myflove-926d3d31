@@ -107,7 +107,7 @@ export const LANDING_EN: Record<string, string> = {
   "Jobba en stund, ta paus": "Work a little, take a break",
   "Chatt, planering, Fånga och anteckningar": "Chat, planning, Capture and notes",
   "Hjälp, planering och chatt på ett ställe": "Help, planning and chat in one place",
-  "Prata med Flow": "Talk to Flow",
+  "Prata med Pace": "Talk to Pace",
   "Chatta med din personliga följeslagare": "Chat with your personal companion",
   "Planera": "Plan",
   "Planeringsläget – ordna dagens saker": "Planning mode – organize your day",

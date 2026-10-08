@@ -84,7 +84,7 @@ const MENU_GROUPS: MenuGroup[] = [
     icon: Sparkles,
     items: [
       { label: "Flow", hint: "Hjälp, planering och chatt på ett ställe", icon: Sparkles },
-      { label: "Prata med Flow", hint: "Chatta med din personliga följeslagare", icon: MessageCircle },
+      { label: "Prata med Pace", hint: "Chatta med din personliga följeslagare", icon: MessageCircle },
       { label: "Planera", hint: "Planeringsläget – ordna dagens saker", icon: ListChecks },
       { label: "Fånga", hint: "Fånga något snabbt – sortera sedan", icon: Zap },
       { label: "Anteckningar", hint: "Din idébank – tankar utan krav", icon: NotebookPen },

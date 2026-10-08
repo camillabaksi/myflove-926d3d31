@@ -40,7 +40,7 @@ export default function FlowEntry({
             onChat();
           }}
         >
-          Prata med Flow
+          Prata med Pace
         </Button>
         <div className="flex flex-wrap justify-center gap-2">
           <Button variant="outline" className="rounded-2xl" onClick={onPlan}>

@@ -77,7 +77,7 @@ export default function BatteryPage() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <Link href="/assistant" className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden /><span className="min-w-0 flex-1 text-sm font-semibold text-ink">Prata med Flow om dagens nästa steg</span><ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden /></Link>
+          <Link href="/assistant" className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden /><span className="min-w-0 flex-1 text-sm font-semibold text-ink">Prata med Pace om dagens nästa steg</span><ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden /></Link>
         </MyFloveWide>
 
         <MyFloveWide>

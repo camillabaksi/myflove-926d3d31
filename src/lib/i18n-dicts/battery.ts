@@ -175,7 +175,7 @@ export const EN_BATTERY: Record<string, string> = {
   "Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din kapacitet.":
     "Energy flow never creates calendar events or tasks. It just describes your capacity.",
   "Gör planen lättare": "Make the plan lighter",
-  "Prata med Flow": "Talk to Flow",
+  "Prata med Pace": "Talk to Pace",
 
   // lib/energy-flow.ts labels (rendered, not lib-changed)
   Planerat: "Planned",
