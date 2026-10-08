@@ -46,10 +46,10 @@ describe("Mer navigation presentation", () => {
       const toggle = screen.getByRole("button", { name: new RegExp(group.title) });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
       expect(toggle.closest(".pace-more-section")?.querySelector("h2")?.textContent).toBe(parents[group.title]);
-      expect(container.querySelector(`#pace-more-group-direct-${group.title}`)).toBeNull();
+      expect(document.getElementById(`pace-more-group-direct-${group.title}`)).toBeNull();
       fireEvent.click(toggle);
       expect(toggle).toHaveAttribute("aria-expanded", "true");
-      const direct = container.querySelector(`#pace-more-group-direct-${group.title}`);
+      const direct = document.getElementById(`pace-more-group-direct-${group.title}`);
       expect(direct).not.toBeNull();
       if (!direct) continue;
       const nested = within(tools as HTMLElement).getByRole("heading", { name: group.title }).parentElement;
