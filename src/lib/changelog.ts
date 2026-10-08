@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Mer enligt godkänd målbild (2026-10-08): samma responsiva vy på mobil och dator med profil, vardagskort, familj, insikter, alla övriga verktyg och Äldre funktioner. Befintliga länkar, filter, sök och funktioner bevaras; endast lokal presentation och lätt dekor. Logotyper och stenar oförändrade. Ingen publicering.",
       "Paceable på återstående sidor (2026-10-08): äldre Hem och Flow/samtal med undersidor använder befintliga Paceable-ytor och dialogdjup. Neutrala kort, dekorativa rubrikytor, lokala sidtitlar och chattbubblor anpassade; Inter för funktion och Fraunces för orientering. Primärvyer, betydelsebärande färger, bilder, navigation och data bevarade; ingen publicering.",
       "Verifiering (2026-10-08): slutlig full testkörning 516/516; befintligt timingkänsligt krypteringstest föll i två mellanliggande körningar men klarade separat omkörning. Nya tokenpars kontrast uppfyller AA. Hem-dialogens befintliga fokusåtergång rapporterad separat. Saknade sociala metadata kompletterade utan ändrade sidtitlar eller länkar.",
       "Enhetlig identitet etapp 1, QA-rättning (2026-10-08): lokal enkelkolumn och fri radbrytning vid 200 % text, dialogfält utan sidledsöverflöde samt uttryckligt skydd för Flow-chatten på /assistant med undersidor. Normallayout, Core och funktioner oförändrade; ingen publicering.",

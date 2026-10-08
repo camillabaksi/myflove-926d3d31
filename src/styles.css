@@ -2152,9 +2152,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
   background: var(--pace-canvas);
   color: hsl(var(--foreground));
   border-color: var(--pace-border-warm);
-  --more-lavender: hsl(var(--stone-lavender) / 0.28);
-  --more-sage: hsl(var(--stone-sage) / 0.28);
-  --more-peach: hsl(var(--stone-apricot) / 0.32);
+  --more-lavender: color-mix(in srgb, var(--stone-lavender) 28%, transparent);
+  --more-sage: color-mix(in srgb, var(--stone-sage) 28%, transparent);
+  --more-peach: color-mix(in srgb, var(--stone-apricot) 32%, transparent);
   --more-blush: hsl(var(--blush) / 0.6);
 }
 .pace-more-desktop { width: min(42rem, calc(100vw - 13rem)); border-right: 1px solid var(--pace-border-warm); box-shadow: var(--pace-elevation-2); }
