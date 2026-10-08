@@ -1997,3 +1997,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
   from { box-shadow: 0 0 40px 8px color-mix(in oklab, var(--primary) 35%, transparent); }
   to { box-shadow: 0 0 0 0 transparent; opacity: 0.85; }
 }
+
+/* Editorial rubriker (Fraunces) endast på Paceables primärytor. */
+[data-paceable-surface="true"] { --font-editorial: "Fraunces", Georgia, serif; }
+[data-paceable-surface="true"] :is(h1, h2).font-display {
+  font-family: var(--font-editorial);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 72;
+}
+[data-paceable-surface="true"] h1.font-display { font-size: clamp(2.5rem, 10vw, 2.75rem); line-height: 1.05; }
+[data-paceable-surface="true"] h2.font-display { font-size: 1.4rem; line-height: 1.2; }
