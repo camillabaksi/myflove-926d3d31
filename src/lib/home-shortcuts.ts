@@ -43,7 +43,7 @@ export const HOME_SHORTCUT_CATALOG: HomeShortcut[] = [
   { href: "/tasks", label: "Uppgifter", hint: "Det du vill få gjort", icon: ListTodo },
   { href: "/quickflow", label: "QuickFlow", hint: "Få ur dig det som snurrar", icon: Brain },
   { href: "/anteckningar", label: "Anteckningar", hint: "Sådant du vill spara", icon: NotebookPen },
-  { href: "/assistant", label: "Prata med Flow", hint: "Fråga eller tänk högt", icon: MessageCircle },
+  { href: "/assistant", label: "Prata med Pace", hint: "Fråga eller tänk högt", icon: MessageCircle },
   { href: "/mitt-batteri", label: "Mitt batteri", hint: "Din energi just nu", icon: BatteryMedium },
   { href: "/mitt-batteri", label: "Energi & mående", hint: "Hur är det just nu?", icon: Heart },
   { href: "/aterhamtning", label: "Återhämtning", hint: "Paus, lugn och ljusboost", icon: Wind },

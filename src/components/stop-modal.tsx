@@ -190,7 +190,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
             <div className="flex flex-col gap-2">
               <Button onClick={() => setPhase("feeling")} className="w-full h-12 rounded-2xl">
                 <Sparkles size={18} className="mr-2" />
-                Prata med Flow om det
+                Prata med Pace om det
               </Button>
               <Button
                 variant="ghost"

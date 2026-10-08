@@ -666,7 +666,7 @@ function MyFloveLinkRow() {
         <MyFloveButton variant="secondary">{t("Gör planen lättare")}</MyFloveButton>
       </Link>
       <Link href="/assistant">
-        <MyFloveButton variant="tertiary">{t("Prata med Flow")}</MyFloveButton>
+        <MyFloveButton variant="tertiary">{t("Prata med Pace")}</MyFloveButton>
       </Link>
     </div>
   );
