@@ -43,6 +43,7 @@ export default function Dump() {
                 <PaceableStones compact tactile className="pace-stones-contained h-12 w-24 shrink-0 [&_.pace-stones-img]:absolute [&_.pace-stones-img]:right-0 [&_.pace-stones-img]:!w-[76px] [&_.pace-stones-img]:!max-w-none" />
               </header>
               <div className="space-y-4">
+                <QuickflowCapture appearance="paceable" />
                 <QuickflowImageImport
                   whySlot={
                     <WhyHint label="quickflow" appearance="inline">
