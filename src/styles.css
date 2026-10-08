@@ -2217,7 +2217,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
   border-color: var(--pace-border-warm);
   box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
 }
-.app-shell-bg[data-paceable-app="true"] .font-display {
+.app-shell-bg[data-paceable-app="true"] :is(.font-display, .font-handwritten) {
   font-family: var(--font-sans);
 }
 .app-shell-bg[data-paceable-app="true"] .pace-app-title {
