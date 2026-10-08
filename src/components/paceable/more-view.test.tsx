@@ -30,10 +30,10 @@ describe("Mer navigation presentation", () => {
   const allItems = () => [...new Set([...MORE_FEATURED_HREFS, ...MORE_FAMILY, ...MORE_INSIGHTS, ...MORE_LEGACY, ...MORE_GROUPS.flatMap((group) => [...group.hrefs])])].map((href) => item(href, href !== "/flowplan"));
   const show = (items: MoreItem[], simpleMode = false) => render(<MoreView items={items} simpleMode={simpleMode} enlarged={false} onClose={vi.fn()} onNavigate={vi.fn()} t={(text) => text} />);
 
-  it("adds four direct sections in order while keeping all existing entry points", () => {
+  it("adds four collapsible sections in order while keeping all existing entry points", () => {
     const { container } = show(allItems());
     const headings = [...container.querySelectorAll(".pace-more-section > h2")].map((heading) => heading.textContent);
-    expect(headings).toEqual(["MIN VARDAG", "HÄLSA & VÄLMÅENDE", "FAMILJ & RELATIONER", "ÖVERBLICK & INSIKTER", "Min dag", "Flow och samtal", "Ork och återhämtning", "Hem och vardag", "FLER VERKTYG"]);
+    expect(headings).toEqual(["MIN VARDAG", "HÄLSA & VÄLMÅENDE", "FAMILJ & RELATIONER", "ÖVERBLICK & INSIKTER", "FLER VERKTYG"]);
     expect(screen.getByRole("link", { name: /Min profil/ })).toHaveAttribute("href", "/profil");
     expect(screen.getByRole("link", { name: /Uppgifter/ })).toHaveAttribute("href", "/tasks");
     fireEvent.click(screen.getByRole("button", { name: /Fler funktioner/ }));
@@ -41,6 +41,11 @@ describe("Mer navigation presentation", () => {
     expect(tools).not.toBeNull();
     if (!tools) return;
     for (const group of MORE_GROUPS.slice(0, 4)) {
+      const toggle = screen.getByRole("button", { name: new RegExp(group.title) });
+      expect(toggle).toHaveAttribute("aria-expanded", "false");
+      expect(within(screen.getByRole("region", { name: group.title })).queryByRole("link")).toBeNull();
+      fireEvent.click(toggle);
+      expect(toggle).toHaveAttribute("aria-expanded", "true");
       const direct = screen.getByRole("region", { name: group.title });
       const nested = within(tools as HTMLElement).getByRole("heading", { name: group.title }).parentElement;
       expect(nested).not.toBeNull();
@@ -51,6 +56,8 @@ describe("Mer navigation presentation", () => {
         expect(hrefs).toEqual([...group.hrefs]);
         expect(new Set(hrefs).size).toBe(hrefs.length);
       }
+      fireEvent.click(toggle);
+      expect(toggle).toHaveAttribute("aria-expanded", "false");
     }
     expect(within(tools as HTMLElement).getByRole("heading", { name: "Konto och app" })).toBeInTheDocument();
     expect(within(tools as HTMLElement).getByRole("heading", { name: "Admin" })).toBeInTheDocument();
@@ -61,10 +68,14 @@ describe("Mer navigation presentation", () => {
     const allowed = allItems().filter((entry) => !["/assistant", "/admin", "/admin-statistik"].includes(entry.href));
     const { container } = show(allowed, true);
     fireEvent.click(screen.getByRole("button", { name: /Fler funktioner/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Flow och samtal/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Min dag/ }));
     for (const href of ["/assistant", "/flowplan", "/admin", "/admin-statistik"]) {
       expect(container.querySelectorAll(`a[href="${href}"]`)).toHaveLength(0);
     }
     expect(container.querySelectorAll('a[href="/flow"]')).toHaveLength(2);
+    expect(screen.getByRole("button", { name: /Flow och samtal/ })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: /Min dag/ })).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "/flowplan" } });
     expect(screen.getByRole("link", { name: /flowplan/ })).toHaveAttribute("href", "/flowplan");
