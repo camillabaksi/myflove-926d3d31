@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Enhetlig identitet etapp 1, QA-rättning (2026-10-08): lokal enkelkolumn och fri radbrytning vid 200 % text, dialogfält utan sidledsöverflöde samt uttryckligt skydd för Flow-chatten på /assistant med undersidor. Normallayout, Core och funktioner oförändrade; ingen publicering.",
       "Enhetlig identitet etapp 1 (2026-10-08): övriga inloggade sidor får Paceables befintliga färger och ytor; gemensamma kort och sidrubriker får varm yta och lätt djup, sidtitlar Fraunces; dialoger får upphöjd yta. Idag, Kalender, Tankar, Min plats, äldre Hem och Flow-sidor oförändrade; ingen publicering.",
       "Visningsnamn på Idag (2026-10-08): diskret ⋯-meny i hälsningen med Ändra visningsnamn. Namnet sparas i befintlig kontobunden namnlagring och visas först när synken bekräftats; vid fel behålls tidigare namn. E-postgissning visas bara som tillfälligt förslag och sparas inte. Stenar, layout och övriga funktioner oförändrade; ingen publicering.",
       "Paceables webbvarumärke (2026-10-08): godkända ljusa/mörka huvud- och kompaktlogotyper från korrigerat paket, exakt slogan Ditt liv, i din takt. samt favicon/PWA/Apple Touch Icon. Endast varumärkesplatser och installationsnamn ändrade; inga maskable-ikoner, native-, navigations-, data- eller funktionsändringar. Ingen publicering.",

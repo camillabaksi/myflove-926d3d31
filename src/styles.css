@@ -2162,11 +2162,48 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .app-shell-bg[data-paceable-app="true"] .pace-app-title {
   font-family: var(--font-editorial);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 html[data-paceable-app="true"] [role="dialog"],
 html[data-paceable-app="true"] [role="alertdialog"] {
   background-color: var(--pace-surface-raised);
   border-color: var(--pace-border-warm);
   box-shadow: var(--pace-elevation-2);
+}
+
+/* Stor text på etapp 1-sidor: en kolumn och tillåten radbrytning utan att ändra normallayouten. */
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page {
+  grid-template-columns: minmax(0, 1fr);
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page :is(h1, h2, h3, p, label, button) {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page :is(form, [role="radiogroup"]) {
+  flex-wrap: wrap;
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page :is(input, textarea, select) {
+  min-width: 0;
+  max-width: 100%;
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page button {
+  height: auto;
+  min-height: 44px;
+  white-space: normal;
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-header > .relative {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-header .pace-app-title {
+  overflow-wrap: anywhere;
+}
+html[data-paceable-app="true"] [role="dialog"] :is(form, form > div),
+html[data-paceable-app="true"] [role="alertdialog"] :is(form, form > div) {
+  flex-wrap: wrap;
+}
+html[data-paceable-app="true"] [role="dialog"] :is(input, textarea, select, button),
+html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select, button) {
+  min-width: 0;
+  max-width: 100%;
 }

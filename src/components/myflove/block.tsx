@@ -211,7 +211,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "pace-app-page grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
