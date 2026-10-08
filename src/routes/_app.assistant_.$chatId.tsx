@@ -4,14 +4,14 @@ import Page from "@/pages/assistant";
 export const Route = createFileRoute("/_app/assistant_/$chatId")({
   head: () => ({
     meta: [
-      { property: "og:title", content: "Sparat samtal med Flow – MyFlove" },
-      { property: "og:description", content: "Läs igenom ett tidigare samtal med Flow, din lugna AI-följeslagare." },
+      { property: "og:title", content: "Sparat samtal med Pace – Paceable" },
+      { property: "og:description", content: "Läs igenom ett tidigare samtal med Pace, din lugna AI-följeslagare." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { title: "Sparat samtal med Flow – MyFlove" },
+      { title: "Sparat samtal med Pace – Paceable" },
       {
         name: "description",
-        content: "Läs igenom ett tidigare samtal med Flow, din lugna AI-följeslagare.",
+        content: "Läs igenom ett tidigare samtal med Pace, din lugna AI-följeslagare.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],
