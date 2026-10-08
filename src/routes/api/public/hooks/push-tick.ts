@@ -67,7 +67,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
               const res = await sendPushTo(s, {
                 title: r.title,
                 body: r.body,
-                url: r.url ?? "/hem",
+                url: r.url ?? "/idag",
                 tag: `${r.kind}-${r.id}`,
                 itemKey: r.client_key,
               }, { userId, source: `reminder:${r.kind}`, ref: r.client_key });
@@ -134,7 +134,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 const r = await sendPushTo(s, {
                   title: "God morgon 🌿",
                   body: msg,
-                  url: "/hem",
+                  url: "/idag",
                   tag: `weather-${now.toDateString()}`,
                 }, { userId: p.user_id, source: "weather" });
                 if (r === "ok") sentCount++;
@@ -207,7 +207,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             const r = await sendPushTo(s, {
               title: note.title,
               body: note.body,
-              url: "/hem",
+              url: "/idag",
               tag: `personal-${slot}`,
             }, { userId: p.user_id, source: isMorning ? "personal-morning" : "personal-evening" });
             if (r === "ok") sentCount++;

@@ -44,7 +44,7 @@ function DevSessionPage() {
       });
       if (error) throw new Error(error.message);
       setStatus("Inloggad! Skickar dig till Hem …");
-      window.location.href = "/hem";
+      window.location.href = "/idag";
     } catch (e) {
       setStatus(`Misslyckades: ${(e as Error).message}`);
       setBusy(false);

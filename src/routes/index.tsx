@@ -73,7 +73,7 @@ function LandingPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/hem" });
+      if (data.session) navigate({ to: "/idag" });
     });
   }, [navigate]);
 

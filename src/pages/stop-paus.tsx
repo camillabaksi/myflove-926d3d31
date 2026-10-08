@@ -17,7 +17,7 @@ import { track } from "@/lib/analytics";
 export default function StopPausPage() {
   const [open, setOpen] = useState(true);
   const [check, setCheck] = useState(false);
-  const goBack = useSmartBack("/hem");
+  const goBack = useSmartBack("/idag");
 
   // Räknas oavsett om Stopp-knappen öppnas från Återhämtning eller direkt.
   useEffect(() => {

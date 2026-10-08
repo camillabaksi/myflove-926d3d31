@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Bell, Plus, Sun } from "lucide-react";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
+import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
@@ -51,6 +52,7 @@ export function TodayContent() {
     <MyFlovePageGrid area="idag" className={`pace-today-desktop${textLayout.enlarged ? " pace-text-enlarged" : ""}`}>
       <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
+      <IntroTour />
       <MyFloveWide>
         <div className="pace-greeting-layout flex items-center justify-between gap-4">
           <div className="min-w-0">

@@ -64,7 +64,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
       key: `flow-ork-${day}`,
       title: "Hur är orken idag? 🔋",
       body: "En knapptryckning räcker. MyFlove gör resten.",
-      url: "/hem",
+      url: "/idag",
       deliverAt: at(now, 10),
     });
   }
@@ -99,7 +99,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
         key: `flow-first-${day}`,
         title: `Måste idag: ${input.firstMustDo}`,
         body: "Vi tar en sak i taget. Resten kan vänta.",
-        url: "/hem",
+        url: "/idag",
         deliverAt: at(now, 9, 30),
       });
     }

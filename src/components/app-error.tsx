@@ -36,10 +36,10 @@ export function AppError({ error }: { error?: unknown }) {
             Ladda om
           </button>
           <a
-            href="/hem"
+            href="/idag"
             className="press min-h-11 rounded-full border border-border px-5 text-sm font-medium text-ink"
           >
-            Till Hem
+            Till Idag
           </a>
         </div>
       </div>

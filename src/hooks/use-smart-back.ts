@@ -10,7 +10,7 @@ import { useRouter } from "@tanstack/react-router";
  *
  * Ingen egen parallell historik skapas – vi använder routerns egen.
  */
-export function useSmartBack(fallback = "/hem") {
+export function useSmartBack(fallback = "/idag") {
   const router = useRouter();
 
   return useCallback(() => {

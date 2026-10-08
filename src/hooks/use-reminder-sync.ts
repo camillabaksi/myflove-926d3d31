@@ -149,7 +149,7 @@ export function useReminderSync() {
           title: minsBefore > 0 ? `Om ${minsBefore} min: ${t.title}` : t.title,
           body: `Kl ${t.time}${minsBefore > 0 ? ` – kommer snart` : ""}`,
           deliverAt: deliver.toISOString(),
-          url: "/hem",
+          url: "/idag",
         });
       }
 
@@ -408,7 +408,7 @@ export function useReminderSync() {
           title: "🔔 MyFlove: Du bad mig komma ihåg detta.",
           body: item.text,
           deliverAt: new Date(item.remindAt).toISOString(),
-          url: "/hem",
+          url: "/idag",
         });
       }
 

@@ -19,7 +19,7 @@ export default function IntroTour() {
 
   const finish = (openQuickflow = false) => {
     setSeen(true);
-    navigate({ to: "/hem" });
+    navigate({ to: "/idag" });
     if (openQuickflow) {
       window.setTimeout(() => {
         window.dispatchEvent(new CustomEvent("myflove:quickflow"));

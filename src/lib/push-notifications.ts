@@ -212,7 +212,7 @@ export function sendPushNotification(title: string, options?: FlowNotificationOp
       .then((reg) =>
         reg.showNotification(title, {
           ...rest,
-          data: { url: (rest as { data?: { url?: string } }).data?.url ?? "/hem", itemKey },
+          data: { url: (rest as { data?: { url?: string } }).data?.url ?? "/idag", itemKey },
           actions: [
             { action: "done", title: "\u2713 Klart" },
             { action: "snooze", title: "\u23F0 10 min" },

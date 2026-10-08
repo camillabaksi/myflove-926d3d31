@@ -102,7 +102,7 @@ export default function SettingsPage() {
     } catch {
       // Appen fungerar även när webbläsaren inte tillåter lokal lagring.
     }
-    window.location.href = "/hem";
+    window.location.href = "/idag";
   };
 
   return (

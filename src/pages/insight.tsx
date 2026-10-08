@@ -275,7 +275,7 @@ export default function InsightPage() {
     });
   };
 
-  const goBack = useSmartBack("/hem");
+  const goBack = useSmartBack("/idag");
 
   const toggleContext = (c: InsightContext) =>
     setContexts((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
