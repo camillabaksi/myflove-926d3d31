@@ -118,7 +118,7 @@ function EnergyDemo() {
         Prova energiplanering
       </DialogTitle>
       <DialogDescription className="mt-2 text-sm leading-6">
-        Välj hur mycket energi du har idag, så anpassar MyFlove dagen efter det – inte tvärtom.
+        Välj hur mycket energi du har idag, så anpassar Paceable dagen efter det – inte tvärtom.
       </DialogDescription>
       <div className="mt-4 grid grid-cols-3 gap-2" role="radiogroup" aria-label="Välj energinivå">
         {ENERGY_LEVELS.map((item) => (
