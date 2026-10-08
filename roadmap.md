@@ -3,7 +3,8 @@
 ## Paceables logotyper och webbikoner (2026-10-08)
 - [x] Granska första ZIP-filen och flagga bakgrund, uppskalning och skillnader mellan symbolversioner.
 - [x] Granska det nya rena filpaketet: kvarvarande ljusa kant-/bakgrundsrester, uppskalad stensymbol och omsatt ordmärke rapporterade.
-- [ ] Visa konkret plan; implementation väntar på användarens godkännande och godtagbara produktionsoriginal.
+- [x] Planens grund och avgränsningar godkända; genomförandet är uttryckligen inte godkänt.
+- [ ] Invänta slutliga produktionsdugliga original och användarens uttryckliga godkännande av dessa; inga kod- eller bildändringar under väntan.
 - [ ] Efter godkännande och godtagbar bildkvalitet: endast varumärkesplatser, exakt slogan, favicon/PWA/manifest; bevara gränssnitt, funktioner och native-projekt.
 - [ ] Verifiera mobil/desktop, ljust/mörkt läge, symbolkonsekvens och ändrade platser; ingen publicering.
 
