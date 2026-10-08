@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Mer, expanderbara direktsektioner (2026-10-08): Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag är hopfällda från början och expanderas med samma befintliga kortkomponent som övriga grupper; flera kan vara öppna samtidigt. Alla ingångar finns kvar även under Fler funktioner. Tester uppdaterade; full svit 527/527. Ingen publicering.",
       "Mer, direktsektioner (2026-10-08): fyra befintliga kategorier visas efter Insikter med befintliga rader och filter. Alla tidigare ingångar finns kvar, även samma genvägar under Fler funktioner; inga data eller funktioner dupliceras. Designen bevarad; ingen publicering.",
       "Uppgifter (2026-10-08): oinramad sidrubrik, lättare vyval, Inter på uppgiftsnamn/grupper, varma kort och 44 px kontroller. Endast sidlokal presentation; funktioner, data och övriga sidor bevarade. Ingen publicering.",
       "Uppgifter, verifiering (2026-10-08): fem bredder, båda teman och 200 % text; dialog och vyval utan kontosparning. Fyra nya åtgärdstester; full svit 524/524 i 83 filer och automatiskt bygge OK.",
