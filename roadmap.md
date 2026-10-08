@@ -3,7 +3,9 @@
 ## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
 - [x] Omfattning bekräftad: även Äldre Hem och Flow ingår; befintlig godkänd identitet, inga funktionsändringar.
 - [x] Inventering och före-bilder av Hem/Flow; avgränsad genomförandeplan framtagen.
-- [ ] Genomförande och verifiering väntar på godkännande av planen; ingen publicering.
+- [x] Godkänd plan genomförd med gemensam avgränsning för Hem/Flow, befintliga neutrala kort och lokala dekorativa rubrik-/chattjusteringar; ingen publicering.
+- [x] 180 skärmkontroller vid 360/390/430/1024/1440, båda teman och 200 % utan dokumentoverflow eller sidfel. Nya tokenpar över 4,5:1. Chattens rullning/inmatning samt dialogöppning/Escape kontrollerade utan sparning. Slutlig full svit 516/516; ett äldre timingtest föll vid två mellanliggande körningar. Primärvyer undantagna; tre pixelidentiska CSS-jämförelser, Kalender endast 4×8 px dynamisk skillnad. Ingen publicering.
+- [ ] Hem-dialogens befintliga fokusåtergång efter Escape: bekräftat fel, kräver separat godkännande för funktionsrättning utanför denna visuella etapp.
 
 ## Visningsnamn på Idag (2026-10-08)
 - [x] Plan godkänd; ⋯-meny, dialog, bekräftad synk, ingen sparad e-postgissning, tester. Ingen publicering.

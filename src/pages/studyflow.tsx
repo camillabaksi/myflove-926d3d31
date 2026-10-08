@@ -63,7 +63,7 @@ import {
   studyTransitionPlan,
 } from "@/lib/studyflow";
 
-const card = "rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
+const card = "pace-app-card rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
 
 function tomorrowISO() {
@@ -235,7 +235,7 @@ export default function StudyflowPage() {
             <header className={card}>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h1 className={sectionTitle}>
+                  <h1 className={`pace-app-title ${sectionTitle}`}>
                     <GraduationCap className="h-5 w-5 text-gold" /> Studier – din planering
                   </h1>
                   <p className="mt-1 text-sm text-muted-foreground">

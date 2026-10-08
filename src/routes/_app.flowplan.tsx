@@ -4,6 +4,8 @@ import Page from "@/pages/flowplan";
 export const Route = createFileRoute("/_app/flowplan")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Planera – ordningen på din dag | MyFlove" },
       {
         name: "description",

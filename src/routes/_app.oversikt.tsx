@@ -4,6 +4,10 @@ import Page from "@/pages/overview";
 export const Route = createFileRoute("/_app/oversikt")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "Så funkar MyFlove – översikt" },
+      { property: "og:description", content: "En enkel sammanfattning av allt som finns i MyFlove: dagen, planering, mående, hemma, studier, jobb och anpassning – och vart du går för varje sak." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Så funkar MyFlove – översikt" },
       {
         name: "description",

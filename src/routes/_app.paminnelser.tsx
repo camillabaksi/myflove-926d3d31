@@ -4,6 +4,10 @@ import Page from "@/pages/reminders";
 export const Route = createFileRoute("/_app/paminnelser")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "Påminnelser – MyFlove" },
+      { property: "og:description", content: "Lägg till, ändra och avboka påminnelser med datum, tid och tydlig status." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Påminnelser – MyFlove" },
       {
         name: "description",

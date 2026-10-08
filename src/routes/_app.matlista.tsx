@@ -4,6 +4,10 @@ import Page from "@/pages/meal-planner";
 export const Route = createFileRoute("/_app/matlista")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "Matlista – MyFlove" },
+      { property: "og:description", content: "Veckans matplanering och inköpslista – enkelt och lokalt." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Matlista – MyFlove" },
       { name: "description", content: "Veckans matplanering och inköpslista – enkelt och lokalt." },
       { name: "robots", content: "noindex, nofollow" },

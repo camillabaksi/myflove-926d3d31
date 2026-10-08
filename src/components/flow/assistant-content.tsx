@@ -543,7 +543,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </Link>
         </p>
       </MyFloveHeader>
-      <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
+      <div className="pace-flow-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
           <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
@@ -678,7 +678,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   {messages.length === 0 && (
                     <div className="flex justify-start items-end gap-2">
                       <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
-                      <div className="max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
+                      <div className="pace-flow-reply max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
                         {GREETING} <Heart aria-label="hjärta" className="inline size-4 fill-primary text-primary" />
                       </div>
                     </div>
@@ -707,7 +707,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                             className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                               m.role === "user"
                                 ? "bg-primary text-primary-foreground rounded-br-sm"
-                                : "bg-secondary text-foreground rounded-bl-sm"
+                                : "pace-flow-reply bg-secondary text-foreground rounded-bl-sm"
                             }`}
                           >
                             {m.role === "assistant" ? <FlowRichText text={parsed.text} /> : parsed.text}

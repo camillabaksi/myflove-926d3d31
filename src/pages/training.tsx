@@ -511,7 +511,7 @@ export default function TrainingPage() {
                   <ChevronLeft size={16} /> Tillbaka till översikten
                 </button>
               )}
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
+              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
                 <Dumbbell className="text-primary" />{" "}
                 {view === "overview"
                   ? "Träning"

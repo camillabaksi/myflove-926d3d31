@@ -2147,7 +2147,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-calendar-desktop.pace-text-enlarged [aria-label="Visningsval"] summary { grid-template-columns: auto minmax(0,1fr) auto; }
 .pace-calendar-desktop.pace-text-enlarged [data-capacity-size="sm"] > span:last-child { white-space: normal; overflow-wrap: anywhere; flex-shrink: 1; }
 
-/* Etapp 1 enhetlig identitet – endast övriga inloggade sidor (ej Idag/Kalender/Tankar/Min plats, äldre Hem eller Flow). */
+/* Shared identity on secondary app pages; locked primary pages do not opt in. */
 .app-shell-bg[data-paceable-app="true"] .pace-app-card {
   background: var(--pace-surface);
   border-color: var(--pace-border-warm);
@@ -2206,4 +2206,39 @@ html[data-paceable-app="true"] [role="dialog"] :is(input, textarea, select, butt
 html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select, button) {
   min-width: 0;
   max-width: 100%;
+}
+
+/* Decorative secondary-page surfaces only: area/status/chart colors stay intact. */
+.app-shell-bg[data-paceable-app="true"] {
+  --gradient-hero: linear-gradient(180deg, var(--pace-surface-raised), var(--pace-surface));
+}
+.app-shell-bg[data-paceable-app="true"] :is(.surface-hero, .home-main-surface) {
+  background: var(--pace-surface);
+  border-color: var(--pace-border-warm);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+.app-shell-bg[data-paceable-app="true"] :is(.font-display, .font-handwritten) {
+  font-family: var(--font-sans);
+}
+.app-shell-bg[data-paceable-app="true"] .pace-app-title {
+  font-family: var(--font-editorial);
+  font-weight: 500;
+}
+.app-shell-bg[data-paceable-app="true"] .pace-home-page .home-ambient-glow {
+  background: linear-gradient(135deg, hsl(var(--lavender) / 0.25), transparent 65%);
+}
+.app-shell-bg[data-paceable-app="true"] .pace-flow-reply {
+  background: var(--pace-surface-raised);
+  border: 1px solid var(--pace-border-warm);
+  box-shadow: var(--pace-elevation-1);
+  overflow-wrap: anywhere;
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-home-page > .home-ambient-shell header {
+  grid-template-columns: minmax(0, 1fr);
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-home-page [data-testid="home-widgets"] {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+}
+.app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-flow-chat {
+  grid-template-columns: minmax(0, 1fr);
 }

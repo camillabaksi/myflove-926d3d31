@@ -185,16 +185,9 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 };
 
 const PACEABLE_PATHS = new Set(["/idag", "/kalender", "/quickflow", "/halsa"]);
-/** Äldre Hem och Flow-sidor behåller sitt utseende; övriga inloggade sidor får Paceable-identiteten (etapp 1). */
-const PACEABLE_EXCLUDED_PATHS = new Set([
-  "/hem", "/anpassa-hem", "/flow", "/assistant", "/flow-installningar", "/flowplan", "/flowscore",
-  "/flowstudy", "/studyflow", "/veckans-flow", "/workflow", "/familjeflow",
-]);
+/** Primary pages keep their locked presentation; all other app pages share Paceable surfaces. */
 function isPaceableAppPath(path: string) {
-  const isExcluded = [...PACEABLE_EXCLUDED_PATHS].some(
-    (excludedPath) => path === excludedPath || path.startsWith(`${excludedPath}/`),
-  );
-  return !PACEABLE_PATHS.has(path) && !isExcluded;
+  return !PACEABLE_PATHS.has(path);
 }
 
 import QuickflowFab from "@/components/quickflow-fab";

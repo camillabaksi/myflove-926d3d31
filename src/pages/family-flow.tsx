@@ -98,7 +98,7 @@ export default function FamilyFlowPage() {
         <MyFloveWide>
           <div className="space-y-6">
             <header>
-              <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
+              <h1 className="pace-app-title flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
                 <HeartPulse size={24} aria-hidden /> {t("Familj")}
               </h1>
               <p className="mt-1 text-muted-foreground">
