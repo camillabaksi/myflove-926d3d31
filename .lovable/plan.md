@@ -11,9 +11,11 @@ De båda ZIP-filerna är granskade. Det nya paketet förbättrar transparens och
 | Nya stensymbolen | 285 × 289 px. Frilagd från presentationsbild; ljus bakgrundsrest vid stenarnas bas och ljusa/jämna kantrester runt delar av konturen. | Behöver ett rent godkänt original. |
 | Nya ljusa/mörka ikonerna | Kvadratiska, utan inbakade rundade hörn, i 32/64/180/192/512/1024 px. Samma stenformation återanvänds. Den mörka visar tydligt en ljus fläck vid basen och ljusa konturer. Läsanvisningen bekräftar cirka 300 px faktisk källupplösning. | Används inte som produktionsikoner i nuvarande skick. |
 
-**Stoppregel:** Ingen friläggning, omritning, typsnittsersättning, AI-generering eller uppskalning används för att skapa ett nytt påstått original. Genomförandet börjar först efter planens godkännande och leverans/granskning av rena, godkända produktionsfiler. Planens godkännande gör inte de nuvarande ikonfilerna produktionsdugliga.
+**Stoppregel:** Planens grund och avgränsningar är godkända, men genomförandet är inte godkänt. Ingen friläggning, omritning, typsnittsersättning, AI-generering eller uppskalning används för att skapa ett nytt påstått original. Inga kodändringar eller logotyp-/ikonbyten görs innan användaren har bifogat och uttryckligen godkänt slutliga produktionsdugliga original. Ingen publicering.
 
 Behövs: liggande godkänd logotyp med rena kanter och avsedd typografi, läsbar version för mörkt läge, samt ljus och lavendelbaserad kvadratisk ikon utan bakgrundsrester. Helst vektor eller verkligt skarpt rasteroriginal med samma stensymbol. Ingen ny variant skapas av mig.
+
+**Godkänd design:** Tre mjuka stenar i salviagrönt, persika och lavendel, lätt asymmetriskt placerade utan kraftig lutning. Samma exakta stenformation i samtliga filer. Liggande huvudlogotyp med stenarna till vänster om Paceable, exakt slogan ”Ditt liv, i din takt.” samt ljus appikon och lavendelfärgad variant för mörkt läge.
 
 ## 2. Avgränsad varumärkesuppdatering
 När kvalitetskravet är uppfyllt:
@@ -52,4 +54,4 @@ Ingen generell omdesign, färg-/kort-/knapp-/navigationsändring. Kalender, Capa
 - Kontrollera faviconens fallback och temabyte, manifest-/ikonlänkar och maskable-säkerhet. Redovisa separat vad som kräver fysisk iPhone/Android och vad redan installerade appar kan behöva tid att uppdatera.
 - Kör berörda tester och granska automatisk byggsignal. Rapportera exakt vilka filer/platser som ändrats med skärmbilder och eventuella återstående begränsningar.
 
-**Nuvarande status:** Endast granskning och plan. Ingen appkod, produktionsikon eller publicering ändrad. Genomförandet väntar på godkännande samt godtagbara original.
+**Nuvarande status:** Planens grund och avgränsningar är godkända; genomförandet är pausat. Ingen appkod, produktionsikon eller publicering ändrad. Vi inväntar slutliga produktionsdugliga original och användarens uttryckliga godkännande av dem.
