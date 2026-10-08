@@ -68,7 +68,7 @@ describe("Uppgifters sidlokala Paceable-presentation", () => {
 
   it("återanvänder den befintliga lägg-till-handlingen", () => {
     render(<Tasks />);
-    fireEvent.click(screen.getByRole("button", { name: "Lägg till", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
     expect(actions.addTask).toHaveBeenCalledWith("Ny uppgift", todayISO(), expect.objectContaining({ completed: false }));
   });
 });
