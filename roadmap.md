@@ -321,3 +321,6 @@
 - [ ] Test på två fysiska telefoner + byte till ett annat konto – kräver användaren
 
 - [ ] Taktilt djup: plan + Fraunces/Newsreader-jämförelse (väntar på godkännande), sedan implementation + 5 screenshots
+
+- [x] Enhetlig identitet etapp 1 (ytor, kort, rubriker, dialoger) – ej publicerad
+- [ ] Etapp 2: sidspecifika gradienter och hårdkodade färger (inväntar godkännande)
