@@ -11,13 +11,10 @@
 
 <!-- LOVABLE:END -->
 
-Min Flow appearance and explicit memories use existing account-scoped cloud storage; no parallel preference/chat system.
-Flow's room uses the uploaded animation only as a scene-specific visual; the shared FlowMascot remains unchanged elsewhere so existing screens keep their established identity.
-Flow room appearance uses that storage and one customization sheet for home and legacy entries, keeping choices consistent.
-Render the room's approved seated Flow as a whole-scene image with pose-fitted variants only; keep incompatible saved options intact but visually hidden, because overlays and alternate mascots break identity and perspective.
+Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
 Paceable uses scoped editorial roles and opt-in capture/help appearances; defaults stay unchanged to isolate legacy. Existing stone placements reuse the approved image; preserve legacy SVG and Today rendering to prevent identity drift.
-Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
+Desktop Träning uses direct document navigation so existing tabs cannot stall on an in-app transition.
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Never fall back to plaintext for sensitive local keys; keep them in memory and surface a status instead, because encryption at rest must not depend on startup timing.
@@ -34,3 +31,6 @@ Month cells summarize unique existing areas (family context collapses to the exi
 Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, with the existing mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Paceable isolates legacy themes; keep IDs/routes to avoid migration. Integrated DailyFlowList is Today-only, reusing actions/data. Swedish date headings capitalize only the first character; other locales stay intact.
+
+Desktop More dismissal restores trigger focus; its link navigation focuses new page content, preserving unrelated focus. Groups reuse mobile essential filtering; search remains unfiltered.
+Narrow greetings use balanced optional name breaks, preserving complete names, profile data and approved stones.
