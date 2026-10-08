@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode } from "react";
 import { Link } from "wouter";
 import { User, Settings2, Search, X, ChevronRight, ChevronDown, CheckSquare, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ const DAILY = [
   { href: "/studyflow", label: "Studier", hint: "Lärande i din takt", icon: BookOpen, tone: "peach" },
   { href: "/jobb", label: "Arbete", hint: "Din arbetsvardag", icon: Briefcase, tone: "blush" },
 ] as const;
-export const MORE_FEATURED_HREFS = DAILY.map((item) => item.href).concat("/traning" as "/tasks");
+export const MORE_FEATURED_HREFS: string[] = [...DAILY.map((item) => item.href), "/traning"];
 
 export function getMoreItems(items: MoreItem[], hrefs: readonly string[], simpleMode: boolean) {
   return hrefs.flatMap((href) => {
@@ -67,7 +67,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
   const results = [...items, { href: "/profil", label: t("Min profil"), hint: t("Ditt konto, dina inställningar och din familj"), icon: User }]
     .filter((item) => `${item.label} ${item.hint}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
 
-  const navigate = (event: React.MouseEvent, href: string) => {
+  const navigate = (event: MouseEvent, href: string) => {
     onNavigate();
     if (href === "/traning" && window.matchMedia("(min-width: 768px)").matches && !event.metaKey && !event.ctrlKey && !event.shiftKey && event.button === 0) {
       event.preventDefault();
@@ -83,8 +83,8 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     </Link></li>;
   })}</ul>;
 
-  function card(label: string, hint: string, Icon: typeof User, tone: string, href?: string, group?: string, children?: React.ReactNode, compact = false) {
-    const expanded = open === group;
+  function card(label: string, hint: string, Icon: typeof User, tone: string, href?: string, group?: string, children?: ReactNode, compact = false) {
+    const expanded = Boolean(group && open === group);
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
       <MyFloveIcon icon={Icon} size="md" className="pace-more-icon" />
@@ -98,7 +98,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {group && expanded && <div id={`pace-more-group-${group}`} className="pace-more-expanded">{children}</div>}
     </div>;
   }
-  function section(title: string, content: React.ReactNode) {
+  function section(title: string, content: ReactNode) {
     return <section className="pace-more-section"><h2>{t(title)}</h2>{content}</section>;
   }
   const family = visible(MORE_FAMILY), insights = visible(MORE_INSIGHTS), legacy = visible(MORE_LEGACY);
