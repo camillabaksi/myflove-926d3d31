@@ -36,3 +36,4 @@ Pace v1 is a transient deterministic interpretation of registered Capacity, qual
 Paceable isolates legacy themes; keep IDs/routes to avoid migration. Integrated DailyFlowList is Today-only, reusing actions/data. Swedish date headings capitalize only the first character; other locales stay intact.
 
 Desktop More dismissal returns focus to its trigger; only navigation initiated by its links focuses the existing main scroll container, preserving unrelated page focus. Browse groups reuse mobile essential filtering; search stays fully discoverable.
+Greeting presentation uses optional balanced name segments only on narrow screens, preserving complete names and the approved stone asset without changing profile data.

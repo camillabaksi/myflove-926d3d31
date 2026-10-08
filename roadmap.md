@@ -2,7 +2,7 @@
 
 ## Fyra avgränsade QA-rättningar (2026-10-08)
 - [x] Godkänd plan: fokus, menynamn vid 200 %, desktop-Mers befintliga Enkelt läge och hälsningens radbrytning.
-- [ ] Verifiera sex skärmstorlekar, tangentbord/sidbyte, normalt/enkelt läge, tester och oförändrad stenbild; ingen publicering.
+- [x] Sex skärmstorlekar utan sidoverflow; Escape/kryss återför fokus och sidbyte fokuserar nytt innehåll. Normalt/enkelt läge samt områdes-/rollfilter och 200 % menynamn verifierade. 503 tester och automatiskt bygge OK; stenbildens SHA-256 oförändrad. Ingen publicering.
 
 ## Tankars Varför i importkortet (2026-10-08)
 - [x] Godkänd plan; endast Varför-länken flyttad in i importkortets nederkant via valfritt whySlot-prop (legacy-ytor påverkas inte).
