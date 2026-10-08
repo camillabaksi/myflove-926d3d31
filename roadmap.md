@@ -1,5 +1,10 @@
 # Roadmap
 
+## Mer enligt godkänd målbild (2026-10-08)
+- [x] Tidigare etapps dokumenterade QA genomgången; befintligt Hem-dialogfokusfel kvarstår separat.
+- [x] Inventerat samtliga 34 navItems plus profil, jämfört mobil/desktop med referens och förberett avgränsad plan.
+- [ ] Genomförande väntar på uttryckligt plangodkännande; ingen publicering.
+
 ## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
 - [x] Omfattning bekräftad: även Äldre Hem och Flow ingår; befintlig godkänd identitet, inga funktionsändringar.
 - [x] Inventering och före-bilder av Hem/Flow; avgränsad genomförandeplan framtagen.
