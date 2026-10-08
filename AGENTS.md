@@ -11,10 +11,7 @@
 
 <!-- LOVABLE:END -->
 
-Min Flow appearance and explicit memories use existing account-scoped cloud storage; no parallel preference/chat system.
-Flow's room uses the uploaded animation only as a scene-specific visual; the shared FlowMascot remains unchanged elsewhere so existing screens keep their established identity.
-Flow room appearance uses that storage and one customization sheet for home and legacy entries, keeping choices consistent.
-Render the room's approved seated Flow as a whole-scene image with pose-fitted variants only; keep incompatible saved options intact but visually hidden, because overlays and alternate mascots break identity and perspective.
+Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
 Paceable uses scoped editorial roles and opt-in capture/help appearances; defaults stay unchanged to isolate legacy. Existing stone placements reuse the approved image; preserve legacy SVG and Today rendering to prevent identity drift.
 Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
@@ -35,5 +32,5 @@ Today uses the shared day-capacity source and authorized calendar projection for
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Paceable isolates legacy themes; keep IDs/routes to avoid migration. Integrated DailyFlowList is Today-only, reusing actions/data. Swedish date headings capitalize only the first character; other locales stay intact.
 
-Desktop More dismissal returns focus to its trigger; only navigation initiated by its links focuses the existing main scroll container, preserving unrelated page focus. Browse groups reuse mobile essential filtering; search stays fully discoverable.
-Greeting presentation uses optional balanced name segments only on narrow screens, preserving complete names and the approved stone asset without changing profile data.
+Desktop More dismissal restores trigger focus; its link navigation focuses new page content, preserving unrelated focus. Groups reuse mobile essential filtering; search remains unfiltered.
+Narrow greetings use balanced optional name breaks, preserving complete names, profile data and approved stones.
