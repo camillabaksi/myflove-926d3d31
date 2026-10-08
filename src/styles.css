@@ -2008,6 +2008,6 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 [data-paceable-surface="true"] h1.font-display { font-size: clamp(2.5rem, 10vw, 2.75rem); line-height: 1.05; }
 [data-paceable-surface="true"] h2.font-display { font-size: 1.4rem; line-height: 1.2; }
-[data-paceable-surface="true"] :is(header, aside, nav) :is(h1, h2).font-display {
+[data-paceable-surface="true"] :is(header.sticky, aside, nav) :is(h1, h2).font-display {
   font-family: "Plus Jakarta Sans", sans-serif; font-weight: 700; font-size: revert-layer; line-height: revert-layer; font-variation-settings: normal; letter-spacing: normal;
 }
