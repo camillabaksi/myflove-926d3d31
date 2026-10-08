@@ -52,7 +52,7 @@ export function TodayContent() {
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
-            <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl">{t("Hej")}{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
+            <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl"><span className="pace-greeting-prefix">{t("Hej")}</span>{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
           </div>
           <PaceableStones compact tactile className="shrink-0" style={{ width: 126, height: 74 }} />
