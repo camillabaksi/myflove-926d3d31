@@ -2,8 +2,9 @@
 ## Pace – realistisk följeslagare, endast prototypplan (2026-10-08)
 - [x] Inventera stenoriginal och befintliga presentationsytor; jämför 3D och 2D utan appändring.
 - [x] Bild 1 används endast för ljus/materialkänsla; bild 2 är exakt visuell förlaga utan nya former eller färger.
-- [ ] Alternativ B godkänt: jämför bild 2 med transparent ZIP-original före byggande; tydliga skillnader kräver paus och källbeslut.
-- [ ] Efter godkänd källkontroll: isolerad demo med Vilar/Hälsar/Lyssnar, samma hela bild, teman/mobil/desktop/stillaläge och inspelning; ingen integration eller publicering.
+- [x] Alternativ B: bild 2 och transparent ZIP-original överensstämmer visuellt i former/proportioner/färgfamiljer/ordning/stapling; bakgrund och markskugga skiljer, pixelidentitet inte påstådd.
+- [x] Isolerad lokal demo med Vilar/Hälsar/Lyssnar, exakt samma hela ZIP-bild, teman/390/1280 px/200 %/stillaläge och reducerad rörelse verifierade; inspelning. Ingen appintegration eller publicering.
+- [ ] Användarens visuella godkännande av prototypen; fysisk iOS/Android-prestanda ej verifierad.
 ## Pace/Paceable – namninventering (2026-10-08)
 - [x] Inventera synliga Flow/MyFlove-namn och gamla bilder separat från tekniska identifierare.
 - [x] Redovisa namnförslag, resursbegränsningar för stenföljeslagare, risker och kostnadseffektiv plan; ingen appkodändring eller publicering.

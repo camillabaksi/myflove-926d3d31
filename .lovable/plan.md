@@ -6,7 +6,15 @@
 
 **Referenserna är nu granskade:** bild 1 (`a_clean_soft_pastel_friendly_ui_illustration_co.png`, 1536 × 1024 RGB) styr endast känslan av naturligt material, mjukt ljus och lugn närvaro. Bild 2 (`Paceable_stensymbol.png`) är exakt förlaga för former, färger, proportioner och stapling. Bild 1:s sidoordnade formationer, ljusbågar, glitter, växter, fem tillstånd och prestationscopy som ”när du gjort något” överförs inte. Den visar stillbilder, inte verifierad rörelse.
 
-Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen maskot skapas nu.
+Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen maskot ersätts.
+
+## Godkänd källkontroll och isolerad prototyp
+
+- Bild 2 och `symbols/paceable-stones-exact-1024.png` överensstämmer visuellt i stenarnas identifierbara former, inbördes proportioner, färgfamiljer, ordning och stapling. Ingen pixelidentitet hävdas mellan upplösningarna. Bild 2 har ljus bakgrund och markskugga; ZIP-originalet har transparens, tydligare materialdetaljer och saknar markskuggan. Mindre ton-/kantvariationer kan bero på nedskalning och bakgrund; exakt färgmätning är inte fastställd.
+- Enligt användarens villkor används den transparenta ZIP-bilden oförändrad i demonstrationen. Samma bild används i Vilar (stilla), Hälsar (3 px mjuk förflyttning över 1,8 sekunder) och Lyssnar (1,5 px över 7 sekunder under simulerat aktivt samtal). Ingen separat stenrörelse, ombelysning eller ny skugga.
+- Fristående HTML-demonstration utanför projektets kod/navigation, utan konto, lagring eller samtalsanslutning. Inga nya paket eller appändringar. Val för tema och animation.
+- Verifierat vid 390 och 1280 px, båda teman och 200 % omgivande text utan sidöverflöde. Lyssnar startar rätt animation; avstängd animation och systemets reducerade rörelse ger `animation: none`. Skärmbilder och video kontrollerade. Fysisk iOS/Android-prestanda återstår; den inbakade belysningen förändras inte med tema eller rörelse.
+- Endast dessa tre tillstånd ingår i leveransen; tidigare föreslaget Ger stöd ingår inte. Visuellt godkännande krävs före vidare steg. Ingen integration eller publicering.
 
 ## 1. Tillgängliga stenfiler
 
