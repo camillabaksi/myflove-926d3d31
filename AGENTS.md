@@ -14,7 +14,7 @@
 Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
 Paceable uses scoped editorial roles and opt-in capture/help appearances; defaults stay unchanged to isolate legacy. Existing stone placements reuse the approved image; preserve legacy SVG and Today rendering to prevent identity drift.
-Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
+Desktop Träning uses direct document navigation so existing tabs cannot stall on an in-app transition.
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Never fall back to plaintext for sensitive local keys; keep them in memory and surface a status instead, because encryption at rest must not depend on startup timing.
