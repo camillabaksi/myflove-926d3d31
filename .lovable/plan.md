@@ -4,9 +4,9 @@
 
 **Rekommenderad namnstruktur:** Paceable är appen, Pace är följeslagaren och Din takt är dagsrytmstödet med Varsamt, Jämnt och Utrymme. Slogan: **Ditt liv, i din takt.** Namnen är förslag, inte genomförda beslut.
 
-Gamla namn och den lila maskoten används fortfarande. Huvudlogotyper/webbikoner är redan Paceable och lämnas orörda.
+Gamla namn/maskoten finns kvar; Paceable-logotyper/webbikoner lämnas orörda.
 
-Källkods- och resursinventering, inte ny full skärm-/mobil-/pushkontroll. Endast plan/kravanteckningar dokumenteras; ingen appkod, bild eller användardata ändras eller publiceras. Källor nedan är relativt src om inte annat anges.
+Källkods-/resursinventering, inte full skärm-/mobil-/pushkontroll. Endast plan/kravanteckningar; ingen appkod, bild, data eller publicering.
 
 ## 1. Var de gamla delarna finns
 
@@ -46,7 +46,7 @@ Källor är relativa `src/` om inte annat anges. Synliga texter ska skiljas frå
 | MyFlow / StudyFlow | **Dina uppgifter** / **Studier** | Faktisk destination styr. |
 | Veckans Flow / äldre dagsfunktion | **Veckans översikt** / **Din dag** | Veckans översikt används redan på veckosidan; byt inte tekniska sidnamn. |
 
-Engelska: Pace/Paceable och **Your pace** för dagsrytm; särskilj genom placering.
+Engelska: **Your pace** för dagsrytm.
 
 ## 3. Framtida stenföljeslagare – teknisk möjlighet
 
@@ -75,8 +75,8 @@ AI-systemtexten introducerar fortfarande ”Flow – MyFloves AI-kompanjon”. I
 
 **Namnrisken:** två synliga Pace-koncept kan få dagsrytm att låta som följeslagarens omdöme. Din takt minskar risken. Nivåerna är deterministiskt stöd, inte AI, prestation eller medicinsk bedömning. Engelska ”Your pace” kräver tydlig placering. Namnets juridiska tillgänglighet är inte undersökt; inget namn-/domänskydd garanteras.
 
-## 6. Kontroller och godkännande
+## 6. Kontroll före framtida leverans
 
-Vid framtida implementation: samma länkar, sökning, Enkelt läge, filter och språk; regressioner för unknown/future och Varsamt/Jämnt/Utrymme. Mobil/desktop, båda teman, 200 % text, skärmläsarnamn och minskad rörelse. Samtal och kalenderförslag får inte ändra något automatiskt. Notiser: oförändrat schema, mottagare, behörigheter, ljud, tyst läge och specifika länkar; verklig mobilkontroll separat.
+Testa samma länkar/sökning/filter/språk och oförändrad dagsrytm (unknown/future/nivåer). Kontrollera mobil/desktop, teman, 200 %, skärmläsare och minskad rörelse. Inga automatiska kalenderändringar. Notiser ska behålla schema, mottagare, behörigheter, ljud, tyst läge och specifika länkar; verkliga mobiltester separat.
 
-**Nästa beslut:** godkänn eller justera namnstruktur och minsta textetappen. Ingen implementation eller publicering sker nu. Större bildändringar och publicering kräver separata godkännanden.
+**Nästa beslut:** godkänn namn och minsta textetappen. Ingen kod eller publicering nu; bilder/publicering kräver separata godkännanden.
