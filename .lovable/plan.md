@@ -1,86 +1,64 @@
-# Paceable – prototypplan för följeslagaren Pace
+# Pace – teknikbedömning och plan för riktig 3D
 
-## Resultat av inventeringen
+## Rekommendation
 
-**Rekommendation: börja med alternativ B, en isolerad 2D-prototyp med bild 2 som exakt visuell förlaga.** Det bevarar identiteten bäst och kräver minst resurser. Alternativ A ger verkligt djup och föränderliga kontaktskuggor, men kräver ny, separat godkänd modellering.
+**En specialmodellerad 3D-prototyp med tre separata, slutna stenmodeller, visad med React Three Fiber/Three.js.** Inte tre generiska ellipsoider, inte en bild på en plan yta och inte en ny AI-genererad stenbild. Den godkända transparenta `symbols/paceable-stones-exact-1024.png` är låst frontreferens; logotyp och befintliga appbilder lämnas orörda.
 
-**Referenserna är nu granskade:** bild 1 (`a_clean_soft_pastel_friendly_ui_illustration_co.png`, 1536 × 1024 RGB) styr endast känslan av naturligt material, mjukt ljus och lugn närvaro. Bild 2 (`Paceable_stensymbol.png`) är exakt förlaga för former, färger, proportioner och stapling. Bild 1:s sidoordnade formationer, ljusbågar, glitter, växter, fem tillstånd och prestationscopy som ”när du gjort något” överförs inte. Den visar stillbilder, inte verifierad rörelse.
+## 1. Teknik och nuvarande möjligheter
 
-Ingen appkod, bild, funktion eller publicering ändras i detta steg. Ingen maskot ersätts.
+- Appen använder React 19 och Vite. Den har framer-motion men **saknar Three.js, React Three Fiber och drei**. Framer-motion kan inte ensamt skapa verklig 3D-geometri med fysisk ljusrespons.
+- Bun, Python, NumPy och Pillow finns. Blender hittades inte på kommandosökvägen; någon färdig 3D-modell eller modellering av de tre originalstenarna finns inte i det granskade materialet.
+- **Ja, riktig geometri kan skapas i miljön genom specialskriven, konturstyrd modellering.** Det är ny modellering med visuell iteration, inte automatisk exakt rekonstruktion. Kvaliteten kan inte lovas innan front- och sidobilder granskats.
+- Första vägen behöver inget externt modellprogram. Om kontrollerad kodmodellering inte ger tillräckligt originaltrogna former/material pausas arbetet och behov av manuell Blender-modellering eller en 3D-formgivare redovisas; inget generiskt stenpaket ersätter originalet.
 
-## Godkänd källkontroll och isolerad prototyp
+## 2. Efterlikna originalet utan att dölja osäkerhet
 
-- Bild 2 och `symbols/paceable-stones-exact-1024.png` överensstämmer visuellt i stenarnas identifierbara former, inbördes proportioner, färgfamiljer, ordning och stapling. Ingen pixelidentitet hävdas mellan upplösningarna. Bild 2 har ljus bakgrund och markskugga; ZIP-originalet har transparens, tydligare materialdetaljer och saknar markskuggan. Mindre ton-/kantvariationer kan bero på nedskalning och bakgrund; exakt färgmätning är inte fastställd.
-- Enligt användarens villkor används den transparenta ZIP-bilden oförändrad i demonstrationen. Samma bild används i Vilar (stilla), Hälsar (3 px mjuk förflyttning över 1,8 sekunder) och Lyssnar (1,5 px över 7 sekunder under simulerat aktivt samtal). Ingen separat stenrörelse, ombelysning eller ny skugga.
-- Fristående HTML-demonstration utanför projektets kod/navigation, utan konto, lagring eller samtalsanslutning. Inga nya paket eller appändringar. Val för tema och animation.
-- Verifierat vid 390 och 1280 px, båda teman och 200 % omgivande text utan sidöverflöde. Lyssnar startar rätt animation; avstängd animation och systemets reducerade rörelse ger `animation: none`. Skärmbilder och video kontrollerade. Fysisk iOS/Android-prestanda återstår; den inbakade belysningen förändras inte med tema eller rörelse.
-- Endast dessa tre tillstånd ingår i leveransen; tidigare föreslaget Ger stöd ingår inte. Visuellt godkännande krävs före vidare steg. Ingen integration eller publicering.
-
-## 1. Tillgängliga stenfiler
-
-| Källa | Innehåll | Begränsning/användning |
-|---|---|---|
-| **Bild 2: `Paceable_stensymbol.png`** | **235 × 200 RGB**, staplade originalstenar med ljus bakgrund och markskugga | Exakt visuell förlaga enligt senaste beslutet. Sammansatt bild, ingen transparens eller separata lager. Lämplig för en liten första originaltrogen demonstration, inte stor skarp presentation. |
-| Godkänt `Paceable_Lovable_korrigerat_paket.zip`: `symbols/paceable-stones-exact-1024.png` | 1024 × 1024 RGBA, transparent bakgrund; salviagrön underst, persika i mitten, lavendel överst | Tidigare godkänt original, **en sammansatt rasterbild**, inte tre lager. Visuellt samma typ av stapling; pixelidentitet med nya bild 2 är inte verifierad. Används inte automatiskt i dess ställe. |
-| Samma ZIP: `symbols/paceable-stones-trimmed.png` | 684 × 727 RGBA | Samma symbol med borttagna transparenta marginaler, inte en ny formation eller separat stenresurs. |
-| `src/assets/paceable-brand/paceable-horizontal-{light,dark}.png.asset.json` | Godkända liggande logotyper; originalbilder 1861 × 695 RGBA | Text, slogan och stenar i samma bild. Helt oförändrade; inte animationskälla. |
-| `src/assets/paceable-brand/paceable-compact-{light,dark}.png.asset.json` | Godkända kompakta logotyper, 1287 × 470 respektive 1277 × 465 RGBA | Logotyper, inte frilagda stenar. Lämnas oförändrade. |
-| ZIP: ljusa/mörka appikoner samt `public`-ikoner | Storleksanpassade symboler med bakgrund | Inte separata stenar; favicon/PWA/native lämnas orörda. |
-| `src/assets/paceable-stones.png` | 1425 × 546 RGBA; realistisk illustration med tre stenar **bredvid varandra** | Redan låst på Idag. Andra former/proportioner och arrangemang än varumärkets staplade original. Ska varken ersättas, animeras om eller användas som en alternativ Pace-modell. |
-| `PaceableStones` standard-SVG | Tre förenklade stenformer | Inte originalsymbolen och inte en fotorealistisk modell; inget substitut för Pace. |
-
-**Inga tre separat godkända stenlager, 3D-modeller eller materialkartor har hittats i det godkända paketet.** Originalsymbolen har redan stenstruktur, ljus och kontaktpartier inbakade i bilden. PNG-upplösningen är inte ett mått på tredimensionell detalj eller vektorkvalitet.
-
-**Källbegränsning för bild 2:** dess bakgrund följer med vid visning i mörkt läge. Första demonstrationen kan visa den oförändrad på en avgränsad ljus yta i båda teman; det är inte en färdig integrerad mörkerlösning. För skarp, fristående Pace behövs en högupplöst transparent originalexport av exakt bild 2, eller uttrycklig bekräftelse att ZIP-symbolen får vara dess produktionskälla. Ingen AI-uppskalning, bakgrundsborttagning eller ny stenbild görs nu.
-
-## 2. Teknikjämförelse
-
-| Egenskap | A – gemensam 3D-modell | B – originalbild / godkända 2D-lager |
-|---|---|---|
-| Identitet | Kan närma sig originalets silhuett i en bestämd vinkel; dolda sidor och verklig volym är okända | Sammansatt original ger oförändrade bildpixlar, former och proportioner |
-| Realism | Starkast för verklig volym, ljusrespons och kontaktskuggor under rörelse | Originalets fotografiska material/ljus bevaras i den befintliga vinkeln; ingen verklig ombelysning |
-| Rörelse | Kontrollerad rörelse med trovärdig kontakt mellan stenar | Hel formation kan förflyttas mycket lite; separata rörelser behöver godkända lager |
-| Nytt källmaterial | Kräver modellering av tre stenar och godkännande av fasta material, kamera och ljus | Originalet räcker för hela formationen. Separata lager kräver nya godkända exporter |
-| Kostnad | Högre skapande- och granskningsinsats; eventuell realtidsvisning behöver ytterligare beroenden | Låg för hel formation; medel för separata lager och kvalitetssäkrade skuggor |
-| Mobilprestanda | WebGL belastar GPU/batteri; ska laddas endast vid behov och alltid ha statisk fallback | Bild + små CSS-rörelser; inget nytt paket krävs, ingen kontinuerlig renderloop |
-
-**En 2D-bild kan inte automatiskt bli en exakt 3D-modell.** Automatiskt genererad 3D eller generiska stenmodeller riskerar nya former, material och färger. Det är inte en godkänd genväg här. En modell behöver ytterligare vyer/mått eller manuell rekonstruktion och separat visuell acceptans. Exakthet för osynliga sidor kan inte utlovas med nuvarande material.
-
-**2D kan inte heller garantera konceptets dynamiska realism.** Kontaktskuggorna mellan stenarna sitter i originalbilden. Separering/maskning skapar inte de dolda ytorna och kan ge dubbla skuggor eller glapp. Ingen automatisk friläggning, beskärning av stenformer eller AI-fyllning föreslås. En eventuell separat markskugga ska vara subtil, ha samma ljusriktning och granskas först; inte läggas in i originalfilen.
-
-Om kravet senare blir verkliga rotationsvinklar eller förändrad belysning är A rätt teknik. En möjlig senare kompromiss är att rendera godkända rörelser från **samma** 3D-modell till lätta 2D-sekvenser: identiteten återanvänds utan WebGL i varje appvy, men modelleringen behövs fortfarande och filstorlek/transparens måste provas.
-
-## 3. Högst fyra tillstånd
-
-| Tillstånd | Förslag för första 2D-prototypen |
+| Kan styras av frontbilden | Kräver modellering eller uppskattning |
 |---|---|
-| Vilar | Statisk grundbild; ingen ständig rörelse behövs. |
-| Hälsar | En kort, mjuk förflyttning av hela formationen som återgår till startläget. Ingen deformation eller hopp. |
-| Lyssnar | Nästan omärklig förflyttning under aktivt samtal, utan blinkning, blick eller påhittad känslorespons. |
-| Ger stöd | En enda långsam, varm rörelse när ett befintligt stödmeddelande visas; samma grundbild, inga belöningssignaler. |
+| Synliga silhuetter, bredd/höjd, ordning och asymmetrisk stapling | Stenarnas djup, baksidor, undersidor och överlappade partier |
+| Synliga kontaktlägen och lutningar | Kontaktgeometri vid rörelse och rotationspunkter |
+| Salviagrön, persika och lavendel samt synlig materialkaraktär | Grundmaterialets färg skild från bildens inbakade ljus/skugga, mikroyta på dolda sidor |
 
-Förflyttningarnas storlek och tid fastställs i prototypen, inte genom att ändra stenarna. Alltid samma slutposition. Inga poäng, behov, krav, glödshower, besvikelse eller bedömningar av mående/prestation. Inga ansikten, ögon, armar eller ben.
+- Anpassa individuella mjuka nät till synliga konturer och proportioner från referensen. Modellera avrundad volym och kontaktpartier; inga enkla standardformer lämnas som färdig modell.
+- Referensbilden är sammansatt, inte tre godkända lager. Konturanalys för modellering ändrar inte bildfilen och används inte för att skapa en ersättningsbild.
+- Använd en fast frontkamera för jämförelse och en lätt sidovinkel, ungefär 20–30 grader, för att avslöja verkligt djup. Frontkameran kalibreras mot originalets bildprojektion; full pixelidentitet under ny belysning är inte ett rimligt löfte.
+- Matt, icke-metalliskt stenmaterial med subtil finstruktur och färgvariation. Gemensam kontrollerad studioljusmiljö, mjuka kontaktskuggor och inga effekter som glitter, ljusbågar eller glöd.
+- Originalets ljus/skuggor ska inte bara klistras på modellen: då uppstår dubbla skuggor. Materialfärger och struktur behöver justeras visuellt mot referensen; exakt fysisk materialrekonstruktion från en enda bild är inte möjlig.
+- Ingen omgenerering per läge, ingen ändring av originalsymbol/logotyp och inga ansikten, ögon eller lemmar.
 
-Systemets reducerade rörelse, appens befintliga stillaläge och följeslagarens befintliga rörelseval ska samtliga stoppa animation. Statiskt val finns alltid. Rörelse stoppas när vyn inte är synlig. Samtalsstatus förmedlas även med befintlig text, aldrig enbart genom animation.
+## 3. Arbetsordning med visuell kontroll
 
-## 4. Konsekvens och framtida återanvändning
+1. **Efter teknikgodkännande:** skapa separat lokal prototyp under en temporär mapp, med egna beroenden. Inga paket, filer, rutter eller länkar läggs till i appen.
+2. Skapa en statisk första modell: tre separata stenar, fasta material och kontrollerat ljus. Visa original och frontvy sida vid sida, plus lätt sidovinkel. Redovisa uppskattade delar och eventuella tydliga skillnader.
+3. **Invänta visuellt godkännande av modellens form/material innan rörelser färdigställs.** Om likheten inte räcker: korrigera inom godkänd modellering eller rapportera behov av annat verktyg innan större ändring.
+4. Färdigställ de tre lägena med samma modell och material; visa mobil/desktop, båda teman och statiskt val. Kort film och fristående demonstration levereras för nytt godkännande.
+5. Ingen integration eller publicering ingår. Befintlig maskot, logotyper och illustrationer ersätts inte.
 
-- En gemensam visuell källa och en särskild följeslagarpresentation, föreslaget namn `PaceCompanionVisual`, med endast tillstånd, storlek och stillaläge som indata. Ingen ny lagring, chatt eller beteendemotor.
-- Samma proportioner, formation, färger, ljusriktning och rörelsedefinitioner överallt; ingen AI-generering per scen och inga scenvisa figuralternativ.
-- Mörkt läge ändrar omgivningen, inte stenarnas färger via filter. Granska transparenta kanter och skuggor på båda bakgrunderna.
-- **Prata med Pace:** befintlig samtalsyta kan senare få den gemensamma presentationen utan ändringar av samtal, sparning eller åtgärder.
-- **Utvalda stödmeddelanden:** ersätt endast bildpresentationen efter separat godkännande; behåll befintliga villkor, tystning, länkar och avvisning.
-- **Min Pace:** den tidigare Min Flow-vyn är för närvarande avstängd. Prototypen får illustrera användningsfallet men återinför ingen sida. Rummets figur är inbakad i en scenbild och kan inte bytas med en liten bildersättning.
-- **Idag:** endast en framtida möjlighet. Dagens låsta stenar, hälsningslayout och Din takt lämnas orörda; ingen extra följeslagare eller dubblering införs i denna prototyp.
+## 4. Lägen och rörelse
 
-Pace följeslagaren hålls åtskild från **Din takt** i namn och kod. Befintliga `DayPace`, `deriveDayPace` och `day-pace.ts` lämnas helt oförändrade. Tillstånden kommer från samtal/presentation, inte från Capacity eller nivåerna Varsamt/Jämnt/Utrymme. Tekniska Flow/MyFlove-namn, rutter, inställningsnycklar, data, auth, synk, notiser och native-projekt bevaras.
+| Läge | Utförande |
+|---|---|
+| **Vilar** | Helt stilla i originalformationen. Rendering sker bara när kamera, tema eller storlek ändras. |
+| **Hälsar** | Lavendelstenen lutar försiktigt kring kontaktområdet och återgår. Övriga två reagerar minimalt, utan studs, glapp eller deformation. Spelas en gång på uttrycklig knapptryckning i demon. |
+| **Lyssnar** | Mycket små, långsamma individuella lutningar under simulerat aktivt samtal. Ingen verklig samtalsanslutning eller tolkning av användarens mående. |
 
-## 5. Minsta isolerade prototyp efter godkännande
+Rörelser begränsas kring kontaktpunkterna och granskas från båda vinklarna för genomskärning/glapp. Kontrollerad animation, inte fysiksimulering; trovärdig tyngd är ett visuellt mål, inte en verifierad fysisk modell. Inga belöningar, behov eller prestationssignaler. Reducerad rörelse och manuellt stillaläge stoppar all rörelse och återställer originalformationen. Dold flik/vy stoppar rendering; utan WebGL visas en tydligt märkt statisk originalbild, inte påstådd 3D.
 
-1. Bild 1 är inspiration och bild 2 exakt förlaga. Godkänn B och liten oförändrad bild-2-demo; för större/transparant presentation krävs motsvarande originalexport eller godkännande av ZIP-källan.
-2. Skapa en fristående lokal demonstrationsyta **utanför appens källkod och navigation**, under en temporär prototypmapp. Ingen anslutning till konto, data, familj, chatt eller publicerad app.
-3. Visa samma originalbild i ljust/mörkt på små/stora ytor, statisk samt de fyra tillstånden. Befintlig logotyp visas bara som oförändrad referens om den behövs.
-4. Kontrollera mobil/desktop, 200 % text i omgivande exempel, reducerad rörelse och statiskt val. Granska bildens skärpa, silhuett, färger, kontaktpartier och ljusriktning. Redovisa filstorlek och rörelseprestanda; fysiska iOS/Android-enheter behöver separat kontroll.
-5. Visa skärmbilder och en kort inspelning för **visuellt godkännande**. Ingen integration eller maskotersättning följer automatiskt av teknikgodkännandet.
+## 5. Tekniska detaljer och prestandabudget
 
-**Beslut att godkänna:** B med oförändrad bild 2 som liten första pilot, med ovanstående bakgrunds-/upplösningsbegränsningar. Separata stenlager, annan produktionskälla och 3D är senare, uttryckliga beslut. Ingen implementation eller publicering sker nu.
+- Föreslagna nya beroenden **endast i det fristående prototypprojektet**: `three`, `@react-three/fiber` v9, `@react-three/drei` v10 samt `@types/three`. Återanvänd React 19/Vite-versionerna. Inga fysik-, AI- eller eftereffektspaket.
+- En versionerad modell med tre namngivna stennät, fasta material och rörelsedefinitioner. Möjlig GLB-export för senare återanvändning; ingen integration nu.
+- Budgetmål, inte uppmätta resultat: totalt cirka 6 000–12 000 trianglar, högst 1K materialkartor vid behov, en liten delad detaljkarta, skuggkarta 1024 och pixelratio högst 1,5 på mobil.
+- Rendering på begäran i stillaläge; begränsad uppdatering, preliminärt 30 bilder/sekund, endast när rörelse är aktiv. Ingen ständigt körande renderloop i Vilar.
+- Mät faktisk filstorlek, triangelantal och renderbeteende efter bygge. Programvarurenderad webbläsartest verifierar utseende/funktion, inte fysisk mobilprestanda. iOS/Android måste bedömas på riktiga enheter innan framtida integration.
+- Helt frikopplat från konton, lagring, chatt, Capacity, Din takt, familj, notiser och native-projekt.
+
+## 6. Arbetsinsats och begränsningar
+
+**Medel–hög insats jämfört med 2D.** Grov planeringsram: 1–2 arbetsdagar för statisk geometri/material och front-/sidogranskning, därefter cirka 1 dag för rörelser, kontroller och demonstration. Det är en uppskattning, inte en leveranstidsgaranti; visuella korrigeringar eller manuell extern modellering kan kräva mer.
+
+Största osäkerheten är originaltrogen tredimensionell form/material från endast en vy, inte själva 3D-visningen. Inga osynliga sidor kan verifieras som exakta och ingen fysisk mobilprestanda är ännu uppmätt.
+
+**Godkännandet gäller bara den isolerade 3D-piloten och dess separata beroenden. Första leverans blir statisk front-/sidomodell för visuell granskning; integration och publicering kräver egna beslut.**
+
+Teknikbedömningen följer riktlinjerna i **3d-game**, med specialmodellering för den skyddade originalidentiteten i stället för generiska stenmodeller.
