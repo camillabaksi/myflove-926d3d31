@@ -61,8 +61,8 @@ export function TodayContent() {
             <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl"><span className="pace-greeting-prefix">{t("Hej")}</span>{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
           </div>
-          <div className="flex shrink-0 items-start">
-            <GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />
+          <div className="relative shrink-0">
+            <div className="absolute -top-11 right-0"><GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} /></div>
             <PaceableStones compact tactile className="shrink-0" style={{ width: 126, height: 74 }} />
           </div>
         </div>
