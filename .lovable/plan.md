@@ -17,6 +17,16 @@ Behövs: liggande godkänd logotyp med rena kanter och avsedd typografi, läsbar
 
 **Godkänd design:** Tre mjuka stenar i salviagrönt, persika och lavendel, lätt asymmetriskt placerade utan kraftig lutning. Samma exakta stenformation i samtliga filer. Liggande huvudlogotyp med stenarna till vänster om Paceable, exakt slogan ”Ditt liv, i din takt.” samt ljus appikon och lavendelfärgad variant för mörkt läge.
 
+## Kompletterande granskning av Paceable_Lovable_komplett_paket.zip (2026-10-08)
+- Båda dokumenten och samtliga 31 bildfiler granskade. README anger en 1024 × 1024 rasterkälla, inte vektor; filmåtten ensamma bevisar inte faktisk originalskärpa. Befintlig logotyptext skiljer enligt README fortfarande från första AI-mockupen; ingen typsnittsersättning görs.
+- **Blockerande:** `logos/paceable-horizontal-dark.png` har oavsiktligt färgändrade högra delar av samtliga tre stenar: platta lavendelfält och en mindre ljus fläck. Cirka 64 000 synliga stenpixlar skiljer sig från ljusversionen. README:s påstående att stenpixlarna är oförändrade stämmer inte för denna fil. Invänta korrigerat, användargodkänt original; ingen egen bildkorrigering.
+- Övriga fem logotyper har transparent bakgrund, oförvrängda proportioner och korrekt Paceable-text. Slogan är exakt ”Ditt liv, i din takt.” där den ingår; compact och no-tagline saknar den avsiktligt. Ljus/mörk compact har något olika marginaler/filmått, inte anledning att sträcka bilden. Inga uppenbara kvarvarande presentationsrubriker/bakgrundsblock. Vid cirka 200 px logotypbredd blir inbakad slogan mycket liten; använd kompakt levererad logotyp på trånga befintliga varumärkesplatser, inte hård krympning av sloganen.
+- Symbolens trimmed-fil är pixelidentisk med originalets utsnitt utan transparenta marginaler. Ingen ny stenformation har tillförts. Synlig stenyta i 1024-originalet är 684 × 727 px; textur är mjuk men ser användbar ut i kontrollerade webbvisningsstorlekar. Ingen vektorskärpa eller framtida native-kvalitet utlovas.
+- Samtliga 16 ljusa/mörka ikon-PNG har rätt kvadratiska mått, plana avsedda bakgrunder och inga inbakade rundade hörn. Visuell kontroll i 16/32/48/64/180 px: symbolen känns igen, detaljer blir naturligt små vid 16 px. De tre webb-PNG-filerna är exakta kopior av motsvarande ljusa ikoner; favicon.ico innehåller exakt samma ljusa 16/32/48 px-bilder.
+- Ikonerna i `icons/light/` och `icons/dark/` samt `icons/web/pwa-icon-192.png` och `pwa-icon-512.png` är användbara som vanliga `purpose: any`-ikoner, men **inte godkända som maskable**: synlig stenyta når cirka 46,4 % radie från mitten, utanför den garanterade 40 %-radien. Ett separat godkänt maskable-original krävs om det ska användas; ingen egen omplacering.
+- `icons/web/android-foreground-432.png` inspekterad men inte använd: native-projekt är uttryckligen utanför etappen och filen ersätter inte en färdig webb-maskable-ikon.
+- Nuvarande implementering förblir pausad. Inga app-/ikon-/native-ändringar eller publicering. Tidigare plan och övriga skyddsgränser bevaras.
+
 ## 2. Avgränsad varumärkesuppdatering
 När kvalitetskravet är uppfyllt:
 - Återanvänd den levererade liggande logotypen där produktens varumärke redan visas: sidomeny, mobilens relevanta apphuvud, inloggning, registrering och befintliga introduktionsytor. Behåll alla handlingar och navigationsmål.
