@@ -54,7 +54,7 @@ import {
   Wind,
 } from "lucide-react";
 import { MyPlaceIcon, ThoughtsIcon, TodayHorizonIcon } from "@/components/paceable/navigation-icons";
-import { PaceableStones } from "@/components/paceable/paceable-stones";
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import { initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -710,8 +710,7 @@ export default function Layout({ children }: LayoutProps) {
         className="relative z-30 hidden md:flex flex-col w-[13rem] border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto"
       >
         <div className="mb-6 flex items-center justify-between gap-2 px-1 py-1">
-          <span className="font-display text-xl font-bold text-foreground">Paceable</span>
-          <PaceableStones compact tactile={PACEABLE_PATHS.has(location)} className="pace-stones-contained h-12 w-16" />
+          <BrandLogo compact className="w-full" />
         </div>
         <ul className="space-y-1">
           {primaryNav.map((item) => {
@@ -842,8 +841,8 @@ export default function Layout({ children }: LayoutProps) {
           ) : (
             <span aria-hidden className="w-2 shrink-0" />
           )}
-          <h1 className="min-w-0 flex-1 truncate text-center font-display text-xl font-bold text-foreground">
-            Paceable
+          <h1 className="min-w-0 flex-1">
+            <BrandLogo compact className="mx-auto w-32 max-w-full" />
           </h1>
           <ViewCollapseToggle />
         </header>

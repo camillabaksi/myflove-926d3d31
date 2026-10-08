@@ -13,6 +13,7 @@ import { trackPageView } from "@/lib/analytics";
 import { useAnalyticsClaim } from "@/hooks/use-analytics-claim";
 import { RootErrorBoundary } from "@/components/root-error-boundary";
 
+import brandLight from "@/assets/paceable-brand/paceable-horizontal-light.png.asset.json";
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,14 +24,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
-      { title: "MyFlove — ditt lugna livsflöde" },
+      { title: "Paceable — Ditt liv, i din takt." },
       {
         name: "description",
         content:
-          "MyFlove är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi och mer — allt på ett ställe.",
+          "Paceable är ett mjukt dashboard för vardagen: fokus, uppgifter, humör, ekonomi och mer — allt på ett ställe.",
       },
-      { name: "author", content: "MyFlove" },
-      { property: "og:title", content: "MyFlove — ditt lugna livsflöde" },
+      { name: "author", content: "Paceable" },
+      { property: "og:title", content: "Paceable — Ditt liv, i din takt." },
       {
         property: "og:description",
         content: "Ett mjukt dashboard för din vardag — fokus, humör, uppgifter, ekonomi och mer.",
@@ -40,14 +41,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#7C5CE0" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "MyFlove" },
+      { name: "apple-mobile-web-app-title", content: "Paceable" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "vibekollen-verifiering", content: "vk-52413b42f16be1ff3bcba37c" },
       { name: "google-site-verification", content: "no4-nUlVosHpU1GzHhDN73UtQH7v3b8E4k-qs1mNVgM" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { rel: "icon", href: "/favicon-light.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
+      { rel: "icon", href: "/favicon-dark.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -66,16 +69,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             {
               "@type": "Organization",
               "@id": "https://myflove.lovable.app/#organization",
-              name: "MyFlove",
+              name: "Paceable",
               url: "https://myflove.lovable.app/",
-              logo: "https://myflove.lovable.app/logo.svg",
+              logo: `https://myflove.lovable.app${brandLight.url}`,
               description:
-                "MyFlove är ett lugnt dashboard för vardagen – kalender, uppgifter, humör, ekonomi, familj och studier på ett ställe.",
+                "Paceable är ett lugnt dashboard för vardagen – kalender, uppgifter, humör, ekonomi, familj och studier på ett ställe.",
             },
             {
               "@type": "WebSite",
               "@id": "https://myflove.lovable.app/#website",
-              name: "MyFlove",
+              name: "Paceable",
               url: "https://myflove.lovable.app/",
               inLanguage: "sv-SE",
               publisher: { "@id": "https://myflove.lovable.app/#organization" },

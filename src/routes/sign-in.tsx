@@ -11,30 +11,26 @@ import { useLang } from "@/hooks/use-language";
 import { LANGUAGES } from "@/lib/i18n";
 import { clearTranslationCache } from "@/lib/auto-translate";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
+import { BrandLogo } from "@/components/paceable/brand-logo";
 import PwaInstallButton from "@/components/pwa-install-button";
 
 export const Route = createFileRoute("/sign-in")({
   head: () => ({
     meta: [
-      { title: "Logga in – MyFlove" },
+      { title: "Logga in – Paceable" },
       {
         name: "description",
         content:
-          "Logga in på MyFlove – din lugna följeslagare för vardagen med kalender, uppgifter, humör och mer.",
+          "Logga in på Paceable – din lugna följeslagare för vardagen med kalender, uppgifter, humör och mer.",
       },
-      { property: "og:title", content: "Logga in – MyFlove" },
+      { property: "og:title", content: "Logga in – Paceable" },
       {
         property: "og:description",
-        content: "Logga in på MyFlove och fortsätt där du släppte – lugnt och samlat.",
+        content: "Logga in på Paceable och fortsätt där du släppte – lugnt och samlat.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Logga in – MyFlove" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
-      { property: "og:image:width", content: "1200" },
-      { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { name: "twitter:title", content: "Logga in – Paceable" },
       { property: "og:url", content: "https://myflove.lovable.app/sign-in" },
     ],
     links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],
@@ -145,8 +141,9 @@ function SignInPage() {
             })}
           </div>
         </div>
+        <BrandLogo className="mx-auto mb-6 w-full max-w-xs" />
         <h1 className="mb-2 text-3xl font-bold text-primary tracking-tight">
-          {t("Logga in på MyFlove — Ditt stöd i vardagen")}
+          {t("Logga in på Paceable")}
         </h1>
         <p className="mb-6 text-sm text-muted-foreground">
           {t("Välkommen tillbaka. Logga in för att fortsätta din flow.")}
