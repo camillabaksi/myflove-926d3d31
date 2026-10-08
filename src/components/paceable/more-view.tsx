@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode } from "react";
 import { Link } from "wouter";
-import { User, Settings2, Search, X, ChevronRight, ChevronDown, CheckSquare, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History } from "lucide-react";
+import { User, Settings2, Search, X, ChevronRight, ChevronDown, CheckSquare, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History, CalendarDays, MessageCircle, BatteryCharging, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MyFloveIcon } from "@/components/myflove";
 import { cn } from "@/lib/utils";
@@ -58,7 +58,7 @@ type Props = {
 export default function MoreView({ items, simpleMode, enlarged, onClose, onNavigate, t }: Props) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState<string | null>(null);
+  const [open, setOpen] = useState<string[]>([]);
   const closeRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   useEffect(() => { closeRef.current?.focus({ preventScroll: true }); }, []);
@@ -84,7 +84,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
   })}</ul>;
 
   function card(label: string, hint: string, Icon: typeof User, tone: string, href?: string, group?: string, children?: ReactNode, compact = false) {
-    const expanded = Boolean(group && open === group);
+    const expanded = Boolean(group && open.includes(group));
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
       <MyFloveIcon icon={Icon} size="md" className="pace-more-icon" />
@@ -94,7 +94,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     </>;
     return <div className={`pace-more-card-shell pace-more-tone-${tone}`}>
       {href ? <Button asChild variant="ghost" className={cn("pace-more-card", compact && "pace-more-small-card")}><Link href={href} onClick={(event) => navigate(event, href)}>{content}</Link></Button>
-        : <Button variant="ghost" className="pace-more-card" onClick={() => setOpen(expanded ? null : group ?? null)} aria-expanded={expanded} aria-controls={`pace-more-group-${group}`}>{content}</Button>}
+        : <Button variant="ghost" className="pace-more-card" onClick={() => setOpen((current) => expanded ? current.filter((key) => key !== group) : [...current, group ?? ""]) } aria-expanded={expanded} aria-controls={`pace-more-group-${group}`}>{content}</Button>}
       {group && expanded && <div id={`pace-more-group-${group}`} className="pace-more-expanded">{children}</div>}
     </div>;
   }
@@ -116,9 +116,15 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {visible(["/traning"]).length > 0 && section("HÄLSA & VÄLMÅENDE", card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning"))}
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
-      {MORE_GROUPS.slice(0, 4).map((group) => {
+      {MORE_GROUPS.slice(0, 4).map((group, index) => {
         const entries = visible(group.hrefs);
-        return entries.length ? <section key={group.title} className="pace-more-section" aria-label={t(group.title)}><h2>{t(group.title)}</h2>{rows(entries)}</section> : null;
+        const meta = [
+          { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
+          { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
+          { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
+          { icon: Home, tone: "blush", hint: "Vardagen hemma" },
+        ][index];
+        return entries.length ? <section key={group.title} className="pace-more-section" aria-label={t(group.title)}>{card(group.title, meta.hint, meta.icon, meta.tone, undefined, `direct-${group.title}`, rows(entries))}</section> : null;
       })}
       {section("FLER VERKTYG", <>
         {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_GROUPS.map((group) => {
