@@ -124,8 +124,16 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     {query.trim() ? <section aria-label={t("Sökresultat")}>{results.length ? rows(results) : <p className="pace-more-muted">{t("Hittade inget som matchar")} ”{query}”.</p>}</section> : <>
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
       <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} />{t("Inställningar")}</Link>
-      {visible(DAILY.map((item) => item.href)).length > 0 && section("MIN VARDAG", <div className="pace-more-daily">{DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}</div>)}
-      {visible(["/traning"]).length > 0 && section("HÄLSA & VÄLMÅENDE", card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning"))}
+      {(visible(DAILY.map((item) => item.href)).length > 0 || groupCard("Min dag") || groupCard("Hem och vardag")) && section("MIN VARDAG", <>
+        {visible(DAILY.map((item) => item.href)).length > 0 && <div className="pace-more-daily">{DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}</div>}
+        {groupCard("Min dag")}
+        {groupCard("Hem och vardag")}
+      </>)}
+      {(visible(["/traning"]).length > 0 || groupCard("Ork och återhämtning")) && section("HÄLSA & VÄLMÅENDE", <>
+        {visible(["/traning"]).length > 0 && card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning")}
+        {groupCard("Ork och återhämtning")}
+      </>)}
+      {groupCard("Flow och samtal") && section("STÖD & SAMTAL", groupCard("Flow och samtal"))}
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
       {MORE_GROUPS.slice(0, 4).map((group, index) => {
