@@ -48,12 +48,10 @@ export function TodayContent() {
     <MyFlovePageGrid area="idag">
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
-        <div className="flex justify-end">
-          <PaceableStones compact tactile className="shrink-0" style={{ width: 176, height: 112 }} />
-        </div>
-        <div className="mt-2">
+        <div className="relative">
+          <PaceableStones compact tactile className="pointer-events-none absolute right-0 top-3" style={{ width: 140, height: 90 }} />
           <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
-          <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
+          <h1 className="relative mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
         </div>
         <div className="mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
