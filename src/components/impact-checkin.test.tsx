@@ -45,7 +45,7 @@ describe("Mobilkalenderns befintliga påverkanregistrering", () => {
     fireEvent.click(trigger());
     fireEvent.click(screen.getByRole("button", { name: /Jag har sovit dåligt/ }));
     fireEvent.click(screen.getByRole("button", { name: "Måttligt" }));
-    fireEvent.click(screen.getByRole("button", { name: "Tidigare idag" }));
+    fireEvent.click(screen.getByRole("button", { name: "Har påverkat mig" }));
     fireEvent.click(trigger());
     fireEvent.click(screen.getByRole("button", { name: "Dag" }));
     expect(trigger()).toHaveAttribute("aria-expanded", "false");
@@ -55,7 +55,7 @@ describe("Mobilkalenderns befintliga påverkanregistrering", () => {
       expect(trigger()).toHaveAttribute("aria-expanded", "true");
       expect(screen.getByRole("button", { name: /Jag har sovit dåligt/ })).toHaveAttribute("aria-pressed", "true");
       expect(screen.getByRole("button", { name: "Måttligt" })).toHaveAttribute("aria-pressed", "true");
-      expect(screen.getByRole("button", { name: "Tidigare idag" })).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByRole("button", { name: "Har påverkat mig" })).toHaveAttribute("aria-pressed", "true");
     }
     expect(logImpact).not.toHaveBeenCalled();
     expect(clearImpact).not.toHaveBeenCalled();
