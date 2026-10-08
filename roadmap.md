@@ -1,5 +1,10 @@
 # Roadmap
 
+## Typografisk hierarki (2026-10-08)
+- [x] Godkänd plan; explicita editorialroller och funktionell Inter, oförändrade stenar och övrig design.
+- [ ] Tester och mobil/desktop-, skalnings-, dark/light- och fokuskontroller.
+- [ ] Fem screenshots och slutrapport; ingen publicering.
+
 ## Paceable etapp 1D — detaljpolish (2026-10-07)
 - [x] Visa avgränsad plan och invänta godkännande.
 - [x] Ändra endast Min plats-navsymbol, Idags aktivitetsrader och svensk datumtypografi; bevara Etapp 1C och all funktionalitet.

@@ -16,7 +16,7 @@ Flow's room uses the uploaded animation only as a scene-specific visual; the sha
 Keep the living Flow room's appearance in the existing account-scoped cloud storage and use one customization sheet for both its home entry and legacy route, so appearance choices stay consistent.
 Render the room's approved seated Flow as a whole-scene image with pose-fitted variants only; keep incompatible saved options intact but visually hidden, because overlays and alternate mascots break identity and perspective.
 
-Use the existing Inter and Plus Jakarta Sans typography for functional UI; reserve normal-style Caveat for selected personal greetings so readability stays consistent.
+Use explicit pace-editorial roles for orienting headings on Paceable surfaces; functional text uses Inter and legacy typography stays unchanged, preventing implicit serif inheritance.
 Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.

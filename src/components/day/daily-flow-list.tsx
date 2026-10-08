@@ -168,8 +168,8 @@ export function DailyFlowList({
           const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
           return (
             <li key={item.id}>
-              {dayHeadings && index === firstTimedIndex && <h2 className="px-2 pb-1 pt-3 font-display text-sm font-bold text-primary">Tider idag</h2>}
-              {dayHeadings && index === firstUntimedIndex && <h2 className="px-2 pb-1 pt-3 font-display text-sm font-bold text-primary">Övrigt idag</h2>}
+              {dayHeadings && index === firstTimedIndex && <h2 className={cn("px-2 pb-1 pt-3 text-primary", integrated ? "font-sans text-lg font-semibold leading-snug" : "font-display text-sm font-bold")}>Tider idag</h2>}
+              {dayHeadings && index === firstUntimedIndex && <h2 className={cn("px-2 pb-1 pt-3 text-primary", integrated ? "font-sans text-lg font-semibold leading-snug" : "font-display text-sm font-bold")}>Övrigt idag</h2>}
               {index === nowIndex && (
                 <div className="flex items-center gap-2 py-1" aria-label="Just nu">
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
@@ -215,7 +215,7 @@ export function DailyFlowList({
                             {item.done ? <CheckCircle2 className={integrated ? "text-muted-foreground" : "text-primary"} /> : <Circle />}
                           </Button>
                         )}
-                        <p className={cn("font-display min-w-0 flex-1 break-words leading-snug", integrated ? "text-base font-semibold text-ink" : "pt-0.5 text-xl font-semibold text-ink", item.done && "line-through", integrated && item.done && "font-normal text-muted-foreground")}>
+                        <p className={cn("min-w-0 flex-1 break-words leading-snug", integrated ? "font-sans text-base font-semibold text-ink" : "font-display pt-0.5 text-xl font-semibold text-ink", item.done && "line-through", integrated && item.done && "font-normal text-muted-foreground")}>
                           {item.title}
                         </p>
                       </div>

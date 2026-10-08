@@ -22,7 +22,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
         <div className="min-w-0 flex-1">
           <p id="today-capacity-title" className="text-xs font-semibold uppercase text-muted-foreground">{t("Din kapacitet idag")}</p>
           {percent === null ? <>
-            <h2 className="mt-1 font-display text-xl font-bold text-ink">{t("Hur börjar du dagen?")}</h2>
+            <h2 className="mt-1 font-sans text-[22px] font-semibold text-ink">{t("Hur börjar du dagen?")}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{t("Checka in när du vill för att se hur dagen passar det du har att röra dig med.")}</p>
           </> : <>
             <CapacityBattery percent={percent} size="lg" className="mt-2 w-full max-w-md" />
