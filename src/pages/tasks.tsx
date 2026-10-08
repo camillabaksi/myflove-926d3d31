@@ -208,21 +208,21 @@ export default function Tasks() {
     return (
       <div
         key={task.id}
-        className="group bg-card border border-border rounded-2xl shadow-sm hover:border-primary/30 transition-colors overflow-hidden"
+        className="group pace-tasks-card"
       >
-        <div className="flex items-start gap-3 p-4">
-          <button
+        <div className="pace-tasks-card-body">
+          <Button variant="ghost"
             onClick={() => handleToggle(task)}
-            className="mt-1 text-muted-foreground hover:text-primary transition-colors shrink-0"
+            size="icon" className="pace-tasks-check text-muted-foreground hover:text-primary"
             aria-label="Markera klart"
           >
             <Circle size={26} strokeWidth={1.5} />
-          </button>
+          </Button>
 
-          <div className="flex-1 min-w-0">
-             <p className="font-handwritten break-words text-2xl font-semibold leading-tight">{task.title}</p>
+          <div className="pace-tasks-copy min-w-0">
+             <p className="pace-tasks-title">{task.title}</p>
 
-            <div className="flex items-center gap-1.5 flex-wrap mt-1.5">
+            <div className="pace-tasks-meta flex items-center gap-1.5 flex-wrap mt-2">
               {task.time && (
                 <span className="inline-flex items-center gap-1 text-[11px] text-primary font-semibold">
                   <Clock size={11} /> {task.time}
@@ -284,9 +284,9 @@ export default function Tasks() {
               </p>
             )}
 
-            <div className="mt-3 flex flex-wrap items-center gap-1.5">
+            <div className="pace-tasks-actions mt-3 flex flex-wrap items-center gap-1.5">
               {!task.time && (
-                <button
+                <Button variant="ghost"
                   type="button"
                   onClick={() => {
                     updateTask(task.id, { dueDate: todayISO(), time: laterTodayTime() });
@@ -295,41 +295,42 @@ export default function Tasks() {
                   className={chipBtn(false)}
                 >
                   📅 Lägg till i kalender
-                </button>
+                </Button>
               )}
               {(task.friction === "large" || task.energyImpact === "drains") &&
                 steps.length === 0 && (
-                  <button type="button" onClick={() => splitTask(task)} className={chipBtn(false)}>
+                  <Button variant="ghost" type="button" onClick={() => splitTask(task)} className={chipBtn(false)}>
                     ✂️ Dela upp
-                  </button>
+                  </Button>
                 )}
-              <button
+              <Button variant="ghost"
                 type="button"
                 onClick={() => toggleExpand(task.id)}
-                className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-border text-muted-foreground hover:text-foreground ml-auto"
+                className="pace-tasks-edit text-xs border border-border text-muted-foreground ml-auto"
+                aria-expanded={isOpen}
               >
                 {isOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                 Ändra
-              </button>
+              </Button>
             </div>
           </div>
 
-          <button
+          <Button variant="ghost"
             onClick={() => deleteTask(task.id)}
-            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors md:opacity-0 md:group-hover:opacity-100 shrink-0"
+            size="icon" className="pace-tasks-delete text-muted-foreground hover:text-destructive"
             aria-label="Ta bort"
           >
             <Trash2 size={18} />
-          </button>
+          </Button>
         </div>
 
         {isOpen && (
-          <div className="border-t border-border bg-secondary/20 p-4 space-y-3">
+          <div className="pace-tasks-details border-t border-border p-4 space-y-3">
             {/* Energi & friktion – hänger ihop med FlowScore och energihistoriken */}
             <div className="flex flex-wrap gap-1.5 text-xs">
               <span className="text-muted-foreground self-center mr-1">Energi:</span>
               {ENERGY_IMPACTS.map((id) => (
-                <button
+                <Button variant="ghost"
                   key={id}
                   type="button"
                   onClick={() =>
@@ -340,13 +341,13 @@ export default function Tasks() {
                   className={chipBtn(task.energyImpact === id)}
                 >
                   {ENERGY_IMPACT_META[id].emoji} {ENERGY_IMPACT_META[id].label}
-                </button>
+                </Button>
               ))}
             </div>
             <div className="flex flex-wrap gap-1.5 text-xs">
               <span className="text-muted-foreground self-center mr-1">Storlek:</span>
               {FRICTIONS.map((id) => (
-                <button
+                <Button variant="ghost"
                   key={id}
                   type="button"
                   onClick={() =>
@@ -357,7 +358,7 @@ export default function Tasks() {
                   className={chipBtn(task.friction === id)}
                 >
                   {FRICTION_META[id].emoji} {FRICTION_META[id].label}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -367,7 +368,7 @@ export default function Tasks() {
               {(Object.keys(STATUS_META) as TaskStatus[]).map((s) => {
                 const Icon = STATUS_META[s].Icon;
                 return (
-                  <button
+                  <Button variant="ghost"
                     key={s}
                     type="button"
                     onClick={() => setTaskStatus(task.id, s)}
@@ -375,7 +376,7 @@ export default function Tasks() {
                   >
                     <Icon size={11} className="inline mr-1" />
                     {STATUS_META[s].label}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -384,14 +385,14 @@ export default function Tasks() {
             <div className="flex flex-wrap gap-1.5 text-xs">
               <span className="text-muted-foreground self-center mr-1">Typ:</span>
               {(Object.keys(KIND_META) as TaskKind[]).map((k) => (
-                <button
+                <Button variant="ghost"
                   key={k}
                   type="button"
                   onClick={() => setTaskKind(task.id, k)}
                   className={chipBtn(k === kind)}
                 >
                   {KIND_META[k].label}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -488,14 +489,14 @@ export default function Tasks() {
             <div className="flex flex-wrap gap-1.5 text-xs">
               <span className="text-muted-foreground self-center mr-1">Hör hemma i:</span>
               {ALL_AREAS.map((a) => (
-                <button
+                <Button variant="ghost"
                   key={a}
                   type="button"
                   onClick={() => updateTask(task.id, { area: a })}
                   className={chipBtn(getArea(task) === a)}
                 >
                   {AREA_META[a].emoji} {AREA_META[a].label}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -521,7 +522,7 @@ export default function Tasks() {
             <div className="space-y-2">
               {steps.map((step) => (
                 <div key={step.id} className="flex items-center gap-2">
-                  <button
+                  <Button variant="ghost"
                     type="button"
                     onClick={() => toggleTaskStep(task.id, step.id)}
                     className="text-muted-foreground hover:text-primary"
@@ -532,20 +533,20 @@ export default function Tasks() {
                     ) : (
                       <Circle size={20} />
                     )}
-                  </button>
+                  </Button>
                   <span
                     className={`flex-1 text-sm ${step.done ? "line-through text-muted-foreground" : ""}`}
                   >
                     {step.title}
                   </span>
-                  <button
+                  <Button variant="ghost"
                     type="button"
                     onClick={() => deleteTaskStep(task.id, step.id)}
                     className="p-1.5 text-muted-foreground hover:text-destructive rounded-lg"
                     aria-label="Ta bort delsteg"
                   >
                     <Trash2 size={14} />
-                  </button>
+                  </Button>
                 </div>
               ))}
               <form
@@ -577,17 +578,17 @@ export default function Tasks() {
 
   return (
     <Layout>
-      <MyFlovePageGrid className="page-enter">
+      <MyFlovePageGrid className="page-enter pace-tasks-page">
         <MyFloveWide>
           <div
-            className="pace-app-header rounded-3xl border-2 border-border/60 p-5 shadow-soft"
+            className="pace-tasks-header"
           >
             <div className="flex items-start gap-3">
-              <span aria-hidden className="text-3xl leading-none">
-                ✅
+              <span aria-hidden className="pace-tasks-heading-icon">
+                <ListChecks size={24} />
               </span>
               <div className="min-w-0">
-                <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
+                <h1 className="pace-app-title pace-tasks-heading text-ink">
                   Alla uppgifter
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -605,12 +606,12 @@ export default function Tasks() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <TaskQuickAdd onAdd={handleQuickAdd} />
+          <TaskQuickAdd onAdd={handleQuickAdd} className="pace-tasks-add" />
         </MyFloveWide>
 
         <MyFloveWide>
           {/* Flikar: Idag är standardvyn */}
-          <div className="flex gap-2">
+          <div className="pace-tasks-tabs" role="group" aria-label="Visa uppgifter">
             {TABS.map((t) => {
               const count =
                 t.id === "idag"
@@ -619,7 +620,7 @@ export default function Tasks() {
                     ? agenda.upcoming.length
                     : areaDone.length;
               return (
-                <button
+                <Button variant="ghost"
                   key={t.id}
                   type="button"
                   onClick={() => setTab(t.id)}
@@ -629,9 +630,10 @@ export default function Tasks() {
                       : "bg-lavender text-ink hover:bg-lavender/70"
                   }`}
                 >
-                  {t.emoji} {t.label}
+                  {t.id === "idag" ? <Sun aria-hidden size={16} /> : t.id === "kommande" ? <CalendarIcon aria-hidden size={16} /> : <Check aria-hidden size={16} />}
+                   <span>{t.label}{count > 0 && <span className="ml-1 opacity-70">{count}</span>}</span>
                   {count > 0 && <span className="ml-1 opacity-70">{count}</span>}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -641,7 +643,7 @@ export default function Tasks() {
           <MyFloveWide>
             <div className="space-y-6">
               {suggestion && (
-                <div className="rounded-3xl border-2 border-primary/20 bg-primary/5 p-4">
+                <div className="pace-tasks-support p-4">
                   <div className="flex items-start gap-2">
                     <Sparkles size={18} className="mt-0.5 shrink-0 text-primary" />
                     <div className="min-w-0">
@@ -666,7 +668,7 @@ export default function Tasks() {
               {agenda.overdue.length > 0 && (
                 <CollapsibleSection
                   className="space-y-3"
-                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  headingClassName="pace-tasks-group-title"
                   title={
                     <>
                       <Cloud size={14} /> Saker vi tar när du har energi
@@ -681,7 +683,7 @@ export default function Tasks() {
               {agenda.timed.length > 0 && (
                 <CollapsibleSection
                   className="space-y-3"
-                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  headingClassName="pace-tasks-group-title"
                   title={
                     <>
                       <Clock size={14} /> Med tid idag
@@ -696,7 +698,7 @@ export default function Tasks() {
               {agenda.untimed.length > 0 && (
                 <CollapsibleSection
                   className="space-y-3"
-                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  headingClassName="pace-tasks-group-title"
                   title={
                     <>
                       <Sun size={14} /> Ingen specifik tid
@@ -709,7 +711,7 @@ export default function Tasks() {
               )}
 
               {todayCount === 0 && (
-                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                <div className="pace-tasks-empty text-center py-12 text-muted-foreground">
                   <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
                   <p className="text-lg">Inget inplanerat idag.</p>
                   <p className="text-sm mt-2 opacity-70">Det är också ett fullt giltigt schema.</p>
@@ -719,7 +721,7 @@ export default function Tasks() {
               {snoozedTasks.length > 0 && (
                 <CollapsibleSection
                   className="space-y-3 pt-6 border-t border-border"
-                  headingClassName="text-sm font-medium text-muted-foreground uppercase tracking-wider pl-2 flex items-center gap-2"
+                  headingClassName="pace-tasks-group-title"
                   title={
                     <>
                       <Moon size={16} /> Saker vi tar när du har energi
@@ -730,22 +732,22 @@ export default function Tasks() {
                   {snoozedTasks.map((task) => (
                     <div
                       key={task.id}
-                      className="flex items-center justify-between p-4 bg-secondary/30 border border-dashed border-border rounded-2xl"
+                      className="pace-tasks-card pace-tasks-compact grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-4"
                     >
-                      <div className="flex flex-col">
-                         <span className="font-handwritten break-words text-2xl font-semibold leading-tight text-muted-foreground">{task.title}</span>
+                      <div className="flex min-w-0 flex-col">
+                         <span className="pace-tasks-title text-muted-foreground">{task.title}</span>
                         <span className="text-sm text-muted-foreground flex items-center gap-1.5 mt-0.5">
                           <CalendarIcon size={16} />
                           Syns igen {task.snoozedUntil}
                         </span>
                       </div>
-                      <button
+                      <Button variant="ghost"
                         onClick={() => unsnoozeTask(task.id)}
                         className="p-3 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-colors"
                         aria-label="Visa igen nu"
                       >
                         <RotateCcw size={20} />
-                      </button>
+                      </Button>
                     </div>
                   ))}
                 </CollapsibleSection>
@@ -758,7 +760,7 @@ export default function Tasks() {
           <MyFloveWide>
             <div className="space-y-3">
               {agenda.upcoming.length === 0 ? (
-                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                <div className="pace-tasks-empty text-center py-12 text-muted-foreground">
                   <MyFloveEmptyIllustration kind="default" className="mb-2 block" />
                   <p className="text-lg">Inget framåt just nu.</p>
                   <p className="text-sm mt-2 opacity-70">
@@ -789,7 +791,7 @@ export default function Tasks() {
           <MyFloveWide>
             <div className="space-y-3">
               {areaDone.length === 0 ? (
-                <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
+                <div className="pace-tasks-empty text-center py-12 text-muted-foreground">
                   <p className="text-lg">Inget avbockat än.</p>
                   <p className="text-sm mt-2 opacity-70">Det första kryssen kommer.</p>
                 </div>
@@ -797,17 +799,17 @@ export default function Tasks() {
                 areaDone.map((task) => (
                   <div
                     key={task.id}
-                    className="flex items-center justify-between p-4 bg-card/50 border border-border/50 rounded-2xl opacity-80"
+                    className="pace-tasks-card pace-tasks-compact grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-4"
                   >
-                    <button
+                    <Button variant="ghost"
                       onClick={() => handleToggle(task)}
-                      className="flex items-center gap-4 flex-1 text-left"
+                      className="min-w-0 justify-start gap-3 p-0 text-left"
                     >
                       <div className="text-primary shrink-0">
                         <CheckCircle2 size={28} className="fill-primary/20" strokeWidth={2} />
                       </div>
-                      <div className="flex flex-col">
-                         <span className="font-handwritten break-words text-2xl font-semibold leading-tight line-through">{task.title}</span>
+                      <div className="flex min-w-0 flex-col">
+                         <span className="pace-tasks-title line-through">{task.title}</span>
                         <span className="text-xs text-muted-foreground">
                           {task.dueDate ? describeDay(task.dueDate) : "Ingen dag"}
                           {task.actualEnergy
@@ -815,14 +817,14 @@ export default function Tasks() {
                             : ""}
                         </span>
                       </div>
-                    </button>
-                    <button
+                    </Button>
+                    <Button variant="ghost"
                       onClick={() => deleteTask(task.id)}
                       className="p-3 text-muted-foreground hover:text-destructive rounded-xl transition-colors"
                       aria-label="Ta bort"
                     >
                       <Trash2 size={20} />
-                    </button>
+                    </Button>
                   </div>
                 ))
               )}
