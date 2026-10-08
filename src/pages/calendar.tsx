@@ -30,7 +30,7 @@ import {
   type RepeatMode,
   type Routine,
 } from "@/lib/recurrence";
-import ImpactCheckin from "@/components/impact-checkin";
+import ImpactCheckin, { type CalendarImpactDraft } from "@/components/impact-checkin";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -148,6 +148,8 @@ function useFamilyEventsByDate() {
 }
 
 export function CalendarContent() {
+  // Page-lifetime only: keep the same unfinished registration across planner view remounts.
+  const [impactDraft, setImpactDraft] = useState<CalendarImpactDraft | null>(null);
   const { t, locale } = useLang();
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
@@ -481,7 +483,7 @@ export function CalendarContent() {
     <CalendarPlanner
       onDateChange={setSelectedDateStr}
       weekGoals={<WeekGoals />}
-      checkin={<ImpactCheckin />}
+      checkin={<ImpactCheckin calendarMobile draft={impactDraft} onDraftChange={setImpactDraft} />}
       connection={selectedDateStr ? <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} /> : null}
       tools={<>
             {selectedDateStr && (
