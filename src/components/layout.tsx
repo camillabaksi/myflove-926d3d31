@@ -193,6 +193,7 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const mainScrollRef = React.useRef<HTMLDivElement>(null);
+  const desktopMoreTriggerRef = React.useRef<HTMLButtonElement>(null);
   React.useLayoutEffect(() => {
     mainScrollRef.current?.scrollTo({ top: 0 });
     window.scrollTo({ top: 0 });
@@ -649,14 +650,25 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     setDesktopMoreOpen(false);
   }, [location]);
+  const closeDesktopMore = React.useCallback(() => {
+    setDesktopMoreOpen(false);
+    desktopMoreTriggerRef.current?.focus({ preventScroll: true });
+  }, []);
+  const prepareDesktopMoreNavigation = () => {
+    // Layout is mounted per page: keep this one-shot listener across its unmount.
+    const unsubscribe = router.subscribe("onRendered", () => {
+      unsubscribe();
+      document.querySelector<HTMLElement>('main [data-page-focus-target]')?.focus({ preventScroll: true });
+    });
+  };
   useEffect(() => {
     if (!desktopMoreOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setDesktopMoreOpen(false);
+      if (e.key === "Escape") closeDesktopMore();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [desktopMoreOpen]);
+  }, [desktopMoreOpen, closeDesktopMore]);
   const desktopMoreGroups = useMemo(() => {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; hrefs: string[]; legacy?: boolean; rename?: Record<string, string> }[] = [
@@ -682,10 +694,11 @@ export default function Layout({ children }: LayoutProps) {
         items: g.hrefs
           .map(byHref)
           .filter((i): i is NavItem => Boolean(i))
+          .filter((i) => !simpleMode || i.essential)
           .map((i) => (g.rename?.[i.href] ? { ...i, label: t(g.rename[i.href]) } : i)),
       }))
       .filter((g) => g.items.length > 0);
-  }, [navItems, t]);
+  }, [navItems, t, simpleMode]);
 
 
 
@@ -713,8 +726,8 @@ export default function Layout({ children }: LayoutProps) {
                     isActive ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
                 >
-                  <Icon size={20} strokeWidth={1.8} />
-                  <span className="truncate">{item.label}</span>
+                  <Icon size={20} strokeWidth={1.8} className="shrink-0" />
+                  <span className="min-w-0 whitespace-normal break-words">{item.label}</span>
                 </Link>
               </li>
             );
@@ -722,15 +735,16 @@ export default function Layout({ children }: LayoutProps) {
           <li>
             <button
               type="button"
-              onClick={() => setDesktopMoreOpen((v) => !v)}
+              ref={desktopMoreTriggerRef}
+              onClick={() => desktopMoreOpen ? closeDesktopMore() : setDesktopMoreOpen(true)}
               aria-expanded={desktopMoreOpen}
               aria-controls="desktop-more-panel"
               className={`flex min-h-11 w-full items-center gap-3 rounded-2xl px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 desktopMoreOpen ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
-              <Menu size={20} strokeWidth={1.8} />
-              <span className="truncate">{t("Mer")}</span>
+              <Menu size={20} strokeWidth={1.8} className="shrink-0" />
+              <span className="min-w-0 whitespace-normal break-words">{t("Mer")}</span>
             </button>
           </li>
         </ul>
@@ -746,7 +760,7 @@ export default function Layout({ children }: LayoutProps) {
             <h2 className="text-base font-semibold text-foreground">{t("Mer")}</h2>
             <button
               type="button"
-              onClick={() => setDesktopMoreOpen(false)}
+              onClick={closeDesktopMore}
               aria-label={t("Stäng Mer")}
               className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
@@ -769,7 +783,7 @@ export default function Layout({ children }: LayoutProps) {
               searchResults.length > 0 ? (
                 <ul className="space-y-0.5">
                   {searchResults.map((item) => (
-                    <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                    <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} onNavigate={prepareDesktopMoreNavigation} /></li>
                   ))}
                 </ul>
               ) : (
@@ -785,17 +799,17 @@ export default function Layout({ children }: LayoutProps) {
                         type="button"
                         aria-expanded={open}
                         onClick={() => setDesktopMoreSection(open ? null : group.id)}
-                        className={`flex min-h-11 w-full items-center justify-between rounded-2xl px-3 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                        className={`flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                           group.legacy ? "text-muted-foreground" : "font-semibold text-foreground"
                         } hover:bg-secondary`}
                       >
-                        {group.label}
-                        <span aria-hidden className={`text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+                        <span className="min-w-0 whitespace-normal break-words">{group.label}</span>
+                        <span aria-hidden className={`shrink-0 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
                       </button>
                       {open && (
                         <ul className="mb-2 ml-2 space-y-0.5">
                           {group.items.map((item) => (
-                            <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                            <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} onNavigate={prepareDesktopMoreNavigation} /></li>
                           ))}
                         </ul>
                       )}
@@ -924,6 +938,8 @@ export default function Layout({ children }: LayoutProps) {
 
         <div
           ref={mainScrollRef}
+          tabIndex={-1}
+          data-page-focus-target
           className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={PACEABLE_PATHS.has(location) ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
@@ -1216,9 +1232,11 @@ function NavRow({
 function DesktopMoreLink({
   item,
   active,
+  onNavigate,
 }: {
   item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }> };
   active: boolean;
+  onNavigate: () => void;
 }) {
   const Icon = item.icon;
   const cls = `flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
@@ -1227,7 +1245,7 @@ function DesktopMoreLink({
   const content = (
     <>
       <Icon size={18} strokeWidth={1.8} className="shrink-0" />
-      <span className="truncate">{item.label}</span>
+      <span className="min-w-0 whitespace-normal break-words">{item.label}</span>
     </>
   );
   // Träning behåller sin vanliga sidladdning.
@@ -1239,7 +1257,9 @@ function DesktopMoreLink({
     );
   }
   return (
-    <Link href={item.href} aria-current={active ? "page" : undefined} className={cls}>
+    <Link href={item.href} onClick={(event) => {
+      if (!event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && !active) onNavigate();
+    }} aria-current={active ? "page" : undefined} className={cls}>
       {content}
     </Link>
   );

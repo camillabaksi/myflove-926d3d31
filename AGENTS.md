@@ -34,3 +34,5 @@ Month cells summarize unique existing areas (family context collapses to the exi
 Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, with the existing mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Paceable isolates legacy themes; keep IDs/routes to avoid migration. Integrated DailyFlowList is Today-only, reusing actions/data. Swedish date headings capitalize only the first character; other locales stay intact.
+
+Desktop More dismissal returns focus to its trigger; only navigation initiated by its links focuses the existing main scroll container, preserving unrelated page focus. Browse groups reuse mobile essential filtering; search stays fully discoverable.

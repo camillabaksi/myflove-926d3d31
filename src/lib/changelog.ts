@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Fyra QA-rättningar (2026-10-08): Mer återför fokus efter Escape/kryss och ger sidinnehållet fokus efter navigering; menynamn får radbrytas vid 200 % text; desktop-Mers områden följer befintligt Enkelt läge; hälsningen balanserar radbrytning på smal mobil. Ikoner, färger, stenar, Core och data oförändrade; ingen publicering.",
       "Desktopnavigation etapp 1 (2026-10-08): smal fast vänstermeny med samma fem huvudval som mobilen; Mer öppnas som panel med sök, områden och Äldre funktioner. Mobilen oförändrad; ingen publicering.",
       "Varför in i importkortet (2026-10-08): Tankars hjälplänk ligger nu vänsterställd under importknapparna inne i kortet, med samma funktion, innehåll, 44 px touchyta och fokus. Stenar och övrig layout orörda; ingen publicering.",
       "Tankar, snäv polish (2026-10-08): varm tankeinfångningsyta med tunn kant/elevation-1 och inline-Varför intill import, minst 44 px touchyta. Samma innehåll/funktion och pixelmässigt orörda stenar; ingen publicering.",

@@ -1,5 +1,9 @@
 # Roadmap
 
+## Fyra avgränsade QA-rättningar (2026-10-08)
+- [x] Godkänd plan: fokus, menynamn vid 200 %, desktop-Mers befintliga Enkelt läge och hälsningens radbrytning.
+- [ ] Verifiera sex skärmstorlekar, tangentbord/sidbyte, normalt/enkelt läge, tester och oförändrad stenbild; ingen publicering.
+
 ## Tankars Varför i importkortet (2026-10-08)
 - [x] Godkänd plan; endast Varför-länken flyttad in i importkortets nederkant via valfritt whySlot-prop (legacy-ytor påverkas inte).
 - [x] 501 tester godkända; 360/390/430 px och desktop: länken inne i kortet, 58×44 px klickyta, fokus och popover öppnar samma innehåll, ingen overflow, dark mode och 200 % textskalning OK. Stenbildens kontrollsumma oförändrad. Tre leveransbilder; ingen publicering.
