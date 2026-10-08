@@ -6,12 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-07";
+export const CHANGELOG_UPDATED = "2026-10-08";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Större Paceable-stenar på Idag (2026-10-08): stenarna vid hälsningen är tydligt större och ligger på en egen rad ovanför hälsningen, så de inte ser ut som en liten rad bredvid texten. Stenbilden är beskuren så stenarna fyller ytan. Verifierat i 390 px. Ingen funktions- eller dataändring; ingen publicering.",
       "Min plats-ikon (2026-10-07): navigationen använder valt förslag B, Öppen rymdform.",
       "Paceable etapp 1D (2026-10-07): öppen organisk Min plats-navkontur, lättare Idag-rader med liten områdesprick och separatorer. Checkbox/meny har 44 px tryckyta; klara poster har checkmark/genomstrykning utan animation. Svensk datumrubrik visar Onsdag 7 oktober. Etapp 1C:s färger, övriga ytor, Core och data oförändrade. Ingen publicering.",
       "Paceable etapp 1C (2026-10-07): varm ivory, aubergine och flera mjuka accenter ersätter stark lila som generell action- och markeringsfärg på primärvyerna. Capacity har en egen dämpad ton, Kalenderns val är neutrala, Idag saknar prestationsantal och Pace-blad, Min plats-symbolen är enklare och Tankar är luftigare med neutral importcopy. Kalenderns Hem-prickar verifierades som återkommande rutiner och var redan områdesdeduplicerade. Ingen Core-, data- eller routeändring; ingen publicering.",

@@ -1,3 +1,7 @@
+## 2026-10-08
+
+- **Större Paceable-stenar på Idag**: Stenarna vid hälsningen är tydligt större (176×112 px) och ligger på en egen rad ovanför hälsningen, så de inte längre ser ut som en liten rad bredvid texten och hälsningen får plats på en rad. Stenbilden är beskuren så stenarna fyller ytan. Verifierat i 390 px. Ingen funktions- eller dataändring. Ingen publicering.
+
 ## 2026-10-07
 
 - **Min plats-ikon**: Navigationen använder valt förslag B, Öppen rymdform.
