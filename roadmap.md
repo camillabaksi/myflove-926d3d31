@@ -1,5 +1,10 @@
 # Roadmap
 
+## Kompakt kapacitetsstöd i mobilkalendern
+- [ ] Godkänn avgränsad plan för kompakt rad och oförändrat formulär; ingen publicering.
+- [ ] Implementera endast mobilpresentation med bevarade osparade val och oförändrad desktop.
+- [ ] Verifiera tre mobilbredder × tre vyer × två textstorlekar, sparning i isolerat test och desktopkontroll; leverera bilder och båda ändringsloggarna.
+
 ## Etapp 2A tillgänglighetsrättning
 - [x] Plan godkänd; faktisk textstorlek/utrymme, separata tidsblocksbegränsningar och jämförelsebilder 390/768 px vid 200 %. Ingen publicering.
 - [x] Lokal textanpassning genomförd; normalbilder 390/768 px identiska. Fasta veckoblock rapporteras separat, inte som lösta.
