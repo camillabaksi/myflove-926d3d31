@@ -1,7 +1,8 @@
 # Roadmap
 
 ## Kompakt kapacitetsstöd i mobilkalendern
-- [ ] Godkänn avgränsad plan för kompakt rad och oförändrat formulär; ingen publicering.
+- [x] Avgränsad plan godkänd; ingen publicering.
+- [ ] Kontrollera uttryckligen osparade val och öppet läge vid Månad/Vecka/Dag utan autosparning; bevara tillfälligt utkast inom befintlig kalenderinstans.
 - [ ] Implementera endast mobilpresentation med bevarade osparade val och oförändrad desktop.
 - [ ] Verifiera tre mobilbredder × tre vyer × två textstorlekar, sparning i isolerat test och desktopkontroll; leverera bilder och båda ändringsloggarna.
 

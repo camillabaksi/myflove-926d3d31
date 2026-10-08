@@ -30,7 +30,7 @@ import {
   type RepeatMode,
   type Routine,
 } from "@/lib/recurrence";
-import ImpactCheckin from "@/components/impact-checkin";
+import ImpactCheckin, { type CalendarImpactDraft } from "@/components/impact-checkin";
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
