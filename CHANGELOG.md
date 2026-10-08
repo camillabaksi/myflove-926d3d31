@@ -1,4 +1,5 @@
 ## 2026-10-08
+- Tankar: tankeinfångningens streckade ram ersätts endast här av befintlig varm surface, tunn neutral kant och elevation-1 utan gradient. Varför blir en inline-hjälplänk 4 px under import med minst 44×44 px klickyta och fokusmarkering. Texter, funktioner och stenar oförändrade; ingen publicering.
 - Tankar: endast den befintliga stenbildens rendering förstoras från 40 till 76 px bredd (1,9×), proportionellt inom samma övre högra placering. Rubrik, innehåll och övriga vyer oförändrade; ingen bildändring eller publicering.
 - Sista finjusteringen: Idags hälsning använder 34 px under 380 px; 390/430 px och desktop lämnas oförändrade. Tankar använder redan samma godkända stenbild och Min plats-rubriken är redan 32 px; båda lämnas orörda. Ingen annan visuell ändring eller publicering.
 - Slutpolish: befintliga stenplaceringar i Tankar och primärytornas desktopmeny återanvänder Idags godkända bild utan extra filter. Idag-stenarna fortsatt 126×74 px på samma plats. Hälsningen 32 px under 380 px, 36 px större mobil och 38 px desktop; Min plats 32 px med 4 px extra luft mot hjärtikonen. Ingen logik-, data- eller bildändring och ingen publicering.

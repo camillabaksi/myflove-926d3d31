@@ -1,5 +1,9 @@
 # Roadmap
 
+## Tankars två ytor (2026-10-08)
+- [x] Godkänd plan, enbart capture-yta och inline-hjälp vid import; stenarna orörda.
+- [ ] Verifiera vyer, funktioner och tester; leverera fyra bilder utan publicering.
+
 ## Endast Tankars stenstorlek (2026-10-08)
 - [x] Godkänd plan och endast stenbildens rendering 1,9× större; befintlig behållare och övrig layout orörda.
 - [x] 360/390/430 px kontrollerade, fyra riktade tester godkända och bildkontrollsumma oförändrad. Ingen publicering.

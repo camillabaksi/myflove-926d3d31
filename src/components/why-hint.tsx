@@ -9,13 +9,14 @@ interface WhyHintProps {
   /** Vad förklaringen gäller, används för skärmläsare. */
   label?: string;
   className?: string;
+  appearance?: "chip" | "inline";
 }
 
 /**
  * Diskret "ⓘ Varför?" – används bara där nyttan inte är självklar.
  * Aldrig krav, aldrig påminnelse: bara en kort mening om vad du får tillbaka.
  */
-export default function WhyHint({ children, label, className }: WhyHintProps) {
+export default function WhyHint({ children, label, className, appearance = "chip" }: WhyHintProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -24,7 +25,9 @@ export default function WhyHint({ children, label, className }: WhyHintProps) {
           aria-label={label ? `Varför ${label}?` : "Varför?"}
           onClick={(e) => e.stopPropagation()}
           className={cn(
-            "inline-flex shrink-0 items-center gap-1 rounded-full border border-border/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            appearance === "inline"
+              ? "inline-flex min-h-11 min-w-11 shrink-0 items-center gap-1 rounded-sm text-xs font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              : "inline-flex shrink-0 items-center gap-1 rounded-full border border-border/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
         >

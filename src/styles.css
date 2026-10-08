@@ -2025,3 +2025,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial { font-size: 2rem; }
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial-title-spacing { margin-left: 0.25rem; }
 .pace-stones-contained .pace-stones-img { filter: none; }
+[data-paceable-surface="true"] .pace-thought-capture {
+  background: var(--pace-surface);
+  border-color: var(--pace-border-warm);
+  box-shadow: var(--pace-elevation-1);
+}
