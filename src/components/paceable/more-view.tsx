@@ -89,7 +89,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
       <MyFloveIcon icon={Icon} size="md" className="pace-more-icon" />
-      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
+      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label === "Flow och samtal" ? "Pace & samtal" : label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
       {group && expanded ? <ChevronDown className="pace-more-arrow" aria-hidden /> : <ChevronRight className="pace-more-arrow" aria-hidden />}
       {!compact && group !== "legacy" && <Sprig className="pace-more-wide-decor" />}
     </>;

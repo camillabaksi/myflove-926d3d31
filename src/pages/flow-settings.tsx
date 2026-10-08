@@ -12,9 +12,9 @@ import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
 import { FLOW_PRIORITIES } from "@/lib/flow-priorities";
 
 const LEVELS: Array<{ id: FlowHelpLevel; label: string; hint: string }> = [
-  { id: "tyst", label: "Tyst", hint: "Flow syns men säger inget själv." },
-  { id: "diskret", label: "Diskret", hint: "Flow hör bara av sig när det spelar roll." },
-  { id: "aktiv", label: "Aktiv", hint: "Flow hör av sig oftare och tipsar mer." },
+  { id: "tyst", label: "Tyst", hint: "Pace syns men säger inget själv." },
+  { id: "diskret", label: "Diskret", hint: "Pace hör bara av sig när det spelar roll." },
+  { id: "aktiv", label: "Aktiv", hint: "Pace hör av sig oftare och tipsar mer." },
 ];
 
 export default function FlowSettingsPage() {
@@ -28,6 +28,7 @@ export default function FlowSettingsPage() {
         <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
           <div className="shrink-0">
             <FlowCharacter
+              alt="Pace – Paceables följeslagare"
               scene="hello"
               seed={3}
               energy={settings.enabled ? 70 : 30}
@@ -36,10 +37,10 @@ export default function FlowSettingsPage() {
           </div>
           <div className="space-y-1">
             <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-              Flow-inställningar
+              Pace-inställningar
             </h1>
             <p className="text-sm text-muted-foreground">
-              Du bestämmer hur mycket Flow får säga, när han får höra av sig och vad han ska hålla
+              Du bestämmer hur mycket Pace får säga, när Pace får höra av sig och vad Pace ska hålla
               koll på. Inget av det här ändrar dina uppgifter.
             </p>
           </div>
@@ -47,10 +48,10 @@ export default function FlowSettingsPage() {
       </MyFloveWide>
 
       <MyFloveWide span="wide">
-        <MyFloveBlock title="Hjälpnivå" subtitle="Hur mycket plats Flow får ta i vardagen.">
+        <MyFloveBlock title="Hjälpnivå" subtitle="Hur mycket plats Pace får ta i vardagen.">
           <div className="flex items-center justify-between gap-3">
             <Label htmlFor="flow-enabled" className="text-sm font-normal">
-              Visa Flow i appen
+              Visa Pace i appen
             </Label>
             <Switch
               id="flow-enabled"
@@ -77,7 +78,7 @@ export default function FlowSettingsPage() {
 
           <div className="flex items-center justify-between gap-3">
             <Label htmlFor="flow-learning" className="text-sm font-normal">
-              Flow får berätta vad han lär sig om dig
+              Pace får berätta vad Pace lär sig om dig
             </Label>
             <Switch
               id="flow-learning"
@@ -90,8 +91,8 @@ export default function FlowSettingsPage() {
 
       <MyFloveWide span="wide">
         <MyFloveBlock
-          title="När får Flow höra av sig?"
-          subtitle="Utanför det här fönstret är Flow tyst – han finns kvar men säger inget själv."
+          title="När får Pace höra av sig?"
+          subtitle="Utanför det här fönstret är Pace tyst – Pace finns kvar men säger inget själv."
         >
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
             <div className="space-y-1.5">
@@ -134,7 +135,7 @@ export default function FlowSettingsPage() {
               aria-label="Förvarning i minuter"
             />
             <p className="text-xs text-muted-foreground">
-              Flow säger till i god tid, t.ex. "om cirka {settings.leadMinutes} minuter", och länkar
+              Pace säger till i god tid, t.ex. "om cirka {settings.leadMinutes} minuter", och länkar
               till rätt vy.
             </p>
           </div>
@@ -143,8 +144,8 @@ export default function FlowSettingsPage() {
 
       <MyFloveWide>
         <MyFloveBlock
-          title="Vad ska Flow prioritera?"
-          subtitle="Välj vilka typer av tider Flow håller extra koll på. Resten ligger kvar i appen som vanligt."
+          title="Vad ska Pace prioritera?"
+          subtitle="Välj vilka typer av tider Pace håller extra koll på. Resten ligger kvar i appen som vanligt."
         >
           {FLOW_PRIORITIES.map((p) => (
             <div key={p.key} className="flex items-start justify-between gap-3">
@@ -173,7 +174,7 @@ export default function FlowSettingsPage() {
           <Button asChild variant="ghost" className="rounded-2xl">
             <Link href="/flow">
               <Sparkles className="mr-2 size-4" />
-              Se Flow live
+              Se Pace live
             </Link>
           </Button>
         </div>

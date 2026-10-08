@@ -342,7 +342,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     } catch (e) {
       const raw = e instanceof Error ? e.message : "";
       const msg = /invalid|parse|validation/i.test(raw)
-        ? "Flow kunde inte läsa meddelandet. Prova att starta en ny chatt eller skriv lite kortare."
+        ? "Pace kunde inte läsa meddelandet. Prova att starta en ny chatt eller skriv lite kortare."
         : raw || "Något gick fel. Prova igen om en stund.";
       setError(msg);
     } finally {
@@ -382,7 +382,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
       {conversations.length === 0 ? (
         <div className="rounded-2xl border border-border px-3 py-4 text-center">
-          <p className="text-sm font-medium">💜 Prata med Flow</p>
+          <p className="text-sm font-medium">💜 Prata med Pace</p>
           <p className="mt-1 text-xs text-muted-foreground">
             Du kan börja ett nytt samtal när du vill.
           </p>
@@ -512,7 +512,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         </>
       )}
       <p data-npf="optional" className="px-1 pt-1 text-[11px] text-muted-foreground">
-        Sparade samtal är bara din historik – de blir inte automatiskt en del av vad Flow lär sig om
+        Sparade samtal är bara din historik – de blir inte automatiskt en del av vad Pace lär sig om
         dig.
       </p>
     </div>
@@ -521,7 +521,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   return (
     <>
       <MyFloveHeader
-        title="Chatta med Flow"
+        title="Chatta med Pace"
         emojiKey="assistant"
         description="Din andra hjärna – lugn, empatisk, aldrig dömande"
         action={
@@ -537,7 +537,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         }
       >
         <p data-npf="optional" className="text-xs text-muted-foreground">
-          Flow utgår från din profil och dina mönster i appen.{" "}
+          Pace utgår från din profil och dina mönster i appen.{" "}
           <Link to="/profil" className="underline underline-offset-2">
             Justera din profil
           </Link>
@@ -578,11 +578,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               </>
             )}
             <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
-            <span className="font-medium text-foreground">Flow</span>
+            <span className="font-medium text-foreground">Pace</span>
           </nav>
 
           <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/40 p-3">
-            <FlowMascot
+            <FlowMascot alt="Pace – Paceables följeslagare"
               size="sm"
               wave={flowStatus === "idle"}
               glow
@@ -594,7 +594,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               className="shrink-0"
             />
             <p className="text-sm text-muted-foreground">
-              {flowStatus === "thinking" ? "Flow tänker…" : "Flow lyssnar när du behöver det."}
+              {flowStatus === "thinking" ? "Pace tänker…" : "Pace lyssnar när du behöver det."}
             </p>
           </div>
 
@@ -645,7 +645,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           <MyFloveBlock
             title="Idag"
-            subtitle="En liten lägesbild från Flow"
+            subtitle="En liten lägesbild från Pace"
             icon={MessageCircle}
             tone="lavender"
             surface="lavender"
@@ -660,7 +660,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           <MyFloveBlock
             title="Samtal"
-            subtitle="Skriv när du vill – Flow lyssnar"
+            subtitle="Skriv när du vill – Pace lyssnar"
             icon={MessageCircle}
             tone="lavender"
             surface="plain"
@@ -677,7 +677,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 <>
                   {messages.length === 0 && (
                     <div className="flex justify-start items-end gap-2">
-                      <FlowMascot size="sm" mood="wave" bump className="shrink-0" />
+                      <FlowMascot alt="Pace – Paceables följeslagare" size="sm" mood="wave" bump className="shrink-0" />
                       <div className="pace-flow-reply max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
                         {GREETING} <Heart aria-label="hjärta" className="inline size-4 fill-primary text-primary" />
                       </div>
@@ -695,7 +695,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                           className={`flex items-end gap-2 ${m.role === "user" ? "justify-end" : "justify-start"}`}
                         >
                           {m.role !== "user" && (
-                            <FlowMascot
+                            <FlowMascot alt="Pace – Paceables följeslagare"
                               size="sm"
                               mood="calm"
                               status={flowStatus}
@@ -792,11 +792,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               )}
               {isSending && (
                 <div className="flex justify-start items-end gap-2">
-                  <FlowMascot size="sm" mood="think" status="thinking" bump className="shrink-0" />
+                  <FlowMascot alt="Pace – Paceables följeslagare" size="sm" mood="think" status="thinking" bump className="shrink-0" />
                   <div className="bg-secondary text-muted-foreground px-4 py-2 rounded-2xl rounded-bl-sm text-sm">
                     <MyFloveThinking
                       steps={["💬", "🧠", "💜", "✨"]}
-                      label="Flow tänker…"
+                      label="Pace tänker…"
                       className="py-1"
                     />
                   </div>
@@ -829,7 +829,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   void send(input);
                 }
               }}
-              placeholder="Skriv till Flow…"
+              placeholder="Skriv till Pace…"
               className="w-full h-24 p-3 bg-transparent border-none outline-none resize-none text-base"
             />
             <div className="flex justify-end gap-2 px-2 pb-1">
@@ -877,7 +877,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         </div>
       )}
       <Dialog open={memoryCandidate !== null} onOpenChange={open => { if (!open) setMemoryCandidate(null); }}>
-        <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Flow?</DialogTitle><DialogDescription>Flow använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
+        <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Pace?</DialogTitle><DialogDescription>Pace använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
       </Dialog>
     </>
   );

@@ -43,7 +43,7 @@ describe("Mer navigation presentation", () => {
     if (!tools) return;
     const parents: Record<string, string> = { "Min dag": "MIN VARDAG", "Hem och vardag": "MIN VARDAG", "Ork och återhämtning": "HÄLSA & VÄLMÅENDE", "Flow och samtal": "STÖD & SAMTAL" };
     for (const group of MORE_GROUPS.slice(0, 4)) {
-      const toggle = screen.getByRole("button", { name: new RegExp(group.title) });
+      const toggle = screen.getByRole("button", { name: new RegExp(group.title === "Flow och samtal" ? "Pace & samtal" : group.title) });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
       expect(toggle.closest(".pace-more-section")?.querySelector("h2")?.textContent).toBe(parents[group.title]);
       expect(document.getElementById(`pace-more-group-direct-${group.title}`)).toBeNull();
@@ -71,13 +71,13 @@ describe("Mer navigation presentation", () => {
     const allowed = allItems().filter((entry) => !["/assistant", "/admin", "/admin-statistik"].includes(entry.href));
     const { container } = show(allowed, true);
     fireEvent.click(screen.getByRole("button", { name: /Fler funktioner/ }));
-    fireEvent.click(screen.getByRole("button", { name: /Flow och samtal/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Pace & samtal/ }));
     fireEvent.click(screen.getByRole("button", { name: /Min dag/ }));
     for (const href of ["/assistant", "/flowplan", "/admin", "/admin-statistik"]) {
       expect(container.querySelectorAll(`a[href="${href}"]`)).toHaveLength(0);
     }
     expect(container.querySelectorAll('a[href="/flow"]')).toHaveLength(1);
-    expect(screen.getByRole("button", { name: /Flow och samtal/ })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: /Pace & samtal/ })).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("button", { name: /Min dag/ })).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "/flowplan" } });
@@ -87,7 +87,7 @@ describe("Mer navigation presentation", () => {
 
   it("omits empty subcategories without removing the existing tools menu", () => {
     show([item("/installningar")]);
-    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title) })).toBeNull();
+    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title === "Flow och samtal" ? "Pace & samtal" : group.title) })).toBeNull();
     expect(screen.queryByRole("heading", { name: "STÖD & SAMTAL" })).toBeNull();
     expect(screen.getByRole("button", { name: /Fler funktioner/ })).toBeInTheDocument();
   });

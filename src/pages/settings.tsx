@@ -114,13 +114,13 @@ export default function SettingsPage() {
               <Settings className="size-6" aria-hidden />
               <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Inställningar</h1>
             </div>
-            <p className="text-muted-foreground">Anpassa MyFlove, konto och appens inställningar.</p>
+            <p className="text-muted-foreground">Anpassa Paceable, konto och appens inställningar.</p>
           </header>
         </MyFloveWide>
 
         <MyFloveBlock title="Profil och konto" subtitle="Dina uppgifter och ditt konto" icon={User} tone="lavender" surface="lavender">
           <SettingsLink href="/profil" icon={User} label="Min profil" hint="Namn, barn och din livsprofil" />
-          <SettingsLink href="/anpassa" icon={Accessibility} label="Anpassa MyFlove" hint="Utseende, tydlighet, integritet och konto" />
+          <SettingsLink href="/anpassa" icon={Accessibility} label="Anpassa Paceable" hint="Utseende, tydlighet, integritet och konto" />
           <Show when="signed-in">
             <Button
               variant="outline"
@@ -166,9 +166,9 @@ export default function SettingsPage() {
           </p>
         </MyFloveBlock>
 
-        <MyFloveBlock defaultCollapsed title="Anpassning" subtitle="Vad som visas och hur Flow hjälper" icon={LayoutGrid} tone="mint" surface="mint">
+        <MyFloveBlock defaultCollapsed title="Anpassning" subtitle="Vad som visas och hur Pace hjälper" icon={LayoutGrid} tone="mint" surface="mint">
           <SettingsLink href="/anpassa-hem" icon={Home} label="Hemskärm" hint="Välj block, ordning och genvägar" />
-          <SettingsLink href="/flow-installningar" icon={Sparkles} label="Flow-inställningar" hint="Hjälpnivå, tider och prioriteringar" />
+          <SettingsLink href="/flow-installningar" icon={Sparkles} label="Pace-inställningar" hint="Hjälpnivå, tider och prioriteringar" />
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3 text-left" onClick={toggleSimpleMode}>
             {simpleMode ? <Check className="size-5 shrink-0" /> : <LayoutGrid className="size-5 shrink-0" />}
             <span>
@@ -178,12 +178,12 @@ export default function SettingsPage() {
           </Button>
           <div className="rounded-2xl border border-border/60 bg-card/70 p-3">
             <p className="text-sm font-semibold text-ink">Din bottenmeny</p>
-            <p className="mt-1 text-xs text-muted-foreground">Översikt, Flow, Hälsa, Återhämtning och Mer ligger fast för alla.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Idag, Kalender, Tankar, Min plats och Mer ligger fast för alla.</p>
           </div>
         </MyFloveBlock>
 
         <MyFloveBlock defaultCollapsed title="Appen" subtitle="Introduktion, installation och ljud" icon={Settings} tone="sky" surface="sky">
-          <SettingsLink href="/oversikt" icon={Compass} label="Så funkar MyFlove" hint="En enkel sammanfattning av appen" />
+          <SettingsLink href="/oversikt" icon={Compass} label="Så funkar Paceable" hint="En enkel sammanfattning av appen" />
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3" onClick={replayIntro}>
             <Sparkles className="size-5 shrink-0" /> Visa introduktionen igen
           </Button>

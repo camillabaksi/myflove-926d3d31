@@ -6,14 +6,14 @@ import Page from "@/pages/assistant";
 export const Route = createFileRoute("/_app/assistant")({
   head: () => ({
     meta: [
-      { property: "og:title", content: "Prata med Flow – MyFlove" },
-      { property: "og:description", content: "Chatta med Flow, din personliga följeslagare i MyFlove." },
+      { property: "og:title", content: "Prata med Pace – Paceable" },
+      { property: "og:description", content: "Chatta med Pace, din personliga följeslagare i Paceable." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { title: "Prata med Flow – MyFlove" },
+      { title: "Prata med Pace – Paceable" },
       {
         name: "description",
-        content: "Chatta med Flow, din personliga följeslagare i MyFlove.",
+        content: "Chatta med Pace, din personliga följeslagare i Paceable.",
       },
       { name: "robots", content: "noindex, nofollow" },
     ],

@@ -358,9 +358,9 @@ export default function Layout({ children }: LayoutProps) {
     },
     {
       href: "/assistant",
-      label: "Prata med Flow",
+      label: "Prata med Pace",
       icon: MessageCircle,
-      hint: "Chatta med Flow – din personliga följeslagare",
+      hint: "Chatta med Pace – din personliga följeslagare",
       essential: true,
     },
     {
@@ -440,11 +440,11 @@ export default function Layout({ children }: LayoutProps) {
       href: "/flowplan",
       label: "Planera",
       icon: Sparkles,
-      hint: "Planeringsläget i Flow – ordna dagens saker",
+      hint: "Planeringsläget i Pace – ordna dagens saker",
     },
     {
       href: "/flow",
-      label: "Flow",
+      label: "Pace",
       icon: Sparkles,
       hint: "Hjälp, planering och chatt på ett ställe",
       essential: true,
@@ -525,7 +525,7 @@ export default function Layout({ children }: LayoutProps) {
       },
       {
         id: "flowflow",
-        label: "Flow",
+        label: "Pace",
         hint: "Chatt och planering",
         icon: Sparkles,
         hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar", "/tasks"],

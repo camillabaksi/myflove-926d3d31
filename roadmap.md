@@ -2,7 +2,9 @@
 ## Pace/Paceable – namninventering (2026-10-08)
 - [x] Inventera synliga Flow/MyFlove-namn och gamla bilder separat från tekniska identifierare.
 - [x] Redovisa namnförslag, resursbegränsningar för stenföljeslagare, risker och kostnadseffektiv plan; ingen appkodändring eller publicering.
-- Genomförande väntar på användarens namn-/plangodkännande; ingår inte i inventeringsuppdraget.
+- [x] Namnstruktur och minsta textetapp godkända: synligt Pace i Mer/samtal/inställningar och Din takt på Idag; interna namn, grupp-ID, bilder och övriga etapper bevaras.
+- [x] Textetappen verifierad: 531/531 tester i 84 filer efter omkörning av äldre tidskänsligt krypteringstest; nya namn på Idag/samtal/inställningar och Mer-sökning/länkar i 390/1280 px, båda teman och 200 % utan Mer-overflow. Befintliga bilder och interna identifierare oförändrade; ingen publicering.
+- Övriga textområden, AI-identitet, notiser och bildpilot väntar på separat godkännande enligt planen.
 ## Mer – sista struktur- och kortjusteringen (2026-10-08)
 - [x] Ta bort fyra dubblerade verktygsgrupper och ge Min vardag sex enhetliga kort med oberoende expansion.
 - [x] 528/528 tester i 83 filer; automatiskt bygge OK. 360/390/430/1024/1440 px, båda teman och 200 %: sex kort, oberoende expansion utan höjdförändring, sökning och kvarvarande verktygsgrupper verifierade. 320 px normal fungerar; 320 px + 200 % visar ett befintligt överflöde i sök/kryss-raden (inte vardagskorten), lämnat orört enligt avgränsningen. Ingen publicering.

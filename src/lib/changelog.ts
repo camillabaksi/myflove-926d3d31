@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Pace, första textetappen (2026-10-08): synligt följeslagarnamn Pace i Mer, samtal och inställningar; dagsrytmens rubrik Din takt. Engelska texter och lokala alternativtexter uppdaterade. Interna Flow/MyFlove-namn, grupp-ID, rutter, data, logik, notiser, bilder och native-projekt bevarade. Ingen publicering.",
       "Mer, enhetliga vardagskort (2026-10-08): sex små kort under Min vardag; Min dag och Hem och vardag expanderar oberoende med befintliga länkrader under hela kortraden. De fyra placerade grupperna dubbleras inte längre under Fler funktioner; Konto och app, behörighetsstyrd Admin, Äldre funktioner, sökning och Enkelt läge bevaras. Endast Mer ändrad; ingen publicering.",
       "Mer, hierarki (2026-10-08): Min dag och Hem och vardag ligger som hopfällbara underkategorier under Min vardag, Ork och återhämtning under Hälsa & välmående, Flow och samtal under nya Stöd & samtal. Samma befintliga kortkomponent; alla huvudkort, länkar, Fler funktioner, rutter och behörigheter oförändrade. Full svit 527/527. Ingen publicering.",
       "Mer, expanderbara direktsektioner (2026-10-08): Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag är hopfällda från början och expanderas med samma befintliga kortkomponent som övriga grupper; flera kan vara öppna samtidigt. Alla ingångar finns kvar även under Fler funktioner. Tester uppdaterade; full svit 527/527. Ingen publicering.",

@@ -21,9 +21,9 @@ import { cn } from "@/lib/utils";
  */
 
 const LEVELS: Array<{ id: FlowHelpLevel; label: string; hint: string }> = [
-  { id: "tyst", label: "Tyst", hint: "Flow syns men säger inget" },
+  { id: "tyst", label: "Tyst", hint: "Pace syns men säger inget" },
   { id: "diskret", label: "Diskret", hint: "Bara när det spelar roll" },
-  { id: "aktiv", label: "Aktiv", hint: "Flow hör av sig oftare" },
+  { id: "aktiv", label: "Aktiv", hint: "Pace hör av sig oftare" },
 ];
 
 function FlowSettingsPopover() {
@@ -37,16 +37,16 @@ function FlowSettingsPopover() {
           size="icon"
           variant="ghost"
           className="size-7 rounded-full text-muted-foreground"
-          aria-label="Hur mycket ska Flow hjälpa till?"
+          aria-label="Hur mycket ska Pace hjälpa till?"
         >
           <Settings2 className="size-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-72 space-y-4 rounded-2xl">
         <div className="space-y-1">
-          <p className="text-sm font-medium">Hur mycket ska Flow hjälpa till?</p>
+          <p className="text-sm font-medium">Hur mycket ska Pace hjälpa till?</p>
           <p className="text-xs text-muted-foreground">
-            Du bestämmer. Flow ska aldrig vara i vägen.
+            Du bestämmer. Pace ska aldrig vara i vägen.
           </p>
         </div>
 
@@ -69,7 +69,7 @@ function FlowSettingsPopover() {
 
         <div className="flex items-center justify-between gap-3">
           <Label htmlFor="flow-learning" className="text-sm font-normal">
-            Flow får berätta vad han lär sig
+            Pace får berätta vad Pace lär sig
           </Label>
           <Switch
             id="flow-learning"
@@ -80,7 +80,7 @@ function FlowSettingsPopover() {
 
         <div className="flex items-center justify-between gap-3">
           <Label htmlFor="flow-enabled" className="text-sm font-normal">
-            Visa Flow i appen
+            Visa Pace i appen
           </Label>
           <Switch
             id="flow-enabled"
@@ -90,7 +90,7 @@ function FlowSettingsPopover() {
         </div>
 
         <Button asChild variant="outline" size="sm" className="w-full rounded-full text-xs">
-          <Link href="/flow-installningar">Fler Flow-inställningar</Link>
+          <Link href="/flow-installningar">Fler Pace-inställningar</Link>
         </Button>
 
         <div className="space-y-1 rounded-xl bg-muted/50 p-3">
@@ -139,7 +139,7 @@ export default function FlowCompanion({
     <section
       data-flow-companion
       data-flow-scene={moment.scene}
-      aria-label="Flow"
+      aria-label="Pace"
       className={cn(
         "flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-border/60 bg-card shadow-sm",
         isMini ? "p-3" : "p-4",
@@ -148,6 +148,7 @@ export default function FlowCompanion({
     >
       <div className={cn("shrink-0 overflow-hidden flow-alive", isMini ? "w-[68px]" : "w-auto")}>
         <FlowCharacter
+              alt="Pace – Paceables följeslagare"
           scene={moment.scene}
           seed={moment.seed}
           energy={moment.energy}
@@ -214,7 +215,7 @@ export default function FlowCompanion({
             </Button>
           )}
           <Button asChild size="sm" variant="outline" className="min-w-0 rounded-full px-3">
-            <Link href="/assistant">Prata med Flow</Link>
+            <Link href="/assistant">Prata med Pace</Link>
           </Button>
           <div className="ml-auto">
             <FlowSettingsPopover />

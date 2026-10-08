@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 export type FlowTab = "flow" | "planera" | "chatt";
 
 const TABS: { id: FlowTab; label: string; icon: typeof Sparkles }[] = [
-  { id: "flow", label: "Flow", icon: Sparkles },
+  { id: "flow", label: "Pace", icon: Sparkles },
   { id: "planera", label: "Planera", icon: ListOrdered },
   { id: "chatt", label: "Chatta", icon: MessageCircle },
 ];
@@ -23,7 +23,7 @@ export default function FlowTabs({
   return (
     <div
       role="tablist"
-      aria-label="Flow"
+      aria-label="Pace"
       className="mb-4 grid grid-cols-3 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
     >
       {TABS.map((tab) => {

@@ -557,8 +557,10 @@ export function FlowCharacter({
   rain = false,
   stage = "hero",
   className,
+  alt,
 }: {
   scene: FlowScene;
+  alt?: string;
   seed?: number;
   energy?: number;
   kids?: number;
@@ -588,6 +590,7 @@ export function FlowCharacter({
         {!isMini && variant.back?.(ctx)}
 
         <FlowMascot
+          alt={alt}
           size={isMini ? "sm" : stage === "compact" ? "md" : "xl"}
           glow
           mood={variant.mood}
