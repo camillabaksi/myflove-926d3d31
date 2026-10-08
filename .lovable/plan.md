@@ -1,41 +1,37 @@
 # Paceable — taktilt djup och visuell dimension
 
-Endast presentation. Ingen ändring av Capacity/Load/Pace, kalender-, familje- eller completion-logik, data, routes, lagring, identifierare eller publicering. Bilden används som riktning, inte mall (inga procent i framtida kalenderdagar, ingen ny funktion).
+Endast presentation. Ingen ändring av Capacity/Load/Pace, kalender-, familje- eller completion-logik, data, routes, lagring, identifierare. Ingen publicering. Mockupen är riktning, inte funktionell mall: inga framtida Capacity-procent.
 
 ## 1. Får material/elevation
-- **Capacity-ytan på Idag**: varm off-white surface, hårfin varm kant, elevation-1, spåret lätt nedsänkt (inner shadow). Färgen förblir konstant.
-- **Primär knapp (plum)**: tunn ljus överkant, kort mjuk skugga, sjunker 1 px vid tryck, tydlig fokusring.
-- **Sekundära knappar/chips**: off-white + tunn kant, nästan ingen skugga.
-- **Dagens Pace**: behåller sage-ytan, får subtil varm kant + elevation-1. Ingen ikon, ingen gradient.
-- **Kalender, vald dag**: tunn plum-kontur + mycket mjuk tonad yta + extremt svag skugga. Geometri, prickar och kapacitetsindikatorer oförändrade.
-- **Dialoger/sheets**: elevation-2 (den enda flytande nivån).
+- **Capacity-ytan på Idag**: varm off-white yta, hårfin varm kant, elevation-1, mycket svag ljusvariation; spåret lätt nedsänkt (inner shadow). Färg konstant, horisontell, ingen ring.
+- **Primär knapp (plum)**: svag ljus överkant, kort mjuk skugga, sjunker 1 px vid tryck, lugn tydlig fokusring.
+- **Sekundära knappar/chips**: off-white + tunn varm kant, nästan ingen skugga.
+- **Dagens Pace**: sage-yta kvar, varm kant + elevation-1. Ingen ikon, gradient eller celebration.
+- **Kalender, vald dag**: tunn plum-kontur, mjukt tonad yta, extremt svag separation. Geometri, prickar och indikatorer oförändrade.
+- **Dialoger/sheets**: elevation-2, systemets enda tydliga lyft.
 
-## 2. Förblir medvetet platta
-- Aktivitetsraderna (endast whitespace, tunna avdelare, lätt hover/pressed-ton; inga kort).
-- Sektionsrubriker, metadata, datumrader.
-- Bottennavigeringen: samma ikoner, aktiv flik = mjuk lavender-wash + plum, mjuk färgövergång, ingen skugga.
-- Kalendergriddens övriga dagar, tidslinjen.
-- Tankar- och Min plats-sidornas innehåll utöver delade knapp-/ytroller.
+## 2. Förblir platta
+Aktivitetsrader på Idag (whitespace, tunna avdelare, lätt hover/pressed-ton, 44 px-mål kvar, lugnt klart-läge), sektionsrubriker, metadata, datumrader, övriga kalenderdagar, tidslinjen, bottennavigeringen (aktiv flik: lavender-wash + plum, mjuk övergång, ingen skugga), Tankar- och Min plats-innehåll (endast delade tokens/knappar).
 
-## 3. Stenarna: från ballonger till taktila pebbles
-- En enda genererad bild (transparent PNG) med tre matta keramik-/mineralstenar: låg asymmetrisk lavendel, varmare rundare aprikos, högre tyngre salvia. Ljus från övre vänster, kontaktskugga under, svag ambient skugga mellan, ingen glans.
-- `PaceableStones` behåller sitt API men renderar denna bild överallt (samma modell, inga nya former per vy). Nuvarande SVG-blobbar tas bort.
-- Används på Idag vid hälsningen (liten) och i befintliga placeringar där de redan finns; inga nya placeringar.
-- Valfri mycket kort "settling" vid första render (opacity + 2 px), avstängd vid reduced motion. Ingen idle/puls.
+## 3. Stenarna: ballong till taktil pebble
+- En högupplöst transparent bild (minst 3x visningsstorlek) med exakt tre stenar i fast ordning: låg, bred, mjukt asymmetrisk lavendel; varmare, rundare, kuddig aprikos; högre, tyngre salvia. Matt keramik/mineral, ljus från övre vänster, liten lokal kontaktskugga, svag ambient skugga emellan, ingen glans, glow eller genomskinlighet.
+- `PaceableStones` behåller sitt API; komponenten lägger till en mycket svag `--pace-contact-shadow` så den sitter mot olika ytor.
+- Valfri settling (opacity + 2 px, kort ease-out) vid första render; helt statisk vid reduced motion.
+- **Befintliga förekomster** (rapporteras innan de byts): Idag-hälsningen, Tankar-sidan (`/quickflow`), Dagens Pace-modulen och sidomenyn på desktop. Förslag: endast Idag får den nya bilden i denna etapp; de andra tre behåller nuvarande SVG tills du har bedömt stenarna på Idag. Inga nya placeringar.
 
 ## 4. Typografi, riktning C
-- **Display/hälsning och sektionsrubriker på primärytorna**: mjuk editorial serif (förslag: Fraunces med låg "softness"/opsz, alternativt Newsreader), vikt 500–600, inte fet.
-- Hälsning cirka 40–44 px mobil, sektionsrubriker cirka 22–24 px.
-- **Body/UI/metadata/labels**: Inter, oförändrade, med tydligare viktskillnad (titel 500–600, metadata 400 muted, labels små versaler 600).
-- Begränsas till primärytorna (`/idag`, `/kalender`, `/quickflow`, `/halsa`) via befintlig Paceable-ytmarkering; legacy-sidor påverkas inte.
-- Notera: detta ersätter tidigare regel "sans-serif på core-vyer" för rubriker. Brödtext förblir sans-serif.
+- Två jämförelsebilder bifogas (A Fraunces, B Newsreader), identiska förutom rubriktypsnitt: hälsning 42 px, rubriker 24 px, vikt 500.
+- Editorial font endast för hälsning och viktiga sektionsrubriker på `/idag`, `/kalender`, `/quickflow`, `/halsa`. Inter kvar för allt övrigt (body 400, titlar 500–600, metadata 400 muted, labels 600).
+- Inget slutligt fontval implementeras förrän du valt A eller B.
 
-## 5. Tokens (i `src/styles.css`, med dark-mode-motsvarigheter)
-- `--pace-canvas`, `--pace-surface`, `--pace-surface-raised`, `--pace-border-warm`
-- `--pace-elevation-0` (ingen), `--pace-elevation-1` (mycket subtil), `--pace-elevation-2` (flytande, sparsamt)
-- `--pace-contact-shadow` (endast stenar), `--pace-highlight-top` (ljus överkant), `--pace-inset-track` (nedsänkt spår)
-- `--font-editorial` + typografiska utilities för display/rubrik/metadata/label
-- Små justeringar av befintliga plum-/lavender-/sage-värden endast i ton, inte mättnad.
+## 5. Tokens (`src/styles.css`, med dark mode)
+`--pace-canvas`, `--pace-surface`, `--pace-surface-raised`, `--pace-border-warm`, `--pace-elevation-0/1/2`, `--pace-contact-shadow`, `--pace-highlight-top`, `--pace-inset-track`, `--font-editorial`. Inga per-komponent-skuggor; ingen höjd mättnad.
 
-## Verifiering efteråt
-Testsvit, typkontroll, bygge; `/idag`, `/kalender`, `/quickflow`, `/halsa` på 360/390 px och desktop: overflow, textskalning, kontrast, fokus, 44 px-mål, ljust/mörkt, reduced motion, små stenar. Sedan fem screenshots (Idag övre, aktivitetsrader + Pace, Kalender månad, Kalender dag, närbild stenar) och inga fler ändringar före din granskning. Changelogs och AGENTS.md uppdateras. Ingen publicering.
+## 6. Risk för legacy-sidor
+- Alla nya roller kopplas till befintlig Paceable-ytmarkering, så legacy-sidor påverkas inte.
+- Risk: den delade knappkomponenten används även på legacy-sidor. Taktil knappstil läggs därför endast inom Paceable-ytorna, inte i grundkomponenten.
+- Risk: appens toppfält ("Paceable") använder samma rubriknivå; i jämförelsebilderna fick den också serif. Vid implementation avgör vi om toppfältet ska följa med eller förbli Inter (förslag: förbli Inter).
+- Dialoger renderas utanför sidytan; elevation-2 läggs därför på Paceable-dialogernas egna klasser, inte globalt.
+
+## Efter fontval och implementation
+Testsvit, typkontroll, bygge; de fyra vyerna på 360/390 px och desktop (overflow, textskalning, kontrast, fokus, 44 px, ljust/mörkt, reduced motion, skarpa små stenar, inga framtida Capacity-värden, Core/familj/read-only oförändrat). AGENTS.md och changelogs uppdateras. Fem screenshots, nr 5 som verklig app-rendering av stenarna. Inga ändringar efter screenshots före din granskning. Ingen publicering.

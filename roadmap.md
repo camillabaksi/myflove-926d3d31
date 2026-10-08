@@ -258,3 +258,5 @@
 
 - [ ] Serverstyrd versionshantering för synkkonflikter (ersätter enhetsklockor) – planerat, ej påbörjat
 - [ ] Test på två fysiska telefoner + byte till ett annat konto – kräver användaren
+
+- [ ] Taktilt djup: plan + Fraunces/Newsreader-jämförelse (väntar på godkännande), sedan implementation + 5 screenshots
