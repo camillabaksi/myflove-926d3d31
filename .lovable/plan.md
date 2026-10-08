@@ -1,25 +1,48 @@
-# Ändra visningsnamn från Idag
+# Paceable – enhetlig visuell identitet (inventering och plan)
 
-## Vad granskningen visade
-- Hälsningen på Idag läser namnet från den befintliga, kontobundna namnlagringen (samma som legacy-Hem och "Byt namn" där). Den synkas redan mellan enheter via kontots molnlagring och finns kvar efter ny inloggning.
-- "Camillabaksi" uppstår när inget namn är sparat: då tas förnamn från kontoprofilen, annars gissas det från e-postadressens början (camillabaksi@… saknar punkt/bindestreck, så allt blir ett ord). Gissningen sparas sedan som om den vore vald.
-- Familjemedlemmars och barns namn ligger i helt separata tabeller och berörs inte.
+Ingen kodändring eller publicering förrän planen är godkänd.
 
-## Vad som byggs
-1. Diskret ⋯-knapp (44×44 px, etikett "Fler val för hälsningen") uppe till höger i hälsningsraden, bredvid stenarna utan att flytta dem; vid trång bredd/200 % text placeras den i hälsningsradens övre hörn utan överlapp.
-2. Meny med ett val: "✏️ Ändra visningsnamn".
-3. Liten dialog: rubrik "Vad vill du bli kallad?", fält förifyllt med nuvarande namn (max 32 tecken som idag), "Avbryt" och "Spara". Fokus i fältet vid öppning, Escape stänger, fokus tillbaka till ⋯.
-4. Validering: tomt eller bara mellanslag ger lugnt meddelande under fältet; Spara inaktiveras inte tyst.
-5. Sparning: namnet skrivs till befintlig namnlagring och synkas direkt till kontot. Dialogen stängs och hälsningen visar nytt namn först när synken lyckats; vid fel återställs det gamla namnet och ett lugnt felmeddelande visas i dialogen ("Namnet kunde inte sparas just nu. Försök igen om en stund.").
-6. Ett eget valt namn prioriteras alltid; den automatiska gissningen används bara när inget namn finns, och ersätter aldrig ett valt namn.
+## Inventering – vad som redan finns
 
-## Avgränsning
-Ingen ändring av e-post, inloggning, användar-ID, familj/barn, Capacity, Din dag, Pace, kalender, stenar eller tekniska nycklar. Ingen databas-/behörighetsändring. Ingen publicering.
+- **Färger och djup:** Paceables varma yta, kant och tre djupnivåer finns redan som gemensamma värden, med en mörk variant. De gäller i dag bara inom de omarbetade sidorna (en "Paceable-yta"-markering).
+- **Typsnitt:** Fraunces för hälsningar/orienterande rubriker (`pace-editorial`), Inter för allt funktionellt.
+- **Byggstenar:** gemensam rubrik, kort, sektion, knapp, chip, tomt läge, laddning, dialog (MyFlove-familjen, används på 13 sidor) samt standardknappar/dialoger. Paceables stenar och logotyp är låsta.
+- **Redan i Paceable-stil:** Idag, Kalender, Tankar, Min plats, navigering (mobil + desktop), inloggning/registrering.
+- **Avviker tydligt:** de äldre sidorna under Mer (t.ex. Uppgifter, Träning, Studier, Arbete, Historik, Insikter, Energikarta, Friktionsindex, Pitch). De har lila gradienter, rosa kort, kraftigare skuggor och några hårdkodade färger. Äldre Hem är medvetet kvar som äldre funktion.
+- **Hårdkodade färger:** få (friktionsindex 4, träning/uppgifter/insikter 1 vardera). Det stora avståndet kommer i stället från gradienter och kort.
 
-## Tekniska detaljer
-- `src/hooks/use-user-profile.ts`: ny `saveName(value)` som trimmar, sätter värdet via `useCloudSyncedStorage`, väntar på en bekräftad synk av just namnnyckeln och returnerar ok/fel; återställer vid fel.
-- `src/lib/cloud-storage.ts`: liten exporterad helper som synkar en enskild nyckel och kastar vid fel (befintliga `flushCloudSync` sväljer fel). Ingen ändring av merge-/lagringslogik.
-- Ny `src/components/day/greeting-name-menu.tsx`: befintliga shadcn DropdownMenu + Dialog.
-- `src/pages/today.tsx`: monterar menyn i hälsningsraden; `styles.css` endast lokal placering vid 200 %.
-- Tester: tomt/mellanslagsnamn avvisas, dialogen stängs inte vid misslyckad synk, valt namn prioriteras över gissning. Kontroll 360/390/430/1024/1440, långt namn, 200 %, tangentbord, ljust/mörkt.
-- CHANGELOG.md + src/lib/changelog.ts uppdateras.
+## Tabell
+
+| Område / sida | Finns redan | Behöver justeras | Återanvändning? | Insats |
+|---|---|---|---|---|
+| Gemensam bakgrund och ytor för alla inloggade sidor | Paceable-värden, men bara på 4 sidor | Använd Paceable-ytan på hela appens innehållsdel | Ja, befintliga värden | Låg |
+| Gemensamt kort och gemensam sektion (MyFlove-familjen) | Används på 13 sidor | Varm yta, tunn kant, djupnivå 1 i stället för vitt kort och kraftig skugga | Ja, ändras på ett ställe | Låg |
+| Gemensam sidrubrik | Finns | Fraunces för sidtitel, Inter för undertext, lugnare ikon | Ja | Låg |
+| Knappar och dialoger | Standardknappar och dialoger | Dialoger får djupnivå 2 och varm yta; plommon bara som huvudknapp | Ja | Låg |
+| Uppgifter, Träning, Studier, Arbete, Historik | Egna kort och gradienter | Byt gradientkort mot det gemensamma kortet | Ja | Medel |
+| Insikter, Energikarta, Friktionsindex, Statistik | Diagram, hårdkodade färger | Byt till befintliga färgvärden; diagrammen behålls | Delvis | Medel |
+| Inställningar, Profil, Familj, Barn | Formulär med standardbyggstenar | Följer i stort sett med via punkterna ovan | Ja | Låg |
+| Glömt/nytt lösenord | Delvis | Samma logotyp och yta som inloggningen | Ja | Låg |
+| Publik startsida, Om oss | Ljus fast bakgrund | Mörkt läge blandar ljus bakgrund med mörk text; 200 %-överflöde på smal skärm | Delvis | Medel |
+| Äldre Hem, Flow-sidor | Äldre färgstark stil med Flow | Lämnas orörda (äldre funktion, Flow skyddad) | — | — |
+
+## Skydd
+
+Inga ändringar av data, inloggning, kalender, Capacity, Pace, Flow, familj, notiser, synkning, databas eller tekniska identifierare. Stenar, logotyper, navigering och sidornas uppbyggnad behålls. Inga nya paket och inget nytt designsystem. Ändringarna görs bara i utseendet.
+
+## Minsta första implementation (rekommenderas)
+
+1. Gör Paceable-ytan gällande för hela den inloggade appens innehåll, men inte för äldre Hem och Flow-sidorna.
+2. Uppdatera det gemensamma kortet, sektionen och rubriken så att de använder befintliga Paceable-värden.
+3. Ge dialoger samma yta och djup.
+
+Det är cirka tre filer och ger ett lugnare, enhetligt intryck på omkring 30 sidor på en gång. Sidspecifika gradienter (prioritet 2–3) tas i en senare omgång.
+
+Kontroll: 360/390/430/1024/1440 px, ljust/mörkt läge, 200 % text och kontrast (WCAG AA), samt att alla tester godkänns. Idag, Kalender, Tankar och Min plats ska se ut exakt som innan.
+
+## Tekniskt
+
+- Lägg `data-paceable-surface` på innehållscontainern i layouten, med undantag för legacy-routes.
+- `MyFloveCard` och `MyFloveSection` får `bg-[var(--pace-surface)]`, kanten `--pace-border-warm` och `shadow-[var(--pace-elevation-1)]`. `MyFloveHeader`-titeln får `pace-editorial`.
+- `DialogContent` får `--pace-surface-raised` och `--pace-elevation-2`.
+- Fem hårdkodade färger byts mot semantiska tokens i omgång 2.
