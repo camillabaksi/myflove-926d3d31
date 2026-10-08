@@ -6,7 +6,7 @@ export function CapacityBattery({ percent, size = "md", className }: { percent: 
   const text = { xs: "text-[10px]", sm: "text-[11px]", md: "text-sm", lg: "text-3xl" }[size];
   return <span className={cn("inline-flex min-w-0 items-center gap-1.5", className)}>
     <span className={cn("inline-flex items-center", size === "lg" && "flex min-w-0 flex-1 max-w-60")} aria-hidden>
-      <span className={cn("relative overflow-hidden border border-border bg-secondary/70", size !== "xs" && "p-0.5", dims)}>
+      <span className={cn("pace-inset-track relative overflow-hidden border border-border bg-secondary/70", size !== "xs" && "p-0.5", dims)}>
         {percent != null && <span className="block h-full rounded-[inherit] bg-capacity transition-[width] motion-reduce:transition-none" style={{ width: `${Math.max(4, percent)}%` }} />}
       </span>
       {size !== "xs" && <span className={cn("ml-0.5 rounded-r-sm bg-border", size === "lg" ? "h-3 w-1.5" : "h-1.5 w-1")} />}

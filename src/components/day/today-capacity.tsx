@@ -17,7 +17,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   return <>
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-soft" aria-labelledby="today-capacity-title">
+    <section className="pace-surface rounded-3xl p-5" aria-labelledby="today-capacity-title">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <p id="today-capacity-title" className="text-xs font-semibold uppercase text-muted-foreground">{t("Din kapacitet idag")}</p>

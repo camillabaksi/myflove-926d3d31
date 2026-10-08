@@ -196,9 +196,28 @@
   --ring: 276 19% 21%;
   --lavender: 267 32% 92%;
   --capacity: 267 27% 73%;
+  --pace-canvas: hsl(45 29% 97%);
+  --pace-surface: hsl(40 60% 98.5%);
+  --pace-surface-raised: hsl(40 100% 99.5%);
+  --pace-border-warm: hsl(36 24% 86% / 0.8);
+  --pace-elevation-0: none;
+  --pace-elevation-1: 0 1px 2px hsl(30 20% 40% / 0.05), 0 6px 18px -10px hsl(30 25% 35% / 0.12);
+  --pace-elevation-2: 0 2px 6px hsl(30 20% 30% / 0.06), 0 22px 48px -20px hsl(290 20% 20% / 0.22);
+  --pace-contact-shadow: drop-shadow(0 3px 3px hsl(30 25% 30% / 0.14));
+  --pace-highlight-top: inset 0 1px 0 hsl(0 0% 100% / 0.7);
+  --pace-inset-track: inset 0 1px 2px hsl(30 20% 30% / 0.12);
 }
 
 .dark [data-paceable-surface="true"] {
+  --pace-canvas: hsl(276 16% 10%);
+  --pace-surface: hsl(276 13% 13%);
+  --pace-surface-raised: hsl(276 12% 16%);
+  --pace-border-warm: hsl(276 10% 26% / 0.8);
+  --pace-elevation-1: 0 1px 2px hsl(0 0% 0% / 0.25), 0 8px 20px -12px hsl(0 0% 0% / 0.4);
+  --pace-elevation-2: 0 2px 8px hsl(0 0% 0% / 0.3), 0 24px 48px -20px hsl(0 0% 0% / 0.55);
+  --pace-contact-shadow: drop-shadow(0 3px 3px hsl(0 0% 0% / 0.35));
+  --pace-highlight-top: inset 0 1px 0 hsl(0 0% 100% / 0.05);
+  --pace-inset-track: inset 0 1px 2px hsl(0 0% 0% / 0.35);
   --background: 276 16% 10%;
   --foreground: 40 24% 93%;
   --card: 276 13% 14%;
@@ -213,6 +232,40 @@
   --lavender: 264 18% 23%;
   --capacity: 267 24% 64%;
 }
+
+/* Taktilt djup – endast inom Paceable-ytor. */
+[data-paceable-surface="true"] .pace-surface {
+  background: linear-gradient(180deg, var(--pace-surface-raised), var(--pace-surface));
+  border: 1px solid var(--pace-border-warm);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+[data-paceable-surface="true"] .pace-sage-surface {
+  background-color: hsl(var(--sage) / 0.32);
+  border: 1px solid var(--pace-border-warm);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+[data-paceable-surface="true"] .pace-inset-track { box-shadow: var(--pace-inset-track); }
+[data-paceable-surface="true"] .pace-selected-day,
+[data-paceable-surface="true"] .pace-selected-day:hover {
+  background-color: hsl(var(--lavender) / 0.45);
+  border-color: hsl(var(--ink) / 0.55);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+[data-paceable-surface="true"] button.bg-primary,
+[data-paceable-surface="true"] a.bg-primary {
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.14), 0 2px 6px -2px hsl(276 25% 15% / 0.35);
+  transition: transform 120ms ease-out, box-shadow 120ms ease-out, background-color 150ms;
+}
+[data-paceable-surface="true"] button.bg-primary:active,
+[data-paceable-surface="true"] a.bg-primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.08), 0 1px 2px -1px hsl(276 25% 15% / 0.3);
+}
+[data-paceable-surface="true"] :is(button, a):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+.pace-stones-img { filter: var(--pace-contact-shadow, drop-shadow(0 3px 3px rgb(60 40 30 / 0.14))); animation: pace-stones-settle 420ms ease-out both; }
+@keyframes pace-stones-settle { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pace-stones-img { animation: none; } }
+[data-role="dialog"], [role="dialog"].rounded-3xl { box-shadow: var(--pace-elevation-2, var(--shadow-lifted)); }
 
 .paceable-my-place-header {
   background-image: linear-gradient(135deg, hsl(var(--sky) / 0.48), hsl(var(--card)) 55%, hsl(var(--blush) / 0.38));

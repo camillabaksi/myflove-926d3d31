@@ -1,6 +1,14 @@
 import { cn } from "@/lib/utils";
+import stonesImage from "@/assets/paceable-stones.png";
 
-export function PaceableStones({ className, compact = false }: { className?: string; compact?: boolean }) {
+export function PaceableStones({ className, compact = false, tactile = false }: { className?: string; compact?: boolean; tactile?: boolean }) {
+  if (tactile) {
+    return (
+      <span className={cn("pace-stones relative inline-block", compact ? "h-12 w-24" : "h-20 w-40", className)}>
+        <img src={stonesImage} alt="Tre Paceable-stenar" width={1536} height={768} decoding="async" className="pace-stones-img relative h-full w-full object-contain" />
+      </span>
+    );
+  }
   return (
     <svg
       viewBox="0 0 180 96"
