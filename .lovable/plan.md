@@ -1,34 +1,38 @@
-# Mer – lyft fram fyra befintliga kategorier
+# Mer: flytta de fyra sektionerna in under befintliga överkategorier
 
-## Inventering
-De fyra första kategorierna under **Fler funktioner** är, i nuvarande ordning:
+## Mål
+Ta bort de fyra fristående sektionerna längre ner på Mer och placera deras innehåll som hopfällbara underkategorier under relevanta befintliga överkategorier. Visuell design, rutter, behörigheter och funktioner oförändrade.
 
-| Kategori | Befintliga funktioner |
-|---|---|
-| Min dag | Idag, Kalender, Tankar, Påminnelser, Timer |
-| Flow och samtal | Flow, Prata med Flow, Planera, Anteckningar |
-| Ork och återhämtning | Min plats, Mitt batteri, Energins historik, Återhämtning, Stop-paus, Rutiner & medicin |
-| Hem och vardag | Matlista, Inköpslista, Städning |
+## Föreslagen hierarki (exakt)
 
-## Föreslagen placering och presentation
-- Behåll profilkortet och samtliga huvudsektioner exakt som idag.
-- Direkt efter **ÖVERBLICK & INSIKTER**, före **FLER VERKTYG**, placeras fyra egna sektioner i ordningen ovan.
-- Funktionerna visas direkt som befintliga klickbara rader med ikon, namn, kort beskrivning och pil. Inget extra öppningssteg behövs.
-- Återanvänd samma typografi, färger, illustrationer, ytor och avstånd. Ingen ny kortstil eller dekor införs.
-- **Konto och app** och behörighetsstyrd **Admin** ligger kvar under **Fler funktioner**. **Äldre funktioner** och slutpåminnelsen ligger kvar som idag.
-- Behåll även de fyra grupperna i den utfällbara listan. Alla befintliga huvudkort, sektioner och länkar lämnas kvar, inklusive Inställningar på sina befintliga platser. Upprepade genvägar mellan sektioner är avsiktliga; data och funktion dupliceras aldrig.
-- Behåll Enkelt läge, områdesfilter och behörigheter; tomma kategorier visas inte. Alla tillåtna länkar finns kvar i sökningen.
+- **Min profil** (oförändrat huvudkort) + Inställningar-länk
+- **MIN VARDAG**
+  - Befintliga kort kvar: Uppgifter, Ekonomi, Studier, Arbete
+  - Nytt hopfällbart kort: **Min dag** → Idag, Kalender, Tankar, Påminnelser, Timer
+  - Nytt hopfällbart kort: **Hem och vardag** → Matlista, Inköpslista, Städning
+- **HÄLSA & VÄLMÅENDE**
+  - Befintligt kort kvar: Träning och rörelse
+  - Nytt hopfällbart kort: **Ork och återhämtning** → Min plats, Mitt batteri, Energins historik, Återhämtning, Stop-paus, Rutiner & medicin
+- **STÖD & SAMTAL** (ny överkategori)
+  - Hopfällbart kort: **Flow och samtal** → Flow, Prata med Flow, Planera, Anteckningar
+- **FAMILJ & RELATIONER** — oförändrat (Familj-kort)
+- **ÖVERBLICK & INSIKTER** — oförändrat (Insikter och historik-kort)
+- **FLER VERKTYG** — oförändrat: Fler funktioner behåller ALLA grupper (inkl. de fyra), Äldre funktioner kvar med Äldre Hem
+- Avslutande påminnelsefält — oförändrat
 
-## Teknisk avgränsning
-- `src/components/paceable/more-view.tsx`: lägg till presentationen av de fyra grupperna och återanvänd befintliga `section`, `rows` och filtrering, utan att ändra befintliga grupper.
-- `src/components/paceable/more-view.test.tsx`: verifiera full länktäckning, rätt destinationer, samma behörighetsfilter och inga dubbla destinationer inom samma sektion; tillåt avsiktliga upprepningar mellan sektioner.
-- `src/styles.css`: endast om befintlig radstil behöver en liten, Mer-avgränsad anpassning för direktvisade listor; inga globala ändringar.
-- Uppdatera befintlig dokumentation och båda ändringsloggarna efter genomförandet.
-- Inga nya komponenter, paket, rutter, funktioner eller lagringsändringar. Övrig navigation lämnas orörd.
+## Beteende
+- Samma befintliga expanderbara `card()`-komponent och styling som Familj/Insikter/de fyra sektionerna redan använder — ingen ny variant.
+- Hopfällda från början, flera kan vara öppna samtidigt (befintlig `open: string[]`-logik).
+- Behörighets- och Enkelt läge-filter gäller per länk via befintliga `visible()`; en underkategori som blir tom renderas inte, men överkategorin och övriga kort finns kvar.
+- Genvägar får finnas på flera platser (avsiktligt); inga dubbletter inom samma underkategori.
 
-## Kontroll efter godkännande
-- Mobil 360/390/430 px och desktop 1024/1440 px, båda teman och 200 % text: läsbara rader, tydliga sektionsgränser, fungerande scroll och synlig bottennavigation.
-- Kontrollera samtliga länkar, Enkelt läge, behörighetsfilter, sökning och kvarvarande utfällbara grupper.
-- Kör relevanta tester och kontrollera automatiskt bygge; inga sparande tester i kontot.
+## Ändrade filer
+- `src/components/paceable/more-view.tsx` — omplacering av de fyra grupperna till underkategorikort i respektive sektion; inga nya komponenter eller stilar.
+- `src/components/paceable/more-view.test.tsx` — uppdatera tester: underkategorierna är hopfällda från början, expanderar och visar rätt destinationer, filter gäller på båda platserna, inga dubbletter inom samma underkategori.
+- `CHANGELOG.md`, `src/lib/changelog.ts` — dokumentation.
 
-**Genomförandet godkänt med förtydligandet ovan. Ingen publicering ingår.**
+## Skydd
+Inga ändringar av rutter, behörigheter, sökning, Enkelt läge, datalagring, andra sidor eller globala stilar. Inga nya paket.
+
+## Verifiering
+Hela testsviten, bygge, samt webbläsarkontroll: mobil/desktop, ljust/mörkt läge, 200 % text, sökning, Enkelt läge och behörighetsfilter. Ingen publicering före uttryckligt godkännande.
