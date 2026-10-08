@@ -1,4 +1,7 @@
 # Roadmap
+## Pace/Paceable – namninventering (2026-10-08)
+- [ ] Inventera synliga Flow/MyFlove-namn och gamla bilder separat från tekniska identifierare.
+- [ ] Redovisa namnförslag, resursbegränsningar för stenföljeslagare, risker och kostnadseffektiv plan; ingen appkodändring eller publicering.
 ## Mer – sista struktur- och kortjusteringen (2026-10-08)
 - [x] Ta bort fyra dubblerade verktygsgrupper och ge Min vardag sex enhetliga kort med oberoende expansion.
 - [x] 528/528 tester i 83 filer; automatiskt bygge OK. 360/390/430/1024/1440 px, båda teman och 200 %: sex kort, oberoende expansion utan höjdförändring, sökning och kvarvarande verktygsgrupper verifierade. 320 px normal fungerar; 320 px + 200 % visar ett befintligt överflöde i sök/kryss-raden (inte vardagskorten), lämnat orört enligt avgränsningen. Ingen publicering.
