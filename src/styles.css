@@ -2036,6 +2036,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-calendar-heading, .pace-calendar-capacity { display: contents; }
 @media (max-width: 767px) {
   .pace-calendar-heading > [role="group"], .pace-calendar-capacity > * { margin-top: 16px; }
+  .pace-calendar-capacity + div { margin-top: 16px; }
 }
 
 /* Etapp 2A: presentation is scoped to these two pages; mobile stays unchanged. */
@@ -2054,5 +2055,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 @container (max-width: 44rem) {
   .pace-calendar-heading { grid-template-columns: minmax(0, 1fr); }
-  .pace-calendar-heading [aria-label="Kalendervy"] button { height: auto; white-space: normal; overflow-wrap: anywhere; }
+  .pace-calendar-heading header { grid-template-columns: minmax(0, 1fr); }
+  .pace-calendar-heading header button { justify-self: start; }
+  .pace-calendar-heading [role="group"] { grid-template-columns: minmax(0, 1fr); }
+  .pace-calendar-heading [role="group"] button { height: auto; white-space: normal; overflow-wrap: anywhere; }
 }
