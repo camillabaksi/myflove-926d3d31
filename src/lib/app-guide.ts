@@ -41,7 +41,7 @@ export const APP_GUIDE: GuideGroup[] = [
         label: "Prata med Flow",
         what: "Chatta med Flow när du vill prata av dig eller tänka högt",
       },
-      { href: "/quickflow", label: "QuickFlow", what: "Skriv av dig snabbt – sortera sen" },
+      { href: "/quickflow", label: "Fånga", what: "Skriv av dig snabbt – sortera sen" },
     ],
   },
   {

@@ -606,7 +606,7 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
                   if (!meetingAgenda.trim()) return;
                   addQuickflow({ text: meetingAgenda.trim(), level: "viktigt" });
                   setMeetingAgenda("");
-                  toast.success("Sparat i Quickflow – jag påminner dig i mötet. 💙");
+                  toast.success("Sparat i Fånga – jag påminner dig i mötet. 💙");
                 }}
               >
                 Spara
@@ -759,7 +759,7 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
             headingClassName={sectionTitle}
             title={
               <>
-                <Sparkles className="h-5 w-5 text-gold" /> Quickflow på jobbet
+                <Sparkles className="h-5 w-5 text-gold" /> Fånga på jobbet
               </>
             }
           >

@@ -109,7 +109,7 @@ export default function FlowReset() {
             📦 {movedToday} {movedToday === 1 ? "sak flyttad" : "saker flyttade"}
           </li>
           <li>
-            💭 {capturedToday} {capturedToday === 1 ? "sak fångad" : "saker fångade"} i QuickFlow
+            💭 {capturedToday} {capturedToday === 1 ? "sak fångad" : "saker fångade"} i Fånga
           </li>
           {dayDone.map((d) => (
             <li key={d.text}>

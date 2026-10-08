@@ -57,7 +57,7 @@ function QuickflowDemo() {
     <div>
       <DialogTitle className="flex items-center gap-2 font-display text-xl">
         <span className="grid size-9 place-items-center rounded-full bg-lavender text-primary"><Zap className="size-4" aria-hidden="true" /></span>
-        Prova QuickFlow
+        Prova Fånga
       </DialogTitle>
       <DialogDescription className="mt-2 text-sm leading-6">
         Skriv en tanke innan den försvinner. I appen hjälper Flow dig sedan att sortera den till kalender, uppgift eller påminnelse.

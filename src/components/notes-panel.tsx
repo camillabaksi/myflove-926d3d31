@@ -142,12 +142,12 @@ export default function NotesPanel() {
     );
   };
 
-  /** Tillbaka till Quickflow – anteckningen blir ett aktivt flow-block igen. */
+  /** Tillbaka till Fånga – anteckningen blir ett aktivt flow-block igen. */
   const backToQuickflow = (note: FlowNote) => {
     addQuickflow({ text: note.text, level: "tanke" });
     removeNote(note.id);
     if (editingId === note.id) cancelEdit();
-    toast.success(t("Tanken ligger i Quickflow igen. 💜"), {
+    toast.success(t("Tanken ligger i Fånga igen. 💜"), {
       action: {
         label: t("Ångra"),
         onClick: () => addNote(note.text, note.area),
@@ -397,7 +397,7 @@ export default function NotesPanel() {
                   onClick={() => backToQuickflow(note)}
                   className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm font-medium inline-flex items-center justify-center gap-2"
                 >
-                  <Undo2 size={16} /> {t("Tillbaka till Quickflow")}
+                  <Undo2 size={16} /> {t("Tillbaka till Fånga")}
                 </button>
                 {folders.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">

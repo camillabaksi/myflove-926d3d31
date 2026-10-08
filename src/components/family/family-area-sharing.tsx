@@ -18,7 +18,7 @@ const ADDABLE: Partial<Record<Area, string>> = { inkop: "Lägg till vara", antec
 
 const AREAS: { id: Area; label: string; hint: string; icon: typeof CalendarDays }[] = [
   { id: "kalender", label: "Kalender & Min dag", hint: "Dina aktiviteter och möten med datum", icon: CalendarDays },
-  { id: "uppgifter", label: "Uppgifter & QuickFlow", hint: "Dina att-göra-saker", icon: ListChecks },
+  { id: "uppgifter", label: "Uppgifter & Fånga", hint: "Dina att-göra-saker", icon: ListChecks },
   { id: "inkop", label: "Inköp & måltider", hint: "Inköpslista och matsedel", icon: ShoppingCart },
   { id: "hem", label: "Hem & städning", hint: "Städlistor och sysslor hemma", icon: Home },
   { id: "rutiner", label: "Rutiner & medicin", hint: "Rutiner, doser och om de är tagna idag", icon: Pill },

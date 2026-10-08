@@ -572,7 +572,7 @@ export default function VisualChildSchedule({
       )}
 
       {!readOnly && quickMatches.length > 0 && (
-        <section className="rounded-3xl border border-border bg-sky/25 p-4"><h3 className="font-semibold text-ink">{t("Från QuickFlow")}</h3><div className="mt-2 space-y-2">{quickMatches.map((item) => <div key={item.id} className="flex items-center gap-2"><p className="min-w-0 flex-1 text-sm text-ink">{item.text}</p><Button type="button" variant="outline" onClick={() => void importQuickItem(item.text, item.remindAt)} className="h-11 rounded-2xl">{t("Lägg till")}</Button></div>)}</div></section>
+        <section className="rounded-3xl border border-border bg-sky/25 p-4"><h3 className="font-semibold text-ink">{t("Från Fånga")}</h3><div className="mt-2 space-y-2">{quickMatches.map((item) => <div key={item.id} className="flex items-center gap-2"><p className="min-w-0 flex-1 text-sm text-ink">{item.text}</p><Button type="button" variant="outline" onClick={() => void importQuickItem(item.text, item.remindAt)} className="h-11 rounded-2xl">{t("Lägg till")}</Button></div>)}</div></section>
       )}
 
       {!readOnly && !adding && mode === "today" && <div className="grid grid-cols-2 gap-2"><Button type="button" onClick={() => openAdd()} className="h-12 rounded-xl"><Plus size={18} /> {t("Lägg till")}</Button><Button type="button" variant="outline" onClick={() => openCopy("day", undefined, dayDate)} className="h-12 rounded-xl"><Copy size={17} /> {t("Kopiera dagen")}</Button></div>}

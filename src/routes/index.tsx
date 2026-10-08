@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Paceable – Vardagen ska kräva mindre av hjärnan" },
       {
         property: "og:description",
-        content: "Fånga tankar med QuickFlow, planera efter din dagsform och fokusera på nästa rimliga steg.",
+        content: "Fånga tankar, planera efter din dagsform och fokusera på nästa rimliga steg.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -38,7 +38,7 @@ const FEATURES = [
   {
     id: "quickflow",
     icon: Zap,
-    title: "QuickFlow",
+    title: "Fånga",
     text: "Få ner tankar, uppgifter och idéer innan de försvinner. Flow hjälper dig att sortera resten.",
     accent: "bg-lavender text-primary",
   },

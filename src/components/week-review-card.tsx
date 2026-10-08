@@ -30,7 +30,7 @@ export function WeekReviewCard({
 
   const rows = [
     { icon: CalendarDays, label: t("Aktiviteter"), value: `${review.activityCount}` },
-    { icon: Brain, label: t("Quickflow"), value: `${review.quickflowCount} ${t("saker")}` },
+    { icon: Brain, label: t("Fånga"), value: `${review.quickflowCount} ${t("saker")}` },
     { icon: BatteryMedium, label: t("Ork"), value: t(review.energyLabel) },
     { icon: Heart, label: t("Mående"), value: t(review.moodLabel) },
   ];

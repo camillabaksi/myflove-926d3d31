@@ -46,7 +46,7 @@ export function TodayTasks({
           <p className="rounded-2xl bg-secondary/30 p-4 text-sm text-muted-foreground">
             {todayDone.length > 0
               ? "Allt som hörde till idag är genomfört. Fint jobbat. 💙"
-              : "Inget att bocka av just nu. Släpp en tanke i QuickFlow så landar den här."}
+              : "Inget att bocka av just nu. Släpp en tanke i Fånga så landar den här."}
           </p>
         ) : (
           <ul className="space-y-2">

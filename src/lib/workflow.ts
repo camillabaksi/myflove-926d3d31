@@ -117,7 +117,7 @@ export function pickForMinutes(
 /** Övergångshjälp: vad gör jag med luckan som blev? */
 export function transitionPlan(gapMinutes: number): string[] {
   if (gapMinutes <= 5)
-    return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Quickflow"];
+    return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Fånga"];
   if (gapMinutes <= 15)
     return ["📌 Dokumentera det som precis hände", "📧 Svara på ett viktigt mejl", "🧠 5 min paus"];
   return [
@@ -132,7 +132,7 @@ export const END_OF_DAY_CHECK = [
   "Dokumentation klar",
   "Morgondagens viktigaste uppgift vald",
   "Arbetsplatsen återställd",
-  "Saker du behöver komma ihåg → Quickflow",
+  "Saker du behöver komma ihåg → Fånga",
 ];
 
 /** Fallback-steg när AI inte är tillgänglig – bara att komma över tröskeln. */

@@ -93,7 +93,7 @@ export default function WeekFlowPage() {
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>✓ {doneCount} saker genomförda</li>
                 <li>↻ {snoozedTasks.length} omplanerade</li>
-                <li>⚡ {capturedCount} saker fångade i QuickFlow</li>
+                <li>⚡ {capturedCount} saker fångade i Fånga</li>
                 <li>🗑️ {removedCount} saker som hanterades eller togs bort</li>
               </ul>
             </CollapsibleSection>

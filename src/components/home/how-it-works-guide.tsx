@@ -41,7 +41,7 @@ export default function HowItWorksGuide() {
     {
       n: 1,
       kicker: t("Fånga"),
-      title: "QuickFlow",
+      title: "Fånga",
       text: t("Skriv ner det som snurrar."),
       href: "/quickflow",
       icon: Brain,

@@ -4,13 +4,13 @@ import Page from "@/pages/dump";
 export const Route = createFileRoute("/_app/quickflow")({
   head: () => ({
     meta: [
-      { title: "Quickflow – få ut det ur huvudet | MyFlove" },
+      { title: "Fånga – få ut det ur huvudet | MyFlove" },
       {
         name: "description",
         content:
-          "Skriv eller prata in allt du bär på. Quickflow sorterar det till rätt plats – och håller det som inte får glömmas.",
+          "Skriv eller prata in allt du bär på. Fånga sorterar det till rätt plats – och håller det som inte får glömmas.",
       },
-      { property: "og:title", content: "Quickflow – få ut det ur huvudet" },
+      { property: "og:title", content: "Fånga – få ut det ur huvudet" },
       {
         property: "og:description",
         content:

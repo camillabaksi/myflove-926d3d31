@@ -178,7 +178,7 @@ export default function SettingsPage() {
           </Button>
           <div className="rounded-2xl border border-border/60 bg-card/70 p-3">
             <p className="text-sm font-semibold text-ink">Din bottenmeny</p>
-            <p className="mt-1 text-xs text-muted-foreground">Idag, Kalender, Tankar, Min plats och Mer ligger fast för alla.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Idag, Kalender, Fånga, Min plats och Mer ligger fast för alla.</p>
           </div>
         </MyFloveBlock>
 
