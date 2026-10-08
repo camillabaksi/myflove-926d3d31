@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Sista finjusteringen (2026-10-08): Idags hälsning 34 px på smal mobil; större vyer oförändrade. Samma godkända stenar i Tankar och Min plats-rubriken på 32 px behålls. Inga övriga visuella ändringar; ingen publicering.",
       "Slutpolish (2026-10-08): samma godkända stenbild i befintliga Tankar/desktop-placeringar; Idag-stenarna oförändrade. Hälsningen anpassas på smal mobil, Min plats-rubriken är lugnare. Ingen Core-, data- eller bildändring; ingen publicering.",
       "Typografisk hierarki (2026-10-08): explicit Fraunces på hälsningen och Din dag, Tankars huvudrubrik och Min plats; funktionella rubriker använder Inter. Stenasset, rendering/placering, färger, djup, funktioner och data är oförändrade. Ingen publicering.",
       "Paceable-stenarna på Idag lite större (2026-10-08): stenarna bredvid hälsningen är nu 126×74 px efter att ha varit 104×68 px. De ligger i sidans eget flöde med luft runt sig, utan att gå in i texten, och hälsningen bryts på två rader. Verifierat i 390 px utan horisontell overflow. Ingen funktions- eller dataändring; ingen publicering.",

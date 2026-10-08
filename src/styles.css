@@ -2020,7 +2020,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 
 /* Design-lock: only the narrow greeting and Min plats header proportions. */
 @media (max-width: 379px) {
-  [data-paceable-surface="true"] .pace-editorial-greeting { font-size: 2rem; }
+  [data-paceable-surface="true"] .pace-editorial-greeting { font-size: 2.125rem; }
 }
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial { font-size: 2rem; }
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial-title-spacing { margin-left: 0.25rem; }
