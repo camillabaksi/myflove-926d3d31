@@ -23,7 +23,7 @@ describe("onboarding: en enkel första handling", () => {
     const skips = await screen.findAllByRole("button", { name: /hoppa över intro/i });
     fireEvent.click(skips[0]);
 
-    expect(navigate).toHaveBeenCalledWith({ to: "/hem" });
+    expect(navigate).toHaveBeenCalledWith({ to: "/idag" });
     expect(window.localStorage.getItem("myflove-intro-seen")).toBe("true");
 
     unmount();

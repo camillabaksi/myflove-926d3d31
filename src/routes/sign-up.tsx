@@ -42,7 +42,7 @@ export const Route = createFileRoute("/sign-up")({
 });
 
 function safeNext(next?: string): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//")) return "/hem";
+  if (!next || !next.startsWith("/") || next.startsWith("//")) return "/idag";
   return next;
 }
 

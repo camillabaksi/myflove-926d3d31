@@ -78,7 +78,7 @@ function NewPasswordPage() {
       return;
     }
     toast({ title: "Klart", description: "Ditt lösenord är uppdaterat." });
-    navigate({ to: "/hem" });
+    navigate({ to: "/idag" });
   }
 
   return (
