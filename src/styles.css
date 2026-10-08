@@ -2034,6 +2034,9 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 .pace-calendar-heading, .pace-calendar-capacity { display: contents; }
+@media (max-width: 767px) {
+  .pace-calendar-heading > [role="group"], .pace-calendar-capacity > * { margin-top: 16px; }
+}
 
 /* Etapp 2A: presentation is scoped to these two pages; mobile stays unchanged. */
 @media (min-width: 768px) {
