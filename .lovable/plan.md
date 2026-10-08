@@ -1,35 +1,36 @@
-# Etapp 2A – riktad tillgänglighetsrättning
+# Kompakt kapacitetsstöd i mobilkalendern
 
-## Avgränsning
-Behåll den godkända layouten vid normal textstorlek. Anpassa endast Idag och Kalender när förstorad text kräver mer utrymme. Ingen redesign eller publicering.
+## Resultat
+Endast mobilens befintliga ”Vad påverkar din kapacitet?” får en kompakt presentation. Kalendern kommer tidigare när stödet är stängt. Ingen publicering.
 
-## Idag
-- Låt hela hälsningen radbrytas naturligt med oförändrad Fraunces-storlek.
-- Placera originalstenarna på separat rad när de inte ryms bredvid texten. Normal placering och bildfil bevaras.
-- Låt Capacity-värdet och batterispåret få separata rader vid platsbrist, så batteriet inte pressas ihop.
+## Stängt och utfällt läge
+- Stängt som standard när kalendern öppnas, utan att automatiskt stänga en pågående registrering.
+- Hela raden öppnar/stänger: befintlig ikon, rubriken, ”Lägg till vid behov” och tydlig ned-/uppåtpil.
+- Befintliga rosa/aprikosa ytor, rundning, diskret kant och subtil skugga. Ingen ny dekor eller illustration.
+- Utfällt visas exakt dagens formulär direkt under rubriken, inklusive befintliga förklaringar. Referensbildens exempelalternativ införs inte.
+- Osparade val bevaras när raden stängs och öppnas; ingen ny lagring införs. Samma validering och sparfunktion används.
 
-## Kalender
-- Anpassa rubrik, periodnavigation, Capacity och Veckans mål för läsbara radbrytningar utan mindre text.
-- Gruppera befintliga kontroller effektivare vid förstoring: rubrik/vy/period, familj/visningsval, dagens Capacity. Flytta sekundära desktopverktyg efter huvudkalendern endast i det anpassade läget; normallayouten lämnas oförändrad.
-- Behåll en enda instans av varje kontroll och formulär, samma funktioner och tangentbordsåtkomst.
-- Gör aktivitetsnamn fullt läsbara där radbrytning ryms utan att ändra tidsblock, dagbredder eller dragytor.
+## Placering och skydd
+- Samma placering i månad, vecka och dag; Veckans mål flyttas inte.
+- Desktopplacering, kontrollrader och Etapp 2A:s textförstoring bevaras. Andra sidor och den delade expanderbara komponentens standardbeteende lämnas oförändrade.
+- Capacity/Load/Pace, familj, kalendergeometri, tidsblock, drag/drop, undo, aktiviteter, data, synk, kryptering, notiser, navigation, identifierare och stenar ändras inte.
 
-## Viktig skyddsgräns
-Långa namn kan vara omöjliga att visa i sin helhet inuti ett kort, geometriskt låst tidsblock vid 200 % text. Om detta bekräftas stoppas just den delrättningen och målkonflikten rapporteras för beslut. Ingen utvidgning av tidsblock, överlappande text, dold ellips eller ny kalenderfunktion införs för att kringgå skyddet. Befintlig detaljvisning bevaras, men räknas inte som att hela namnet blivit synligt i tidsblocket.
-
-## Skydd
-Ingen ändring av Capacity/Load/Pace, kalendergeometri, NU-linje, familjebehörigheter, barnschemats read-only-visning, data, sparning, påminnelser, navigation, lagring eller stenasset. Ingen generell CSS-förändring på andra sidor.
+## Tillgänglighet
+- Befintlig knappkomponent med minst 44 px klickhöjd, synligt fokus samt öppet/stängt tillstånd och koppling till innehållet för skärmläsare.
+- Naturlig radbrytning och innehållsanpassad höjd vid 200 %; ingen textminskning, kapning eller horisontell sidscroll.
+- Stängt formulär är inte åtkomligt via tangentbord, men dess osparade val bevaras.
 
 ## Tekniskt genomförande
-- Sidavgränsad anpassning till faktiskt textutrymme, inte enbart skärmbredd; samma skalningsmetod som i QA används för verifiering.
-- Berörda huvudfiler: `src/pages/today.tsx`, `src/components/calendar/calendar-planner.tsx`, `src/styles.css`.
-- Vid behov opt-in-presentation i `src/components/day/today-capacity.tsx`, `src/components/calendar/capacity-battery.tsx` och `src/components/week-goals.tsx`; andra användningar lämnas oförändrade.
-- Dokumentera i AGENTS.md, roadmap och båda changelogfilerna. Inga nya paket eller serverändringar.
+- Lägg till uttryckligt opt-in-läge för mobilkalendern i `src/components/impact-checkin.tsx`; samma formulär återanvänds och andra anrop behåller dagens presentation.
+- Aktivera läget vid befintliga `checkin={<ImpactCheckin />}` i `src/pages/calendar.tsx`. Återanvänd befintlig mobil/desktopgräns (768 px), inte textstorleken, för att avgränsa presentationen.
+- Undvik ändringar i `ExpandableBlock`, collapse-lagring och den befintliga desktoplösningen. Bevara en formulärinstans och dess pågående val vid öppning/stängning och kontrollera byte mellan kalendervyer.
+- Använd befintliga tokens och endast lokalt avgränsade stilar vid behov. Inga paket, serverändringar eller migreringar.
+- Uppdatera riktade tester, AGENTS.md, roadmap, CHANGELOG.md och `src/lib/changelog.ts`.
 
 ## Verifiering och leverans
-- Idag samt månad/vecka/dag: 360, 390, 430, 768, 1024, 1280 och 1440 px vid normal och 200 % text.
-- Jämför normallayout före/efter med stabilt innehåll; kontrollera stenar, ordning, batterier, fokus, tangentbord och texters verkliga utrymme.
-- Kör befintlig testsvit och läs automatisk bygg-/typkontrollsignal; redovisa om separat typkontroll inte är tillgänglig.
-- Rapportera ändrade filer, bekräftade rättningar och kvarvarande begränsningar; visa nya bilder. Ingen publicering.
-
-Veckans framtida desktopgeometri och förklaringar av månadens prickar/procent är separata frågor och ingår inte.
+- Ta före/efter-bilder med samma konto och innehåll.
+- Månad, vecka och dag vid 360/390/430 px med normal och 200 % text: kompakt rad, komplett formulär, bibehållna osparade val, fokus/tangentbord och ingen sidscroll.
+- Kontrollera sparfunktionen med isolerad testdata eller kontrollerad testdubbel, inte genom att skriva över användarens registrering; redovisa om verklig kontosparning inte har testats.
+- Jämför desktop vid 1024/1440 px, även textförstoring, och kontrollera att Veckans mål och övriga kontroller är oförändrade.
+- Kör befintliga tester och kontrollera arbetsmiljöns automatiska bygg-/typkontrollsignal; redovisa eventuella begränsningar.
+- Visa mobil månad stängd/öppen, mobil vecka/dag samt desktopkontroll. Rapportera ändrade filer och resultat. Publicera inte.
