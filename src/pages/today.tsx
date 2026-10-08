@@ -46,7 +46,7 @@ export function TodayContent() {
   });
 
   return (
-    <MyFlovePageGrid area="idag">
+    <MyFlovePageGrid area="idag" className="pace-today-desktop">
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
         <div className="flex items-center justify-between gap-4">
@@ -57,7 +57,7 @@ export function TodayContent() {
           </div>
           <PaceableStones compact tactile className="shrink-0" style={{ width: 126, height: 74 }} />
         </div>
-        <div className="mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
+        <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
       <MyFloveWide>
@@ -86,7 +86,7 @@ export function TodayContent() {
         </section>
       </MyFloveWide>
 
-      <MyFloveWide className="pt-4">
+      <MyFloveWide className="pace-today-pace pt-4">
         <TodayPace pace={pace} />
       </MyFloveWide>
     </MyFlovePageGrid>

@@ -2032,3 +2032,16 @@ html[data-npf-less="true"] [data-npf="optional"] {
   border-color: var(--pace-border-warm);
   box-shadow: var(--pace-elevation-1);
 }
+
+/* Etapp 2A: presentation is scoped to these two pages; mobile stays unchanged. */
+@media (min-width: 768px) {
+  .pace-today-desktop { width: 100%; max-width: 820px; margin-inline: auto; }
+  .pace-today-capacity { max-width: 520px; }
+  .pace-today-pace { width: 100%; max-width: 640px; }
+  .pace-calendar-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 360px); gap: 16px; align-items: center; }
+  .pace-calendar-heading > * { min-width: 0; }
+  .pace-calendar-capacity { max-width: 400px; }
+  .pace-calendar-capacity:empty { display: none; }
+  .pace-calendar-secondary { max-width: 640px; }
+  .pace-calendar-desktop [aria-label="Kalenderverktyg"] { margin-top: 4px; }
+}

@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Etapp 2A desktop (2026-10-08): Idag får flexibel huvudkolumn med proportionerlig Capacity och Pace; kalenderns kontroller samlas med Familj/visningsval först och frivilligt stöd efter huvudvyn på desktop. Mobil, navigation, stenasset, kalendergeometri, Core och data oförändrade; ingen publicering.",
       "Fyra QA-rättningar (2026-10-08): Mer återför fokus efter Escape/kryss och ger sidinnehållet fokus efter navigering; menynamn får radbrytas vid 200 % text; desktop-Mers områden följer befintligt Enkelt läge; hälsningen balanserar radbrytning på smal mobil. Ikoner, färger, stenar, Core och data oförändrade; ingen publicering.",
       "Desktopnavigation etapp 1 (2026-10-08): smal fast vänstermeny med samma fem huvudval som mobilen; Mer öppnas som panel med sök, områden och Äldre funktioner. Mobilen oförändrad; ingen publicering.",
       "Varför in i importkortet (2026-10-08): Tankars hjälplänk ligger nu vänsterställd under importknapparna inne i kortet, med samma funktion, innehåll, 44 px touchyta och fokus. Stenar och övrig layout orörda; ingen publicering.",
