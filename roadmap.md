@@ -1,5 +1,10 @@
 # Roadmap
 
+## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
+- [x] Omfattning bekräftad: även Äldre Hem och Flow ingår; befintlig godkänd identitet, inga funktionsändringar.
+- [x] Inventering och före-bilder av Hem/Flow; avgränsad genomförandeplan framtagen.
+- [ ] Genomförande och verifiering väntar på godkännande av planen; ingen publicering.
+
 ## Visningsnamn på Idag (2026-10-08)
 - [x] Plan godkänd; ⋯-meny, dialog, bekräftad synk, ingen sparad e-postgissning, tester. Ingen publicering.
 
