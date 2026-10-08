@@ -3,13 +3,13 @@
 - [x] Kontrollera befintliga verktyg/beroenden och redovisa specialmodellering, material, granskning, resursbudget och begränsningar i planen; ingen appändring.
 - [x] Teknikplan godkänd; endast statisk modell, separata prototypberoenden, inga rörelser.
 - [x] Isolerad statisk konturmodell med 11 520 trianglar och gemensamma material; frontjämförelse/25°/teman/390–1280 px. WebGL utan sidfel; huvudappens kod/beroenden orörda.
-- [ ] Visuell kvalitet blockerad: släta/facetterade ytor, kontaktglapp och materialavvikelse. Pausat enligt stoppregeln; beslut om förfinad specialmodellering/manuell 3D krävs. Inga rörelser/integration/publicering.
+- Pausat på användarens uttryckliga beslut 2026-10-08: inga ytterligare modell-, material- eller animationsändringar. Prototyp/källor/begränsningar arkiveras; återupptas endast på uttrycklig begäran. Kvarstående släta/facetterade ytor, kontaktglapp och materialavvikelse dokumenteras, ingen integration/publicering.
 ## Pace – realistisk följeslagare, endast prototypplan (2026-10-08)
 - [x] Inventera stenoriginal och befintliga presentationsytor; jämför 3D och 2D utan appändring.
 - [x] Bild 1 används endast för ljus/materialkänsla; bild 2 är exakt visuell förlaga utan nya former eller färger.
 - [x] Alternativ B: bild 2 och transparent ZIP-original överensstämmer visuellt i former/proportioner/färgfamiljer/ordning/stapling; bakgrund och markskugga skiljer, pixelidentitet inte påstådd.
 - [x] Isolerad lokal demo med Vilar/Hälsar/Lyssnar, exakt samma hela ZIP-bild, teman/390/1280 px/200 %/stillaläge och reducerad rörelse verifierade; inspelning. Ingen appintegration eller publicering.
-- [ ] Användarens visuella godkännande av prototypen; fysisk iOS/Android-prestanda ej verifierad.
+- Även 2D-/animationsspåret pausat tills uttrycklig begäran; fysisk iOS/Android-prestanda ej verifierad.
 ## Pace/Paceable – namninventering (2026-10-08)
 - [x] Inventera synliga Flow/MyFlove-namn och gamla bilder separat från tekniska identifierare.
 - [x] Redovisa namnförslag, resursbegränsningar för stenföljeslagare, risker och kostnadseffektiv plan; ingen appkodändring eller publicering.
