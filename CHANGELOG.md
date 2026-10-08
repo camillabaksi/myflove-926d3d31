@@ -1,4 +1,5 @@
 ## 2026-10-08
+- Slutpolish: befintliga stenplaceringar i Tankar och primärytornas desktopmeny återanvänder Idags godkända bild utan extra filter. Idag-stenarna fortsatt 126×74 px på samma plats. Hälsningen 32 px under 380 px, 36 px större mobil och 38 px desktop; Min plats 32 px med 4 px extra luft mot hjärtikonen. Ingen logik-, data- eller bildändring och ingen publicering.
 - Paceable typografisk hierarki: explicit Fraunces endast på Idags hälsning och Din dag, Tankars huvudrubrik och Min plats. Funktionella rubriker använder Inter; Capacity 22 px/600, Idags listrubriker 18 px/600. Stenasset, rendering och placering, visuellt djup och all logik är oförändrade. Ingen publicering.
 - Idag: Paceable-stenarna bredvid hälsningen är lite större (126×74 px) och ligger med luft runt sig utan att gå in i texten. Verifierat i 390 px.
 - Idag: hälsningen något mindre (ca 37 px) och Paceable-stenarna ca 80 % stora, placerade bredvid hälsningen.

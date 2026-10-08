@@ -1,5 +1,11 @@
 # Roadmap
 
+## Slutpolish och visuellt lås (2026-10-08)
+- [x] Godkänd plan, inventering och endast tre presentationsändringar.
+- [x] 501 tester, automatiskt bygge, bildkontrollsumma och mobil/desktop-kontroller. Separat typkontroll ej körd.
+- [x] Fem bilder och rapport levererade; inga fler visuella ändringar.
+- [ ] Användarens visuella godkännande/designlås: små Tankar/sidebar-stenar och befintlig Min plats-klippning vid 200 % samt Tankar-dark-kontrast rapporterade. Ingen publicering.
+
 ## Typografisk hierarki (2026-10-08)
 - [x] Godkänd plan; explicita editorialroller och funktionell Inter, oförändrade stenar och övrig design.
 - [x] 500 tester godkända och automatiskt bygge OK; mobil/desktop-, 200 % skalnings-, dark/light- och fokuskontroller genomförda.
