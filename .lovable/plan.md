@@ -22,7 +22,7 @@ Endast mobilens befintliga ”Vad påverkar din kapacitet?” får en kompakt pr
 
 ## Tekniskt genomförande
 - Lägg till uttryckligt opt-in-läge för mobilkalendern i `src/components/impact-checkin.tsx`; samma formulär återanvänds och andra anrop behåller dagens presentation.
-- Aktivera läget där Kalender skapar sitt befintliga check-in-innehåll. Återanvänd befintlig mobil/desktopgräns, inte textstorleken, för att avgränsa presentationen.
+- Aktivera läget vid befintliga `checkin={<ImpactCheckin />}` i `src/pages/calendar.tsx`. Återanvänd befintlig mobil/desktopgräns (768 px), inte textstorleken, för att avgränsa presentationen.
 - Undvik ändringar i `ExpandableBlock`, collapse-lagring och den befintliga desktoplösningen. Bevara en formulärinstans och dess pågående val vid öppning/stängning och kontrollera byte mellan kalendervyer.
 - Använd befintliga tokens och endast lokalt avgränsade stilar vid behov. Inga paket, serverändringar eller migreringar.
 - Uppdatera riktade tester, AGENTS.md, roadmap, CHANGELOG.md och `src/lib/changelog.ts`.
