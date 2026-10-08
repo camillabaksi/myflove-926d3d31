@@ -6,6 +6,7 @@ import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
+import { GreetingNameMenu } from "@/components/day/greeting-name-menu";
 import { TodayCapacity } from "@/components/day/today-capacity";
 import { TodayPace } from "@/components/day/today-pace";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -28,7 +29,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 export function TodayContent() {
   const textLayout = useTextLayout();
   const { t, locale } = useLang();
-  const { name } = useUserProfile();
+  const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
   useEffect(() => {
     track("today_viewed", { source: "sida" });
@@ -60,7 +61,10 @@ export function TodayContent() {
             <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl"><span className="pace-greeting-prefix">{t("Hej")}</span>{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
           </div>
-          <PaceableStones compact tactile className="shrink-0" style={{ width: 126, height: 74 }} />
+          <div className="relative shrink-0">
+            <div className="absolute -top-11 right-0"><GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} /></div>
+            <PaceableStones compact tactile className="shrink-0" style={{ width: 126, height: 74 }} />
+          </div>
         </div>
         <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>

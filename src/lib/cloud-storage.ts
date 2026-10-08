@@ -448,6 +448,15 @@ export function requestSync(key: string): Promise<void> {
   return p;
 }
 
+/**
+ * Synkar exakt en nyckel nu och svarar om molnet bekräftat den lokala
+ * ändringen. Använder samma merge/konto-väg som allt annat; rör inga andra nycklar.
+ */
+export async function syncKeyNow(key: string): Promise<boolean> {
+  await requestSync(key);
+  return !hasUnsyncedCloudData(key);
+}
+
 function scheduleSync(key: string) {
   setKeyStatus(key, "pending");
   const d = debounces.get(key);
