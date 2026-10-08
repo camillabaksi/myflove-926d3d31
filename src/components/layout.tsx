@@ -643,6 +643,51 @@ export default function Layout({ children }: LayoutProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navItems]);
 
+  // Desktop: Mer öppnas som panel bredvid menyn. Samma navItems som mobilen.
+  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
+  const [desktopMoreSection, setDesktopMoreSection] = useState<string | null>(null);
+  useEffect(() => {
+    setDesktopMoreOpen(false);
+  }, [location]);
+  useEffect(() => {
+    if (!desktopMoreOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDesktopMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [desktopMoreOpen]);
+  const desktopMoreGroups = useMemo(() => {
+    const byHref = (href: string) => navItems.find((i) => i.href === href);
+    const groups: { id: string; label: string; hrefs: string[]; legacy?: boolean; rename?: Record<string, string> }[] = [
+      { id: "dag", label: "Min dag", hrefs: ["/paminnelser", "/tasks", "/pomodoro"] },
+      { id: "stod", label: "Stöd & samtal", hrefs: ["/assistant", "/flow", "/flowplan", "/anteckningar"] },
+      { id: "ork", label: "Ork & återhämtning", hrefs: ["/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin"] },
+      { id: "familj", label: "Familj", hrefs: ["/familjeflow", "/barn", "/relationer"] },
+      { id: "vardag", label: "Hem & vardag", hrefs: ["/matlista", "/shopping", "/stadning", "/finances"] },
+      { id: "studier-jobb", label: "Studier & jobb", hrefs: ["/studyflow", "/jobb"] },
+      { id: "monster", label: "Mönster", hrefs: ["/insight", "/historik", "/statistik"] },
+      {
+        id: "konto",
+        label: "Konto & app",
+        hrefs: ["/familj", "/friktionsindex", "/installningar", "/admin", "/admin-statistik"],
+        rename: { "/familj": "Delning & åtkomst", "/admin": "Administration – översikt", "/admin-statistik": "Administration – appstatistik" },
+      },
+      { id: "aldre", label: "Äldre funktioner", hrefs: ["/hem", "/flowscore", "/beloningar"], legacy: true },
+    ];
+    return groups
+      .map((g) => ({
+        ...g,
+        label: t(g.label),
+        items: g.hrefs
+          .map(byHref)
+          .filter((i): i is NavItem => Boolean(i))
+          .map((i) => (g.rename?.[i.href] ? { ...i, label: t(g.rename[i.href]) } : i)),
+      }))
+      .filter((g) => g.items.length > 0);
+  }, [navItems, t]);
+
+
 
   return (
     <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
@@ -1164,6 +1209,38 @@ function NavRow({
           {item.hint}
         </span>
       </span>
+    </Link>
+  );
+}
+
+function DesktopMoreLink({
+  item,
+  active,
+}: {
+  item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }> };
+  active: boolean;
+}) {
+  const Icon = item.icon;
+  const cls = `flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+    active ? "bg-lavender text-foreground font-medium" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+  }`;
+  const content = (
+    <>
+      <Icon size={18} strokeWidth={1.8} className="shrink-0" />
+      <span className="truncate">{item.label}</span>
+    </>
+  );
+  // Träning behåller sin vanliga sidladdning.
+  if (item.href === "/traning") {
+    return (
+      <RouterLink to="/traning" reloadDocument aria-current={active ? "page" : undefined} className={cls}>
+        {content}
+      </RouterLink>
+    );
+  }
+  return (
+    <Link href={item.href} aria-current={active ? "page" : undefined} className={cls}>
+      {content}
     </Link>
   );
 }
