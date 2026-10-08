@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Tankar, snäv polish (2026-10-08): varm tankeinfångningsyta med tunn kant/elevation-1 och inline-Varför intill import, minst 44 px touchyta. Samma innehåll/funktion och pixelmässigt orörda stenar; ingen publicering.",
       "Tankars stenar (2026-10-08): endast befintlig keramisk bildrendering förstoras 1,9× i samma övre högra placering. Asset, rubrik, övrig layout och andra vyer oförändrade; ingen publicering.",
       "Sista finjusteringen (2026-10-08): Idags hälsning 34 px på smal mobil; större vyer oförändrade. Samma godkända stenar i Tankar och Min plats-rubriken på 32 px behålls. Inga övriga visuella ändringar; ingen publicering.",
       "Slutpolish (2026-10-08): samma godkända stenbild i befintliga Tankar/desktop-placeringar; Idag-stenarna oförändrade. Hälsningen anpassas på smal mobil, Min plats-rubriken är lugnare. Ingen Core-, data- eller bildändring; ingen publicering.",

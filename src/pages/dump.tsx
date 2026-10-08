@@ -43,13 +43,15 @@ export default function Dump() {
                 <PaceableStones compact tactile className="pace-stones-contained h-12 w-24 shrink-0 [&_.pace-stones-img]:absolute [&_.pace-stones-img]:right-0 [&_.pace-stones-img]:!w-[76px] [&_.pace-stones-img]:!max-w-none" />
               </header>
               <div className="space-y-4">
-                <QuickflowCapture />
+                <QuickflowCapture appearance="paceable" />
+                <div className="space-y-1">
                 <QuickflowImageImport />
-                <WhyHint label="quickflow">
+                <WhyHint label="quickflow" appearance="inline">
                   {t(
                     "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.",
                   )}
                 </WhyHint>
+                </div>
               </div>
             </section>
 
