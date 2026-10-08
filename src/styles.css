@@ -265,7 +265,6 @@
 .pace-stones-img { filter: var(--pace-contact-shadow, drop-shadow(0 3px 3px rgb(60 40 30 / 0.14))); animation: pace-stones-settle 420ms ease-out both; }
 @keyframes pace-stones-settle { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .pace-stones-img { animation: none; } }
-[data-role="dialog"], [role="dialog"].rounded-3xl { box-shadow: var(--pace-elevation-2, var(--shadow-lifted)); }
 
 .paceable-my-place-header {
   background-image: linear-gradient(135deg, hsl(var(--sky) / 0.48), hsl(var(--card)) 55%, hsl(var(--blush) / 0.38));
