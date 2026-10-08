@@ -43,21 +43,19 @@ Källor är relativa `src/` om inte annat anges. Synliga texter ska skiljas frå
 | QuickFlow | **Tankar** / handling **Fånga en tanke** | Rekommenderas eftersom navigationen redan använder Tankar. Alternativ: Snabbfånga om kortnamn behövs. |
 | FlowPlan / planeringsläge | **Planera** | Beskriv stödet, inte ett nytt varumärke. |
 | Dagens Pace | **Din takt** | Varsamt / Jämnt / Utrymme behålls. |
-| MyFlow / StudyFlow | **Dina uppgifter**, **din plan** / **Studier** | Välj ord efter den verkliga destinationen. |
+| MyFlow / StudyFlow | **Dina uppgifter** / **Studier** | Faktisk destination styr. |
 | Veckans Flow / äldre dagsfunktion | **Veckans översikt** / **Din dag** | Veckans översikt används redan på veckosidan; byt inte tekniska sidnamn. |
 
-På engelska behålls Pace/Paceable; dagsrytm kan heta **Your pace**. Den språkliga likheten finns då kvar men särskiljs genom placering och funktionsbeskrivning.
+Engelska: Pace/Paceable och **Your pace** för dagsrytm; särskilj genom placering.
 
-## 3. Framtida stenföljeslagare – vad resurserna tillåter
+## 3. Framtida stenföljeslagare – teknisk möjlighet
 
-- Godkänd stenbild finns som en sammanhållen bild i `src/assets/paceable-stones.png`, använd via `PaceableStones`. Den är inte tre frilagda original.
-- **Möjligt med befintlig bild:** mycket liten långsam förflyttning av hela formationen, utan deformation, färgfilter, nya skuggor eller materialändring. Stillaläge och minskad rörelse ger helt statisk bild. Befintliga låsta stenplaceringar/logotypen ska inte automatiskt börja röra sig.
-- **Inte möjligt som enkel, godkänd återanvändning:** att låta varje sten röra sig självständigt bakom/framför de andra med nuvarande sammanfogade original. Det kräver separat godkända frilagda original/lager, inte maskning, beskärning eller omritning av nuvarande bild.
-- Komponenten har även en äldre SVG-variant med tre grupper. Den är tekniskt animerbar men **inte ett tillåtet substitut för de pixelmässigt godkända stenarna**.
-- FlowMascot har blick, blinkning, hjärtglöd, vinkning och olika samtalsstatus. Dessa ansikts-/kroppsuttryck kan inte överföras till stenarna. Behåll tydlig väntestatus i text; undvik att ”klart” blir en belöning eller att rörelse uttrycker en bedömning av mående.
-- FlowCharacter innehåller situationsscener som behöver egen visuell genomgång. En generell bildersättning räcker inte för alla sammansatta illustrationer.
-- Rummets Flow är inbakad i en helscen (`flow-room-seated.jpg`). Att ta bort figuren där är en större bild-/designändring, inte ett rent namnbyte. Gamla rumsanimationer och kläd-/tillbehörsfiler bevaras; sparade val raderas inte.
-- Ingen ny figur, animation, scen eller bild skapas i denna inventering. Inga ansikten/armar/ben, tre separata figurer, krav, poäng eller Tamagotchi-beteende föreslås.
+- `src/assets/paceable-stones.png` är en sammanfogad godkänd bild via `PaceableStones`, inte tre frilagda original.
+- **Möjligt:** mycket liten långsam förflyttning av hela formationen, utan deformation, filter, nya skuggor eller materialändring. Stillaläge/minskad rörelse ger statisk bild. Logotyp och låsta stenplaceringar lämnas stilla.
+- **Separata stenrörelser:** kräver separat godkända frilagda original/lager; inte beskärning, maskning eller omritning av den låsta bilden. Äldre SVG-grupper är animerbara men inte ett godkänt substitut.
+- FlowMascots blick, blinkning, hjärtglöd och vinkning kan inte överföras till stenar. Behåll samtalsstatus i text; ingen belöningsrörelse eller bedömning av mående/prestation.
+- FlowCharacters situationsscener behöver separat visuell genomgång. Rummets figur är inbakad i `flow-room-seated.jpg`: byte kräver större bild-/designbeslut. Gamla rumsanimationer, tillbehör och sparade val bevaras.
+- Exakta färger, former och material skyddas. Inga ansikten/armar/ben utan separat godkännande, inga tre tecknade individer eller Tamagotchi-krav/belöningar. Ingen bild eller animation skapas nu.
 
 ## 4. Skydd och teknisk separation
 
