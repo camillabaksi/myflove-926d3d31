@@ -12,6 +12,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Uppgifter (2026-10-08): oinramad sidrubrik, lättare vyval, Inter på uppgiftsnamn/grupper, varma kort och 44 px kontroller. Endast sidlokal presentation; funktioner, data och övriga sidor bevarade. Ingen publicering.",
+      "Uppgifter, verifiering (2026-10-08): fem bredder, båda teman och 200 % text; dialog och vyval utan kontosparning. Fyra nya åtgärdstester; full svit 524/524 i 83 filer och automatiskt bygge OK.",
       "Mer enligt godkänd målbild (2026-10-08): samma responsiva vy på mobil och dator med profil, vardagskort, familj, insikter, alla övriga verktyg och Äldre funktioner. Befintliga länkar, filter, sök och funktioner bevaras; endast lokal presentation och lätt dekor. Logotyper och stenar oförändrade. Ingen publicering.",
       "Paceable på återstående sidor (2026-10-08): äldre Hem och Flow/samtal med undersidor använder befintliga Paceable-ytor och dialogdjup. Neutrala kort, dekorativa rubrikytor, lokala sidtitlar och chattbubblor anpassade; Inter för funktion och Fraunces för orientering. Primärvyer, betydelsebärande färger, bilder, navigation och data bevarade; ingen publicering.",
       "Verifiering (2026-10-08): slutlig full testkörning 516/516; befintligt timingkänsligt krypteringstest föll i två mellanliggande körningar men klarade separat omkörning. Nya tokenpars kontrast uppfyller AA. Hem-dialogens befintliga fokusåtergång rapporterad separat. Saknade sociala metadata kompletterade utan ändrade sidtitlar eller länkar.",
