@@ -102,6 +102,18 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     return <section className="pace-more-section"><h2>{t(title)}</h2>{content}</section>;
   }
   const family = visible(MORE_FAMILY), insights = visible(MORE_INSIGHTS), legacy = visible(MORE_LEGACY);
+  const groupMeta: Record<string, { icon: typeof User; tone: string; hint: string }> = {
+    "Min dag": { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
+    "Flow och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
+    "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
+    "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
+  };
+  const groupCard = (title: string) => {
+    const group = MORE_GROUPS.find((entry) => entry.title === title);
+    const meta = groupMeta[title];
+    const entries = group ? visible(group.hrefs) : [];
+    return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries)) : null;
+  };
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
