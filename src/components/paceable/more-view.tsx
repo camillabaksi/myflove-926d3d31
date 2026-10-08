@@ -102,6 +102,19 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     return <section className="pace-more-section"><h2>{t(title)}</h2>{content}</section>;
   }
   const family = visible(MORE_FAMILY), insights = visible(MORE_INSIGHTS), legacy = visible(MORE_LEGACY);
+  const groupMeta: Record<string, { icon: typeof User; tone: string; hint: string }> = {
+    "Min dag": { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
+    "Flow och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
+    "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
+    "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
+  };
+  const groupCard = (title: string) => {
+    const group = MORE_GROUPS.find((entry) => entry.title === title);
+    const meta = groupMeta[title];
+    const entries = group ? visible(group.hrefs) : [];
+    return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries)) : null;
+  };
+  const minDag = groupCard("Min dag"), hemVardag = groupCard("Hem och vardag"), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Flow och samtal");
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
@@ -112,20 +125,18 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     {query.trim() ? <section aria-label={t("Sökresultat")}>{results.length ? rows(results) : <p className="pace-more-muted">{t("Hittade inget som matchar")} ”{query}”.</p>}</section> : <>
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
       <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} />{t("Inställningar")}</Link>
-      {visible(DAILY.map((item) => item.href)).length > 0 && section("MIN VARDAG", <div className="pace-more-daily">{DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}</div>)}
-      {visible(["/traning"]).length > 0 && section("HÄLSA & VÄLMÅENDE", card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning"))}
+      {(visible(DAILY.map((item) => item.href)).length > 0 || minDag || hemVardag) && section("MIN VARDAG", <>
+        {visible(DAILY.map((item) => item.href)).length > 0 && <div className="pace-more-daily">{DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}</div>}
+        {minDag}
+        {hemVardag}
+      </>)}
+      {(visible(["/traning"]).length > 0 || ork) && section("HÄLSA & VÄLMÅENDE", <>
+        {visible(["/traning"]).length > 0 && card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning")}
+        {ork}
+      </>)}
+      {flowSamtal && section("STÖD & SAMTAL", flowSamtal)}
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
-      {MORE_GROUPS.slice(0, 4).map((group, index) => {
-        const entries = visible(group.hrefs);
-        const meta = [
-          { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
-          { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
-          { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
-          { icon: Home, tone: "blush", hint: "Vardagen hemma" },
-        ][index];
-        return entries.length ? <section key={group.title} className="pace-more-section" aria-label={t(group.title)}>{card(group.title, meta.hint, meta.icon, meta.tone, undefined, `direct-${group.title}`, rows(entries))}</section> : null;
-      })}
       {section("FLER VERKTYG", <>
         {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_GROUPS.map((group) => {
           const entries = visible(group.hrefs);

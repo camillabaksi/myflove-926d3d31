@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Mer, hierarki (2026-10-08): Min dag och Hem och vardag ligger som hopfällbara underkategorier under Min vardag, Ork och återhämtning under Hälsa & välmående, Flow och samtal under nya Stöd & samtal. Samma befintliga kortkomponent; alla huvudkort, länkar, Fler funktioner, rutter och behörigheter oförändrade. Full svit 527/527. Ingen publicering.",
       "Mer, expanderbara direktsektioner (2026-10-08): Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag är hopfällda från början och expanderas med samma befintliga kortkomponent som övriga grupper; flera kan vara öppna samtidigt. Alla ingångar finns kvar även under Fler funktioner. Tester uppdaterade; full svit 527/527. Ingen publicering.",
       "Mer, direktsektioner (2026-10-08): fyra befintliga kategorier visas efter Insikter med befintliga rader och filter. Alla tidigare ingångar finns kvar, även samma genvägar under Fler funktioner; inga data eller funktioner dupliceras. Designen bevarad; ingen publicering.",
       "Uppgifter (2026-10-08): oinramad sidrubrik, lättare vyval, Inter på uppgiftsnamn/grupper, varma kort och 44 px kontroller. Endast sidlokal presentation; funktioner, data och övriga sidor bevarade. Ingen publicering.",

@@ -30,28 +30,33 @@ describe("Mer navigation presentation", () => {
   const allItems = () => [...new Set([...MORE_FEATURED_HREFS, ...MORE_FAMILY, ...MORE_INSIGHTS, ...MORE_LEGACY, ...MORE_GROUPS.flatMap((group) => [...group.hrefs])])].map((href) => item(href, href !== "/flowplan"));
   const show = (items: MoreItem[], simpleMode = false) => render(<MoreView items={items} simpleMode={simpleMode} enlarged={false} onClose={vi.fn()} onNavigate={vi.fn()} t={(text) => text} />);
 
-  it("adds four collapsible sections in order while keeping all existing entry points", () => {
+  it("places the four groups as collapsible subcategories under their parent sections while keeping all existing entry points", () => {
     const { container } = show(allItems());
     const headings = [...container.querySelectorAll(".pace-more-section > h2")].map((heading) => heading.textContent);
-    expect(headings).toEqual(["MIN VARDAG", "HÄLSA & VÄLMÅENDE", "FAMILJ & RELATIONER", "ÖVERBLICK & INSIKTER", "FLER VERKTYG"]);
+    expect(headings).toEqual(["MIN VARDAG", "HÄLSA & VÄLMÅENDE", "STÖD & SAMTAL", "FAMILJ & RELATIONER", "ÖVERBLICK & INSIKTER", "FLER VERKTYG"]);
     expect(screen.getByRole("link", { name: /Min profil/ })).toHaveAttribute("href", "/profil");
     expect(screen.getByRole("link", { name: /Uppgifter/ })).toHaveAttribute("href", "/tasks");
+    expect(screen.getByRole("link", { name: /Träning och rörelse/ })).toHaveAttribute("href", "/traning");
     fireEvent.click(screen.getByRole("button", { name: /Fler funktioner/ }));
     const tools = container.querySelector("#pace-more-group-tools");
     expect(tools).not.toBeNull();
     if (!tools) return;
+    const parents: Record<string, string> = { "Min dag": "MIN VARDAG", "Hem och vardag": "MIN VARDAG", "Ork och återhämtning": "HÄLSA & VÄLMÅENDE", "Flow och samtal": "STÖD & SAMTAL" };
     for (const group of MORE_GROUPS.slice(0, 4)) {
       const toggle = screen.getByRole("button", { name: new RegExp(group.title) });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
-      expect(within(screen.getByRole("region", { name: group.title })).queryByRole("link")).toBeNull();
+      expect(toggle.closest(".pace-more-section")?.querySelector("h2")?.textContent).toBe(parents[group.title]);
+      expect(document.getElementById(`pace-more-group-direct-${group.title}`)).toBeNull();
       fireEvent.click(toggle);
       expect(toggle).toHaveAttribute("aria-expanded", "true");
-      const direct = screen.getByRole("region", { name: group.title });
+      const direct = document.getElementById(`pace-more-group-direct-${group.title}`);
+      expect(direct).not.toBeNull();
+      if (!direct) continue;
       const nested = within(tools as HTMLElement).getByRole("heading", { name: group.title }).parentElement;
       expect(nested).not.toBeNull();
       if (!nested) continue;
       for (const section of [direct, nested]) {
-        const links = within(section).getAllByRole("link");
+        const links = within(section as HTMLElement).getAllByRole("link");
         const hrefs = links.map((link) => link.getAttribute("href"));
         expect(hrefs).toEqual([...group.hrefs]);
         expect(new Set(hrefs).size).toBe(hrefs.length);
@@ -82,9 +87,10 @@ describe("Mer navigation presentation", () => {
     expect(container.querySelectorAll('a[href="/assistant"]')).toHaveLength(0);
   });
 
-  it("omits empty direct sections without removing the existing tools menu", () => {
+  it("omits empty subcategories without removing the existing tools menu", () => {
     show([item("/installningar")]);
-    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("region", { name: group.title })).toBeNull();
+    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title) })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "STÖD & SAMTAL" })).toBeNull();
     expect(screen.getByRole("button", { name: /Fler funktioner/ })).toBeInTheDocument();
   });
 });
