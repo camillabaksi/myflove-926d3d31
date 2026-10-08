@@ -109,4 +109,15 @@ describe("visningsnamn", () => {
     expect(ok).toBe(false);
     expect(window.localStorage.getItem(NAME_KEY)).toBeNull();
   });
+
+  it("en fördröjd äldre sparning skriver inte över ett senare val", async () => {
+    const { result } = renderHook(() => useUserProfile());
+    await act(async () => {
+      const first = result.current.saveName("Första");
+      const second = result.current.saveName("Andra");
+      await Promise.all([first, second]);
+    });
+    expect(result.current.name).toBe("Andra");
+    expect(db.get(NAME_KEY)?.value).toBe("Andra");
+  });
 });
