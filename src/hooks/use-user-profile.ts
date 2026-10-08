@@ -64,7 +64,7 @@ export function useUserProfile() {
       const next = value.trim();
       if (!next) return false;
       const token = ++saveToken.current;
-      const previous = storedName;
+      const previous = confirmedDuringSave ?? storedName;
       setConfirmedDuringSave((current) => current ?? previous);
       setNameState(next);
       const ok = await syncKeyNow(NAME_KEY);
@@ -73,7 +73,7 @@ export function useUserProfile() {
       setConfirmedDuringSave(null);
       return ok;
     },
-    [storedName, setNameState],
+    [confirmedDuringSave, storedName, setNameState],
   );
 
   const shownStored = confirmedDuringSave ?? storedName;
