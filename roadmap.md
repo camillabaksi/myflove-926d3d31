@@ -2,8 +2,9 @@
 
 ## Slutpolish och visuellt lås (2026-10-08)
 - [x] Godkänd plan, inventering och endast tre presentationsändringar.
-- [ ] Tester, bildkontrollsumma och mobil/desktop-kontroller.
-- [ ] Fem bilder och rapport; därefter användarens visuella godkännande. Ingen publicering.
+- [x] 501 tester, automatiskt bygge, bildkontrollsumma och mobil/desktop-kontroller. Separat typkontroll ej körd.
+- [x] Fem bilder och rapport levererade; inga fler visuella ändringar.
+- [ ] Användarens visuella godkännande/designlås: små Tankar/sidebar-stenar och befintlig Min plats-klippning vid 200 % samt Tankar-dark-kontrast rapporterade. Ingen publicering.
 
 ## Typografisk hierarki (2026-10-08)
 - [x] Godkänd plan; explicita editorialroller och funktionell Inter, oförändrade stenar och övrig design.
