@@ -1,48 +1,52 @@
-# Paceable – enhetlig visuell identitet (inventering och plan)
+# Paceable – samma godkända design på återstående sidor
 
-Ingen kodändring eller publicering förrän planen är godkänd.
+## Mål och avgränsning
 
-## Inventering – vad som redan finns
+Fortsätt efter den publicerade första etappen: även **Äldre Hem och Flow** ska följa Paceables befintliga visuella identitet. Ingen ny designriktning eller ombyggnad. Planen måste godkännas före appkodändring; ingen publicering ingår.
 
-- **Färger och djup:** Paceables varma yta, kant och tre djupnivåer finns redan som gemensamma värden, med en mörk variant. De gäller i dag bara inom de omarbetade sidorna (en "Paceable-yta"-markering).
-- **Typsnitt:** Fraunces för hälsningar/orienterande rubriker (`pace-editorial`), Inter för allt funktionellt.
-- **Byggstenar:** gemensam rubrik, kort, sektion, knapp, chip, tomt läge, laddning, dialog (MyFlove-familjen, används på 13 sidor) samt standardknappar/dialoger. Paceables stenar och logotyp är låsta.
-- **Redan i Paceable-stil:** Idag, Kalender, Tankar, Min plats, navigering (mobil + desktop), inloggning/registrering.
-- **Avviker tydligt:** de äldre sidorna under Mer (t.ex. Uppgifter, Träning, Studier, Arbete, Historik, Insikter, Energikarta, Friktionsindex, Pitch). De har lila gradienter, rosa kort, kraftigare skuggor och några hårdkodade färger. Äldre Hem är medvetet kvar som äldre funktion.
-- **Hårdkodade färger:** få (friktionsindex 4, träning/uppgifter/insikter 1 vardera). Det stora avståndet kommer i stället från gradienter och kort.
+Idag, Kalender, Tankar, Min plats och navigationen behåller sitt godkända utseende. Den publika webbplatsen och native-projektens ikoner ingår inte.
 
-## Tabell
+## Inventering
 
-| Område / sida | Finns redan | Behöver justeras | Återanvändning? | Insats |
+Gemensamma Paceable-färger, ytor, kanter, djup och typsnittsroller finns redan i båda teman. Första etappen har anslutit många sidor, men egna gradienter och äldre färgval finns kvar. Hem och Flow är fortfarande uttryckligen undantagna från den gemensamma stilen.
+
+Före-bilder har tagits av Hem och den befintliga Flow-chatten. Hem har lila/rosa bakgrundsglöd och starkt violetta knappar. Flow har gradientrubrik, lavendelytor och violetta pratbubblor. Innehåll och funktioner ska behållas.
+
+| Område / sida | Befintligt | Avgränsad justering | Återanvändning | Insats |
 |---|---|---|---|---|
-| Gemensam bakgrund och ytor för alla inloggade sidor | Paceable-värden, men bara på 4 sidor | Använd Paceable-ytan på hela appens innehållsdel | Ja, befintliga värden | Låg |
-| Gemensamt kort och gemensam sektion (MyFlove-familjen) | Används på 13 sidor | Varm yta, tunn kant, djupnivå 1 i stället för vitt kort och kraftig skugga | Ja, ändras på ett ställe | Låg |
-| Gemensam sidrubrik | Finns | Fraunces för sidtitel, Inter för undertext, lugnare ikon | Ja | Låg |
-| Knappar och dialoger | Standardknappar och dialoger | Dialoger får djupnivå 2 och varm yta; plommon bara som huvudknapp | Ja | Låg |
-| Uppgifter, Träning, Studier, Arbete, Historik | Egna kort och gradienter | Byt gradientkort mot det gemensamma kortet | Ja | Medel |
-| Insikter, Energikarta, Friktionsindex, Statistik | Diagram, hårdkodade färger | Byt till befintliga färgvärden; diagrammen behålls | Delvis | Medel |
-| Inställningar, Profil, Familj, Barn | Formulär med standardbyggstenar | Följer i stort sett med via punkterna ovan | Ja | Låg |
-| Glömt/nytt lösenord | Delvis | Samma logotyp och yta som inloggningen | Ja | Låg |
-| Publik startsida, Om oss | Ljus fast bakgrund | Mörkt läge blandar ljus bakgrund med mörk text; 200 %-överflöde på smal skärm | Delvis | Medel |
-| Äldre Hem, Flow-sidor | Äldre färgstark stil med Flow | Lämnas orörda (äldre funktion, Flow skyddad) | — | — |
+| Gemensamt utseende | Publicerade Paceable-ytor; Hem/Flow undantagna | Anslut även dessa sidor till samma färger, kanter och dialogdjup | Befintliga färgvärden och gemensamma byggstenar | Låg |
+| Äldre Hem | Befintliga genvägar, Just nu, barnschema och utfällbara delar; färgstarka ytor | Tona ned dekorativa gradienter, anpassa kort och knappar; orienterande hälsning får befintlig rubrikstil | Samma innehåll och kort, ingen omflyttning | Medel |
+| Flow och samtal | Historik, områdesval, pratbubblor, inmatning och maskot | Samma lugna ytor och knappstil; tydlig skillnad mellan egna och Flows meddelanden | Befintlig chatt och kontroller | Medel |
+| Uppgifter, Träning, Studier, Arbete, Historik | Gemensamma kort plus egna dekorativa gradienter | Ersätt återstående dekorativa färgval med befintliga Paceable-ytor | Gemensamma kort och rubriker först | Medel |
+| Familj, barn och inställningar | Formulär och områdesmarkeringar | Bara kvarvarande visuella avvikelser; bevara betydelsebärande områdesfärger | Befintliga formulär och dialoger | Låg–medel |
+| Insikter, Energikarta, Friktionsindex och statistik | Diagram och egna färgval | Anpassa omgivande ytor och dekorativa färger, inte diagrammens betydelse eller data | Befintliga färgvärden där betydelsen stämmer | Medel |
+| Flowplan och äldre FlowScore | Befintliga planerings- och informationsvyer | Anpassa ramar, ytor och funktionell typografi; inga nya poäng eller stenplaceringar | Befintliga byggstenar | Låg–medel |
+
+## Genomförande – minsta ändring först
+
+1. Utvidga den befintliga Paceable-avgränsningen till Hem och Flow, inklusive samtalens undersidor och tillhörande dialoger. Kontrollera resultatet innan fler regler tillkommer.
+2. Rätta bara kvarvarande dekorativa avvikelser genom befintliga gemensamma kort, rubriker och färgvärden. Undvik breda regler som färgar om alla gradienter eller statusmarkeringar.
+3. Gör små lokala justeringar där egna kort eller pratbubblor fortfarande avviker. Behåll ordning, antal delar, klickytor, chattens rullning och sidornas layout.
+
+Fraunces används uttryckligen och sparsamt för orienterande rubriker; Inter för funktioner, formulär, aktiviteter, status, meddelanden och metadata. Återanvänd redan godkända radier och djup.
 
 ## Skydd
 
-Inga ändringar av data, inloggning, kalender, Capacity, Pace, Flow, familj, notiser, synkning, databas eller tekniska identifierare. Stenar, logotyper, navigering och sidornas uppbyggnad behålls. Inga nya paket och inget nytt designsystem. Ändringarna görs bara i utseendet.
+- Ingen ändring av funktioner, sparning, konto, auth, synkning, databas, notiser eller tekniska identifierare.
+- Kalendergeometri, Capacity/Load/Pace, familjebehörigheter och barnens read-only-visning lämnas orörda.
+- Flow-maskoten och godkända scenbilder bevaras; inga nya bilder, stenformationer eller stenplaceringar.
+- Godkända logotyper, ikoner och stenar ändras inte. Inga nya paket.
+- Betydelsebärande områdes-, status- och diagramfärger ersätts inte med dekorativ plommonfärg.
 
-## Minsta första implementation (rekommenderas)
+## Verifiering och leverans
 
-1. Gör Paceable-ytan gällande för hela den inloggade appens innehåll, men inte för äldre Hem och Flow-sidorna.
-2. Uppdatera det gemensamma kortet, sektionen och rubriken så att de använder befintliga Paceable-värden.
-3. Ge dialoger samma yta och djup.
-
-Det är cirka tre filer och ger ett lugnare, enhetligt intryck på omkring 30 sidor på en gång. Sidspecifika gradienter (prioritet 2–3) tas i en senare omgång.
-
-Kontroll: 360/390/430/1024/1440 px, ljust/mörkt läge, 200 % text och kontrast (WCAG AA), samt att alla tester godkänns. Idag, Kalender, Tankar och Min plats ska se ut exakt som innan.
+- Kontrollera representativa återstående sidor samt Hem och Flow vid 360/390/430/1024/1440 px, ljust/mörkt och 200 % text.
+- Kontrollera WCAG AA-kontrast, synligt tangentbordsfokus, dialoger och mobilens klickytor.
+- Kontrollera chatthistorik, rullning, inmatning och öppning av befintliga funktioner utan att skriva testinnehåll i användarens konto.
+- Jämför Idag, Kalender, Tankar och Min plats med före-bilder; deras utseende ska inte förändras.
+- Kör hela befintliga testsviten och kontrollera automatiskt bygge. Redovisa ändrade filer, före/efter-bilder och eventuella begränsningar.
+- Uppdatera båda ändringsloggarna vid genomförandet. Invänta separat godkännande för publicering.
 
 ## Tekniskt
 
-- Lägg `data-paceable-surface` på innehållscontainern i layouten, med undantag för legacy-routes.
-- `MyFloveCard` och `MyFloveSection` får `bg-[var(--pace-surface)]`, kanten `--pace-border-warm` och `shadow-[var(--pace-elevation-1)]`. `MyFloveHeader`-titeln får `pace-editorial`.
-- `DialogContent` får `--pace-surface-raised` och `--pace-elevation-2`.
-- Fem hårdkodade färger byts mot semantiska tokens i omgång 2.
+Utgå från `src/components/layout.tsx`, `src/styles.css` och befintliga `src/components/myflove/`-byggstenar. Hem finns i `src/pages/home.tsx`; Flow omfattar även befintliga komponenter under `src/components/flow/` och `/assistant`-undersidor. Använd avgränsade regler och opt-in-presentation, inte globala rubrikändringar eller nya parallella komponentfamiljer. Det exakta antalet filer beror på vilka lokala färgval som kvarstår efter gemensam anslutning.
