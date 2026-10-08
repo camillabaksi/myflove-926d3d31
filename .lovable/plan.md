@@ -30,7 +30,7 @@ Källor är relativa `src/` om inte annat anges. Synliga texter ska skiljas frå
 | Andra äldre funktionsord | MyFlow i Insikter/toasts, StudyFlow i schemaimport, FlowScore i batteriförklaring/äldre egen sida | `pages/insight.tsx`, `components/insight-quickflow-hint.tsx`, `schedule-import.tsx`, `pages/battery.tsx`, `flowscore.tsx` | MyFlow → faktisk destination; StudyFlow → Studier. FlowScore kräver begreppsgranskning: inte följeslagaren, inte automatiskt Capacity/Din takt. |
 | Historik/gamla filer/native | MyFlove/Flow i changelog, pitch/filmer, bilder, iOS/Android | `lib/changelog.ts`, `pages/pitch.tsx`, `remotion/`, `public/logo.svg`, `ios/`, `android/` | Bevaras. Historiska namn skrivs inte om; gammal bildfil betyder inte aktiv visning. `logo.svg` saknar aktiv appreferens i granskningen. |
 
-## 2. Sammanhängande namnförslag
+## 2. Namnförslag
 
 | Befintligt | Förslag | Avgränsning |
 |---|---|---|
@@ -48,7 +48,7 @@ Källor är relativa `src/` om inte annat anges. Synliga texter ska skiljas frå
 
 Engelska: **Your pace** för dagsrytm.
 
-## 3. Framtida stenföljeslagare – teknisk möjlighet
+## 3. Stenföljeslagare
 
 - `src/assets/paceable-stones.png` är en sammanfogad godkänd bild via `PaceableStones`, inte tre frilagda original.
 - **Möjligt:** mycket liten långsam förflyttning av hela formationen, utan deformation, filter, nya skuggor eller materialändring. Stillaläge/minskad rörelse ger statisk bild. Logotyp och låsta stenplaceringar lämnas stilla.
@@ -65,7 +65,7 @@ Dagsrytmens `DayPace`, `deriveDayPace` och `day-pace.ts` behålls. Framtida föl
 
 AI-systemtexten introducerar fortfarande ”Flow – MyFloves AI-kompanjon”. Identitetsorden behöver senare separat granskning utan ändrade råd, säkerhetsregler eller åtgärdsgodkännande. Sparade samtal skrivs inte om.
 
-## 5. Kostnadseffektiv arbetsordning
+## 5. Arbetsordning
 
 1. **Namnbeslut, låg insats:** godkänn Pace / Din takt och synligt QuickFlow-namn.
 2. **Minsta textetapp, låg–medel:** etiketter i Mer, samtal, inställningar och Din takt; språk/alternativtexter. Lila bilden står kvar tills bildbyte godkänts.
@@ -75,7 +75,7 @@ AI-systemtexten introducerar fortfarande ”Flow – MyFloves AI-kompanjon”. I
 
 **Namnrisken:** två synliga Pace-koncept kan få dagsrytm att låta som följeslagarens omdöme. Din takt minskar risken. Nivåerna är deterministiskt stöd, inte AI, prestation eller medicinsk bedömning. Engelska ”Your pace” kräver tydlig placering. Namnets juridiska tillgänglighet är inte undersökt; inget namn-/domänskydd garanteras.
 
-## 6. Kontroll före framtida leverans
+## 6. Kontroller
 
 Testa samma länkar/sökning/filter/språk och oförändrad dagsrytm (unknown/future/nivåer). Kontrollera mobil/desktop, teman, 200 %, skärmläsare och minskad rörelse. Inga automatiska kalenderändringar. Notiser ska behålla schema, mottagare, behörigheter, ljud, tyst läge och specifika länkar; verkliga mobiltester separat.
 
