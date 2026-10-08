@@ -102,7 +102,7 @@ export default function Home() {
   const savedItemsHref = openItems.length > 0 ? "/quickflow" : "/anteckningar";
   const savedItemCounts = [
     openItems.length > 0
-      ? `${openItems.length} ${openItems.length === 1 ? t("sak") : t("saker")} ${t("i QuickFlow")}`
+      ? `${openItems.length} ${openItems.length === 1 ? t("sak") : t("saker")} ${t("i Fånga")}`
       : null,
     openNotes.length > 0
       ? `${openNotes.length} ${openNotes.length === 1 ? t("anteckning") : t("anteckningar")}`

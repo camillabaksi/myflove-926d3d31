@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app/relationer")({
       {
         name: "description",
         content:
-          "Samla partner, barn, familj, vänner, anhöriga och husdjur på ett ställe – som kontext i Quickflow, kalender och påminnelser.",
+          "Samla partner, barn, familj, vänner, anhöriga och husdjur på ett ställe – som kontext i Fånga, kalender och påminnelser.",
       },
       { property: "og:title", content: "Relationer – MyFlove" },
       {

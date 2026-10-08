@@ -360,7 +360,7 @@ export default function RelationsPage() {
               </h1>
               <p className="text-muted-foreground">
                 Människorna – och djuren – som hör till ditt liv. Flow använder dem som kontext i
-                Quickflow, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder
+                Fånga, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder
                 för dig.
               </p>
             </div>

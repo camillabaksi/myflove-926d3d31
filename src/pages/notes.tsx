@@ -21,7 +21,7 @@ export default function NotesPage() {
             </h1>
             <p className="text-muted-foreground">
               {t(
-                "Din idébank. Skriv ner tankar utan deadline – och omvandla dem när du vill, eller flytta tillbaka dem till Quickflow.",
+                "Din idébank. Skriv ner tankar utan deadline – och omvandla dem när du vill, eller flytta tillbaka dem till Fånga.",
               )}
             </p>
           </header>

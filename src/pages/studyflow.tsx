@@ -680,7 +680,7 @@ export default function StudyflowPage() {
                         if (!lecturePrep.trim()) return;
                         addQuickflow({ text: lecturePrep.trim(), level: "viktigt" });
                         setLecturePrep("");
-                        toast.success("Sparat i Quickflow – jag påminner dig på lektionen. 💙");
+                        toast.success("Sparat i Fånga – jag påminner dig på lektionen. 💙");
                       }}
                     >
                       Spara
