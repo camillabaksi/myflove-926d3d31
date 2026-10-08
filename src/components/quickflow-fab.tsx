@@ -9,10 +9,10 @@ export default function QuickflowFab() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new CustomEvent("myflove:quickflow"))}
-      aria-label="Tankar – få ut det ur huvudet"
+      aria-label="Fånga – få ut det ur huvudet"
       className="hidden"
     >
-      <ThoughtsIcon size={18} /> Tankar
+      <ThoughtsIcon size={18} /> Fånga
     </button>
   );
 }

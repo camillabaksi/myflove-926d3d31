@@ -345,7 +345,7 @@ export default function Layout({ children }: LayoutProps) {
 
     {
       href: "/quickflow",
-      label: "Tankar",
+      label: "Fånga",
       icon: ThoughtsIcon,
       hint: "Fånga något snabbt – sortera sedan",
       essential: true,

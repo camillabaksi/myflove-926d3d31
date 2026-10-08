@@ -39,7 +39,7 @@ export const EN: Record<string, string> = {
   "Anpassa Paceable, konto och appens inställningar.": "Customise Paceable, your account and app settings.",
   "Så funkar Paceable": "How Paceable works",
   "Vad som visas och hur Pace hjälper": "What is shown and how Pace helps",
-  "Idag, Kalender, Tankar, Min plats och Mer ligger fast för alla.": "Today, Calendar, Thoughts, My space and More are fixed for everyone.",
+  "Idag, Kalender, Fånga, Min plats och Mer ligger fast för alla.": "Today, Calendar, Capture, My space and More are fixed for everyone.",
   "Pace tänker…": "Pace is thinking…",
   "Pace lyssnar när du behöver det.": "Pace listens when you need it.",
   "Pace utgår från din profil och dina mönster i appen.": "Pace uses your profile and your patterns in the app.",
@@ -72,7 +72,7 @@ export const EN: Record<string, string> = {
   // ── Navigation ──────────────────────────────────────────────────────────
   Hem: "Home",
   Idag: "Today",
-  Tankar: "Thoughts",
+  Fånga: "Capture",
   "Min plats": "My space",
   "Anpassa Paceable, konto och appens inställningar": "Customise Paceable, your account and app settings",
   "Huvudnavigation": "Main navigation",
@@ -317,8 +317,8 @@ export const EN: Record<string, string> = {
     "Nothing added for today yet. That's completely okay too.",
   "Från ditt huvud": "From your head",
   "Visa alla": "Show all",
-  "Inget som snurrar just nu – tryck på Quickflow när något dyker upp.":
-    "Nothing spinning right now – tap Quickflow when something comes up.",
+  "Inget som snurrar just nu – tryck på Fånga när något dyker upp.":
+    "Nothing spinning right now – tap Capture when something comes up.",
   "Dagens tanke": "Today's thought",
   "Små steg varje dag": "Small steps every day",
   "skapar stora förändringar.": "create big changes.",
@@ -335,8 +335,8 @@ export const EN: Record<string, string> = {
   "Dagens rutiner och doser": "Today's routines and doses",
   "MyFlove ser hela din dag – oavsett vilket rum sakerna hör till.":
     "MyFlove sees your whole day – no matter which room things belong to.",
-  "Du använder Quickflow mest, så den ligger först här nu.":
-    "You use Quickflow the most, so it comes first here now.",
+  "Du använder Fånga mest, så den ligger först här nu.":
+    "You use Capture the most, so it comes first here now.",
   "Du använder kalendern mest, så den ligger först här nu.":
     "You use the calendar the most, so it comes first here now.",
   "Du checkar in i batteriet ofta, så det ligger först här nu.":
