@@ -1,5 +1,10 @@
 # Roadmap
 
+## Etapp 2A tillgänglighetsrättning
+- [ ] Godkänn avgränsad plan; ingen publicering.
+- [ ] Anpassa hälsning, batterier, kalendertexter och kontrollgrupper för förstorad text utan ändrad normallayout/geometri.
+- [ ] Verifiera sju bredder vid normal/200 % text, tangentbord, tester och tillgänglig typkontroll; rapportera eventuella målkonflikter.
+
 ## Etapp 2A desktop (2026-10-08)
 - [x] Godkänd avgränsning: Idag en huvudkolumn; kalenderkontroller och sekundärt stöd, oförändrad mobil/geometri.
 - [x] 503 tester godkända, automatiskt bygge OK; 768/1024/1280/1440 px och 200 % text kontrollerade. Mobilregler och stenasset bevarade; live-data gör pixeljämförelse varierande. Ingen publicering.
