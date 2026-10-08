@@ -624,15 +624,11 @@ export default function Tasks() {
                   key={t.id}
                   type="button"
                   onClick={() => setTab(t.id)}
-                  className={`press flex-1 rounded-pill px-3 py-2 text-sm font-semibold transition-colors ${
-                    tab === t.id
-                      ? "bg-primary text-primary-foreground shadow-soft"
-                      : "bg-lavender text-ink hover:bg-lavender/70"
-                  }`}
+                  aria-pressed={tab === t.id}
+                  className="pace-tasks-tab"
                 >
                   {t.id === "idag" ? <Sun aria-hidden size={16} /> : t.id === "kommande" ? <CalendarIcon aria-hidden size={16} /> : <Check aria-hidden size={16} />}
                    <span>{t.label}{count > 0 && <span className="ml-1 opacity-70">{count}</span>}</span>
-                  {count > 0 && <span className="ml-1 opacity-70">{count}</span>}
                 </Button>
               );
             })}
