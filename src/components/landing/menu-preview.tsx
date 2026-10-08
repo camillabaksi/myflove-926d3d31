@@ -80,13 +80,13 @@ const MENU_GROUPS: MenuGroup[] = [
   {
     id: "flowflow",
     label: "Flow",
-    hint: "Chatt, planering, QuickFlow och anteckningar",
+    hint: "Chatt, planering, Fånga och anteckningar",
     icon: Sparkles,
     items: [
       { label: "Flow", hint: "Hjälp, planering och chatt på ett ställe", icon: Sparkles },
       { label: "Prata med Flow", hint: "Chatta med din personliga följeslagare", icon: MessageCircle },
       { label: "Planera", hint: "Planeringsläget – ordna dagens saker", icon: ListChecks },
-      { label: "QuickFlow", hint: "Fånga något snabbt – sortera sedan", icon: Zap },
+      { label: "Fånga", hint: "Fånga något snabbt – sortera sedan", icon: Zap },
       { label: "Anteckningar", hint: "Din idébank – tankar utan krav", icon: NotebookPen },
       { label: "Alla uppgifter", hint: "Hela listan framåt", icon: CheckSquare },
     ],
