@@ -88,7 +88,7 @@ function formatDate(iso: string) {
 
 const LOW = 0.7;
 
-export function QuickflowImageImport() {
+export function QuickflowImageImport({ whySlot }: { whySlot?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [stage, setStage] = useState<Stage>("pick");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -288,6 +288,7 @@ export function QuickflowImageImport() {
             <FileText size={18} className="text-primary" /> PDF / dokument
           </button>
         </div>
+        {whySlot && <div className="mt-3">{whySlot}</div>}
       </div>
 
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={onPick} />
