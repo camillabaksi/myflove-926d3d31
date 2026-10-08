@@ -1,5 +1,9 @@
 # Roadmap
 
+## Tankars Varför i importkortet (2026-10-08)
+- [x] Godkänd plan; endast Varför-länken flyttad in i importkortets nederkant via valfritt whySlot-prop (legacy-ytor påverkas inte).
+- [x] 501 tester godkända; 360/390/430 px och desktop: länken inne i kortet, 58×44 px klickyta, fokus och popover öppnar samma innehåll, ingen overflow, dark mode och 200 % textskalning OK. Stenbildens kontrollsumma oförändrad. Tre leveransbilder; ingen publicering.
+
 ## Tankars två ytor (2026-10-08)
 - [x] Godkänd plan, enbart capture-yta och inline-hjälp vid import; stenarna orörda.
 - [x] 501 tester och bygge godkända; 360/390/430/desktop, light/dark, 200 % textskalning utan dokumentoverflow, fokus och hjälpöppning verifierade. Capture-dialog och befintlig röstkontroll öppnas; importknappar finns. Faktisk inspelning och import/sparning ej end-to-end-testade.

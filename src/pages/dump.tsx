@@ -44,14 +44,15 @@ export default function Dump() {
               </header>
               <div className="space-y-4">
                 <QuickflowCapture appearance="paceable" />
-                <div className="space-y-1">
-                <QuickflowImageImport />
-                <WhyHint label="quickflow" appearance="inline">
-                  {t(
-                    "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.",
-                  )}
-                </WhyHint>
-                </div>
+                <QuickflowImageImport
+                  whySlot={
+                    <WhyHint label="quickflow" appearance="inline">
+                      {t(
+                        "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.",
+                      )}
+                    </WhyHint>
+                  }
+                />
               </div>
             </section>
 
