@@ -40,7 +40,7 @@ export default function Dump() {
                   <h1 id="thoughts-title" className="mt-1 pace-editorial text-3xl text-ink">{t("Vad har du i huvudet?")}</h1>
                   <p className="mt-1 text-base text-muted-foreground">{t("Skriv eller säg det som det är.")}</p>
                 </div>
-                <PaceableStones compact />
+                <PaceableStones compact tactile className="pace-stones-contained h-12 w-24 shrink-0" />
               </header>
               <div className="space-y-4">
                 <QuickflowCapture />

@@ -367,7 +367,7 @@ export function MyFloveHeader({
           className="mt-0.5"
         />
 
-        <div className="min-w-0 flex-1">
+        <div className={cn("min-w-0 flex-1", titleClassName?.includes("pace-editorial") && "pace-editorial-title-spacing")}>
           <h1 className={cn("font-display text-2xl font-bold leading-tight text-ink sm:text-3xl", titleClassName)}>
             {title}
           </h1>

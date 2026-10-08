@@ -19,6 +19,15 @@ describe("Paceable presentation", () => {
     expect(container.querySelectorAll("circle")).toHaveLength(0);
   });
 
+  it("renders the approved asset proportionally for existing tactile placements", () => {
+    const { container } = render(<PaceableStones compact tactile className="h-12 w-24" />);
+    const image = screen.getByRole("img", { name: "Tre Paceable-stenar" });
+    expect(image).toHaveAttribute("width", "1425");
+    expect(image).toHaveAttribute("height", "546");
+    expect(image).toHaveClass("object-contain");
+    expect(container.querySelector("svg")).toBeNull();
+  });
+
   it("keeps the three stones as one accessible identity with three reusable shapes", () => {
     const { container } = render(<PaceableStones />);
     expect(screen.getByRole("img", { name: "Tre mjuka Paceable-stenar" })).toBeInTheDocument();

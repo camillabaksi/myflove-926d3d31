@@ -650,7 +650,7 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="hidden md:flex flex-col w-56 border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto">
         <div className="mb-5 flex items-center justify-between gap-2 px-1 py-1">
           <h1 className="font-display text-xl font-bold text-foreground">Paceable</h1>
-          <PaceableStones compact className="w-16" />
+          <PaceableStones compact tactile={PACEABLE_PATHS.has(location)} className="pace-stones-contained h-12 w-16" />
         </div>
         <div className="space-y-4">
           {categories.map((cat) => (

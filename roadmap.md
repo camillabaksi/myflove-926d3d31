@@ -1,5 +1,10 @@
 # Roadmap
 
+## Slutpolish och visuellt lås (2026-10-08)
+- [x] Godkänd plan, inventering och endast tre presentationsändringar.
+- [ ] Tester, bildkontrollsumma och mobil/desktop-kontroller.
+- [ ] Fem bilder och rapport; därefter användarens visuella godkännande. Ingen publicering.
+
 ## Typografisk hierarki (2026-10-08)
 - [x] Godkänd plan; explicita editorialroller och funktionell Inter, oförändrade stenar och övrig design.
 - [x] 500 tester godkända och automatiskt bygge OK; mobil/desktop-, 200 % skalnings-, dark/light- och fokuskontroller genomförda.
