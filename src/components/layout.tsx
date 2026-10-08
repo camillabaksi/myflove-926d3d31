@@ -647,76 +647,121 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-56 border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto">
-        <div className="mb-5 flex items-center justify-between gap-2 px-1 py-1">
-          <h1 className="font-display text-xl font-bold text-foreground">Paceable</h1>
+      <nav
+        aria-label={t("Huvudnavigation")}
+        className="relative z-30 hidden md:flex flex-col w-[13rem] border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto"
+      >
+        <div className="mb-6 flex items-center justify-between gap-2 px-1 py-1">
+          <span className="font-display text-xl font-bold text-foreground">Paceable</span>
           <PaceableStones compact tactile={PACEABLE_PATHS.has(location)} className="pace-stones-contained h-12 w-16" />
         </div>
-        <div className="space-y-4">
-          {categories.map((cat) => (
-            <div key={cat.id}>
-              <div
-                className="flex items-center gap-1.5 px-1 mb-1 text-[11px] font-semibold uppercase tracking-wider"
-                style={{ color: catColor(cat.id) }}
-              >
-                <span
-                  className="inline-flex h-5 w-5 items-center justify-center rounded-md"
-                  style={{ backgroundColor: catColor(cat.id, 0.14) }}
-                  aria-hidden="true"
+        <ul className="space-y-1">
+          {primaryNav.map((item) => {
+            const isActive = !desktopMoreOpen && (location === item.href || location.startsWith(`${item.href}/`));
+            const Icon = item.icon;
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    isActive ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
                 >
-                  <cat.icon size={12} />
-                </span>
-                {cat.label}
-              </div>
+                  <Icon size={20} strokeWidth={1.8} />
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              type="button"
+              onClick={() => setDesktopMoreOpen((v) => !v)}
+              aria-expanded={desktopMoreOpen}
+              aria-controls="desktop-more-panel"
+              className={`flex min-h-11 w-full items-center gap-3 rounded-2xl px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                desktopMoreOpen ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+              }`}
+            >
+              <Menu size={20} strokeWidth={1.8} />
+              <span className="truncate">{t("Mer")}</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-              <div className="space-y-0.5">
-                {cat.items.map((item) => {
-                  const isActive = location === item.href;
-                  const Icon = item.icon;
-                  if (item.href === "/traning") {
-                    return (
-                      <RouterLink
-                        key={item.href}
-                        to="/traning"
-                        reloadDocument
-                        className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
-                          isActive
-                            ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                        }`}
-                      >
-                        <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
-                        <span className="truncate leading-tight">{item.label}</span>
-                      </RouterLink>
-                    );
-                  }
+      {desktopMoreOpen && (
+        <aside
+          id="desktop-more-panel"
+          aria-label={t("Mer")}
+          className="fixed inset-y-0 left-[13rem] z-30 hidden w-80 max-w-[calc(100vw-13rem)] flex-col border-r border-border bg-card shadow-lg md:flex"
+        >
+          <div className="flex items-center justify-between border-b border-border/60 p-4">
+            <h2 className="text-base font-semibold text-foreground">{t("Mer")}</h2>
+            <button
+              type="button"
+              onClick={() => setDesktopMoreOpen(false)}
+              aria-label={t("Stäng Mer")}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="relative mb-4">
+              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="search"
+                value={navSearch}
+                onChange={(e) => setNavSearch(e.target.value)}
+                placeholder="Sök i appen…"
+                aria-label="Sök i appen"
+                className="w-full rounded-2xl border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            {navSearch.trim() ? (
+              searchResults.length > 0 ? (
+                <ul className="space-y-0.5">
+                  {searchResults.map((item) => (
+                    <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-6 text-center text-sm text-muted-foreground">Hittade inget som matchar ”{navSearch}”.</p>
+              )
+            ) : (
+              <div className="space-y-1">
+                {desktopMoreGroups.map((group) => {
+                  const open = desktopMoreSection === group.id;
                   return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                      }`}
-                    >
-                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
-                      <span className="truncate leading-tight">{item.label}</span>
-                    </Link>
+                    <section key={group.id} className={group.legacy ? "mt-4 border-t border-border/60 pt-3" : undefined}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        onClick={() => setDesktopMoreSection(open ? null : group.id)}
+                        className={`flex min-h-11 w-full items-center justify-between rounded-2xl px-3 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                          group.legacy ? "text-muted-foreground" : "font-semibold text-foreground"
+                        } hover:bg-secondary`}
+                      >
+                        {group.label}
+                        <span aria-hidden className={`text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+                      </button>
+                      {open && (
+                        <ul className="mb-2 ml-2 space-y-0.5">
+                          {group.items.map((item) => (
+                            <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                          ))}
+                        </ul>
+                      )}
+                    </section>
                   );
                 })}
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-auto pt-3 pb-1">
-          <Link href="/installningar">
-            <Button variant="outline" size="sm" className="w-full rounded-lg gap-2">
-              <Settings2 size={15} /> Inställningar
-            </Button>
-          </Link>
-        </div>
-      </nav>
+            )}
+          </div>
+        </aside>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
