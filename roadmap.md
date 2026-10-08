@@ -1,4 +1,7 @@
 # Roadmap
+## Mer – fyra extra direktsektioner (2026-10-08)
+- [ ] Lägg till Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag efter Insikter; behåll alla befintliga ingångar även under Fler funktioner.
+- [ ] Verifiera rätt destinationer, gemensamma behörighetsfilter och inga dubbletter inom samma sektion; mobil, teman, 200 %, tester och ändringsloggar. Ingen publicering.
 
 ## Uppgifter – sammanhållet Paceable-uttryck (2026-10-08)
 - [x] Granskat sidans egna visuella avvikelser och delade komponenter; avgränsad plan framtagen före appkodändring.
