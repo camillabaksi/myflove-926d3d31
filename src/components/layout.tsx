@@ -744,30 +744,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </header>
 
-        <nav aria-label={t("Huvudnavigation")} className="hidden md:flex items-center gap-1.5 px-6 pt-4">
-          {primaryNav.map((item) => {
-            const active =
-              item.href === "/flow"
-                ? location.startsWith("/flow") || location.startsWith("/assistant")
-                : location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? "bg-lavender text-foreground"
-                    : "text-muted-foreground hover:bg-card hover:text-foreground"
-                }`}
-              >
-                <Icon size={18} strokeWidth={1.8} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
 
         <div className="hidden md:flex items-center justify-between px-6 pt-2">
           {canGoBack ? (
