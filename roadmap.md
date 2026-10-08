@@ -1,4 +1,7 @@
 # Roadmap
+## Mer – sista struktur- och kortjusteringen (2026-10-08)
+- [x] Ta bort fyra dubblerade verktygsgrupper och ge Min vardag sex enhetliga kort med oberoende expansion.
+- [x] 528/528 tester i 83 filer; automatiskt bygge OK. 360/390/430/1024/1440 px, båda teman och 200 %: sex kort, oberoende expansion utan höjdförändring, sökning och kvarvarande verktygsgrupper verifierade. 320 px normal fungerar; 320 px + 200 % visar ett befintligt överflöde i sök/kryss-raden (inte vardagskorten), lämnat orört enligt avgränsningen. Ingen publicering.
 ## Mer – fyra extra direktsektioner (2026-10-08)
 - [x] Lägg till Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag efter Insikter; behåll alla befintliga ingångar även under Fler funktioner.
 - [x] Tre nya tester verifierar rätt destinationer, samma filter och inga dubbletter inom sektioner. 360/390/430/1024/1440 px, båda teman och 200 % text kontrollerade utan overflow eller sidfel. Full svit 527/527 i 83 filer med lägre samtidighet efter ett känt tidskänsligt krypteringstest i första körningen; automatiskt bygge OK. Ändringsloggar uppdaterade. Ingen publicering.

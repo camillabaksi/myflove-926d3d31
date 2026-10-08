@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import type { ReactNode, MouseEventHandler } from "react";
-import MoreView, { getMoreItems, MORE_GROUPS, MORE_FAMILY, MORE_INSIGHTS, MORE_LEGACY, MORE_FEATURED_HREFS, type MoreItem } from "./more-view";
+import MoreView, { getMoreItems, MORE_GROUPS, MORE_TOOL_GROUPS, MORE_FAMILY, MORE_INSIGHTS, MORE_LEGACY, MORE_FEATURED_HREFS, type MoreItem } from "./more-view";
 import { User } from "lucide-react";
 
 vi.mock("wouter", () => ({ Link: ({ children, href, ...props }: { children: ReactNode; href: string; className?: string; onClick?: MouseEventHandler<HTMLAnchorElement> }) => <a href={href} {...props}>{children}</a> }));
@@ -30,7 +30,7 @@ describe("Mer navigation presentation", () => {
   const allItems = () => [...new Set([...MORE_FEATURED_HREFS, ...MORE_FAMILY, ...MORE_INSIGHTS, ...MORE_LEGACY, ...MORE_GROUPS.flatMap((group) => [...group.hrefs])])].map((href) => item(href, href !== "/flowplan"));
   const show = (items: MoreItem[], simpleMode = false) => render(<MoreView items={items} simpleMode={simpleMode} enlarged={false} onClose={vi.fn()} onNavigate={vi.fn()} t={(text) => text} />);
 
-  it("places the four groups as collapsible subcategories under their parent sections while keeping all existing entry points", () => {
+  it("places each category only under its parent and keeps remaining tools and legacy", () => {
     const { container } = show(allItems());
     const headings = [...container.querySelectorAll(".pace-more-section > h2")].map((heading) => heading.textContent);
     expect(headings).toEqual(["MIN VARDAG", "HÄLSA & VÄLMÅENDE", "STÖD & SAMTAL", "FAMILJ & RELATIONER", "ÖVERBLICK & INSIKTER", "FLER VERKTYG"]);
@@ -52,10 +52,8 @@ describe("Mer navigation presentation", () => {
       const direct = document.getElementById(`pace-more-group-direct-${group.title}`);
       expect(direct).not.toBeNull();
       if (!direct) continue;
-      const nested = within(tools as HTMLElement).getByRole("heading", { name: group.title }).parentElement;
-      expect(nested).not.toBeNull();
-      if (!nested) continue;
-      for (const section of [direct, nested]) {
+      expect(within(tools as HTMLElement).queryByRole("heading", { name: group.title })).toBeNull();
+      for (const section of [direct]) {
         const links = within(section as HTMLElement).getAllByRole("link");
         const hrefs = links.map((link) => link.getAttribute("href"));
         expect(hrefs).toEqual([...group.hrefs]);
@@ -69,7 +67,7 @@ describe("Mer navigation presentation", () => {
     expect(screen.getByRole("button", { name: /Äldre funktioner/ })).toBeInTheDocument();
   });
 
-  it("applies identical authorization and simple-mode filtering in both locations", () => {
+  it("preserves authorization, simple-mode filtering and unfiltered search", () => {
     const allowed = allItems().filter((entry) => !["/assistant", "/admin", "/admin-statistik"].includes(entry.href));
     const { container } = show(allowed, true);
     fireEvent.click(screen.getByRole("button", { name: /Fler funktioner/ }));
@@ -78,7 +76,7 @@ describe("Mer navigation presentation", () => {
     for (const href of ["/assistant", "/flowplan", "/admin", "/admin-statistik"]) {
       expect(container.querySelectorAll(`a[href="${href}"]`)).toHaveLength(0);
     }
-    expect(container.querySelectorAll('a[href="/flow"]')).toHaveLength(2);
+    expect(container.querySelectorAll('a[href="/flow"]')).toHaveLength(1);
     expect(screen.getByRole("button", { name: /Flow och samtal/ })).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("button", { name: /Min dag/ })).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
@@ -92,5 +90,24 @@ describe("Mer navigation presentation", () => {
     for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title) })).toBeNull();
     expect(screen.queryByRole("heading", { name: "STÖD & SAMTAL" })).toBeNull();
     expect(screen.getByRole("button", { name: /Fler funktioner/ })).toBeInTheDocument();
+  });
+  it("uses six compact daily tiles with independent full-width expansions", () => {
+    const { container } = show(allItems());
+    const grid = container.querySelector(".pace-more-daily");
+    if (!grid) throw new Error("Missing daily grid");
+    const tiles = grid.querySelectorAll(".pace-more-small-card");
+    expect(tiles).toHaveLength(6);
+    expect([...tiles].map((tile) => tile.querySelector(".pace-more-card-title")?.textContent)).toEqual(["Uppgifter", "Ekonomi", "Studier", "Arbete", "Min dag", "Hem och vardag"]);
+    for (const title of ["Min dag", "Hem och vardag"]) fireEvent.click(screen.getByRole("button", { name: new RegExp(title) }));
+    for (const title of ["Min dag", "Hem och vardag"]) {
+      const region = screen.getByRole("region", { name: title });
+      expect(region.parentElement).toBe(grid);
+      expect(region).toHaveClass("col-span-full");
+      expect(region.closest(".pace-more-card-shell")).toBeNull();
+    }
+    fireEvent.click(screen.getByRole("button", { name: /Min dag/ }));
+    expect(screen.queryByRole("region", { name: "Min dag" })).toBeNull();
+    expect(screen.getByRole("region", { name: "Hem och vardag" })).toBeInTheDocument();
+    expect(MORE_TOOL_GROUPS.map((group) => group.title)).toEqual(["Konto och app", "Admin"]);
   });
 });

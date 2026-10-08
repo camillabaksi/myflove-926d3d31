@@ -2188,6 +2188,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-section { margin-top: 1.25rem; }
 .pace-more-section > h2 { margin-bottom: 0.55rem; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; line-height: 1.5; color: hsl(var(--muted-foreground)); letter-spacing: 0; }
 .pace-more-daily { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0.7rem; }
+.pace-more-daily > div:not(.pace-more-expanded) { min-width: 0; }
+.pace-more-daily .pace-more-card-shell, .pace-more-daily .pace-more-small-card { height: 100%; }
 .pace-more-small-card { grid-template-columns: minmax(0,1fr) auto; grid-template-rows: 2.6rem auto; gap: 0.65rem 0.2rem; min-height: 7.5rem; padding: 0.8rem; align-items: end; }
 .pace-more-small-card .pace-more-icon { grid-column: 1; grid-row: 1; align-self: start; }
 .pace-more-small-card .pace-more-card-copy { grid-column: 1; grid-row: 2; }

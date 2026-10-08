@@ -32,7 +32,7 @@ Today uses the shared day-capacity source and authorized calendar projection for
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Secondary pages share Paceable scope; primary pages stay locked. Tasks uses local presentation/tokens, not shared rendering or store changes. Keep IDs/routes. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
 
-More reuses filtered navItems/groups for direct and expandable links. Scoped styles protect other pages. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
+More reuses filtered navItems/groups and scoped styles. Compact expansions use full-grid-width sibling link lists to avoid stretching adjacent controls. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
 Narrow greetings balance name breaks; full names, profile data and approved stones stay intact.
 
 Today/Calendar use local rem/container rules for enlarged text; normal layout and timeline geometry stay locked.

@@ -21,6 +21,7 @@ export const MORE_GROUPS = [
   { title: "Konto och app", hrefs: ["/installningar", "/friktionsindex"] },
   { title: "Admin", hrefs: ["/admin", "/admin-statistik"] },
 ] as const;
+export const MORE_TOOL_GROUPS = MORE_GROUPS.slice(4);
 export const MORE_FAMILY = ["/familjeflow", "/barn", "/relationer", "/familj"];
 export const MORE_INSIGHTS = ["/insight", "/historik", "/statistik"];
 export const MORE_LEGACY = ["/hem", "/flowscore", "/beloningar"];
@@ -83,7 +84,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     </Link></li>;
   })}</ul>;
 
-  function card(label: string, hint: string, Icon: typeof User, tone: string, href?: string, group?: string, children?: ReactNode, compact = false) {
+  function card(label: string, hint: string, Icon: typeof User, tone: string, href?: string, group?: string, children?: ReactNode, compact = false, detached = false) {
     const expanded = Boolean(group && open.includes(group));
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
@@ -94,8 +95,8 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     </>;
     return <div className={`pace-more-card-shell pace-more-tone-${tone}`}>
       {href ? <Button asChild variant="ghost" className={cn("pace-more-card", compact && "pace-more-small-card")}><Link href={href} onClick={(event) => navigate(event, href)}>{content}</Link></Button>
-        : <Button variant="ghost" className="pace-more-card" onClick={() => setOpen((current) => expanded ? current.filter((key) => key !== group) : [...current, group ?? ""]) } aria-expanded={expanded} aria-controls={`pace-more-group-${group}`}>{content}</Button>}
-      {group && expanded && <div id={`pace-more-group-${group}`} className="pace-more-expanded">{children}</div>}
+        : <Button variant="ghost" className={cn("pace-more-card", compact && "pace-more-small-card")} onClick={() => setOpen((current) => expanded ? current.filter((key) => key !== group) : [...current, group ?? ""]) } aria-expanded={expanded} aria-controls={`pace-more-group-${group}`}>{content}</Button>}
+      {group && expanded && !detached && <div id={`pace-more-group-${group}`} className="pace-more-expanded">{children}</div>}
     </div>;
   }
   function section(title: string, content: ReactNode) {
@@ -108,13 +109,18 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
     "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
   };
-  const groupCard = (title: string) => {
+  const groupCard = (title: string, compact = false) => {
     const group = MORE_GROUPS.find((entry) => entry.title === title);
     const meta = groupMeta[title];
     const entries = group ? visible(group.hrefs) : [];
-    return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries)) : null;
+    return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries), compact, compact) : null;
   };
-  const minDag = groupCard("Min dag"), hemVardag = groupCard("Hem och vardag"), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Flow och samtal");
+  const minDag = groupCard("Min dag", true), hemVardag = groupCard("Hem och vardag", true), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Flow och samtal");
+  const dailyExpansion = (title: string) => {
+    const group = MORE_GROUPS.find((entry) => entry.title === title);
+    const entries = group ? visible(group.hrefs) : [];
+    return entries.length > 0 && open.includes(`direct-${title}`) ? <div id={`pace-more-group-direct-${title}`} className="pace-more-expanded col-span-full min-w-0" role="region" aria-label={t(title)}>{rows(entries)}</div> : null;
+  };
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
@@ -126,9 +132,13 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
       <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} />{t("Inställningar")}</Link>
       {(visible(DAILY.map((item) => item.href)).length > 0 || minDag || hemVardag) && section("MIN VARDAG", <>
-        {visible(DAILY.map((item) => item.href)).length > 0 && <div className="pace-more-daily">{DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}</div>}
-        {minDag}
-        {hemVardag}
+        <div className="pace-more-daily">
+          {DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}
+          {minDag}
+          {hemVardag}
+          {dailyExpansion("Min dag")}
+          {dailyExpansion("Hem och vardag")}
+        </div>
       </>)}
       {(visible(["/traning"]).length > 0 || ork) && section("HÄLSA & VÄLMÅENDE", <>
         {visible(["/traning"]).length > 0 && card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning")}
@@ -138,7 +148,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
       {section("FLER VERKTYG", <>
-        {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_GROUPS.map((group) => {
+        {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_TOOL_GROUPS.map((group) => {
           const entries = visible(group.hrefs);
           return entries.length ? <section key={group.title} className="pace-more-tool-group"><h3>{t(group.title)}</h3>{rows(entries)}</section> : null;
         }))}
