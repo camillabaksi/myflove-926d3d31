@@ -114,6 +114,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const entries = group ? visible(group.hrefs) : [];
     return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries)) : null;
   };
+  const minDag = groupCard("Min dag"), hemVardag = groupCard("Hem och vardag"), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Flow och samtal");
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
