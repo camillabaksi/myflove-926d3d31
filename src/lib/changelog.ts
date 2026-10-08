@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Mer, direktsektioner (2026-10-08): fyra befintliga kategorier visas efter Insikter med befintliga rader och filter. Alla tidigare ingångar finns kvar, även samma genvägar under Fler funktioner; inga data eller funktioner dupliceras. Designen bevarad; ingen publicering.",
       "Uppgifter (2026-10-08): oinramad sidrubrik, lättare vyval, Inter på uppgiftsnamn/grupper, varma kort och 44 px kontroller. Endast sidlokal presentation; funktioner, data och övriga sidor bevarade. Ingen publicering.",
       "Uppgifter, verifiering (2026-10-08): fem bredder, båda teman och 200 % text; dialog och vyval utan kontosparning. Fyra nya åtgärdstester; full svit 524/524 i 83 filer och automatiskt bygge OK.",
       "Mer enligt godkänd målbild (2026-10-08): samma responsiva vy på mobil och dator med profil, vardagskort, familj, insikter, alla övriga verktyg och Äldre funktioner. Befintliga länkar, filter, sök och funktioner bevaras; endast lokal presentation och lätt dekor. Logotyper och stenar oförändrade. Ingen publicering.",

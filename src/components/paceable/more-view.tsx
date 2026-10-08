@@ -116,6 +116,10 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       {visible(["/traning"]).length > 0 && section("HÄLSA & VÄLMÅENDE", card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning"))}
       {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
       {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
+      {MORE_GROUPS.slice(0, 4).map((group) => {
+        const entries = visible(group.hrefs);
+        return entries.length ? <section key={group.title} className="pace-more-section" aria-label={t(group.title)}><h2>{t(group.title)}</h2>{rows(entries)}</section> : null;
+      })}
       {section("FLER VERKTYG", <>
         {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_GROUPS.map((group) => {
           const entries = visible(group.hrefs);
