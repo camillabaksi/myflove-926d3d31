@@ -1,7 +1,9 @@
 # Roadmap
 ## Pace – riktig 3D, teknikbedömning (2026-10-08)
 - [x] Kontrollera befintliga verktyg/beroenden och redovisa specialmodellering, material, granskning, resursbudget och begränsningar i planen; ingen appändring.
-- [ ] Teknikplanens godkännande före modellbygge/installering; därefter separat visuellt godkännande. Ingen integration eller publicering.
+- [x] Teknikplan godkänd; endast statisk modell, separata prototypberoenden, inga rörelser.
+- [x] Isolerad statisk konturmodell med 11 520 trianglar och gemensamma material; frontjämförelse/25°/teman/390–1280 px. WebGL utan sidfel; huvudappens kod/beroenden orörda.
+- [ ] Visuell kvalitet blockerad: släta/facetterade ytor, kontaktglapp och materialavvikelse. Pausat enligt stoppregeln; beslut om förfinad specialmodellering/manuell 3D krävs. Inga rörelser/integration/publicering.
 ## Pace – realistisk följeslagare, endast prototypplan (2026-10-08)
 - [x] Inventera stenoriginal och befintliga presentationsytor; jämför 3D och 2D utan appändring.
 - [x] Bild 1 används endast för ljus/materialkänsla; bild 2 är exakt visuell förlaga utan nya former eller färger.

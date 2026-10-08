@@ -15,7 +15,7 @@ Min Flow appearance/memories use existing account-scoped cloud storage and one c
 
 Paceable editorial/capture/help remain opt-in for legacy isolation. BrandLogo uses approved originals and .dark; illustrative stones/Flow stay unchanged to prevent identity drift.
 Desktop Träning uses document navigation to prevent stalled transitions.
-Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
+Public landing demos never use account data/sync, protecting saved plans. Local data has one account owner; sync only while that owner is signed in to prevent shared-device leaks.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Never fall back to plaintext for sensitive local keys; keep them in memory and surface a status instead, because encryption at rest must not depend on startup timing.
 A child profile's linked account (children.account_user_id) never gets row access to the owner's children/child_items; it reads only safe fields via get_my_child_profiles/get_my_child_schedule/get_my_shared_child_items (explicit item shares, deduped against the schedule), and the link never gates the account's own features in the UI, so parent-only data is enforced by the database while the person stays a full MyFlove user.
@@ -36,3 +36,4 @@ More reuses filtered navItems/groups and scoped styles. Compact expansions use f
 Narrow greetings balance name breaks; full names, profile data and approved stones stay intact.
 
 Today/Calendar use local rem/container rules for enlarged text; normal layout and timeline geometry stay locked.
+3D companion prototypes use standalone temporary projects and dependencies, never app routes/data, to isolate unapproved models.
