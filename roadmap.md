@@ -2,7 +2,7 @@
 
 ## Mer enligt godkänd målbild (2026-10-08)
 - [x] Tidigare etapps dokumenterade QA genomgången; befintligt Hem-dialogfokusfel kvarstår separat.
-- [ ] Inventera samtliga Mer-länkar och jämför mobil/desktop med referens; visa avgränsad plan.
+- [x] Inventerat samtliga 34 navItems plus profil, jämfört mobil/desktop med referens och förberett avgränsad plan.
 - [ ] Genomförande väntar på uttryckligt plangodkännande; ingen publicering.
 
 ## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
