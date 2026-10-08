@@ -2,7 +2,7 @@
 
 ## Sista avgränsade finjusteringen (2026-10-08)
 - [x] Godkänd plan: endast hälsningens smala storlek ändras till 34 px; befintliga Tankar-stenar och Min plats 32 px behålls.
-- [ ] Verifiera mobilvyer, stenbildens kontrollsumma och tester; leverera bilder utan publicering.
+- [x] Mobilvyer, oförändrad bildkontrollsumma och 501 tester verifierade; bilder levererade utan publicering. Vid 360 px bryts Camillabaksi fortfarande över två namnrader vid minsta tillåtna 34 px; större vyer oförändrade. Separat typkontroll ej körd.
 
 ## Slutpolish och visuellt lås (2026-10-08)
 - [x] Godkänd plan, inventering och endast tre presentationsändringar.

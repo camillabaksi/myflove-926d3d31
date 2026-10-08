@@ -15,6 +15,8 @@ export const Route = createFileRoute("/_app/halsa")({
         property: "og:description",
         content: "Allt som handlar om hur du mår, samlat på ett ställe.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
