@@ -2,7 +2,7 @@
 
 ## Sammanfattning
 
-**Rekommenderad namnstruktur:** Paceable är appen, Pace är följeslagaren och Din takt är dagsrytmstödet med Varsamt, Jämnt och Utrymme. Slogan: **Ditt liv, i din takt.** Namnen är förslag, inte genomförda beslut.
+**Förslag:** Paceable = appen, Pace = följeslagaren, Din takt = dagsrytm (Varsamt/Jämnt/Utrymme). Slogan: **Ditt liv, i din takt.** Inget namnbyte genomfört.
 
 Gamla namn/maskoten finns kvar; Paceable-logotyper/webbikoner lämnas orörda.
 
