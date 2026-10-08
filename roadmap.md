@@ -2,7 +2,7 @@
 
 ## Etapp 2A desktop (2026-10-08)
 - [x] Godkänd avgränsning: Idag en huvudkolumn; kalenderkontroller och sekundärt stöd, oförändrad mobil/geometri.
-- [ ] Verifiera desktopbredder, 200 % text, mobilregressioner och full testsvit; ingen publicering.
+- [x] 503 tester godkända, automatiskt bygge OK; 768/1024/1280/1440 px och 200 % text kontrollerade. Mobilregler och stenasset bevarade; live-data gör pixeljämförelse varierande. Ingen publicering.
 
 ## Fyra avgränsade QA-rättningar (2026-10-08)
 - [x] Godkänd plan: fokus, menynamn vid 200 %, desktop-Mers befintliga Enkelt läge och hälsningens radbrytning.
