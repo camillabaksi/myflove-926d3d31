@@ -30,7 +30,7 @@ Child schedule focus follows times independently of completion, with untimed ite
 Month cells summarize unique existing areas (family context collapses to the existing family area), with capacity only for today or recorded history; this prevents activity volume and unknown future energy from becoming visual noise.
 Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, with the existing mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
-Secondary pages, including Home/Flow, share Paceable scope; primary scope stays locked to avoid regressions. Keep IDs/routes. DailyFlowList integration is Today-only. Swedish dates capitalize only the first character.
+Secondary pages share Paceable scope; primary pages stay locked. Tasks uses local presentation/tokens, not shared rendering or store changes. Keep IDs/routes. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
 
 More shares one responsive view consuming filtered navItems; scoped styles protect other pages. Dismissal restores trigger focus; navigation focuses new content. Groups use essential filtering; search stays unfiltered.
 Narrow greetings balance name breaks; full names, profile data and approved stones stay intact.

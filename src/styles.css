@@ -2328,3 +2328,44 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-flow-chat {
   grid-template-columns: minmax(0, 1fr);
 }
+
+/* Tasks-only presentation; shared task rendering and stores stay unchanged. */
+.pace-tasks-page { width: 100%; max-width: 52rem; margin-inline: auto; font-family: var(--font-sans); }
+.pace-tasks-page .pace-tasks-header { padding: 0.75rem 0.25rem 0.25rem; }
+.pace-tasks-page .pace-tasks-heading { font-family: var(--font-editorial); font-size: 2rem; font-weight: 500; line-height: 1.2; letter-spacing: 0; }
+.pace-tasks-heading-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 50%; background: hsl(var(--lavender)); color: hsl(var(--foreground)); }
+.pace-tasks-page .pace-tasks-add { min-height: 44px; height: auto; border-radius: 1rem; box-shadow: var(--pace-elevation-0); }
+.pace-tasks-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem; padding: 0.25rem; border: 1px solid var(--pace-border-warm); border-radius: 1rem; background: var(--pace-surface); }
+.pace-tasks-page .pace-tasks-tab { min-width: 0; min-height: 44px; height: auto; gap: 0.35rem; padding: 0.6rem 0.35rem; border-radius: 0.75rem; color: hsl(var(--muted-foreground)); background: transparent; font-weight: 500; box-shadow: none; }
+.pace-tasks-page .pace-tasks-tab[aria-pressed="true"] { color: hsl(var(--foreground)); background: hsl(var(--lavender)); }
+.pace-tasks-page .pace-tasks-tab:hover { background: hsl(var(--accent)); }
+.pace-tasks-card { border: 1px solid var(--pace-border-warm); border-radius: 1.5rem; background: var(--pace-surface-raised); box-shadow: var(--pace-highlight-top), var(--pace-elevation-1); overflow: hidden; }
+.pace-tasks-card-body { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: start; gap: 0.25rem; padding: 1rem 0.5rem; }
+.pace-tasks-page .pace-tasks-title { font-family: var(--font-sans); font-size: 1.125rem; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; letter-spacing: 0; padding-top: 0.45rem; }
+.pace-tasks-page .pace-tasks-check svg { width: 24px; height: 24px; }
+.pace-tasks-page .pace-tasks-delete svg { width: 18px; height: 18px; }
+.pace-tasks-page .pace-tasks-meta > span { font-size: 0.75rem; line-height: 1.5; max-width: 100%; overflow-wrap: anywhere; }
+.pace-tasks-meta svg { flex-shrink: 0; }
+.pace-tasks-page .pace-tasks-actions button { height: auto; min-height: 44px; padding: 0.5rem 0.7rem; border-radius: 0.75rem; font-weight: 500; white-space: normal; overflow-wrap: anywhere; }
+.pace-tasks-page .pace-tasks-group-title { display: flex; align-items: center; gap: 0.5rem; min-width: 0; font-family: var(--font-sans); font-size: 0.875rem; font-weight: 500; line-height: 1.5; letter-spacing: 0; color: hsl(var(--muted-foreground)); }
+.pace-tasks-page section > div:first-child { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.5rem; align-items: center; }
+.pace-tasks-page section > div:first-child > button { min-width: 0; min-height: 44px; }
+.pace-tasks-group-title svg { flex-shrink: 0; }
+.pace-tasks-details { background: var(--pace-surface); }
+.pace-tasks-page .pace-tasks-details :is(button, input, select) { min-height: 44px; height: auto; max-width: 100%; min-width: 0; }
+.pace-tasks-page .pace-tasks-details button { white-space: normal; overflow-wrap: anywhere; }
+.pace-tasks-page .pace-tasks-details form { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+.pace-tasks-page .pace-tasks-details svg { flex-shrink: 0; }
+.pace-tasks-support { border: 1px solid var(--pace-border-warm); border-radius: 1.25rem; background: hsl(var(--accent)); }
+.pace-tasks-empty { border-top: 1px solid var(--pace-border-warm); }
+.pace-tasks-compact .pace-tasks-title { padding-top: 0; }
+.pace-tasks-page button:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+@media (min-width: 640px) {
+  .pace-tasks-card-body { padding: 1.25rem 1rem; gap: 0.5rem; }
+  .pace-tasks-page .pace-tasks-title { font-size: 1.25rem; }
+}
+.pace-app-text-enlarged .pace-tasks-tabs { grid-template-columns: minmax(0, 1fr); }
+.pace-app-text-enlarged .pace-tasks-copy { grid-column: 1 / -1; grid-row: 2; padding-inline: 0.5rem; }
+.pace-app-text-enlarged .pace-tasks-delete { grid-column: 3; grid-row: 1; }
+.pace-app-text-enlarged .pace-tasks-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+.pace-app-text-enlarged .pace-tasks-edit { margin-left: 0; }
