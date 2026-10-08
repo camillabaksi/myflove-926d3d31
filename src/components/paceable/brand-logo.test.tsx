@@ -7,6 +7,13 @@ import compactLight from "@/assets/paceable-brand/paceable-compact-light.png.ass
 import compactDark from "@/assets/paceable-brand/paceable-compact-dark.png.asset.json";
 
 describe("Approved Paceable branding", () => {
+  it("keeps the light original on existing fixed-light public surfaces", () => {
+    const { container } = render(<BrandLogo lightSurface />);
+    const images = container.querySelectorAll("img");
+    expect(images).toHaveLength(1);
+    expect(images[0]).toHaveAttribute("src", light.url);
+    expect(images[0]).not.toHaveClass("dark:hidden");
+  });
   it("uses original horizontal sources and exact slogan without filters or cropping", () => {
     const { container } = render(<BrandLogo />);
     const images = container.querySelectorAll("img");

@@ -7,8 +7,8 @@
 - [x] Granska hela Paceable_Lovable_komplett_paket.zip inklusive båda dokumenten och alla 29 bildfiler: blockerande färgändring i horizontal-dark, vanlig ikon inte maskable-säker, övriga webbversioner visuellt kontrollerade. Redovisning före ändringar.
 - [x] Korrigerad horizontal-dark verifierad pixelidentisk i stenregionen; mörk text oförändrad, separat PNG matchar ZIP.
 - [x] Genomförandet godkänt med Paceable_Lovable_korrigerat_paket.zip; separat godkännande krävs för publicering.
-- [ ] Efter godkännande och godtagbar bildkvalitet: endast varumärkesplatser, exakt slogan, favicon/PWA/manifest; bevara gränssnitt, funktioner och native-projekt.
-- [ ] Verifiera mobil/desktop, ljust/mörkt läge, symbolkonsekvens och ändrade platser; ingen publicering.
+- [x] Efter godkännande och godtagbar bildkvalitet: endast varumärkesplatser, exakt slogan, favicon/PWA/manifest; bevara gränssnitt, funktioner och native-projekt.
+- [x] Verifiera mobil/desktop, ljust/mörkt läge, symbolkonsekvens och ändrade platser; ingen publicering. Resultat och kvarstående begränsningar: docs/paceable-brand-verification.md.
 
 ## Kompakt kapacitetsstöd i mobilkalendern
 - [x] Avgränsad plan godkänd; ingen publicering.
