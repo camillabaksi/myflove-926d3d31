@@ -2071,7 +2071,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-text-enlarged [data-capacity-size="lg"] { flex-wrap: wrap; container-type: inline-size; gap: 8px; }
 .pace-text-enlarged [data-capacity-size="lg"] > [data-capacity-track] { flex: 1 1 120px; min-width: min(120px, 100%); }
 .pace-text-enlarged [data-capacity-size="sm"] { flex-wrap: wrap; justify-content: center; }
-.pace-calendar-desktop.pace-text-enlarged { display: flex; flex-direction: column; gap: 12px; }
+.pace-calendar-desktop.pace-text-enlarged { container-type: inline-size; display: flex; flex-direction: column; gap: 12px; }
 .pace-calendar-desktop.pace-text-enlarged > * { margin-block: 0; }
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading { display: contents; }
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading header { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -2117,3 +2117,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-entry:not(.pace-calendar-timeline .pace-calendar-entry) > span { min-width: 0; }
 .pace-calendar-desktop.pace-text-enlarged [data-month-date] > span:first-child { overflow-wrap: anywhere; }
 .pace-calendar-desktop.pace-text-enlarged [data-month-date] [data-month-capacity] { width: 100%; overflow-wrap: anywhere; }
+
+.pace-calendar-desktop.pace-text-enlarged :is(.pace-calendar-heading,.pace-calendar-period,[aria-label="Visningsval"]) button { min-height: 44px; }
+.pace-calendar-desktop.pace-text-enlarged [aria-label="Visningsval"] summary { display: grid; grid-template-columns: auto minmax(0,1fr) auto; }
+.pace-calendar-desktop.pace-text-enlarged [aria-label="Visningsval"] summary > span { margin-left: 0; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-capacity] { flex-direction: column; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-capacity] > span { max-width: 100%; overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-date] > span:first-child { max-width: 100%; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="impact-checkin"] :is(p,div.line-clamp-2) { -webkit-line-clamp: unset; display: block; overflow: visible; overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline .pace-calendar-entry :is(.truncate,.line-clamp-2) { white-space: normal; text-overflow: clip; -webkit-line-clamp: unset; display: block; overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline .pace-calendar-entry { overflow: auto; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-day [aria-label="Dagens balans"] > .flex { flex-wrap: wrap; }
