@@ -43,7 +43,7 @@ self.addEventListener("push", (event) => {
   let data = {
     title: "MyFlove",
     body: "Ny påminnelse",
-    url: "/hem",
+    url: "/idag",
     tag: undefined,
     icon: "/icon-192.png",
     badge: "/icon-192.png",
@@ -78,7 +78,7 @@ self.addEventListener("push", (event) => {
     badge: data.badge || "/icon-192.png",
     tag: data.tag,
     renotify: !!data.tag,
-    data: { url: data.url || "/hem", itemKey: itemKey || null },
+    data: { url: data.url || "/idag", itemKey: itemKey || null },
     actions: quickActions,
     vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200],
     requireInteraction: !!data.requireInteraction,
@@ -138,7 +138,7 @@ self.addEventListener("notificationclick", (event) => {
   const info = event.notification.data || {};
   const itemKey = info.itemKey;
   const action = event.action; // "done" | "snooze" | ""
-  let targetUrl = info.url || "/hem";
+  let targetUrl = info.url || "/idag";
   if (action && itemKey) {
     targetUrl = `${targetUrl}${targetUrl.includes("?") ? "&" : "?"}notis=${encodeURIComponent(itemKey)}&atgard=${action}`;
   }
