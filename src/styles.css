@@ -2060,3 +2060,42 @@ html[data-npf-less="true"] [data-npf="optional"] {
   .pace-calendar-heading [role="group"] { grid-template-columns: minmax(0, 1fr); }
   .pace-calendar-heading [role="group"] button { height: auto; white-space: normal; overflow-wrap: anywhere; }
 }
+
+/* Text-size adaptation stays local to Today and Calendar; fixed time blocks are untouched. */
+.pace-text-probe { position: absolute; width: 1rem; height: 0; overflow: hidden; pointer-events: none; }
+.pace-text-probe + * { margin-top: 0 !important; }
+.pace-text-enlarged .pace-greeting-layout { flex-wrap: wrap; }
+.pace-text-enlarged .pace-greeting-layout > div:first-child { flex: 1 1 18em; max-width: 100%; }
+.pace-text-enlarged .pace-greeting-name-part { display: inline; overflow-wrap: anywhere; }
+.pace-text-enlarged .pace-greeting-layout > :last-child { margin-left: auto; }
+.pace-text-enlarged [data-capacity-size="lg"] { flex-wrap: wrap; container-type: inline-size; gap: 8px; }
+.pace-text-enlarged [data-capacity-size="lg"] > [data-capacity-track] { flex: 1 1 120px; min-width: min(120px, 100%); }
+.pace-text-enlarged [data-capacity-size="sm"] { flex-wrap: wrap; justify-content: center; }
+.pace-calendar-desktop.pace-text-enlarged { display: flex; flex-direction: column; gap: 12px; }
+.pace-calendar-desktop.pace-text-enlarged > * { margin-block: 0; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading { display: contents; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading header { display: flex; flex-wrap: wrap; gap: 8px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading h1 { overflow-wrap: anywhere; flex: 1 1 auto; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading [role="group"] { display: flex; flex-wrap: wrap; gap: 4px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-heading [role="group"] button { flex: 1 1 auto; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-capacity { display: block; order: 1; max-width: none; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-capacity > * { margin-top: 0; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-period { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-period > div { order: -1; flex: 1 0 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-period > div p { overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged > :is(ul,section,[role="group"],.pace-calendar-day,.pace-calendar-secondary,details) { order: 2; }
+.pace-calendar-desktop.pace-text-enlarged > [aria-label="Kalenderverktyg"] { order: 3; }
+.pace-calendar-desktop.pace-text-enlarged button:not(.pace-calendar-timeline button) { white-space: normal; height: auto; overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-capacity] { flex-wrap: wrap; justify-content: center; white-space: normal; gap: 0; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-capacity] svg { flex-basis: 100%; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-date] { padding-inline: 0; gap: 2px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-entry:not(.pace-calendar-timeline .pace-calendar-entry) :is(.truncate,.line-clamp-2) { white-space: normal; overflow: visible; text-overflow: clip; display: block; -webkit-line-clamp: unset; overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="week-goals"] h2 { overflow-wrap: anywhere; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="week-goals"] > div:first-child { flex-wrap: wrap; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="week-goals"] form { flex-wrap: wrap; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="week-goals"] form input { flex-basis: 100%; }
+.pace-calendar-desktop.pace-text-enlarged [data-testid="week-goals"] button:focus-visible { outline: 2px solid var(--color-ring); outline-offset: 3px; }
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-day { grid-template-columns: minmax(0,1fr) minmax(0,280px); }
+@container (max-width: 35rem) {
+ .pace-calendar-desktop.pace-text-enlarged .pace-calendar-day { grid-template-columns: minmax(0,1fr); }
+}

@@ -1,7 +1,7 @@
 # Roadmap
 
 ## Etapp 2A tillgänglighetsrättning
-- [ ] Godkänn avgränsad plan; ingen publicering.
+- [x] Plan godkänd; faktisk textstorlek/utrymme, separata tidsblocksbegränsningar och jämförelsebilder 390/768 px vid 200 %. Ingen publicering.
 - [ ] Anpassa hälsning, batterier, kalendertexter och kontrollgrupper för förstorad text utan ändrad normallayout/geometri.
 - [ ] Verifiera sju bredder vid normal/200 % text, tangentbord, tester och tillgänglig typkontroll; rapportera eventuella målkonflikter.
 
