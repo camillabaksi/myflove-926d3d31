@@ -2,8 +2,8 @@
 
 ## Uppgifter – sammanhållet Paceable-uttryck (2026-10-08)
 - [x] Granskat sidans egna visuella avvikelser och delade komponenter; avgränsad plan framtagen före appkodändring.
-- [ ] Efter godkännande: endast Uppgifters presentation, befintliga funktioner och övriga sidor oförändrade.
-- [ ] Kontrollera mobil/desktop, båda teman, 200 % text och relevanta tester; uppdatera båda ändringsloggarna. Ingen publicering utan separat godkännande.
+- [x] Godkänd sidlokal presentation genomförd med befintliga tokens: sammanhållen rubrik, vyval, grupper, uppgiftskort och kontroller; Inter för funktion, Fraunces endast sidrubrik. Inga ändringar i datakällor eller delade komponenter.
+- [x] 360/390/430/1024/1440, båda teman, normal/200 % text och alla tre vyval utan dokument-/sidöverflöde eller kapade namn. Dialog och redigeringsfält öppnade utan kontosparning; fyra isolerade åtgärdstester. Full svit 524/524 i 83 filer, automatiskt bygge OK. Idag/Kalender pixelidentiska före/efter; Tankar/Min plats har dynamiska bildskillnader, inga Uppgifter-klasser. Båda ändringsloggarna uppdaterade; inget publicerat.
 
 ## Mer enligt godkänd målbild (2026-10-08)
 - [x] Tidigare etapps dokumenterade QA genomgången; befintligt Hem-dialogfokusfel kvarstår separat.
