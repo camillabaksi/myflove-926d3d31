@@ -11,12 +11,12 @@
 
 <!-- LOVABLE:END -->
 
-Min Flow uses existing account-scoped cloud storage for appearance and explicit memories; this avoids a parallel preference or chat system.
+Min Flow appearance and explicit memories use existing account-scoped cloud storage; no parallel preference/chat system.
 Flow's room uses the uploaded animation only as a scene-specific visual; the shared FlowMascot remains unchanged elsewhere so existing screens keep their established identity.
-Keep the living Flow room's appearance in the existing account-scoped cloud storage and use one customization sheet for both its home entry and legacy route, so appearance choices stay consistent.
+Flow room appearance uses that storage and one customization sheet for home and legacy entries, keeping choices consistent.
 Render the room's approved seated Flow as a whole-scene image with pose-fitted variants only; keep incompatible saved options intact but visually hidden, because overlays and alternate mascots break identity and perspective.
 
-Use explicit pace-editorial roles for orienting headings on Paceable surfaces; functional text uses Inter and legacy typography stays unchanged, preventing implicit serif inheritance. Existing primary-surface stone placements reuse the approved image through PaceableStones; preserve legacy SVG elsewhere and the approved Today rendering to avoid identity drift.
+Paceable headings require explicit pace-editorial roles; functional text uses Inter, legacy typography stays unchanged. Existing primary stone placements reuse the approved PaceableStones image; preserve legacy SVG elsewhere and Today rendering to prevent identity drift.
 Use a direct document navigation for the desktop sidebar's Träning link so an already-open tab cannot leave that destination waiting on an in-app transition.
 Keep the public landing preview isolated from account data and sync; its interactive examples are local-only so visitors cannot affect saved plans.Scope all local user data to one owning account (account-scope) and only sync when that owner is signed in, so data can never cross accounts on a shared device.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
