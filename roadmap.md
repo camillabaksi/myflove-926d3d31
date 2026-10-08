@@ -2,8 +2,8 @@
 
 ## Typografisk hierarki (2026-10-08)
 - [x] Godkänd plan; explicita editorialroller och funktionell Inter, oförändrade stenar och övrig design.
-- [ ] Tester och mobil/desktop-, skalnings-, dark/light- och fokuskontroller.
-- [ ] Fem screenshots och slutrapport; ingen publicering.
+- [x] 500 tester godkända och automatiskt bygge OK; mobil/desktop-, 200 % skalnings-, dark/light- och fokuskontroller genomförda.
+- [x] Fem screenshots levererade; ingen publicering. Granskningspunkt: vid 360 px bryts Camillabaksi på två namnrader; 390/430 px har två rader totalt. Stenlåset förhindrar layoutändring; inga visuella ändringar efter bilderna.
 
 ## Paceable etapp 1D — detaljpolish (2026-10-07)
 - [x] Visa avgränsad plan och invänta godkännande.
