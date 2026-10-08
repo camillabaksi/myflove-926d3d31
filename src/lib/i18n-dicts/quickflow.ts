@@ -1,10 +1,10 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_QUICKFLOW: Record<string, string> = {
   "Vad behöver du få ur huvudet?": "What do you need to get out of your head?",
-  "Skriv eller prata fritt. Flow sorterar och hjälper dig prioritera.":
-    "Write or talk freely. Flow sorts it and helps you prioritise.",
-  "Dumpa allt som snurrar – Flow delar upp det i separata saker och föreslår en ordning utifrån viktighet, brådska och ditt batteri. Du bestämmer alltid själv.":
-    "Dump everything spinning around – Flow splits it into separate things and suggests an order based on importance, urgency and your battery. You always decide.",
+  "Skriv eller prata fritt. Pace sorterar och hjälper dig prioritera.":
+    "Write or talk freely. Pace sorts it and helps you prioritise.",
+  "Dumpa allt som snurrar – Pace delar upp det i separata saker och föreslår en ordning utifrån viktighet, brådska och ditt batteri. Du bestämmer alltid själv.":
+    "Dump everything spinning around – Pace splits it into separate things and suggests an order based on importance, urgency and your battery. You always decide.",
   "När huvudet är fullt ska det vara lätt att få nästa steg utan att behöva planera allt själv. Inga tider eller deadlines skapas här – det gör du i kalendern när du vill.":
     "When your head is full, it should be easy to get the next step without having to plan everything yourself. No times or deadlines are created here – you do that in the calendar whenever you like.",
   "Anteckningar & idébank": "Notes & idea bank",
@@ -14,19 +14,19 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "Sluta lyssna": "Stop listening",
   "Prata in": "Speak",
   "Skriv eller prata": "Write or talk",
-  "＋ Skriv eller prata med Flow": "＋ Write or talk with Flow",
-  "Dumpa allt – Flow delar upp och hjälper dig prioritera.":
-    "Dump it all – Flow splits it up and helps you prioritise.",
+  "＋ Skriv eller prata med Pace": "＋ Write or talk with Pace",
+  "Dumpa allt – Pace delar upp och hjälper dig prioritera.":
+    "Dump it all – Pace splits it up and helps you prioritise.",
   "T.ex. Hämta barnen, handla, ring skolan, tvätta och fixa inför imorgon":
     "E.g. Pick up the kids, go shopping, call the school, do laundry and get ready for tomorrow",
   "Det här ser ut som en längre anteckning.": "This looks like a longer note.",
   "Vill du spara den som en anteckning? Hela texten behålls som den är.":
     "Do you want to save it as a note? The whole text stays exactly as it is.",
   "📝 Spara som anteckning": "📝 Save as a note",
-  "Behåll i Quickflow": "Keep in Quickflow",
+  "Behåll i Fånga": "Keep in Capture",
   "Så här har jag förstått det": "Here's how I've understood it",
-  "Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra eller ta bort – du bestämmer.":
-    "Flow splits the text into separate things so nothing gets lumped together. You can edit or remove – you decide.",
+  "Pace delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra eller ta bort – du bestämmer.":
+    "Pace splits the text into separate things so nothing gets lumped together. You can edit or remove – you decide.",
   "Redigera uppgiften": "Edit the task",
   Spara: "Save",
   Redigera: "Edit",
@@ -54,8 +54,8 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "Jag vet inte – hjälp mig": "I don't know – help me",
   "saker är ute ur huvudet. 💙": "things are out of your head. 💙",
   "Ute ur huvudet. 💙": "Out of your head. 💙",
-  "De ligger i din lista – Flow har föreslagit en ordning.":
-    "They're in your list – Flow has suggested an order.",
+  "De ligger i din lista – Pace har föreslagit en ordning.":
+    "They're in your list – Pace has suggested an order.",
   "Några fanns redan – jag slog ihop dem. 💙": "Some already existed – I merged them. 💙",
   "Lugn. Jag håller det åt dig. 💙": "No worries. I've got it for you. 💙",
   "Den ligger som en öppen tanke – jag frågar dig senare.":
@@ -89,12 +89,12 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "🗑️ Jag behöver inte detta längre": "🗑️ I don't need this anymore",
   "Låt den ligga kvar": "Leave it be",
   "Du bad mig komma ihåg": "You asked me to remember",
-  "Allt du skrivit i Quickflow. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar.":
-    "Everything you've written in Quickflow. Choose whether it becomes a task, a time in the calendar – or just stays put.",
+  "Allt du skrivit i Fånga. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar.":
+    "Everything you've written in Capture. Choose whether it becomes a task, a time in the calendar – or just stays put.",
   "Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙":
     "Nothing here disappears on its own. I've got it for you. 💙",
-  "Du har något i Quickflow som verkar ha blivit liggande 💜":
-    "You have something in Quickflow that seems to have been sitting for a while 💜",
+  "Du har något i Fånga som verkar ha blivit liggande 💜":
+    "You have something in Capture that seems to have been sitting for a while 💜",
   "Sparade till senare": "Saved for later",
   "Hanterad – göm den": "Handled – hide it",
   "Flytta till en annan tid": "Move to a different time",
@@ -104,11 +104,11 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "Var sparad till": "Was saved for",
   "Markerades som hanterad": "Marked as handled",
   Ångra: "Undo",
-  "Ångrad – tanken är tillbaka i QuickFlow. 💜": "Undone – the thought is back in QuickFlow. 💜",
+  "Ångrad – tanken är tillbaka i Fånga. 💜": "Undone – the thought is back in Capture. 💜",
   "Sparad bland dina anteckningar. 📝": "Saved among your notes. 📝",
   "Min lista just nu": "My list right now",
   "Ingen tid, ingen deadline. Bara ordning.": "No time, no deadline. Just order.",
-  "Flows förslag": "Flow's suggestion",
+  "Paces förslag": "Pace's suggestion",
   "Ändra ordning": "Change order",
   "Flytta upp": "Move up",
   "Flytta ner": "Move down",
@@ -226,12 +226,12 @@ export const EN_QUICKFLOW: Record<string, string> = {
   "Du kan ändra tider eller ta bort stegen när du vill.":
     "You can change times or remove the steps whenever you like.",
   "det som kommer": "what's coming up",
-  "Flow kunde inte förtydliga uppgiften just nu.": "Flow couldn't clarify the task right now.",
+  "Pace kunde inte förtydliga uppgiften just nu.": "Pace couldn't clarify the task right now.",
   "Ditt batteri just nu:": "Your battery right now:",
   procent: "percent",
   prioriteringen: "the prioritisation",
-  "Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.":
-    "Flow helps you sort when everything feels equally important. The prioritisation is based on what seems important, urgent and doable given your energy right now.",
+  "Pace hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.":
+    "Pace helps you sort when everything feels equally important. The prioritisation is based on what seems important, urgent and doable given your energy right now.",
   klar: "done",
   klara: "done",
   "idag.": "today.",
