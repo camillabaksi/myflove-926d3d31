@@ -27,7 +27,7 @@ export function DayWindow() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-[112px_minmax(0,1fr)]">
         <aside className="hidden border-r border-border/60 bg-landing-sand/60 p-3 sm:block">
-          <BrandLogo compact className="w-full" />
+          <BrandLogo compact lightSurface className="w-full" />
           <div className="mt-8 space-y-1 text-[10px] font-medium text-muted-foreground">
             <div className="flex items-center gap-2 rounded-lg bg-secondary px-2 py-2 text-primary"><House className="size-3" aria-hidden="true" /> Översikt</div>
             <div className="flex items-center gap-2 px-2 py-2"><CalendarDays className="size-3" aria-hidden="true" /> Min dag</div>

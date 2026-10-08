@@ -87,8 +87,8 @@ function LandingPage() {
       <header className="relative z-10 bg-landing-background">
         <div className="mx-auto grid min-h-18 max-w-[1440px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:px-12">
           <Link to="/" aria-label="Paceable, startsida" className="flex shrink-0 items-center gap-2.5">
-            <BrandLogo compact className="w-28 max-w-full sm:w-40 lg:hidden" />
-            <BrandLogo className="hidden w-64 max-w-full lg:block" />
+            <BrandLogo compact lightSurface className="w-28 max-w-full sm:w-40 lg:hidden" />
+            <BrandLogo lightSurface className="hidden w-64 max-w-full lg:block" />
           </Link>
           <nav aria-label="Huvudmeny" className="hidden items-center gap-7 lg:flex">
             <Link to="/" className="text-sm font-semibold hover:text-primary">Hem</Link>

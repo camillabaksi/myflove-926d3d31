@@ -22,7 +22,7 @@ function AboutPage() {
       <div className="mx-auto max-w-3xl">
         <header className="flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-2 font-display text-xl font-extrabold">
-            <BrandLogo compact className="w-40 max-w-full" />
+            <BrandLogo compact lightSurface className="w-40 max-w-full" />
           </Link>
           <Button asChild variant="ghost"><Link to="/sign-in">Logga in</Link></Button>
         </header>
