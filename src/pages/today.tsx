@@ -54,7 +54,7 @@ export function TodayContent() {
             <h1 className="mt-1 break-words font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{name ? `${t("Hej")} ${name}` : t("Hej")}</h1>
             <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
           </div>
-          <PaceableStones compact tactile className="-mt-3 h-28 w-44 shrink-0" />
+          <PaceableStones compact tactile className="-mt-3 shrink-0" style={{ width: 176, height: 112 }} />
         </div>
         <div className="mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
