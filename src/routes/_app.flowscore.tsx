@@ -4,6 +4,10 @@ import Page from "@/pages/flowscore";
 export const Route = createFileRoute("/_app/flowscore")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "Dagens balans – din kapacitet just nu | MyFlove" },
+      { property: "og:description", content: "Se dagens balans: energi, mående och tid kvar vägs samman till en realistisk bild av vad som är rimligt just nu." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { title: "Dagens balans – din kapacitet just nu | MyFlove" },
       {
         name: "description",
