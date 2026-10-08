@@ -2212,7 +2212,10 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-enlarged .pace-more-daily { grid-template-columns: minmax(0,1fr); }
 .pace-more-enlarged .pace-more-header { grid-template-columns: minmax(0,1fr); }
 .pace-more-enlarged .pace-more-header > .pace-more-sprig, .pace-more-enlarged .pace-more-wide-decor { display: none; }
-.pace-more-enlarged .pace-more-card { grid-template-columns: auto minmax(0,1fr) auto; }
+.pace-more-enlarged .pace-more-card { grid-template-columns: minmax(0,1fr) auto; }
+.pace-more-enlarged .pace-more-card .pace-more-icon { grid-column: 1; grid-row: 1; }
+.pace-more-enlarged .pace-more-card-copy { grid-column: 1; grid-row: 2; }
+.pace-more-enlarged .pace-more-card .pace-more-arrow { grid-column: 2; grid-row: 2; }
 .pace-more-enlarged .pace-more-small-card { grid-template-rows: auto auto; }
 .pace-more-enlarged .pace-more-reminder { grid-template-columns: minmax(0,1fr); }
 .pace-more-enlarged .pace-more-reminder > svg { display: none; }
