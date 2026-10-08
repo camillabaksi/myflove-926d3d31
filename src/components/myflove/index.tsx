@@ -208,7 +208,7 @@ export function MyFloveCard({
     <div
       className={cn(
         "rounded-3xl border border-border/60 p-5 shadow-soft pop-in",
-        tone && tone !== "plain" ? TONE_BG[tone].split(" ")[0] : "bg-card",
+        tone && tone !== "plain" ? TONE_BG[tone].split(" ")[0] : "bg-card pace-app-card",
         className,
       )}
       {...rest}
@@ -335,7 +335,7 @@ export function MyFloveHeader({
       {...areaProps(area)}
       className={cn(
         "relative overflow-hidden rounded-3xl border border-border/60 p-5 shadow-lifted page-enter",
-        area ? "area-hero area-border" : "",
+        area ? "area-hero area-border" : "pace-app-header",
         className,
       )}
       {...(area
@@ -345,7 +345,7 @@ export function MyFloveHeader({
           })}
     >
       <div
-        className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md"
+        className="pointer-events-none absolute -top-16 -right-12 h-32 w-32 rounded-full bg-blush opacity-50 blur-md pace-app-glow"
         aria-hidden
       />
       <div className="relative flex items-start gap-3">
@@ -368,7 +368,7 @@ export function MyFloveHeader({
         />
 
         <div className={cn("min-w-0 flex-1", titleClassName?.includes("pace-editorial") && "pace-editorial-title-spacing")}>
-          <h1 className={cn("font-display text-2xl font-bold leading-tight text-ink sm:text-3xl", titleClassName)}>
+          <h1 className={cn("pace-app-title font-display text-2xl font-bold leading-tight text-ink sm:text-3xl", titleClassName)}>
             {title}
           </h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}

@@ -182,7 +182,10 @@
 }
 
 /* Primary Paceable surfaces stay consistent without changing saved legacy themes. */
-[data-paceable-surface="true"] {
+[data-paceable-surface="true"],
+.app-shell-bg[data-paceable-app="true"],
+html[data-paceable-app="true"] [role="dialog"],
+html[data-paceable-app="true"] [role="alertdialog"] {
   --background: 45 29% 97%;
   --foreground: 276 19% 21%;
   --card: 40 100% 99%;
@@ -208,7 +211,10 @@
   --pace-inset-track: inset 0 1px 2px hsl(30 20% 30% / 0.12);
 }
 
-.dark [data-paceable-surface="true"] {
+.dark [data-paceable-surface="true"],
+.dark .app-shell-bg[data-paceable-app="true"],
+html.dark[data-paceable-app="true"] [role="dialog"],
+html.dark[data-paceable-app="true"] [role="alertdialog"] {
   --pace-canvas: hsl(276 16% 10%);
   --pace-surface: hsl(276 13% 13%);
   --pace-surface-raised: hsl(276 12% 16%);
@@ -1999,7 +2005,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 }
 
 /* Explicit typografiska roller, endast på Paceables primärytor. */
-[data-paceable-surface="true"] { --font-editorial: "Fraunces", Georgia, serif; }
+[data-paceable-surface="true"],
+[data-paceable-app="true"] { --font-editorial: "Fraunces", Georgia, serif; }
 [data-paceable-surface="true"] .font-display:not(.pace-editorial) { font-family: var(--font-sans); }
 [data-paceable-surface="true"] .pace-editorial {
   font-family: var(--font-editorial);
@@ -2139,3 +2146,27 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline .pace-calendar-entry > span > span { overflow-wrap: anywhere; }
 .pace-calendar-desktop.pace-text-enlarged [aria-label="Visningsval"] summary { grid-template-columns: auto minmax(0,1fr) auto; }
 .pace-calendar-desktop.pace-text-enlarged [data-capacity-size="sm"] > span:last-child { white-space: normal; overflow-wrap: anywhere; flex-shrink: 1; }
+
+/* Etapp 1 enhetlig identitet – endast övriga inloggade sidor (ej Idag/Kalender/Tankar/Min plats, äldre Hem eller Flow). */
+.app-shell-bg[data-paceable-app="true"] .pace-app-card {
+  background: var(--pace-surface);
+  border-color: var(--pace-border-warm);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+.app-shell-bg[data-paceable-app="true"] .pace-app-header {
+  background-image: linear-gradient(180deg, var(--pace-surface-raised), var(--pace-surface)) !important;
+  border-color: var(--pace-border-warm);
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+.app-shell-bg[data-paceable-app="true"] .pace-app-header .pace-app-glow { display: none; }
+.app-shell-bg[data-paceable-app="true"] .pace-app-title {
+  font-family: var(--font-editorial);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+html[data-paceable-app="true"] [role="dialog"],
+html[data-paceable-app="true"] [role="alertdialog"] {
+  background-color: var(--pace-surface-raised);
+  border-color: var(--pace-border-warm);
+  box-shadow: var(--pace-elevation-2);
+}

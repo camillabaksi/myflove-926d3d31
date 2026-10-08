@@ -185,6 +185,14 @@ const CATEGORY_THEMES: Record<string, Record<string, string>> = {
 };
 
 const PACEABLE_PATHS = new Set(["/idag", "/kalender", "/quickflow", "/halsa"]);
+/** Äldre Hem och Flow-sidor behåller sitt utseende; övriga inloggade sidor får Paceable-identiteten (etapp 1). */
+const PACEABLE_EXCLUDED_PATHS = new Set([
+  "/hem", "/anpassa-hem", "/flow", "/flow-installningar", "/flowplan", "/flowscore",
+  "/flowstudy", "/studyflow", "/veckans-flow", "/workflow", "/familjeflow",
+]);
+function isPaceableAppPath(path: string) {
+  return !PACEABLE_PATHS.has(path) && !PACEABLE_EXCLUDED_PATHS.has(path);
+}
 
 import QuickflowFab from "@/components/quickflow-fab";
 import QuickflowCapture from "@/components/quickflow-capture";
@@ -193,6 +201,13 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const mainScrollRef = React.useRef<HTMLDivElement>(null);
+  const paceableApp = isPaceableAppPath(location);
+  React.useEffect(() => {
+    const root = document.documentElement;
+    if (paceableApp) root.dataset.paceableApp = "true";
+    else delete root.dataset.paceableApp;
+    return () => { delete root.dataset.paceableApp; };
+  }, [paceableApp]);
   const desktopMoreTriggerRef = React.useRef<HTMLButtonElement>(null);
   React.useLayoutEffect(() => {
     mainScrollRef.current?.scrollTo({ top: 0 });
@@ -703,7 +718,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
+    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
       {/* Desktop Sidebar */}
       <nav
         aria-label={t("Huvudnavigation")}
