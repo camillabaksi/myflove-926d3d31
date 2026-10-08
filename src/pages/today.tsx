@@ -18,12 +18,14 @@ import { applyFamilyPresence, DEFAULT_FAMILY_LAYER, type FamilyLayerPreferences 
 import { deriveDayPace } from "@/lib/day-pace";
 import { todayISO } from "@/lib/day";
 import { dateHeadingLabel } from "@/lib/date-presentation";
+import { useTextLayout } from "@/hooks/use-text-layout";
 import { greetingNameParts } from "@/lib/greeting-presentation";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
+  const textLayout = useTextLayout();
   const { t, locale } = useLang();
   const { name } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
@@ -46,10 +48,11 @@ export function TodayContent() {
   });
 
   return (
-    <MyFlovePageGrid area="idag" className="pace-today-desktop">
+    <MyFlovePageGrid area="idag" className={`pace-today-desktop${textLayout.enlarged ? " pace-text-enlarged" : ""}`}>
+      <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <MyFloveWide>
-        <div className="flex items-center justify-between gap-4">
+        <div className="pace-greeting-layout flex items-center justify-between gap-4">
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
             <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl"><span className="pace-greeting-prefix">{t("Hej")}</span>{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
