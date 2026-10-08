@@ -12,7 +12,7 @@ Användaren ska se funktionen som **Fånga** – "Få ur dig det. Ta hand om det
 
 | Yta | Idag | Nytt |
 |---|---|---|
-| Meny/navigation | Tankar | **Fånga** (beslut: se fråga nedan) |
+| Meny/navigation | Tankar | **Fånga** (godkänt) |
 | Sidans rubrik/knuttexter | "Vad har du i huvudet?", "Fånga en tanke" | Behålls/anpassas till Fånga-språk |
 | Hjälp- och tom-lägen-texter | "QuickFlow", "Quickflow" | "Fånga" |
 | Sorterings-/prioritets texter | "Flow sorterar", "Behåll i Quickflow" | "Pace sorterar" / "Behåll i Fånga" |
