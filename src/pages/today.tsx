@@ -52,6 +52,7 @@ export function TodayContent() {
     <MyFlovePageGrid area="idag" className={`pace-today-desktop${textLayout.enlarged ? " pace-text-enlarged" : ""}`}>
       <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
+      <IntroTour />
       <MyFloveWide>
         <div className="pace-greeting-layout flex items-center justify-between gap-4">
           <div className="min-w-0">
