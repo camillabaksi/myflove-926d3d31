@@ -23,7 +23,7 @@ Användaren ska se funktionen som **Fånga** – "Få ur dig det. Ta hand om det
 ## Tekniskt upplägg
 1. Uppdatera `src/lib/i18n-dicts/quickflow.ts` (sv + en) – de flesta synliga texterna ligger där.
 2. Riktade textbyten i `src/pages/dump.tsx`, `src/components/quickflow-*.tsx`, `src/routes/_app.quickflow.tsx` (head-metadata).
-3. Menyetikett i navigationen (om "Tankar" → "Fånga" godkänns).
+3. Menyetikett i navigationen: "Tankar" → "Fånga" (godkänt av användaren).
 4. Uppdatera testet `src/lib/pace-brand-copy.test.ts` och ev. quickflow-tester som matchar texter.
 5. CHANGELOG.md + src/lib/changelog.ts enligt rutin.
 
@@ -31,5 +31,5 @@ Användaren ska se funktionen som **Fånga** – "Få ur dig det. Ta hand om det
 - Hela testsviten (528+ tester), build.
 - Playwright: /quickflow på 360/390/1280 px, ljust/mörkt, 200 % text; kontroll att fångst, påminnelse och sortering fungerar som före.
 
-## Fråga innan genomförande
-Menyn heter idag "Tankar". Ska den byta till "Fånga", eller behållas "Tankar" medan funktionen inne på sidan heter Fånga?
+## Beslut
+Menynamnet blir "Fånga" (godkänt). Övriga synliga QuickFlow-texter byts enligt tabellen.
