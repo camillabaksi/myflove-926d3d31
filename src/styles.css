@@ -2128,3 +2128,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline .pace-calendar-entry :is(.truncate,.line-clamp-2) { white-space: normal; text-overflow: clip; -webkit-line-clamp: unset; display: block; overflow-wrap: anywhere; }
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline .pace-calendar-entry { overflow: auto; }
 .pace-calendar-desktop.pace-text-enlarged .pace-calendar-day [aria-label="Dagens balans"] > .flex { flex-wrap: wrap; }
+
+.pace-calendar-desktop.pace-text-enlarged .pace-calendar-timeline button { min-height: 0; }
+.pace-calendar-desktop.pace-text-enlarged [data-month-date] > span:last-child[aria-hidden] { flex-wrap: wrap; height: auto; min-height: 12px; }
+.pace-calendar-desktop.pace-text-enlarged [role="group"][aria-label="Veckovy, svep för fler dagar"] > div > div > button { padding-inline: 2px; }
