@@ -1,4 +1,5 @@
 ## 2026-10-08
+- Tankar: "Varför?" flyttas in i importkortets nederkant, vänsterställd under Bild och PDF/dokument. Samma funktion, innehåll, minst 44×44 px klickyta och fokusläge; stenar, tankeinfångning och övrig layout oförändrade. Inga andra visuella ändringar och ingen publicering.
 - Tankar: tankeinfångningens streckade ram ersätts endast här av befintlig varm surface, tunn neutral kant och elevation-1 utan gradient. Varför blir en inline-hjälplänk 4 px under import med minst 44×44 px klickyta och fokusmarkering. Texter, funktioner och stenar oförändrade; ingen publicering.
 - Tankar: endast den befintliga stenbildens rendering förstoras från 40 till 76 px bredd (1,9×), proportionellt inom samma övre högra placering. Rubrik, innehåll och övriga vyer oförändrade; ingen bildändring eller publicering.
 - Sista finjusteringen: Idags hälsning använder 34 px under 380 px; 390/430 px och desktop lämnas oförändrade. Tankar använder redan samma godkända stenbild och Min plats-rubriken är redan 32 px; båda lämnas orörda. Ingen annan visuell ändring eller publicering.
