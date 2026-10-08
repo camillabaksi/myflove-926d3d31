@@ -1,4 +1,5 @@
 ## 2026-10-08
+- Paceable typografisk hierarki: explicit Fraunces endast på Idags hälsning och Din dag, Tankars huvudrubrik och Min plats. Funktionella rubriker använder Inter; Capacity 22 px/600, Idags listrubriker 18 px/600. Stenasset, rendering och placering, visuellt djup och all logik är oförändrade. Ingen publicering.
 - Idag: Paceable-stenarna bredvid hälsningen är lite större (126×74 px) och ligger med luft runt sig utan att gå in i texten. Verifierat i 390 px.
 - Idag: hälsningen något mindre (ca 37 px) och Paceable-stenarna ca 80 % stora, placerade bredvid hälsningen.
 

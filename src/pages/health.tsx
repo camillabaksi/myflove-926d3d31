@@ -52,6 +52,7 @@ export default function HealthPage() {
         <MyFloveWide>
           <MyFloveHeader
             title="Min plats"
+            titleClassName="pace-editorial"
             area="halsa"
             emojiKey="wellness"
             description="Din plats för energi, återhämtning och det som påverkar dagen."
@@ -63,23 +64,23 @@ export default function HealthPage() {
           <p className="pb-1 text-sm text-muted-foreground">{t("Checka in, se dina mönster eller hitta återhämtning.")}</p>
           <Link href="/mitt-batteri" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary" aria-hidden><Battery className="h-5 w-5" /></span>
-            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
+            <span className="min-w-0 flex-1"><span className="block font-sans text-lg font-semibold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
           </Link>
           <Link href="/aterhamtning" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sage text-primary" aria-hidden><Heart className="h-5 w-5" /></span>
-            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">{t("Återhämtning")}</span><span className="block text-sm text-muted-foreground">{t("Välj en paus som passar just nu.")}</span></span>
+            <span className="min-w-0 flex-1"><span className="block font-sans text-lg font-semibold text-ink">{t("Återhämtning")}</span><span className="block text-sm text-muted-foreground">{t("Välj en paus som passar just nu.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
           </Link>
           <Link href="/assistant" className="press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sun text-primary" aria-hidden><MessageCircle className="h-5 w-5" /></span>
-            <span className="min-w-0 flex-1"><span className="block font-display text-lg font-bold text-ink">{t("Prata om din dag")}</span><span className="block text-sm text-muted-foreground">{t("Berätta vad du behöver göra och hitta ett nästa steg.")}</span></span>
+            <span className="min-w-0 flex-1"><span className="block font-sans text-lg font-semibold text-ink">{t("Prata om din dag")}</span><span className="block text-sm text-muted-foreground">{t("Berätta vad du behöver göra och hitta ett nästa steg.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
           </Link>
         </MyFloveWide>
 
         <MyFloveWide>
-          <CollapsibleSection id="health-other" title="Mer inom hälsa" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="font-display text-base font-bold text-ink">
+          <CollapsibleSection id="health-other" title="Mer inom hälsa" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="font-sans text-base font-semibold text-ink">
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] items-stretch gap-3">
             {AREAS.map((a) => {
               const Icon = a.icon;
@@ -94,7 +95,7 @@ export default function HealthPage() {
                         <Icon size={20} />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-display text-base font-bold leading-tight text-ink">
+                        <span className="block font-sans text-base font-semibold leading-tight text-ink">
                           {a.title}
                         </span>
                         <span className="block text-xs text-muted-foreground">{a.what}</span>

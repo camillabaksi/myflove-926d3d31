@@ -311,6 +311,7 @@ export function MyFloveHeader({
   area,
   children,
   className,
+  titleClassName,
 }: {
   title: string;
   emojiKey?: MyFloveEmojiKey;
@@ -326,6 +327,7 @@ export function MyFloveHeader({
   area?: AreaId;
   children?: React.ReactNode;
   className?: string;
+  titleClassName?: string;
 }) {
   const goBack = useSmartBack(backTo);
   return (
@@ -366,7 +368,7 @@ export function MyFloveHeader({
         />
 
         <div className="min-w-0 flex-1">
-          <h1 className="font-display text-2xl font-bold leading-tight text-ink sm:text-3xl">
+          <h1 className={cn("font-display text-2xl font-bold leading-tight text-ink sm:text-3xl", titleClassName)}>
             {title}
           </h1>
           {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}

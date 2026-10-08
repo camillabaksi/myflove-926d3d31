@@ -37,7 +37,7 @@ export default function Dump() {
                 <div className="min-w-0">
                   <span className="mb-3 grid h-9 w-9 place-items-center rounded-2xl bg-lavender text-ink" aria-hidden><ThoughtsIcon size={20} /></span>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">{t("Tankar")}</p>
-                  <h1 id="thoughts-title" className="mt-1 font-display text-3xl font-bold text-ink">{t("Vad har du i huvudet?")}</h1>
+                  <h1 id="thoughts-title" className="mt-1 pace-editorial text-3xl text-ink">{t("Vad har du i huvudet?")}</h1>
                   <p className="mt-1 text-base text-muted-foreground">{t("Skriv eller säg det som det är.")}</p>
                 </div>
                 <PaceableStones compact />

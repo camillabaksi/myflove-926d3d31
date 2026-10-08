@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Navigation",
     items: [
+      "Typografisk hierarki (2026-10-08): explicit Fraunces på hälsningen och Din dag, Tankars huvudrubrik och Min plats; funktionella rubriker använder Inter. Stenasset, rendering/placering, färger, djup, funktioner och data är oförändrade. Ingen publicering.",
       "Paceable-stenarna på Idag lite större (2026-10-08): stenarna bredvid hälsningen är nu 126×74 px efter att ha varit 104×68 px. De ligger i sidans eget flöde med luft runt sig, utan att gå in i texten, och hälsningen bryts på två rader. Verifierat i 390 px utan horisontell overflow. Ingen funktions- eller dataändring; ingen publicering.",
       "Större Paceable-stenar på Idag (2026-10-08): stenarna vid hälsningen är tydligt större och ligger på en egen rad ovanför hälsningen, så de inte ser ut som en liten rad bredvid texten. Stenbilden är beskuren så stenarna fyller ytan. Verifierat i 390 px. Ingen funktions- eller dataändring; ingen publicering.",
       "Min plats-ikon (2026-10-07): navigationen använder valt förslag B, Öppen rymdform.",
