@@ -54,6 +54,7 @@ import {
   Wind,
 } from "lucide-react";
 import { MyPlaceIcon, ThoughtsIcon, TodayHorizonIcon } from "@/components/paceable/navigation-icons";
+import MoreView from "@/components/paceable/more-view";
 import { BrandLogo } from "@/components/paceable/brand-logo";
 import { initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
@@ -213,6 +214,15 @@ export default function Layout({ children }: LayoutProps) {
   }, [location]);
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMoreTriggerRef = React.useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setMobileMenuOpen(false); mobileMoreTriggerRef.current?.focus({ preventScroll: true }); }
+    };
+    window.addEventListener("keydown", escape);
+    return () => window.removeEventListener("keydown", escape);
+  }, [mobileMenuOpen]);
   const {
     alerts: medicationAlerts,
     dismissAlert: dismissMedicationAlert,
@@ -615,6 +625,7 @@ export default function Layout({ children }: LayoutProps) {
   const closeMenu = () => {
     setMobileMenuOpen(false);
     setOpenCategory(null);
+    mobileMoreTriggerRef.current?.focus({ preventScroll: true });
   };
 
   // Enkelt läge: AV som standard – slås bara på om användaren själv väljer det.
@@ -764,74 +775,8 @@ export default function Layout({ children }: LayoutProps) {
       </nav>
 
       {desktopMoreOpen && (
-        <aside
-          id="desktop-more-panel"
-          aria-label={t("Mer")}
-          className="fixed inset-y-0 left-[13rem] z-30 hidden w-80 max-w-[calc(100vw-13rem)] flex-col border-r border-border bg-card shadow-lg md:flex"
-        >
-          <div className="flex items-center justify-between border-b border-border/60 p-4">
-            <h2 className="text-base font-semibold text-foreground">{t("Mer")}</h2>
-            <button
-              type="button"
-              onClick={closeDesktopMore}
-              aria-label={t("Stäng Mer")}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <X size={20} />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="relative mb-4">
-              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="search"
-                value={navSearch}
-                onChange={(e) => setNavSearch(e.target.value)}
-                placeholder="Sök i appen…"
-                aria-label="Sök i appen"
-                className="w-full rounded-2xl border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
-            {navSearch.trim() ? (
-              searchResults.length > 0 ? (
-                <ul className="space-y-0.5">
-                  {searchResults.map((item) => (
-                    <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} onNavigate={prepareDesktopMoreNavigation} /></li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-6 text-center text-sm text-muted-foreground">Hittade inget som matchar ”{navSearch}”.</p>
-              )
-            ) : (
-              <div className="space-y-1">
-                {desktopMoreGroups.map((group) => {
-                  const open = desktopMoreSection === group.id;
-                  return (
-                    <section key={group.id} className={group.legacy ? "mt-4 border-t border-border/60 pt-3" : undefined}>
-                      <button
-                        type="button"
-                        aria-expanded={open}
-                        onClick={() => setDesktopMoreSection(open ? null : group.id)}
-                        className={`flex min-h-11 w-full items-center justify-between gap-2 rounded-2xl px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                          group.legacy ? "text-muted-foreground" : "font-semibold text-foreground"
-                        } hover:bg-secondary`}
-                      >
-                        <span className="min-w-0 whitespace-normal break-words">{group.label}</span>
-                        <span aria-hidden className={`shrink-0 text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
-                      </button>
-                      {open && (
-                        <ul className="mb-2 ml-2 space-y-0.5">
-                          {group.items.map((item) => (
-                            <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} onNavigate={prepareDesktopMoreNavigation} /></li>
-                          ))}
-                        </ul>
-                      )}
-                    </section>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+        <aside id="desktop-more-panel" aria-label={t("Mer")} data-paceable-surface="true" className="pace-more-desktop fixed inset-y-0 left-[13rem] z-30 hidden overflow-y-auto md:block">
+          <MoreView items={navItems} simpleMode={simpleMode} enlarged={textLayout.enlarged} t={t} onClose={closeDesktopMore} onNavigate={prepareDesktopMoreNavigation} />
         </aside>
       )}
 
@@ -1022,6 +967,9 @@ export default function Layout({ children }: LayoutProps) {
 
 
           <button
+            ref={mobileMoreTriggerRef}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-more-panel"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-current={mobileMenuOpen ? "page" : undefined}
             className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
@@ -1040,158 +988,9 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </nav>
 
-      {/* Mer – appens områden först, med en enda ingång till inställningar. */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-background/95 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="flex flex-col h-full">
-            <div className="flex justify-between items-center p-4 border-b border-border/50">
-              <h2 className="text-lg font-medium text-muted-foreground">
-                {openCategory
-                  ? (categories.find((c) => c.id === openCategory)?.label ?? t("Mer"))
-                  : t("Mer")}
-              </h2>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setOpenCategory(null);
-                }}
-                className="p-2 text-muted-foreground hover:bg-secondary rounded-full"
-                aria-label="Stäng"
-              >
-                <X size={28} />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 pb-24">
-              <div className="relative mb-4">
-                <Search
-                  size={18}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-                />
-                <input
-                  type="search"
-                  value={navSearch}
-                  onChange={(e) => setNavSearch(e.target.value)}
-                  placeholder="Sök i appen…"
-                  aria-label="Sök i appen"
-                  className="w-full rounded-2xl border border-border bg-card py-3 pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-                {navSearch && (
-                  <button
-                    type="button"
-                    aria-label="Rensa sökning"
-                    onClick={() => setNavSearch("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-muted-foreground hover:bg-secondary"
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
-
-              {navSearch.trim() ? (
-                searchResults.length > 0 ? (
-                  <div className="space-y-2">
-                    {searchResults.map((item) => (
-                      <NavRow
-                        key={item.href}
-                        item={item}
-                        isActive={location === item.href}
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          setOpenCategory(null);
-                          setNavSearch("");
-                        }}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground text-center mt-8">
-                    Hittade inget som matchar ”{navSearch}”.
-                  </p>
-                )
-              ) : openCategory ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => setOpenCategory(null)}
-                    className="mb-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    <RotateCcw size={16} /> Alla kategorier
-                  </button>
-                  <div className="space-y-2">
-                    {(categories.find((c) => c.id === openCategory)?.items ?? [])
-                      .filter((item) => (simpleMode ? item.essential : true))
-                      .map((item) => (
-                        <NavRow
-                          key={item.href}
-                          item={item}
-                          isActive={location === item.href}
-                          tint={catColor(openCategory, 0.1)}
-                          onClick={() => {
-                            setMobileMenuOpen(false);
-                            setOpenCategory(null);
-                          }}
-                        />
-                      ))}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h3 className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Mina områden
-                  </h3>
-                  <p className="mb-2 text-xs text-muted-foreground/80">
-                    Allt som hör till studier, jobb, hem och relationer.
-                  </p>
-                  <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
-                    {categories
-                      .filter((cat) =>
-                        simpleMode ? cat.items.some((i) => i.essential) : cat.items.length > 0,
-                      )
-                      .map((cat) => {
-                        const Icon = cat.icon;
-                        return (
-                          <button
-                            key={cat.id}
-                            type="button"
-                            onClick={() => setOpenCategory(cat.id)}
-                            style={{
-                              backgroundColor: catColor(cat.id, 0.12),
-                              borderColor: catColor(cat.id, 0.35),
-                              color: catColor(cat.id),
-                            }}
-                            className="flex flex-col items-center justify-center gap-2 rounded-3xl p-4 text-center border shadow-sm transition-all duration-200 active:scale-95"
-                          >
-                            <span
-                              className="inline-flex h-12 w-12 items-center justify-center rounded-2xl"
-                              style={{ backgroundColor: catColor(cat.id, 0.18) }}
-                              aria-hidden="true"
-                            >
-                              <Icon size={26} />
-                            </span>
-                            <span className="text-sm font-medium leading-tight">{cat.label}</span>
-                            <span className="text-[11px] leading-snug opacity-70">{cat.hint}</span>
-                          </button>
-                        );
-                      })}
-                  </div>
-
-                  <h3 className="mb-2 mt-6 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    Appen
-                  </h3>
-                  <NavRow
-                    item={{
-                      href: "/installningar",
-                      label: "Inställningar",
-                      icon: Settings2,
-                      hint: "Anpassa Paceable, konto och appens inställningar",
-                    }}
-                    isActive={location === "/installningar"}
-                    onClick={closeMenu}
-                  />
-                </>
-              )}
-            </div>
-          </div>
+        <div id="mobile-more-panel" aria-label={t("Mer")} data-paceable-surface="true" className="pace-more-mobile fixed inset-x-0 top-0 z-30 overflow-y-auto md:hidden">
+          <MoreView items={navItems} simpleMode={simpleMode} enlarged={textLayout.enlarged} t={t} onClose={closeMenu} onNavigate={() => { prepareDesktopMoreNavigation(); closeMenu(); }} />
         </div>
       )}
     </div>

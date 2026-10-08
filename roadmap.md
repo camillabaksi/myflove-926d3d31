@@ -3,7 +3,8 @@
 ## Mer enligt godkänd målbild (2026-10-08)
 - [x] Tidigare etapps dokumenterade QA genomgången; befintligt Hem-dialogfokusfel kvarstår separat.
 - [x] Inventerat samtliga 34 navItems plus profil, jämfört mobil/desktop med referens och förberett avgränsad plan.
-- [ ] Genomförande väntar på uttryckligt plangodkännande; ingen publicering.
+- [x] Godkänd plan genomförd: en responsiv Mer-vy, befintliga länkar/filter och Äldre Hem bevarade; endast lokal presentation, ingen publicering.
+- [x] 520/520 tester i 82 filer; automatiskt bygge OK. 360/390/430/1024/1440 i båda teman och normal/200 % text utan panel-/dokumentoverflow; gruppöppning, Äldre Hem, Escape-fokus och söknavigation kontrollerade utan sparning.
 
 ## Paceable på återstående sidor inklusive Hem och Flow (2026-10-08)
 - [x] Omfattning bekräftad: även Äldre Hem och Flow ingår; befintlig godkänd identitet, inga funktionsändringar.
