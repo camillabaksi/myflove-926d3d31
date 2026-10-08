@@ -643,80 +643,170 @@ export default function Layout({ children }: LayoutProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navItems]);
 
+  // Desktop: Mer öppnas som panel bredvid menyn. Samma navItems som mobilen.
+  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
+  const [desktopMoreSection, setDesktopMoreSection] = useState<string | null>(null);
+  useEffect(() => {
+    setDesktopMoreOpen(false);
+  }, [location]);
+  useEffect(() => {
+    if (!desktopMoreOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDesktopMoreOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [desktopMoreOpen]);
+  const desktopMoreGroups = useMemo(() => {
+    const byHref = (href: string) => navItems.find((i) => i.href === href);
+    const groups: { id: string; label: string; hrefs: string[]; legacy?: boolean; rename?: Record<string, string> }[] = [
+      { id: "dag", label: "Min dag", hrefs: ["/paminnelser", "/tasks", "/pomodoro"] },
+      { id: "stod", label: "Stöd & samtal", hrefs: ["/assistant", "/flow", "/flowplan", "/anteckningar"] },
+      { id: "ork", label: "Ork & återhämtning", hrefs: ["/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin"] },
+      { id: "familj", label: "Familj", hrefs: ["/familjeflow", "/barn", "/relationer"] },
+      { id: "vardag", label: "Hem & vardag", hrefs: ["/matlista", "/shopping", "/stadning", "/finances"] },
+      { id: "studier-jobb", label: "Studier & jobb", hrefs: ["/studyflow", "/jobb"] },
+      { id: "monster", label: "Mönster", hrefs: ["/insight", "/historik", "/statistik"] },
+      {
+        id: "konto",
+        label: "Konto & app",
+        hrefs: ["/familj", "/friktionsindex", "/installningar", "/admin", "/admin-statistik"],
+        rename: { "/familj": "Delning & åtkomst", "/admin": "Administration – översikt", "/admin-statistik": "Administration – appstatistik" },
+      },
+      { id: "aldre", label: "Äldre funktioner", hrefs: ["/hem", "/flowscore", "/beloningar"], legacy: true },
+    ];
+    return groups
+      .map((g) => ({
+        ...g,
+        label: t(g.label),
+        items: g.hrefs
+          .map(byHref)
+          .filter((i): i is NavItem => Boolean(i))
+          .map((i) => (g.rename?.[i.href] ? { ...i, label: t(g.rename[i.href]) } : i)),
+      }))
+      .filter((g) => g.items.length > 0);
+  }, [navItems, t]);
+
+
 
   return (
     <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} className="app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative">
       {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-56 border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto">
-        <div className="mb-5 flex items-center justify-between gap-2 px-1 py-1">
-          <h1 className="font-display text-xl font-bold text-foreground">Paceable</h1>
+      <nav
+        aria-label={t("Huvudnavigation")}
+        className="relative z-30 hidden md:flex flex-col w-[13rem] border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto"
+      >
+        <div className="mb-6 flex items-center justify-between gap-2 px-1 py-1">
+          <span className="font-display text-xl font-bold text-foreground">Paceable</span>
           <PaceableStones compact tactile={PACEABLE_PATHS.has(location)} className="pace-stones-contained h-12 w-16" />
         </div>
-        <div className="space-y-4">
-          {categories.map((cat) => (
-            <div key={cat.id}>
-              <div
-                className="flex items-center gap-1.5 px-1 mb-1 text-[11px] font-semibold uppercase tracking-wider"
-                style={{ color: catColor(cat.id) }}
-              >
-                <span
-                  className="inline-flex h-5 w-5 items-center justify-center rounded-md"
-                  style={{ backgroundColor: catColor(cat.id, 0.14) }}
-                  aria-hidden="true"
+        <ul className="space-y-1">
+          {primaryNav.map((item) => {
+            const isActive = !desktopMoreOpen && (location === item.href || location.startsWith(`${item.href}/`));
+            const Icon = item.icon;
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    isActive ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
                 >
-                  <cat.icon size={12} />
-                </span>
-                {cat.label}
-              </div>
+                  <Icon size={20} strokeWidth={1.8} />
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <button
+              type="button"
+              onClick={() => setDesktopMoreOpen((v) => !v)}
+              aria-expanded={desktopMoreOpen}
+              aria-controls="desktop-more-panel"
+              className={`flex min-h-11 w-full items-center gap-3 rounded-2xl px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                desktopMoreOpen ? "bg-lavender text-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+              }`}
+            >
+              <Menu size={20} strokeWidth={1.8} />
+              <span className="truncate">{t("Mer")}</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-              <div className="space-y-0.5">
-                {cat.items.map((item) => {
-                  const isActive = location === item.href;
-                  const Icon = item.icon;
-                  if (item.href === "/traning") {
-                    return (
-                      <RouterLink
-                        key={item.href}
-                        to="/traning"
-                        reloadDocument
-                        className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
-                          isActive
-                            ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                        }`}
-                      >
-                        <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
-                        <span className="truncate leading-tight">{item.label}</span>
-                      </RouterLink>
-                    );
-                  }
+      {desktopMoreOpen && (
+        <aside
+          id="desktop-more-panel"
+          aria-label={t("Mer")}
+          className="fixed inset-y-0 left-[13rem] z-30 hidden w-80 max-w-[calc(100vw-13rem)] flex-col border-r border-border bg-card shadow-lg md:flex"
+        >
+          <div className="flex items-center justify-between border-b border-border/60 p-4">
+            <h2 className="text-base font-semibold text-foreground">{t("Mer")}</h2>
+            <button
+              type="button"
+              onClick={() => setDesktopMoreOpen(false)}
+              aria-label={t("Stäng Mer")}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="relative mb-4">
+              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="search"
+                value={navSearch}
+                onChange={(e) => setNavSearch(e.target.value)}
+                placeholder="Sök i appen…"
+                aria-label="Sök i appen"
+                className="w-full rounded-2xl border border-border bg-background py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+            {navSearch.trim() ? (
+              searchResults.length > 0 ? (
+                <ul className="space-y-0.5">
+                  {searchResults.map((item) => (
+                    <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-6 text-center text-sm text-muted-foreground">Hittade inget som matchar ”{navSearch}”.</p>
+              )
+            ) : (
+              <div className="space-y-1">
+                {desktopMoreGroups.map((group) => {
+                  const open = desktopMoreSection === group.id;
                   return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-left text-sm transition-colors duration-150 ${
-                        isActive
-                          ? "bg-primary text-primary-foreground font-medium shadow-sm"
-                          : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                      }`}
-                    >
-                      <Icon size={16} strokeWidth={isActive ? 2.5 : 2} className="shrink-0" />
-                      <span className="truncate leading-tight">{item.label}</span>
-                    </Link>
+                    <section key={group.id} className={group.legacy ? "mt-4 border-t border-border/60 pt-3" : undefined}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        onClick={() => setDesktopMoreSection(open ? null : group.id)}
+                        className={`flex min-h-11 w-full items-center justify-between rounded-2xl px-3 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                          group.legacy ? "text-muted-foreground" : "font-semibold text-foreground"
+                        } hover:bg-secondary`}
+                      >
+                        {group.label}
+                        <span aria-hidden className={`text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+                      </button>
+                      {open && (
+                        <ul className="mb-2 ml-2 space-y-0.5">
+                          {group.items.map((item) => (
+                            <li key={item.href}><DesktopMoreLink item={item} active={location === item.href} /></li>
+                          ))}
+                        </ul>
+                      )}
+                    </section>
                   );
                 })}
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-auto pt-3 pb-1">
-          <Link href="/installningar">
-            <Button variant="outline" size="sm" className="w-full rounded-lg gap-2">
-              <Settings2 size={15} /> Inställningar
-            </Button>
-          </Link>
-        </div>
-      </nav>
+            )}
+          </div>
+        </aside>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
@@ -744,30 +834,6 @@ export default function Layout({ children }: LayoutProps) {
           <ViewCollapseToggle />
         </header>
 
-        <nav aria-label={t("Huvudnavigation")} className="hidden md:flex items-center gap-1.5 px-6 pt-4">
-          {primaryNav.map((item) => {
-            const active =
-              item.href === "/flow"
-                ? location.startsWith("/flow") || location.startsWith("/assistant")
-                : location === item.href;
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? "bg-lavender text-foreground"
-                    : "text-muted-foreground hover:bg-card hover:text-foreground"
-                }`}
-              >
-                <Icon size={18} strokeWidth={1.8} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
 
         <div className="hidden md:flex items-center justify-between px-6 pt-2">
           {canGoBack ? (
@@ -1143,6 +1209,38 @@ function NavRow({
           {item.hint}
         </span>
       </span>
+    </Link>
+  );
+}
+
+function DesktopMoreLink({
+  item,
+  active,
+}: {
+  item: { href: string; label: string; icon: React.ComponentType<{ size?: number; strokeWidth?: number; className?: string }> };
+  active: boolean;
+}) {
+  const Icon = item.icon;
+  const cls = `flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+    active ? "bg-lavender text-foreground font-medium" : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+  }`;
+  const content = (
+    <>
+      <Icon size={18} strokeWidth={1.8} className="shrink-0" />
+      <span className="truncate">{item.label}</span>
+    </>
+  );
+  // Träning behåller sin vanliga sidladdning.
+  if (item.href === "/traning") {
+    return (
+      <RouterLink to="/traning" reloadDocument aria-current={active ? "page" : undefined} className={cls}>
+        {content}
+      </RouterLink>
+    );
+  }
+  return (
+    <Link href={item.href} aria-current={active ? "page" : undefined} className={cls}>
+      {content}
     </Link>
   );
 }
