@@ -1,4 +1,7 @@
 # Roadmap
+## Mer – fyra extra direktsektioner (2026-10-08)
+- [x] Lägg till Min dag, Flow och samtal, Ork och återhämtning samt Hem och vardag efter Insikter; behåll alla befintliga ingångar även under Fler funktioner.
+- [x] Tre nya tester verifierar rätt destinationer, samma filter och inga dubbletter inom sektioner. 360/390/430/1024/1440 px, båda teman och 200 % text kontrollerade utan overflow eller sidfel. Full svit 527/527 i 83 filer med lägre samtidighet efter ett känt tidskänsligt krypteringstest i första körningen; automatiskt bygge OK. Ändringsloggar uppdaterade. Ingen publicering.
 
 ## Uppgifter – sammanhållet Paceable-uttryck (2026-10-08)
 - [x] Granskat sidans egna visuella avvikelser och delade komponenter; avgränsad plan framtagen före appkodändring.

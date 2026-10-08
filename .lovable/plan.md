@@ -16,12 +16,12 @@ De fyra första kategorierna under **Fler funktioner** är, i nuvarande ordning:
 - Funktionerna visas direkt som befintliga klickbara rader med ikon, namn, kort beskrivning och pil. Inget extra öppningssteg behövs.
 - Återanvänd samma typografi, färger, illustrationer, ytor och avstånd. Ingen ny kortstil eller dekor införs.
 - **Konto och app** och behörighetsstyrd **Admin** ligger kvar under **Fler funktioner**. **Äldre funktioner** och slutpåminnelsen ligger kvar som idag.
-- Ta bort de fyra grupperna från den utfällbara listan när de lyfts fram. Visa Inställningar endast vid profilkortet, inte även under Konto och app; Feedback ligger kvar där. Sökresultat är en alternativ sökvy, inte en extra lista i normalvyn.
+- Behåll även de fyra grupperna i den utfällbara listan. Alla befintliga huvudkort, sektioner och länkar lämnas kvar, inklusive Inställningar på sina befintliga platser. Upprepade genvägar mellan sektioner är avsiktliga; data och funktion dupliceras aldrig.
 - Behåll Enkelt läge, områdesfilter och behörigheter; tomma kategorier visas inte. Alla tillåtna länkar finns kvar i sökningen.
 
 ## Teknisk avgränsning
-- `src/components/paceable/more-view.tsx`: flytta presentationen av de fyra grupperna och återanvänd befintliga `section`, `rows` och filtrering.
-- `src/components/paceable/more-view.test.tsx`: verifiera full länktäckning, korrekt gruppplacering och inga dubbla destinationer i normalvyn.
+- `src/components/paceable/more-view.tsx`: lägg till presentationen av de fyra grupperna och återanvänd befintliga `section`, `rows` och filtrering, utan att ändra befintliga grupper.
+- `src/components/paceable/more-view.test.tsx`: verifiera full länktäckning, rätt destinationer, samma behörighetsfilter och inga dubbla destinationer inom samma sektion; tillåt avsiktliga upprepningar mellan sektioner.
 - `src/styles.css`: endast om befintlig radstil behöver en liten, Mer-avgränsad anpassning för direktvisade listor; inga globala ändringar.
 - Uppdatera befintlig dokumentation och båda ändringsloggarna efter genomförandet.
 - Inga nya komponenter, paket, rutter, funktioner eller lagringsändringar. Övrig navigation lämnas orörd.
@@ -31,4 +31,4 @@ De fyra första kategorierna under **Fler funktioner** är, i nuvarande ordning:
 - Kontrollera samtliga länkar, Enkelt läge, behörighetsfilter, sökning och kvarvarande utfällbara grupper.
 - Kör relevanta tester och kontrollera automatiskt bygge; inga sparande tester i kontot.
 
-**Ingen appkod ändras före godkännande. Ingen publicering ingår.**
+**Genomförandet godkänt med förtydligandet ovan. Ingen publicering ingår.**
