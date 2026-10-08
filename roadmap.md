@@ -1,5 +1,11 @@
 # Roadmap
 
+## Paceables logotyper och webbikoner (2026-10-08)
+- [x] Granska första ZIP-filen och flagga bakgrund, uppskalning och skillnader mellan symbolversioner.
+- [ ] Granska det nya rena filpaketet och visa konkret plan innan implementation.
+- [ ] Efter godkännande och godtagbar bildkvalitet: endast varumärkesplatser, exakt slogan, favicon/PWA/manifest; bevara gränssnitt, funktioner och native-projekt.
+- [ ] Verifiera mobil/desktop, ljust/mörkt läge, symbolkonsekvens och ändrade platser; ingen publicering.
+
 ## Kompakt kapacitetsstöd i mobilkalendern
 - [x] Avgränsad plan godkänd; ingen publicering.
 - [x] Osparade val och öppet/stängt läge bevaras över Månad/Vecka/Dag via tillfällig sidstatus; ingen ny lagring eller autosparning.
