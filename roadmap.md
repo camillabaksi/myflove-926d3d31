@@ -2,8 +2,9 @@
 
 ## Etapp 2A tillgänglighetsrättning
 - [x] Plan godkänd; faktisk textstorlek/utrymme, separata tidsblocksbegränsningar och jämförelsebilder 390/768 px vid 200 %. Ingen publicering.
-- [ ] Anpassa hälsning, batterier, kalendertexter och kontrollgrupper för förstorad text utan ändrad normallayout/geometri.
-- [ ] Verifiera sju bredder vid normal/200 % text, tangentbord, tester och tillgänglig typkontroll; rapportera eventuella målkonflikter.
+- [x] Lokal textanpassning genomförd; normalbilder 390/768 px identiska. Fasta veckoblock rapporteras separat, inte som lösta.
+- [x] 56 bildkontroller över sju bredder och fyra vyer vid normal/200 %, utan dokumentoverflow; 503 tester och automatiskt bygge OK. Dialoger, periodnavigation, aktivitetsöppning och tangentbordsfokus verifierade utan sparning. Separat typkontroll inte körd enligt miljöns instruktion.
+- [ ] Full läsbarhet i fasta veckoblock vid 200 %: blockerad av låsta dagbredder/tidsgeometri, kräver användarbeslut inför separat etapp.
 
 ## Etapp 2A desktop (2026-10-08)
 - [x] Godkänd avgränsning: Idag en huvudkolumn; kalenderkontroller och sekundärt stöd, oförändrad mobil/geometri.

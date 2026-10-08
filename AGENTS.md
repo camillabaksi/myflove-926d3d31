@@ -34,3 +34,5 @@ Paceable isolates legacy themes; keep IDs/routes to avoid migration. Integrated 
 
 Desktop More dismissal restores trigger focus; its link navigation focuses new page content, preserving unrelated focus. Groups reuse mobile essential filtering; search remains unfiltered.
 Narrow greetings use balanced optional name breaks, preserving complete names, profile data and approved stones.
+
+Today and Calendar use a page-local rem probe and container-aware layout rules for enlarged text; preserve normal layout and fixed timeline positioning so accessibility presentation never changes calendar scheduling geometry.
