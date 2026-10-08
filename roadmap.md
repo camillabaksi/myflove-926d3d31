@@ -1,5 +1,9 @@
 # Roadmap
 
+## Endast Tankars stenstorlek (2026-10-08)
+- [x] Godkänd plan och endast stenbildens rendering 1,9× större; befintlig behållare och övrig layout orörda.
+- [x] 360/390/430 px kontrollerade, fyra riktade tester godkända och bildkontrollsumma oförändrad. Ingen publicering.
+
 ## Sista avgränsade finjusteringen (2026-10-08)
 - [x] Godkänd plan: endast hälsningens smala storlek ändras till 34 px; befintliga Tankar-stenar och Min plats 32 px behålls.
 - [x] Mobilvyer, oförändrad bildkontrollsumma och 501 tester verifierade; bilder levererade utan publicering. Vid 360 px bryts Camillabaksi fortfarande över två namnrader vid minsta tillåtna 34 px; större vyer oförändrade. Separat typkontroll ej körd.
