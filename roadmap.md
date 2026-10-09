@@ -1,4 +1,9 @@
 # Roadmap
+## Pace – hela appen stegvis (2026-10-09)
+- [x] Ordning fastställd: menyn och sidrubriker först, därefter formulär för formulär med befintligt designsystem.
+- [ ] Godkänn etappplan före appkodändring; ingen publicering.
+- [ ] Etapp 1: granska och enhetliggör meny/sidrubriker utan nya länkar, ordning eller beteenden.
+- [ ] Följande etapper: renderingsgranska och anpassa samtliga återstående formulär gruppvis; bevara sparning, utkast och behörigheter.
 ## Pace – gemensamt designsystem (2026-10-09)
 - [x] Inventera befintlig godkänd grund och ta fram plan för återanvändbara sid-/formulärmönster.
 - [x] Godkännande mottaget för system, referensyta och begränsad pilot; ingen publicering.
