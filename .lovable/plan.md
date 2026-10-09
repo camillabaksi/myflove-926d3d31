@@ -33,4 +33,10 @@ Logga just nu är `src/components/simple-checkin.tsx` och återanvänds bland an
 - Kör relevanta formulärtester och hela befintliga testsviten. Kontrollera uttryckligen att redan godkända formulär förblir oförändrade.
 - Visa mobilbild av Logga just nu, representativa före-/efterbilder för övriga ändrade formulärfamiljer samt desktop- och mörkerkontroll. Redovisa exakt vilka formulär som ändrats och eventuella kvarstående begränsningar. Uppdatera båda ändringsloggarna efter genomförandet.
 
+## Inventeringens nuläge
+- Kartlagda formulärfamiljer: loggning/hälsa, familj/barn, profil/inställningar, hem/vardag och planering/listor. Inventeringen är inte ett påstående om att alla dessa formulär har visuella fel.
+- Renderingskontroll har öppnat Mitt batteri, Energins historik, Familj, Inställningar, Anteckningar och Inköpslista utan att göra testregistreringar. Flera visar redan neutrala ytor och ska inte ändras enbart på grund av äldre klassnamn.
+- Logga just nu är den bekräftade avvikelsen från användarens bild. Dess utfällda läge och övriga dialoger granskas före respektive presentationsändring. Idag gav en tom första skärmbild; detta räknas inte som en genomförd visuell kontroll.
+- Kandidater omfattar bland annat medicin, mående, barnprofiler, familjedelning, profil, anpassning, tyst läge, morgonstart, städning, inköp, matplanering, ekonomi och påminnelser. Bara bekräftade äldre formulärytor får det uttryckliga presentationsvalet.
+
 Genomförandet inväntar godkännande. Ingen publicering ingår.
