@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const today = readFileSync(new URL("./today.tsx", import.meta.url), "utf8");
-const layout = readFileSync(new URL("../components/layout.tsx", import.meta.url), "utf8");
-const styles = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
+const today = readFileSync("src/pages/today.tsx", "utf8");
+const layout = readFileSync("src/components/layout.tsx", "utf8");
+const styles = readFileSync("src/styles.css", "utf8");
 
 describe("Approved Today-only header boundary", () => {
   it("reuses the mobile shell logo with a route-specific width, not another page logo", () => {
