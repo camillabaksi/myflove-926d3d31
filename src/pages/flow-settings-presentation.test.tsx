@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+vi.stubGlobal("ResizeObserver", class { observe() {} unobserve() {} disconnect() {} });
 const mocks = vi.hoisted(() => ({ update: vi.fn(), togglePriority: vi.fn(), reset: vi.fn() }));
 vi.mock("@/components/layout", () => ({ default: ({ children }: { children: React.ReactNode }) => <div>{children}</div> }));
 vi.mock("@/components/flow/flow-character", () => ({ FlowCharacter: () => null }));
