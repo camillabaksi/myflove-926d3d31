@@ -250,7 +250,7 @@ export function QuickflowCapture({
             variant === "compact"
               ? "inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover-scale"
               : appearance === "paceable"
-                ? "pace-thought-capture group w-full flex items-center gap-4 p-5 rounded-3xl border text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                ? "pace-capture-entry pace-thought-capture group w-full flex items-center gap-4 p-5 rounded-3xl border text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               : "group w-full flex items-center gap-4 p-5 rounded-3xl border-2 border-dashed border-primary/40 bg-card hover:border-primary hover:shadow-lifted transition-all text-left active:scale-[0.99]"
           }
         >
