@@ -74,6 +74,29 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(serialized).not.toContain("sjuk");
   });
 
+  it("behåller osparade val och text över Visa mer och hopfällning utan autosparning", () => {
+    render(<SimpleCheckin />);
+    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
+    fireEvent.click(screen.getByRole("button", { name: "Bra" }));
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt utkast" } });
+    fireEvent.click(screen.getByRole("button", { name: "Visa mer" }));
+    fireEvent.click(screen.getByRole("button", { name: /Sömn/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Visa mindre" }));
+    fireEvent.click(screen.getByRole("button", { name: /Logga just nu/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Logga just nu/ }));
+    expect(screen.getByRole("button", { name: "Lågt" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: "Bra" }).getAttribute("aria-pressed")).toBe("true");
+    expect((screen.getByRole("textbox") as HTMLTextAreaElement).value).toBe("Mitt utkast");
+    fireEvent.click(screen.getByRole("button", { name: "Visa mer" }));
+    expect(screen.getByRole("button", { name: /Sömn/ }).getAttribute("aria-pressed")).toBe("true");
+    expect(logEnergy).not.toHaveBeenCalled();
+    expect(logMood).not.toHaveBeenCalled();
+    expect(addFactor).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
+    expect(logMood).toHaveBeenCalledWith(expect.any(Number), "Mitt utkast");
+    expect(addFactor).toHaveBeenCalledWith(expect.objectContaining({ category: "somn" }));
+  });
+
   it("flera loggningar samma dag är tillåtna – formuläret blockeras aldrig", () => {
     // Användaren har redan loggat i morse.
     checkinState = {
