@@ -26,6 +26,15 @@ function oauth(): OAuthApi {
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
+  head: () => ({ meta: [
+    { title: "Godkänn appkoppling – Paceable" },
+    { name: "description", content: "Granska och godkänn eller avböj en appkoppling till ditt Paceable-konto." },
+    { property: "og:title", content: "Godkänn appkoppling – Paceable" },
+    { property: "og:description", content: "Granska åtkomsten innan du godkänner en appkoppling." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+    { name: "robots", content: "noindex, nofollow" },
+  ] }),
   validateSearch: (s: Record<string, unknown>) => ({
     authorization_id: typeof s.authorization_id === "string" ? s.authorization_id : "",
   }),

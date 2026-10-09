@@ -1,0 +1,1 @@
+Pace patterns opt in and wrap existing controls; never own storage or submission, avoiding behavioral drift. Reference uses sample state only; portals opt in separately to retain themes.

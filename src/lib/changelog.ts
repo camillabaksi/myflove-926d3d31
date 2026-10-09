@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pace-designsystem",
+    items: ["Designsystem (2026-10-09): återanvändbara opt-in-mönster för sidor och formulär, fristående referens på /designsystem och dokumenterad konverteringsguide. Piloten behåller befintlig funktion och sparning. 537 tester godkända; ingen publicering. Alla sidor är inte konverterade; fysisk mobil och skärmläsare är inte verifierade."],
+  },
+  {
     title: "Formulär",
     items: ["Formulär (2026-10-09): Logga just nu, Anpassa, aviseringskort och rutinformulär har lokal Paceable-presentation och flexibel radbrytning. Sparning, data och funktioner bevaras. 532 tester godkända; ingen publicering. Alla dolda formulär är ännu inte slutverifierade."],
   },

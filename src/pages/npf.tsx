@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3, Eye, Hand } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
 import { PersonalizationSettings } from "@/components/personalization-settings";
+import { paceFormSurface } from "@/components/paceable/design-system";
 import { Link } from "@tanstack/react-router";
 
 function readAnalyticsOptOut(): boolean {
@@ -101,7 +102,7 @@ export default function NpfPage() {
           icon={Eye}
           tone="lavender"
           surface="plain"
-          className="pace-form pace-form-surface"
+          className={paceFormSurface}
           collapsible
           defaultCollapsed
           collapseId="anpassa::se-mindre"
@@ -129,7 +130,7 @@ export default function NpfPage() {
           icon={Hand}
           tone="mint"
           surface="plain"
-          className="pace-form pace-form-surface"
+          className={paceFormSurface}
           collapsible
           defaultCollapsed
           collapseId="anpassa::lattare"
@@ -166,7 +167,7 @@ export default function NpfPage() {
           icon={BarChart3}
           tone="sky"
           surface="plain"
-          className="pace-form pace-form-surface"
+          className={paceFormSurface}
           collapsible
           defaultCollapsed
           collapseId="anpassa::integritet"
@@ -195,7 +196,7 @@ export default function NpfPage() {
           icon={Accessibility}
           tone="blush"
           surface="plain"
-          className="pace-form pace-form-surface border-destructive/30"
+          className={`${paceFormSurface} border-destructive/30`}
           data-testid="account-section"
         >
           <DeleteAccountButton />
