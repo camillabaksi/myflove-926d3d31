@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { MyFloveBlock } from "@/components/myflove/block";
+import { paceFormSurface } from "@/components/paceable/design-system";
 import { useLang } from "@/hooks/use-language";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -115,7 +116,7 @@ export default function SimpleCheckin({
       collapsible
       collapseId="batteri::logga-just-nu"
       data-testid="battery-log-form"
-      className={cn("pace-form pace-form-surface h-full", className)}
+      className={cn(paceFormSurface, "h-full", className)}
       footer={
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
           {saved
