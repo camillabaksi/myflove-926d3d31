@@ -8,7 +8,6 @@ import HomePriorityActions from "@/components/home/priority-actions";
 import HowItWorksGuide from "@/components/home/how-it-works-guide";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import ChildrenDaySummary from "@/components/home/children-day-summary";
-import { FlowMascot } from "@/components/flow-mascot";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 
@@ -174,14 +173,6 @@ export default function Home() {
                     {name ? t("Byt namn") : t("Vad ska jag kalla dig?")}
                   </button>
                 )}
-              </div>
-              <div className="pointer-events-none shrink-0 select-none" aria-hidden>
-                <FlowMascot
-                  size="md"
-                  mood="calm"
-                  className={npf.stillness ? undefined : "flow-alive"}
-                  alt=""
-                />
               </div>
             </header>
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Moon, X } from "lucide-react";
-import { FlowMascot } from "@/components/flow-mascot";
 import { Button } from "@/components/ui/button";
 import { haptic } from "@/lib/haptics";
 import { pauseRemindersFor, resumeReminders, subscribeQuietMode } from "@/lib/quiet-mode";
@@ -80,16 +79,6 @@ export default function CalmMode({
       </Button>
 
       <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
-        <div className="calm-breathing-halo relative grid size-40 place-items-center rounded-full bg-background/10 sm:size-52">
-          <FlowMascot
-            size="lg"
-            mood="calm"
-            glow
-            alive
-            alt="Flow vilar tillsammans med dig"
-            className="sm:scale-125"
-          />
-        </div>
         <p className="mt-6 flex items-center gap-2 text-sm font-semibold text-background/70 sm:mt-8">
           <Moon className="size-4" aria-hidden /> {kind === "acute" ? "Akut Lugn" : "Mikropaus"}
         </p>

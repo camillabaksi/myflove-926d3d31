@@ -1,4 +1,8 @@
 # Roadmap
+## Ta bort lila maskotbild (2026-10-09)
+- [x] Plan godkänd: endast bildpresentation; bevara texter, knappar, funktioner, originalassets och sparade val. Ingen ersättningsbild/publicering.
+- [x] Gemensam maskotpresentation och tomma bildutrymmen borttagna; texter och handlingar kvar. 542/542 tester godkända; Inställningar, Pace-inställningar, samtal och Idag kontrollerade i båda teman vid 360/390/1280 px och 200 % text utan sidöverflöde eller konsolfel.
+- [ ] Separata rumsbilder i Anpassa/Min samling pausade: maskoten är inbakad i hela scenen med hälsningsyta och kan inte tas bort som fristående bild utan separat beslut. Originalassets och sparade val bevarade; ingen publicering.
 ## Pace – hela appen stegvis (2026-10-09)
 - [x] Formulärsteg 1: Inställningar och Pace-inställningar granskade och lokalt anpassade; 540/540 tester, 56 bredd-/tema-/textkontroller utan överflöde, Mer pixelidentisk. Inga kontoval ändrade eller publicerade.
 - Nästa lilla etapp: kvarvarande profil/livsprofil och hemskärmsanpassning behöver öppnad-formulärgranskning; namn/barnens befintliga sparning ska bevaras exakt. Därefter ork/återhämtning enligt godkänd ordning. Inte färdigt i denna etapp.

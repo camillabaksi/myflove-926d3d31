@@ -85,14 +85,16 @@ const EXPECTED: Record<FlowScene, { props: string[][]; moods: string[] }> = {
 const SCENES = Object.keys(EXPECTED) as FlowScene[];
 
 describe("FlowCharacter – ett state i taget", () => {
-  it.each(SCENES)("scen %s renderar exakt en karaktär och en maskot", (scene) => {
+  it.each(SCENES)("scen %s bevarar dold scen utan maskotbild", (scene) => {
     const { container } = render(<FlowCharacter scene={scene} />);
     expect(container.querySelectorAll("[data-flow-character]")).toHaveLength(1);
     expect(
       Array.from(container.querySelectorAll("[data-flow-mascot]")).filter(
         (el) => !el.closest('[data-flow-prop="miniFlows"]'),
       ),
-    ).toHaveLength(1);
+    ).toHaveLength(0);
+    expect(container.querySelector("[data-flow-character]")).toHaveAttribute("hidden");
+    expect(container.querySelector("[data-flow-character]")).toHaveAttribute("aria-hidden", "true");
     expect(container.querySelector("[data-flow-character]")).toHaveAttribute(
       "data-flow-scene",
       scene,
@@ -130,10 +132,8 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
           ).toBeGreaterThan(0);
         }
 
-        const mood = Array.from(container.querySelectorAll("[data-flow-mascot]"))
-          .find((el) => !el.closest('[data-flow-prop="miniFlows"]'))!
-          .getAttribute("data-flow-mood");
-        expect(spec.moods, `oväntad pose ${mood} i scen ${scene}`).toContain(mood);
+        expect(root).toHaveAttribute("hidden");
+        expect(container.querySelector("img")).toBeNull();
       });
     }
   }
@@ -146,12 +146,13 @@ describe("FlowCharacter – rätt rekvisita och pose per kontext", () => {
     expect(stage.className).toContain("max-h-[260px]");
   });
 
-  it("visar själva maskoten tydligt i mini-läget utan rekvisita som tar plats", () => {
+  it("visar ingen maskot eller rekvisita i mini-läget", () => {
     const { container } = render(<FlowCharacter scene="rain" stage="mini" />);
     const stage = container.querySelector("[data-flow-character]")!;
-    const mascot = container.querySelector("[data-flow-mascot] img")!;
+    const mascot = container.querySelector("[data-flow-mascot] img");
     expect(stage).toHaveAttribute("data-flow-stage", "mini");
-    expect(mascot.className).toContain("h-[68px]");
+    expect(mascot).toBeNull();
+    expect(stage).toHaveAttribute("hidden");
     expect(container.querySelector('[data-flow-prop="umbrella"]')).toBeNull();
     expect(container.querySelector('[data-flow-prop="rainDrops"]')).toBeNull();
   });

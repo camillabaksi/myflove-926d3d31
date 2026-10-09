@@ -48,6 +48,12 @@ beforeEach(() => {
 });
 
 describe("Flow-knappen 'Vad jag lärt mig'", () => {
+  it("behåller samtalslänk och inställningar utan maskotens bildutrymme", () => {
+    render(<FlowCompanion />);
+    expect(screen.queryByTestId("flow-character")).toBeNull();
+    expect(screen.getByRole("link", { name: "Prata med Pace" })).toHaveAttribute("href", "/assistant");
+    expect(screen.getByRole("button", { name: "Hur mycket ska Pace hjälpa till?" })).toBeVisible();
+  });
   it("loggar exakt ett event när knappen öppnas", () => {
     render(<FlowCompanion />);
     fireEvent.click(screen.getByText("Vad jag lärt mig"));
