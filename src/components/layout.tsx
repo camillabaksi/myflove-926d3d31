@@ -800,9 +800,9 @@ export default function Layout({ children }: LayoutProps) {
           ) : location !== "/idag" ? (
             <span aria-hidden className="w-2 shrink-0" />
           ) : null}
-          <div className="min-w-0 flex-1">
+          <h1 className="min-w-0 flex-1">
             <BrandLogo compact className={location === "/idag" ? "w-[220px] max-w-full" : "mx-auto w-32 max-w-full"} />
-          </div>
+          </h1>
           <ViewCollapseToggle />
         </header>
 
