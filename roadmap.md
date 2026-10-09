@@ -3,7 +3,8 @@
 - [x] Ordning fastställd: menyn och sidrubriker först, därefter formulär för formulär med befintligt designsystem.
 - [x] Etappplan godkänd; Mer-vyn ska behållas som den är. Ingen publicering.
 - [x] Ny avgränsning: skydda Mer-vyns hela godkända presentation och beteende under anpassningen.
-- [ ] Etapp 1: granska och enhetliggör meny/sidrubriker utan nya länkar, ordning eller beteenden.
+- [x] Första rubriksteget: Inställningar, Anpassa, Anteckningar och Relationer delar PacePageTitle. Huvudmenyn behålls; Mer oförändrad i kod och pixelidentisk i jämförelsen. 538/538 tester, bygge OK; 112 rubrikkontroller i teman/360–1440 px/100–200 % utan overflow.
+- [ ] Fortsatt rubriketapp: granska återstående sidrubriker före lokal anpassning; redan godkända ytor bevaras.
 - [ ] Följande etapper: renderingsgranska och anpassa samtliga återstående formulär gruppvis; bevara sparning, utkast och behörigheter.
 ## Pace – gemensamt designsystem (2026-10-09)
 - [x] Inventera befintlig godkänd grund och ta fram plan för återanvändbara sid-/formulärmönster.
