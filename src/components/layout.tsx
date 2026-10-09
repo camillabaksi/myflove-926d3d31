@@ -787,7 +787,7 @@ export default function Layout({ children }: LayoutProps) {
         <UnownedDataPrompt />
 
         {/* Mobile Header */}
-        <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
+        <header className={`sticky top-0 z-10 items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden ${location === "/idag" ? "grid grid-cols-[minmax(0,1fr)_auto]" : "flex"}`}>
           {canGoBack ? (
             <button
               type="button"
@@ -797,11 +797,11 @@ export default function Layout({ children }: LayoutProps) {
             >
               <ArrowLeft size={22} />
             </button>
-          ) : (
+          ) : location !== "/idag" ? (
             <span aria-hidden className="w-2 shrink-0" />
-          )}
+          ) : null}
           <h1 className="min-w-0 flex-1">
-            <BrandLogo compact className="mx-auto w-32 max-w-full" />
+            <BrandLogo compact className={location === "/idag" ? "w-[220px] max-w-full" : "mx-auto w-32 max-w-full"} />
           </h1>
           <ViewCollapseToggle />
         </header>

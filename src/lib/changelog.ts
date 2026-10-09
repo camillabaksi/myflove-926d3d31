@@ -9,6 +9,7 @@ export const CHANGELOG_INTRO =
 export const CHANGELOG_UPDATED = "2026-10-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  { title: "Idag – sidhuvud", items: ["Idag, sidhuvud (2026-10-09): befintlig mobil-logotyp vänsterställd i 220 px bredd utan dubblering, mindre Fraunces-hälsning med datum och tillgänglig namnmeny i sidflödet. Extra dekorativa stenar bredvid hälsningen visas inte längre på Idag; original och övriga användningar bevaras. Knappar, personval, kapacitet, aktiviteter och data oförändrade. Ingen publicering."] },
   { title: "Maskotbild", items: ["2026-10-09: gemensam lila maskotbild och tomma bildutrymmen borttagna, med texter, samtalsknappar, status och handlingar bevarade. Originalassets, sparade val, logotyper och stenar orörda. Rumsbilder i Anpassa/Min samling pausade eftersom maskoten ingår i hela scenen och hälsningsytan; ingen publicering."] },
   {
     title: "Pace – stegvis anpassning",
