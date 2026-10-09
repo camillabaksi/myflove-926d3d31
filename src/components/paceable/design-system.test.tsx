@@ -2,10 +2,18 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 vi.stubGlobal("ResizeObserver", class { observe() {} unobserve() {} disconnect() {} });
 vi.mock("@/components/myflove/block", () => ({ MyFloveBlock: (props: { title: string; collapseId?: string }) => <div data-testid="block" data-collapse={props.collapseId}>{props.title}</div> }));
-import { PacePage, PaceField, PaceInput, PaceChoice, PaceHeading, PaceStatus, PaceBlock } from "./design-system";
+import { PacePage, PaceField, PaceInput, PaceChoice, PaceHeading, PacePageTitle, PaceStatus, PaceBlock } from "./design-system";
 import DesignSystemReference from "./design-system-reference";
 
 describe("Pace presentation system", () => {
+  it("provides a page title without restyling sibling forms", () => {
+    render(<div><PacePageTitle id="orientation">Inställningar</PacePageTitle><input aria-label="Unchanged field" /></div>);
+    const title = screen.getByRole("heading", { level: 1, name: "Inställningar" });
+    expect(title.id).toBe("orientation");
+    expect(title.className).toContain("pace-editorial-role");
+    expect(title.className).toContain("pace-page-title");
+    expect(screen.getByLabelText("Unchanged field").closest("[data-pace-design]")).toBeNull();
+  });
   it("opts in and reserves editorial typography for explicit headings", () => {
     render(<PacePage><PaceHeading>Function</PaceHeading><PaceHeading editorial>Orientation</PaceHeading></PacePage>);
     expect(screen.getByText("Function").closest("[data-pace-design]")).toBeTruthy();

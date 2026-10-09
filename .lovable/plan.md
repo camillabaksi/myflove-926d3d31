@@ -7,6 +7,7 @@ Använd det färdiga Pace-designsystemet för samma godkända utseende i hela ap
 - Granska den synliga mobilmenyn, desktopmenyn, Mer och sidornas faktiska rubriker före ändring.
 - Enhetliggör endast avvikande textroller, avstånd, kontrast, fokus och markeringar med befintliga byggdelar.
 - Behåll menyernas struktur, ordning, benämningar, länkar, sökning, Enkelt läge, expansioner och behörighetsfilter. Behåll även Äldre Hem.
+- Användarens godkännande 2026-10-09: behåll hela den befintliga Mer-vyn precis som den gjordes. Ingen omdesign eller komponentkonvertering av Mer ingår.
 - Orienterande sidrubriker får den godkända, uttryckliga Fraunces-rollen; funktionella rubriker, knappar, etiketter och kalenderperioder använder Inter. Ingen automatisk serif på alla rubriker.
 - Idags hälsning, godkända primärvyer, logotyper och stenarnas exakta utseende/placering lämnas oförändrade där de redan följer systemet.
 

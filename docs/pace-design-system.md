@@ -24,6 +24,7 @@ Inter for function; Fraunces only via explicit editorial PaceHeading. No global 
 Import from `@/components/paceable/design-system`:
 - PacePage: scope only, no navigation or main landmark.
 - PaceHeading: level 1/2/3, explicit optional editorial role.
+- PacePageTitle: standalone explicit editorial h1; no page-wide scope or sibling-form restyling. First adopters: Settings, Anpassa, Notes and Relations. More remains unchanged.
 - PaceSection: unframed accessible section. PaceCard: framed tool/repeated item, no decorative nesting.
 - PaceBlock: original MyFloveBlock; retain collapseId and existing persistence behavior.
 - PaceButton/Input/Textarea: existing APIs/refs, scoped presentation.

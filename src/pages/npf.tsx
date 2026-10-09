@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3, Eye, Hand } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
 import { PersonalizationSettings } from "@/components/personalization-settings";
-import { paceFormSurface } from "@/components/paceable/design-system";
+import { PacePageTitle, paceFormSurface } from "@/components/paceable/design-system";
 import { Link } from "@tanstack/react-router";
 
 function readAnalyticsOptOut(): boolean {
@@ -87,10 +87,10 @@ export default function NpfPage() {
         <MyFloveWide>
           <header className="space-y-2">
             <div className="flex items-center gap-2 text-primary">
-              <Accessibility size={22} />
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+              <Accessibility size={22} className="shrink-0" aria-hidden />
+              <PacePageTitle>
                 Anpassa appen
-              </h1>
+              </PacePageTitle>
             </div>
             <p className="text-muted-foreground">Välj hur Paceable ska se ut och kännas.</p>
           </header>

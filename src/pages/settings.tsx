@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import Layout from "@/components/layout";
+import { PacePageTitle } from "@/components/paceable/design-system";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import PwaInstallButton from "@/components/pwa-install-button";
 import { Button } from "@/components/ui/button";
@@ -111,8 +112,8 @@ export default function SettingsPage() {
         <MyFloveWide>
           <header className="space-y-2">
             <div className="flex items-center gap-2 text-primary">
-              <Settings className="size-6" aria-hidden />
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Inställningar</h1>
+              <Settings className="size-6 shrink-0" aria-hidden />
+              <PacePageTitle>Inställningar</PacePageTitle>
             </div>
             <p className="text-muted-foreground">Anpassa Paceable, konto och appens inställningar.</p>
           </header>
