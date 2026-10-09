@@ -55,7 +55,7 @@ export function PersonalizationSettings() {
         surface="plain"
         className="pace-form pace-form-surface"
       >
-        <div className="grid grid-cols-2 gap-2" data-no-translate>
+        <div className="pace-form-language-options grid grid-cols-2 gap-2" data-no-translate>
           {LANGUAGES.map((l) => (
             <Button
               key={l.value}
@@ -187,7 +187,7 @@ export function PersonalizationSettings() {
                   active ? "border-primary" : "border-border/50",
                 )}
               >
-                <div className="min-w-0 flex-1">
+                <div className="pace-form-sound-copy min-w-0 flex-1">
                   <p className="text-sm font-medium text-ink">{sound.label}</p>
                   <p className="text-xs text-muted-foreground">{sound.hint}</p>
                 </div>

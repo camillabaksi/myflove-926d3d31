@@ -2394,3 +2394,6 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-form > div:first-child :is(h2, p) { -webkit-line-clamp: unset; display: block; }
 .pace-form > div:first-child [class*="line-clamp"] { -webkit-line-clamp: unset; display: block; }
 .pace-form [role="switch"] { flex-shrink: 0; }
+.pace-form[data-expanded="true"] { grid-column: 1 / -1; }
+.pace-form .pace-form-language-options { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
+.pace-form .pace-form-sound-copy { flex-basis: 12rem; }
