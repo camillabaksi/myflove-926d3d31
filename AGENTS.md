@@ -11,7 +11,7 @@
 
 <!-- LOVABLE:END -->
 
-Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room scenes remain separate from the shared mascot presentation. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
+Flow appearance, room scenes and memories: see src/components/flow/AGENTS.md.
 
 Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; brand stones stay unchanged to prevent identity drift.
 Desktop Träning uses document navigation to avoid stalls.
