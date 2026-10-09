@@ -34,7 +34,7 @@ Secondary pages share Paceable scope; primary pages stay locked. Tasks uses loca
 Forms opt in; preserve calendar/capture/name and primitives. PacePageTitle isolates headings from forms. See src/components/paceable/AGENTS.md.
 
 More reuses filtered navItems/groups and scoped styles. Compact expansions use full-width sibling lists to avoid stretching adjacent controls. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
-Narrow greetings balance name breaks; preserve full names, profile data and approved stones.
+Today reuses one shell BrandLogo (mobile header/desktop sidebar) and page-scoped greeting styles to avoid duplicate branding; preserve full names, profile data and approved assets.
 
 Today/Calendar use local rem/container rules for enlarged text; preserve layout and timeline geometry.
 3D companion prototypes isolate unapproved models in temporary standalone projects/dependencies, never app routes/data.
