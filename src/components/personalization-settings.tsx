@@ -91,7 +91,7 @@ export function PersonalizationSettings() {
         status={`Valt: ${APPEARANCES.find((a) => a.id === appearance)?.label ?? "Ljust"}`}
         data-testid="personalization-appearance"
       >
-        <div className="grid grid-cols-3 gap-2">
+        <div className="pace-form-option-grid grid grid-cols-3 gap-2">
           {APPEARANCES.map((a) => {
             const active = appearance === a.id;
             return (
@@ -130,7 +130,7 @@ export function PersonalizationSettings() {
         status={activeTheme ? `Valt: ${activeTheme.label}` : undefined}
         data-testid="personalization-theme"
       >
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="pace-form-option-grid grid grid-cols-2 gap-2 sm:grid-cols-4">
           {THEMES.map((theme) => {
             const active = personalization.theme === theme.id;
             return (

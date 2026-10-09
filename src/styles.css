@@ -2397,3 +2397,5 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-form[data-expanded="true"] { grid-column: 1 / -1; }
 .pace-form .pace-form-language-options { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
 .pace-form .pace-form-sound-copy { flex-basis: 12rem; }
+.pace-form .pace-form-option-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
+.pace-form :is(a, span) { overflow-wrap: anywhere; }
