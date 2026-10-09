@@ -2,7 +2,7 @@
 ## Kalender, Fånga och Min plats – nästa visuella etapp (2026-10-09)
 - [x] Etapp 2–3 på Idag godkänd; ny begäran registrerad om samma målbild på Kalender, Fånga och Min plats.
 - [x] Avgränsad plan godkänd för sidlokala kontroller och mörklila/mörkröd ton. Ingen publicering.
-- [ ] Genomför endast godkänd presentation och verifiera teman, smala skärmar, 200 % text och befintliga handlingar; skydda Mer, sidhuvud, originalassets, formulär och all datalogik.
+- [x] Godkänd lokal presentation genomförd; 48 bredd-/tema-/textkontroller utan sidöverflöde, 44px kontrollboxar och befintliga öppningar/länkar verifierade utan sparning. Full befintlig svit 545/545; skyddstest tillagt. Bildgranskning och begränsningar i docs/pace-next-pages-verification.md. Ingen publicering; denna etapp avslutad.
 ## Idag – logotyp och sidhuvud, Etapp 1 (2026-10-09)
 - [x] Godkänd snäv etapp: befintlig BrandLogo utan dubblering, mindre Fraunces-hälsning, datum/namnmeny och borttagen dekorativ stenvisning endast på Idag.
 - [x] Genomför sidlokal presentation; befintlig mobil-BrandLogo i 220 px, desktopsidebar oförändrad, Fraunces-hälsning 2rem och namnmeny i gridflödet. Knappar/personval och alla funktioner bevarade.
