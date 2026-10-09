@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "Pace – stegvis anpassning",
+    items: ["Sidrubriker (2026-10-09): Inställningar, Anpassa appen, Anteckningar och Relationer använder gemensam orienterande rubrik utan ändrade formulär. Huvudmenyn och hela Mer-vyn behålls. Ingen publicering; återstående sidor/formulär följer i små etapper."],
+  },
+  {
     title: "Pace-designsystem",
     items: ["Designsystem (2026-10-09): återanvändbara opt-in-mönster för sidor och formulär, fristående referens på /designsystem och dokumenterad konverteringsguide. Piloten behåller befintlig funktion och sparning. 537 tester godkända; ingen publicering. Alla sidor är inte konverterade; fysisk mobil och skärmläsare är inte verifierade."],
   },

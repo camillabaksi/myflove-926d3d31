@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Plus, Trash2, Pencil, Check, X, Zap } from "lucide-react";
 import Layout from "@/components/layout";
+import { PacePageTitle } from "@/components/paceable/design-system";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -355,9 +356,9 @@ export default function RelationsPage() {
         <MyFloveWide>
           <div className="space-y-8">
             <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
+              <PacePageTitle className="mb-2 flex items-center gap-2 [&>span]:shrink-0">
                 <MyFloveHeart size={26} /> Relationer
-              </h1>
+              </PacePageTitle>
               <p className="text-muted-foreground">
                 Människorna – och djuren – som hör till ditt liv. Flow använder dem som kontext i
                 Fånga, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder

@@ -21,6 +21,11 @@ export function PaceHeading({ editorial = false, level = 1, className, ...props 
   return <Tag {...props} className={cn("pace-ds-heading", `pace-ds-heading-${level}`, editorial && "pace-editorial-role", className)} />;
 }
 
+/** Page orientation only; sibling forms retain their presentation. */
+export function PacePageTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+  return <PaceHeading {...props} editorial level={1} className={cn("pace-page-title", className)} />;
+}
+
 export function PaceSection({ title, children, className, ...props }: Omit<React.ComponentProps<"section">, "title"> & { title: string }) {
   const id = React.useId();
   return <section {...props} aria-labelledby={id} className={cn("pace-ds-section", className)}><PaceHeading level={2} id={id}>{title}</PaceHeading>{children}</section>;
