@@ -106,7 +106,7 @@ export default function PausePage() {
                     key={m}
                     type="button"
                     variant={m === minutes ? "default" : "secondary"}
-                    className="min-h-12 rounded-2xl"
+                    className={`pace-compact-control ${m === minutes ? "pace-compact-primary" : ""}`}
                     onClick={() => startPause(m)}
                   >
                     {m} min
@@ -121,11 +121,11 @@ export default function PausePage() {
                   onChange={(e) => setCustom(e.target.value.replace(/\D/g, ""))}
                   placeholder={t("Egen tid i minuter")}
                   aria-label={t("Egen tid i minuter")}
-                  className="h-12 rounded-2xl"
+                  className="h-11 rounded-2xl"
                 />
                 <Button
                   type="button"
-                  className="min-h-12 shrink-0 rounded-2xl"
+                  className="pace-compact-control pace-compact-primary shrink-0"
                   disabled={!custom}
                   onClick={() => {
                     startPause(Number(custom));

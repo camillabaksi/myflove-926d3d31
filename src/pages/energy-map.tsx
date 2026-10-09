@@ -206,7 +206,8 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                     key={lvl}
                     type="button"
                     onClick={() => setSelected(lvl)}
-                    className={`flex flex-col items-center justify-center gap-1 rounded-2xl border p-3 transition-all ${
+                    aria-pressed={active}
+                    className={`pace-health-choice flex min-h-11 flex-col items-center justify-center gap-1 rounded-2xl border px-1 py-2 transition-all ${
                       active
                         ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
                         : "bg-secondary/40 border-transparent hover:bg-secondary"
