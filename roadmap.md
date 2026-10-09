@@ -1,5 +1,6 @@
 # Roadmap
 ## Pace – hela appen stegvis (2026-10-09)
+- [ ] Nästa godkända formulärsteg: öppna och granska konto/inställningar, anpassa lokalt med Pace-mönster och verifiera utan kontosparning; Mer bevaras.
 - [x] Ordning fastställd: menyn och sidrubriker först, därefter formulär för formulär med befintligt designsystem.
 - [x] Etappplan godkänd; Mer-vyn ska behållas som den är. Ingen publicering.
 - [x] Ny avgränsning: skydda Mer-vyns hela godkända presentation och beteende under anpassningen.
