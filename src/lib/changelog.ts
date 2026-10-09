@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-08";
+export const CHANGELOG_UPDATED = "2026-10-09";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "Formulär",
+    items: ["Formulär (2026-10-09): Logga just nu, Anpassa, aviseringskort och rutinformulär har lokal Paceable-presentation och flexibel radbrytning. Sparning, data och funktioner bevaras. 532 tester godkända; ingen publicering. Alla dolda formulär är ännu inte slutverifierade."],
+  },
   {
     title: "Navigation",
     items: [
