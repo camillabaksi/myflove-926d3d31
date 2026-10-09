@@ -1,8 +1,8 @@
 # Roadmap
 ## Idag – logotyp och sidhuvud, Etapp 1 (2026-10-09)
 - [x] Godkänd snäv etapp: befintlig BrandLogo utan dubblering, mindre Fraunces-hälsning, datum/namnmeny och borttagen dekorativ stenvisning endast på Idag.
-- [ ] Genomför sidlokal presentation; bevara knappar/personval och alla funktioner.
-- [ ] Verifiera före/efter mobil, teman, desktop, långt namn och 200 % text; redovisa filer/tester. Ingen publicering; Etapp 2/3 inväntar nytt godkännande.
+- [x] Genomför sidlokal presentation; befintlig mobil-BrandLogo i 220 px, desktopsidebar oförändrad, Fraunces-hälsning 2rem och namnmeny i gridflödet. Knappar/personval och alla funktioner bevarade.
+- [x] Före/efter mobil i båda teman visade; 32 kontroller över 320/360/390/430/768/1024/1280/1440 px och normal/200 % text utan sidöverflöde, dubbla logotyper eller överlapp. Namnmeny/dialog/Avbryt-fokus och syntetiskt långt namn utan sparning verifierade. 545/545 tester i 87 filer godkända i slutlig full körning; tidigare tidskänsligt secure-local-test klarade separat omkörning. Automatiskt bygge OK. Ingen publicering; Etapp 2/3 inväntar nytt godkännande.
 ## Ta bort lila maskotbild (2026-10-09)
 - [x] Plan godkänd: endast bildpresentation; bevara texter, knappar, funktioner, originalassets och sparade val. Ingen ersättningsbild/publicering.
 - [x] Gemensam maskotpresentation och tomma bildutrymmen borttagna; texter och handlingar kvar. 542/542 tester godkända; Inställningar, Pace-inställningar, samtal och Idag kontrollerade i båda teman vid 360/390/1280 px och 200 % text utan sidöverflöde eller konsolfel.
