@@ -1,3 +1,6 @@
+## 2026-10-09 – Appikoner för iPhone och Android
+- Native-projektens appikoner ersatta med godkända Paceable-ikoner (ljus 1024 px för iOS, Android-förgrund 432 px och ljus bakgrund #FAF9F6). Appnamn, paket-ID, kod och funktioner oförändrade. Kräver nytt bygge i Xcode/Android Studio eller Codemagic.
+
 ## 2026-10-09 – Rutiner, Påminnelser och Inköp
 - Samma kompakta knappar, val, mörklila primärknapp och rubrikstorlek som Mitt batteri och Återhämtning. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ej publicerat.
 
