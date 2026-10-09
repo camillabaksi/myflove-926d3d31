@@ -1,4 +1,7 @@
 # Roadmap
+## Paceable – kvarvarande äldre formulär (2026-10-09)
+- [ ] Inventera återanvändbara formulär, dialoger och lokala äldre kontrollstilar; utöka planen från Logga just nu till samtliga kvarvarande äldre formulär.
+- [ ] Visa avgränsad plan och invänta godkännande före appkodändring; ingen publicering eller funktionsändring.
 ## Pace – riktig 3D, teknikbedömning (2026-10-08)
 - [x] Kontrollera befintliga verktyg/beroenden och redovisa specialmodellering, material, granskning, resursbudget och begränsningar i planen; ingen appändring.
 - [x] Teknikplan godkänd; endast statisk modell, separata prototypberoenden, inga rörelser.
