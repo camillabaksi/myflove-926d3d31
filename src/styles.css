@@ -2529,3 +2529,8 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-next-place .pace-place-entry .text-ink { color: var(--pace-control-ink); overflow-wrap: anywhere; }
 .pace-next-place .pace-place-entry > svg { width: 18px; height: 18px; }
 .pace-next-place .paceable-my-place-header .pace-next-title { font-size: 1.875rem; }
+
+/* Health pages opt-in: headings and cards only; charts, status and area hues unchanged. */
+.pace-next-health h1 { color: var(--pace-control-ink); overflow-wrap: anywhere; }
+.pace-next-health h2.text-ink { color: var(--pace-control-ink); }
+.pace-next-health section.shadow-soft { box-shadow: var(--shadow-soft, none); border-color: color-mix(in oklab, var(--pace-control-outline) 45%, transparent); }

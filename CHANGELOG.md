@@ -1,3 +1,6 @@
+## 2026-10-09 – Hälsa & välmående
+- Mitt batteri, Återhämtning, Mående och Energikarta har samma lugna plommonrubriker och kortkanter som Min plats. Endast utseende; data, loggar, paus och diagram oförändrade. Ej publicerat.
+
 ## 2026-10-09
 - **Kalender, Fånga och Min plats** (2026-10-09): utvalda kontroller får kompaktare visuella ytor inom separerade 44 px tryckytor och lokal mörklila plommonton. Ingångskort behåller beskrivningar och områdesfärger. Idag, Mer, kalendergeometri, dialoghandlingar, data och originalassets bevaras. Ingen publicering.
 - **Idag, sidhuvud** (2026-10-09): befintlig mobil-logotyp vänsterställd i 220 px bredd utan dubblering, mindre Fraunces-hälsning med datum och tillgänglig namnmeny i sidflödet. Extra dekorativa stenar bredvid hälsningen visas inte längre på Idag; original och övriga användningar bevaras. Knappar, personval, kapacitet, aktiviteter och data oförändrade. Ingen publicering.
