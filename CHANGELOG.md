@@ -1,5 +1,5 @@
 ## 2026-10-09 – Appversioner
-- Android 6.4 (versionCode 23) och iOS 1.2 (build 2) inför nya byggen med Paceable-ikoner.
+- Android 6.4 (versionCode 23) och iOS 1.2 (build 13, över senaste TestFlight #12) inför nya byggen med Paceable-ikoner.
 
 ## 2026-10-09 – Appikoner för iPhone och Android
 - Native-projektens appikoner ersatta med godkända Paceable-ikoner (ljus 1024 px för iOS, Android-förgrund 432 px och ljus bakgrund #FAF9F6). Appnamn, paket-ID, kod och funktioner oförändrade. Kräver nytt bygge i Xcode/Android Studio eller Codemagic.
