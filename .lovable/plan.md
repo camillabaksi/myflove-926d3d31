@@ -21,6 +21,7 @@ Kontrollerna får ett något kompaktare uttryck. Plommon ska upplevas tydligare 
 | Fil | Avgränsad ändring |
 |---|---|
 | `src/components/calendar/calendar-planner.tsx` | Endast namngivna huvudkontroller och filter, inte tidsblock eller dialogformulär |
+| `src/pages/calendar.tsx` | Befintliga verktyg: snabbtillägg, påminnelse, kopiera och bildstöd; endast presentation |
 | `src/pages/dump.tsx` | Lokal avgränsning och rubrik-/avståndsregler |
 | `src/components/quickflow-capture.tsx` | Opt-in presentation av befintliga kontroller |
 | `src/components/quickflow-image-import.tsx` | Opt-in för importingångar, inte importdialogens handlingar |
