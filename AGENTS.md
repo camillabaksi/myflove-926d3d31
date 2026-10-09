@@ -39,4 +39,4 @@ Narrow greetings balance name breaks; preserve full names, profile data and appr
 Today/Calendar use local rem/container rules for enlarged text; preserve layout and timeline geometry.
 3D companion prototypes isolate unapproved models in temporary standalone projects/dependencies, never app routes/data.
 
-Shared FlowMascot renders no image or layout box while preserving its technical props/source; message wrappers retain content and actions, and standalone FlowCharacter scenes remain hidden. Whole-room images with embedded greeting targets require a separate decision, preventing image removal from silently removing a function.
+Shared FlowMascot renders no image or layout box; preserve props/source and wrapper content/actions. FlowCharacter and room-image safeguards: see src/components/flow/AGENTS.md.
