@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { BrandLogo } from "./brand-logo";
-import { PacePage, PaceHeading, PaceSection, PaceCard, PaceField, PaceInput, PaceTextarea, PaceChoiceGroup, PaceChoice, PaceActions, PaceButton, PaceHelp, PaceSwitch, PaceDialogContent, PaceStatus, PaceSelectTrigger } from "./design-system";
+import { PacePage, PaceHeading, PaceSection, PaceCard, PaceField, PaceInput, PaceTextarea, PaceChoiceGroup, PaceChoice, PaceActions, PaceButton, PaceHelp, PaceSwitch, PaceDialogContent, PaceStatus, PaceSelectTrigger, PaceSelectContent } from "./design-system";
 import { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectItem, SelectValue } from "@/components/ui/select";
 
 /** Isolated examples only. Never imports account stores, analytics or mutations. */
 export default function DesignSystemReference() {
@@ -28,7 +28,7 @@ export default function DesignSystemReference() {
           <PaceField label="Vad vill du kalla planen?" required help="Du kan ändra namnet senare." error={error}><PaceInput value={draft} onChange={(event) => { setDraft(event.target.value); setSaved(false); }} /></PaceField>
           <PaceField label="Några ord för dig själv" help="Valfritt."><PaceTextarea placeholder="Vad vill du komma ihåg?" /></PaceField>
           <PaceChoiceGroup label="Var passar det bäst?">{["Hemma", "På väg", "En plats med ett längre beskrivande namn"].map((name) => <PaceChoice key={name} type="button" selected={choice === name} onClick={() => setChoice(name)}>{name}</PaceChoice>)}</PaceChoiceGroup>
-          <PaceField label="När?"><Select defaultValue="later"><PaceSelectTrigger><SelectValue /></PaceSelectTrigger><SelectContent><SelectItem value="later">Senare, när det finns utrymme</SelectItem><SelectItem value="today">I dag</SelectItem></SelectContent></Select></PaceField>
+          <Select defaultValue="later"><PaceField label="När?"><PaceSelectTrigger><SelectValue /></PaceSelectTrigger></PaceField><PaceSelectContent className={dark ? "dark" : undefined}><SelectItem value="later">Senare, när det finns utrymme</SelectItem><SelectItem value="today">I dag</SelectItem></PaceSelectContent></Select>
           <PaceSwitch label="Visa en påminnelse i exemplet" help="Inställningen gäller bara denna sida." />
           <PaceActions><PaceHelp type="button" onClick={() => setError("Detta är ett exempel; inget skickas eller sparas på ditt konto.")}>Varför?</PaceHelp><PaceButton type="submit">Spara exempel</PaceButton></PaceActions>
           {saved && <PaceStatus state="saved">Exemplet är klart; inget har sparats på ditt konto.</PaceStatus>}

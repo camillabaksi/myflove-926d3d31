@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { SelectTrigger } from "@/components/ui/select";
+import { SelectTrigger, SelectContent } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { DialogContent } from "@/components/ui/dialog";
 import { MyFloveBlock, type MyFloveBlockProps } from "@/components/myflove/block";
@@ -47,6 +47,9 @@ export const PaceTextarea = React.forwardRef<HTMLTextAreaElement, React.Componen
 });
 export const PaceSelectTrigger = React.forwardRef<React.ElementRef<typeof SelectTrigger>, React.ComponentPropsWithoutRef<typeof SelectTrigger>>(function PaceSelectTrigger({ className, ...props }, ref) {
   return <SelectTrigger {...props} ref={ref} className={cn("pace-ds-control pace-ds-select", className)} />;
+});
+export const PaceSelectContent = React.forwardRef<React.ElementRef<typeof SelectContent>, React.ComponentPropsWithoutRef<typeof SelectContent>>(function PaceSelectContent({ className, ...props }, ref) {
+  return <SelectContent {...props} ref={ref} data-pace-design="true" className={cn("pace-ds pace-ds-select-content", className)} />;
 });
 
 type FieldChildProps = { id?: string; "aria-describedby"?: string; "aria-invalid"?: React.AriaAttributes["aria-invalid"]; required?: boolean };

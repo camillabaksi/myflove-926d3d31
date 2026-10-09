@@ -9,6 +9,7 @@ import { useReminders } from "@/hooks/use-data";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Repeat, Clock, Sparkles } from "lucide-react";
 import { REPEAT_LABELS, routineOccursOn, type RepeatMode, type Routine } from "@/lib/recurrence";
+import { paceFormSurface } from "@/components/paceable/design-system";
 
 const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
   { value: "daily", label: "Varje dag" },
@@ -191,7 +192,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       </MyFloveWide>
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="pace-form pace-form-surface max-h-[85vh] overflow-y-auto rounded-3xl">
+        <DialogContent className={`${paceFormSurface} max-h-[85vh] overflow-y-auto rounded-3xl`}>
           <DialogHeader>
             <DialogTitle>Ny rutin</DialogTitle>
           </DialogHeader>
@@ -256,7 +257,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
           icon={Sparkles}
           subtitle="Klicka för att lägga till"
           surface="plain"
-          className="pace-form pace-form-surface"
+          className={paceFormSurface}
           defaultCollapsed
         >
           <div className="flex flex-wrap gap-2">

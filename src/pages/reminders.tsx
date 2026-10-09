@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import PushStatusCard from "@/components/push-status-card";
+import { paceFormSurface } from "@/components/paceable/design-system";
 import {
   getNotificationPermission,
   requestNotificationPermission,
@@ -265,7 +266,7 @@ export default function RemindersPage() {
           subtitle="Notis när det är dags"
           icon={BellRing}
           surface="plain"
-          className="pace-form pace-form-surface"
+          className={paceFormSurface}
           area="idag"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">

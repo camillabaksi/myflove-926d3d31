@@ -7,6 +7,7 @@ import { useLang } from "@/hooks/use-language";
 import { LANGUAGES } from "@/lib/i18n";
 import { clearTranslationCache } from "@/lib/auto-translate";
 import { MyFloveBlock } from "@/components/myflove/block";
+import { paceFormSurface } from "@/components/paceable/design-system";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { playAlarmPreview } from "@/lib/push-notifications";
@@ -53,7 +54,7 @@ export function PersonalizationSettings() {
         icon={Languages}
         tone="lavender"
         surface="plain"
-        className="pace-form pace-form-surface"
+        className={paceFormSurface}
       >
         <div className="pace-form-language-options grid grid-cols-2 gap-2" data-no-translate>
           {LANGUAGES.map((l) => (
@@ -84,7 +85,7 @@ export function PersonalizationSettings() {
         icon={SunMoon}
         tone="sky"
         surface="plain"
-        className="pace-form pace-form-surface"
+        className={paceFormSurface}
         collapsible
         defaultCollapsed
         collapseId="anpassa::utseende"
@@ -123,7 +124,7 @@ export function PersonalizationSettings() {
         icon={Palette}
         tone="lavender"
         surface="plain"
-        className="pace-form pace-form-surface"
+        className={paceFormSurface}
         collapsible
         defaultCollapsed
         collapseId="anpassa::tema"
@@ -169,7 +170,7 @@ export function PersonalizationSettings() {
         icon={Bell}
         tone="mint"
         surface="plain"
-        className="pace-form pace-form-surface"
+        className={paceFormSurface}
         collapsible
         defaultCollapsed
         collapseId="anpassa::alarmsignal"
@@ -223,7 +224,7 @@ export function PersonalizationSettings() {
         icon={BellRing}
         tone="sun"
         surface="plain"
-        className="pace-form pace-form-surface"
+        className={paceFormSurface}
         collapsible
         defaultCollapsed
         collapseId="anpassa::alarmformat"

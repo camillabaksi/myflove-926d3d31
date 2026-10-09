@@ -2466,6 +2466,8 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-ds-dialog { border-radius: var(--pace-radius-card); background: var(--pace-surface-raised); color: var(--pace-text); border-color: var(--pace-border-warm); box-shadow: var(--pace-elevation-2); }
 .pace-ds-dialog > button:last-child { display: grid; place-items: center; min-width: var(--pace-touch); min-height: var(--pace-touch); top: var(--pace-space-2); right: var(--pace-space-2); }
 .pace-ds-dialog > h2 { padding-inline-end: var(--pace-touch); font-family: var(--font-sans); line-height: 1.4; }
+.pace-ds-select-content { background: var(--pace-surface-raised); color: var(--pace-text); border-color: var(--pace-border-warm); max-width: calc(100vw - 2rem); }
+.pace-ds-select-content [role="option"] { min-height: var(--pace-touch); white-space: normal; overflow-wrap: anywhere; }
 .pace-ds-reference-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--pace-space-4); margin-bottom: var(--pace-space-8); }
 .pace-ds-reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--pace-space-4); }
 .pace-ds-still *, .pace-ds-still { animation: none !important; transition: none !important; }
