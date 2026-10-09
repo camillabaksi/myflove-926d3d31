@@ -182,6 +182,7 @@
 }
 
 /* Primary Paceable surfaces stay consistent without changing saved legacy themes. */
+.pace-form,
 [data-paceable-surface="true"],
 .app-shell-bg[data-paceable-app="true"],
 html[data-paceable-app="true"] [role="dialog"],
@@ -211,6 +212,7 @@ html[data-paceable-app="true"] [role="alertdialog"] {
   --pace-inset-track: inset 0 1px 2px hsl(30 20% 30% / 0.12);
 }
 
+.dark .pace-form,
 .dark [data-paceable-surface="true"],
 .dark .app-shell-bg[data-paceable-app="true"],
 html.dark[data-paceable-app="true"] [role="dialog"],
@@ -2372,3 +2374,21 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-app-text-enlarged .pace-tasks-delete { grid-column: 3; grid-row: 1; }
 .pace-app-text-enlarged .pace-tasks-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
 .pace-app-text-enlarged .pace-tasks-edit { margin-left: 0; }
+
+/* Explicit legacy-form opt-in; approved capture/calendar/name forms stay untouched. */
+.pace-form { font-family: var(--font-sans); color: hsl(var(--foreground)); min-width: 0; }
+.pace-form-surface { background: var(--pace-surface); border: 1px solid var(--pace-border-warm); box-shadow: var(--pace-highlight-top), var(--pace-elevation-1); }
+.pace-form :is(h2, h3, label, input, textarea, select, button) { font-family: var(--font-sans); letter-spacing: 0; }
+.pace-form :is(h2, p, label, button) { overflow-wrap: anywhere; }
+.pace-form :is(input, textarea, select, button) { min-width: 0; max-width: 100%; }
+.pace-form button { min-height: 44px; height: auto; white-space: normal; }
+.pace-form :is(button, input, textarea, select):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+.pace-form .pace-form-choice { border: 1px solid var(--pace-border-warm); background: var(--pace-surface-raised); color: hsl(var(--foreground)); box-shadow: none; }
+.pace-form .pace-form-choice[aria-pressed="true"] { background: hsl(var(--lavender)); border-color: hsl(var(--ring)); }
+.pace-form .pace-form-choice:hover { background: hsl(var(--accent)); }
+.pace-form .pace-form-heading { flex-wrap: wrap; align-items: flex-start; }
+.pace-form .pace-form-ork { grid-template-columns: repeat(auto-fit, minmax(min(100%, 6rem), 1fr)); }
+.pace-form .pace-form-moods { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 3.5rem), 1fr)); gap: 0.35rem; }
+.pace-form .pace-form-moods button { padding: 0.5rem 0.25rem; }
+.pace-form[data-expanded="false"] { max-height: none; }
+.pace-form > div:first-child :is(h2, p) { -webkit-line-clamp: unset; display: block; }
