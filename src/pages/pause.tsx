@@ -62,7 +62,7 @@ export default function PausePage() {
         }}
       />
 
-      <MyFlovePageGrid area="halsa">
+      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
         <MyFloveWide>
           <div className="space-y-5">
             <MyFloveHeader

@@ -160,13 +160,13 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   }
 
   return (
-    <MyFlovePageGrid>
+    <MyFlovePageGrid className="pace-next-page pace-next-health">
       {showHeader && (
         <MyFloveWide>
           <header className="space-y-1">
             <div className="flex items-center gap-2">
               <Battery className="text-primary" size={28} />
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+              <h1 className="pace-next-title font-display text-2xl font-bold text-ink sm:text-3xl">
                 {t("Energikarta")}
               </h1>
             </div>

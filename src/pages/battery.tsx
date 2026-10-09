@@ -45,7 +45,7 @@ export default function BatteryPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa">
+      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
