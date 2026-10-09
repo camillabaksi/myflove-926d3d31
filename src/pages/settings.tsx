@@ -17,10 +17,9 @@ import {
 } from "lucide-react";
 
 import Layout from "@/components/layout";
-import { PacePageTitle } from "@/components/paceable/design-system";
-import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { PacePageTitle, PaceBlock as MyFloveBlock, PaceButton as Button } from "@/components/paceable/design-system";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import PwaInstallButton from "@/components/pwa-install-button";
-import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { LANGUAGES } from "@/lib/i18n";
@@ -108,7 +107,7 @@ export default function SettingsPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid className="gap-5">
+      <MyFlovePageGrid className="pace-ds pace-account-forms gap-5">
         <MyFloveWide>
           <header className="space-y-2">
             <div className="flex items-center gap-2 text-primary">
@@ -144,11 +143,12 @@ export default function SettingsPage() {
           tone="lavender"
           surface="lavender"
         >
-          <div className="grid grid-cols-2 gap-2" data-no-translate>
+          <div className="pace-form-language-options grid grid-cols-2 gap-2" data-no-translate>
             {LANGUAGES.map((l) => (
               <Button
                 key={l.value}
                 variant={lang === l.value ? "default" : "outline"}
+                aria-pressed={lang === l.value}
                 className="h-auto justify-start gap-2 rounded-2xl py-3"
                 onClick={() => {
                   if (l.value === lang) return;
