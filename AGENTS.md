@@ -11,9 +11,9 @@
 
 <!-- LOVABLE:END -->
 
-Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
+Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room scenes remain separate from the shared mascot presentation. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
-Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; stones/Flow stay unchanged to prevent identity drift.
+Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; brand stones stay unchanged to prevent identity drift.
 Desktop Träning uses document navigation to avoid stalls.
 Public landing demos never use account data/sync, protecting saved plans. Local data has one account owner; sync only while that owner is signed in to prevent shared-device leaks.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
@@ -28,7 +28,7 @@ Calendar area presentation uses calendarArea to resolve explicit life areas and 
 Family calendar layers project calendar-only fields from existing authorized child rows and owner-scoped school schedules; context never consumes parental time/load, and explicit presence is required, so profile/account identities and privacy remain separate.
 Child schedule focus follows times independently of completion, with untimed items separate and no completion controls in any schedule rendering, so only owned parent tasks participate in task achievements.
 Month cells summarize unique existing areas (family context collapses to the existing family area), with capacity only for today or recorded history; this prevents activity volume and unknown future energy from becoming visual noise.
-Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, with the existing mascot; never infer new capacity, recovery benefits or free time from unknown durations.
+Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, without requiring a decorative mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Secondary pages share Paceable scope; primary pages stay locked. Tasks uses local tokens; IDs/routes stay. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
 Forms opt in; preserve calendar/capture/name and primitives. PacePageTitle isolates headings from forms. See src/components/paceable/AGENTS.md.
@@ -38,3 +38,5 @@ Narrow greetings balance name breaks; preserve full names, profile data and appr
 
 Today/Calendar use local rem/container rules for enlarged text; preserve layout and timeline geometry.
 3D companion prototypes isolate unapproved models in temporary standalone projects/dependencies, never app routes/data.
+
+Shared FlowMascot renders no image or layout box while preserving its technical props/source; message wrappers retain content and actions, and standalone FlowCharacter scenes remain hidden. Whole-room images with embedded greeting targets require a separate decision, preventing image removal from silently removing a function.

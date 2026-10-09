@@ -3,18 +3,17 @@ import { describe, expect, it } from "vitest";
 import { FlowMascot, FlowSays, FLOW_MASCOT_SRC } from "./flow-mascot";
 
 /**
- * Flow ska synas tydligt utan att knuffa layouten:
- * rutan i flödet behåller sin storlek, bilden skalas inuti.
+ * Den borttagna maskotbilden ska varken lämna bild eller tom layoutruta.
  */
 describe("FlowMascot", () => {
-  it("behåller layoutrutans storlek när Flow är optiskt större", () => {
+  it("visar ingen bild eller layoutruta även med bump", () => {
     const { container } = render(<FlowMascot size="xs" bump alt="Flow" />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByAltText("Flow")).toBeNull();
     expect(FLOW_MASCOT_SRC).toBeTruthy();
   });
 
-  it("lämnar layouten orörd utan bump", () => {
+  it("visar ingen bild eller layoutruta utan bump", () => {
     const { container } = render(<FlowMascot size="sm" alt="Flow utan bump" />);
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByAltText("Flow utan bump")).toBeNull();
