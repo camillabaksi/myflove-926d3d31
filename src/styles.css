@@ -2438,6 +2438,9 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-ds-heading-3 { font-size: 1.125rem; }
 .pace-ds .pace-editorial-role, .pace-page-title.pace-editorial-role { font-family: var(--font-editorial); font-weight: 500; }
 .pace-page-title { min-width: 0; max-width: 100%; overflow-wrap: anywhere; color: hsl(var(--foreground)); }
+.pace-account-forms .pace-account-heading { padding-block: 0.75rem; }
+.pace-account-forms :is(button, a) > svg { flex-shrink: 0; }
+.pace-account-forms .pace-ds-switch { box-shadow: var(--pace-elevation-0); }
 .pace-ds-section { display: grid; gap: var(--pace-space-4); margin-block: var(--pace-space-8); min-width: 0; }
 .pace-ds-card { display: grid; align-content: start; gap: var(--pace-space-4); min-width: 0; padding: var(--pace-space-6); border: 1px solid var(--pace-border-warm); border-radius: var(--pace-radius-card); background: var(--pace-surface); box-shadow: var(--pace-elevation-1); }
 .pace-ds-field { display: grid; gap: var(--pace-space-2); min-width: 0; border: 0; margin: 0; padding: 0; }

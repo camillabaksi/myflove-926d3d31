@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-09";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Pace – stegvis anpassning",
-    items: ["Sidrubriker (2026-10-09): Inställningar, Anpassa appen, Anteckningar och Relationer använder gemensam orienterande rubrik utan ändrade formulär. Huvudmenyn och hela Mer-vyn behålls. Ingen publicering; återstående sidor/formulär följer i små etapper."],
+    items: ["Konto/inställningar (2026-10-09): Inställningar och Pace-inställningar delar befintliga Pace-block, knappar och tidsfält; oinramad orienterande rubrik, funktionell Inter och större klickytor. Värden, handlingar och sparning bevaras. Profil/barn och Mer orörda; ingen publicering.", "Sidrubriker (2026-10-09): Inställningar, Anpassa appen, Anteckningar och Relationer använder gemensam orienterande rubrik utan ändrade formulär. Huvudmenyn och hela Mer-vyn behålls. Ingen publicering; återstående sidor/formulär följer i små etapper."],
   },
   {
     title: "Pace-designsystem",

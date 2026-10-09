@@ -1,11 +1,10 @@
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { RotateCcw, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PaceBlock as MyFloveBlock, PaceButton as Button, PaceInput as Input, PacePageTitle } from "@/components/paceable/design-system";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { FlowCharacter } from "@/components/flow/flow-character";
 import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
@@ -22,10 +21,10 @@ export default function FlowSettingsPage() {
 
   return (
     <Layout>
-    <MyFlovePageGrid className="mx-auto w-full max-w-4xl pb-24">
+    <MyFlovePageGrid className="pace-ds pace-account-forms mx-auto w-full max-w-4xl pb-24">
 
       <MyFloveWide>
-        <header className="flex items-center gap-4 rounded-3xl border-2 border-border/60 bg-card p-4 shadow-soft">
+        <header className="pace-account-heading flex flex-wrap items-center gap-4">
           <div className="shrink-0">
             <FlowCharacter
               alt="Pace – Paceables följeslagare"
@@ -35,10 +34,10 @@ export default function FlowSettingsPage() {
               stage="inline"
             />
           </div>
-          <div className="space-y-1">
-            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
+          <div className="min-w-0 flex-1 basis-64 space-y-1">
+            <PacePageTitle>
               Pace-inställningar
-            </h1>
+            </PacePageTitle>
             <p className="text-sm text-muted-foreground">
               Du bestämmer hur mycket Pace får säga, när Pace får höra av sig och vad Pace ska hålla
               koll på. Inget av det här ändrar dina uppgifter.
@@ -54,6 +53,7 @@ export default function FlowSettingsPage() {
               Visa Pace i appen
             </Label>
             <Switch
+              className="pace-ds-switch"
               id="flow-enabled"
               checked={settings.enabled}
               onCheckedChange={(v) => update({ enabled: v })}
@@ -65,6 +65,7 @@ export default function FlowSettingsPage() {
               <Button
                 key={l.id}
                 variant={settings.level === l.id ? "default" : "outline"}
+                aria-pressed={settings.level === l.id}
                 className="rounded-2xl"
                 onClick={() => update({ level: l.id })}
               >
@@ -81,6 +82,7 @@ export default function FlowSettingsPage() {
               Pace får berätta vad Pace lär sig om dig
             </Label>
             <Switch
+              className="pace-ds-switch"
               id="flow-learning"
               checked={settings.learning}
               onCheckedChange={(v) => update({ learning: v })}
@@ -122,11 +124,12 @@ export default function FlowSettingsPage() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <Label className="text-sm font-normal">Förvarning innan en viktig tid</Label>
               <span className="text-sm font-medium">{settings.leadMinutes} min</span>
             </div>
             <Slider
+              className="min-h-11"
               value={[settings.leadMinutes]}
               min={5}
               max={90}
@@ -156,6 +159,7 @@ export default function FlowSettingsPage() {
                 <p className="text-xs text-muted-foreground">{p.hint}</p>
               </div>
               <Switch
+                className="pace-ds-switch"
                 id={`flow-p-${p.key}`}
                 checked={settings.priorities[p.key] !== false}
                 onCheckedChange={(v) => togglePriority(p.key, v)}

@@ -1,5 +1,7 @@
 # Roadmap
 ## Pace – hela appen stegvis (2026-10-09)
+- [x] Formulärsteg 1: Inställningar och Pace-inställningar granskade och lokalt anpassade; 540/540 tester, 56 bredd-/tema-/textkontroller utan överflöde, Mer pixelidentisk. Inga kontoval ändrade eller publicerade.
+- Nästa lilla etapp: kvarvarande profil/livsprofil och hemskärmsanpassning behöver öppnad-formulärgranskning; namn/barnens befintliga sparning ska bevaras exakt. Därefter ork/återhämtning enligt godkänd ordning. Inte färdigt i denna etapp.
 - [x] Ordning fastställd: menyn och sidrubriker först, därefter formulär för formulär med befintligt designsystem.
 - [x] Etappplan godkänd; Mer-vyn ska behållas som den är. Ingen publicering.
 - [x] Ny avgränsning: skydda Mer-vyns hela godkända presentation och beteende under anpassningen.
