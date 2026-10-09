@@ -28,7 +28,7 @@ describe("Pace settings presentation preserves existing actions", () => {
     fireEvent.click(screen.getByRole("button", { name: "Återställ till standard" }));
     expect(mocks.reset).toHaveBeenCalled();
     expect(screen.getByRole("link", { name: "Se Pace live" }).getAttribute("href")).toBe("/flow");
-    expect(screen.getByLabelText("Förvarning i minuter").getAttribute("aria-valuemin")).toBe("5");
-    expect(screen.getByLabelText("Förvarning i minuter").getAttribute("aria-valuemax")).toBe("90");
+    expect(screen.getByRole("slider").getAttribute("aria-valuemin")).toBe("5");
+    expect(screen.getByRole("slider").getAttribute("aria-valuemax")).toBe("90");
   });
 });
