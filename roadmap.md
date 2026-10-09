@@ -1,8 +1,8 @@
 # Roadmap
 ## Pace – gemensamt designsystem (2026-10-09)
 - [x] Inventera befintlig godkänd grund och ta fram plan för återanvändbara sid-/formulärmönster.
-- [ ] Invänta godkännande av system, referensyta och begränsad pilot före appkodändringar; ingen publicering.
-- [ ] Efter godkännande: bygg, dokumentera och verifiera systemet; redovisa återstående sidkonvertering separat.
+- [x] Godkännande mottaget för system, referensyta och begränsad pilot; ingen publicering.
+- [x] System, referens och guide byggda; gemensam klassdefinition i befintliga pilotformulär. 537 tester godkända; referens i båda teman, 360–1440 px och 200 % text, dialogfokus, validering och reduced motion kontrollerade. Fysisk mobil/skärmläsare ej verifierade; återstående sidkonvertering separat.
 ## Paceable – kvarvarande äldre formulär (2026-10-09)
 - [x] Inventera gemensamma formulär-/dialogstilar och granskningskandidater; planen utökad från Logga just nu till samtliga kvarvarande äldre formulär. Fullständig renderingsinventering ingår före implementation.
 - [x] Användaren begär samma design på samtliga kvarvarande äldre formulär; ingen publicering eller funktionsändring.

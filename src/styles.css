@@ -2408,6 +2408,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
   --pace-text: hsl(var(--foreground));
   --pace-text-secondary: hsl(var(--muted-foreground));
   --pace-focus: hsl(var(--ring));
+  --pace-control-border: hsl(var(--muted-foreground));
   --pace-selected: hsl(var(--lavender));
   --pace-danger: hsl(var(--foreground));
   --pace-space-1: 0.25rem;
@@ -2429,6 +2430,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 }
 .pace-ds-page { width: 100%; padding: var(--pace-space-6); min-height: 100dvh; }
 .pace-ds-page > * { max-width: 60rem; margin-inline: auto; }
+.pace-ds-page > .pace-ds-heading { margin-inline: auto; }
 .pace-ds :is(p, label, legend, h1, h2, h3, button, span) { overflow-wrap: anywhere; }
 .pace-ds-heading { font-family: var(--font-sans); font-weight: 600; line-height: 1.3; letter-spacing: 0; margin: 0; }
 .pace-ds-heading-1 { font-size: 2rem; }
@@ -2444,6 +2446,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-ds-help { color: var(--pace-text-secondary); font-size: 0.875rem; line-height: 1.6; margin: 0; }
 .pace-ds .pace-ds-control { min-width: 0; max-width: 100%; min-height: var(--pace-touch); height: auto; padding: var(--pace-space-3); font: inherit; line-height: 1.5; border-radius: var(--pace-radius-control); background: var(--pace-surface-raised); color: var(--pace-text); border: 1px solid var(--pace-border-warm); box-shadow: var(--pace-elevation-0); }
 .pace-ds .pace-ds-textarea { min-height: 6rem; resize: vertical; }
+.pace-ds .pace-ds-control, .pace-ds .pace-ds-choice { border-color: var(--pace-control-border); }
 .pace-ds .pace-ds-select { white-space: normal; }
 .pace-ds .pace-ds-select > span { -webkit-line-clamp: unset; min-width: 0; }
 .pace-ds .pace-ds-button { min-height: var(--pace-touch); height: auto; max-width: 100%; white-space: normal; font-family: var(--font-sans); letter-spacing: 0; }
