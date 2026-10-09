@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+vi.stubGlobal("ResizeObserver", class { observe() {} unobserve() {} disconnect() {} });
 vi.mock("@/components/myflove/block", () => ({ MyFloveBlock: (props: { title: string; collapseId?: string }) => <div data-testid="block" data-collapse={props.collapseId}>{props.title}</div> }));
 import { PacePage, PaceField, PaceInput, PaceChoice, PaceHeading, PaceStatus, PaceBlock } from "./design-system";
 import DesignSystemReference from "./design-system-reference";
