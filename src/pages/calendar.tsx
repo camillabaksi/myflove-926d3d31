@@ -498,7 +498,7 @@ export function CalendarContent() {
                           month: "long",
                         })}
                   </h3>
-                  <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                  <div className="pace-calendar-actions flex w-full flex-wrap items-center gap-2 sm:w-auto">
                     <button
                       type="button"
                       onClick={() => setQuickAddOpen((prev) => !prev)}

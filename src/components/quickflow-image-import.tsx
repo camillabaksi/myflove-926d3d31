@@ -88,7 +88,7 @@ function formatDate(iso: string) {
 
 const LOW = 0.7;
 
-export function QuickflowImageImport({ whySlot }: { whySlot?: ReactNode }) {
+export function QuickflowImageImport({ whySlot, appearance = "default" }: { whySlot?: ReactNode; appearance?: "default" | "paceable" }) {
   const [open, setOpen] = useState(false);
   const [stage, setStage] = useState<Stage>("pick");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -260,7 +260,7 @@ export function QuickflowImageImport({ whySlot }: { whySlot?: ReactNode }) {
 
   return (
     <>
-      <div className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+      <div className={`rounded-3xl border border-border/60 bg-card p-4 shadow-soft ${appearance === "paceable" ? "pace-import-entry" : ""}`}>
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <ScanLine size={20} />
@@ -273,20 +273,20 @@ export function QuickflowImageImport({ whySlot }: { whySlot?: ReactNode }) {
           </span>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button
+          <Button variant="outline"
             type="button"
             onClick={() => setOpen(true)}
-            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"
+            className={appearance === "paceable" ? "pace-compact-control gap-2 text-sm font-semibold" : "h-auto flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"}
           >
             <ImageIcon size={18} className="text-primary" /> Bild
-          </button>
-          <button
+          </Button>
+          <Button variant="outline"
             type="button"
             onClick={() => docRef.current?.click()}
-            className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"
+            className={appearance === "paceable" ? "pace-compact-control gap-2 text-sm font-semibold" : "h-auto flex items-center justify-center gap-2 rounded-2xl border border-border bg-background px-3 py-2.5 text-sm font-semibold text-ink hover:border-primary/50 active:scale-[0.98]"}
           >
             <FileText size={18} className="text-primary" /> PDF / dokument
-          </button>
+          </Button>
         </div>
         {whySlot && <div className="mt-3">{whySlot}</div>}
       </div>

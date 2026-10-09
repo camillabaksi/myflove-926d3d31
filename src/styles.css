@@ -2482,3 +2482,50 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-ds-reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--pace-space-4); }
 .pace-ds-still *, .pace-ds-still { animation: none !important; transition: none !important; }
 @media (prefers-reduced-motion: reduce) { .pace-ds *, .pace-ds { animation: none !important; transition: none !important; } }
+
+/* Next-page opt-in: unchanged global palette and calendar time geometry. */
+.pace-next-page {
+  --pace-control-ink: hsl(295 38% 24%);
+  --pace-control-fill: var(--pace-surface);
+  --pace-control-selected: hsl(295 28% 92%);
+  --pace-control-outline: hsl(295 22% 76%);
+  --pace-control-on-fill: hsl(45 29% 97%);
+}
+.dark .pace-next-page {
+  --pace-control-ink: hsl(295 32% 87%);
+  --pace-control-selected: hsl(295 24% 24%);
+  --pace-control-outline: hsl(295 22% 55%);
+  --pace-control-on-fill: hsl(295 38% 20%);
+}
+.pace-next-page .pace-next-title { color: var(--pace-control-ink); overflow-wrap: anywhere; }
+.pace-next-page .pace-compact-control,
+.pace-next-page .pace-calendar-actions :is(button,a) {
+  position: relative; min-height: 44px; min-width: 44px; height: auto; max-width: 100%;
+  border: 5px solid transparent; border-inline-width: 0; border-radius: var(--radius-pill);
+  padding: 3px 10px; background: var(--pace-control-fill); background-clip: padding-box;
+  color: var(--pace-control-ink); box-shadow: none; font-family: var(--font-sans);
+  line-height: 1.25; white-space: normal; overflow-wrap: anywhere; gap: 6px;
+}
+.pace-next-page .pace-compact-control::before,
+.pace-next-page .pace-calendar-actions :is(button,a)::before {
+  content: ""; position: absolute; inset: 0; border: 1px solid var(--pace-control-outline);
+  border-radius: inherit; pointer-events: none;
+}
+.pace-next-page .pace-compact-primary { background-color: var(--pace-control-ink); color: var(--pace-control-on-fill); }
+.pace-next-page .pace-compact-selected,
+.pace-next-page .pace-calendar-actions [aria-pressed="true"],
+.pace-next-page .pace-calendar-actions [aria-expanded="true"] { background-color: var(--pace-control-selected); }
+.pace-next-page .pace-compact-control:hover,
+.pace-next-page .pace-calendar-actions :is(button,a):hover { filter: brightness(0.97); }
+.pace-next-page .pace-compact-control:focus-visible,
+.pace-next-page .pace-calendar-actions :is(button,a):focus-visible,
+.pace-next-page .pace-place-entry:focus-visible { outline: 2px solid var(--pace-control-ink); outline-offset: 2px; }
+.pace-next-page .pace-compact-control svg,
+.pace-next-page .pace-calendar-actions :is(button,a) svg { width: 16px; height: 16px; flex-shrink: 0; }
+.pace-next-capture .pace-capture-entry { padding: 16px; gap: 12px; }
+.pace-next-capture .pace-capture-entry > span:first-child { width: 40px; height: 40px; }
+.pace-next-capture .pace-import-entry > div:nth-child(2) { grid-template-columns: repeat(auto-fit,minmax(min(100%,8rem),1fr)); gap: 8px; }
+.pace-next-place .pace-place-entry { gap: 12px; }
+.pace-next-place .pace-place-entry .text-ink { color: var(--pace-control-ink); overflow-wrap: anywhere; }
+.pace-next-place .pace-place-entry > svg { width: 18px; height: 18px; }
+.pace-next-place .paceable-my-place-header .pace-next-title { font-size: 1.875rem; }
