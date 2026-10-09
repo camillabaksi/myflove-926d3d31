@@ -1,7 +1,7 @@
 # Roadmap
 ## Paceable – kvarvarande äldre formulär (2026-10-09)
 - [x] Inventera gemensamma formulär-/dialogstilar och granskningskandidater; planen utökad från Logga just nu till samtliga kvarvarande äldre formulär. Fullständig renderingsinventering ingår före implementation.
-- [x] Avgränsad plan godkänd; ingen publicering eller funktionsändring.
+- [x] Användaren begär samma design på samtliga kvarvarande äldre formulär; ingen publicering eller funktionsändring.
 - [ ] Anpassa bekräftade äldre formulär och verifiera teman, bredder, textförstoring och befintliga tester.
 ## Pace – riktig 3D, teknikbedömning (2026-10-08)
 - [x] Kontrollera befintliga verktyg/beroenden och redovisa specialmodellering, material, granskning, resursbudget och begränsningar i planen; ingen appändring.

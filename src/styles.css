@@ -2381,7 +2381,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-form :is(h2, h3, label, input, textarea, select, button) { font-family: var(--font-sans); letter-spacing: 0; }
 .pace-form :is(h2, p, label, button) { overflow-wrap: anywhere; }
 .pace-form :is(input, textarea, select, button) { min-width: 0; max-width: 100%; }
-.pace-form button { min-height: 44px; height: auto; white-space: normal; }
+.pace-form button:not([role="switch"]) { min-height: 44px; height: auto; white-space: normal; }
 .pace-form :is(button, input, textarea, select):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
 .pace-form .pace-form-choice { border: 1px solid var(--pace-border-warm); background: var(--pace-surface-raised); color: hsl(var(--foreground)); box-shadow: none; }
 .pace-form .pace-form-choice[aria-pressed="true"] { background: hsl(var(--lavender)); border-color: hsl(var(--ring)); }
@@ -2392,3 +2392,5 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-form .pace-form-moods button { padding: 0.5rem 0.25rem; }
 .pace-form[data-expanded="false"] { max-height: none; }
 .pace-form > div:first-child :is(h2, p) { -webkit-line-clamp: unset; display: block; }
+.pace-form > div:first-child [class*="line-clamp"] { -webkit-line-clamp: unset; display: block; }
+.pace-form [role="switch"] { flex-shrink: 0; }

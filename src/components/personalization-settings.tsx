@@ -1,5 +1,5 @@
 /**
- * "Din MyFlove" – färgtema, alarmsignal och alarmformat på ett ställe.
+ * "Din Paceable" – färgtema, alarmsignal och alarmformat på ett ställe.
  * Kompakt och mobil först: små färgcirklar och täta valrader.
  */
 import { Check, Play, Palette, Bell, BellRing, SunMoon, Languages } from "lucide-react";
@@ -52,7 +52,8 @@ export function PersonalizationSettings() {
         subtitle="Hela appen på svenska eller engelska."
         icon={Languages}
         tone="lavender"
-        surface="lavender"
+        surface="plain"
+        className="pace-form pace-form-surface"
       >
         <div className="grid grid-cols-2 gap-2" data-no-translate>
           {LANGUAGES.map((l) => (
@@ -82,7 +83,8 @@ export function PersonalizationSettings() {
         subtitle="Välj hur ljus appen ska vara."
         icon={SunMoon}
         tone="sky"
-        surface="sky"
+        surface="plain"
+        className="pace-form pace-form-surface"
         collapsible
         defaultCollapsed
         collapseId="anpassa::utseende"
@@ -103,7 +105,7 @@ export function PersonalizationSettings() {
                 aria-pressed={active}
                 title={a.hint}
                 className={cn(
-                  "min-h-[3.5rem] rounded-2xl border-2 bg-card/70 p-2 text-center text-sm font-medium text-ink transition",
+                  "pace-form-choice min-h-[3.5rem] rounded-2xl border-2 bg-card/70 p-2 text-center text-sm font-medium text-ink transition",
                   active ? "border-primary" : "border-border/50 hover:border-border",
                 )}
               >
@@ -116,11 +118,12 @@ export function PersonalizationSettings() {
 
       <MyFloveBlock
         title="Färgtema"
-        subtitle="Välj hur MyFlove ska kännas."
-        eyebrow="Din MyFlove"
+        subtitle="Välj hur Paceable ska kännas."
+        eyebrow="Din Paceable"
         icon={Palette}
         tone="lavender"
-        surface="lavender"
+        surface="plain"
+        className="pace-form pace-form-surface"
         collapsible
         defaultCollapsed
         collapseId="anpassa::tema"
@@ -140,7 +143,7 @@ export function PersonalizationSettings() {
                 aria-label={`Tema ${theme.label}`}
                 title={theme.label}
                 className={cn(
-                  "h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/80 p-3 text-sm transition hover:bg-card",
+                  "pace-form-choice h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/80 p-3 text-sm transition hover:bg-card",
                   active ? "border-primary" : "border-border/60 hover:border-border",
                 )}
               >
@@ -165,7 +168,8 @@ export function PersonalizationSettings() {
         subtitle="Välj ljudet som påminner dig."
         icon={Bell}
         tone="mint"
-        surface="mint"
+        surface="plain"
+        className="pace-form pace-form-surface"
         collapsible
         defaultCollapsed
         collapseId="anpassa::alarmsignal"
@@ -179,13 +183,13 @@ export function PersonalizationSettings() {
               <div
                 key={sound.id}
                 className={cn(
-                  "flex items-center gap-2 rounded-2xl border-2 bg-card/70 p-2 pl-3",
+                  "flex flex-wrap items-center gap-2 rounded-2xl border-2 bg-card/70 p-2 pl-3",
                   active ? "border-primary" : "border-border/50",
                 )}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-ink">{sound.label}</p>
-                  <p className="truncate text-xs text-muted-foreground">{sound.hint}</p>
+                  <p className="text-sm font-medium text-ink">{sound.label}</p>
+                  <p className="text-xs text-muted-foreground">{sound.hint}</p>
                 </div>
                 <Button
                   type="button"
@@ -218,7 +222,8 @@ export function PersonalizationSettings() {
         subtitle="Välj ljud, vibration eller båda."
         icon={BellRing}
         tone="sun"
-        surface="sun"
+        surface="plain"
+        className="pace-form pace-form-surface"
         collapsible
         defaultCollapsed
         collapseId="anpassa::alarmformat"
@@ -235,7 +240,7 @@ export function PersonalizationSettings() {
                 onClick={() => chooseFormat(format.id)}
                 aria-pressed={active}
                 className={cn(
-                  "flex aspect-square h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/70 p-3 text-left text-sm font-medium text-ink transition",
+                  "pace-form-choice flex h-auto min-h-[5.5rem] flex-col items-start gap-2 rounded-2xl border-2 bg-card/70 p-3 text-left text-sm font-medium text-ink transition",
                   active ? "border-primary" : "border-border/50 hover:border-border",
                 )}
               >
