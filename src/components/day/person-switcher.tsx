@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ME_ID } from "@/lib/family-perspective";
@@ -49,7 +50,7 @@ export function possessive(name: string): string {
   return /[sxz]$/i.test(name) ? name : `${name}s`;
 }
 
-/** [Min dag] [Bella] [Bianca] [Familj] – alltid tydligt vems dag som visas. */
+/** [Min dag] [Bella] [Bianca] [Familj] – en svepbar rad; alltid tydligt vems dag som visas. */
 export function PersonSwitcher({
   people,
   value,
@@ -64,29 +65,64 @@ export function PersonSwitcher({
     ...people.map((p) => ({ id: p.id, label: p.name, person: p })),
     { id: FAMILY_ID, label: "Familj" },
   ];
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [moreRight, setMoreRight] = useState(false);
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    const update = () => setMoreRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
+    update();
+    el.addEventListener("scroll", update, { passive: true });
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro?.disconnect();
+    };
+  }, [options.length]);
+
   return (
-    <div role="radiogroup" aria-label="Vems dag vill du se?" className="flex flex-wrap gap-1.5">
-      {options.map((o) => {
-        const active = value === o.id;
-        return (
-          <button
-            key={o.id}
-            type="button"
-            role="radio"
-            aria-checked={active}
-            onClick={() => onChange(o.id)}
-            className={cn(
-              "press inline-flex min-h-10 max-w-full items-center gap-1.5 rounded-full border px-3 text-sm font-semibold",
-              active
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-card text-ink hover:bg-secondary/60",
-            )}
-          >
-            {o.person ? <PersonAvatar person={o.person} className="h-5 w-5 text-[10px]" /> : <Users size={15} aria-hidden />}
-            <span className="truncate">{o.label}</span>
-          </button>
-        );
-      })}
+    <div className="relative min-w-0">
+      <div
+        ref={rowRef}
+        role="radiogroup"
+        aria-label="Vems dag vill du se?"
+        data-person-switcher-row=""
+        className="-mx-1 flex snap-x gap-1 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {options.map((o) => {
+          const active = value === o.id;
+          return (
+            <button
+              key={o.id}
+              type="button"
+              role="radio"
+              aria-checked={active}
+              onClick={() => onChange(o.id)}
+              className="group inline-flex min-h-11 shrink-0 snap-start items-center rounded-full focus-visible:outline-none"
+            >
+              <span
+                className={cn(
+                  "press inline-flex min-h-[2.125rem] max-w-[14rem] items-center gap-1.5 rounded-full border px-2.5 text-sm font-semibold group-focus-visible:ring-2 group-focus-visible:ring-ring group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-background",
+                  active
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-card text-ink group-hover:bg-secondary/60",
+                )}
+              >
+                {o.person ? <PersonAvatar person={o.person} className="h-5 w-5 text-[10px]" /> : <Users size={16} aria-hidden />}
+                <span className="truncate">{o.label}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {moreRight && (
+        <span
+          aria-hidden
+          data-person-switcher-more=""
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent"
+        />
+      )}
     </div>
   );
 }

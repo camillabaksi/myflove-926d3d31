@@ -73,18 +73,18 @@ export function TodayContent() {
             <div>
               <h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2>
             </div>
-            <div className="flex flex-wrap items-center gap-1">
-              <Button asChild size="sm" className="rounded-full">
+            <div className="pace-today-actions flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <Button asChild size="sm" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
                 <Link href="/lagg-till">
-                  <Plus size={15} /> {t("Lägg till")}
+                  <Plus size={16} aria-hidden /> {t("Lägg till")}
                 </Link>
               </Button>
-              <Button asChild size="sm" variant="ghost" className="rounded-full text-muted-foreground hover:text-ink">
+              <Button asChild size="sm" variant="ghost" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
                 <Link href="/paminnelser">
-                  <Bell size={15} /> {t("Påminnelse")}
+                  <Bell size={16} aria-hidden /> {t("Påminnelse")}
                 </Link>
               </Button>
-              <CopyDayButton date={today} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-ink" />
+              <CopyDayButton date={today} className="pace-today-action relative inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']" />
             </div>
           </header>
           <div className="pt-2">
