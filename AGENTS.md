@@ -14,7 +14,7 @@
 Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
 Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; stones/Flow stay unchanged to prevent identity drift.
-Desktop Träning uses document navigation to avoid stalled transitions.
+Desktop Träning uses document navigation to avoid stalls.
 Public landing demos never use account data/sync, protecting saved plans. Local data has one account owner; sync only while that owner is signed in to prevent shared-device leaks.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Sensitive local keys never fall back to plaintext: keep them in memory and show status; encryption at rest must not depend on startup timing.
@@ -36,5 +36,5 @@ Legacy forms opt in with pace-form tokens; approved calendar/capture/name forms 
 More reuses filtered navItems/groups and scoped styles. Compact expansions use full-width sibling lists to avoid stretching adjacent controls. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
 Narrow greetings balance name breaks; preserve full names, profile data and approved stones.
 
-Today/Calendar use local rem/container rules for enlarged text; normal layout and timeline geometry stay locked.
+Today/Calendar use local rem/container rules for enlarged text; preserve layout and timeline geometry.
 3D companion prototypes isolate unapproved models in temporary standalone projects/dependencies, never app routes/data.
