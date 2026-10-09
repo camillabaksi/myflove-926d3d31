@@ -30,7 +30,7 @@ export function FlowMascot(_props: {
   /** Extra klasser på bilden, t.ex. responsiva storlekar. */
   imgClassName?: string;
   alt?: string;
-) {
+}) {
   return null;
 }
 
