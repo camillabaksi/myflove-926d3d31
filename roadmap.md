@@ -1,4 +1,7 @@
 # Roadmap
+## Ta bort lila maskotbild (2026-10-09)
+- [x] Plan godkänd: endast bildpresentation; bevara texter, knappar, funktioner, originalassets och sparade val. Ingen ersättningsbild/publicering.
+- [ ] Inventera direktbilder och scener, ta bort gemensam bildpresentation och tomma bildutrymmen; verifiera teman, skärmar, 200 % och tester.
 ## Pace – hela appen stegvis (2026-10-09)
 - [x] Formulärsteg 1: Inställningar och Pace-inställningar granskade och lokalt anpassade; 540/540 tester, 56 bredd-/tema-/textkontroller utan överflöde, Mer pixelidentisk. Inga kontoval ändrade eller publicerade.
 - Nästa lilla etapp: kvarvarande profil/livsprofil och hemskärmsanpassning behöver öppnad-formulärgranskning; namn/barnens befintliga sparning ska bevaras exakt. Därefter ork/återhämtning enligt godkänd ordning. Inte färdigt i denna etapp.

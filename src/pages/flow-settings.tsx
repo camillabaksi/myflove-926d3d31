@@ -6,7 +6,6 @@ import { PaceBlock as MyFloveBlock, PaceButton as Button, PaceInput as Input, Pa
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { FlowCharacter } from "@/components/flow/flow-character";
 import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
 import { FLOW_PRIORITIES } from "@/lib/flow-priorities";
 
@@ -25,15 +24,6 @@ export default function FlowSettingsPage() {
 
       <MyFloveWide>
         <header className="pace-account-heading flex flex-wrap items-center gap-4">
-          <div className="shrink-0">
-            <FlowCharacter
-              alt="Pace – Paceables följeslagare"
-              scene="hello"
-              seed={3}
-              energy={settings.enabled ? 70 : 30}
-              stage="inline"
-            />
-          </div>
           <div className="min-w-0 flex-1 basis-64 space-y-1">
             <PacePageTitle>
               Pace-inställningar

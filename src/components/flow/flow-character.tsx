@@ -577,11 +577,13 @@ export function FlowCharacter({
   return (
     <div
       data-flow-character
+      hidden
+      aria-hidden="true"
       data-flow-scene={scene}
       data-flow-variant={index}
       data-flow-stage={stage}
       className={cn(
-        "flex items-end justify-center",
+        "hidden",
         stage === "mini" ? "w-[80px] max-w-[80px] shrink-0" : "w-full",
         className,
       )}

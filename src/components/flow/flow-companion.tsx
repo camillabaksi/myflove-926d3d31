@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { FlowCharacter, type FlowStage } from "@/components/flow/flow-character";
+import { type FlowStage } from "@/components/flow/flow-character";
 import { useFlowMoment } from "@/hooks/use-flow-moment";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useFlowSettings, type FlowHelpLevel } from "@/hooks/use-flow-settings";
@@ -146,19 +146,6 @@ export default function FlowCompanion({
         className,
       )}
     >
-      <div className={cn("shrink-0 overflow-hidden flow-alive", isMini ? "w-[68px]" : "w-auto")}>
-        <FlowCharacter
-              alt="Pace – Paceables följeslagare"
-          scene={moment.scene}
-          seed={moment.seed}
-          energy={moment.energy}
-          kids={moment.kids}
-          rain={moment.rain}
-          stage={stage}
-          className={isMini ? "w-[68px]" : "w-auto"}
-        />
-      </div>
-
       <div className="min-w-0 flex-1 space-y-2">
         {moment.silent || !moment.message ? (
           <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
