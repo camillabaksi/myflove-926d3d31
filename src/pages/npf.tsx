@@ -91,7 +91,7 @@ export default function NpfPage() {
                 Anpassa appen
               </h1>
             </div>
-            <p className="text-muted-foreground">Välj hur MyFlove ska se ut och kännas.</p>
+            <p className="text-muted-foreground">Välj hur Paceable ska se ut och kännas.</p>
           </header>
         </MyFloveWide>
 
@@ -100,7 +100,8 @@ export default function NpfPage() {
           subtitle="Dölj det som inte behövs"
           icon={Eye}
           tone="lavender"
-          surface="lavender"
+          surface="plain"
+          className="pace-form pace-form-surface"
           collapsible
           defaultCollapsed
           collapseId="anpassa::se-mindre"
@@ -127,7 +128,8 @@ export default function NpfPage() {
           subtitle="Större text och tydligare ord"
           icon={Hand}
           tone="mint"
-          surface="mint"
+          surface="plain"
+          className="pace-form pace-form-surface"
           collapsible
           defaultCollapsed
           collapseId="anpassa::lattare"
@@ -151,7 +153,7 @@ export default function NpfPage() {
 
         <MyFloveWide>
           <header className="space-y-1">
-            <h2 className="text-lg font-bold text-ink">Din MyFlove</h2>
+            <h2 className="text-lg font-bold text-ink">Din Paceable</h2>
             <p className="text-sm text-muted-foreground">Gör appen lite mer till din.</p>
           </header>
         </MyFloveWide>
@@ -163,7 +165,8 @@ export default function NpfPage() {
           subtitle="Dela anonym statistik"
           icon={BarChart3}
           tone="sky"
-          surface="sky"
+          surface="plain"
+          className="pace-form pace-form-surface"
           collapsible
           defaultCollapsed
           collapseId="anpassa::integritet"
@@ -191,8 +194,8 @@ export default function NpfPage() {
           subtitle="Radera ditt konto"
           icon={Accessibility}
           tone="blush"
-          surface="blush"
-          className="border-destructive/30"
+          surface="plain"
+          className="pace-form pace-form-surface border-destructive/30"
           data-testid="account-section"
         >
           <DeleteAccountButton />

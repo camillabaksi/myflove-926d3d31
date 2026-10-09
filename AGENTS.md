@@ -13,11 +13,11 @@
 
 Min Flow appearance/memories use existing account-scoped cloud storage and one customization sheet for home/legacy; no parallel preference/chat system. Room animation stays scene-specific; shared FlowMascot elsewhere is unchanged. Render seated Flow as the approved whole-scene image with pose-fitted variants only; preserve but hide incompatible saved options to protect identity/perspective.
 
-Paceable editorial/capture/help remain opt-in for legacy isolation. BrandLogo uses approved originals and .dark; illustrative stones/Flow stay unchanged to prevent identity drift.
-Desktop Träning uses document navigation to prevent stalled transitions.
+Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; stones/Flow stay unchanged to prevent identity drift.
+Desktop Träning uses document navigation to avoid stalls.
 Public landing demos never use account data/sync, protecting saved plans. Local data has one account owner; sync only while that owner is signed in to prevent shared-device leaks.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
-Never fall back to plaintext for sensitive local keys; keep them in memory and surface a status instead, because encryption at rest must not depend on startup timing.
+Sensitive local keys never fall back to plaintext: keep them in memory and show status; encryption at rest must not depend on startup timing.
 A child profile's linked account (children.account_user_id) never gets row access to the owner's children/child_items; it reads only safe fields via get_my_child_profiles/get_my_child_schedule/get_my_shared_child_items (explicit item shares, deduped against the schedule), and the link never gates the account's own features in the UI, so parent-only data is enforced by the database while the person stays a full MyFlove user.
 Family sharing audience is NULL = whole household (including future members) or an explicit user list (family_share_areas.viewers, child_items.share_family + child_item_shares); an empty list means nobody, so deselecting can never widen access.
 The visual calendar uses a read-only period projection over existing account stores and authorized family queries; mutations target their original source, while linked parent-managed schedules remain separate and read-only, to preserve ownership and privacy.
@@ -30,10 +30,11 @@ Child schedule focus follows times independently of completion, with untimed ite
 Month cells summarize unique existing areas (family context collapses to the existing family area), with capacity only for today or recorded history; this prevents activity volume and unknown future energy from becoming visual noise.
 Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, with the existing mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
-Secondary pages share Paceable scope; primary pages stay locked. Tasks uses local presentation/tokens, not shared rendering or store changes. Keep IDs/routes. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
+Secondary pages share Paceable scope; primary pages stay locked. Tasks uses local tokens; IDs/routes stay. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
+Legacy forms opt in with pace-form tokens; approved calendar/capture/name forms and UI primitives stay untouched to prevent regressions.
 
 More reuses filtered navItems/groups and scoped styles. Compact expansions use full-width sibling lists to avoid stretching adjacent controls. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
-Narrow greetings balance name breaks; full names, profile data and approved stones stay intact.
+Narrow greetings balance name breaks; preserve full names, profile data and approved stones.
 
-Today/Calendar use local rem/container rules for enlarged text; normal layout and timeline geometry stay locked.
-3D companion prototypes use standalone temporary projects and dependencies, never app routes/data, to isolate unapproved models.
+Today/Calendar use local rem/container rules for enlarged text; preserve layout and timeline geometry.
+3D companion prototypes isolate unapproved models in temporary standalone projects/dependencies, never app routes/data.

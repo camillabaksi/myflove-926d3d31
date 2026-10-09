@@ -191,7 +191,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       </MyFloveWide>
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+        <DialogContent className="pace-form pace-form-surface max-h-[85vh] overflow-y-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle>Ny rutin</DialogTitle>
           </DialogHeader>
@@ -202,13 +202,13 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="T.ex. Borsta tänderna"
-                className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+                className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
               <input
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                className="p-3 rounded-xl bg-secondary/50 border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
+                className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
             </div>
             <div className="space-y-2">
@@ -220,7 +220,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                     type="button"
                     onClick={() => setRepeat(opt.value)}
                     aria-pressed={repeat === opt.value}
-                    className={`px-3 py-2 rounded-xl border text-sm transition-all ${
+                    className={`pace-form-choice px-3 py-2 rounded-xl border text-sm transition-all ${
                       repeat === opt.value
                         ? "bg-primary/10 border-primary/40 text-primary"
                         : "bg-secondary/50 border-transparent text-foreground hover:border-primary/30"
@@ -231,13 +231,13 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                 ))}
               </div>
               {repeat !== "daily" && (
-                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <label className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                   {repeat === "none" ? "Datum" : "Startdatum"}
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="p-2 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
+                    className="p-2 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm"
                   />
                 </label>
               )}
@@ -255,7 +255,8 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
           title="Snabbstart"
           icon={Sparkles}
           subtitle="Klicka för att lägga till"
-          surface="lavender"
+          surface="plain"
+          className="pace-form pace-form-surface"
           defaultCollapsed
         >
           <div className="flex flex-wrap gap-2">

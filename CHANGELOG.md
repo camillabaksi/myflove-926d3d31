@@ -1,3 +1,6 @@
+## 2026-10-09
+- Formulär: Logga just nu, Anpassa, aviseringskort och rutinformulär har lokal Paceable-presentation med neutrala ytor, Inter och flexibel radbrytning. Sparning, data och funktioner bevaras. 532 tester godkända; ingen publicering. Alla dolda formulär är ännu inte slutverifierade.
+
 ## 2026-10-08
 - **Fånga, synligt namnbyte (2026-10-08): funktionen QuickFlow heter nu Fånga för användaren – i menyn, på sidan, i hjälptexter, meddelanden, landningssidan och engelska översättningar (Capture). Sorteringstexterna namnger Pace. Interna namn, lagringsnycklar, rutter, påminnelser, notiser, synk och data är oförändrade. Ingen publicering.**
 - **Färgtema och Pace-texter (2026-10-08): webbläsarens färgade fält vid adressraden bytte från lila till appens varma bakgrundsfärg, och synliga Prata med Flow-texter heter nu Prata med Pace på alla sidor. Länkar, funktioner och data oförändrade; ingen publicering.**

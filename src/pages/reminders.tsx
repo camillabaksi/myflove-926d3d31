@@ -264,7 +264,8 @@ export default function RemindersPage() {
           title="Aviseringar"
           subtitle="Notis när det är dags"
           icon={BellRing}
-          surface="lavender"
+          surface="plain"
+          className="pace-form pace-form-surface"
           area="idag"
         >
           <div className="flex flex-wrap items-center justify-between gap-2">

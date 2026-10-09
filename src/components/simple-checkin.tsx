@@ -9,6 +9,8 @@ import WhyHint from "@/components/why-hint";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import { MyFloveBlock } from "@/components/myflove/block";
 import { useLang } from "@/hooks/use-language";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 
@@ -105,15 +107,15 @@ export default function SimpleCheckin({
   return (
     <MyFloveBlock
       title={t("Logga just nu")}
-      subtitle={t("Två snabba frågor. MyFlove gör resten.")}
+      subtitle={t("Två snabba frågor. Paceable gör resten.")}
       eyebrow={t("Logga")}
       icon={Pencil}
       tone="lavender"
-      surface="lavender"
+      surface="plain"
       collapsible
       collapseId="batteri::logga-just-nu"
       data-testid="battery-log-form"
-      className={cn("h-full", className)}
+      className={cn("pace-form pace-form-surface h-full", className)}
       footer={
         <p aria-live="polite" className="text-center text-xs text-muted-foreground">
           {saved
@@ -123,18 +125,19 @@ export default function SimpleCheckin({
       }
     >
       <div className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
+        <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
             <span aria-hidden>🔋</span> {t("Hur mycket ryms idag?")}
           </p>
-          <WhyHint label={t("logga ork")}>
-            {t("Du väljer bara ett ord – MyFlove ser mönstren åt dig över tid.")}
+          <WhyHint appearance="inline" label={t("logga ork")}>
+            {t("Du väljer bara ett ord – Paceable ser mönstren åt dig över tid.")}
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="pace-form-ork grid grid-cols-3 gap-2">
           {ORK_LEVELS.map((l) => (
-            <button
+            <Button
+              variant="outline"
               key={l.id}
               type="button"
               aria-pressed={ork?.id === l.id}
@@ -143,36 +146,32 @@ export default function SimpleCheckin({
                 markStarted("battery");
                 setBattery(l.value10);
               }}
-              className={cn(
-                "flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-sm font-medium transition-all",
-                ork?.id === l.id
-                  ? "border-primary bg-primary/10 text-ink scale-[1.02]"
-                  : "border-transparent bg-card/80 text-muted-foreground hover:opacity-100",
-              )}
+              className="pace-form-choice flex-1 gap-2 rounded-xl px-3 py-2.5"
             >
               <span aria-hidden className="text-base">
                 {l.dot}
               </span>
               {t(l.label)}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
+        <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
             <span aria-hidden>💜</span> {t("Hur känns det just nu?")}{" "}
             <span className="font-normal text-muted-foreground">{t("(valfritt)")}</span>
           </p>
-          <WhyHint label={t("logga mående")}>
-            {t("Det hjälper Flow förstå om ditt mående och din ork brukar hänga ihop för dig.")}
+          <WhyHint appearance="inline" label={t("logga mående")}>
+            {t("Det hjälper Pace förstå om ditt mående och din ork brukar hänga ihop för dig.")}
           </WhyHint>
         </div>
         {moodExplainer && <p className="text-xs text-muted-foreground">{moodExplainer}</p>}
-        <div className="flex justify-between gap-1">
+        <div className="pace-form-moods">
           {MOODS.map((m) => (
-            <button
+            <Button
+              variant="outline"
               key={m.score10}
               type="button"
               aria-pressed={mood === m.score10}
@@ -181,16 +180,11 @@ export default function SimpleCheckin({
                 markStarted("mood");
                 setMood(m.score10);
               }}
-              className={cn(
-                "flex flex-1 flex-col items-center gap-1 rounded-2xl p-2 transition-all",
-                mood === m.score10
-                  ? "bg-card shadow-soft scale-105"
-                  : "opacity-70 hover:bg-card hover:opacity-100",
-              )}
+              className="pace-form-choice flex-col gap-1 rounded-xl"
             >
               <span className="text-2xl">{m.emoji}</span>
               <span className="text-[11px] text-muted-foreground">{t(m.label)}</span>
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -200,21 +194,22 @@ export default function SimpleCheckin({
           <span className="text-xs text-muted-foreground">
             {t("Vill du skriva några ord? (valfritt)")}
           </span>
-          <textarea
+          <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
             placeholder={t("T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”")}
-            className="w-full resize-none rounded-2xl border border-border/60 bg-card/70 p-3 text-sm text-ink outline-none transition-colors focus:border-primary"
+            className="w-full resize-none rounded-xl border-input bg-card p-3 text-sm text-foreground"
           />
         </label>
 
         {/* Progressiv komplexitet: det avancerade ligger bakom "Visa mer". */}
-        <button
+        <Button
+          variant="ghost"
           type="button"
           onClick={() => setShowMore((v) => !v)}
           aria-expanded={showMore}
-          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          className="gap-1.5 px-0 text-muted-foreground hover:bg-transparent hover:text-foreground hover:underline"
         >
           <ChevronDown
             size={15}
@@ -222,7 +217,7 @@ export default function SimpleCheckin({
             className={cn("transition-transform", showMore && "rotate-180")}
           />
           {showMore ? t("Visa mindre") : t("Visa mer")}
-        </button>
+        </Button>
 
         {showMore && (
           <div className="space-y-2">
@@ -234,7 +229,8 @@ export default function SimpleCheckin({
               {FACTORS.map((f) => {
                 const on = factors.includes(f.id);
                 return (
-                  <button
+                  <Button
+                    variant="outline"
                     key={f.id}
                     type="button"
                     aria-pressed={on}
@@ -243,18 +239,13 @@ export default function SimpleCheckin({
                         prev.includes(f.id) ? prev.filter((x) => x !== f.id) : [...prev, f.id],
                       )
                     }
-                    className={cn(
-                      "rounded-pill border px-3 py-1.5 text-sm transition-all",
-                      on
-                        ? "border-primary bg-primary/10 text-ink"
-                        : "border-border/60 bg-card/70 text-muted-foreground hover:text-foreground",
-                    )}
+                    className="pace-form-choice rounded-xl px-3 py-1.5"
                   >
                     <span aria-hidden className="mr-1">
                       {f.emoji}
                     </span>
                     {t(f.labelSv)}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -262,14 +253,14 @@ export default function SimpleCheckin({
         )}
       </div>
 
-      <button
+      <Button
         type="button"
         onClick={save}
-        className="flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90"
+        className="w-full gap-2 rounded-xl px-4 py-3 font-semibold"
       >
         <Sparkles size={16} aria-hidden="true" />
         {saved ? t("Tack") : t("Logga energi & mående")}
-      </button>
+      </Button>
     </MyFloveBlock>
   );
 }
