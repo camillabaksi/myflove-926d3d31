@@ -39,8 +39,8 @@ workflows:
           xcode-project use-profiles --project "$XCODE_PROJECT"
       - name: Bygg .ipa
         script: |
-          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME" \
-            --archive-xcargs "CURRENT_PROJECT_VERSION=$BUILD_NUMBER"
+          # Byggnumret styrs av CURRENT_PROJECT_VERSION i Xcode-projektet (måste vara högre än senaste TestFlight-bygget).
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
