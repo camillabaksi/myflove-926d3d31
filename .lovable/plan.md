@@ -1,4 +1,21 @@
-# En sammanhållen Paceable-app, steg för steg
+# Ta bort den lila maskotbilden
+
+## Avgränsad bildändring
+- Ta bort den gamla lila maskotens synliga bilder från appen, inklusive inställningar, samtalsytor, hjälp, introduktion och tomlägen.
+- Behåll alla texter, samtalsknappar, formulär, länkar och handlingar. Anpassa bara tomma bildutrymmen så att inga onödiga luckor kvarstår.
+- Inventera även scenbilder där maskoten ingår. Om bilden inte kan döljas utan att ta bort en funktion eller godkänd separat scen, pausa den ytan och redovisa den.
+- Ersätt inte maskoten med stenar, nya bilder eller animationer. Logotyper och befintliga godkända stenar lämnas oförändrade.
+- Bevara originalassets, sparade utseendeval, tekniska Flow-namn, navigation, data, synk, familjeskydd, kalender och Capacity/Pace.
+
+## Verifiering
+Kontrollera berörda ytor i ljust/mörkt läge, mobil/desktop och 200 % text, samt tangentbordsåtkomst och oförändrade handlingar. Kör relevanta tester och hela testsviten. Visa skärmbilder och rapportera eventuella kvarstående scenbilder. Ingen publicering.
+
+## Tekniskt genomförande
+Inventera gemensamma maskotkomponenter och direkta bildanrop före ändring. Dölj eller ta bort enbart bildpresentationen; ta inte bort funktionella omslag eller statusinformation. Inga nya paket eller ändringar av lagring.
+
+---
+
+# Tidigare godkänd stegvis formulärplan (bevarad)
 
 ## Mål
 Använd det färdiga Pace-designsystemet för samma godkända utseende i hela appen. Börja med menyn och sidrubrikerna, fortsätt därefter formulär för formulär. Ingen ny designriktning och ingen publicering.
