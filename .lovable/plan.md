@@ -11,6 +11,17 @@
 Ingen ändring av registrering, sparning, utkast, hopfällning, förval, påverkansfaktorer, kontodata, synk, Capacity/Din takt, kalender, familj, notiser eller navigation. Redan godkända formulär lämnas visuellt orörda, särskilt kalenderns kompakta kapacitetsstöd, Fånga och visningsnamnsdialogen. Inga ändringar av logotyper, stenar eller globala grundstilar. Inga paket eller publicering.
 
 ## Tekniska detaljer
+### Inventering och prioritering
+| Formulärfamilj | Underlag | Minsta åtgärd |
+| --- | --- | --- |
+| Logga just nu | `simple-checkin.tsx`, `myflove/block.tsx`: uttrycklig pastellyta och egna val-/sparknappar verifierade i koden och bilden. | Neutral befintlig yta, Inter och befintliga designkontroller. |
+| Planering från Fånga | `quickflow-plan-dialog.tsx`, `quickflow-priority.tsx`: egna markerings- och kantstilar identifierade som granskningskandidater. | Kontrollera faktisk rendering; ändra bara kvarvarande visuella avvikelser, inte prioritering eller förslag. |
+| Omvandling och kopiering | `note-convert-dialog.tsx`, `copy-day-dialog.tsx`: lokala dialog-/kontrollstilar att kontrollera. | Återanvänd befintlig dialogpresentation och kontroller där äldre uttryck bekräftas. |
+| Övrig hälsa, familj, vardag och inställningar | Kartlägg alla kvarvarande inmatnings-/redigeringsformulär och deras delade byggstenar före implementation. | Gemensamma små presentationsval först, lokala rättningar sist. Redovisa fullständig ändringslista. |
+| Redan godkända formulär | Kapacitetsstödet i kalendern, Fånga och visningsnamn. | Endast regressionskontroll; ingen ny design. |
+
+Kodstilar är inte ensamma bevis för ett visuellt fel: kandidater granskas i den renderade appen före ändring. Ingen ny palett, generell serif på dialogrubriker eller ändring av navigation införs.
+
 Logga just nu är `src/components/simple-checkin.tsx` och återanvänds bland annat från Idag, Hem och Mitt batteri. `MyFloveBlock` väljer en uttrycklig pastellyta som inte får den befintliga neutrala kortmarkeringen; detta är en verifierad orsak till avvikelsen. Övriga formulär kartläggs per familj före ändring: loggning/hälsa, lägga till/redigera, familj/vardag, profil/inställningar och planering.
 
 Återanvänd befintliga semantiska Paceable-tokens och designkontroller. Börja med små gemensamma presentationsval för berörda formulär, därefter enbart nödvändiga lokala avvikelser. Ingen bred CSS-regel som automatiskt stylar alla inputfält eller färgade kort. Gemensamma block, hjälplänkar och dialoger ändras endast genom ett uttryckligt presentationsval om det behövs; andra användningar lämnas orörda. Dialogernas befintliga öppning, stängning och fokus bevaras. Samma återanvända formulär får samma uttryck på sina olika ingångar, utan dubblering av formulär eller data.
