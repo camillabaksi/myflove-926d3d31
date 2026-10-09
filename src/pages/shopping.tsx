@@ -215,7 +215,7 @@ export default function Shopping() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
           <div>
             <MyFloveHeader
@@ -230,6 +230,7 @@ export default function Shopping() {
                   <button
                     type="button"
                     onClick={() => setMode("shared")}
+                    aria-pressed={mode === "shared"}
                     className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "shared" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   >
                     Delad med familjen
@@ -237,6 +238,7 @@ export default function Shopping() {
                   <button
                     type="button"
                     onClick={() => setMode("personal")}
+                    aria-pressed={mode === "personal"}
                     className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "personal" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
                   >
                     Bara min lista

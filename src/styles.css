@@ -2536,3 +2536,14 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-next-health section.shadow-soft { box-shadow: var(--shadow-soft, none); border-color: color-mix(in oklab, var(--pace-control-outline) 45%, transparent); }
 .pace-next-health .pace-health-choice[aria-pressed="true"] { background-color: var(--pace-control-selected); color: var(--pace-control-ink); border-color: var(--pace-control-outline); }
 .pace-next-health .pace-health-choice:focus-visible { outline: 2px solid var(--pace-control-ink); outline-offset: 2px; }
+
+/* Everyday tools opt-in (Rutiner, Påminnelser, Inköp): calmer page actions, 44px targets. Dialogs render outside and are unchanged. */
+.pace-next-tools h1 { font-size: clamp(1.625rem, 4.5vw + 0.5rem, 1.875rem); }
+.pace-next-tools button:is(.h-10, .h-12, .h-14) { height: auto; min-height: 44px; padding-block: 6px; font-size: 0.9375rem; border-radius: var(--radius-pill); box-shadow: none; }
+.pace-next-tools button.bg-primary { background-color: var(--pace-control-ink); color: var(--pace-control-on-fill); }
+.pace-next-tools button:is(.h-8, .h-9) { min-height: 44px; border-radius: var(--radius-pill); }
+.pace-next-tools button svg { width: 16px; height: 16px; }
+.pace-next-tools [aria-pressed] { min-height: 44px; }
+.pace-next-tools [aria-pressed="true"] { color: var(--pace-control-ink); }
+.pace-next-tools button:focus-visible { outline: 2px solid var(--pace-control-ink); outline-offset: 2px; }
+.pace-next-tools button { min-height: 44px; min-width: 44px; }

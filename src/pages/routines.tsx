@@ -174,7 +174,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const sorted = [...routines].sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <MyFlovePageGrid>
+    <MyFlovePageGrid className="pace-next-page pace-next-health pace-next-tools">
       {showHeader && (
         <MyFloveWide>
           <MyFloveHeader
