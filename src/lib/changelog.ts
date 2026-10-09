@@ -92,6 +92,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     "Ljud: Morgonstartens klang respekterar avstängt/tyst larm (2026-10-04)",
     "Notiser: tomma konton får inte längre Flows fråga om orken (2026-10-04)",
     "Notiser: aktiviteter med klockslag låter inte längre med larmljud om du inte själv valt påminnelse (2026-10-04)",
+    "Appversioner: Android 6.4 (versionCode 23) och iOS 1.2 (build 2) med Paceable-ikoner (2026-10-09)",
     "Android: appikonen matchar den bifogade MyFlove-ikonen; App Bundle 6.2 (versionCode 21) för Google Play (2026-10-04)",
     "iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen (2026-10-03)",
     "Mobilprojektet: Capacitor-appen använder nu app-ID \"se.myflove.app\" (matchar Apple Developer) och iOS-mappen är förberedd; Android bygger fortfarande med \"app.myflove.mobile\" (2026-10-03)",
