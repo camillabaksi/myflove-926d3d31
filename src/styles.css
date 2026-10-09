@@ -2534,3 +2534,5 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-next-health h1 { color: var(--pace-control-ink); overflow-wrap: anywhere; }
 .pace-next-health h2.text-ink { color: var(--pace-control-ink); }
 .pace-next-health section.shadow-soft { box-shadow: var(--shadow-soft, none); border-color: color-mix(in oklab, var(--pace-control-outline) 45%, transparent); }
+.pace-next-health .pace-health-choice[aria-pressed="true"] { background-color: var(--pace-control-selected); color: var(--pace-control-ink); border-color: var(--pace-control-outline); }
+.pace-next-health .pace-health-choice:focus-visible { outline: 2px solid var(--pace-control-ink); outline-offset: 2px; }

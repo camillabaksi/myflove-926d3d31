@@ -95,7 +95,8 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                   <button
                     key={item.score}
                     onClick={() => setSelectedScore(item.score)}
-                    className={`flex flex-col items-center gap-2 p-2 rounded-2xl transition-all ${
+                    aria-pressed={selectedScore === item.score}
+                    className={`pace-health-choice min-h-11 min-w-11 flex flex-col items-center gap-2 p-2 rounded-2xl transition-all ${
                       selectedScore === item.score
                         ? "bg-primary/10 scale-110"
                         : "hover:bg-secondary opacity-70 hover:opacity-100 grayscale-[0.5] hover:grayscale-0"

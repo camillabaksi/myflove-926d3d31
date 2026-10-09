@@ -1,6 +1,7 @@
 # Roadmap
 ## Hälsa & välmående (2026-10-09)
 - [x] Rubriker och kort på Mitt batteri, Återhämtning, Mående, Energikarta. Ingen publicering.
+- [x] Kompakta pausval, Starta, energinivåer och måendeval (44 px tryckyta). Ingen publicering.
 
 ## Kalender, Fånga och Min plats – nästa visuella etapp (2026-10-09)
 - [x] Etapp 2–3 på Idag godkänd; ny begäran registrerad om samma målbild på Kalender, Fånga och Min plats.
