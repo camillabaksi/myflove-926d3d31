@@ -1,3 +1,6 @@
+## 2026-10-09 – Rutiner, Påminnelser och Inköp
+- Samma kompakta knappar, val, mörklila primärknapp och rubrikstorlek som Mitt batteri och Återhämtning. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ej publicerat.
+
 ## 2026-10-09 – Hälsa & välmående
 - Mitt batteri, Återhämtning, Mående och Energikarta har samma lugna plommonrubriker och kortkanter som Min plats. Endast utseende; data, loggar, paus och diagram oförändrade. Ej publicerat.
 

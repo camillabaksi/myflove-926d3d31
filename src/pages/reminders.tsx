@@ -251,7 +251,7 @@ export default function RemindersPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="idag">
+      <MyFlovePageGrid area="idag" className="pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
           <MyFloveHeader
             title="Påminnelser"

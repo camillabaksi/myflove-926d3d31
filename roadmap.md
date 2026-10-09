@@ -1,4 +1,7 @@
 # Roadmap
+## Rutiner, Påminnelser och Inköp (2026-10-09)
+- [x] Kompaktare sidknappar, val och rubriker med 44 px tryckyta. Ingen publicering.
+
 ## Hälsa & välmående (2026-10-09)
 - [x] Rubriker och kort på Mitt batteri, Återhämtning, Mående, Energikarta. Ingen publicering.
 - [x] Kompakta pausval, Starta, energinivåer och måendeval (44 px tryckyta). Ingen publicering.
