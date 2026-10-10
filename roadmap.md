@@ -1,4 +1,8 @@
 # Roadmap
+## Insikter – endast etapp 2B (2026-10-10)
+- [x] Godkänd avgränsning: endast Insikters sida, metadata och isolerade presentationstester; inga andra vyer, datakällor eller publicering.
+- [x] Förebilder tagna i sex bredder, båda teman och 100/200 % text. Separat navigeringsrad, Fraunces-rubrik och befintligt PaceContent införda.
+- [x] Efterbilder: sex bredder × två teman × 100/200 % utan dokumentoverflow; även fasta rubrik-/textstorlekar förstorade separat. Insikter och båda diagrammen visas, tillbaka/Hem fungerar och tangentbordsfokus syns. Diagrammens befintliga mobilbegränsningar och fysisk Android/iOS-QA kvarstår för separat beslut; ingen 2C/2D eller publicering.
 ## Paceable designsystem – etapp 1 (2026-10-10)
 - [x] Skapa en gemensam, opt-in designreferens med semantiska HSL-variabler för sidmarginaler, kort, informationsblock, kontroller, formulär, dialoger, typografi och responsivitet.
 - [x] Bevara alla befintliga vyer; kontrollera referensen i ljust/mörkt tema, små mobilbredder och 200 % text utan nya beroenden eller publicering.

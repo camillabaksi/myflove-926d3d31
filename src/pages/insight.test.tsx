@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import type { FlowKnowledge } from "@/lib/flow-learning";
 
 const state = {
@@ -12,9 +12,11 @@ const state = {
   completed: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }, { id: "5" }],
   totalDays: 9,
 };
+const goBack = vi.fn();
+vi.mock("@/hooks/use-smart-back", () => ({ useSmartBack: () => goBack }));
 
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, ...rest }: { children: React.ReactNode }) => <a {...rest}>{children}</a>,
+  Link: ({ children, ...rest }: { children: React.ReactNode }) => <a role="link" {...rest}>{children}</a>,
   useNavigate: () => vi.fn(),
   useRouter: () => ({
     history: { canGoBack: () => false, length: 1, back: vi.fn() },
@@ -56,6 +58,7 @@ vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 const { default: InsightPage } = await import("@/pages/insight");
 
 beforeEach(() => {
+  goBack.mockClear();
   state.demo = false;
   state.totalDays = 9;
   state.knowledge = {
@@ -66,6 +69,32 @@ beforeEach(() => {
 });
 
 describe("MyFlove Insight", () => {
+  it("har separat navigation och en oklippt editorialrubrik i Paceables listbredd", () => {
+    render(<InsightPage />);
+    const header = screen.getByTestId("insight-header");
+    const heading = within(header).getByRole("heading", { name: "Insikter", level: 1 });
+    expect(heading.className).toContain("pace-editorial-role");
+    expect(heading.className).not.toMatch(/truncate|nowrap|line-clamp/);
+    expect(header.closest(".pace-ds-content-list")).toBeTruthy();
+    expect(within(header).queryByText("MyFlove Insight")).toBeNull();
+    const back = within(header).getByRole("button", { name: "Tillbaka" });
+    expect(back.className).toContain("pace-ds-button");
+    fireEvent.click(back);
+    expect(goBack).toHaveBeenCalledOnce();
+    const home = within(header).getByRole("link", { name: "Till hem" });
+    expect(home.getAttribute("to")).toBe("/hem");
+    expect(home.className).toContain("pace-ds-button");
+  });
+
+  it("behåller den befintliga frivilliga förklaringen under rubriken", () => {
+    render(<InsightPage />);
+    const header = screen.getByTestId("insight-header");
+    const why = within(header).getByRole("button", { name: /Varför/ });
+    expect(why.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(why);
+    expect(within(header).getByText(/När du loggar över tid kan Flow hjälpa dig/)).toBeTruthy();
+  });
+
   it("visar den inloggade användarens egna insikter", () => {
     render(<InsightPage />);
     expect(screen.getByTestId("insight-personal")).toBeTruthy();
