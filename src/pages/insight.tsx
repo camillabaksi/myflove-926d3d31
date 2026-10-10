@@ -121,13 +121,13 @@ function AreaStrategies({
           <div key={area.id} className="rounded-3xl bg-card border border-border overflow-hidden">
             <button
               onClick={() => setOpenArea(isOpen ? null : area.id)}
-              className="w-full p-5 flex items-center gap-4 text-left"
+              className="flex w-full min-w-0 items-center gap-[12px] p-[16px] text-left sm:gap-[16px] sm:p-[20px]"
               aria-expanded={isOpen}
             >
-              <span className="text-2xl" aria-hidden>
+              <span className="shrink-0 text-2xl" aria-hidden>
                 {area.emoji}
               </span>
-              <span className="flex-1">
+              <span className="min-w-0 flex-1">
                 <span className="block font-medium">{area.label}</span>
                 {!isOpen && (
                   <span className="block text-sm text-muted-foreground">{area.intro}</span>
@@ -135,12 +135,12 @@ function AreaStrategies({
               </span>
               <ChevronRight
                 size={18}
-                className={`text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
+                className={`shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
               />
             </button>
 
             {isOpen && (
-              <div className="px-5 pb-5 space-y-3">
+              <div className="space-y-3 px-[16px] pb-[16px] sm:px-[20px] sm:pb-[20px]">
                 <p className="text-sm text-muted-foreground">{area.intro}</p>
                 <p className="font-medium text-sm">Exempel på strategier</p>
                 {strategiesForArea(area.id).map((s) => {
@@ -149,7 +149,7 @@ function AreaStrategies({
                   return (
                     <div
                       key={s.id}
-                      className="p-4 rounded-2xl bg-secondary/40 border border-border space-y-2"
+                      className="space-y-2 rounded-2xl border border-border bg-secondary/40 p-[12px] sm:p-[16px]"
                     >
                       <p className="font-medium">{s.title}</p>
                       <p className="text-sm text-muted-foreground">{s.why}</p>
@@ -320,7 +320,7 @@ export default function InsightPage() {
 
         {!demoMode && (
           <section data-testid="insight-personal" className="space-y-5">
-            <div className="p-5 rounded-3xl bg-card border border-border space-y-3">
+            <div className="min-w-0 space-y-3 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]">
               <p className="font-medium">Vad Flow lärt sig om dig</p>
               <p className="text-sm text-muted-foreground">{personal.label}</p>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -341,7 +341,7 @@ export default function InsightPage() {
                 title="Din vardag"
                 description="Det här har Paceable lärt sig av dina egna dagar"
                 data-testid="insight-everyday-patterns"
-                className="rounded-3xl border border-border bg-card p-5"
+                className="min-w-0 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]"
                 headingClassName="font-semibold"
               >
                 <ul className="mt-3 space-y-2">
@@ -361,7 +361,7 @@ export default function InsightPage() {
                   {personal.insights.map((i) => (
                     <li
                       key={i.id}
-                      className="p-4 rounded-2xl bg-secondary/40 border border-border leading-relaxed"
+                      className="rounded-2xl border border-border bg-secondary/40 p-[16px] leading-relaxed"
                     >
                       {i.text}
                     </li>
@@ -387,7 +387,7 @@ export default function InsightPage() {
             ) : (
               <div
                 data-testid="insight-empty"
-                className="p-5 rounded-3xl bg-card border border-border space-y-3"
+                className="space-y-3 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]"
               >
                 <p className="leading-relaxed">
                   Jag har inte lärt känna dig tillräckligt ännu. Använd MyFlove några dagar så
