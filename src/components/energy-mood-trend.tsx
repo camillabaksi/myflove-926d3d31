@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
-import { HeartPulse, TrendingDown, TrendingUp, Minus } from "lucide-react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, HeartPulse, TrendingDown, TrendingUp, Minus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
@@ -20,9 +21,52 @@ const RANGE_DESCRIPTIONS: Record<TrendRange, string> = {
   months: "Senaste 6 månaderna",
 };
 
-function Bars({ periods }: { periods: TrendPeriod[] }) {
+export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
+  const viewport = useRef<HTMLDivElement>(null);
+  const timelineId = useId();
+  const [edges, setEdges] = useState({ start: true, end: true });
+  const updateEdges = () => {
+    const node = viewport.current;
+    if (!node) return;
+    setEdges({ start: node.scrollLeft <= 1, end: node.scrollLeft + node.clientWidth >= node.scrollWidth - 1 });
+  };
+  useEffect(() => {
+    const node = viewport.current;
+    if (!node) return;
+    node.scrollLeft = 0;
+    updateEdges();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(updateEdges);
+    observer?.observe(node);
+    return () => observer?.disconnect();
+  }, [periods]);
+  const move = (direction: number) => {
+    const node = viewport.current;
+    if (!node) return;
+    node.scrollBy({ left: direction * node.clientWidth * 0.8, behavior: "auto" });
+  };
   return (
-    <div className="grid grid-cols-6 gap-2 sm:grid-cols-8" role="list">
+    <div className="min-w-0 space-y-2">
+      <div className="flex justify-end gap-2">
+        <Button type="button" size="icon" variant="ghost" aria-label="Tidigare perioder" aria-controls={timelineId} disabled={edges.start} onClick={() => move(-1)}>
+          <ArrowLeft aria-hidden="true" />
+        </Button>
+        <Button type="button" size="icon" variant="ghost" aria-label="Senare perioder" aria-controls={timelineId} disabled={edges.end} onClick={() => move(1)}>
+          <ArrowRight aria-hidden="true" />
+        </Button>
+      </div>
+      <div ref={viewport} id={timelineId} onScroll={updateEdges} className="min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring" role="region" aria-label="Tidslinje för energi och mående" tabIndex={0}>
+      <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
+        const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
+        const index = items.indexOf(event.target as HTMLElement);
+        if (index < 0) return;
+        const next = event.key === "ArrowRight" ? Math.min(index + 1, items.length - 1)
+          : event.key === "ArrowLeft" ? Math.max(index - 1, 0)
+          : event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 : null;
+        if (next == null) return;
+        event.preventDefault();
+        items[next]?.focus({ preventScroll: true });
+        items[next]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "auto" });
+      }}>
       {periods.map((period) => {
         const description = `${period.accessibleLabel}: ${
           period.energy == null ? "ingen energilogg" : `energi ${period.energy} procent`
@@ -31,26 +75,37 @@ function Bars({ periods }: { periods: TrendPeriod[] }) {
           <div
             key={period.key}
             role="listitem"
+             tabIndex={0}
             aria-label={description}
             title={description}
-            className="min-w-0 text-center"
+            className="w-24 shrink-0 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <div className="mx-auto flex h-20 w-full max-w-14 items-end justify-center gap-1 rounded-xl border border-border bg-background p-1">
-              <span
+              {period.energy != null && <span
+                aria-hidden="true"
+                data-series="energy"
                 className="w-1/2 rounded-md bg-primary/70 transition-[height] duration-500"
-                style={{ height: `${period.energy == null ? 3 : Math.max(6, period.energy)}%` }}
-              />
-              <span
+                style={{ height: `${Math.max(6, period.energy)}%` }}
+              />}
+              {period.mood != null && <span
+                aria-hidden="true"
+                data-series="mood"
                 className="w-1/2 rounded-md bg-accent/70 transition-[height] duration-500"
-                style={{ height: `${period.mood == null ? 3 : Math.max(6, period.mood)}%` }}
-              />
+                style={{ height: `${Math.max(6, period.mood)}%` }}
+              />}
             </div>
-            <span className="mt-1 block truncate text-[10px] text-muted-foreground">
+            <span className="mt-2 block text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
+             <span aria-hidden="true" className="mt-1 block break-words text-xs leading-relaxed text-muted-foreground">
+               Energi {period.energy == null ? "–" : `${period.energy} %`}<br />
+               Mående {period.mood == null ? "–" : `${period.mood} %`}
+             </span>
           </div>
         );
       })}
+      </div>
+      </div>
     </div>
   );
 }
@@ -75,7 +130,7 @@ export default function EnergyMoodTrend() {
       id="insight-energy-mood-trend"
       title="Energi & mående över tid"
       description="Hur dina veckor och månader har sett ut"
-      className="rounded-3xl border border-border bg-card p-5"
+      className="min-w-0 rounded-3xl border border-border bg-card p-4 font-sans sm:p-5 [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
       headingClassName="font-semibold"
       data-testid="energy-mood-trend"
     >
@@ -93,9 +148,9 @@ export default function EnergyMoodTrend() {
         </div>
 
         <Tabs value={range} onValueChange={(value) => setRange(value as TrendRange)}>
-          <TabsList className="grid w-full grid-cols-2 rounded-full">
+          <TabsList className="grid h-auto w-full grid-cols-2 rounded-full">
             {(Object.keys(RANGE_LABELS) as TrendRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="rounded-full">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}
@@ -112,7 +167,7 @@ export default function EnergyMoodTrend() {
             </span>
           </div>
           <p className="mb-3 text-xs font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
-          <Bars periods={periods} />
+          <EnergyMoodPeriods periods={periods} />
           {!hasData && (
             <p className="py-2 text-center text-sm text-muted-foreground">
               <HeartPulse size={14} className="mr-1 inline text-primary" aria-hidden />
