@@ -7,13 +7,13 @@ export const Route = createFileRoute("/_app/insight")({
   }),
   head: () => ({
     meta: [
-      { title: "MyFlove Insight – behov till strategier | MyFlove" },
+      { title: "Insikter · Paceable" },
       {
         name: "description",
         content:
-          "Insight omvandlar information om behov och styrkor till konkreta vardagsstrategier som kopplas till MyFlow. Demo med fiktiva testprofiler.",
+           "Insikter i Paceable hjälper dig förstå behov, upptäcka egna mönster och hitta konkreta strategier i vardagen.",
       },
-      { property: "og:title", content: "MyFlove Insight – förstå behov, hitta strategier" },
+      { property: "og:title", content: "Insikter · Paceable" },
       {
         property: "og:description",
         content: "Från behovsområden till konkreta strategier och påminnelser i vardagen.",

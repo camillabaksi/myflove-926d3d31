@@ -6,6 +6,7 @@ import { useSmartBack } from "@/hooks/use-smart-back";
 import Layout from "@/components/layout";
 
 import { Button } from "@/components/ui/button";
+import { PaceContent, PacePage, PacePageTitle, PaceButton } from "@/components/paceable/design-system";
 import {
   Dialog,
   DialogContent,
@@ -38,7 +39,6 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
-import { MyFloveInsightGather } from "@/components/myflove/motion";
 import WhyHint from "@/components/why-hint";
 import BatteryLoadTrend from "@/components/battery-load-trend";
 import EnergyMoodTrend from "@/components/energy-mood-trend";
@@ -282,25 +282,31 @@ export default function InsightPage() {
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6 pb-28 page-enter">
-        <header
-          className="pace-app-header rounded-3xl border-2 border-border/60 p-5 shadow-soft"
-        >
-          <div className="flex items-start gap-3">
-            <button
+      <PacePage className="page-enter pb-28">
+        <PaceContent width="list" className="space-y-6">
+        <header className="min-w-0 space-y-4" data-testid="insight-header">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
+            <PaceButton
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={goBack}
               aria-label="Tillbaka"
-              className="press mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-pill bg-card/70 text-ink"
+              className="shrink-0 rounded-full text-foreground"
             >
               <ArrowLeft size={18} strokeWidth={2.2} />
-            </button>
-            <MyFloveInsightGather emoji="🧠" />
-            <div className="min-w-0 flex-1">
-              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
-                MyFlove Insight
-              </h1>
-              <p className="mt-1 text-sm text-muted-foreground">
+            </PaceButton>
+            <PaceButton asChild variant="ghost" className="min-w-11 shrink-0 rounded-full text-foreground">
+              <Link to="/hem" aria-label="Till hem">
+                <Home size={14} /> Hem
+              </Link>
+            </PaceButton>
+          </div>
+          <div className="min-w-0 space-y-2">
+              <PacePageTitle className="text-[var(--pace-primary)] dark:text-foreground">
+                Insikter
+              </PacePageTitle>
+              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
                 Förstå behov. Hitta strategier. Gör vardagen enklare.
               </p>
               <div className="mt-2">
@@ -309,14 +315,6 @@ export default function InsightPage() {
                   energi.
                 </WhyHint>
               </div>
-            </div>
-            <Link
-              to="/hem"
-              aria-label="Till hem"
-              className="press mt-0.5 inline-flex h-9 shrink-0 items-center gap-1 rounded-pill bg-card/70 px-3 text-xs font-medium text-ink"
-            >
-              <Home size={14} /> Hem
-            </Link>
           </div>
         </header>
 
@@ -341,7 +339,7 @@ export default function InsightPage() {
               <CollapsibleSection
                 id="insight-everyday-patterns"
                 title="Din vardag"
-                description="Det här har MyFlove lärt sig av dina egna dagar"
+                description="Det här har Paceable lärt sig av dina egna dagar"
                 data-testid="insight-everyday-patterns"
                 className="rounded-3xl border border-border bg-card p-5"
                 headingClassName="font-semibold"
@@ -703,7 +701,8 @@ export default function InsightPage() {
             </Button>
           </DialogContent>
         </Dialog>
-      </div>
+        </PaceContent>
+      </PacePage>
     </Layout>
   );
 }
