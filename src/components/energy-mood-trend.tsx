@@ -150,7 +150,7 @@ export default function EnergyMoodTrend() {
         <Tabs value={range} onValueChange={(value) => setRange(value as TrendRange)}>
           <TabsList className="grid h-auto w-full grid-cols-1 gap-1 rounded-2xl @[16rem]:grid-cols-2 @[16rem]:rounded-full">
             {(Object.keys(RANGE_LABELS) as TrendRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full px-[8px]">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}

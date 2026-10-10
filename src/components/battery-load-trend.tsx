@@ -160,7 +160,7 @@ export default function BatteryLoadTrend() {
         <Tabs value={range} onValueChange={(value) => setRange(value as BatteryLoadRange)}>
           <TabsList className="grid h-auto w-full grid-cols-1 gap-1 rounded-2xl @[22rem]:grid-cols-3">
             {(Object.keys(RANGE_LABELS) as BatteryLoadRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full px-[8px]">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}
