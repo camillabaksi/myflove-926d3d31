@@ -44,6 +44,34 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(screen.getByRole("button", { name: /Logga energi & mående/i })).toBeTruthy();
   });
 
+  it("har fast rubrik och sparyta runt ett separat scrollbart innehåll i dialogläge", () => {
+    render(<SimpleCheckin presentation="dialog" onCancel={() => undefined} />);
+
+    expect(screen.getByTestId("checkin-dialog-header")).toHaveTextContent("Logga just nu");
+    expect(screen.getByTestId("checkin-dialog-scroll")).toContainElement(
+      screen.getByText("Hur mycket ryms idag?"),
+    );
+    expect(screen.getByTestId("checkin-dialog-footer")).toContainElement(
+      screen.getByRole("button", { name: /^Logga energi & mående$/ }),
+    );
+    expect(screen.getByText("Två snabba frågor. Paceable gör resten.")).toHaveClass("sr-only");
+  });
+
+  it("behåller dialogens ifyllda val när hjälp och fördjupning öppnas", () => {
+    render(<SimpleCheckin presentation="dialog" />);
+    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
+    fireEvent.click(screen.getByRole("button", { name: "Bra" }));
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt dialogutkast" } });
+    fireEvent.click(screen.getByRole("button", { name: "Visa mer" }));
+    fireEvent.click(screen.getByRole("button", { name: /Sömn/ }));
+
+    expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Bra" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("textbox")).toHaveValue("Mitt dialogutkast");
+    expect(screen.getByRole("button", { name: /Sömn/ })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: /^Logga energi & mående$/ })).toBeVisible();
+  });
+
   it("låter användaren skriva fri text – men kräver den inte", () => {
     render(<SimpleCheckin />);
     const field = screen.getByPlaceholderText(/Sovit bara 4 timmar/i);

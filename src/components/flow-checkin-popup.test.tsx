@@ -6,7 +6,11 @@ import FlowCheckinPopup from "@/components/flow-checkin-popup";
 const SEEN_KEY = "myflove-flow-checkin-seen";
 
 vi.mock("@/components/simple-checkin", () => ({
-  default: () => <div data-testid="central-checkin">Logga energi &amp; mående</div>,
+  default: ({ presentation }: { presentation?: string }) => (
+    <div data-testid="central-checkin" data-presentation={presentation}>
+      Logga energi &amp; mående
+    </div>
+  ),
 }));
 
 vi.mock("@/hooks/use-quick-checkin", () => ({
@@ -38,6 +42,7 @@ describe("Flows mjuka check-in-popup", () => {
 
     await user.click(screen.getByRole("button", { name: /Logga hur jag mår/ }));
     expect(screen.getByTestId("central-checkin")).toBeInTheDocument();
+    expect(screen.getByTestId("central-checkin")).toHaveAttribute("data-presentation", "dialog");
   });
 
   it("visar kvällens text på kvällen", async () => {

@@ -66,7 +66,11 @@ export default function FlowCheckinPopup() {
     <Dialog open={open} onOpenChange={(v) => !v && close()}>
       <DialogContent
         data-testid="flow-checkin-popup"
-        className="max-h-[85vh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-3xl border-2 border-border/60 bg-card p-5 shadow-lifted sm:p-6"
+        className={
+          logging
+            ? "pace-ds h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)] max-h-[42rem] w-[calc(100%-1rem)] max-w-md grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden rounded-3xl border border-border/70 bg-card p-0 pb-0 shadow-lifted sm:p-0 sm:pb-0 [&>button]:right-3 [&>button]:top-[calc(0.5rem+env(safe-area-inset-top))] [&>button]:z-10 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:rounded-xl"
+            : "w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-3xl border-2 border-border/60 bg-card p-5 shadow-lifted sm:p-6"
+        }
       >
         {logging ? (
           <>
@@ -78,6 +82,8 @@ export default function FlowCheckinPopup() {
               source={copy.source}
               presetFactors={copy.presetFactors}
               onSaved={close}
+              onCancel={close}
+              presentation="dialog"
             />
           </>
         ) : (

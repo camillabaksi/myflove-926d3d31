@@ -32,11 +32,15 @@ export default function SimpleCheckin({
   className,
   source = "ma-bra",
   onSaved,
+  presentation = "card",
+  onCancel,
   presetFactors,
 }: {
   className?: string;
   source?: string;
   onSaved?: () => void;
+  presentation?: "card" | "dialog";
+  onCancel?: () => void;
   /** Förvald påverkansfaktor, t.ex. sömn på morgonen. Går alltid att ändra. */
   presetFactors?: string[];
 }) {
@@ -105,26 +109,8 @@ export default function SimpleCheckin({
 
   const ork = orkFromValue10(battery);
 
-  return (
-    <MyFloveBlock
-      title={t("Logga just nu")}
-      subtitle={t("Två snabba frågor. Paceable gör resten.")}
-      eyebrow={t("Logga")}
-      icon={Pencil}
-      tone="lavender"
-      surface="plain"
-      collapsible
-      collapseId="batteri::logga-just-nu"
-      data-testid="battery-log-form"
-      className={cn(paceFormSurface, "h-full", className)}
-      footer={
-        <p aria-live="polite" className="text-center text-xs text-muted-foreground">
-          {saved
-            ? t("Tack – din observation är sparad.")
-            : t("Logga så ofta du vill – varje sparning blir en egen observation i din dag.")}
-        </p>
-      }
-    >
+  const fields = (
+    <>
       <div className="space-y-2">
         <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
@@ -253,15 +239,100 @@ export default function SimpleCheckin({
           </div>
         )}
       </div>
+    </>
+  );
 
-      <Button
-        type="button"
-        onClick={save}
-        className="w-full gap-2 rounded-xl px-4 py-3 font-semibold"
+  const saveButton = (
+    <Button
+      type="button"
+      onClick={save}
+      className="min-h-11 w-full gap-2 rounded-xl px-4 py-2.5 font-semibold"
+    >
+      <Sparkles size={16} aria-hidden="true" />
+      {saved ? t("Tack") : t("Logga energi & mående")}
+    </Button>
+  );
+
+  const status = (
+    <p aria-live="polite" className="text-center text-xs leading-relaxed text-muted-foreground">
+      {saved
+        ? t("Tack – din observation är sparad.")
+        : t("Logga så ofta du vill – varje sparning blir en egen observation i din dag.")}
+    </p>
+  );
+
+  if (presentation === "dialog") {
+    return (
+      <div
+        data-testid="battery-log-form"
+        className={cn(
+          "pace-form",
+          "grid min-h-0 max-h-full grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden bg-card",
+          className,
+        )}
       >
-        <Sparkles size={16} aria-hidden="true" />
-        {saved ? t("Tack") : t("Logga energi & mående")}
-      </Button>
+        <header
+          data-testid="checkin-dialog-header"
+          className="border-b border-border/70 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] pr-16 sm:px-5 sm:pb-4 sm:pt-5 sm:pr-16"
+        >
+          <p className="text-xs font-semibold uppercase text-primary">{t("Logga")}</p>
+          <h2 className="mt-1 font-display text-xl font-bold leading-tight text-ink">
+            {t("Logga just nu")}
+          </h2>
+          <p className="sr-only">
+            {t("Två snabba frågor. Paceable gör resten.")}
+          </p>
+        </header>
+
+        <div
+          data-testid="checkin-dialog-scroll"
+          className="min-h-0 space-y-4 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4"
+        >
+          {fields}
+        </div>
+
+        <footer
+          data-testid="checkin-dialog-footer"
+          className="space-y-2 border-t border-border/70 bg-card px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 sm:px-5 sm:pb-5"
+        >
+          <div className="grid grid-cols-1 gap-1">
+            {saveButton}
+            {onCancel && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={onCancel}
+                className="min-h-11 w-full px-3 text-muted-foreground"
+              >
+                {t("Avbryt")}
+              </Button>
+            )}
+          </div>
+          <p aria-live="polite" className="text-center text-xs leading-relaxed text-muted-foreground">
+            {saved ? t("Tack – din observation är sparad.") : ""}
+          </p>
+        </footer>
+      </div>
+    );
+  }
+
+  return (
+    <MyFloveBlock
+      title={t("Logga just nu")}
+      subtitle={t("Två snabba frågor. Paceable gör resten.")}
+      eyebrow={t("Logga")}
+      icon={Pencil}
+      tone="lavender"
+      surface="plain"
+      collapsible
+      collapseId="batteri::logga-just-nu"
+      data-testid="battery-log-form"
+      className={cn(paceFormSurface, "h-full", className)}
+      footer={status}
+    >
+      {fields}
+
+      {saveButton}
     </MyFloveBlock>
   );
 }
