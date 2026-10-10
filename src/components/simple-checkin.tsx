@@ -246,10 +246,11 @@ export default function SimpleCheckin({
     <Button
       type="button"
       onClick={save}
+      aria-label={t("Logga energi & mående")}
       className="min-h-11 w-full gap-2 rounded-xl px-4 py-2.5 font-semibold"
     >
       <Sparkles size={16} aria-hidden="true" />
-      {saved ? t("Tack") : t("Logga energi & mående")}
+      {saved ? t("Tack") : t("Spara")}
     </Button>
   );
 
@@ -275,8 +276,8 @@ export default function SimpleCheckin({
           data-testid="checkin-dialog-header"
           className="border-b border-border/70 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] pr-16 sm:px-5 sm:pb-4 sm:pt-5 sm:pr-16"
         >
-          <p className="text-xs font-semibold uppercase text-primary">{t("Logga")}</p>
-          <h2 className="mt-1 font-display text-xl font-bold leading-tight text-ink">
+          <p className="sr-only">{t("Logga")}</p>
+          <h2 className="font-display text-xl font-bold leading-tight text-ink">
             {t("Logga just nu")}
           </h2>
           <p className="sr-only">
