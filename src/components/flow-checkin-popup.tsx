@@ -66,6 +66,11 @@ export default function FlowCheckinPopup() {
     <Dialog open={open} onOpenChange={(v) => !v && close()}>
       <DialogContent
         data-testid="flow-checkin-popup"
+        onOpenAutoFocus={(e) => {
+          // Fokusera dialogen själv, inte första "Varför?", så ingen fokusram syns permanent.
+          e.preventDefault();
+          (e.currentTarget as HTMLElement).focus();
+        }}
         className={
           logging
             ? "pace-ds h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)] max-h-[42rem] w-[calc(100%-1rem)] max-w-md grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden rounded-3xl border border-border/70 bg-card p-0 pb-0 shadow-lifted sm:p-0 sm:pb-0 [&>button]:right-3 [&>button]:top-[calc(0.5rem+env(safe-area-inset-top))] [&>button]:z-10 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:rounded-xl"

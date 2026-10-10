@@ -1,5 +1,24 @@
 import { useEffect, useState } from "react";
-import { Pencil, Sparkles, ChevronDown } from "lucide-react";
+import {
+  Pencil,
+  Sparkles,
+  ChevronDown,
+  BatteryMedium,
+  BatteryFull,
+  BatteryLow,
+  Heart,
+  Frown,
+  Annoyed,
+  Meh,
+  Smile,
+  Laugh,
+  Moon,
+  Wind,
+  Volume2,
+  Utensils,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import type { EnergyCategory } from "@/lib/energy-flow";
@@ -16,6 +35,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 
 const MOODS = MOOD_FACES;
+
+/* Systemoberoende ikoner i stället för emoji, som saknas i vissa Android-/WebView-typsnitt. */
+const MOOD_ICONS: Record<number, LucideIcon> = { 2: Frown, 4: Annoyed, 6: Meh, 8: Smile, 10: Laugh };
+const ORK_ICONS: Record<string, LucideIcon> = {
+  fullt: BatteryFull,
+  mellan: BatteryMedium,
+  lagt: BatteryLow,
+};
+const FACTOR_ICONS: Record<string, LucideIcon> = {
+  somn: Moon,
+  stress: Wind,
+  ljud: Volume2,
+  mat: Utensils,
+  socialt: Users,
+  kroppen: Heart,
+  annat: Sparkles,
+};
 
 const FACTORS: { id: string; labelSv: string; emoji: string; category: EnergyCategory }[] = [
   { id: "somn", labelSv: "Sömn", emoji: "😴", category: "somn" },
@@ -108,15 +144,18 @@ export default function SimpleCheckin({
   };
 
   const ork = orkFromValue10(battery);
+  // Formuläret har redan en fokuskontur; undvik dubbel ring runt "Varför?".
+  const whyClass = "focus-visible:ring-0 focus-visible:ring-offset-0";
 
   const fields = (
     <>
       <div className="space-y-2">
         <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <span aria-hidden>🔋</span> {t("Hur mycket ryms idag?")}
+            <BatteryMedium size={16} aria-hidden="true" className="mr-1 inline-block align-[-3px] text-primary" />
+            {t("Hur mycket ryms idag?")}
           </p>
-          <WhyHint appearance="inline" label={t("logga ork")}>
+          <WhyHint appearance="inline" label={t("logga ork")} className={whyClass}>
             {t("Du väljer bara ett ord – Paceable ser mönstren åt dig över tid.")}
           </WhyHint>
         </div>
@@ -135,9 +174,10 @@ export default function SimpleCheckin({
               }}
               className="pace-form-choice flex-1 gap-2 rounded-xl px-3 py-2.5"
             >
-              <span aria-hidden className="text-base">
-                {l.dot}
-              </span>
+              {(() => {
+                const Icon = ORK_ICONS[l.id] ?? BatteryMedium;
+                return <Icon size={18} aria-hidden="true" className="shrink-0" />;
+              })()}
               {t(l.label)}
             </Button>
           ))}
@@ -147,10 +187,11 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <span aria-hidden>💜</span> {t("Hur känns det just nu?")}{" "}
+            <Heart size={16} aria-hidden="true" className="mr-1 inline-block align-[-3px] text-primary" />
+            {t("Hur känns det just nu?")}{" "}
             <span className="font-normal text-muted-foreground">{t("(valfritt)")}</span>
           </p>
-          <WhyHint appearance="inline" label={t("logga mående")}>
+          <WhyHint appearance="inline" label={t("logga mående")} className={whyClass}>
             {t("Det hjälper Pace förstå om ditt mående och din ork brukar hänga ihop för dig.")}
           </WhyHint>
         </div>
@@ -169,8 +210,11 @@ export default function SimpleCheckin({
               }}
               className="pace-form-choice flex-col gap-1 rounded-xl"
             >
-              <span className="text-2xl">{m.emoji}</span>
-              <span className="text-[11px] text-muted-foreground">{t(m.label)}</span>
+              {(() => {
+                const Icon = MOOD_ICONS[m.score10] ?? Meh;
+                return <Icon size={24} aria-hidden="true" className="shrink-0" />;
+              })()}
+              <span className="text-xs text-muted-foreground">{t(m.label)}</span>
             </Button>
           ))}
         </div>
@@ -184,6 +228,11 @@ export default function SimpleCheckin({
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
+            onFocus={(e) => {
+              // Håll anteckningen synlig ovanför den fasta sparytan när tangentbordet öppnas.
+              const el = e.currentTarget;
+              window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+            }}
             rows={2}
             placeholder={t("T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”")}
             className="w-full resize-none rounded-xl border-input bg-card p-3 text-sm text-foreground"
@@ -228,9 +277,10 @@ export default function SimpleCheckin({
                     }
                     className="pace-form-choice rounded-xl px-3 py-1.5"
                   >
-                    <span aria-hidden className="mr-1">
-                      {f.emoji}
-                    </span>
+                    {(() => {
+                      const Icon = FACTOR_ICONS[f.id] ?? Sparkles;
+                      return <Icon size={15} aria-hidden="true" className="mr-1 shrink-0" />;
+                    })()}
                     {t(f.labelSv)}
                   </Button>
                 );
@@ -287,7 +337,7 @@ export default function SimpleCheckin({
 
         <div
           data-testid="checkin-dialog-scroll"
-          className="min-h-0 space-y-4 overflow-y-auto overscroll-contain px-4 py-3 sm:px-5 sm:py-4"
+          className="min-h-0 space-y-4 overflow-y-auto overscroll-contain scroll-pb-6 px-4 pb-6 pt-3 sm:px-5 sm:py-4"
         >
           {fields}
         </div>
@@ -296,7 +346,7 @@ export default function SimpleCheckin({
           data-testid="checkin-dialog-footer"
           className="space-y-2 border-t border-border/70 bg-card px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 sm:px-5 sm:pb-5"
         >
-          <div className="grid grid-cols-1 gap-1">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2">
             {saveButton}
             {onCancel && (
               <Button
