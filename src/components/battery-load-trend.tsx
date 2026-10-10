@@ -139,7 +139,7 @@ export default function BatteryLoadTrend() {
       id="insight-battery-load-trend"
       title="Batteri & faktisk tid"
       description="Din energi över tid, jämförd med den tid som faktiskt gått åt"
-      className="@container min-w-0 rounded-3xl border border-border bg-card p-[16px] font-sans sm:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
+      className="@container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
       headingClassName="font-semibold"
       data-testid="battery-load-trend"
     >

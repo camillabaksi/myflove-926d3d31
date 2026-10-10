@@ -118,16 +118,16 @@ function AreaStrategies({
       {INSIGHT_AREAS.filter((a) => areas.includes(a.id)).map((area) => {
         const isOpen = openArea === area.id;
         return (
-          <div key={area.id} className="rounded-3xl bg-card border border-border overflow-hidden">
+          <div key={area.id} className="@container min-w-0 overflow-hidden rounded-3xl border border-border bg-card">
             <button
               onClick={() => setOpenArea(isOpen ? null : area.id)}
-              className="flex w-full min-w-0 items-center gap-[12px] p-[16px] text-left sm:gap-[16px] sm:p-[20px]"
+              className="flex w-full min-w-0 flex-wrap items-center gap-[12px] p-[16px] text-left @[22rem]:flex-nowrap @[22rem]:gap-[16px] @[22rem]:p-[20px]"
               aria-expanded={isOpen}
             >
               <span className="shrink-0 text-2xl" aria-hidden>
                 {area.emoji}
               </span>
-              <span className="min-w-0 flex-1">
+              <span className="order-3 min-w-0 basis-full @[22rem]:order-none @[22rem]:flex-1 @[22rem]:basis-auto">
                 <span className="block font-medium">{area.label}</span>
                 {!isOpen && (
                   <span className="block text-sm text-muted-foreground">{area.intro}</span>
@@ -135,7 +135,7 @@ function AreaStrategies({
               </span>
               <ChevronRight
                 size={18}
-                className={`shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`}
+                className={`order-2 ml-auto shrink-0 text-muted-foreground transition-transform @[22rem]:order-none ${isOpen ? "rotate-90" : ""}`}
               />
             </button>
 
@@ -283,7 +283,7 @@ export default function InsightPage() {
   return (
     <Layout>
       <PacePage className="page-enter px-[16px]! pb-28 sm:px-[24px]! lg:px-[32px]!">
-        <PaceContent width="list" className="space-y-6">
+        <PaceContent width="list" className="@container space-y-6">
         <header className="min-w-0 space-y-4" data-testid="insight-header">
           <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-[8px] sm:flex sm:justify-between">
             <PaceButton
@@ -320,7 +320,7 @@ export default function InsightPage() {
 
         {!demoMode && (
           <section data-testid="insight-personal" className="space-y-5">
-            <div className="min-w-0 space-y-3 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]">
+            <div className="min-w-0 space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]">
               <p className="font-medium">Vad Flow lärt sig om dig</p>
               <p className="text-sm text-muted-foreground">{personal.label}</p>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -341,7 +341,7 @@ export default function InsightPage() {
                 title="Din vardag"
                 description="Det här har Paceable lärt sig av dina egna dagar"
                 data-testid="insight-everyday-patterns"
-                className="min-w-0 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]"
+                className="min-w-0 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]"
                 headingClassName="font-semibold"
               >
                 <ul className="mt-3 space-y-2">
@@ -387,7 +387,7 @@ export default function InsightPage() {
             ) : (
               <div
                 data-testid="insight-empty"
-                className="space-y-3 rounded-3xl border border-border bg-card p-[16px] sm:p-[20px]"
+                className="space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]"
               >
                 <p className="leading-relaxed">
                   Jag har inte lärt känna dig tillräckligt ännu. Använd MyFlove några dagar så
