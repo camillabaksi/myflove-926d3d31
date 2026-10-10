@@ -1,1 +1,1 @@
-Pace patterns opt in and wrap existing controls; never own storage or submission, avoiding behavioral drift. Reference uses sample state only; portals opt in separately to retain themes.
+Pace patterns opt in and wrap existing controls; never own storage or submission, avoiding behavioral drift. Semantic layout and presentation tokens remain inside `.pace-ds`; reference uses sample state only and portals opt in separately to retain themes.

@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 vi.stubGlobal("ResizeObserver", class { observe() {} unobserve() {} disconnect() {} });
 vi.mock("@/components/myflove/block", () => ({ MyFloveBlock: (props: { title: string; collapseId?: string }) => <div data-testid="block" data-collapse={props.collapseId}>{props.title}</div> }));
-import { PacePage, PaceField, PaceInput, PaceChoice, PaceHeading, PacePageTitle, PaceStatus, PaceBlock } from "./design-system";
+import { PacePage, PaceContent, PaceField, PaceInput, PaceChoice, PaceHeading, PacePageTitle, PaceStatus, PaceBlock, PaceInfoBlock } from "./design-system";
 import DesignSystemReference from "./design-system-reference";
 
 describe("Pace presentation system", () => {
@@ -19,6 +19,11 @@ describe("Pace presentation system", () => {
     expect(screen.getByText("Function").closest("[data-pace-design]")).toBeTruthy();
     expect(screen.getByText("Function").className).not.toContain("pace-editorial-role");
     expect(screen.getByText("Orientation").className).toContain("pace-editorial-role");
+  });
+  it("offers semantic content widths and information blocks without owning behavior", () => {
+    render(<PacePage><PaceContent width="reading"><PaceInfoBlock>Helpful context</PaceInfoBlock></PaceContent></PacePage>);
+    expect(screen.getByText("Helpful context").parentElement?.className).toContain("pace-ds-content-reading");
+    expect(screen.getByText("Helpful context").className).toContain("pace-ds-info");
   });
   it("connects labels/help/errors and preserves handlers", () => {
     const change = vi.fn();
