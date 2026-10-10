@@ -16,7 +16,7 @@ const goBack = vi.fn();
 vi.mock("@/hooks/use-smart-back", () => ({ useSmartBack: () => goBack }));
 
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, ...rest }: { children: React.ReactNode }) => <a {...rest}>{children}</a>,
+  Link: ({ children, ...rest }: { children: React.ReactNode }) => <a role="link" {...rest}>{children}</a>,
   useNavigate: () => vi.fn(),
   useRouter: () => ({
     history: { canGoBack: () => false, length: 1, back: vi.fn() },
