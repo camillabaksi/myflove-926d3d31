@@ -1,9 +1,9 @@
 # Roadmap
 ## Paceable designsystem – etapp 1 (2026-10-10)
-- [ ] Skapa en gemensam, opt-in designreferens med semantiska HSL-variabler för sidmarginaler, kort, informationsblock, kontroller, formulär, dialoger, typografi och responsivitet.
+- [x] Skapa en gemensam, opt-in designreferens med semantiska HSL-variabler för sidmarginaler, kort, informationsblock, kontroller, formulär, dialoger, typografi och responsivitet.
 - [ ] Bevara alla befintliga vyer; kontrollera referensen i ljust/mörkt tema, små mobilbredder och 200 % text utan nya beroenden eller publicering.
-- [ ] Dokumentera observerade senare kontrollpunkter för Logga just nu, MyFlove Insight samt diagrammen Energi och mående och Batteri & faktisk tid, utan att ändra dessa vyer.
-- [ ] Uppdatera båda changelogarna och redovisa exakt ändrade filer, skapade designvariabler och utförda kontroller. Stanna därefter för nytt godkännande.
+- [x] Dokumentera observerade senare kontrollpunkter för Logga just nu, MyFlove Insight samt diagrammen Energi och mående och Batteri & faktisk tid, utan att ändra dessa vyer.
+- [x] Uppdatera båda changelogarna och redovisa exakt ändrade filer, skapade designvariabler och utförda kontroller. Stanna därefter för nytt godkännande.
 
 ## Fullständig designinventering (2026-10-10)
 - [x] Läsgranska alla appvyer, offentliga sidor, delade komponenter, formulär, dialoger, diagram och navigation; skilj kodfynd från renderingsverifiering.

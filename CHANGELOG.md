@@ -1,3 +1,6 @@
+## 2026-10-10 – Paceable designsystem, etapp 1
+- Den fristående designreferensen beskriver och visar semantiska HSL-variabler för #512654, sidmarginaler, tre innehållsbredder, avstånd, kort, informationsblock, kontrollhöjd, formulär, dialoger och typografi i ljust/mörkt tema. Allt är opt-in under samma Pace-scope; befintliga vyer påverkas inte. Fyra kända mobilproblem är dokumenterade för senare separata etapper utan att deras komponenter ändrats. Inga nya beroenden och ingen publicering.
+
 ## 2026-10-10 – Appnamn Paceable
 - Synligt appnamn ändrat från MyFlove till Paceable på Android (strings.xml) och iOS (CFBundleDisplayName), samt appName i capacitor.config.ts. server.url pekar fortfarande på https://www.myflove.se tills lokal data migrerats säkert. Paket-ID (app.myflove.mobile) och Bundle ID (se.myflove.app) oförändrade. Inga byggen skapade.
 

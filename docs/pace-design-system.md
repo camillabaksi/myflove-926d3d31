@@ -18,14 +18,26 @@ Reference: `/designsystem` — isolated sample data, no navigation entry, noinde
 | Radius | `--pace-radius-control/card`: .75/1.5 rem |
 | Touch / icon | `--pace-touch`: 44px; `--pace-icon`: 1.125rem |
 
+### Etapp 1 – gemensam referens
+- Primär handling: `--pace-primary: hsl(295 38% 24%)` (**#512654**) med varm ljus text. Paletten i övrigt återanvänder befintliga HSL-variabler; inga globala färger ersätts.
+- Sidmarginal: `--pace-page-gutter` = 1rem mobil, 1.5rem från 640px och 2rem från 1024px.
+- Innehållsbredder: `--pace-content-reading` 42rem, `--pace-content-list` 52rem, `--pace-content-wide` 60rem.
+- Avstånd: `--pace-space-1/2/3/4/5/6/8/10` = 4/8/12/16/20/24/32/40px.
+- Kort: innehållsstyrd höjd, `--pace-card-padding` 1rem mobil och 1.25rem från 640px, `--pace-radius-card` 1.5rem och elevation 1.
+- Informationsblock: samma padding, `--pace-radius-block` 1.25rem, tonad befintlig accent, tunn kant och ingen skugga.
+- Kontroller: `--pace-control-visual` 2.5rem inom minst `--pace-touch` 44px faktisk tryckyta; naturlig radbrytning.
+- Dialog: upphöjd yta/elevation 2, 1.5rem radie, 44px stängningsmål, synlig fokusmarkering och innehåll som får brytas.
+
 Inter for function; Fraunces only via explicit editorial PaceHeading. No global heading conversion. Keep approved logos/stones and semantic calendar/destructive colors.
 
 ## Patterns
 Import from `@/components/paceable/design-system`:
 - PacePage: scope only, no navigation or main landmark.
+- PaceContent: `reading`, `list` eller `wide`; sätter bara responsiv maxbredd.
 - PaceHeading: level 1/2/3, explicit optional editorial role.
 - PacePageTitle: standalone explicit editorial h1; no page-wide scope or sibling-form restyling. First adopters: Settings, Anpassa, Notes and Relations. More remains unchanged.
 - PaceSection: unframed accessible section. PaceCard: framed tool/repeated item, no decorative nesting.
+- PaceInfoBlock: lugnt informationsunderlag utan upphöjning; inte ett kort i ett kort.
 - PaceBlock: original MyFloveBlock; retain collapseId and existing persistence behavior.
 - PaceButton/Input/Textarea: existing APIs/refs, scoped presentation.
 - PaceField: one actual control child; connects label/help/error and preserves descriptions/handlers. Select belongs outside, PaceSelectTrigger inside.
@@ -50,6 +62,16 @@ Controls need PacePage or pace-ds scope; portals supply their own. Reduced motio
 | Daily-flow, energy-flow, home, flowscore, history, mood, dump | Candidate forms, not proved visually inconsistent |
 | Family/visual-child-schedule | Authorized visual review before field-only conversion; privacy/semantic colors protected |
 | Calendar/capture/display-name dialogs | Explicitly protected, no conversion here |
+
+## Prioriterade kontrollpunkter för senare etapper – inte ändrade i etapp 1
+| Observerat problem | Orsakande presentation | Separat avgränsad framtida kontroll |
+| --- | --- | --- |
+| Dialogen **Logga just nu** blir för hög | `flow-checkin-popup.tsx` ger dialogen 85vh och scroll; `simple-checkin.tsx` lägger ett fullhöjdsblock, tre orkval, fem måendeval, anteckning och fördjupning i samma flöde. | Mät öppnad dialog på 320/360/390px och stora systemtexter. Justera endast mobilens höjdfördelning/sticky handling/kompakt valpresentation; bevara utkast, sparning och fältordning. |
+| **MyFlove Insight** har gammalt namn och fel mobilkomposition | Synlig titel finns i `pages/insight.tsx` och sidmetadata i `_app.insight.tsx`. Sidhuvudet har tillbakaikon, illustrationssymbol, titeltext och Hem-länk i en enda flexrad. | Egen copy-/headeretapp med godkänt synligt namn och två-radig mobilgrid. Ändra inte Insight-beräkningar, data eller destinationslänkar. |
+| **Energi & mående över tid** bryts över flera rader | `energy-mood-trend.tsx` använder sex kolumner på liten skärm för upp till åtta veckoperioder; resten hamnar på en ny rad. | Välj i separat diagrametapp mellan läsbar färre-periodsvy och horisontell periodrad. Behåll värden, perioder, kvalitativ text och tillgänglighetsbeskrivningar. |
+| **Batteri & faktisk tid** blir långt och svårt att tolka | `battery-load-trend.tsx` visar 28 dagar i fyra kolumner, 12 veckor/månader i samma karta, text inne i staplar samt två efterföljande sammanfattningsrutor. | Testa en kompakt, progressivt utfälld mobilpresentation. Behåll alla beräkningar, periodval och full information för tangentbord/skärmläsare. |
+
+Dessa fyra punkter är dokumentation, inte genomförande. Berörda vyer och komponenter är oförändrade i etapp 1.
 
 ## Checklist
 Screenshot actual form first; class names alone do not establish defects. Keep handlers/refs/IDs/collapse keys/options/tab order/permissions/submission unchanged. No autosave or draft resets. Check light/dark, 360–1440px, 200% text, long names/errors, keyboard/dialog restoration, AA contrast and 44×44 actions. No ellipsis/font reduction; retain calendar geometry. Run save/draft/full regressions; report screenshots and physical-device/assistive-tech limitations.
