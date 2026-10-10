@@ -1,3 +1,6 @@
+## 2026-10-10 – Insikter, endast etapp 2B
+- **Insikter** (2026-10-10): separat navigeringsrad, Fraunces-rubrik och Inter-undertitel med befintlig Paceable-listbredd och semantiska teman. Sidmetadata heter Insikter · Paceable. Navigation, data och diagramlogik bevarade; ingen publicering eller etapp 2C/2D.
+
 ## 2026-10-10 – Paceable designsystem, etapp 1
 - Den fristående designreferensen beskriver och visar semantiska HSL-variabler för #512654, sidmarginaler, tre innehållsbredder, avstånd, kort, informationsblock, kontrollhöjd, formulär, dialoger och typografi i ljust/mörkt tema. Allt är opt-in under samma Pace-scope; befintliga vyer påverkas inte. Fyra kända mobilproblem är dokumenterade för senare separata etapper utan att deras komponenter ändrats. Inga nya beroenden och ingen publicering.
 
