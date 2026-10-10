@@ -31,7 +31,7 @@ Month cells summarize unique existing areas (family context collapses to the exi
 Today uses the shared day-capacity source and authorized calendar projection for one contextual Flow observation, without requiring a decorative mascot; never infer new capacity, recovery benefits or free time from unknown durations.
 Pace v1 is a transient deterministic interpretation of registered Capacity, qualitative calendar Load, and verified time spacing; it never persists, estimates future Capacity, or writes to the legacy Capacity Mode, because Pace is guidance rather than a score or planning engine.
 Secondary pages share Paceable scope; Tasks uses local tokens. DailyFlowList is Today-only; Swedish dates capitalize only the first character.
-Forms opt in; preserve calendar/capture/name and primitives. PacePageTitle isolates headings from forms. See src/components/paceable/AGENTS.md.
+Forms opt in; preserve protected forms. Pace tokens stay under `.pace-ds`. See src/components/paceable/AGENTS.md.
 
 More reuses filtered navItems/groups and scoped styles. Compact expansions use full-width sibling lists to avoid stretching adjacent controls. Dismissal restores focus; navigation focuses content. Groups use essential filtering; search stays unfiltered.
 Today reuses one shell BrandLogo (mobile header/desktop sidebar) and page-scoped greeting styles to avoid duplicate branding; preserve full names, profile data and approved assets.
