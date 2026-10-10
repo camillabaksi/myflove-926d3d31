@@ -66,7 +66,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>
-      <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och faktisk tid" tabIndex={0} className="min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
+      <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och faktisk tid" tabIndex={0} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
       <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
@@ -90,7 +90,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             tabIndex={0}
             aria-label={description}
             title={description}
-            className="w-32 shrink-0 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="w-[min(8rem,calc(100cqw-12px))] shrink-0 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <div aria-hidden="true" className="relative mx-auto h-20 w-full max-w-14 overflow-hidden rounded-xl border border-border bg-background">
               {period.loadMinutes > 0 && <div
@@ -139,16 +139,16 @@ export default function BatteryLoadTrend() {
       id="insight-battery-load-trend"
       title="Batteri & faktisk tid"
       description="Din energi över tid, jämförd med den tid som faktiskt gått åt"
-      className="min-w-0 rounded-3xl border border-border bg-card p-4 font-sans sm:p-5 [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
+      className="@container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
       headingClassName="font-semibold"
       data-testid="battery-load-trend"
     >
       <div className="mt-4 space-y-4">
-        <div className="rounded-2xl bg-secondary/40 p-3 sm:flex sm:items-start sm:gap-3 sm:p-4">
+        <div className="min-w-0 rounded-2xl bg-secondary/40 p-[12px] @[30rem]:flex @[30rem]:items-start @[30rem]:gap-[12px] sm:p-[16px]">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <TrendIcon size={18} aria-hidden />
           </span>
-          <div className="mt-2 min-w-0 sm:mt-0">
+          <div className="mt-2 min-w-0 @[30rem]:mt-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Upp till 12 månader · {formatMinutes(trend.loadMinutes)} på {trend.loadOccasions}{" "}
@@ -158,16 +158,16 @@ export default function BatteryLoadTrend() {
         </div>
 
         <Tabs value={range} onValueChange={(value) => setRange(value as BatteryLoadRange)}>
-          <TabsList className="flex h-auto w-full flex-wrap rounded-2xl">
+          <TabsList className="grid h-auto w-full grid-cols-1 gap-1 rounded-2xl @[22rem]:grid-cols-3">
             {(Object.keys(RANGE_LABELS) as BatteryLoadRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="min-h-11 min-w-fit flex-1 whitespace-normal rounded-full">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full px-[8px]">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}
           </TabsList>
         </Tabs>
 
-        <div className="overflow-hidden rounded-2xl border border-border bg-background/60 p-3">
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background/60 p-[8px] sm:p-[12px]">
           <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-full bg-primary/75" /> Batteri
@@ -185,13 +185,13 @@ export default function BatteryLoadTrend() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
-          <div className="rounded-2xl bg-secondary/30 p-3">
+        <div className="grid grid-cols-1 gap-3 text-sm @[30rem]:grid-cols-2">
+          <div className="min-w-0 rounded-2xl bg-secondary/30 p-[12px]">
             <Clock size={16} className="mb-1 text-primary" aria-hidden />
             <p className="font-medium text-ink">{formatMinutes(trend.loadMinutes)}</p>
             <p className="text-xs text-muted-foreground">faktisk tid på aktiviteter</p>
           </div>
-          <div className="rounded-2xl bg-secondary/30 p-3">
+          <div className="min-w-0 rounded-2xl bg-secondary/30 p-[12px]">
             <Activity size={16} className="mb-1 text-primary" aria-hidden />
             <p className="font-medium text-ink">{trend.pairedOccasions} tillfällen</p>
             <p className="text-xs text-muted-foreground">med mätning före och efter</p>

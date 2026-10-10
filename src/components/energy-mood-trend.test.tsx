@@ -53,4 +53,9 @@ describe("Energi och mående – periodpresentation", () => {
     expect(fireEvent.keyDown(items[1] ?? first, { key: "ArrowDown" })).toBe(true);
     expect(scroll).toHaveBeenCalled();
   });
+  it("A1: periodbredden anpassas efter diagrammets synliga yta", () => {
+    render(<EnergyMoodPeriods periods={Array.from({ length: 8 }, (_, i) => ({ key: `p${i}`, label: `V${i}`, accessibleLabel: `Vecka ${i}`, energy: null, mood: null })) as unknown as TrendPeriod[]} />);
+    expect(screen.getByRole("region").className).toContain("@container");
+    expect(screen.getAllByRole("listitem")[0].className).toContain("w-[min(6rem,calc(100cqw-12px))]");
+  });
 });

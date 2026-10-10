@@ -64,4 +64,11 @@ describe("Batteri och faktisk tid – isolerad presentation", () => {
     for (const button of screen.getAllByRole("button")) expect(button.className).toContain("h-11");
     expect(screen.getAllByRole("listitem")[0]?.className).toContain("focus-visible:outline-ring");
   });
+  it("A1: staplar periodväljare och anpassar periodbredd efter diagrammets synliga yta", () => {
+    render(<BatteryLoadTrend />);
+    expect(screen.getByRole("tablist").className).toContain("grid-cols-1");
+    expect(screen.getByRole("tablist").className).toContain("@[22rem]:grid-cols-3");
+    expect(screen.getByRole("region").className).toContain("@container");
+    expect(screen.getAllByRole("listitem")[0].className).toContain("w-[min(8rem,calc(100cqw-12px))]");
+  });
 });
