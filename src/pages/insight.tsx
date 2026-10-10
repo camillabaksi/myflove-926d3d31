@@ -282,10 +282,10 @@ export default function InsightPage() {
 
   return (
     <Layout>
-      <PacePage className="page-enter px-[16px] pb-28 sm:px-[24px] lg:px-[32px]">
+      <PacePage className="page-enter px-[16px]! pb-28 sm:px-[24px]! lg:px-[32px]!">
         <PaceContent width="list" className="space-y-6">
         <header className="min-w-0 space-y-4" data-testid="insight-header">
-          <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-2 sm:flex sm:justify-between">
+          <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-[8px] sm:flex sm:justify-between">
             <PaceButton
               type="button"
               variant="ghost"
@@ -309,7 +309,7 @@ export default function InsightPage() {
               <p className="font-sans text-sm leading-relaxed text-muted-foreground">
                 Förstå behov. Hitta strategier. Gör vardagen enklare.
               </p>
-              <div className="mt-2">
+              <div className="mt-2 [&_[role=region]]:max-w-full">
                 <WhyHint label="insikter">
                   När du loggar över tid kan Flow hjälpa dig upptäcka vad som brukar ge eller ta
                   energi.
