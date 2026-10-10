@@ -2,7 +2,7 @@ import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { useLocalStorage } from "@/lib/storage";
 import { supabase } from "@/integrations/supabase/client";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
-import { isActiveOwner } from "@/lib/account-scope";
+import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
 import {
   SECURE_UNLOCK_EVENT,
   isSensitiveKey,
@@ -53,24 +53,31 @@ export const CLOUD_KEYS_REGISTRY = "myflove-cloud-keys";
 
 let cachedUser: { user: User | null } | null = null;
 let inflightUser: Promise<User | null> | null = null;
+let authGeneration = 0;
+let sessionUserId: string | null | undefined;
 
 /** Den inloggade användaren – men bara om enhetens data tillhör hen. */
 export async function getSyncUser(): Promise<User | null> {
+  const generation = authGeneration;
   const ownerChecked = (u: User | null) => (u && isActiveOwner(u.id) ? u : null);
   if (cachedUser) return ownerChecked(cachedUser.user);
   if (!inflightUser) {
-    inflightUser = supabase.auth
+    const pending = supabase.auth
       .getUser()
       .then(({ data }) => {
+        if (generation !== authGeneration) return null;
         cachedUser = { user: data.user ?? null };
         return cachedUser.user;
       })
       .catch(() => null)
       .finally(() => {
-        inflightUser = null;
+        // Ett gammalt svar får inte tömma nästa sessions pågående auth-anrop.
+        if (inflightUser === pending) inflightUser = null;
       });
+    inflightUser = pending;
   }
-  return ownerChecked(await inflightUser);
+  const user = await inflightUser;
+  return generation === authGeneration ? ownerChecked(user) : null;
 }
 
 // Delat, synkront värde per nyckel så att två snabba uppdateringar från olika
@@ -79,8 +86,13 @@ const sharedValues = new Map<string, unknown>();
 const initialValues = new Map<string, unknown>();
 const revisions = new Map<string, number>();
 
-supabase.auth.onAuthStateChange(() => {
+supabase.auth.onAuthStateChange((event, session) => {
+  const uid = session?.user.id ?? null;
+  // En ny session för samma konto är också ett byte; tokenförnyelse är det inte.
+  if (event === "SIGNED_OUT" || uid !== sessionUserId) authGeneration++;
+  sessionUserId = uid;
   cachedUser = null;
+  inflightUser = null;
   sharedValues.clear();
 });
 
@@ -302,121 +314,136 @@ function clearRetry(key: string) {
 }
 
 async function syncOnce(key: string): Promise<void> {
-  if (isSensitiveKey(key)) {
-    await unlockSecureLocal();
-    // Krypterat men oläsbart just nu: skicka aldrig ett "tomt" värde.
-    const raw = lsGet(key);
-    if (raw !== null && raw.startsWith("enc:v1:") && secureGetItem(key) === null) {
-      setKeyStatus(key, "pending");
-      return;
-    }
-  }
-  const user = await getSyncUser();
-  if (!user) {
-    if (hasUnsyncedCloudData(key)) setKeyStatus(key, "pending");
-    return;
-  }
-
-  for (let attempt = 0; attempt < 4; attempt++) {
-    const { data, error } = await supabase
-      .from("user_kv")
-      .select("value, updated_at")
-      .eq("user_id", user.id)
-      .eq("key", key)
-      .maybeSingle();
-    if (!isActiveOwner(user.id)) return; // kontot byttes under tiden
-    if (error) {
-      setKeyStatus(key, hasUnsyncedCloudData(key) ? "error" : "saved");
-      if (hasUnsyncedCloudData(key)) scheduleRetry(key);
-      return;
-    }
-    const row = data as Row | null;
-    const unsynced = hasUnsyncedCloudData(key);
-
-    if (!unsynced) {
-      // Inget lokalt att skicka: molnet är sanningen.
-      if (row) {
-        const cloudValue = withoutRemoved(key, row.value);
-        if (JSON.stringify(cloudValue) !== JSON.stringify(currentValue(key))) {
-          writeLocal(key, cloudValue);
-        }
-        const ts = new Date(row.updated_at).getTime();
-        markConfirmed(key, Math.max(ts, readMeta(key, META_SUFFIX)), cloudValue);
+  const owner = getDataOwner();
+  const generation = authGeneration;
+  const isCurrent = () => generation === authGeneration && isActiveOwner(owner);
+  if (!owner) return;
+  try {
+    if (isSensitiveKey(key)) {
+      await unlockSecureLocal();
+      if (!isCurrent()) return;
+      // Krypterat men oläsbart just nu: skicka aldrig ett "tomt" värde.
+      const raw = lsGet(key);
+      if (raw !== null && raw.startsWith("enc:v1:") && secureGetItem(key) === null) {
+        setKeyStatus(key, "pending");
+        return;
       }
-      clearRetry(key);
-      setKeyStatus(key, "saved");
+    }
+    const user = await getSyncUser();
+    if (!isCurrent()) return;
+    if (!user) {
+      if (hasUnsyncedCloudData(key)) setKeyStatus(key, "pending");
       return;
     }
 
-    const revision = revisions.get(key) ?? 0;
-    const editStamp = readMeta(key, META_SUFFIX) || Date.now();
-    const local = currentValue(key);
-
-    if (!row && isEmptyValue(key, local)) {
-      markConfirmed(key, editStamp, local);
-      setKeyStatus(key, "saved");
-      return;
-    }
-
-    const merged = row
-      ? mergeSyncValues({
-          base: readBase(key),
-          local,
-          cloud: row.value,
-          removed: new Set(readRemoved(key)),
-          localUpdatedAt: editStamp,
-          cloudUpdatedAt: new Date(row.updated_at).getTime(),
-        })
-      : local;
-
-    let writeError: { code?: string } | null = null;
-    let wrote = false;
-    if (row) {
-      const res = await supabase
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const { data, error } = await supabase
         .from("user_kv")
-        .update({ value: merged as never })
+        .select("value, updated_at")
         .eq("user_id", user.id)
         .eq("key", key)
-        .eq("updated_at", row.updated_at)
-        .select("updated_at");
-      writeError = res.error;
-      wrote = !res.error && Array.isArray(res.data) && res.data.length > 0;
-    } else {
-      const res = await supabase
-        .from("user_kv")
-        .insert({ user_id: user.id, key, value: merged as never })
-        .select("updated_at");
-      writeError = res.error;
-      wrote = !res.error;
-      if (res.error?.code === "23505") {
-        writeError = null; // en annan enhet hann först – läs om och slå ihop
+        .maybeSingle();
+      if (!isCurrent() || user.id !== owner) return;
+      if (error) {
+        setKeyStatus(key, hasUnsyncedCloudData(key) ? "error" : "saved");
+        if (hasUnsyncedCloudData(key)) scheduleRetry(key);
+        return;
       }
-    }
+      const row = data as Row | null;
+      const unsynced = hasUnsyncedCloudData(key);
 
-    if (writeError) {
-      setKeyStatus(key, "error");
-      scheduleRetry(key);
+      if (!unsynced) {
+        // Inget lokalt att skicka: molnet är sanningen.
+        if (row) {
+          const cloudValue = withoutRemoved(key, row.value);
+          if (JSON.stringify(cloudValue) !== JSON.stringify(currentValue(key))) {
+            writeLocal(key, cloudValue);
+          }
+          const ts = new Date(row.updated_at).getTime();
+          markConfirmed(key, Math.max(ts, readMeta(key, META_SUFFIX)), cloudValue);
+        }
+        clearRetry(key);
+        setKeyStatus(key, "saved");
+        return;
+      }
+
+      const revision = revisions.get(key) ?? 0;
+      const editStamp = readMeta(key, META_SUFFIX) || Date.now();
+      const local = currentValue(key);
+
+      if (!row && isEmptyValue(key, local)) {
+        markConfirmed(key, editStamp, local);
+        setKeyStatus(key, "saved");
+        return;
+      }
+
+      const merged = row
+        ? mergeSyncValues({
+            base: readBase(key),
+            local,
+            cloud: row.value,
+            removed: new Set(readRemoved(key)),
+            localUpdatedAt: editStamp,
+            cloudUpdatedAt: new Date(row.updated_at).getTime(),
+          })
+        : local;
+
+      let writeError: { code?: string } | null = null;
+      let wrote = false;
+      if (row) {
+        const res = await supabase
+          .from("user_kv")
+          .update({ value: merged as never })
+          .eq("user_id", user.id)
+          .eq("key", key)
+          .eq("updated_at", row.updated_at)
+          .select("updated_at");
+        writeError = res.error;
+        wrote = !res.error && Array.isArray(res.data) && res.data.length > 0;
+      } else {
+        const res = await supabase
+          .from("user_kv")
+          .insert({ user_id: user.id, key, value: merged as never })
+          .select("updated_at");
+        writeError = res.error;
+        wrote = !res.error;
+        if (res.error?.code === "23505") {
+          writeError = null; // en annan enhet hann först – läs om och slå ihop
+        }
+      }
+
+      // Även skrivningen är asynkron. Ett sent svar tillhör sin ursprungliga
+      // session och får aldrig uppdatera nästa kontos värde, metadata eller status.
+      if (!isCurrent()) return;
+      if (writeError) {
+        setKeyStatus(key, "error");
+        scheduleRetry(key);
+        return;
+      }
+      if (!wrote) continue; // molnet ändrades mellan läsning och skrivning
+
+      // Skrivet. Visa det sammanslagna värdet om ingen ny ändring kommit under tiden.
+      if ((revisions.get(key) ?? 0) === revision) {
+        if (JSON.stringify(merged) !== JSON.stringify(local)) writeLocal(key, merged);
+        markConfirmed(key, editStamp, merged);
+        clearRetry(key);
+        setKeyStatus(key, "saved");
+      } else {
+        // Nya ändringar under skrivningen: basen är det som nu ligger i molnet.
+        lsSet(key + BASE_SUFFIX, JSON.stringify(snapshotBase(merged)));
+        lsSet(key + SYNCED_SUFFIX, String(editStamp));
+        rerun.add(key);
+      }
       return;
     }
-    if (!wrote) continue; // molnet ändrades mellan läsning och skrivning
-
-    // Skrivet. Visa det sammanslagna värdet om ingen ny ändring kommit under tiden.
-    if ((revisions.get(key) ?? 0) === revision) {
-      if (JSON.stringify(merged) !== JSON.stringify(local)) writeLocal(key, merged);
-      markConfirmed(key, editStamp, merged);
-      clearRetry(key);
-      setKeyStatus(key, "saved");
-    } else {
-      // Nya ändringar under skrivningen: basen är det som nu ligger i molnet.
-      lsSet(key + BASE_SUFFIX, JSON.stringify(snapshotBase(merged)));
-      lsSet(key + SYNCED_SUFFIX, String(editStamp));
-      rerun.add(key);
-    }
-    return;
+    // Fyra krockar i rad: försök igen lite senare.
+    setKeyStatus(key, "pending");
+    scheduleRetry(key);
+  } catch {
+    if (!isCurrent()) return;
+    setKeyStatus(key, "error");
+    scheduleRetry(key);
   }
-  // Fyra krockar i rad: försök igen lite senare.
-  setKeyStatus(key, "pending");
-  scheduleRetry(key);
 }
 
 /** Synkar en nyckel nu (eller direkt efter pågående körning). */
@@ -437,9 +464,6 @@ export function requestSync(key: string): Promise<void> {
         rerun.delete(key);
         await syncOnce(key);
       } while (rerun.has(key));
-    } catch {
-      setKeyStatus(key, "error");
-      scheduleRetry(key);
     } finally {
       running.delete(key);
     }
@@ -545,6 +569,9 @@ export function __resetCloudSync(): void {
   revisions.clear();
   aggregate = "saved";
   cachedUser = null;
+  inflightUser = null;
+  authGeneration++;
+  sessionUserId = undefined;
 }
 
 /** Endast för tester: registrera en nyckel utan React. */
