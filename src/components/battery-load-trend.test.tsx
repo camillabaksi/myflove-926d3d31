@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { ReactNode } from "react";
-import type { BatteryLoadPeriod } from "@/lib/battery-load-trend";
 
 const fixtures = vi.hoisted(() => {
   const make = (count: number) => Array.from({ length: count }, (_, index) => ({
