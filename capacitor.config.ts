@@ -11,7 +11,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  */
 const config: CapacitorConfig = {
   appId: "se.myflove.app",
-  appName: "MyFlove",
+  appName: "Paceable",
   webDir: "mobile-webroot",
   server: {
     url: "https://www.myflove.se",

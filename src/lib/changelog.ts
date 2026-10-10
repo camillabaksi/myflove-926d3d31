@@ -6,9 +6,10 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "MyFlove Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-09";
+export const CHANGELOG_UPDATED = "2026-10-10";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  { title: "Appnamn Paceable", items: ["Appnamn (2026-10-10): synligt appnamn ändrat från MyFlove till Paceable på Android och iOS. Appen använder fortfarande www.myflove.se internt tills lokal data migrerats säkert. Paket-ID, Bundle ID, lagring, kryptering, inloggning och synk oförändrade. Inga byggen skapade."] },
   { title: "Appikoner för iPhone och Android", items: ["Appikoner (2026-10-09): native-projektens ikoner ersatta med godkända Paceable-ikoner. Paket-ID, appnamn och funktioner oförändrade; nytt appbygge krävs."] },
   { title: "Rutiner, Påminnelser och Inköp", items: ["Vardagsverktyg (2026-10-09): Rutiner, Påminnelser och Inköp får samma kompakta knappar, val och rubriker som Mitt batteri och Återhämtning, med minst 44 px tryckyta. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ingen publicering."] },
   { title: "Hälsa & välmående", items: ["Hälsa & välmående (2026-10-09): Mitt batteri, Återhämtning, Mående och Energikarta får samma lugna plommonrubriker och kortkanter som Min plats. Pausval, Starta, energinivåer och måendeval kompaktare med minst 44 px tryckyta. Data, loggar, paus och diagram oförändrade. Ingen publicering."] },
