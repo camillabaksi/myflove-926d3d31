@@ -46,7 +46,7 @@ export default function WhyHint({ children, label, className, appearance = "chip
           id={contentId}
           role="region"
           aria-label={label ? `Förklaring: ${label}` : "Förklaring"}
-          className="mt-1 block w-64 max-w-full rounded-2xl border border-border/60 bg-card px-3 py-2 text-left text-sm leading-relaxed text-muted-foreground"
+          className="mt-1 block w-64 max-w-[calc(100vw-3rem)] rounded-2xl border border-border/60 bg-card px-3 py-2 text-left text-sm leading-relaxed text-muted-foreground"
           onClick={(e) => e.stopPropagation()}
         >
           {children}
