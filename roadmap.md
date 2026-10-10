@@ -1,7 +1,7 @@
 # Roadmap
 ## Fullständig designinventering (2026-10-10)
-- [ ] Läsgranska alla appvyer, offentliga sidor, delade komponenter, formulär, dialoger, diagram och navigation; skilj kodfynd från renderingsverifiering.
-- [ ] Redovisa avvikelser, gemensam målbild, återanvändning och riskbedömd etappplan. Ingen appkod-, native- eller publiceringsändring.
+- [x] Läsgranska alla appvyer, offentliga sidor, delade komponenter, formulär, dialoger, diagram och navigation; skilj kodfynd från renderingsverifiering.
+- [x] Redovisa avvikelser, gemensam målbild, återanvändning och riskbedömd etappplan. PDF och sökbara bilagor levereras; nya offentliga kontroller och referens-QA, kontovyer endast kod-/historisk inventering. Ingen appkod-, native- eller publiceringsändring.
 - [ ] Genomförande inväntar uttryckligt godkännande av avgränsad etapp.
 ## Rutiner, Påminnelser och Inköp (2026-10-09)
 - [x] Kompaktare sidknappar, val och rubriker med 44 px tryckyta. Ingen publicering.
