@@ -282,21 +282,21 @@ export default function InsightPage() {
 
   return (
     <Layout>
-      <PacePage className="page-enter pb-28">
+      <PacePage className="page-enter px-[16px] pb-28 sm:px-[24px] lg:px-[32px]">
         <PaceContent width="list" className="space-y-6">
         <header className="min-w-0 space-y-4" data-testid="insight-header">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:flex sm:justify-between">
+          <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-2 sm:flex sm:justify-between">
             <PaceButton
               type="button"
               variant="ghost"
               size="icon"
               onClick={goBack}
               aria-label="Tillbaka"
-              className="shrink-0 rounded-full text-foreground"
+              className="min-w-[44px] w-[44px] shrink-0 rounded-full text-foreground"
             >
               <ArrowLeft size={18} strokeWidth={2.2} />
             </PaceButton>
-            <PaceButton asChild variant="ghost" className="min-w-11 shrink-0 rounded-full text-foreground">
+            <PaceButton asChild variant="ghost" className="min-w-[44px] justify-self-end gap-1 rounded-full px-2 text-foreground">
               <Link to="/hem" aria-label="Till hem">
                 <Home size={14} /> Hem
               </Link>
