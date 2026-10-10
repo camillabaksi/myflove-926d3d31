@@ -47,10 +47,10 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
   return (
     <div className="min-w-0 space-y-2">
       <div className="flex justify-end gap-2">
-        <Button type="button" size="icon" variant="ghost" aria-label="Tidigare perioder" aria-controls={timelineId} disabled={edges.start} onClick={() => move(-1)}>
+        <Button type="button" size="icon" variant="ghost" title="Tidigare perioder" aria-label="Tidigare perioder" aria-controls={timelineId} disabled={edges.start} onClick={() => move(-1)}>
           <ArrowLeft aria-hidden="true" />
         </Button>
-        <Button type="button" size="icon" variant="ghost" aria-label="Senare perioder" aria-controls={timelineId} disabled={edges.end} onClick={() => move(1)}>
+        <Button type="button" size="icon" variant="ghost" title="Senare perioder" aria-label="Senare perioder" aria-controls={timelineId} disabled={edges.end} onClick={() => move(1)}>
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>
@@ -84,13 +84,13 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
               {period.energy != null && <span
                 aria-hidden="true"
                 data-series="energy"
-                className="w-1/2 rounded-md bg-primary/70 transition-[height] duration-500"
+                className="w-1/2 rounded-md bg-primary/70 transition-[height] duration-500 motion-reduce:transition-none"
                 style={{ height: `${Math.max(6, period.energy)}%` }}
               />}
               {period.mood != null && <span
                 aria-hidden="true"
                 data-series="mood"
-                className="w-1/2 rounded-md bg-accent/70 transition-[height] duration-500"
+                className="w-1/2 rounded-md bg-accent/70 transition-[height] duration-500 motion-reduce:transition-none"
                 style={{ height: `${Math.max(6, period.mood)}%` }}
               />}
             </div>
@@ -135,11 +135,11 @@ export default function EnergyMoodTrend() {
       data-testid="energy-mood-trend"
     >
       <div className="mt-4 space-y-4">
-        <div className="flex items-start gap-3 rounded-2xl bg-secondary/40 p-4">
+        <div className="rounded-2xl bg-secondary/40 p-3 sm:flex sm:items-start sm:gap-3 sm:p-4">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <TrendIcon size={18} aria-hidden />
           </span>
-          <div className="min-w-0">
+          <div className="mt-2 min-w-0 sm:mt-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Bygger på dina egna energisvar och måendekollar.

@@ -32,7 +32,7 @@ describe("Energi och mående – periodpresentation", () => {
   it("gör datum och båda värdena åtkomliga utan att förlita sig på färger", () => {
     render(<EnergyMoodPeriods periods={periods} />);
     expect(screen.getByRole("listitem", { name: "Vecka 3: energi 70 procent, mående 50 procent" })).toBeTruthy();
-    const item = screen.getByRole("listitem", { name: "Vecka 3: energi 70 procent, månde 50 procent".replace("månde", "mående") });
+    const item = screen.getByRole("listitem", { name: "Vecka 3: energi 70 procent, mående 50 procent" });
     expect(item.textContent).toContain("Energi 70 %");
     expect(item.textContent).toContain("Mående 50 %");
   });
