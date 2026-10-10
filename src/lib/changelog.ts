@@ -9,6 +9,7 @@ export const CHANGELOG_INTRO =
 export const CHANGELOG_UPDATED = "2026-10-10";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  { title: "Paceable designsystem – etapp 1", items: ["Designreferens (2026-10-10): semantiska HSL-variabler för Paceables befintliga #512654, sidmarginaler, innehållsbredder, kort, informationsblock, kontroller, formulär, dialoger och typografi. Allt är explicit opt-in och påverkar inte befintliga vyer. Fyra kända mobilproblem dokumenterade för senare avgränsade etapper; ingen publicering."] },
   { title: "Appnamn Paceable", items: ["Appnamn (2026-10-10): synligt appnamn ändrat från MyFlove till Paceable på Android och iOS. Appen använder fortfarande www.myflove.se internt tills lokal data migrerats säkert. Paket-ID, Bundle ID, lagring, kryptering, inloggning och synk oförändrade. Inga byggen skapade."] },
   { title: "Appikoner för iPhone och Android", items: ["Appikoner (2026-10-09): native-projektens ikoner ersatta med godkända Paceable-ikoner. Paket-ID, appnamn och funktioner oförändrade; nytt appbygge krävs."] },
   { title: "Rutiner, Påminnelser och Inköp", items: ["Vardagsverktyg (2026-10-09): Rutiner, Påminnelser och Inköp får samma kompakta knappar, val och rubriker som Mitt batteri och Återhämtning, med minst 44 px tryckyta. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ingen publicering."] },

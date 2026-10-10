@@ -16,6 +16,10 @@ export function PacePage({ className, children, ...props }: React.ComponentProps
   return <div {...props} data-pace-design="true" className={cn("pace-ds pace-ds-page", className)}>{children}</div>;
 }
 
+export function PaceContent({ width = "wide", className, ...props }: React.ComponentProps<"div"> & { width?: "reading" | "list" | "wide" }) {
+  return <div {...props} className={cn("pace-ds-content", `pace-ds-content-${width}`, className)} />;
+}
+
 export function PaceHeading({ editorial = false, level = 1, className, ...props }: React.HTMLAttributes<HTMLHeadingElement> & { editorial?: boolean; level?: 1 | 2 | 3 }) {
   const Tag = level === 1 ? "h1" : level === 2 ? "h2" : "h3";
   return <Tag {...props} className={cn("pace-ds-heading", `pace-ds-heading-${level}`, editorial && "pace-editorial-role", className)} />;
@@ -33,6 +37,10 @@ export function PaceSection({ title, children, className, ...props }: Omit<React
 
 export function PaceCard({ className, ...props }: React.ComponentProps<"div">) {
   return <div {...props} className={cn("pace-ds-card", className)} />;
+}
+
+export function PaceInfoBlock({ className, ...props }: React.ComponentProps<"div">) {
+  return <div {...props} className={cn("pace-ds-info", className)} />;
 }
 
 /** Retains the original component, collapse key and stored collapse behavior. */
