@@ -363,7 +363,13 @@ export default function SimpleCheckin({
               </Button>
             )}
           </div>
-          <p aria-live="polite" className="text-center text-xs leading-relaxed text-muted-foreground">
+          <p
+            aria-live="polite"
+            className={cn(
+              "text-center text-xs leading-relaxed text-muted-foreground",
+              !saved && "hidden",
+            )}
+          >
             {saved ? t("Tack – din observation är sparad.") : ""}
           </p>
         </footer>
