@@ -324,11 +324,15 @@ export default function SimpleCheckin({
       >
         <header
           data-testid="checkin-dialog-header"
-          className="border-b border-border/70 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] pr-16 sm:px-5 sm:pb-4 sm:pt-5 sm:pr-16"
+          className="border-b border-border/70 px-4 pb-2 pt-[calc(0.5rem+env(safe-area-inset-top))] pr-14 sm:px-5 sm:pb-3 sm:pt-4 sm:pr-16"
         >
-          <p className="sr-only">{t("Logga")}</p>
-          <h2 className="font-display text-xl font-bold leading-tight text-ink">
-            {t("Logga just nu")}
+          {/* Kort synlig rubrik på trånga skärmar; det fullständiga namnet finns alltid för skärmläsare. */}
+          <h2
+            aria-label={t("Logga just nu")}
+            className="font-display text-lg font-bold leading-tight text-ink sm:text-xl"
+          >
+            <span aria-hidden="true" className="sm:hidden">{t("Logga")}</span>
+            <span aria-hidden="true" className="hidden sm:inline">{t("Logga just nu")}</span>
           </h2>
           <p className="sr-only">
             {t("Två snabba frågor. Paceable gör resten.")}
@@ -344,7 +348,7 @@ export default function SimpleCheckin({
 
         <footer
           data-testid="checkin-dialog-footer"
-          className="space-y-2 border-t border-border/70 bg-card px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 sm:px-5 sm:pb-5"
+          className="space-y-1.5 border-t border-border/70 bg-card px-4 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 sm:px-5 sm:pb-4 sm:pt-3"
         >
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2">
             {saveButton}
