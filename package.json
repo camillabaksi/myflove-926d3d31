@@ -20,7 +20,7 @@
     "@ai-sdk/openai-compatible": "^3.0.5",
     "@ai-sdk/react": "^4.0.17",
     "@block65/webcrypto-web-push": "^1.0.2",
-    "@capacitor/android": "^8.4.2",
+    "@capacitor/android": "^8.5.1",
     "@capacitor/app": "^8.1.1",
     "@capacitor/cli": "^8.4.2",
     "@capacitor/core": "^8.4.2",
