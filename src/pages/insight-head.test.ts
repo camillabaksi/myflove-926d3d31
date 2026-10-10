@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 describe("Insikters sidmetadata", () => {
   it("använder Paceable och bevarar sökväg, demo och indexeringsinställning", () => {
-    const route = readFileSync(new URL("../routes/_app.insight.tsx", import.meta.url), "utf8");
+    const route = readFileSync("src/routes/_app.insight.tsx", "utf8");
     expect(route).toContain('createFileRoute("/_app/insight")');
     expect(route).toContain('{ title: "Insikter · Paceable" }');
     expect(route).toContain('property: "og:title", content: "Insikter · Paceable"');
