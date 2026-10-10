@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { authorizePushTick } from "@/lib/push-tick-auth.server";
 
-// Cron-hit endpoint. Called every ~5 minutes by pg_cron with an `apikey`
-// header equal to the Supabase publishable key. We use `supabaseAdmin` to
+// Cron-hit endpoint. Called by pg_cron with a private Bearer secret from
+// Supabase Vault (ops/bootstrap-push-tick-auth.sql). We use `supabaseAdmin` to
 // scan due reminders across all users, send Web Push, and mark them
 // delivered. Weather morning-nudge is generated inline here per user.
 
@@ -9,11 +10,8 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apikey = request.headers.get("apikey");
-        const expected = process.env.SUPABASE_PUBLISHABLE_KEY;
-        if (!expected || apikey !== expected) {
-          return new Response("Unauthorized", { status: 401 });
-        }
+        const rejected = await authorizePushTick(request);
+        if (rejected) return rejected;
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { sendPushTo } = await import("@/lib/push.server");
@@ -64,13 +62,17 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           for (const r of reminders) {
             let anyOk = false;
             for (const s of subs) {
-              const res = await sendPushTo(s, {
-                title: r.title,
-                body: r.body,
-                url: r.url ?? "/idag",
-                tag: `${r.kind}-${r.id}`,
-                itemKey: r.client_key,
-              }, { userId, source: `reminder:${r.kind}`, ref: r.client_key });
+              const res = await sendPushTo(
+                s,
+                {
+                  title: r.title,
+                  body: r.body,
+                  url: r.url ?? "/idag",
+                  tag: `${r.kind}-${r.id}`,
+                  itemKey: r.client_key,
+                },
+                { userId, source: `reminder:${r.kind}`, ref: r.client_key },
+              );
               if (res === "ok") {
                 anyOk = true;
                 sentCount++;
@@ -131,12 +133,16 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
                 .select("endpoint, p256dh, auth")
                 .eq("user_id", p.user_id);
               for (const s of subs ?? []) {
-                const r = await sendPushTo(s, {
-                  title: "God morgon 🌿",
-                  body: msg,
-                  url: "/idag",
-                  tag: `weather-${now.toDateString()}`,
-                }, { userId: p.user_id, source: "weather" });
+                const r = await sendPushTo(
+                  s,
+                  {
+                    title: "God morgon 🌿",
+                    body: msg,
+                    url: "/idag",
+                    tag: `weather-${now.toDateString()}`,
+                  },
+                  { userId: p.user_id, source: "weather" },
+                );
                 if (r === "ok") sentCount++;
                 if (r === "gone") {
                   await supabaseAdmin
@@ -204,12 +210,16 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             .select("endpoint, p256dh, auth")
             .eq("user_id", p.user_id);
           for (const s of subs ?? []) {
-            const r = await sendPushTo(s, {
-              title: note.title,
-              body: note.body,
-              url: "/idag",
-              tag: `personal-${slot}`,
-            }, { userId: p.user_id, source: isMorning ? "personal-morning" : "personal-evening" });
+            const r = await sendPushTo(
+              s,
+              {
+                title: note.title,
+                body: note.body,
+                url: "/idag",
+                tag: `personal-${slot}`,
+              },
+              { userId: p.user_id, source: isMorning ? "personal-morning" : "personal-evening" },
+            );
             if (r === "ok") sentCount++;
             if (r === "gone") {
               await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
@@ -253,14 +263,18 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
             .select("endpoint, p256dh, auth")
             .eq("user_id", p.user_id);
           for (const s of subs ?? []) {
-            const r = await sendPushTo(s, {
-              title: note.title,
-              body: note.body,
-              url: "/daglig-rutin",
-              tag: `wake-${localDate}`,
-              requireInteraction: note.requireInteraction,
-              vibrate: note.vibrate,
-            }, { userId: p.user_id, source: "wake", ref: `stage-${stage}` });
+            const r = await sendPushTo(
+              s,
+              {
+                title: note.title,
+                body: note.body,
+                url: "/daglig-rutin",
+                tag: `wake-${localDate}`,
+                requireInteraction: note.requireInteraction,
+                vibrate: note.vibrate,
+              },
+              { userId: p.user_id, source: "wake", ref: `stage-${stage}` },
+            );
             if (r === "ok") sentCount++;
             if (r === "gone") {
               await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
