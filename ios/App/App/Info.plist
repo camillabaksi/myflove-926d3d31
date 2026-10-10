@@ -25,13 +25,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>MyFlove använder mikrofonen bara när du själv trycker för att prata in till Flow.</string>
+	<string>Paceable använder mikrofonen bara när du själv trycker för att prata in till Flow.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>MyFlove använder kameran bara när du själv väljer att ta ett foto, till exempel av ett schema.</string>
+	<string>Paceable använder kameran bara när du själv väljer att ta ett foto, till exempel av ett schema.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>MyFlove öppnar dina bilder bara när du själv väljer en bild att läsa in.</string>
+	<string>Paceable öppnar dina bilder bara när du själv väljer en bild att läsa in.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>MyFlove använder platsen bara om du själv slagit på påminnelser när du är nära en sparad butik.</string>
+	<string>Paceable använder platsen bara om du själv slagit på påminnelser när du är nära en sparad butik.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
