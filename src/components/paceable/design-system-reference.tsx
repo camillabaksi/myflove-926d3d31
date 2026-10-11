@@ -3,6 +3,7 @@ import { BrandLogo } from "./brand-logo";
 import { PacePage, PaceContent, PaceHeading, PaceSection, PaceCard, PaceInfoBlock, PaceField, PaceInput, PaceTextarea, PaceChoiceGroup, PaceChoice, PaceActions, PaceButton, PaceHelp, PaceSwitch, PaceDialogContent, PaceStatus, PaceSelectTrigger, PaceSelectContent } from "./design-system";
 import { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectItem, SelectValue } from "@/components/ui/select";
+import { HealthToolLinks } from "@/components/health-tool-links";
 
 /** Isolated examples only. Never imports account stores, analytics or mutations. */
 export default function DesignSystemReference() {
@@ -29,6 +30,12 @@ export default function DesignSystemReference() {
           <PaceInfoBlock><PaceHeading editorial level={3}>Kortrubrik i Fraunces</PaceHeading><PaceHeading level={3}>Samma mjuka typsnitt i hela appen</PaceHeading><p>Sidrubriker: 32. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext: 14. Små etiketter: 12. Alla använder Fraunces och följer din inställning för större text.</p></PaceInfoBlock>
           <PaceActions><PaceButton>Primär handling</PaceButton><PaceButton variant="outline">Sekundär handling</PaceButton><PaceButton variant="ghost">Diskret handling</PaceButton><PaceButton variant="destructive">Destruktiv handling</PaceButton></PaceActions>
           <p className="pace-ds-help">Kontroller kan se 36–40 px höga ut men behåller minst 44×44 px faktisk tryckyta.</p>
+        </PaceSection>
+        <PaceSection title="Min plats – mobilbredd">
+          <PaceCard className="pace-next-page pace-next-place max-w-xs">
+            <p className="pace-place-section-title font-sans font-semibold text-ink">Mer inom hälsa</p>
+            <HealthToolLinks />
+          </PaceCard>
         </PaceSection>
         <PaceSection title="Formulär och val">
           <PaceContent width="reading"><form className="pace-ds-card pace-ds-field" onSubmit={(event) => { event.preventDefault(); if (!draft.trim()) { setError("Skriv ett namn innan du fortsätter."); setSaved(false); return; } setError(""); setSaved(true); }} noValidate>

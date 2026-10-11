@@ -38,6 +38,7 @@ html[data-paceable-typography="true"] body,
     h4,
     h5,
     h6,
+    .font-sans,
     .font-display,
     .font-handwritten,
     .font-serif,
@@ -84,7 +85,7 @@ html[data-paceable-typography="true"] body,
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
-  :is(h2, .pace-editorial-section, .pace-ds-heading-2) {
+  :is(h2, .pace-editorial-section, .pace-ds-heading-2, .pace-place-section-title) {
   font-size: var(--pace-type-section);
   font-weight: 600;
   line-height: 1.35;
@@ -92,7 +93,7 @@ html[data-paceable-typography="true"] body,
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
-  :is(h3, .pace-ds-heading-3, .pace-tasks-title, .pace-more-card-title) {
+  :is(h3, .pace-ds-heading-3, .pace-tasks-title, .pace-more-card-title, .pace-place-entry-title) {
   font-size: var(--pace-type-card);
   font-weight: 600;
   line-height: 1.4;

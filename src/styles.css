@@ -2591,6 +2591,7 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-next-capture .pace-import-entry > div:nth-child(2) { grid-template-columns: repeat(auto-fit,minmax(min(100%,8rem),1fr)); gap: 8px; }
 .pace-next-place .pace-place-entry { gap: 12px; }
 .pace-next-place .pace-place-entry .text-ink { color: var(--pace-control-ink); overflow-wrap: anywhere; }
+.pace-next-place .pace-place-tool-link .pace-place-entry-title { overflow-wrap: normal; word-break: normal; }
 .pace-next-place .pace-place-entry > svg { width: 18px; height: 18px; }
 .pace-next-place .paceable-my-place-header .pace-next-title { font-size: 1.875rem; }
 
