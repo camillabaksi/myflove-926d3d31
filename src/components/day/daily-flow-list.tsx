@@ -215,15 +215,15 @@ export function DailyFlowList({
                             {item.done ? <CheckCircle2 className={integrated ? "text-muted-foreground" : "text-primary"} /> : <Circle />}
                           </Button>
                         )}
-                        <p className={cn("min-w-0 flex-1 break-words leading-snug", integrated ? "font-sans text-base font-semibold text-ink" : "font-display pt-0.5 text-xl font-semibold text-ink", item.done && "line-through", integrated && item.done && "font-normal text-muted-foreground")}>
+                        <p className={cn("pace-type-activity min-w-0 flex-1 break-words leading-snug", integrated ? "font-sans text-base font-semibold text-ink" : "font-display pt-0.5 text-xl font-semibold text-ink", item.done && "line-through", integrated && item.done && "font-normal text-muted-foreground")}>
                           {item.title}
                         </p>
                       </div>
                       <div className={cn("flex min-w-0 flex-wrap items-center gap-1.5", integrated ? "mt-0.5" : "mt-1", item.completable && (integrated ? "pl-11" : "sm:pl-7"))}>
-                        <span className={integrated ? "text-xs text-muted-foreground" : "rounded-full border px-2 py-0.5 text-[10px] font-semibold"} style={integrated ? undefined : visualChip}>
+                        <span className={cn("pace-type-category", integrated ? "text-xs text-muted-foreground" : "rounded-full border px-2 py-0.5 text-[10px] font-semibold")} style={integrated ? undefined : visualChip}>
                           {visual.label}
                         </span>
-                        <span className="text-[10px] font-medium text-muted-foreground">
+                        <span className="pace-type-category text-[10px] font-medium text-muted-foreground">
                           {SOURCE_LABEL[item.source]}
                         </span>
                         {item.linkedLabel && (

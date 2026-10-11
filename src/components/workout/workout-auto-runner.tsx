@@ -179,7 +179,7 @@ export default function WorkoutAutoRunner({
         <p className="text-sm font-medium uppercase tracking-wide text-primary">
           {isRest ? "Vila" : isPrep ? "Gör dig redo" : step.side ? `${step.side} sida` : "Kör"}
         </p>
-        <h2 className="mt-1 text-2xl font-semibold text-ink">{step.title}</h2>
+        <h2 className="pace-type-activity mt-1 text-2xl font-semibold text-ink">{step.title}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{step.detail}</p>
 
         {isReps ? (

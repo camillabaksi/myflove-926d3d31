@@ -116,7 +116,7 @@ export default function DayTimeline({
                     <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
                       {e.title}
                     </span>
-                    <span className="shrink-0 text-xs text-muted-foreground">
+                    <span className="pace-type-time shrink-0 text-xs text-muted-foreground">
                       {e.time}
                       {e.endTime ? `–${e.endTime}` : ""}
                     </span>

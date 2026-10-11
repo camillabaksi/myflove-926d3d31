@@ -86,7 +86,7 @@ export default function WorkoutRunner({
           eager
           className="mx-auto aspect-square w-full max-w-[360px] rounded-3xl border border-border/50 object-cover"
         />
-        <h2 className="mt-3 text-xl font-semibold text-ink">{ex.name}</h2>
+        <h2 className="pace-type-activity mt-3 text-xl font-semibold text-ink">{ex.name}</h2>
         <p className="mt-1 text-base font-medium text-primary">{dose}</p>
         <ul className="mx-auto mt-3 max-w-sm space-y-1 text-left text-sm text-muted-foreground">
           {ex.cues.map((cue) => (

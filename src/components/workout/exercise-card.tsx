@@ -58,7 +58,7 @@ export default function ExerciseCard({
             </span>
             <h3
               className={cn(
-                "break-words text-base font-semibold text-ink",
+                "pace-type-activity break-words text-base font-semibold text-ink",
                 done && "line-through",
               )}
             >
