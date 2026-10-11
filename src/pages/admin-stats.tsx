@@ -48,7 +48,7 @@ const CORE_LOOP_ICON: Record<string, string> = {
 const FRIENDLY_PARTS: Array<{ label: string; sections: string[] }> = [
   { label: "Hem", sections: ["hem", "home"] },
   { label: "Idag", sections: ["idag", "today", "my-day", "min-dag"] },
-  { label: "Flow", sections: ["flow", "flowplan", "flowscore", "assistant"] },
+  { label: "Pace", sections: ["flow", "flowplan", "flowscore", "assistant"] },
   { label: "Kalender", sections: ["kalender", "calendar"] },
   { label: "Mitt batteri", sections: ["batteri", "energi", "energifloede", "energikarta"] },
   { label: "Mående", sections: ["mood", "halsa", "how-are-you", "wellness"] },
@@ -137,7 +137,7 @@ export default function AdminStats() {
       ...findUsage("energi", "activity_energy_logged"),
     },
     { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
-    { label: t("Flow totalt"), ...sumSection(["flow", "flowplan"]) },
+    { label: t("Pace totalt"), ...sumSection(["flow", "flowplan"]) },
   ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
   const sortedCapacity = sortAdminRows(capacityStats, capacitySort);
 
@@ -190,9 +190,9 @@ export default function AdminStats() {
         },
         {
           icon: Sparkles,
-          label: t("Flow-användning"),
+          label: t("Pace-användning"),
           value: `${flowUsage.events}`,
-          hint: t("Gånger Flow använts"),
+          hint: t("Gånger Pace använts"),
         },
       ]
     : [];
@@ -204,10 +204,10 @@ export default function AdminStats() {
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
-            <BarChart3 className="text-primary" /> {t("Hur går MyFlove?")}
+            <BarChart3 className="text-primary" /> {t("Hur går Paceable?")}
           </h1>
           <p className="text-muted-foreground">
-            {t("Anonym, sammanslagen statistik om hur MyFlove används.")}
+            {t("Anonym, sammanslagen statistik om hur Paceable används.")}
           </p>
           <p className="mt-2 text-xs text-muted-foreground flex items-start gap-2 bg-secondary/40 border border-border rounded-2xl p-3">
             <Info size={14} className="mt-0.5 shrink-0" />
@@ -290,7 +290,7 @@ export default function AdminStats() {
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {t(
-                      "Sverige är första marknaden där MyFlove kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.",
+                      "Sverige är första marknaden där Paceable kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.",
                     )}
                   </p>
                 </div>
@@ -336,19 +336,19 @@ export default function AdminStats() {
                   >
                     {t("Socialstyrelsen – förekomst, trend och könsskillnader vid adhd")}
                   </a>
-                  . {t("Siffrorna är externa marknadsuppskattningar, inte MyFloves användardata.")}
+                  . {t("Siffrorna är externa marknadsuppskattningar, inte Paceables användardata.")}
                 </p>
               </div>
 
               <WhyBox
                 what={t("Målgruppens storlek i den första marknaden och vägen vidare.")}
-                why={t("Binder ihop svenska behov, tidig validering och MyFloves expansionsplan.")}
+                why={t("Binder ihop svenska behov, tidig validering och Paceables expansionsplan.")}
               />
             </CollapsibleSection>
 
             {/* 2. Kärnflödet som funnel */}
             <CollapsibleSection
-              title={t("MyFloves kärnflöde")}
+              title={t("Paceables kärnflöde")}
               id="admin-core-flow"
               headingClassName="text-lg font-semibold"
               className={cardClass}
@@ -375,7 +375,7 @@ export default function AdminStats() {
                 })}
               </div>
               <WhyBox
-                what={t("Hur många användare som når varje steg i MyFloves dagliga loop.")}
+                what={t("Hur många användare som når varje steg i Paceables dagliga loop.")}
                 why={t("Visar om hela flödet håller ihop eller om något steg tappar folk.")}
               />
             </CollapsibleSection>
@@ -431,7 +431,7 @@ export default function AdminStats() {
               <WhyBox
                 what={t("Hur ofta människor loggar energi, mående och påverkan — helt anonymt.")}
                 why={t(
-                  "Det här är MyFloves kärna: att planera efter kapacitet, inte bara att-göra.",
+                  "Det här är Paceables kärna: att planera efter kapacitet, inte bara att-göra.",
                 )}
               />
             </CollapsibleSection>

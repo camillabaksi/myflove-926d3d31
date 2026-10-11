@@ -4,25 +4,25 @@ import { LegalShell } from "./integritet";
 export const Route = createFileRoute("/cookies")({
   head: () => ({
     meta: [
-      { title: "Cookiepolicy – MyFlove" },
+      { title: "Cookiepolicy – Paceable" },
       {
         name: "description",
         content:
-          "MyFlove använder bara nödvändig lokal lagring – ingen spårning, inga marknadscookies.",
+          "Paceable använder bara nödvändig lokal lagring – ingen spårning, inga marknadscookies.",
       },
-      { property: "og:title", content: "Cookiepolicy – MyFlove" },
+      { property: "og:title", content: "Cookiepolicy – Paceable" },
       {
         property: "og:description",
         content:
-          "MyFlove använder bara nödvändig lokal lagring – ingen spårning, inga marknadscookies.",
+          "Paceable använder bara nödvändig lokal lagring – ingen spårning, inga marknadscookies.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Cookiepolicy – MyFlove" },
+      { name: "twitter:title", content: "Cookiepolicy – Paceable" },
       { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
       { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:url", content: "https://myflove.lovable.app/cookies" },
     ],
@@ -35,7 +35,7 @@ function CookiesPage() {
   return (
     <LegalShell title="Cookies & lokal lagring" updated="28 augusti 2026">
       <p>
-        MyFlove är byggd för att vara lugn – även tekniskt. Vi använder inga marknadscookies, inga
+        Paceable är byggd för att vara lugn – även tekniskt. Vi använder inga marknadscookies, inga
         tredjepartsspårare och inga annonsnätverk.
       </p>
 
@@ -44,7 +44,7 @@ function CookiesPage() {
         <li>
           <strong>Nödvändig lokal lagring (localStorage):</strong> för att komma ihåg dig som
           inloggad, dina inställningar (t.ex. genvägar, textstorlek och tema) och lokala uppgifter
-          som matlista och FlowPlan.
+          som matlista och Planering.
         </li>
         <li>
           <strong>Krypterad lokal lagring:</strong> det känsligaste – energi, mående, medicin och
@@ -52,7 +52,7 @@ function CookiesPage() {
           Vid utloggning raderas nyckeln och den lokala datan.
         </li>
         <li>
-          <strong>Sessionslagring:</strong> tillfälligt, t.ex. påbörjad text i en chatt med Flow.
+          <strong>Sessionslagring:</strong> tillfälligt, t.ex. påbörjad text i en chatt med Pace.
           Den försvinner när du stänger fliken eller loggar ut.
         </li>
         <li>

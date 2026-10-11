@@ -13,7 +13,7 @@
 export const DEMO_EMAIL = "investor@myflove.se";
 
 /** Visningsnamn som används i demobannern. */
-export const DEMO_DISPLAY_NAME = "MyFlove Demo";
+export const DEMO_DISPLAY_NAME = "Paceable Demo";
 
 /** Lokal enhetsflagga så att synkron kod (analytics) vet att sessionen är demo. */
 export const DEMO_SESSION_KEY = "myflove-demo-session";

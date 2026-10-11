@@ -4,7 +4,7 @@ import Page from "@/pages/dump";
 export const Route = createFileRoute("/_app/quickflow")({
   head: () => ({
     meta: [
-      { title: "Fånga – få ut det ur huvudet | MyFlove" },
+      { title: "Fånga – få ut det ur huvudet | Paceable" },
       {
         name: "description",
         content:
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_app/quickflow")({
       {
         property: "og:description",
         content:
-          "Snabbfångst för ett fullt huvud. MyFlove håller tanken åt dig tills du orkar sortera.",
+          "Snabbfångst för ett fullt huvud. Paceable håller tanken åt dig tills du orkar sortera.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

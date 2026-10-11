@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { currentProductCopy } from "@/lib/public-copy";
 
 /**
  * NPF-läge – globala tillgänglighetsval som gäller hela appen.
@@ -54,19 +55,23 @@ export function applyToDocument(s: NpfSettings) {
 const PLAIN_WORDS: Record<string, string> = {
   FlowPlan: "Ordning på dagen",
   FlowScore: "Hur mycket du orkar",
-  "Veckans Flow": "Veckan som gick",
+  "Veckans översikt": "Veckan som gick",
   Quickflow: "Skriv av dig",
   StudyFlow: "Plugg",
   StudyBuddy: "Plugghjälp",
   WorkFlow: "Jobbfokus",
-  "MyFlove Insight": "Tips för dig",
+  "Insikter": "Tips för dig",
   Pomodoro: "Timer",
   Feedback: "Tyck till",
 };
 
+const CURRENT_PLAIN_WORDS = Object.fromEntries(
+  Object.entries(PLAIN_WORDS).map(([label, value]) => [currentProductCopy(label), value]),
+);
+
 export function plainLabel(label: string, enabled: boolean): string {
   if (!enabled) return label;
-  return PLAIN_WORDS[label] ?? label;
+  return CURRENT_PLAIN_WORDS[label] ?? PLAIN_WORDS[label] ?? label;
 }
 
 export function useNpfSettings() {

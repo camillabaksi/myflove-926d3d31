@@ -4,12 +4,12 @@ import Page from "@/pages/admin-stats";
 export const Route = createFileRoute("/_app/admin-statistik")({
   head: () => ({
     meta: [
-      { title: "Adminstatistik – MyFlove" },
-      { name: "description", content: "Intern översikt över användarstatistik i MyFlove." },
-      { property: "og:title", content: "Adminstatistik – MyFlove" },
+      { title: "Adminstatistik – Paceable" },
+      { name: "description", content: "Intern översikt över användarstatistik i Paceable." },
+      { property: "og:title", content: "Adminstatistik – Paceable" },
       {
         property: "og:description",
-        content: "Intern översikt över användarstatistik och marknadsanalys i MyFlove.",
+        content: "Intern översikt över användarstatistik och marknadsanalys i Paceable.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

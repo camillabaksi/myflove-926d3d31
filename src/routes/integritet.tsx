@@ -3,25 +3,25 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/integritet")({
   head: () => ({
     meta: [
-      { title: "Integritetspolicy – MyFlove" },
+      { title: "Integritetspolicy – Paceable" },
       {
         name: "description",
         content:
-          "Så hanterar MyFlove dina personuppgifter enligt GDPR – vilka data vi samlar, varför, hur länge och dina rättigheter.",
+          "Så hanterar Paceable dina personuppgifter enligt GDPR – vilka data vi samlar, varför, hur länge och dina rättigheter.",
       },
-      { property: "og:title", content: "Integritetspolicy – MyFlove" },
+      { property: "og:title", content: "Integritetspolicy – Paceable" },
       {
         property: "og:description",
         content:
-          "Så hanterar MyFlove dina personuppgifter enligt GDPR – vilka data vi samlar, varför och dina rättigheter.",
+          "Så hanterar Paceable dina personuppgifter enligt GDPR – vilka data vi samlar, varför och dina rättigheter.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Integritetspolicy – MyFlove" },
+      { name: "twitter:title", content: "Integritetspolicy – Paceable" },
       { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
       { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:url", content: "https://myflove.lovable.app/integritet" },
     ],
@@ -34,7 +34,7 @@ function PrivacyPage() {
   return (
     <LegalShell title="Integritetspolicy" updated="28 augusti 2026">
       <p>
-        MyFlove är byggd för att minska mental belastning – och det gäller även dina
+        Paceable är byggd för att minska mental belastning – och det gäller även dina
         personuppgifter. Vi samlar in så lite som möjligt, förklarar varför, och du bestämmer alltid
         själv. Denna policy beskriver hur vi behandlar dina uppgifter i enlighet med EU:s
         dataskyddsförordning (GDPR).
@@ -42,7 +42,7 @@ function PrivacyPage() {
 
       <h2>Personuppgiftsansvarig</h2>
       <p>
-        MyFlove ansvarar för behandlingen av dina personuppgifter. Kontakt:{" "}
+        Paceable ansvarar för behandlingen av dina personuppgifter. Kontakt:{" "}
         <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
       </p>
 
@@ -64,7 +64,7 @@ function PrivacyPage() {
           på din enhet (AES-GCM, med nyckeln i enhetens säkra lagring).
         </li>
         <li>
-          <strong>Samtal med Flow:</strong> sparade chattar med AI-följeslagaren Flow lagras kopplat
+          <strong>Samtal med Pace:</strong> sparade chattar med AI-följeslagaren Pace lagras kopplat
           till ditt konto tills du raderar dem. Påbörjad text ligger bara kvar under sessionen.
         </li>
         <li>
@@ -108,7 +108,7 @@ function PrivacyPage() {
       <p>
         Uppgifterna lagras hos vår molnleverantör inom EU (Supabase / AWS Europe). AI-svar genereras
         via Lovable AI Gateway och skickas då i förekommande fall till underleverantörer såsom
-        Google (Gemini) – bland annat den text du skriver till Flow och material du laddar upp för
+        Google (Gemini) – bland annat den text du skriver till Pace och material du laddar upp för
         tolkning (t.ex. schemabilder). Kartlänkar öppnas hos Google Maps först när du själv klickar.
         Inga uppgifter säljs vidare, och ditt innehåll används inte för att träna AI-modeller.
       </p>
@@ -116,7 +116,7 @@ function PrivacyPage() {
       <h2>Hur länge vi sparar</h2>
       <p>
         Ditt konto och tillhörande innehåll sparas så länge du har ett aktivt konto. Du kan när som
-        helst radera enskilda poster, enskilda Flow-samtal eller hela ditt konto med all data direkt
+        helst radera enskilda poster, enskilda Pace-samtal eller hela ditt konto med all data direkt
         i appen under Inställningar → Avsluta konto. Vid utloggning rensas dessutom den lokala
         kopian på enheten och den lokala krypteringsnyckeln raderas. Behöver du hjälp når du oss på{" "}
         <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
@@ -140,7 +140,7 @@ function PrivacyPage() {
 
       <h2>Cookies och lokal lagring</h2>
       <p>
-        MyFlove använder endast nödvändig lokal lagring i webbläsaren för att komma ihåg dig som
+        Paceable använder endast nödvändig lokal lagring i webbläsaren för att komma ihåg dig som
         inloggad och dina inställningar. Vi använder inga cookies för marknadsföring eller
         tredjepartsspårning. Läs mer i <Link to="/cookies">cookiepolicyn</Link>.
       </p>
@@ -167,7 +167,7 @@ export function LegalShell({
     <main className="min-h-screen bg-background text-foreground px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <Link to="/" className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-          ← MyFlove
+          ← Paceable
         </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">{title}</h1>
         <p className="mt-2 text-sm text-[#6B647F]">Senast uppdaterad: {updated}</p>

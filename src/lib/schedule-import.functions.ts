@@ -28,7 +28,7 @@ const LectureSchema = z.object({
 
 export type ParsedScheduleLecture = z.infer<typeof LectureSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna AI-kompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna AI-kompanjon.
 Du tolkar ett studieschema som användaren klistrat in, fotograferat eller laddat upp och gör om det till strukturerad data.
 
 Regler:

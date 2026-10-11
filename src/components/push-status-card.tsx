@@ -95,7 +95,7 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
         toast({
           title: "Notiser är inte påslagna",
           description:
-            "För att få påminnelser från MyFlove behöver notiser vara aktiverade i telefonens inställningar för MyFlove.",
+            "För att få påminnelser från Paceable behöver notiser vara aktiverade i telefonens inställningar för Paceable.",
         });
         return;
       }
@@ -141,7 +141,7 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
         title: res.sent > 0 ? "Testnotis skickad" : "Ingen enhet att skicka till",
         description:
           res.sent > 0
-            ? "Den bör dyka upp inom några sekunder. Kommer den inte fram är notiser troligen avstängda för MyFlove i telefonens inställningar."
+            ? "Den bör dyka upp inom några sekunder. Kommer den inte fram är notiser troligen avstängda för Paceable i telefonens inställningar."
             : "Slå på notiser här först, så kan vi testa.",
       });
     } catch {
@@ -159,10 +159,10 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
         <p className="font-medium text-foreground">Notiser</p>
         <p className="text-sm text-muted-foreground">
           {isNativeShell() ? (
-            "I MyFlove-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
+            "I Paceable-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
           ) : (
             <>
-              Den här webbläsaren kan inte visa notiser. På iPhone: öppna MyFlove i Safari, välj
+              Den här webbläsaren kan inte visa notiser. På iPhone: öppna Paceable i Safari, välj
               Dela → <em>Lägg till på hemskärmen</em>, och öppna appen från ikonen.
             </>
           )}
@@ -203,14 +203,14 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
             : registered && permission === "granted"
               ? "Klart – du får påminnelser även när appen är stängd."
               : permission === "denied"
-                ? "För att få påminnelser från MyFlove behöver notiser vara aktiverade. Slå på dem för MyFlove i telefonens inställningar och kom tillbaka hit."
-                : "För att få påminnelser från MyFlove behöver notiser vara aktiverade på den här enheten."}
+                ? "För att få påminnelser från Paceable behöver notiser vara aktiverade. Slå på dem för Paceable i telefonens inställningar och kom tillbaka hit."
+                : "För att få påminnelser från Paceable behöver notiser vara aktiverade på den här enheten."}
         </p>
       </div>
 
       {iosNeedsInstall && (
         <p className="text-sm text-muted-foreground">
-          På iPhone behöver MyFlove ligga på hemskärmen för att notiser ska fungera: Dela →{" "}
+          På iPhone behöver Paceable ligga på hemskärmen för att notiser ska fungera: Dela →{" "}
           <em>Lägg till på hemskärmen</em>, öppna sedan appen från ikonen.
         </p>
       )}

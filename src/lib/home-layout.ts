@@ -31,7 +31,7 @@ export const HOME_BLOCKS: HomeBlockMeta[] = [
   { id: "checklista", label: "Dagens checklista", hint: "Möten, vardag och rutiner" },
   { id: "barnens-dag", label: "Barnens dag", hint: "Visa valda barns aktiviteter på Hem" },
   { id: "kvall", label: "Kvällscheck", hint: "Kort avstämning efter kl 18" },
-  { id: "mina-genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i MyFlove" },
+  { id: "mina-genvagar", label: "Mina genvägar", hint: "Dina valda kort under Mer i Paceable" },
   {
     id: "medicin",
     label: "Rutiner & medicin",

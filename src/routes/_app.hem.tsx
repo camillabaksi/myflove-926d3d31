@@ -4,13 +4,13 @@ import Page from "@/pages/home";
 export const Route = createFileRoute("/_app/hem")({
   head: () => ({
     meta: [
-      { title: "Hem – MyFlove" },
+      { title: "Hem – Paceable" },
       {
         name: "description",
         content:
-          "Din lugna start i MyFlove – fånga en tanke, se kalendern, kolla batteriet eller logga hur du mår.",
+          "Din lugna start i Paceable – fånga en tanke, se kalendern, kolla batteriet eller logga hur du mår.",
       },
-      { property: "og:title", content: "Hem – MyFlove" },
+      { property: "og:title", content: "Hem – Paceable" },
       {
         property: "og:description",
         content: "En lugn översikt där du tar en sak i taget.",

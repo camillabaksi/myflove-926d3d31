@@ -165,7 +165,7 @@ export function StudiesSection() {
       }));
     } catch (err) {
       toast({
-        title: "Flow kunde inte dela upp uppgiften",
+        title: "Pace kunde inte dela upp uppgiften",
         description: err instanceof Error ? err.message : "Prova igen om en stund.",
         variant: "destructive",
       });
@@ -299,7 +299,7 @@ export function StudiesSection() {
         </form>
         {activeCourses.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Inga kurser än. Lägg till en så vet Flow vad inlämningen hör till.
+            Inga kurser än. Lägg till en så vet Pace vad inlämningen hör till.
           </p>
         ) : (
           <ul className="flex flex-wrap gap-2">
@@ -395,7 +395,7 @@ export function StudiesSection() {
             <textarea
               value={details}
               onChange={(e) => setDetails(e.target.value)}
-              placeholder="Valfritt: klistra in instruktionen så kan Flow dela upp den bättre."
+              placeholder="Valfritt: klistra in instruktionen så kan Pace dela upp den bättre."
               rows={2}
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
@@ -654,7 +654,7 @@ export function StudiesSection() {
                 >
                   {busyId === task.id ? (
                     <>
-                      <Loader2 size={14} className="mr-2 animate-spin" /> Flow tänker…
+                      <Loader2 size={14} className="mr-2 animate-spin" /> Pace tänker…
                     </>
                   ) : (
                     <>

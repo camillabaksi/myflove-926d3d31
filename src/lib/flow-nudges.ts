@@ -63,7 +63,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
     nudges.push({
       key: `flow-ork-${day}`,
       title: "Hur är orken idag? 🔋",
-      body: "En knapptryckning räcker. MyFlove gör resten.",
+      body: "En knapptryckning räcker. Paceable gör resten.",
       url: "/idag",
       deliverAt: at(now, 10),
     });

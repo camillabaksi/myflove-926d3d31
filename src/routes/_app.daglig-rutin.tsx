@@ -4,9 +4,9 @@ import Page from "@/pages/daily-flow";
 export const Route = createFileRoute("/_app/daglig-rutin")({
   head: () => ({
     meta: [
-      { title: "Rutiner & medicin – MyFlove" },
+      { title: "Rutiner & medicin – Paceable" },
       { name: "description", content: "Dina fasta rutiner och doser samlade på ett lugnt ställe." },
-      { property: "og:title", content: "Rutiner & medicin – MyFlove" },
+      { property: "og:title", content: "Rutiner & medicin – Paceable" },
       {
         property: "og:description",
         content: "Dina fasta rutiner och doser samlade på ett lugnt ställe.",

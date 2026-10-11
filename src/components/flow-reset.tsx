@@ -64,7 +64,7 @@ export default function FlowReset() {
 
       <div className="relative flex items-center gap-2">
         <Moon size={18} className="text-primary" />
-        <h3 className="font-display text-lg font-bold text-ink">Flow Reset 🌙</h3>
+        <h3 className="font-display text-lg font-bold text-ink">Kvällsavslut 🌙</h3>
       </div>
 
       <div className="space-y-3">

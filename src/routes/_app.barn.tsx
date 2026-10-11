@@ -4,11 +4,11 @@ import Page from "@/pages/children";
 export const Route = createFileRoute("/_app/barn")({
   head: () => ({
     meta: [
-      { property: "og:title", content: "Barn – MyFlove" },
+      { property: "og:title", content: "Barn – Paceable" },
       { property: "og:description", content: "Samla allt om barnen – aktiviteter, att göra, anteckningar och dokument. Privat tills du delar." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { title: "Barn – MyFlove" },
+      { title: "Barn – Paceable" },
       {
         name: "description",
         content:

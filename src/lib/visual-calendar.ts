@@ -85,7 +85,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
         endTime: task.dueDate && task.dueDate < date ? undefined : task.endTime,
         energyImpact: task.energyImpact, friction: task.friction, area: task.area, done: task.completed, editable: !task.syncKey,
         href: task.syncKey ? "/studyflow" : undefined,
-        label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "QuickFlow" : undefined });
+        label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "Fånga" : undefined });
     }
     for (const r of data.reminders) {
       if (r.canceled || !(occursOn(r.date, r.repeat, date) || (r.endDate && date >= r.date && date <= r.endDate))) continue;
@@ -111,12 +111,12 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       if (q.done ? !completedBelongsToDay(date, planned, q.doneAt) : planned ? planned !== date : date !== today) continue;
       const time = q.remindAt ? timeOf(new Date(q.remindAt).getHours() * 60 + new Date(q.remindAt).getMinutes()) : undefined;
       out.push({ id: `qf-${q.id}`, sourceId: q.id, source: "quickflow", date, title: q.text, time,
-        area: q.area, done: !!q.done, editable: false, href: "/quickflow", label: "QuickFlow" });
+        area: q.area, done: !!q.done, editable: false, href: "/quickflow", label: "Fånga" });
     }
     if (date === today) for (const p of data.priority) {
       if (linked.has(p.id) || p.done && !completedBelongsToDay(date, undefined, p.doneAt)) continue;
       out.push({ id: `prio-${p.id}`, sourceId: p.id, source: "priority", date, title: p.title, done: !!p.done,
-        editable: false, href: "/quickflow", label: "QuickFlow" });
+        editable: false, href: "/quickflow", label: "Fånga" });
     }
   }
   return days;

@@ -319,7 +319,7 @@ export interface AlarmSoundPreset {
 }
 
 export const ALARM_SOUNDS: AlarmSoundPreset[] = [
-  { id: "myflove", label: "MyFlove-standard", hint: "Tre mjuka pip", premium: false },
+  { id: "myflove", label: "Paceable-standard", hint: "Tre mjuka pip", premium: false },
   { id: "mjuk-klocka", label: "Mjuk klocka", hint: "Klingar långsamt", premium: true },
   { id: "litet-pling", label: "Litet pling", hint: "Kort och lätt", premium: true },
   { id: "mjuk-ton", label: "Mjuk ton", hint: "En enda varm ton", premium: true },

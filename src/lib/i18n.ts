@@ -13,6 +13,7 @@ import { EN_BATTERY } from "@/lib/i18n-dicts/battery";
 import { EN_HISTORY } from "@/lib/i18n-dicts/history";
 import { EN_NOTES } from "@/lib/i18n-dicts/notes";
 import { EN_ADMIN } from "@/lib/i18n-dicts/admin";
+import { currentCopyDictionary } from "@/lib/public-copy";
 
 export type Lang = "sv" | "en";
 
@@ -379,7 +380,7 @@ export const EN: Record<string, string> = {
 };
 
 /** Områdesordlistor slås ihop med kärnan. Kärnan vinner vid krock. */
-const DICT: Record<string, string> = {
+const DICT: Record<string, string> = currentCopyDictionary({
   ...EN_QUICKFLOW,
   ...EN_CALENDAR,
   ...EN_BATTERY,
@@ -387,7 +388,7 @@ const DICT: Record<string, string> = {
   ...EN_NOTES,
   ...EN_ADMIN,
   ...EN,
-};
+});
 
 /** Svenska veckodagar → engelska, för genererade meningar. */
 const WEEKDAY_EN: Record<string, string> = {

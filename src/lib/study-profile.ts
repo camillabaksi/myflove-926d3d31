@@ -287,7 +287,7 @@ export function studySuggestions(
   if (lowFlow && !out.length) {
     out.push({
       title: "Låg kapacitet idag",
-      body: `Energin är ${ctx.energy ?? "låg"} och FlowScore ${ctx.flowScore}. Ett pass på ${session} minuter räcker gott idag – resten kan vänta.`,
+      body: `Energin är ${ctx.energy ?? "låg"} och Dagens balans ${ctx.flowScore}. Ett pass på ${session} minuter räcker gott idag – resten kan vänta.`,
       href: "/idag",
       hrefLabel: "Se dagen",
     });

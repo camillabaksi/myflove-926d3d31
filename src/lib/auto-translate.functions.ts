@@ -8,12 +8,12 @@ const InputSchema = z.object({
 
 export type AutoTranslateResult = { translations: Record<string, string> };
 
-const SYSTEM = `Du översätter gränssnittstext i appen MyFlove från svenska till engelska.
+const SYSTEM = `Du översätter gränssnittstext i appen Paceable från svenska till engelska.
 
 Regler:
 - Behåll tonen: lugn, varm, kort, aldrig skuldbeläggande.
 - Behåll emojis, siffror, interpunktion och radbrytningar exakt.
-- Översätt INTE produktnamn: MyFlove, Flow, QuickFlow, FlowPlan, FlowScore, Ljusboost (= "Light boost"), Mikropaus (= "Micro pause").
+- Översätt INTE produktnamn: Paceable, Pace, Fånga, Planering, Dagens balans, Ljusboost (= "Light boost"), Mikropaus (= "Micro pause").
 - Om texten redan är engelska, returnera den oförändrad.
 - Svara ENDAST med giltig JSON: { "items": [{ "sv": "...", "en": "..." }] } med exakt samma svenska strängar som du fick, i samma ordning.`;
 

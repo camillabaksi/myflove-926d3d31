@@ -180,7 +180,7 @@ export default function CycleCard() {
             </p>
             <p className="text-xs text-muted-foreground">
               {t(
-                "Fas och ägglossning är uppskattningar och varierar mellan personer och mellan cykler. MyFlove säger inget om hur du bör må.",
+                "Fas och ägglossning är uppskattningar och varierar mellan personer och mellan cykler. Paceable säger inget om hur du bör må.",
               )}
             </p>
           </div>
@@ -228,7 +228,7 @@ export default function CycleCard() {
             </ul>
             <div className="flex items-center justify-between gap-2 pt-1">
               <p className="text-xs text-muted-foreground">
-                {t("Vill du att Flow tar hänsyn till detta när du planerar?")}
+                {t("Vill du att Pace tar hänsyn till detta när du planerar?")}
               </p>
               <div className="flex gap-1.5">
                 {[true, false].map((v) => (

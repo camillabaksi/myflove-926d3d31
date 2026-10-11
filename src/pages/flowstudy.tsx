@@ -149,7 +149,7 @@ export function StudyBuddyContent() {
       });
     } catch (err) {
       toast({
-        title: "Flow kunde inte skapa frågorna",
+        title: "Pace kunde inte skapa frågorna",
         description: err instanceof Error ? err.message : "Prova igen om en stund.",
         variant: "destructive",
       });
@@ -161,7 +161,7 @@ export function StudyBuddyContent() {
   return (
     <div className="space-y-8">
       <p className="text-sm text-muted-foreground">
-        Ladda upp materialet – Flow gör flashcards och quiz, och kommer ihåg vad du behöver
+        Ladda upp materialet – Pace gör flashcards och quiz, och kommer ihåg vad du behöver
         repetera.
       </p>
 
@@ -252,7 +252,7 @@ export function StudyBuddyContent() {
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
             <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
-              <p className="text-xs font-medium">Flow anpassar efter din livsprofil</p>
+              <p className="text-xs font-medium">Pace anpassar efter din livsprofil</p>
               {basePlan.chips.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">
                   {basePlan.chips.map((c) => (
@@ -336,7 +336,7 @@ export function StudyBuddyContent() {
             <Button type="submit" disabled={busy || !title.trim()} className="h-11 rounded-xl px-5">
               {busy ? (
                 <>
-                  <Loader2 size={16} className="mr-2 animate-spin" /> Flow läser materialet…
+                  <Loader2 size={16} className="mr-2 animate-spin" /> Pace läser materialet…
                 </>
               ) : (
                 <>
@@ -567,7 +567,7 @@ function AddMaterialForm({
       setFile(null);
     } catch (err) {
       toast({
-        title: "Flow kunde inte lägga till materialet",
+        title: "Pace kunde inte lägga till materialet",
         description: err instanceof Error ? err.message : "Prova igen om en stund.",
         variant: "destructive",
       });
@@ -611,7 +611,7 @@ function AddMaterialForm({
         <Button type="submit" size="sm" className="rounded-xl" disabled={busy}>
           {busy ? (
             <>
-              <Loader2 size={14} className="mr-2 animate-spin" /> Flow läser…
+              <Loader2 size={14} className="mr-2 animate-spin" /> Pace läser…
             </>
           ) : (
             <>

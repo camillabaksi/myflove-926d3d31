@@ -65,7 +65,7 @@ export function AdaptiveIntentPrompt({
           disabled={!draft.trim()}
           className="press min-h-11 w-full rounded-full bg-primary px-4 sm:w-auto text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
-          {t("Fråga Flow")}
+          {t("Fråga Pace")}
         </button>
       </form>
 

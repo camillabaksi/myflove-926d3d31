@@ -15,7 +15,7 @@ export const ensureDevTestUserFn = createServerFn({ method: "POST" }).handler(
     }
 
     const email = process.env["DEV_TEST_EMAIL"] ?? "testflow@myflove.test";
-    const password = process.env["DEV_TEST_PASSWORD"] ?? "MyFloveDev!2026";
+    const password = process.env["DEV_TEST_PASSWORD"] ?? "PaceableDev!2026";
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

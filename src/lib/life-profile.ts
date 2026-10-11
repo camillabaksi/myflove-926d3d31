@@ -237,7 +237,7 @@ export function lifeProfileContext(p: LifeProfile): string {
   if (p.energyGives.length) lines.push(`- Ger energi: ${p.energyGives.join(", ")}`);
   if (p.energyTakes.length) lines.push(`- Tar energi: ${p.energyTakes.join(", ")}`);
   if (p.flowPreferences.length)
-    lines.push(`- Så vill användaren att Flow hjälper till: ${p.flowPreferences.join(", ")}`);
+    lines.push(`- Så vill användaren att Pace hjälper till: ${p.flowPreferences.join(", ")}`);
   if (p.note.trim()) lines.push(`- Övrigt: ${p.note.trim()}`);
   lines.push(
     "Använd detta som personlig kontext. Gör inga medicinska antaganden, döm aldrig, och väg alltid krav mot användarens energi och övriga livspussel.",

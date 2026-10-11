@@ -4,16 +4,16 @@ import Page from "@/pages/training";
 export const Route = createFileRoute("/_app/traning")({
   head: () => ({
     meta: [
-      { title: "Träningsprogram – pass, program och historik | MyFlove" },
+      { title: "Träningsprogram – pass, program och historik | Paceable" },
       {
         name: "description",
         content:
-          "Skapa energianpassade pass med Flow, använd färdiga träningsprogram och se sparade och genomförda pass på samma plats.",
+          "Skapa energianpassade pass med Pace, använd färdiga träningsprogram och se sparade och genomförda pass på samma plats.",
       },
-      { property: "og:title", content: "Träningsprogram | MyFlove" },
+      { property: "og:title", content: "Träningsprogram | Paceable" },
       {
         property: "og:description",
-        content: "Flow-pass, färdiga program och träningshistorik samlat i en lugn träningssektion.",
+        content: "Pace-pass, färdiga program och träningshistorik samlat i en lugn träningssektion.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

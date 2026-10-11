@@ -44,7 +44,7 @@ const PlanSchema = z.object({
 export type AiWorkoutPlanResult = z.infer<typeof PlanSchema>;
 
 
-const SYSTEM = `Du är Flow – MyFloves lugna, icke-dömande träningskompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, icke-dömande träningskompanjon.
 Du bygger ett enskilt träningspass av övningar som redan finns i listan.
 
 Regler:

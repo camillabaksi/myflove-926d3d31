@@ -83,7 +83,7 @@ export function QuickflowPriority() {
       setExpandedClarificationId(item.id);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : t("Flow kunde inte förtydliga uppgiften just nu.");
+        error instanceof Error ? error.message : t("Pace kunde inte förtydliga uppgiften just nu.");
       toast({ description: message });
     } finally {
       setClarifyingId(null);
@@ -154,7 +154,7 @@ export function QuickflowPriority() {
         <MyFloveBlock
           title={t("Min lista just nu")}
           subtitle={t("Ingen tid, ingen deadline. Bara ordning.")}
-          eyebrow={t("Flows förslag")}
+          eyebrow={t("Paces förslag")}
           icon={Sparkles}
           tone="mint"
           action={
@@ -176,7 +176,7 @@ export function QuickflowPriority() {
               )}
               <WhyHint label={t("prioriteringen")}>
                 {t(
-                  "Flow hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.",
+                  "Pace hjälper dig att sortera när allt känns lika viktigt. Prioriteringen bygger på vad som verkar viktigt, brådskande och möjligt utifrån din energi just nu.",
                 )}
               </WhyHint>
             </div>

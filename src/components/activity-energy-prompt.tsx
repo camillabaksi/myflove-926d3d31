@@ -102,7 +102,7 @@ export function ActivityEnergyPrompt({
         </DialogHeader>
         {item && <p className="-mt-2 text-sm text-muted-foreground">{item.title}</p>}
         <WhyHint label="vi frågar om energin" className="self-start">
-          Vi frågar hur aktiviteten påverkade dig för att Flow över tid ska kunna förstå vad som ger
+          Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
           och tar energi för just dig. Svaret är alltid frivilligt.
         </WhyHint>
         <div className="grid grid-cols-2 gap-2 pt-1">

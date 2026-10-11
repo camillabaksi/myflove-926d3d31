@@ -172,7 +172,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             </div>
             <p className="text-sm text-muted-foreground">
               {t(
-                "Logga hur du känner dig just nu. Flow lär sig när på dygnet du har mest att ge – och när du behöver vila.",
+                "Logga hur du känner dig just nu. Pace lär sig när på dygnet du har mest att ge – och när du behöver vila.",
               )}
             </p>
           </header>

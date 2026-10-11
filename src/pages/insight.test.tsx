@@ -92,7 +92,7 @@ describe("MyFlove Insight", () => {
     const why = within(header).getByRole("button", { name: /Varför/ });
     expect(why.getAttribute("aria-expanded")).toBe("false");
     fireEvent.click(why);
-    expect(within(header).getByText(/När du loggar över tid kan Flow hjälpa dig/)).toBeTruthy();
+    expect(within(header).getByText(/När du loggar över tid kan Pace hjälpa dig/)).toBeTruthy();
   });
 
   it("visar den inloggade användarens egna insikter", () => {

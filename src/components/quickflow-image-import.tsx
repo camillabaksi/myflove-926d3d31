@@ -306,7 +306,7 @@ export function QuickflowImageImport({ whySlot, appearance = "default" }: { whyS
           <DialogHeader>
             <DialogTitle className="font-display text-xl text-ink">
               {stage === "review"
-                ? `Flow hittade ${drafts.length} ${drafts.length === 1 ? "sak" : "saker"} 👀`
+                ? `Pace hittade ${drafts.length} ${drafts.length === 1 ? "sak" : "saker"} 👀`
                 : stage === "done"
                   ? "Klart! ✨"
                   : "Importera till kalendern"}
@@ -360,7 +360,7 @@ export function QuickflowImageImport({ whySlot, appearance = "default" }: { whyS
           {stage === "busy" && (
             <div className="flex flex-col items-center gap-3 py-10 text-center">
               <Loader2 className="animate-spin text-primary" size={32} />
-              <p className="text-sm text-muted-foreground">Flow läser av {sourceLabel}en…</p>
+              <p className="text-sm text-muted-foreground">Pace läser av {sourceLabel}en…</p>
             </div>
           )}
 
@@ -368,7 +368,7 @@ export function QuickflowImageImport({ whySlot, appearance = "default" }: { whyS
             <div className="space-y-4">
               <p className="rounded-2xl bg-secondary p-4 text-sm text-ink">
                 {stage === "empty"
-                  ? "Hmm... jag hittade inget tydligt datum eller någon tid i den här bilden. Vill du spara den som en vanlig QuickFlow-anteckning istället?"
+                  ? "Hmm... jag hittade inget tydligt datum eller någon tid i den här bilden. Vill du spara den som en vanlig Fånga-anteckning istället?"
                   : "Jag har svårt att läsa bilden. Testa gärna med en tydligare bild."}
               </p>
               <div className="flex flex-col gap-2 sm:flex-row">
@@ -528,7 +528,7 @@ export function QuickflowImageImport({ whySlot, appearance = "default" }: { whyS
                         {(d.kind === "calendar" || d.kind === "reminder") && (
                           <div className="text-xs text-muted-foreground sm:col-span-2">
                             ⏰ Påminn mig
-                            {d.suggested_reminder && ` (Flow föreslår: ${d.suggested_reminder})`}
+                            {d.suggested_reminder && ` (Pace föreslår: ${d.suggested_reminder})`}
                             <div className="mt-1 flex flex-wrap gap-1.5">
                               {REMINDER_OPTIONS.map((o) => (
                                 <button

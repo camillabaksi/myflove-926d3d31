@@ -184,7 +184,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         emoji="🔋"
         title={t("Logga in för att använda Min energi")}
         description={t(
-          "Dina energiposter sparas till ditt konto så att Flow kan förstå din kapacitet.",
+          "Dina energiposter sparas till ditt konto så att Pace kan förstå din kapacitet.",
         )}
       />
     );
@@ -200,7 +200,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             emoji="📈"
             description={t("Se vad som brukar ge och ta energi över tid.")}
             why={t(
-              "Genom att logga vad som påverkar dig kan Flow upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig.",
+              "Genom att logga vad som påverkar dig kan Pace upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig.",
             )}
           />
         </MyFloveWide>
@@ -252,7 +252,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
             surface="blush"
             tone="blush"
             icon={Sparkles}
-            title={t("Flow ser ett möjligt mönster")}
+            title={t("Pace ser ett möjligt mönster")}
             subtitle={t("En reflektion, inte en slutsats.")}
           >
             <p className="text-sm leading-relaxed text-ink">{insight.message}</p>

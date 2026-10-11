@@ -91,7 +91,7 @@ export function PersonalPushSettings() {
       <div>
         <p className="font-medium text-foreground">Personliga meddelanden</p>
         <p className="text-sm text-muted-foreground">
-          Flow skickar en varm rad som notis – även när appen är stängd.
+          Pace skickar en varm rad som notis – även när appen är stängd.
         </p>
         <MyFloveListening
           active={prefs.personal_enabled || prefs.personal_evening_enabled}

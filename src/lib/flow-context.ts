@@ -23,7 +23,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/idag", label: "Idag", emoji: "❤️" },
     { href: "/tasks", label: "Att göra", emoji: "✅" },
     { href: "/daglig-rutin", label: "Rutiner", emoji: "🔁" },
-    { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
+    { href: "/flowscore", label: "Dagens balans", emoji: "🔋" },
   ],
   privat: [
     { href: "/relationer", label: "Relationer", emoji: "❤️" },
@@ -38,7 +38,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/shopping", label: "Inköp", emoji: "🛒" },
   ],
   studier: [
-    { href: "/studyflow", label: "StudyFlow", emoji: "🎓" },
+    { href: "/studyflow", label: "Studier", emoji: "🎓" },
     { href: "/studybuddy", label: "Plugga", emoji: "📚" },
     { href: "/kalender", label: "Schema", emoji: "🗓️" },
     { href: "/pomodoro", label: "Fokus", emoji: "⏱️" },
@@ -53,7 +53,7 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/mitt-batteri", label: "Mitt batteri", emoji: "❤️" },
     { href: "/daglig-rutin", label: "Rutiner & medicin", emoji: "💊" },
     { href: "/traning", label: "Träning", emoji: "🏃" },
-    { href: "/flowscore", label: "FlowScore", emoji: "🔋" },
+    { href: "/flowscore", label: "Dagens balans", emoji: "🔋" },
   ],
   ekonomi: [
     { href: "/finances", label: "Ekonomi", emoji: "💰" },
@@ -123,12 +123,12 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
   "/relationer": { label: "Relationer", prompt: "Vem vill jag ge lite tid idag?", area: "privat" },
   "/barn": { label: "Barn", prompt: "Hjälp mig med barnens dag.", area: "privat" },
   "/quickflow": {
-    label: "QuickFlow",
+    label: "Fånga",
     prompt: "Hjälp mig sortera det jag skrivit ner.",
     area: "vardag",
   },
   "/flowscore": {
-    label: "FlowScore",
+    label: "Dagens balans",
     prompt: "Vad är rimligt med den ork jag har?",
     area: "vardag",
   },

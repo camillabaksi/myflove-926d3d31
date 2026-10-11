@@ -53,7 +53,7 @@ export default function PwaInstallCard({
         )}
       >
         <FlowMascot size="xs" mood="wave" bump className="shrink-0" />
-        <span>Vill du ha Flow nära till hands? Lägg till på hemskärmen</span>
+        <span>Vill du ha Pace nära till hands? Lägg till på hemskärmen</span>
       </button>
     );
   }
@@ -70,7 +70,7 @@ export default function PwaInstallCard({
       <div className="flex items-center gap-3">
         <FlowMascot size="xs" mood="wave" bump className="flow-alive shrink-0" />
         <p className="min-w-0 flex-1 text-pretty text-sm leading-relaxed text-muted-foreground">
-          <span className="font-semibold text-foreground">Ha Flow nära till hands 💜</span>
+          <span className="font-semibold text-foreground">Ha Pace nära till hands 💜</span>
           <span className="mt-0.5 block">Paceable kan ligga direkt på din hemskärm.</span>
         </p>
       </div>

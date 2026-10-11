@@ -173,31 +173,31 @@ export type ExplainerTopic = "energi" | "maende" | "planering" | "promenad" | "m
 const EXPLAINERS: Record<ExplainerTopic, { intro: string; growing: string; light: string }> = {
   energi: {
     intro:
-      "Det här hjälper Flow förstå hur din energi förändras under dagen – och vad som brukar ge eller ta energi för dig.",
+      "Det här hjälper Pace förstå hur din energi förändras under dagen – och vad som brukar ge eller ta energi för dig.",
     growing: "Ju mer du berättar, desto tydligare ser jag vad som påverkar din energi.",
     light: "Bra att veta hur du ligger till just nu.",
   },
   maende: {
     intro:
-      "Flow lär sig om ditt mående och din energi brukar hänga ihop för dig. Du kan hoppa över.",
+      "Pace lär sig om ditt mående och din energi brukar hänga ihop för dig. Du kan hoppa över.",
     growing: "Det här gör bilden av dina dagar lite tydligare. Valfritt.",
     light: "Valfritt.",
   },
   planering: {
     intro:
-      "Planera utifrån vad du har ork till – inte bara vad som behöver göras. Flow föreslår en ordning, du ändrar den som du vill.",
-    growing: "Flow föreslår en ordning som passar din ork idag – du ändrar den som du vill.",
+      "Planera utifrån vad du har ork till – inte bara vad som behöver göras. Pace föreslår en ordning, du ändrar den som du vill.",
+    growing: "Pace föreslår en ordning som passar din ork idag – du ändrar den som du vill.",
     light: "Du ändrar ordningen som du vill.",
   },
   promenad: {
     intro:
-      "Hitta en promenad som passar din energi just nu. Säg hur länge du vill gå, så föreslår Flow vägar nära dig.",
+      "Hitta en promenad som passar din energi just nu. Säg hur länge du vill gå, så föreslår Pace vägar nära dig.",
     growing: "Förslagen anpassas efter hur mycket ork du har just nu.",
-    light: "Välj längd, så föreslår Flow en runda.",
+    light: "Välj längd, så föreslår Pace en runda.",
   },
   medicin: {
     intro:
-      "Bocka av när du tagit dem – då slipper du hålla tiderna i huvudet, och Flow kan påminna dig när det passar din dag.",
+      "Bocka av när du tagit dem – då slipper du hålla tiderna i huvudet, och Pace kan påminna dig när det passar din dag.",
     growing: "Avbockningen gör att påminnelserna kan passa din dag bättre.",
     light: "",
   },

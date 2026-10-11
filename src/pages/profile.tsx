@@ -318,17 +318,17 @@ export default function ProfilePage() {
         <MyFloveWide>
           <CollapsibleSection
             id="profile-cycle"
-            title={t("Vill du använda menscykel i MyFlove?")}
+            title={t("Vill du använda menscykel i Paceable?")}
             headingClassName="text-base font-semibold"
             description={t(
-              "Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Flow tar inte hänsyn till det.",
+              "Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Pace tar inte hänsyn till det.",
             )}
             className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div
               className="mt-3 flex flex-wrap gap-2"
               role="radiogroup"
-              aria-label={t("Vill du använda menscykel i MyFlove?")}
+              aria-label={t("Vill du använda menscykel i Paceable?")}
             >
               {[true, false].map((v) => (
                 <button

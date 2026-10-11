@@ -31,7 +31,7 @@ export default function FlowScorePage() {
 
         <MyFloveWide span="wide">
           <MyFloveBlock
-            title="Dagens FlowScore"
+            title="Dagens balans"
             subtitle="En ögonblicksbild av vad som är rimligt idag"
             icon={Gauge}
             tone="lavender"

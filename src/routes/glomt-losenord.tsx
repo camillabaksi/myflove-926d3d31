@@ -10,13 +10,13 @@ import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 export const Route = createFileRoute("/glomt-losenord")({
   head: () => ({
     meta: [
-      { title: "Glömt lösenord – MyFlove" },
+      { title: "Glömt lösenord – Paceable" },
       {
         name: "description",
         content:
-          "Återställ ditt lösenord till MyFlove. Vi skickar en länk till din e-post så du kan välja ett nytt lösenord.",
+          "Återställ ditt lösenord till Paceable. Vi skickar en länk till din e-post så du kan välja ett nytt lösenord.",
       },
-      { property: "og:title", content: "Glömt lösenord – MyFlove" },
+      { property: "og:title", content: "Glömt lösenord – Paceable" },
       {
         property: "og:description",
         content: "Få en återställningslänk till din e-post och välj ett nytt lösenord.",
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/glomt-losenord")({
       { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
       { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:url", content: "https://myflove.lovable.app/glomt-losenord" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -58,8 +58,8 @@ export function EnablePushButton() {
     return (
       <div className="rounded-2xl bg-card p-4 text-sm text-muted-foreground">
         {isNativeShell()
-          ? "I MyFlove-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
-          : "Din webbläsare stödjer inte push-notiser. Installera MyFlove på hemskärmen (iPhone: Dela → Lägg till på hemskärmen) och öppna sedan igen."}
+          ? "I Paceable-appen kan telefonen inte visa notiser ännu. Påminnelser du själv lagt in hörs bara medan appen är öppen."
+          : "Din webbläsare stödjer inte push-notiser. Installera Paceable på hemskärmen (iPhone: Dela → Lägg till på hemskärmen) och öppna sedan igen."}
       </div>
     );
   }

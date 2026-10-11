@@ -86,13 +86,13 @@ export default function BatteryPage() {
               >
                 <p className="text-sm text-muted-foreground">
                   Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning.
-                  Kurvan utgår från ditt FlowScore just nu och tar hänsyn till planerade tider och
+                  Kurvan utgår från ditt Dagens balans just nu och tar hänsyn till planerade tider och
                   registrerade energipåverkningar. Utan egna mönster används en generell kurva.
                 </p>
                 {activeFactors.length > 0 && (
                   <>
                     <p className="text-xs font-semibold text-ink">
-                      Det här påverkar FlowScore just nu:
+                      Det här påverkar Dagens balans just nu:
                     </p>
                     <ul className="space-y-1 text-sm text-muted-foreground">
                       {activeFactors.map((factor) => (

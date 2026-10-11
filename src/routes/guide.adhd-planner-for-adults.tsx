@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 const URL = "https://myflove.lovable.app/guide/adhd-planner-for-adults";
 const TITLE = "ADHD-planner för vuxna: så väljer du rätt (2026)";
 const DESC =
-  "Guide för vuxna med ADHD som söker en planner som faktiskt håller. Jämför digitala och analoga lösningar och se hur MyFlove minskar mental belastning.";
+  "Guide för vuxna med ADHD som söker en planner som faktiskt håller. Jämför digitala och analoga lösningar och se hur Paceable minskar mental belastning.";
 
 export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
   head: () => ({
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
       { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
       { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:url", content: URL },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,8 +32,8 @@ export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
           "@type": "Article",
           headline: TITLE,
           description: DESC,
-          author: { "@type": "Organization", name: "MyFlove" },
-          publisher: { "@type": "Organization", name: "MyFlove" },
+          author: { "@type": "Organization", name: "Paceable" },
+          publisher: { "@type": "Organization", name: "Paceable" },
           mainEntityOfPage: URL,
           inLanguage: "sv-SE",
           datePublished: "2026-07-20",
@@ -49,7 +49,7 @@ function GuidePage() {
     <main className="min-h-screen bg-background text-foreground px-6 py-16">
       <div className="mx-auto max-w-2xl">
         <Link to="/" className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-          ← MyFlove
+          ← Paceable
         </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">
           ADHD-planner för vuxna: så väljer du en som faktiskt håller
@@ -64,7 +64,7 @@ function GuidePage() {
             <strong>ADHD-planner för vuxna</strong> gör tvärtom — den möter dig där du är, sänker
             friktionen och tar bort mental belastning istället för att lägga på mer. Här går vi
             igenom vad du faktiskt ska titta efter, jämför digitalt mot papper, och visar hur
-            MyFlove är designad kring de vanligaste friktionspunkterna.
+            Paceable är designad kring de vanligaste friktionspunkterna.
           </p>
 
           <h2>Vad gör en planner ADHD-vänlig?</h2>
@@ -112,14 +112,14 @@ function GuidePage() {
             en anteckningsbok för reflektion.
           </p>
 
-          <h2>De fyra vanligaste friktionspunkterna (och hur MyFlove löser dem)</h2>
+          <h2>De fyra vanligaste friktionspunkterna (och hur Paceable löser dem)</h2>
           <ul>
             <li>
-              <strong>Mental belastning:</strong> Rutiner™ i MyFlove kör dina återkommande sekvenser
+              <strong>Mental belastning:</strong> Rutiner™ i Paceable kör dina återkommande sekvenser
               åt dig — morgon, medicin, tvätt — så huvudet slipper hålla reda på ordningen.
             </li>
             <li>
-              <strong>Överväldigande:</strong> FlowPlan™ tar din lista och föreslår <em>en</em>{" "}
+              <strong>Överväldigande:</strong> Planering tar din lista och föreslår <em>en</em>{" "}
               nästa sak baserat på din energinivå just nu.
             </li>
             <li>
@@ -141,9 +141,9 @@ function GuidePage() {
             <li>Kan jag använda den både på mobilen och på datorn?</li>
           </ul>
 
-          <h2>Prova MyFlove</h2>
+          <h2>Prova Paceable</h2>
           <p>
-            MyFlove är byggd av och för människor med neurodivergenta hjärnor. Ingen
+            Paceable är byggd av och för människor med neurodivergenta hjärnor. Ingen
             produktivitetshype, ingen shame-loop — bara ett varmt stöd i vardagen.{" "}
             <Link to="/sign-up">Skapa ett konto</Link> och testa i några dagar. Det är gratis att
             komma igång.

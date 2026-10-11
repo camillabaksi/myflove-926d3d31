@@ -77,7 +77,7 @@ export function ScheduleImport() {
 
   const show = (found: ParsedLecture[]) => {
     if (!found.length) {
-      toast.error('Hittade inga lektioner – prova "Låt Flow tolka" istället.');
+      toast.error('Hittade inga lektioner – prova "Låt Pace tolka" istället.');
       return;
     }
     setEditIdx(null);
@@ -106,18 +106,18 @@ export function ScheduleImport() {
       const prepared = await prepareUpload(file);
       if (prepared.kind !== "file") return;
       addFile(prepared.file);
-      toast.success("Filen är sparad – Flow läser av schemat…");
+      toast.success("Filen är sparad – Pace läser av schemat…");
       const res = await parseScheduleWithFlow({ data: { file: prepared.file } });
       const found = dedupe(res.lectures);
       if (!found.length) {
         toast.error(
-          "Flow kunde inte läsa av schemat i bilden. Filen är sparad – prova en tydligare bild eller klistra in texten.",
+          "Pace kunde inte läsa av schemat i bilden. Filen är sparad – prova en tydligare bild eller klistra in texten.",
         );
         return;
       }
       setEditIdx(null);
       setPreview(found);
-      toast.success(`Flow läste av ${found.length} lektioner – granska och spara 💙`);
+      toast.success(`Pace läste av ${found.length} lektioner – granska och spara 💙`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Kunde inte läsa filen.");
     } finally {
@@ -132,7 +132,7 @@ export function ScheduleImport() {
       const res = await parseScheduleWithFlow({ data: { text: text.slice(0, 8000) } });
       show(dedupe(res.lectures));
     } catch {
-      toast.error("Flow kunde inte tolka schemat just nu. Prova att klistra in igen.");
+      toast.error("Pace kunde inte tolka schemat just nu. Prova att klistra in igen.");
     } finally {
       setBusy(false);
     }
@@ -175,14 +175,14 @@ export function ScheduleImport() {
       >
         <p className="mt-1 text-sm text-muted-foreground">
           Klistra in schemat som text, ladda upp en fil (.ics, .txt, .csv) eller ta en bild/PDF på
-          schemat. Flow läser av bilden och gör om den till ditt veckoschema – filen sparas så att
+          schemat. Pace läser av bilden och gör om den till ditt veckoschema – filen sparas så att
           du kan titta på originalet när du vill.
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl border border-primary/25 bg-primary/5 p-3 text-sm">
           <CalendarCheck className="h-4 w-4 shrink-0 text-primary" />
           <span className="text-ink">
-            Sparas i <strong>ditt veckoschema</strong> här i StudyFlow
+            Sparas i <strong>ditt veckoschema</strong> här i Studier
             {lectures.length > 0 ? ` · ${lectures.length} lektioner just nu` : ""}
           </span>
           <button
@@ -239,7 +239,7 @@ export function ScheduleImport() {
             onClick={askFlow}
             disabled={!text.trim() || busy}
           >
-            <Sparkles className="mr-2 h-4 w-4" /> {busy ? "Flow läser…" : "Låt Flow tolka"}
+            <Sparkles className="mr-2 h-4 w-4" /> {busy ? "Pace läser…" : "Låt Pace tolka"}
           </Button>
           <Button
             variant="outline"
@@ -248,7 +248,7 @@ export function ScheduleImport() {
             disabled={busy}
           >
             <FileUp className="mr-2 h-4 w-4" />
-            {busy ? "Flow läser filen…" : "Ladda upp fil eller bild"}
+            {busy ? "Pace läser filen…" : "Ladda upp fil eller bild"}
           </Button>
           <input
             ref={fileRef}

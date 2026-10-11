@@ -405,7 +405,7 @@ export function useReminderSync() {
         desired.set(key, {
           clientKey: key,
           kind: "custom",
-          title: "🔔 MyFlove: Du bad mig komma ihåg detta.",
+          title: "🔔 Paceable: Du bad mig komma ihåg detta.",
           body: item.text,
           deliverAt: new Date(item.remindAt).toISOString(),
           url: "/idag",

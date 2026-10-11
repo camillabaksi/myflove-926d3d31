@@ -82,7 +82,7 @@ export function WakeUpSettings() {
         <div>
           <p className="font-medium text-foreground">Morgonstart</p>
           <p className="text-sm text-muted-foreground">
-            För dig som snoozar bort alarmet. Flow puffar mjukt igen tills du säger att du är vaken
+            För dig som snoozar bort alarmet. Pace puffar mjukt igen tills du säger att du är vaken
             – sen är det tyst resten av dagen.
           </p>
         </div>
@@ -95,7 +95,7 @@ export function WakeUpSettings() {
 
       {wake.wake_enabled && !notifOk && (
         <p className="rounded-xl bg-muted/60 p-3 text-sm text-muted-foreground">
-          För att få påminnelser från MyFlove behöver notiser vara aktiverade. Slå på dem i rutan
+          För att få påminnelser från Paceable behöver notiser vara aktiverade. Slå på dem i rutan
           ovan, annars syns Morgonstart bara när appen är öppen.
         </p>
       )}

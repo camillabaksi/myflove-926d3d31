@@ -112,7 +112,7 @@ async function exportDocx() {
   });
 
   const blob = await Packer.toBlob(doc);
-  downloadBlob(blob, "MyFlove-Changelog.docx");
+  downloadBlob(blob, "Paceable-Changelog.docx");
 }
 
 async function exportPdf() {
@@ -172,7 +172,7 @@ async function exportPdf() {
   doc.setFontSize(9);
   doc.text(`Senast uppdaterad: ${CHANGELOG_UPDATED}`, margin, y);
 
-  downloadBlob(doc.output("blob"), "MyFlove-Changelog.pdf");
+  downloadBlob(doc.output("blob"), "Paceable-Changelog.pdf");
 }
 
 export default function ChangelogExport() {

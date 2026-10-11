@@ -23,7 +23,7 @@ export default function PwaInstallButton({
   label = "Lägg till Paceable på hemskärmen",
   variant = "default",
   row = false,
-  hint = "Öppna Paceable snabbare när du behöver Flow.",
+  hint = "Öppna Paceable snabbare när du behöver Pace.",
 }: {
   className?: string;
   label?: string;
@@ -81,7 +81,7 @@ export default function PwaInstallButton({
               {t("Så lägger du till Paceable")}
             </DialogTitle>
             <DialogDescription>
-              {t("Ha Flow nära till hands 💜 – appen hamnar direkt på din hemskärm.")}
+              {t("Ha Pace nära till hands 💜 – appen hamnar direkt på din hemskärm.")}
             </DialogDescription>
           </DialogHeader>
           {isIos ? (

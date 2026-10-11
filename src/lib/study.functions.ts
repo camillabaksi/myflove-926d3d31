@@ -20,7 +20,7 @@ const OutputSchema = z.object({
 
 export type StudyBreakdown = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, empatiska AI-kompanjon.
 Din uppgift här är att dela upp en skoluppgift eller inlämning i små, konkreta steg.
 
 Regler:

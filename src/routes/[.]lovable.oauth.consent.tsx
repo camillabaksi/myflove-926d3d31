@@ -96,10 +96,10 @@ function Consent() {
     <main className="mx-auto flex min-h-[100dvh] max-w-md items-center justify-center p-6">
       <div className="w-full rounded-3xl border border-border bg-card p-8 shadow-sm">
         <h1 className="mb-2 text-2xl font-semibold text-primary">
-          Koppla {clientName} till MyFlove
+          Koppla {clientName} till Paceable
         </h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Detta låter <strong>{clientName}</strong> använda MyFloves verktyg som dig — läsa och
+          Detta låter <strong>{clientName}</strong> använda Paceables verktyg som dig — läsa och
           lägga till dina uppgifter samt logga humör. Dina rättigheter i appen gäller fortfarande.
         </p>
         {error && (

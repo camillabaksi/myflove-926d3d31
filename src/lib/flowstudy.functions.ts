@@ -40,7 +40,7 @@ const OutputSchema = z.object({
 
 export type StudySet = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna, empatiska studiekompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, empatiska studiekompanjon.
 Du gör studiematerial till flashcards och quizfrågor.
 
 Regler:
@@ -67,7 +67,7 @@ export const generateStudySet = createServerFn({ method: "POST" })
     if (!apiKey) throw new Error("Missing LOVABLE_API_KEY");
 
     if (!data.text?.trim() && !data.file) {
-      throw new Error("Lägg till text eller en fil så kan Flow skapa frågor.");
+      throw new Error("Lägg till text eller en fil så kan Pace skapa frågor.");
     }
 
     const instruction = [

@@ -24,10 +24,10 @@ const OutputSchema = z.object({
 
 export type QuickflowPriorityResult = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna, NPF-vänliga kompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, NPF-vänliga kompanjon.
 Användaren har många saker på en gång och vill INTE planera tider.
 
-Sortera sakerna i MyFloves fyra prioritetsnivåer:
+Sortera sakerna i Paceables fyra prioritetsnivåer:
 - "nu" = P1. ${PRIORITY_DEFINITIONS[1]}
 - "sedan" = P2. ${PRIORITY_DEFINITIONS[2]}
 - "kan-vanta" = P3. ${PRIORITY_DEFINITIONS[3]}

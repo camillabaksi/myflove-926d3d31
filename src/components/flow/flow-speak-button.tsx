@@ -40,7 +40,7 @@ export function FlowSpeakButton({ text, className }: { text: string; className?:
   return (
     <button
       type="button"
-      aria-label={active ? "Stoppa uppläsningen" : "Lyssna på Flows svar"}
+      aria-label={active ? "Stoppa uppläsningen" : "Lyssna på Paces svar"}
       title={state === "error" ? "Uppläsningen misslyckades – försök igen" : undefined}
       onClick={() => (active ? stop() : void play())}
       className={cn(

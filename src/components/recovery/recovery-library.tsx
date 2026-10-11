@@ -64,7 +64,7 @@ type TopCategory = "mig" | "barn" | "sparade";
 const TOP: { id: TopCategory; emoji: string; label: string; hint: string }[] = [
   { id: "mig", emoji: "🌿", label: "För mig", hint: "Kropp, sinnen, tankar och vardag" },
   { id: "barn", emoji: "👨‍👩‍👧", label: "Barn & familj", hint: "Övningar ni sparat för barnen" },
-  { id: "sparade", emoji: "⭐", label: "Mina sparade", hint: "Allt du har sparat från Flow" },
+  { id: "sparade", emoji: "⭐", label: "Mina sparade", hint: "Allt du har sparat från Pace" },
 ];
 
 const CHILD_EXAMPLES = ["🧸 Lugn inför läggdags", "🌬️ Andas och landa", "🌈 Efter starka känslor", "🫶 Svår övergång", "👀 Sinnespaus"];
@@ -86,7 +86,7 @@ function SavedList({ list, emptyText, showExamples }: { list: SavedExercise[]; e
           </div>
         )}
         <Link to="/assistant" className="inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground">
-          {t("Be Flow skapa en övning")}
+          {t("Be Pace skapa en övning")}
         </Link>
       </div>
     );
@@ -215,7 +215,7 @@ function ChildrenFamily({ childId }: { childId?: string }) {
           ))}
         </div>
       )}
-      <SavedList list={shown} showExamples emptyText="Här hamnar övningar som Flow skapat för barnen, när du väljer att spara dem." />
+      <SavedList list={shown} showExamples emptyText="Här hamnar övningar som Pace skapat för barnen, när du väljer att spara dem." />
     </div>
   );
 }
@@ -223,7 +223,7 @@ function ChildrenFamily({ childId }: { childId?: string }) {
 function Favorites() {
   const { exercises } = useSavedExercises();
   const sorted = [...exercises.filter((e) => e.category === "favorit"), ...exercises.filter((e) => e.category !== "favorit")];
-  return <div className="mt-3"><SavedList list={sorted} emptyText="Inget sparat än. När Flow skapar en övning kan du spara den här." /></div>;
+  return <div className="mt-3"><SavedList list={sorted} emptyText="Inget sparat än. När Pace skapar en övning kan du spara den här." /></div>;
 }
 
 export default function RecoveryLibrary({ initialCategory, childId }: { initialCategory?: TopCategory; childId?: string } = {}) {

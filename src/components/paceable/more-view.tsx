@@ -15,7 +15,7 @@ export type MoreItem = {
 
 export const MORE_GROUPS = [
   { title: "Min dag", hrefs: ["/idag", "/kalender", "/quickflow", "/paminnelser", "/pomodoro"] },
-  { title: "Flow och samtal", hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar"] },
+  { title: "Pace och samtal", hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar"] },
   { title: "Ork och återhämtning", hrefs: ["/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/daglig-rutin"] },
   { title: "Hem och vardag", hrefs: ["/matlista", "/shopping", "/stadning"] },
   { title: "Konto och app", hrefs: ["/installningar", "/friktionsindex"] },
@@ -89,7 +89,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
       <MyFloveIcon icon={Icon} size="md" className="pace-more-icon" />
-      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label === "Flow och samtal" ? "Pace & samtal" : label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
+      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label === "Pace och samtal" ? "Pace & samtal" : label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
       {group && expanded ? <ChevronDown className="pace-more-arrow" aria-hidden /> : <ChevronRight className="pace-more-arrow" aria-hidden />}
       {!compact && group !== "legacy" && <Sprig className="pace-more-wide-decor" />}
     </>;
@@ -105,7 +105,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
   const family = visible(MORE_FAMILY), insights = visible(MORE_INSIGHTS), legacy = visible(MORE_LEGACY);
   const groupMeta: Record<string, { icon: typeof User; tone: string; hint: string }> = {
     "Min dag": { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
-    "Flow och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
+    "Pace och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
     "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
     "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
   };
@@ -115,7 +115,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const entries = group ? visible(group.hrefs) : [];
     return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries), compact, compact) : null;
   };
-  const minDag = groupCard("Min dag", true), hemVardag = groupCard("Hem och vardag", true), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Flow och samtal");
+  const minDag = groupCard("Min dag", true), hemVardag = groupCard("Hem och vardag", true), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Pace och samtal");
   const dailyExpansion = (title: string) => {
     const group = MORE_GROUPS.find((entry) => entry.title === title);
     const entries = group ? visible(group.hrefs) : [];

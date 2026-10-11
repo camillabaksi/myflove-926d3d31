@@ -4,13 +4,13 @@ import Page from "@/pages/energy-flow";
 export const Route = createFileRoute("/_app/energifloede")({
   head: () => ({
     meta: [
-      { title: "Min energi – vad ger och tar energi | MyFlove" },
+      { title: "Min energi – vad ger och tar energi | Paceable" },
       {
         name: "description",
         content:
           "Registrera vad som ger och tar energi under dagen. Energiflödet vägs in i dagens balans så att planen blir rimlig.",
       },
-      { property: "og:title", content: "Min energi – vad ger och tar energi | MyFlove" },
+      { property: "og:title", content: "Min energi – vad ger och tar energi | Paceable" },
       {
         property: "og:description",
         content:

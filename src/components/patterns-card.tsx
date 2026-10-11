@@ -38,7 +38,7 @@ export default function PatternsCard() {
       {patterns.length === 0 ? (
         <p className="text-sm text-muted-foreground">
           {t(
-            "Ännu finns inget tydligt mönster. När du checkat in några dagar kan MyFlove visa försiktiga mönster ur din egen data – aldrig påhittade.",
+            "Ännu finns inget tydligt mönster. När du checkat in några dagar kan Paceable visa försiktiga mönster ur din egen data – aldrig påhittade.",
           )}
         </p>
       ) : (

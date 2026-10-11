@@ -84,7 +84,7 @@ export default function Dump() {
                       {t("Anteckningar & idébank")}
                     </span>
                     <span className="block text-sm text-muted-foreground">
-                      {t("Tankar utan krav bor i en egen del under Flow.")}
+                      {t("Tankar utan krav bor i en egen del under Pace.")}
                     </span>
                   </span>
                 </Link>
@@ -95,7 +95,7 @@ export default function Dump() {
                       <Brain size={20} /> {t("Mina sorteringsregler")}
                     </span>
                   }
-                  id="QuickFlow-regler"
+                  id="Fånga-regler"
                   headingClassName="font-semibold"
                   className="pt-4"
                 >

@@ -227,7 +227,7 @@ async function readPdfText(file: File, maxChars = 30000): Promise<string> {
   const text = parts.join("\n").trim();
   if (!text) {
     throw new Error(
-      "PDF:en verkar vara en skannad bild utan text. Ta gärna en skärmbild av den istället – då kan Flow läsa den.",
+      "PDF:en verkar vara en skannad bild utan text. Ta gärna en skärmbild av den istället – då kan Pace läsa den.",
     );
   }
   return text.length > maxChars ? `${text.slice(0, maxChars)}\n…` : text;
@@ -261,7 +261,7 @@ export async function prepareUpload(file: File): Promise<PreparedUpload> {
     };
   }
   throw new Error(
-    `Flow kan inte läsa ${fileExtension(file.name) || "det formatet"} ännu. Spara som PDF, Word eller bild så fungerar det.`,
+    `Pace kan inte läsa ${fileExtension(file.name) || "det formatet"} ännu. Spara som PDF, Word eller bild så fungerar det.`,
   );
 }
 
