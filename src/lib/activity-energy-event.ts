@@ -18,6 +18,11 @@ export function emitActivityDone(detail: ActivityDoneDetail) {
   window.dispatchEvent(new CustomEvent<ActivityDoneDetail>(ACTIVITY_DONE_EVENT, { detail }));
 }
 
+/** Kalenderns visnings-id pekar på samma källa som instanshistoriken. */
+export function activityEnergySourceId(id: string): string {
+  return id.startsWith("rem-") ? `reminder-${id.slice(4)}` : id;
+}
+
 /** Minimal FlowItem-form som "Hur kändes det?" behöver. */
 export function detailToFlowItem(detail: ActivityDoneDetail): FlowItem {
   return {

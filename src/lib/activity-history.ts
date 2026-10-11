@@ -89,6 +89,9 @@ export interface InstanceRecord {
   expectedEnergy?: ActivityEnergy;
   energyImpact?: ActivityEnergy;
   energyImpactRecordedAt?: number;
+  /** Befintlig energipost: ändringar och retries återanvänder samma post. */
+  energyFactorId?: string;
+  energyFactorOccurredAt?: string;
 }
 
 /** En konkret aktivitet på ett konkret datum. */
@@ -267,10 +270,12 @@ export function recordEnergy(
   date: string,
   energy: ActivityEnergy,
   at = Date.now(),
+  factor?: { id: string; occurredAt: string },
 ): InstanceRecord[] {
   return upsertRecord(records, sourceId, date, {
     energyImpact: energy,
     energyImpactRecordedAt: at,
+    ...(factor ? { energyFactorId: factor.id, energyFactorOccurredAt: factor.occurredAt } : {}),
   });
 }
 

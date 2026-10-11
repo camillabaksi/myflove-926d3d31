@@ -355,7 +355,11 @@ export function useFlowItems(dateISO?: string): {
         emitActivityDone({
           id: item.id,
           title: item.title,
-          ...(item.dueDate ? { dueDate: item.dueDate } : {}),
+          dueDate: item.id.startsWith("rem-")
+            ? (reminders.find((r) => `rem-${r.id}` === item.id)?.repeat ?? "none") !== "none"
+              ? targetDay
+              : item.dueDate ?? targetDay
+            : item.dueDate ?? targetDay,
         });
       }
       const [, rest] = [
