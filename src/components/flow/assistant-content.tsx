@@ -31,15 +31,7 @@ import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { flowPlanContext } from "@/lib/flow-plan";
 import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import { useMyFlowMemories } from "@/hooks/use-my-flow";
-import { lastPlace, placeFor, shortcutsFor, type FlowPlace } from "@/lib/flow-context";
-import {
-  AREA_META,
-  ALL_AREAS,
-  areaChipStyle,
-  areaTint,
-  areaColor,
-  type LifeArea,
-} from "@/lib/life-areas";
+import { lastPlace, type FlowPlace } from "@/lib/flow-context";
 import { Link } from "@tanstack/react-router";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -165,21 +157,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   useEffect(() => {
     setPlace(lastPlace());
   }, []);
-  /** Byt del av livet utan att lämna Flow – ändrar bara vad Flow utgår från. */
-  const switchArea = (area: LifeArea) => {
-    const home: Record<LifeArea, string> = {
-      vardag: "/hem",
-      privat: "/familj",
-      barn: "/barn",
-      studier: "/studyflow",
-      jobb: "/jobb",
-      halsa: "/mitt-batteri",
-      ekonomi: "/finances",
-      socialt: "/relationer",
-      egentid: "/mitt-batteri",
-    };
-    setPlace(placeFor(home[area]));
-  };
 
   const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask, setTaskTime } =
     useTasks();
@@ -593,52 +570,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               {flowStatus === "thinking" ? "Pace tänker…" : "Pace lyssnar när du behöver det."}
             </p>
           </div>
-
-          {place && (
-            <div
-              className="rounded-3xl border-2 p-4"
-              style={{
-                backgroundColor: areaTint(place.area, 0.1),
-                borderColor: areaTint(place.area, 0.3),
-              }}
-            >
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Utgår från</p>
-              <p className="text-sm font-semibold" style={{ color: areaColor(place.area) }}>
-                {AREA_META[place.area].emoji} {AREA_META[place.area].label}
-                {place.label !== AREA_META[place.area].label && ` · ${place.label}`}
-              </p>
-              <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
-                {AREA_META[place.area].blurb}
-              </p>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {shortcutsFor(place).map((sc) => (
-                  <Link
-                    key={sc.href}
-                    to={sc.href}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-transform active:scale-95"
-                  >
-                    <span aria-hidden="true">{sc.emoji}</span>
-                    {sc.label}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {ALL_AREAS.map((a) => (
-                  <button
-                    key={a}
-                    type="button"
-                    onClick={() => switchArea(a)}
-                    style={areaChipStyle(a, a === place.area)}
-                    className="rounded-full px-3 py-1 text-[11px] font-medium"
-                  >
-                    {AREA_META[a].emoji} {AREA_META[a].label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
 
           <MyFloveBlock
             title="Idag"
