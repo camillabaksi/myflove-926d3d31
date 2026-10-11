@@ -18,13 +18,7 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
 import { useLang } from "@/hooks/use-language";
-
-interface EnergyLog {
-  id: string;
-  level: number;
-  note: string | null;
-  logged_at: string;
-}
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 
 const LEVEL_LABELS: Record<number, string> = {
   1: "Tom",
@@ -61,7 +55,14 @@ interface EnergyContentProps {
 export function EnergyContent({ showHeader = true }: EnergyContentProps) {
   const { t, lang, locale } = useLang();
   const levelLabels = lang === "en" ? LEVEL_LABELS_EN : LEVEL_LABELS;
-  const [logs, setLogs] = useState<EnergyLog[]>([]);
+  const { energyEntries, logEnergy } = useQuickCheckin();
+  const logs = useMemo(
+    () =>
+      energyEntries.filter(
+        (entry) => new Date(entry.logged_at).getTime() >= Date.now() - 7 * 86400000,
+      ),
+    [energyEntries],
+  );
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -80,16 +81,6 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         setLoading(false);
         return;
       }
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      const { data, error: err } = await supabase
-        .from("energy_logs")
-        .select("id, level, note, logged_at")
-        .eq("user_id", uid)
-        .gte("logged_at", sevenDaysAgo)
-        .order("logged_at", { ascending: true });
-      if (!mounted) return;
-      if (err) setError(err.message);
-      else setLogs(data ?? []);
       setLoading(false);
     })();
     return () => {
@@ -109,7 +100,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         }),
         level: l.level,
       }));
-  }, [logs]);
+  }, [logs, locale]);
 
   const hourAverages = useMemo(() => {
     const buckets: Record<number, { sum: number; n: number }> = {};
@@ -140,23 +131,15 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
     if (!userId || !selected) return;
     setSaving(true);
     setError(null);
-    const { data, error: err } = await supabase
-      .from("energy_logs")
-      .insert({
-        user_id: userId,
-        level: selected,
-        note: note.trim() || null,
-      })
-      .select("id, level, note, logged_at")
-      .single();
-    setSaving(false);
-    if (err) {
-      setError(err.message);
-      return;
+    try {
+      await logEnergy(selected * 2, note);
+      setSelected(null);
+      setNote("");
+    } catch {
+      setError(t("Det gick inte att spara. Dina val finns kvar – försök igen."));
+    } finally {
+      setSaving(false);
     }
-    if (data) setLogs((prev) => [...prev, data]);
-    setSelected(null);
-    setNote("");
   }
 
   return (

@@ -37,7 +37,13 @@ import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
 const MOODS = MOOD_FACES;
 
 /* Systemoberoende ikoner i stället för emoji, som saknas i vissa Android-/WebView-typsnitt. */
-const MOOD_ICONS: Record<number, LucideIcon> = { 2: Frown, 4: Annoyed, 6: Meh, 8: Smile, 10: Laugh };
+const MOOD_ICONS: Record<number, LucideIcon> = {
+  2: Frown,
+  4: Annoyed,
+  6: Meh,
+  8: Smile,
+  10: Laugh,
+};
 const ORK_ICONS: Record<string, LucideIcon> = {
   fullt: BatteryFull,
   mellan: BatteryMedium,
@@ -91,15 +97,18 @@ export default function SimpleCheckin({
   const [factors, setFactors] = useState<string[]>(presetFactors ?? []);
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [pendingSync, setPendingSync] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [started, setStarted] = useState(false);
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
-    if (energyValue != null) setBattery(energyValue);
-  }, [energyValue]);
+    if (!started && energyValue != null) setBattery(energyValue);
+  }, [energyValue, started]);
   useEffect(() => {
-    if (moodValue != null) setMood(moodValue);
-  }, [moodValue]);
+    if (!started && moodValue != null) setMood(moodValue);
+  }, [moodValue, started]);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const incoming = new URLSearchParams(window.location.search).get("note");
@@ -112,35 +121,46 @@ export default function SimpleCheckin({
     track(kind === "battery" ? "battery_checkin_started" : "mood_checkin_started", { source });
   };
 
-  const save = () => {
-    void logEnergy(battery);
-    track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
-    track("battery_logged", { source, method: "knapp" });
-    const text = note.trim();
-    if (mood != null || text) {
-      logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
-      track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
-      track("mood_logged", { source, method: "emoji" });
+  const save = async () => {
+    if (saving) return;
+    setSaving(true);
+    setSaved(false);
+    setSaveError(null);
+    try {
+      const result = await logEnergy(battery);
+      setPendingSync(result?.synced === false);
+      track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
+      track("battery_logged", { source, method: "knapp" });
+      const text = note.trim();
+      if (mood != null || text) {
+        logMood(mood ?? Math.max(1, Math.min(10, battery)), text || undefined);
+        track("mood_checkin_completed", { source, method: "emoji", result: "completed" });
+        track("mood_logged", { source, method: "emoji" });
+      }
+      if (factors.length > 0) {
+        track("health_factor_logged", { source, method: "knapp", count: factors.length });
+      }
+      for (const id of factors) {
+        const f = FACTORS.find((x) => x.id === id);
+        if (!f) continue;
+        void addFactor({
+          title: t(f.labelSv),
+          direction: battery >= 6 ? "gives" : "drains",
+          strength: 2,
+          category: f.category,
+          kind: "vardag",
+        }).catch(() => undefined);
+      }
+      setSaved(true);
+      setFactors([]);
+      setNote("");
+      onSaved?.();
+      window.setTimeout(() => setSaved(false), 2500);
+    } catch {
+      setSaveError(t("Det gick inte att spara. Dina val finns kvar – försök igen."));
+    } finally {
+      setSaving(false);
     }
-    if (factors.length > 0) {
-      track("health_factor_logged", { source, method: "knapp", count: factors.length });
-    }
-    for (const id of factors) {
-      const f = FACTORS.find((x) => x.id === id);
-      if (!f) continue;
-      void addFactor({
-        title: t(f.labelSv),
-        direction: battery >= 6 ? "gives" : "drains",
-        strength: 2,
-        category: f.category,
-        kind: "vardag",
-      }).catch(() => undefined);
-    }
-    setSaved(true);
-    setFactors([]);
-    setNote("");
-    onSaved?.();
-    window.setTimeout(() => setSaved(false), 2500);
   };
 
   const ork = orkFromValue10(battery);
@@ -152,7 +172,11 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <BatteryMedium size={16} aria-hidden="true" className="mr-1 inline-block align-[-3px] text-primary" />
+            <BatteryMedium
+              size={16}
+              aria-hidden="true"
+              className="mr-1 inline-block align-[-3px] text-primary"
+            />
             {t("Hur mycket ryms idag?")}
           </p>
           <WhyHint appearance="inline" label={t("logga ork")} className={whyClass}>
@@ -187,7 +211,11 @@ export default function SimpleCheckin({
       <div className="space-y-2">
         <div className="pace-form-heading flex items-center justify-between gap-2">
           <p className="text-sm font-semibold text-ink">
-            <Heart size={16} aria-hidden="true" className="mr-1 inline-block align-[-3px] text-primary" />
+            <Heart
+              size={16}
+              aria-hidden="true"
+              className="mr-1 inline-block align-[-3px] text-primary"
+            />
             {t("Hur känns det just nu?")}{" "}
             <span className="font-normal text-muted-foreground">{t("(valfritt)")}</span>
           </p>
@@ -231,7 +259,10 @@ export default function SimpleCheckin({
             onFocus={(e) => {
               // Håll anteckningen synlig ovanför den fasta sparytan när tangentbordet öppnas.
               const el = e.currentTarget;
-              window.setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+              window.setTimeout(
+                () => el.scrollIntoView({ block: "center", behavior: "smooth" }),
+                300,
+              );
             }}
             rows={2}
             placeholder={t("T.ex. ”Sovit bara 4 timmar och är dessutom sjuk.”")}
@@ -296,19 +327,28 @@ export default function SimpleCheckin({
     <Button
       type="button"
       onClick={save}
+      disabled={saving}
       aria-label={t("Logga energi & mående")}
       className="min-h-11 w-full gap-2 rounded-xl px-4 py-2.5 font-semibold"
     >
       <Sparkles size={16} aria-hidden="true" />
-      {saved ? t("Tack") : t("Spara")}
+      {saving ? t("Sparar…") : saved ? t("Tack") : t("Spara")}
     </Button>
   );
 
   const status = (
     <p aria-live="polite" className="text-center text-xs leading-relaxed text-muted-foreground">
-      {saved
-        ? t("Tack – din observation är sparad.")
-        : t("Logga så ofta du vill – varje sparning blir en egen observation i din dag.")}
+      {saveError ? (
+        <span role="alert">{saveError}</span>
+      ) : saved ? (
+        pendingSync ? (
+          t("Din observation är sparad här och väntar på synkning till kontot.")
+        ) : (
+          t("Tack – din observation är sparad.")
+        )
+      ) : (
+        t("Logga så ofta du vill – varje sparning blir en egen observation i din dag.")
+      )}
     </p>
   );
 
@@ -331,12 +371,14 @@ export default function SimpleCheckin({
             aria-label={t("Logga just nu")}
             className="font-display text-lg font-bold leading-tight text-ink sm:text-xl"
           >
-            <span aria-hidden="true" className="sm:hidden">{t("Logga")}</span>
-            <span aria-hidden="true" className="hidden sm:inline">{t("Logga just nu")}</span>
+            <span aria-hidden="true" className="sm:hidden">
+              {t("Logga")}
+            </span>
+            <span aria-hidden="true" className="hidden sm:inline">
+              {t("Logga just nu")}
+            </span>
           </h2>
-          <p className="sr-only">
-            {t("Två snabba frågor. Paceable gör resten.")}
-          </p>
+          <p className="sr-only">{t("Två snabba frågor. Paceable gör resten.")}</p>
         </header>
 
         <div

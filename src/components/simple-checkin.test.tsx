@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 
 const logMood = vi.fn();
 const logEnergy = vi.fn();
@@ -32,7 +32,8 @@ import SimpleCheckin from "@/components/simple-checkin";
 describe("Mitt batteri – den kanoniska loggningsvyn", () => {
   beforeEach(() => {
     logMood.mockClear();
-    logEnergy.mockClear();
+    logEnergy.mockReset();
+    logEnergy.mockResolvedValue({ synced: true });
     addFactor.mockClear();
     trackCalls.length = 0;
     checkinState = { moodValue: null, energyValue: null, todayMood: null };
@@ -72,37 +73,41 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(screen.getByRole("button", { name: /^Logga energi & mående$/ })).toBeVisible();
   });
 
-  it("låter användaren skriva fri text – men kräver den inte", () => {
+  it("låter användaren skriva fri text – men kräver den inte", async () => {
     render(<SimpleCheckin />);
     const field = screen.getByPlaceholderText(/Sovit bara 4 timmar/i);
     expect((field as HTMLTextAreaElement).required).toBe(false);
     fireEvent.click(screen.getByRole("button", { name: /Logga energi & mående/i }));
     expect(logEnergy).toHaveBeenCalledTimes(1);
+    await screen.findByText("Tack – din observation är sparad.");
   });
 
-  it("sparar fritexten tillsammans med observationen i befintlig datamodell", () => {
+  it("sparar fritexten tillsammans med observationen i befintlig datamodell", async () => {
     render(<SimpleCheckin />);
     fireEvent.change(screen.getByPlaceholderText(/Sovit bara 4 timmar/i), {
       target: { value: "Jag sov bara 4 timmar och är dessutom sjuk." },
     });
     fireEvent.click(screen.getByRole("button", { name: /Logga energi & mående/i }));
-    expect(logMood).toHaveBeenCalledWith(
-      expect.any(Number),
-      "Jag sov bara 4 timmar och är dessutom sjuk.",
+    await waitFor(() =>
+      expect(logMood).toHaveBeenCalledWith(
+        expect.any(Number),
+        "Jag sov bara 4 timmar och är dessutom sjuk.",
+      ),
     );
   });
 
-  it("skickar aldrig hälsotexten som analytics-payload", () => {
+  it("skickar aldrig hälsotexten som analytics-payload", async () => {
     render(<SimpleCheckin />);
     fireEvent.change(screen.getByPlaceholderText(/Sovit bara 4 timmar/i), {
       target: { value: "Jag är sjuk" },
     });
     fireEvent.click(screen.getByRole("button", { name: /Logga energi & mående/i }));
+    await waitFor(() => expect(logMood).toHaveBeenCalled());
     const serialized = JSON.stringify(trackCalls);
     expect(serialized).not.toContain("sjuk");
   });
 
-  it("behåller osparade val och text över Visa mer och hopfällning utan autosparning", () => {
+  it("behåller osparade val och text över Visa mer och hopfällning utan autosparning", async () => {
     render(<SimpleCheckin />);
     fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
     fireEvent.click(screen.getByRole("button", { name: "Bra" }));
@@ -121,11 +126,11 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(logMood).not.toHaveBeenCalled();
     expect(addFactor).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
-    expect(logMood).toHaveBeenCalledWith(expect.any(Number), "Mitt utkast");
+    await waitFor(() => expect(logMood).toHaveBeenCalledWith(expect.any(Number), "Mitt utkast"));
     expect(addFactor).toHaveBeenCalledWith(expect.objectContaining({ category: "somn" }));
   });
 
-  it("flera loggningar samma dag är tillåtna – formuläret blockeras aldrig", () => {
+  it("flera loggningar samma dag är tillåtna – formuläret blockeras aldrig", async () => {
     // Användaren har redan loggat i morse.
     checkinState = {
       moodValue: 4,
@@ -139,7 +144,65 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(screen.queryByText(/redan loggat/i)).toBeNull();
     fireEvent.click(button);
     expect(logEnergy).toHaveBeenCalledTimes(1);
-    // Formuläret är direkt redo för nästa observation.
+    await screen.findByText("Tack – din observation är sparad.");
+    // Formuläret är redo för nästa observation när sparningen är klar.
     expect(screen.getByRole("button", { name: /Logga energi & mående|Tack/i })).toBeTruthy();
+  });
+  it("väntar på sparningen innan dialogen stängs och hindrar dubbla tryck", async () => {
+    let finish!: (result: { synced: boolean }) => void;
+    logEnergy.mockReturnValue(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    const onSaved = vi.fn();
+    render(<SimpleCheckin presentation="dialog" onSaved={onSaved} />);
+    fireEvent.click(screen.getByRole("button", { name: "Bra" }));
+    const save = screen.getByRole("button", { name: /^Logga energi & mående$/ });
+    fireEvent.click(save);
+    fireEvent.click(save);
+    expect(save).toBeDisabled();
+    expect(logEnergy).toHaveBeenCalledTimes(1);
+    expect(logMood).not.toHaveBeenCalled();
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(screen.queryByText("Tack – din observation är sparad.")).toBeNull();
+    await act(async () => finish({ synced: true }));
+    expect(logMood).toHaveBeenCalledWith(8, undefined);
+    expect(onSaved).toHaveBeenCalledTimes(1);
+  });
+
+  it("behåller utkastet och visar ett fel när sparningen misslyckas", async () => {
+    logEnergy.mockRejectedValue(new Error("Account changed"));
+    const onSaved = vi.fn();
+    render(<SimpleCheckin onSaved={onSaved} />);
+    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt utkast" } });
+    fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Dina val finns kvar");
+    expect(screen.getByRole("textbox")).toHaveValue("Mitt utkast");
+    expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
+    expect(onSaved).not.toHaveBeenCalled();
+    expect(logMood).not.toHaveBeenCalled();
+  });
+
+  it("berättar när observationen väntar på synkning", async () => {
+    logEnergy.mockResolvedValue({ synced: false });
+    render(<SimpleCheckin />);
+    fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
+    expect(await screen.findByText(/väntar på synkning till kontot/)).toBeVisible();
+  });
+
+  it("låter inte sena molnvärden skriva över valen i ett påbörjat utkast", async () => {
+    const { rerender } = render(<SimpleCheckin />);
+    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
+    fireEvent.click(screen.getByRole("button", { name: "Bra" }));
+    checkinState.energyValue = 10;
+    checkinState.moodValue = 2;
+    rerender(<SimpleCheckin />);
+    expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Bra" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
+    await waitFor(() => expect(logMood).toHaveBeenCalledWith(8, undefined));
+    expect(logEnergy).toHaveBeenCalledWith(3);
   });
 });

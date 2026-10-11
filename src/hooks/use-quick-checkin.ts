@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getSyncUser } from "@/lib/cloud-storage";
 import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
+import { isActiveOwner } from "@/lib/account-scope";
+import { todayISO } from "@/lib/day";
 
 import { PENDING_ENERGY_KEY, ensurePendingUuids, migratePendingEnergy } from "@/lib/energy-pending";
 
@@ -22,6 +24,7 @@ export interface EnergyLogEntry {
   id: string;
   level: number;
   logged_at: string;
+  note?: string | null;
 }
 
 function isToday(ts: number | string): boolean {
@@ -42,7 +45,13 @@ export const toScale5 = (v10: number) => Math.min(5, Math.max(1, Math.round(v10 
 /** 1–5 → 1–10 (fallback när exakt värde saknas). */
 export const toScale10 = (v5: number) => Math.min(10, Math.max(1, Math.round(v5 * 2)));
 
-const todayKey = () => new Date().toISOString().slice(0, 10);
+const todayKey = todayISO;
+
+function mergeEnergy(...lists: EnergyLogEntry[][]): EnergyLogEntry[] {
+  const entries = new Map<string, EnergyLogEntry>();
+  for (const list of lists) for (const entry of list) entries.set(entry.id, entry);
+  return [...entries.values()].sort((a, b) => a.logged_at.localeCompare(b.logged_at));
+}
 
 /** Energiloggar gjorda utan inloggning – flyttas till energy_logs vid login. */
 export { PENDING_ENERGY_KEY };
@@ -66,8 +75,8 @@ export function useQuickCheckin() {
   const [checkin10, setCheckin10] = useCloudSyncedStorage<Checkin10>("myflove-checkin-10", {
     day: todayKey(),
   });
-  const [cloudEnergy, setCloudEnergy] = useState<EnergyLogEntry[] | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+  const localEnergyRef = useRef(localEnergy);
+  localEnergyRef.current = localEnergy;
   const pendingRef = useRef(pendingEnergy);
   pendingRef.current = pendingEnergy;
   const userIdRef = useRef<string | null>(null);
@@ -83,29 +92,26 @@ export function useQuickCheckin() {
      */
     const load = async (uid: string | null) => {
       if (!mounted) return;
-      setUserId(uid);
       userIdRef.current = uid;
-      if (!uid) {
-        setCloudEnergy(null);
-        return;
-      }
+      if (!uid || !isActiveOwner(uid)) return;
+      const knownIds = new Set(localEnergyRef.current.map((entry) => entry.id));
       const since = new Date();
       // Ett års historik behövs för den långsiktiga belastningskartan i Insikter.
       since.setDate(since.getDate() - 365);
       since.setHours(0, 0, 0, 0);
       const { data, error } = await supabase
         .from("energy_logs")
-        .select("id, level, logged_at")
+        .select("id, level, note, logged_at")
         .eq("user_id", uid)
         .gte("logged_at", since.toISOString())
         .order("logged_at", { ascending: true });
-      if (!mounted) return;
+      if (!mounted || userIdRef.current !== uid || !isActiveOwner(uid)) return;
 
       // Kunde vi inte läsa molnet rör vi inte de väntande posterna – de
       // ligger kvar och försöks igen vid nästa tillfälle.
       if (error || !data) return;
 
-      let rows = data;
+      let rows: EnergyLogEntry[] = data;
       const pending = pendingRef.current ?? [];
       if (pending.length > 0 && !migratingRef.current) {
         migratingRef.current = true;
@@ -118,9 +124,11 @@ export function useQuickCheckin() {
             setPendingEnergy(entries);
           }
           const result = await migratePendingEnergy(uid, entries, data);
-          if (!mounted) return;
+          if (!mounted || userIdRef.current !== uid || !isActiveOwner(uid)) return;
           // Behåll exakt det som inte bekräftats – aldrig en blank rensning.
-          setPendingEnergy(result.remaining);
+          const migratedIds = new Set(result.migrated.map((entry) => entry.id));
+          pendingRef.current = pendingRef.current.filter((entry) => !migratedIds.has(entry.id));
+          setPendingEnergy((prev) => prev.filter((entry) => !migratedIds.has(entry.id)));
           if (result.inserted.length > 0) {
             rows = [...rows, ...result.inserted].sort(
               (a, b) => new Date(a.logged_at).getTime() - new Date(b.logged_at).getTime(),
@@ -131,27 +139,37 @@ export function useQuickCheckin() {
         }
       }
 
-      if (!mounted) return;
-      setCloudEnergy(rows);
-      setLocalEnergy(rows);
+      if (!mounted || userIdRef.current !== uid || !isActiveOwner(uid)) return;
+      // Samma cache används av alla vyer. En långsam läsning får inte
+      // ta bort väntande eller nya observationer som lagts till under tiden.
+      setLocalEnergy((prev) =>
+        mergeEnergy(
+          rows,
+          prev.filter((entry) => !knownIds.has(entry.id)),
+          pendingRef.current,
+        ),
+      );
     };
 
     const retry = () => {
       if ((pendingRef.current ?? []).length === 0) return;
       if (!userIdRef.current) return;
-      void load(userIdRef.current);
+      void load(userIdRef.current).catch(() => undefined);
     };
 
-    void supabase.auth.getUser().then(({ data }) => load(data.user?.id ?? null));
+    void supabase.auth
+      .getUser()
+      .then(({ data }) => load(data.user?.id ?? null))
+      .catch(() => undefined);
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      void load(session?.user?.id ?? null);
+      void load(session?.user?.id ?? null).catch(() => undefined);
     });
     let stopRealtime: (() => void) | undefined;
     void getSyncUser().then((user) => {
       const uid = user?.id;
       if (!uid || !mounted) return;
       stopRealtime = subscribeToAccountTable("energy_logs", uid, () => {
-        void load(uid);
+        if (userIdRef.current === uid) void load(uid).catch(() => undefined);
       });
     });
     window.addEventListener("online", retry);
@@ -165,7 +183,7 @@ export function useQuickCheckin() {
     };
   }, [setLocalEnergy, setPendingEnergy]);
 
-  const energyEntries = cloudEnergy ?? localEnergy;
+  const energyEntries = localEnergy;
 
   /** Alla dagens måendeobservationer, äldst → nyast. */
   const todayMoods = useMemo<MoodEntry[]>(
@@ -198,7 +216,11 @@ export function useQuickCheckin() {
     (score10: number, note?: string) => {
       const score = toScale5(score10);
       const text = note?.trim() ? note.trim() : undefined;
-      setCheckin10((prev) => ({ day: todayKey(), energy: prev?.energy, mood: score10 }));
+      setCheckin10((prev) => ({
+        day: todayKey(),
+        energy: prev?.day === todayKey() ? prev.energy : undefined,
+        mood: score10,
+      }));
       setMoods((prev) => [
         {
           id: Math.random().toString(36).slice(2, 11),
@@ -217,44 +239,64 @@ export function useQuickCheckin() {
   const queueRef = useRef<Promise<void>>(Promise.resolve());
 
   const logEnergy = useCallback(
-    (level10: number) => {
+    (level10: number, note?: string) => {
       const level = toScale5(level10);
-      setCheckin10((prev) => ({ day: todayKey(), mood: prev?.mood, energy: level10 }));
+      const uid = userIdRef.current;
       const run = async () => {
         const now = new Date().toISOString();
         // Stabilt id (UUID när webbläsaren stöder det) så att en post som
         // ligger i kön kan skrivas upp idempotent, utan dubbletter vid retry.
-        const id =
-          typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-            ? crypto.randomUUID()
-            : Math.random().toString(36).slice(2, 11);
-        const local = { id, level, logged_at: now };
-        if (!userId) {
-          setPendingEnergy((prev) => [...(prev ?? []), local]);
-          setLocalEnergy((prev) => [...(prev ?? []), local]);
-          return;
+        const {
+          entries: [local],
+        } = ensurePendingUuids([
+          { id: "", level, logged_at: now, ...(note?.trim() ? { note: note.trim() } : {}) },
+        ]);
+        if (uid !== userIdRef.current || (uid && !isActiveOwner(uid))) {
+          throw new Error("Kontot ändrades. Öppna incheckningen igen.");
         }
-        const { data, error } = await supabase
-          .from("energy_logs")
-          .insert({ user_id: userId, level, logged_at: now })
-          .select("id, level, logged_at")
-          .single();
-        if (error || !data) {
+        setCheckin10((prev) => ({
+          day: todayKey(),
+          mood: prev?.day === todayKey() ? prev.mood : undefined,
+          energy: level10,
+        }));
+        setLocalEnergy((prev) => mergeEnergy(prev ?? [], [local]));
+        const queuePending = () => {
           // Offline eller serverfel – lägg den i kön i stället för att
           // tappa loggningen. Migreringen är idempotent och kör om.
-          setPendingEnergy((prev) => [...(prev ?? []), local]);
-          setLocalEnergy((prev) => [...(prev ?? []), local]);
-          return;
+          pendingRef.current = mergeEnergy(pendingRef.current ?? [], [local]);
+          setPendingEnergy((prev) => mergeEnergy(prev ?? [], [local]));
+          return { synced: false };
+        };
+        const queued = queuePending();
+        if (!uid) return queued;
+        try {
+          const { data, error } = await supabase
+            .from("energy_logs")
+            .upsert({ ...local, user_id: uid }, { onConflict: "id" })
+            .select("id, level, note, logged_at")
+            .single();
+          if (uid !== userIdRef.current || !isActiveOwner(uid)) {
+            throw new Error("Kontot ändrades. Öppna incheckningen igen.");
+          }
+          if (error || !data) return queuePending();
+          setLocalEnergy((prev) => mergeEnergy(prev ?? [], [data]));
+          pendingRef.current = pendingRef.current.filter((entry) => entry.id !== local.id);
+          setPendingEnergy((prev) => prev.filter((entry) => entry.id !== local.id));
+          return { synced: true };
+        } catch (error) {
+          if (uid !== userIdRef.current || !isActiveOwner(uid)) throw error;
+          return queuePending();
         }
-        setCloudEnergy((prev) => [...(prev ?? []), data]);
-        setLocalEnergy((prev) => [...(prev ?? []), data]);
       };
 
       const next = queueRef.current.then(run, run);
-      queueRef.current = next.catch(() => undefined);
+      queueRef.current = next.then(
+        () => undefined,
+        () => undefined,
+      );
       return next;
     },
-    [userId, setLocalEnergy, setPendingEnergy, setCheckin10],
+    [setLocalEnergy, setPendingEnergy, setCheckin10],
   );
 
   const sameDay = checkin10?.day === todayKey();
@@ -273,6 +315,7 @@ export function useQuickCheckin() {
     todayEnergy,
     todayMoods,
     todayEnergyEntries,
+    energyEntries,
     moodValue,
     energyValue,
     logMood,
