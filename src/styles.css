@@ -2171,7 +2171,22 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-shell-sidebar > ul :is(a, button) { gap: 12px; min-height: 44px; padding: 8px 12px; }
 .pace-shell-sidebar > ul :is(a, button) > span { overflow-wrap: normal; word-break: normal; }
 .pace-more-desktop { left: var(--pace-shell-sidebar-width); width: min(42rem, calc(100vw - var(--pace-shell-sidebar-width))); border-right: 1px solid var(--pace-border-warm); box-shadow: var(--pace-elevation-2); }
-.pace-more-mobile { bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
+/* Labels can grow and wrap; menu/content offsets follow the measured bar height. */
+.pace-mobile-navigation { container-type: inline-size; container-name: pace-mobile-navigation; }
+.pace-mobile-navigation-items { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); align-items: stretch; gap: 4px; padding: 6px 4px 4px; }
+.pace-mobile-nav-item { display: grid; grid-template-rows: 32px auto; justify-items: center; align-content: start; gap: 4px; width: 100%; min-width: 44px; min-height: 56px; height: auto; padding: 6px 2px; text-align: center; }
+.pace-mobile-nav-icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; max-width: 100%; height: 32px; }
+.pace-mobile-nav-icon svg { flex-shrink: 0; }
+.pace-mobile-nav-label { display: block; min-width: 0; max-width: 100%; font-size: 0.625rem; line-height: 1.25; white-space: normal; overflow-wrap: anywhere; }
+.pace-mobile-nav-item:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: -2px; }
+@container pace-mobile-navigation (width < 18rem) {
+  .pace-mobile-navigation-items { display: flex; flex-wrap: wrap; }
+  .pace-mobile-nav-item { width: auto; flex: 1 1 calc((100% - 8px) / 3); }
+}
+@media (max-width: 767px) {
+  .pace-mobile-content-scroll { padding-bottom: calc(var(--pace-mobile-nav-height, calc(72px + env(safe-area-inset-bottom))) + 24px); }
+}
+.pace-more-mobile { bottom: var(--pace-mobile-nav-height, calc(72px + env(safe-area-inset-bottom))); }
 .pace-more-view { max-width: 42rem; margin-inline: auto; padding: 0.6rem 1rem 1.5rem; font-family: var(--font-sans); }
 .pace-more-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 .pace-more-tools button { color: hsl(var(--foreground)); }

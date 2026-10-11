@@ -199,6 +199,17 @@ import { useTextLayout } from "@/hooks/use-text-layout";
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
   const mainScrollRef = React.useRef<HTMLDivElement>(null);
+  const mobileNavigationRef = React.useRef<HTMLElement>(null);
+  const [mobileNavigationHeight, setMobileNavigationHeight] = useState<number | null>(null);
+  useEffect(() => {
+    const element = mobileNavigationRef.current;
+    if (!element) return;
+    const update = () => setMobileNavigationHeight(Math.ceil(element.getBoundingClientRect().height));
+    const observer = new ResizeObserver(update);
+    observer.observe(element, { box: "border-box" });
+    update();
+    return () => observer.disconnect();
+  }, []);
   const paceableApp = isPaceableAppPath(location);
   const textLayout = useTextLayout();
   React.useLayoutEffect(() => {
@@ -727,7 +738,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} className={`app-shell-bg pace-shell-navigation h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${paceableApp && textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
+    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} style={mobileNavigationHeight === null ? undefined : { "--pace-mobile-nav-height": `${mobileNavigationHeight}px` } as React.CSSProperties} className={`app-shell-bg pace-shell-navigation h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${paceableApp && textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
       <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       {/* Desktop Sidebar */}
       <nav
@@ -898,7 +909,7 @@ export default function Layout({ children }: LayoutProps) {
           ref={mainScrollRef}
           tabIndex={-1}
           data-page-focus-target
-          className="flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
+          className="pace-mobile-content-scroll flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={PACEABLE_PATHS.has(location) ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
@@ -952,8 +963,8 @@ export default function Layout({ children }: LayoutProps) {
       <QuickflowCapture variant="global" />
 
       {/* Paceable mobile navigation. Technical routes remain unchanged. */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
-        <div className="grid grid-cols-5 items-end px-1 pb-1 pt-1.5">
+      <nav ref={mobileNavigationRef} aria-label={t("Huvudnavigation")} className="pace-mobile-navigation md:hidden fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border/70 pb-[env(safe-area-inset-bottom)] z-40">
+        <div className="pace-mobile-navigation-items">
           {primaryNav.map((item) =>
             <BottomNavLink
               key={item.href}
@@ -972,18 +983,19 @@ export default function Layout({ children }: LayoutProps) {
             aria-controls="mobile-more-panel"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-current={mobileMenuOpen ? "page" : undefined}
-            className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
+            className={`pace-mobile-nav-item rounded-2xl press ${
               mobileMenuOpen ? "text-ink" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <span
-              className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+              aria-hidden="true"
+              className={`pace-mobile-nav-icon rounded-2xl transition-colors ${
                 mobileMenuOpen ? "bg-lavender" : ""
               }`}
             >
               <Menu size={22} strokeWidth={1.8} />
             </span>
-            <span className="text-[10px] font-medium">{t("Mer")}</span>
+            <span className="pace-mobile-nav-label font-medium">{t("Mer")}</span>
           </button>
         </div>
       </nav>
@@ -1099,18 +1111,19 @@ function BottomNavLink({
       href={item.href}
       onClick={onClick}
       aria-current={active ? "page" : undefined}
-      className={`flex min-h-14 min-w-0 flex-col items-center gap-1 rounded-2xl px-1 py-1.5 press ${
+      className={`pace-mobile-nav-item rounded-2xl press ${
         active ? "text-ink" : "text-muted-foreground hover:text-foreground"
       }`}
     >
       <span
-        className={`inline-flex items-center justify-center rounded-2xl px-3 py-1 transition-colors ${
+        aria-hidden="true"
+        className={`pace-mobile-nav-icon rounded-2xl transition-colors ${
           active ? "bg-lavender" : ""
         }`}
       >
         <Icon size={22} strokeWidth={1.8} />
       </span>
-      <span className="text-[10px] font-medium">{label ?? item.label}</span>
+      <span className="pace-mobile-nav-label font-medium">{label ?? item.label}</span>
     </Link>
   );
 }
