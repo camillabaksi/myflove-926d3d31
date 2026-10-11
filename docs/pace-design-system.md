@@ -28,7 +28,20 @@ Reference: `/designsystem` — isolated sample data, no navigation entry, noinde
 - Kontroller: `--pace-control-visual` 2.5rem inom minst `--pace-touch` 44px faktisk tryckyta; naturlig radbrytning.
 - Dialog: upphöjd yta/elevation 2, 1.5rem radie, 44px stängningsmål, synlig fokusmarkering och innehåll som får brytas.
 
-Inter for function; Fraunces only via explicit editorial PaceHeading. No global heading conversion. Keep approved logos/stones and semantic calendar/destructive colors.
+### Shared app typography — 2026-10-11
+
+The app now uses Inter for all text roles, including legacy display/handwritten headings. `src/app-typography.css` loads after the legacy stylesheet and uses a separate `data-paceable-typography` scope on authenticated routes, sign-in/up and the isolated reference. The html flag also covers portalled dialogs and menus. Public marketing retains its existing typography; approved logo pixels stay unchanged.
+
+| Role | Size |
+| --- | --- |
+| Page title / greeting | 2rem (32px at default text size) |
+| Section / dialog title | 1.25rem (20px) |
+| Card title | 1.125rem (18px) |
+| Body / controls | 1rem (16px) |
+| Labels / help / navigation group labels | .875rem (14px) |
+| Compact metadata / bottom navigation labels | .75rem (12px) |
+
+Rem units preserve browser and existing NPF larger-text settings. Headings use weight 600, normal letter spacing and consistent line heights. Small legacy 9–11px labels join the metadata role. Large timers, decorative emoji and special numeric/chart geometry remain separate. Typography changes never own field behavior, storage, permissions or submission. Existing editorial component props/classes remain compatible but use the shared Inter typography in the app scope.
 
 ## Patterns
 Import from `@/components/paceable/design-system`:

@@ -6,7 +6,7 @@ import {
   Scripts,
   useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, type ReactNode } from "react";
 
 import { initCacheBusting } from "@/lib/cache-busting";
 import { trackPageView } from "@/lib/analytics";
@@ -15,6 +15,7 @@ import { RootErrorBoundary } from "@/components/root-error-boundary";
 
 import brandLight from "@/assets/paceable-brand/paceable-horizontal-light.png.asset.json";
 import appCss from "../styles.css?url";
+import appTypographyCss from "../app-typography.css?url";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -48,6 +49,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: appTypographyCss },
       { rel: "icon", href: "/favicon.ico", sizes: "16x16 32x32 48x48" },
       { rel: "icon", href: "/favicon-light.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
       { rel: "icon", href: "/favicon-dark.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
@@ -112,6 +114,18 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const appTypography = useRouterState({
+    select: (s) => s.matches.some((match) => match.routeId === "/_app") ||
+      ["/sign-in", "/sign-up", "/designsystem"].includes(s.location.pathname),
+  });
+  // Portalled dialogs/menus share the same type as their page. Public marketing
+  // keeps its own typography; this flag never changes a saved preference.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    if (appTypography) root.dataset.paceableTypography = "true";
+    else delete root.dataset.paceableTypography;
+    return () => { delete root.dataset.paceableTypography; };
+  }, [appTypography]);
   useEffect(() => {
     initCacheBusting();
     void import("@/lib/native-backup").then((m) => m.initNativeBackup());
@@ -125,9 +139,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Outlet />
-        <Toaster />
-        <Sonner />
+        <div data-paceable-typography={appTypography ? "true" : undefined} className="pace-type-scope contents">
+          <Outlet />
+          <Toaster />
+          <Sonner />
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

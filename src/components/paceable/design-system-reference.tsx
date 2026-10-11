@@ -26,7 +26,7 @@ export default function DesignSystemReference() {
           </div>
         </PaceSection>
         <PaceSection title="Typografi och handlingar">
-          <PaceInfoBlock><PaceHeading editorial level={3}>Orienterande rubrik i Fraunces</PaceHeading><PaceHeading level={3}>Funktionell rubrik i Inter</PaceHeading><p>Brödtext, etiketter, val och knappar använder Inter. Text får brytas naturligt och viktig information kortas inte med ellips.</p></PaceInfoBlock>
+          <PaceInfoBlock><PaceHeading editorial level={3}>Kortrubrik i Inter</PaceHeading><PaceHeading level={3}>Samma typsnitt i hela appen</PaceHeading><p>Sidrubriker: 32. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext: 14. Små etiketter: 12. Alla använder Inter och följer din inställning för större text.</p></PaceInfoBlock>
           <PaceActions><PaceButton>Primär handling</PaceButton><PaceButton variant="outline">Sekundär handling</PaceButton><PaceButton variant="ghost">Diskret handling</PaceButton><PaceButton variant="destructive">Destruktiv handling</PaceButton></PaceActions>
           <p className="pace-ds-help">Kontroller kan se 36–40 px höga ut men behåller minst 44×44 px faktisk tryckyta.</p>
         </PaceSection>
