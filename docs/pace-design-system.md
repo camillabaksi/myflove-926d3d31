@@ -30,7 +30,7 @@ Reference: `/designsystem` — isolated sample data, no navigation entry, noinde
 
 ### Shared app typography — 2026-10-11
 
-The app now uses Inter for all text roles, including legacy display/handwritten headings. `src/app-typography.css` loads after the legacy stylesheet and uses a separate `data-paceable-typography` scope on authenticated routes, sign-in/up and the isolated reference. The html flag also covers portalled dialogs and menus. Public marketing retains its existing typography; approved logo pixels stay unchanged.
+The app uses Fraunces for all text roles, including body text, controls and legacy display/handwritten headings, following the user's preference for the original soft editorial font. `src/app-typography.css` loads after the legacy stylesheet and uses a separate `data-paceable-typography` scope on authenticated routes, sign-in/up and the isolated reference. The html flag also covers portalled dialogs and menus. The scope maps the legacy sans/display/editorial aliases to one Fraunces stack without changing the global marketing tokens. We load genuine weights 400, 500, 600 and 700 for regular text, controls, headings and emphasis. Public marketing retains its existing typography; approved logo pixels stay unchanged.
 
 | Role | Size |
 | --- | --- |
@@ -41,7 +41,7 @@ The app now uses Inter for all text roles, including legacy display/handwritten 
 | Labels / help / navigation group labels | .875rem (14px) |
 | Compact metadata / bottom navigation labels | .75rem (12px) |
 
-Rem units preserve browser and existing NPF larger-text settings. Headings use weight 600, normal letter spacing and consistent line heights. Small legacy 9–11px labels join the metadata role. Large timers, decorative emoji and special numeric/chart geometry remain separate. Typography changes never own field behavior, storage, permissions or submission. Existing editorial component props/classes remain compatible but use the shared Inter typography in the app scope.
+Rem units preserve browser and existing NPF larger-text settings. Headings use weight 600, normal letter spacing and consistent line heights. Small legacy 9–11px labels join the metadata role. Large timers, decorative emoji and special numeric/chart geometry remain separate. Typography changes never own field behavior, storage, permissions or submission. Existing editorial component props/classes remain compatible but use the shared Fraunces typography in the app scope.
 
 ## Patterns
 Import from `@/components/paceable/design-system`:

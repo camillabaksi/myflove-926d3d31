@@ -2,13 +2,16 @@
    heading rules converge without touching colors, data or calendar geometry.
    Rem units keep browser/system text enlargement and the existing NPF setting. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"] {
-  --pace-type-family: var(--font-sans);
+  --pace-type-family:
+    "Fraunces", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji";
   --pace-type-page: 2rem;
   --pace-type-section: 1.25rem;
   --pace-type-card: 1.125rem;
   --pace-type-body: 1rem;
   --pace-type-help: 0.875rem;
   --pace-type-meta: 0.75rem;
+  --font-sans: var(--pace-type-family);
   --font-display: var(--pace-type-family);
   --font-handwritten: var(--pace-type-family);
   --font-editorial: var(--pace-type-family);
