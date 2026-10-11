@@ -9,7 +9,10 @@ import {
   subscribeUserToPush,
   unsubscribeCurrent,
   getCurrentSubscription,
+  notifyPushSubscriptionChanged,
+  PUSH_SUBSCRIPTION_EVENT,
 } from "@/lib/push-client";
+import { playAlarmPreview } from "@/lib/push-notifications";
 import {
   subscribeToPush,
   unsubscribeFromPush,
@@ -84,6 +87,15 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
   useEffect(() => {
     setInPreview(isPreviewOrIframe());
     void refresh();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refresh();
+    };
+    window.addEventListener(PUSH_SUBSCRIPTION_EVENT, refresh);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener(PUSH_SUBSCRIPTION_EVENT, refresh);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [refresh]);
 
   const enable = async () => {
@@ -103,9 +115,9 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
         data: {
           ...sub,
           userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
-          replaceOthers: true,
         },
       });
+      notifyPushSubscriptionChanged();
       await refresh();
       toast({ title: "Notiser är på 🌿", description: "Den här enheten kan nu ta emot notiser." });
     } catch (err) {
@@ -235,11 +247,15 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
           <Send className="h-4 w-4" />
           Testa notis
         </Button>
+        <Button variant="outline" onClick={() => playAlarmPreview()} className="gap-2">
+          Testa appens ljud
+        </Button>
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Ljud och vibration styrs av telefonens egna inställningar – har du tyst läge eller Stör ej
-        på kommer notisen tyst. Strömsparläge kan också fördröja den några minuter.
+        Appens alarmljud spelas när appen är öppen. Bakgrundsnotisens ljud styrs av telefonen
+        eller datorn. Tillåt notisljud där och kontrollera tyst läge och Stör ej.
+        Strömsparläge kan fördröja notiser.
       </p>
     </div>
   );

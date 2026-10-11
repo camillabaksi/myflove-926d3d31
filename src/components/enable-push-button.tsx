@@ -9,6 +9,7 @@ import {
   subscribeUserToPush,
   unsubscribeCurrent,
   getCurrentSubscription,
+  notifyPushSubscriptionChanged,
 } from "@/lib/push-client";
 import { subscribeToPush, unsubscribeFromPush, sendTestPush } from "@/lib/push.functions";
 
@@ -103,6 +104,7 @@ export function EnablePushButton() {
           userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
         },
       });
+      notifyPushSubscriptionChanged();
       const res = await testFn();
       setEnabled(true);
       toast({
