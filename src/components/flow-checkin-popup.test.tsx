@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
 
@@ -24,17 +24,36 @@ function atHour(hour: number) {
   vi.setSystemTime(d);
 }
 
-describe("Flows mjuka check-in-popup", () => {
+/** Låt React avsluta öppningen och modalens effekter innan vi klickar. */
+async function advanceTime(ms: number) {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(ms);
+  });
+}
+
+describe("Paces mjuka check-in-popup", () => {
   beforeEach(() => {
     window.localStorage.clear();
     vi.useFakeTimers({ shouldAdvanceTime: true });
+  });
+
+  afterEach(async () => {
+    cleanup();
+    try {
+      // Radix återställer fokus i en timer efter nedmontering. Kör den medan DOM finns kvar.
+      await act(async () => {
+        await vi.runOnlyPendingTimersAsync();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("bjuder in på morgonen och öppnar den befintliga centrala loggningen", async () => {
     atHour(8);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<FlowCheckinPopup />);
-    await vi.advanceTimersByTimeAsync(2000);
+    await advanceTime(2000);
 
     await waitFor(() => expect(screen.getByTestId("flow-checkin-popup")).toBeInTheDocument());
     expect(screen.getByText("God morgon! 💜")).toBeInTheDocument();
@@ -48,14 +67,14 @@ describe("Flows mjuka check-in-popup", () => {
   it("visar kvällens text på kvällen", async () => {
     atHour(20);
     render(<FlowCheckinPopup />);
-    await vi.advanceTimersByTimeAsync(2000);
+    await advanceTime(2000);
     await waitFor(() => expect(screen.getByText("God kväll! 💜")).toBeInTheDocument());
   });
 
   it("visas inte alls utanför tidsfönstren", async () => {
     atHour(3);
     render(<FlowCheckinPopup />);
-    await vi.advanceTimersByTimeAsync(2000);
+    await advanceTime(2000);
     expect(screen.queryByTestId("flow-checkin-popup")).not.toBeInTheDocument();
   });
 
@@ -63,7 +82,7 @@ describe("Flows mjuka check-in-popup", () => {
     atHour(13);
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     const view = render(<FlowCheckinPopup />);
-    await vi.advanceTimersByTimeAsync(2000);
+    await advanceTime(2000);
 
     await waitFor(() => expect(screen.getByText("Hej igen! 💜")).toBeInTheDocument());
     await user.click(screen.getByRole("button", { name: "Hoppa över" }));
@@ -73,7 +92,7 @@ describe("Flows mjuka check-in-popup", () => {
 
     view.unmount();
     render(<FlowCheckinPopup />);
-    await vi.advanceTimersByTimeAsync(2000);
+    await advanceTime(2000);
     expect(screen.queryByTestId("flow-checkin-popup")).not.toBeInTheDocument();
   });
 });
