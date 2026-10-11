@@ -56,6 +56,7 @@ import {
 import { MyPlaceIcon, ThoughtsIcon, TodayHorizonIcon } from "@/components/paceable/navigation-icons";
 import MoreView from "@/components/paceable/more-view";
 import { BrandLogo } from "@/components/paceable/brand-logo";
+import { AppBrandHeader } from "@/components/paceable/app-brand-header";
 import { initAlarmAudioUnlock } from "@/lib/push-notifications";
 import { initPersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
@@ -736,8 +737,8 @@ export default function Layout({ children }: LayoutProps) {
         aria-label={t("Huvudnavigation")}
         className="pace-shell-sidebar relative z-30 hidden md:flex flex-col border-r border-border bg-card/95 shrink-0 overflow-y-auto"
       >
-        <div className="mb-6 flex items-center justify-between gap-2 px-1 py-1">
-          <BrandLogo compact className="w-full" />
+        <div className="mb-6 flex items-center justify-center py-1">
+          <BrandLogo compact className="pace-app-brand" />
         </div>
         <ul className="space-y-1">
           {primaryNav.map((item) => {
@@ -789,23 +790,17 @@ export default function Layout({ children }: LayoutProps) {
         <UnownedDataPrompt />
 
         {/* Mobile Header */}
-        <header className={`sticky top-0 z-10 items-center gap-2 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden ${location === "/idag" ? "grid grid-cols-[minmax(0,1fr)_auto]" : "flex"}`}>
-          {canGoBack ? (
+        <header className="sticky top-0 z-10 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden">
+          <AppBrandHeader back={canGoBack ? (
             <button
               type="button"
               onClick={handleBack}
               aria-label="Gå tillbaka"
-              className="justify-self-start rounded-full p-2 text-foreground transition-colors hover:bg-primary/10"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary/10"
             >
               <ArrowLeft size={22} />
             </button>
-          ) : location !== "/idag" ? (
-            <span aria-hidden className="w-2 shrink-0" />
-          ) : null}
-          <h1 className="min-w-0 flex-1">
-            <BrandLogo compact className={location === "/idag" ? "w-[220px] max-w-full" : "mx-auto w-32 max-w-full"} />
-          </h1>
-          <ViewCollapseToggle />
+          ) : null} actions={<ViewCollapseToggle />} />
         </header>
 
 

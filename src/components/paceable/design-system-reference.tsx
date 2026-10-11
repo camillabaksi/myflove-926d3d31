@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { ArrowLeft, Minimize2 } from "lucide-react";
 import { BrandLogo } from "./brand-logo";
+import { AppBrandHeader } from "./app-brand-header";
+import { DayGreeting } from "@/components/day/day-greeting";
 import { PacePage, PaceContent, PaceHeading, PaceSection, PaceCard, PaceInfoBlock, PaceField, PaceInput, PaceTextarea, PaceChoiceGroup, PaceChoice, PaceActions, PaceButton, PaceHelp, PaceSwitch, PaceDialogContent, PaceStatus, PaceSelectTrigger, PaceSelectContent } from "./design-system";
 import { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectItem, SelectValue } from "@/components/ui/select";
@@ -28,9 +31,19 @@ export default function DesignSystemReference() {
   return <div className={dark ? "dark" : undefined}>
     <PacePage className={still ? "pace-ds-still" : undefined}>
       <PaceContent width="wide">
-        <header className="pace-ds-reference-header"><BrandLogo compact className="w-48" /><div className="pace-ds-actions"><PaceButton variant="outline" onClick={() => setDark(!dark)}>{dark ? "Ljust läge" : "Mörkt läge"}</PaceButton><PaceButton variant="outline" aria-pressed={still} onClick={() => setStill(!still)}>Stilla läge</PaceButton></div></header>
+        <header className="pace-ds-reference-header"><BrandLogo compact className="pace-app-brand" /><div className="pace-ds-actions"><PaceButton variant="outline" onClick={() => setDark(!dark)}>{dark ? "Ljust läge" : "Mörkt läge"}</PaceButton><PaceButton variant="outline" aria-pressed={still} onClick={() => setStill(!still)}>Stilla läge</PaceButton></div></header>
         <PaceHeading editorial>Din vardag, i din takt.</PaceHeading>
         <p className="pace-ds-help">Paceables gemensamma designreferens · Fristående exempel, inget sparas på ditt konto.</p>
+        <PaceSection title="Välkomsthierarki – mobilbredd">
+          <div className="max-w-xs overflow-hidden rounded-3xl border border-border bg-background">
+            <div className="border-b border-border/50 p-3"><AppBrandHeader back={<PaceButton variant="ghost" disabled aria-label="Tillbaka – exempel" className="h-11 w-11 p-0"><ArrowLeft size={22} /></PaceButton>} actions={<PaceButton variant="outline" disabled><Minimize2 size={14} />Minimera allt</PaceButton>} /></div>
+            <div className="space-y-5 p-4">
+              <DayGreeting tagline="Din dag, i din takt" greeting="Hej" name="Cam" date="Söndag 11 oktober" />
+              <PaceHeading level={2}>Din dag</PaceHeading>
+              <div><PaceHeading level={3}>En sak i taget</PaceHeading><p>Det finns plats för en lugn start.</p><p className="pace-type-help text-muted-foreground">Ett fristående exempel på appens textstorlekar.</p></div>
+            </div>
+          </div>
+        </PaceSection>
         <PaceSection title="Grund och sidram">
           <PaceInfoBlock><PaceHeading level={3}>Samma roller, innehållsstyrd höjd</PaceHeading><p>16 px sidmarginal på liten mobil, 24 px från 640 px och 32 px från 1024 px. Läsning använder högst 42rem, listor 52rem och breda verktyg 60rem.</p></PaceInfoBlock>
           <div className="pace-ds-reference-grid">
@@ -39,7 +52,7 @@ export default function DesignSystemReference() {
           </div>
         </PaceSection>
         <PaceSection title="Typografi och handlingar">
-          <PaceInfoBlock><PaceHeading editorial level={3}>Kortrubrik i Fraunces</PaceHeading><PaceHeading level={3}>Samma mjuka typsnitt i hela appen</PaceHeading><p>Sidrubriker: 32. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext: 14. Små etiketter: 12. Alla använder Fraunces och följer din inställning för större text.</p></PaceInfoBlock>
+          <PaceInfoBlock><PaceHeading editorial level={3}>Kortrubrik i Fraunces</PaceHeading><PaceHeading level={3}>Samma mjuka typsnitt i hela appen</PaceHeading><p>Logotypen är störst. Välkomsttext och sidrubriker: 28. Hälsning: 24. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext: 14. Små etiketter: 12. Storlekarna följer din inställning för större text.</p></PaceInfoBlock>
           <PaceActions><PaceButton>Primär handling</PaceButton><PaceButton variant="outline">Sekundär handling</PaceButton><PaceButton variant="ghost">Diskret handling</PaceButton><PaceButton variant="destructive">Destruktiv handling</PaceButton></PaceActions>
           <p className="pace-ds-help">Kontroller kan se 36–40 px höga ut men behåller minst 44×44 px faktisk tryckyta.</p>
         </PaceSection>

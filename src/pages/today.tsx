@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { Bell, Plus, Sun } from "lucide-react";
+import { Bell, Plus } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import { GreetingNameMenu } from "@/components/day/greeting-name-menu";
+import { DayGreeting } from "@/components/day/day-greeting";
 import { TodayCapacity } from "@/components/day/today-capacity";
 import { TodayPace } from "@/components/day/today-pace";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -20,7 +21,6 @@ import { deriveDayPace } from "@/lib/day-pace";
 import { todayISO } from "@/lib/day";
 import { dateHeadingLabel } from "@/lib/date-presentation";
 import { useTextLayout } from "@/hooks/use-text-layout";
-import { greetingNameParts } from "@/lib/greeting-presentation";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 
@@ -54,16 +54,13 @@ export function TodayContent() {
       <QuickAddSheet open={addOpen} onOpenChange={setAddOpen} />
       <IntroTour />
       <MyFloveWide>
-        <div className="pace-greeting-layout grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-          <div className="min-w-0">
-            <p className="flex items-center gap-1.5 text-xs font-semibold uppercase text-primary"><Sun size={14} className="text-sun-ink" aria-hidden />{t("Din dag, i din takt")}</p>
-            <h1 className="mt-1 break-words pace-editorial pace-editorial-greeting text-3xl leading-tight text-ink sm:text-5xl"><span className="pace-greeting-prefix">{t("Hej")}</span>{name && <> {greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p>
-          </div>
-          <div className="shrink-0">
-            <GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />
-          </div>
-        </div>
+        <DayGreeting
+          tagline={t("Din dag, i din takt")}
+          greeting={t("Hej")}
+          name={name}
+          date={dateHeadingLabel(dateLabel, locale)}
+          action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
+        />
         <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
