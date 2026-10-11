@@ -23,12 +23,14 @@ export interface PendingEnergyEntry {
   id: string;
   level: number;
   logged_at: string;
+  note?: string | null;
 }
 
 interface CloudEnergyRow {
   id: string;
   level: number;
   logged_at: string;
+  note?: string | null;
 }
 
 export function isUuid(value: string): boolean {
@@ -102,13 +104,14 @@ export async function migratePendingEnergy(
 ): Promise<MigrationResult> {
   if (pending.length === 0) return { migrated: [], remaining: [], inserted: [], normalized: [] };
   // Kön får bara flyttas till kontot som äger enhetens data.
-  if (!isActiveOwner(userId)) return { migrated: [], remaining: pending, inserted: [], normalized: pending };
+  if (!isActiveOwner(userId))
+    return { migrated: [], remaining: pending, inserted: [], normalized: pending };
 
   const { entries } = ensurePendingUuids(pending);
 
   const { data: history } = await supabase
     .from("energy_logs")
-    .select("id, level, logged_at")
+    .select("id, level, note, logged_at")
     .eq("user_id", userId);
   const knownCloud = history ?? cloud;
   const { toInsert, alreadyThere } = splitAlreadyMigrated(entries, knownCloud);
@@ -123,11 +126,12 @@ export async function migratePendingEnergy(
         user_id: userId,
         level: entry.level,
         logged_at: entry.logged_at,
+        ...(entry.note !== undefined ? { note: entry.note } : {}),
       };
       const { data, error } = await supabase
         .from("energy_logs")
         .upsert(payload, { onConflict: "id" })
-        .select("id, level, logged_at")
+        .select("id, level, note, logged_at")
         .single();
       if (error || !data) {
         // Nätverksfel eller serverfel – behåll posten och försök igen senare.
