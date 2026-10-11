@@ -71,8 +71,8 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
         </Button>
       </section>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">
-          <DialogHeader>
+        <DialogContent className="h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)] max-h-[42rem] w-[calc(100%-1rem)] max-w-md grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden rounded-3xl border border-border/70 bg-card p-0 pb-0 sm:p-0 sm:pb-0 [&>button]:right-3 [&>button]:top-[calc(0.5rem+env(safe-area-inset-top))] [&>button]:z-10 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:rounded-xl">
+          <DialogHeader className="sr-only">
             <DialogTitle>{t("Logga energi & mående")}</DialogTitle>
             <DialogDescription>{t("Din energi och ditt mående just nu.")}</DialogDescription>
           </DialogHeader>

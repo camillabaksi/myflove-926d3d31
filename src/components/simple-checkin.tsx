@@ -4,14 +4,7 @@ import {
   Sparkles,
   ChevronDown,
   BatteryMedium,
-  BatteryFull,
-  BatteryLow,
   Heart,
-  Frown,
-  Annoyed,
-  Meh,
-  Smile,
-  Laugh,
   Moon,
   Wind,
   Volume2,
@@ -31,24 +24,9 @@ import { paceFormSurface } from "@/components/paceable/design-system";
 import { useLang } from "@/hooks/use-language";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { EnergyChoices, MoodChoices } from "@/components/checkin-choices";
 
-import { ORK_LEVELS, MOOD_FACES, orkFromValue10 } from "@/lib/ork";
-
-const MOODS = MOOD_FACES;
-
-/* Systemoberoende ikoner i stället för emoji, som saknas i vissa Android-/WebView-typsnitt. */
-const MOOD_ICONS: Record<number, LucideIcon> = {
-  2: Frown,
-  4: Annoyed,
-  6: Meh,
-  8: Smile,
-  10: Laugh,
-};
-const ORK_ICONS: Record<string, LucideIcon> = {
-  fullt: BatteryFull,
-  mellan: BatteryMedium,
-  lagt: BatteryLow,
-};
+import { orkFromValue10 } from "@/lib/ork";
 const FACTOR_ICONS: Record<string, LucideIcon> = {
   somn: Moon,
   stress: Wind,
@@ -184,28 +162,14 @@ export default function SimpleCheckin({
           </WhyHint>
         </div>
         {energyExplainer && <p className="text-xs text-muted-foreground">{energyExplainer}</p>}
-        <div className="pace-form-ork grid grid-cols-3 gap-2">
-          {ORK_LEVELS.map((l) => (
-            <Button
-              variant="outline"
-              key={l.id}
-              type="button"
-              aria-pressed={ork?.id === l.id}
-              aria-label={t(l.label)}
-              onClick={() => {
-                markStarted("battery");
-                setBattery(l.value10);
-              }}
-              className="pace-form-choice flex-1 gap-2 rounded-xl px-3 py-2.5"
-            >
-              {(() => {
-                const Icon = ORK_ICONS[l.id] ?? BatteryMedium;
-                return <Icon size={18} aria-hidden="true" className="shrink-0" />;
-              })()}
-              {t(l.label)}
-            </Button>
-          ))}
-        </div>
+        <EnergyChoices
+          value={ork?.id}
+          t={t}
+          onChange={(value) => {
+            markStarted("battery");
+            setBattery(value);
+          }}
+        />
       </div>
 
       <div className="space-y-2">
@@ -224,28 +188,14 @@ export default function SimpleCheckin({
           </WhyHint>
         </div>
         {moodExplainer && <p className="text-xs text-muted-foreground">{moodExplainer}</p>}
-        <div className="pace-form-moods">
-          {MOODS.map((m) => (
-            <Button
-              variant="outline"
-              key={m.score10}
-              type="button"
-              aria-pressed={mood === m.score10}
-              aria-label={t(m.label)}
-              onClick={() => {
-                markStarted("mood");
-                setMood(m.score10);
-              }}
-              className="pace-form-choice flex-col gap-1 rounded-xl"
-            >
-              {(() => {
-                const Icon = MOOD_ICONS[m.score10] ?? Meh;
-                return <Icon size={24} aria-hidden="true" className="shrink-0" />;
-              })()}
-              <span className="text-xs text-muted-foreground">{t(m.label)}</span>
-            </Button>
-          ))}
-        </div>
+        <MoodChoices
+          value={mood}
+          t={t}
+          onChange={(value) => {
+            markStarted("mood");
+            setMood(value);
+          }}
+        />
       </div>
 
       <div className="space-y-2">
@@ -357,7 +307,7 @@ export default function SimpleCheckin({
       <div
         data-testid="battery-log-form"
         className={cn(
-          "pace-form",
+          "pace-form pace-checkin",
           "grid min-h-0 max-h-full grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden bg-card",
           className,
         )}
@@ -399,21 +349,14 @@ export default function SimpleCheckin({
                 type="button"
                 variant="ghost"
                 onClick={onCancel}
+                disabled={saving}
                 className="min-h-11 w-full px-3 text-muted-foreground"
               >
                 {t("Avbryt")}
               </Button>
             )}
           </div>
-          <p
-            aria-live="polite"
-            className={cn(
-              "text-center text-xs leading-relaxed text-muted-foreground",
-              !saved && "hidden",
-            )}
-          >
-            {saved ? t("Tack – din observation är sparad.") : ""}
-          </p>
+          {(saveError || saved) && status}
         </footer>
       </div>
     );
@@ -430,7 +373,7 @@ export default function SimpleCheckin({
       collapsible
       collapseId="batteri::logga-just-nu"
       data-testid="battery-log-form"
-      className={cn(paceFormSurface, "h-full", className)}
+      className={cn(paceFormSurface, "pace-checkin h-full", className)}
       footer={status}
     >
       {fields}

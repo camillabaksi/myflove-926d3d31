@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { ArrowLeft, Minimize2 } from "lucide-react";
 import { BrandLogo } from "./brand-logo";
 import { AppBrandHeader } from "./app-brand-header";
@@ -11,6 +11,8 @@ import { TrainingCreationChoice } from "@/components/workout/training-creation-c
 import { TrainingSessionVisual } from "@/components/workout/training-session-visual";
 import { ManualExercises } from "@/components/workout/manual-exercises";
 import type { Workout, WorkoutBlock } from "@/lib/workout-generator";
+import { EnergyChoices, MoodChoices } from "@/components/checkin-choices";
+import { orkFromValue10 } from "@/lib/ork";
 
 const SAMPLE_WORKOUT: Workout = {
   id: "reference-only", title: "Ett lugnt styrkepass", note: "Ett fristående exempel.", createdAt: 0,
@@ -28,6 +30,9 @@ export default function DesignSystemReference() {
   const [saved, setSaved] = useState(false);
   const [trainingExample, setTrainingExample] = useState<"pace" | "manual" | null>(null);
   const [manualBlocks, setManualBlocks] = useState<WorkoutBlock[]>([]);
+  const [sampleEnergy, setSampleEnergy] = useState(6);
+  const [sampleMood, setSampleMood] = useState<number | null>(6);
+  const [largeChoices, setLargeChoices] = useState(false);
   return <div className={dark ? "dark" : undefined}>
     <PacePage className={still ? "pace-ds-still" : undefined}>
       <PaceContent width="wide">
@@ -68,6 +73,16 @@ export default function DesignSystemReference() {
             {trainingExample === "pace" && <div className="surface-card p-4"><p className="font-semibold">{SAMPLE_WORKOUT.title}</p><p className="text-sm text-muted-foreground">Exempel på ett bildpass, inget skapas eller sparas på ditt konto här.</p><TrainingSessionVisual workout={SAMPLE_WORKOUT} /></div>}
             {trainingExample === "manual" && <div className="surface-card p-4"><ManualExercises blocks={manualBlocks} onChange={setManualBlocks} /></div>}
           </div>
+        </PaceSection>
+        <PaceSection title="Incheckning – mobilbredd">
+          <PaceButton variant="outline" aria-pressed={largeChoices} onClick={() => setLargeChoices(!largeChoices)}>200 % text i incheckningsexemplet</PaceButton>
+          <div data-testid="checkin-choices-reference" className="pace-form pace-checkin max-w-xs space-y-4 rounded-3xl border border-border bg-card p-4" style={largeChoices ? { "--pace-type-body": "2rem", "--pace-type-help": "1.75rem" } as CSSProperties : undefined}>
+            <p className="font-semibold">Hur mycket ryms idag?</p>
+            <EnergyChoices value={orkFromValue10(sampleEnergy)?.id} onChange={setSampleEnergy} />
+            <p className="font-semibold">Hur känns det just nu?</p>
+            <MoodChoices value={sampleMood} onChange={setSampleMood} />
+          </div>
+          <p className="pace-ds-help">Fristående val, inget sparas på ditt konto.</p>
         </PaceSection>
         <PaceSection title="Formulär och val">
           <PaceContent width="reading"><form className="pace-ds-card pace-ds-field" onSubmit={(event) => { event.preventDefault(); if (!draft.trim()) { setError("Skriv ett namn innan du fortsätter."); setSaved(false); return; } setError(""); setSaved(true); }} noValidate>
