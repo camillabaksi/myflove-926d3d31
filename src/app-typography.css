@@ -56,7 +56,7 @@ html[data-paceable-typography="true"] body,
     .pace-editorial-role,
     .pace-app-title,
     .pace-tasks-heading,
-    .pace-more-reminder p,
+    .pace-more-reminder :where(p),
     button,
     input,
     textarea,
@@ -68,10 +68,10 @@ html[data-paceable-typography="true"] body,
   font-variation-settings: normal;
 }
 
-/* Explicit display roles also cover older headings rendered as spans or p.
-   Compiled Tailwind font utilities otherwise bypass the scoped family tokens. */
+/* Keep normalization at one class of specificity so explicit roles win.
+   Include semantic headings in this same display role, including h4–h6. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
-  :is(.font-display, .pace-editorial, .pace-editorial-role, .pace-type-heading) {
+  :is(h1, h2, h3, h4, h5, h6, .font-display, .pace-editorial, .pace-editorial-role, .pace-type-heading) {
   font-family: var(--pace-type-heading-family);
 }
 
