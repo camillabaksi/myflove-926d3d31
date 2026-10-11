@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { waitFor } from "@testing-library/react";
 import { installIndexedDbMock, mockOptions, resetIndexedDbMock } from "@/test/indexeddb-mock";
 import {
   __resetSecureLocal,
@@ -31,8 +32,8 @@ describe("krypterad lokal lagring", () => {
   it("sparar känsliga värden krypterat men läser tillbaka klartext", async () => {
     secureSetItem("myflove-finances", JSON.stringify({ saldo: 12345 }));
     await unlockSecureLocal();
-    await Promise.resolve();
-    await new Promise((r) => setTimeout(r, 0));
+    // WebCrypto avslutas asynkront även när nyckeln redan är upplåst.
+    await waitFor(() => expect(window.localStorage.getItem("myflove-finances")).toBeTruthy());
 
     const raw = window.localStorage.getItem("myflove-finances");
     expect(raw).toBeTruthy();
@@ -47,7 +48,10 @@ describe("krypterad lokal lagring", () => {
   });
 
   it("Flow-minnen krypteras på enheten", async () => {
-    secureSetItem("myflove-flow-memories", JSON.stringify([{ id: "m1", text: "Jag vill ha lugn" }]));
+    secureSetItem(
+      "myflove-flow-memories",
+      JSON.stringify([{ id: "m1", text: "Jag vill ha lugn" }]),
+    );
     await unlockSecureLocal();
     await new Promise((r) => setTimeout(r, 0));
     const raw = localStorage.getItem("myflove-flow-memories");

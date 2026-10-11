@@ -813,6 +813,9 @@ export type Database = {
           deliver_at: string
           delivered_at: string | null
           id: string
+          sent_endpoints: string[]
+          processing_token: string | null
+          processing_until: string | null
           kind: string
           title: string
           url: string | null
@@ -826,6 +829,9 @@ export type Database = {
           deliver_at: string
           delivered_at?: string | null
           id?: string
+          sent_endpoints?: string[]
+          processing_token?: string | null
+          processing_until?: string | null
           kind: string
           title: string
           url?: string | null
@@ -839,6 +845,9 @@ export type Database = {
           deliver_at?: string
           delivered_at?: string | null
           id?: string
+          sent_endpoints?: string[]
+          processing_token?: string | null
+          processing_until?: string | null
           kind?: string
           title?: string
           url?: string | null

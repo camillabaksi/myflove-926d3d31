@@ -12,6 +12,7 @@ import {
   QUIET_PAUSE_OPTIONS,
   type QuietModeState,
   isQuietNow,
+  setQuietMode,
 } from "@/lib/quiet-mode";
 
 function formatRemaining(until: number): string {
@@ -26,14 +27,10 @@ function formatRemaining(until: number): string {
 
 /** Tyst läge – pausa alla påminnelser en stund eller varje natt. */
 export function QuietModeSettings() {
-  const [state, setState] = useCloudSyncedStorage<QuietModeState>(
-    "myflove-quiet-mode",
-    DEFAULT_QUIET_STATE,
-  );
+  const [state] = useCloudSyncedStorage<QuietModeState>("myflove-quiet-mode", DEFAULT_QUIET_STATE);
   const [, setTick] = useState(0);
 
-  const update = (patch: Partial<QuietModeState>) =>
-    setState((current) => ({ ...current, ...patch }));
+  const update = (patch: Partial<QuietModeState>) => setQuietMode(patch);
   const paused = state.pausedUntil > Date.now();
   const quiet = isQuietNow(state);
 

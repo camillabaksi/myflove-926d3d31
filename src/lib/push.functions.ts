@@ -70,11 +70,15 @@ export const sendTestPush = createServerFn({ method: "POST" })
     const { sendPushTo } = await import("./push.server");
     let sent = 0;
     for (const s of subs) {
-      const result = await sendPushTo(s, {
-        title: "Paceable",
-        body: "Notiser är på 🌿 Du får dem även när appen är stängd.",
-        url: "/idag",
-      }, { userId, source: "test" });
+      const result = await sendPushTo(
+        s,
+        {
+          title: "Paceable",
+          body: "Notiser är på 🌿 Du får dem även när appen är stängd.",
+          url: "/idag",
+        },
+        { userId, source: "test" },
+      );
       if (result === "ok") sent++;
     }
     return { sent };
@@ -115,6 +119,25 @@ export const syncReminder = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => SyncSchema.parse(data))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    const { data: existing, error: readError } = await supabase
+      .from("push_reminders")
+      .select("title, body, kind, deliver_at, url, canceled_at")
+      .eq("user_id", userId)
+      .eq("client_key", data.clientKey)
+      .maybeSingle();
+    if (readError) throw new Error(readError.message);
+    // Periodisk synk får inte återaktivera ett redan levererat oförändrat utskick.
+    if (
+      existing &&
+      existing.canceled_at === null &&
+      existing.title === data.title &&
+      existing.body === data.body &&
+      existing.kind === data.kind &&
+      existing.url === (data.url ?? null) &&
+      new Date(existing.deliver_at).getTime() === new Date(data.deliverAt).getTime()
+    ) {
+      return { ok: true };
+    }
     const { error } = await supabase.from("push_reminders").upsert(
       {
         user_id: userId,
@@ -126,6 +149,9 @@ export const syncReminder = createServerFn({ method: "POST" })
         url: data.url ?? null,
         delivered_at: null,
         canceled_at: null,
+        sent_endpoints: [],
+        processing_token: null,
+        processing_until: null,
       },
       { onConflict: "user_id,client_key" },
     );

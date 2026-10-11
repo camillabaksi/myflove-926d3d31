@@ -1,9 +1,11 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { Reminder } from "./use-data";
+import type { Reminder, Task } from "./use-data";
 
 const mocks = vi.hoisted(() => ({
   reminders: [] as Reminder[],
+  tasks: [] as Task[],
+  activeOwner: true,
   subscribed: false,
   signedIn: true,
   getUser: vi.fn(),
@@ -17,7 +19,7 @@ vi.mock("@/integrations/supabase/client", () => ({
   supabase: { auth: { getUser: mocks.getUser } },
 }));
 vi.mock("@/hooks/use-data", () => ({
-  useTasks: () => ({ tasks: [] }),
+  useTasks: () => ({ tasks: mocks.tasks }),
   useMedications: () => ({ medications: [], isTaken: () => false, ready: true }),
   useReminders: () => ({ reminders: mocks.reminders }),
 }));
@@ -33,7 +35,10 @@ vi.mock("@/lib/push-client", () => ({
 }));
 vi.mock("@/lib/cloud-storage", () => ({
   useCloudSyncedStorage: (_key: string, initial: unknown) => [initial],
+  getSyncUser: mocks.getUser,
+  ACCOUNT_BOUND_EVENT: "test-account-bound",
 }));
+vi.mock("@/lib/account-scope", () => ({ isActiveOwner: () => mocks.activeOwner }));
 vi.mock("@/hooks/use-quickflow", () => ({ useQuickflow: () => ({ openItems: [] }) }));
 vi.mock("@/hooks/use-study-schedule", () => ({
   useStudySchedule: () => ({ lectures: [], settings: { lectureReminderMinutes: 0 } }),
@@ -53,9 +58,9 @@ beforeEach(() => {
   vi.clearAllMocks();
   mocks.subscribed = false;
   mocks.signedIn = true;
-  mocks.getUser.mockImplementation(async () => ({
-    data: { user: mocks.signedIn ? { id: "test-account" } : null },
-  }));
+  mocks.activeOwner = true;
+  mocks.tasks = [];
+  mocks.getUser.mockImplementation(async () => (mocks.signedIn ? { id: "test-account" } : null));
   mocks.getSubscription.mockImplementation(async () =>
     mocks.subscribed ? { endpoint: "https://push.test/android" } : null,
   );
@@ -119,8 +124,65 @@ describe("köning av påminnelser efter aktivering", () => {
     mocks.subscribed = true;
     renderHook(() => useReminderSync());
     act(() => window.dispatchEvent(new Event("test-push-changed")));
-    await waitFor(() => expect(mocks.getUser).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mocks.getUser).toHaveBeenCalled());
+    expect(mocks.getSubscription).not.toHaveBeenCalled();
+    expect(mocks.sync).not.toHaveBeenCalled();
+  });
+
+  it("köar och uppdaterar uppgifter utan att påminnelsesidan är monterad", async () => {
+    mocks.subscribed = true;
+    mocks.reminders = [];
+    const when = new Date(Date.now() + 20 * 60_000);
+    mocks.tasks = [
+      {
+        id: "task-one",
+        title: "Första rubrik",
+        completed: false,
+        dueDate: mocksDate(when),
+        time: mocksTime(when),
+        reminderMinutesBefore: 0,
+      } as Task,
+    ];
+    const { rerender } = renderHook(() => useReminderSync());
+    await waitFor(() =>
+      expect(mocks.sync).toHaveBeenCalledWith({
+        data: expect.objectContaining({ clientKey: "task:task-one", title: "Första rubrik" }),
+      }),
+    );
+    mocks.tasks = [{ ...mocks.tasks[0], title: "Ny rubrik" }];
+    rerender();
+    await waitFor(() =>
+      expect(mocks.sync).toHaveBeenCalledWith({
+        data: expect.objectContaining({ clientKey: "task:task-one", title: "Ny rubrik" }),
+      }),
+    );
+  });
+
+  it("behåller en förfallen men aktiv påminnelse för serverns återförsök", async () => {
+    mocks.subscribed = true;
+    const when = new Date(Date.now() - 5 * 60_000);
+    const { rerender } = renderHook(() => useReminderSync());
+    await waitFor(() => expect(mocks.reconcile).toHaveBeenCalledOnce());
+    mocks.reminders = [{ ...mocks.reminders[0], date: mocksDate(when), time: mocksTime(when) }];
+    rerender();
+    await waitFor(() => expect(mocks.reconcile).toHaveBeenCalledTimes(2));
+    expect(mocks.cancel).not.toHaveBeenCalled();
+    expect(mocks.sync).toHaveBeenCalledOnce();
+  });
+
+  it("skickar aldrig lokal data som tillhör ett annat konto", async () => {
+    mocks.subscribed = true;
+    mocks.activeOwner = false;
+    renderHook(() => useReminderSync());
+    await waitFor(() => expect(mocks.getUser).toHaveBeenCalled());
     expect(mocks.getSubscription).not.toHaveBeenCalled();
     expect(mocks.sync).not.toHaveBeenCalled();
   });
 });
+
+function mocksDate(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function mocksTime(d: Date) {
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}

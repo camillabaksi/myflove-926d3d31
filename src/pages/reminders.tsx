@@ -7,7 +7,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
-import { useReminderSync } from "@/hooks/use-reminder-sync";
 import PushStatusCard from "@/components/push-status-card";
 import { paceFormSurface } from "@/components/paceable/design-system";
 import { useToast } from "@/hooks/use-toast";
@@ -90,7 +89,11 @@ function ReminderRow({
           <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
             <CalendarClock size={14} />
             {reminder.date}
-            {reminder.time ? <span className="pace-type-time"> · {reminder.time}</span> : " · hela dagen"}
+            {reminder.time ? (
+              <span className="pace-type-time"> · {reminder.time}</span>
+            ) : (
+              " · hela dagen"
+            )}
             {reminder.repeat && reminder.repeat !== "none" ? " · återkommande" : ""}
           </p>
           {reminder.note && <p className="mt-1 text-sm text-muted-foreground">{reminder.note}</p>}
@@ -190,7 +193,6 @@ export default function RemindersPage() {
     restoreReminder,
   } = useReminders();
   const { toast } = useToast();
-  useReminderSync();
   const [addOpen, setAddOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(todayIso());

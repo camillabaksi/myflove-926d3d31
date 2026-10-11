@@ -15,17 +15,21 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { sendPushTo } = await import("@/lib/push.server");
+        const { createPushQuietChecker } = await import("@/lib/push-quiet.server");
+        const { deliverQueuedReminder } = await import("@/lib/push-reminder-delivery.server");
 
         const now = new Date();
         const nowIso = now.toISOString();
+        const quietNow = createPushQuietChecker(supabaseAdmin, now);
 
         // 1) Due reminders
         const { data: due, error: dueErr } = await supabaseAdmin
           .from("push_reminders")
-          .select("id, user_id, kind, title, body, url, client_key")
+          .select("id, user_id, kind, title, body, url, client_key, deliver_at, sent_endpoints")
           .lte("deliver_at", nowIso)
           .is("delivered_at", null)
           .is("canceled_at", null)
+          .or(`processing_until.is.null,processing_until.lt.${nowIso}`)
           .limit(200);
         if (dueErr) {
           console.error("[push-tick] load reminders", dueErr);
@@ -38,55 +42,103 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
         // Group by user for one subs-lookup per user
         const byUser = new Map<string, typeof due>();
         for (const r of due ?? []) {
+          // Samma dygnslånga giltighet som push-payloaden: inga gamla larm
+          // i en klump efter flera dagars frånvaro. Avbokad är inte levererad.
+          if (now.getTime() - new Date(r.deliver_at).getTime() > 24 * 60 * 60_000) {
+            await supabaseAdmin
+              .from("push_reminders")
+              .update({ canceled_at: nowIso })
+              .eq("id", r.id)
+              .is("delivered_at", null)
+              .is("canceled_at", null);
+            continue;
+          }
           if (!byUser.has(r.user_id)) byUser.set(r.user_id, []);
           byUser.get(r.user_id)!.push(r);
         }
 
         for (const [userId, reminders] of byUser.entries()) {
+          // Paus/natt gäller även när alla appens fönster är stängda.
+          if (await quietNow(userId)) continue;
           const { data: subs } = await supabaseAdmin
             .from("push_subscriptions")
             .select("endpoint, p256dh, auth")
             .eq("user_id", userId);
           if (!subs || subs.length === 0) {
-            // Still mark delivered so we don't keep scanning them
-            await supabaseAdmin
-              .from("push_reminders")
-              .update({ delivered_at: nowIso })
-              .in(
-                "id",
-                reminders.map((r) => r.id),
-              );
+            // Inget har levererats. Behåll kön om en prenumeration återkommer.
             continue;
           }
 
           for (const r of reminders) {
-            let anyOk = false;
-            for (const s of subs) {
-              const res = await sendPushTo(
-                s,
-                {
-                  title: r.title,
-                  body: r.body,
-                  url: r.url ?? "/idag",
-                  tag: `${r.kind}-${r.id}`,
-                  itemKey: r.client_key,
-                },
-                { userId, source: `reminder:${r.kind}`, ref: r.client_key },
-              );
-              if (res === "ok") {
-                anyOk = true;
-                sentCount++;
-              }
-              if (res === "gone") {
-                goneCount++;
-                await supabaseAdmin.from("push_subscriptions").delete().eq("endpoint", s.endpoint);
-              }
-            }
-            await supabaseAdmin
+            const token = crypto.randomUUID();
+            const claimQuery = supabaseAdmin
               .from("push_reminders")
-              .update({ delivered_at: nowIso })
-              .eq("id", r.id);
-            void anyOk;
+              .update({
+                processing_token: token,
+                processing_until: new Date(Date.now() + 5 * 60_000).toISOString(),
+              })
+              .eq("id", r.id)
+              .eq("deliver_at", r.deliver_at)
+              .eq("title", r.title)
+              .eq("body", r.body)
+              .eq("kind", r.kind)
+              .is("delivered_at", null)
+              .is("canceled_at", null)
+              .or(`processing_until.is.null,processing_until.lt.${nowIso}`);
+            const { data: claimed, error: claimError } = await (
+              r.url === null ? claimQuery.is("url", null) : claimQuery.eq("url", r.url)
+            ).select("id, sent_endpoints");
+            if (claimError || !claimed?.length) continue;
+            try {
+              // En annan körning kan ha hunnit kvittera en enhet efter läsningen.
+              // Använd alltid kvittona från den rad vi just låste.
+              const result = await deliverQueuedReminder(
+                { ...r, sent_endpoints: claimed[0].sent_endpoints },
+                subs,
+                {
+                  send: sendPushTo,
+                  remember: async (endpoints) => {
+                    const { data, error } = await supabaseAdmin
+                      .from("push_reminders")
+                      .update({ sent_endpoints: endpoints })
+                      .eq("id", r.id)
+                      .eq("processing_token", token)
+                      .is("canceled_at", null)
+                      .select("id");
+                    if (error) throw error;
+                    return !!data?.length;
+                  },
+                  forget: async (endpoint) => {
+                    const { error } = await supabaseAdmin
+                      .from("push_subscriptions")
+                      .delete()
+                      .eq("user_id", userId)
+                      .eq("endpoint", endpoint);
+                    if (error) throw error;
+                  },
+                },
+              );
+              sentCount += result.sent;
+              goneCount += result.gone;
+              if (result.complete) {
+                const { error } = await supabaseAdmin
+                  .from("push_reminders")
+                  .update({ delivered_at: new Date().toISOString() })
+                  .eq("id", r.id)
+                  .eq("processing_token", token)
+                  .is("canceled_at", null);
+                if (error) throw error;
+              }
+            } catch (error) {
+              console.error("[push-tick] reminder retained for retry", error);
+            } finally {
+              // Ett avbrutet serveranrop släpper automatiskt låset efter fem minuter.
+              await supabaseAdmin
+                .from("push_reminders")
+                .update({ processing_token: null, processing_until: null })
+                .eq("id", r.id)
+                .eq("processing_token", token);
+            }
           }
         }
 
@@ -100,6 +152,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           .eq("weather_enabled", true);
 
         for (const p of prefs ?? []) {
+          if (await quietNow(p.user_id)) continue;
           if (p.last_lat == null || p.last_lon == null) continue;
           const [wh] = (p.weather_time ?? "07:00").split(":");
           if (wh !== hh) continue;
@@ -192,6 +245,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           .or("personal_enabled.eq.true,personal_evening_enabled.eq.true");
 
         for (const p of personalPrefs ?? []) {
+          if (await quietNow(p.user_id)) continue;
           const isMorning = !!p.personal_enabled && isDue(p.personal_time ?? "08:00");
           const isEvening =
             !!p.personal_evening_enabled && isDue(p.personal_evening_time ?? "20:30");
@@ -242,6 +296,7 @@ export const Route = createFileRoute("/api/public/hooks/push-tick")({
           .eq("wake_enabled", true);
 
         for (const p of wakePrefs ?? []) {
+          if (await quietNow(p.user_id)) continue;
           if (p.wake_ack_on === localDate) continue;
           const target = hhmmToMinutes(p.wake_time ?? "07:00");
           const interval = p.wake_interval_min ?? 8;

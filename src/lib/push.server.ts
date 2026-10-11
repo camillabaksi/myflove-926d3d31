@@ -100,7 +100,11 @@ async function deliverPush(
   try {
     const payload = await buildPushPayload(msg, wp, vapid);
     const body = payload.body as unknown as BodyInit;
-    const res = await fetch(sub.endpoint, { ...payload, body });
+    const res = await fetch(sub.endpoint, {
+      ...payload,
+      body,
+      signal: AbortSignal.timeout(15_000),
+    });
     if (res.status === 404 || res.status === 410) return "gone";
     if (res.status >= 200 && res.status < 300) return "ok";
     console.error("[push] send failed", res.status, await res.text().catch(() => ""));
