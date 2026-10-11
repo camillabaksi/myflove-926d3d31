@@ -8,7 +8,11 @@ import {
   medicationReminderKey,
   medicationOccursOn,
 } from "@/lib/medications";
-import { getCurrentSubscription, refreshPushSubscription } from "@/lib/push-client";
+import {
+  getCurrentSubscription,
+  refreshPushSubscription,
+  PUSH_SUBSCRIPTION_EVENT,
+} from "@/lib/push-client";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -65,9 +69,11 @@ export function useReminderSync() {
       if (document.visibilityState === "visible") bump();
     };
     document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
     return () => {
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
     };
   }, []);
 
@@ -85,7 +91,17 @@ export function useReminderSync() {
     ]),
     medsReady,
     medications.map((m) => [m.id, m.name, m.dosage, m.times.join(","), m.repeat, m.startDate]),
-    reminders.map((r) => [r.id, r.completed, r.date, r.time, r.repeat]),
+    reminders.map((r) => [
+      r.id,
+      r.completed,
+      r.canceled,
+      r.date,
+      r.time,
+      r.repeat,
+      r.remindMinutesBefore,
+      r.title,
+      r.note,
+    ]),
     routines.map((r) => [r.id, r.title, r.time, r.enabled, r.repeat, r.startDate]),
     quickflowItems.map((q) => [q.id, q.text, q.remindAt, q.done]),
     lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location]),

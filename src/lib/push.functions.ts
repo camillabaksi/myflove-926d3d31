@@ -9,7 +9,7 @@ const SubscribeSchema = z.object({
   p256dh: z.string().min(1),
   auth: z.string().min(1),
   userAgent: z.string().optional(),
-  /** Rensa gamla, döda prenumerationer från samma enhet. */
+  /** Accepteras från äldre klienter; webbläsarinformation identifierar inte en enhet. */
   replaceOthers: z.boolean().optional(),
 });
 
@@ -31,14 +31,8 @@ export const subscribeToPush = createServerFn({ method: "POST" })
     );
     if (error) throw new Error(error.message);
 
-    if (data.replaceOthers && data.userAgent) {
-      await supabase
-        .from("push_subscriptions")
-        .delete()
-        .eq("user_id", userId)
-        .eq("user_agent", data.userAgent)
-        .neq("endpoint", data.endpoint);
-    }
+    // Flera enheter och domäner kan ha samma userAgent. Behåll dem;
+    // döda endpoints städas när pushtjänsten svarar 404/410.
     return { ok: true };
   });
 

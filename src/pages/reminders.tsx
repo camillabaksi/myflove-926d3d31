@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
@@ -10,11 +10,6 @@ import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import { useReminderSync } from "@/hooks/use-reminder-sync";
 import PushStatusCard from "@/components/push-status-card";
 import { paceFormSurface } from "@/components/paceable/design-system";
-import {
-  getNotificationPermission,
-  requestNotificationPermission,
-  type NotificationPermissionState,
-} from "@/lib/push-notifications";
 import { useToast } from "@/hooks/use-toast";
 import {
   ArrowRight,
@@ -203,20 +198,6 @@ export default function RemindersPage() {
   const [note, setNote] = useState("");
   const [repeat, setRepeat] = useState<RepeatMode>("none");
   const [lead, setLead] = useState(0);
-  const [permission, setPermission] = useState<NotificationPermissionState>("default");
-
-  useEffect(() => {
-    setPermission(getNotificationPermission());
-  }, []);
-
-  const askPermission = async () => {
-    const res = await requestNotificationPermission();
-    setPermission(res);
-    if (res === "granted")
-      toast({ description: "Notiser är på – du får en signal när det är dags 🔔" });
-    else if (res === "denied")
-      toast({ description: "Notiser är blockerade i webbläsarens inställningar" });
-  };
 
   const { active, canceled } = useMemo(() => {
     const sorted = [...reminders].sort((a, b) => {
@@ -269,23 +250,7 @@ export default function RemindersPage() {
           className={paceFormSurface}
           area="idag"
         >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="min-w-0 flex-1 text-sm text-muted-foreground">
-              {permission === "granted"
-                ? "Notiser är på på den här enheten."
-                : permission === "unsupported"
-                  ? "Webbläsaren stödjer inte notiser."
-                  : permission === "denied"
-                    ? "Notiser är blockerade i webbläsaren."
-                    : "Slå på notiser så påminner appen dig."}
-            </p>
-            {permission === "default" && (
-              <Button onClick={askPermission} className="h-10 shrink-0 rounded-xl">
-                Tillåt notiser
-              </Button>
-            )}
-          </div>
-          <PushStatusCard className="mt-2" />
+          <PushStatusCard />
         </MyFloveBlock>
 
         <MyFloveWide>

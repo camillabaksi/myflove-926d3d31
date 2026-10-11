@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { subscribeToPush } from "@/lib/push.functions";
-import { refreshPushSubscription } from "@/lib/push-client";
+import { refreshPushSubscription, notifyPushSubscriptionChanged } from "@/lib/push-client";
 
 const LAST_KEY = "myflove-push-last-endpoint";
 
@@ -31,9 +31,9 @@ export function usePushSubscriptionSync(): void {
           data: {
             ...sub,
             userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
-            replaceOthers: true,
           },
         });
+        notifyPushSubscriptionChanged();
         window.localStorage.setItem(LAST_KEY, sub.endpoint);
       } catch (err) {
         console.error("[push] sync failed", err);

@@ -5,6 +5,12 @@ export const VAPID_PUBLIC_KEY =
   "BPxfhVUsDs6sqHE_Ls7Ws3M1b5BJuBobkcUJnSIxEhW85C0RfU3uO-4KrNOFcAlx0APR49fx83eUVDofnQ7dAnI";
 
 const SW_PATH = "/sw.js";
+export const PUSH_SUBSCRIPTION_EVENT = "myflove-push-subscription-changed";
+
+/** Först efter serverregistrering kan befintliga påminnelser köas för bakgrunden. */
+export function notifyPushSubscriptionChanged(): void {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(PUSH_SUBSCRIPTION_EVENT));
+}
 
 function isRefusedContext(): boolean {
   if (typeof window === "undefined") return true;

@@ -41,7 +41,7 @@ self.addEventListener("message", (event) => {
 
 self.addEventListener("push", (event) => {
   let data = {
-    title: "MyFlove",
+    title: "Paceable",
     body: "Ny påminnelse",
     url: "/idag",
     tag: undefined,
@@ -80,7 +80,10 @@ self.addEventListener("push", (event) => {
     renotify: !!data.tag,
     data: { url: data.url || "/idag", itemKey: itemKey || null },
     actions: quickActions,
-    vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200],
+    silent: data.silent === true,
+    ...(data.silent === true
+      ? {}
+      : { vibrate: Array.isArray(data.vibrate) ? data.vibrate : [200, 100, 200] }),
     requireInteraction: !!data.requireInteraction,
   };
   event.waitUntil(self.registration.showNotification(data.title, options));
