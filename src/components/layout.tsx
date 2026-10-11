@@ -737,7 +737,7 @@ export default function Layout({ children }: LayoutProps) {
         aria-label={t("Huvudnavigation")}
         className="pace-shell-sidebar relative z-30 hidden md:flex flex-col border-r border-border bg-card/95 shrink-0 overflow-y-auto"
       >
-        <div className="mb-6 flex items-center justify-center py-1">
+        <div className="mb-6 flex items-center justify-start py-1">
           <BrandLogo compact className="pace-app-brand" />
         </div>
         <ul className="space-y-1">
