@@ -57,7 +57,8 @@ export default function DesignSystemReference() {
           </div>
         </PaceSection>
         <PaceSection title="Typografi och handlingar">
-          <PaceInfoBlock><PaceHeading editorial level={3}>Kortrubrik i Fraunces</PaceHeading><PaceHeading level={3}>Samma mjuka typsnitt i hela appen</PaceHeading><p>Logotypen är störst. Välkomsttext och sidrubriker: 28. Hälsning: 24. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext: 14. Små etiketter: 12. Storlekarna följer din inställning för större text.</p></PaceInfoBlock>
+          <PaceInfoBlock><PaceHeading editorial level={3}>Rubriker och klockslag i Fraunces</PaceHeading><p className="pace-type-activity text-lg">Aktiviteter och lästext i Lora</p><p>Logotypen är störst. Välkomsttext och sidrubriker: 28. Hälsning: 24. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext och underkategorier: 14. Små etiketter: 12. Storlekarna följer din inställning för större text.</p></PaceInfoBlock>
+          <div className="max-w-xs"><PaceHeading level={2}>Tider idag</PaceHeading><div className="mt-3 grid grid-cols-[3.5rem_minmax(0,1fr)] gap-3"><time className="pace-type-time font-semibold tabular-nums">18:30</time><div><p className="pace-type-activity">Lugn promenad</p><p className="pace-type-category text-muted-foreground">Hälsa · Egen tid</p></div></div></div>
           <PaceActions><PaceButton>Primär handling</PaceButton><PaceButton variant="outline">Sekundär handling</PaceButton><PaceButton variant="ghost">Diskret handling</PaceButton><PaceButton variant="destructive">Destruktiv handling</PaceButton></PaceActions>
           <p className="pace-ds-help">Kontroller kan se 36–40 px höga ut men behåller minst 44×44 px faktisk tryckyta.</p>
         </PaceSection>

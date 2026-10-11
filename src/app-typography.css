@@ -3,6 +3,9 @@
    Rem units keep browser/system text enlargement and the existing NPF setting. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"] {
   --pace-type-family:
+    "Lora", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Noto Color Emoji";
+  --pace-type-heading-family:
     "Fraunces", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-brand-width: 16rem;
@@ -15,9 +18,9 @@
   --pace-type-help: 0.875rem;
   --pace-type-meta: 0.75rem;
   --font-sans: var(--pace-type-family);
-  --font-display: var(--pace-type-family);
+  --font-display: var(--pace-type-heading-family);
   --font-handwritten: var(--pace-type-family);
-  --font-editorial: var(--pace-type-family);
+  --font-editorial: var(--pace-type-heading-family);
   --font-serif: var(--pace-type-family);
   font-family: var(--pace-type-family);
   line-height: 1.5;
@@ -25,12 +28,13 @@
 
 html[data-paceable-typography="true"] body,
 .pace-type-scope[data-paceable-typography="true"] {
+  font-family: var(--pace-type-family);
   font-size: var(--pace-type-body);
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is(.pace-ds, [data-paceable-app], [data-paceable-surface]) {
-  --font-editorial: var(--pace-type-family);
+  --font-editorial: var(--pace-type-heading-family);
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
@@ -64,7 +68,15 @@ html[data-paceable-typography="true"] body,
   font-variation-settings: normal;
 }
 
+/* Explicit display roles also cover older headings rendered as spans or p.
+   Compiled Tailwind font utilities otherwise bypass the scoped family tokens. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(.font-display, .pace-editorial, .pace-editorial-role, .pace-type-heading) {
+  font-family: var(--pace-type-heading-family);
+}
+
 :is(html, .pace-type-scope)[data-paceable-typography="true"] :is(h4, h5, h6) {
+  font-family: var(--pace-type-heading-family);
   font-size: var(--pace-type-body);
   font-weight: 600;
   line-height: 1.4;
@@ -79,6 +91,7 @@ html[data-paceable-typography="true"] body,
     .pace-tasks-heading,
     .pace-ds-heading-1
   ) {
+  font-family: var(--pace-type-heading-family);
   font-size: var(--pace-type-page);
   font-weight: 600;
   line-height: 1.25;
@@ -138,6 +151,7 @@ html[data-paceable-typography="true"] body,
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-welcome-title {
+  font-family: var(--pace-type-heading-family);
   font-size: var(--pace-type-welcome);
   font-weight: 600;
   line-height: 1.25;
@@ -147,7 +161,7 @@ html[data-paceable-typography="true"] body,
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-editorial-greeting {
   font-size: var(--pace-type-greeting);
-  font-family: var(--pace-type-family);
+  font-family: var(--pace-type-heading-family);
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: 0;
@@ -161,6 +175,7 @@ html[data-paceable-typography="true"] body,
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is(h2, .pace-editorial-section, .pace-ds-heading-2, .pace-place-section-title) {
+  font-family: var(--pace-type-heading-family);
   font-size: var(--pace-type-section);
   font-weight: 600;
   line-height: 1.35;
@@ -169,10 +184,27 @@ html[data-paceable-typography="true"] body,
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is(h3, .pace-ds-heading-3, .pace-tasks-title, .pace-more-card-title, .pace-place-entry-title) {
+  font-family: var(--pace-type-heading-family);
   font-size: var(--pace-type-card);
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0;
+}
+
+/* Activity names remain reading text even when a legacy card uses a heading
+   element or font-display. Preserve each view's size and calendar geometry. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(.pace-type-activity, .pace-tasks-title) {
+  font-family: var(--pace-type-family);
+  font-weight: 500;
+}
+
+/* The soft serif clock numerals are a separate role from activity prose.
+   Only the family changes: sizes, tabular digits and timer geometry stay put. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(time, .tabular-nums, .font-mono, .pace-type-time, input[type="time"]) {
+  font-family: var(--pace-type-heading-family);
+  font-variation-settings: normal;
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
@@ -235,6 +267,13 @@ html[data-paceable-typography="true"] body,
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is([class~="text-[15px]"], [class~="text-[16px]"]) {
   font-size: var(--pace-type-body);
+  line-height: 1.5;
+}
+
+/* This explicit category role follows legacy 10–14px utility normalization. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-type-category {
+  font-family: var(--pace-type-family);
+  font-size: var(--pace-type-help);
   line-height: 1.5;
 }
 

@@ -90,7 +90,7 @@ function ReminderRow({
           <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
             <CalendarClock size={14} />
             {reminder.date}
-            {reminder.time ? ` · ${reminder.time}` : " · hela dagen"}
+            {reminder.time ? <span className="pace-type-time"> · {reminder.time}</span> : " · hela dagen"}
             {reminder.repeat && reminder.repeat !== "none" ? " · återkommande" : ""}
           </p>
           {reminder.note && <p className="mt-1 text-sm text-muted-foreground">{reminder.note}</p>}
