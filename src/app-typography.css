@@ -91,7 +91,7 @@ html[data-paceable-typography="true"] body,
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-app-brand {
   width: var(--pace-brand-width);
   max-width: 100%;
-  justify-self: center;
+  justify-self: start;
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-navigation {
@@ -100,18 +100,40 @@ html[data-paceable-typography="true"] body,
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-header {
   display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   column-gap: 0.5rem;
+  row-gap: 0.25rem;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  .pace-shell-brand-header
+  .pace-app-brand {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-back {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-actions {
   grid-column: 2;
+  grid-row: 2;
   justify-self: end;
-  margin-top: 0.25rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
-:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-actions:empty {
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-actions > button {
+  max-width: 100%;
+  white-space: normal;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(.pace-shell-brand-back, .pace-shell-brand-actions):empty {
   display: none;
 }
 
