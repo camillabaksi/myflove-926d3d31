@@ -32,7 +32,7 @@ export default function CapacitySelector({
           {t(
             capacity.percent === null
               ? "Hur börjar du dagen?"
-              : "Utifrån din egen registrering idag.",
+              : "Utifrån din egen registrering idag. Du kan checka in igen när det ändras.",
           )}
         </p>
       )}
@@ -56,7 +56,20 @@ export default function CapacitySelector({
           </Button>
         )
       ) : (
-        <CapacityBattery percent={capacity.percent} size="lg" className="mt-4 w-full" />
+        <>
+          <CapacityBattery percent={capacity.percent} size="lg" className="mt-4 w-full" />
+          {onCheckin && (
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4 min-h-11 w-full whitespace-normal rounded-2xl sm:w-auto"
+              onClick={onCheckin}
+            >
+              <Heart size={16} aria-hidden />
+              {t("Logga energi & mående")}
+            </Button>
+          )}
+        </>
       )}
     </section>
   );

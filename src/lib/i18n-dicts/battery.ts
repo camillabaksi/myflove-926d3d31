@@ -1,5 +1,42 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_BATTERY: Record<string, string> = {
+  "Använd energipåverkan i appens beräkningar": "Use energy influences in the app's estimates",
+  "Gäller den beräknade kurvan och planeringsförslagen. Din egen registrerade kapacitet ändras inte. Dina poster finns kvar när du stänger av.":
+    "Applies to the estimated curve and planning suggestions. Your own logged capacity does not change. Your entries remain when you turn this off.",
+  "Utifrån din egen registrering idag. Du kan checka in igen när det ändras.":
+    "Based on your own check-in today. You can check in again when it changes.",
+  "Historik & mönster": "History & patterns",
+  "Dina loggningar och en separat beräknad energikurva.":
+    "Your logs and a separate estimated energy curve.",
+  "Beräknad energikurva": "Estimated energy curve",
+  "Beräknad energi": "Estimated energy",
+  "Appens uppskattning": "The app's estimate",
+  "En uppskattning, inte en mätning av din ork": "An estimate, not a measurement of your energy",
+  "Appens uppskattning utifrån registreringar, mönster och planerade aktiviteter. Din egen registrering är huvudvärdet i Idag och Kalender.":
+    "The app's estimate based on logs, patterns and planned activities. Your own check-in is the main value in Today and Calendar.",
+  "Generell kurva tills det finns tillräckligt med egna energiloggar.":
+    "A general curve until there are enough of your own energy logs.",
+  "Kurvan visar en möjlig ökning.": "The curve shows a possible increase.",
+  "Kurvan visar en möjlig minskning.": "The curve shows a possible decrease.",
+  "Kurvan visar en ganska jämn nivå.": "The curve shows a fairly steady level.",
+  "Beräknad energikurva över dagen. En uppskattning, inte en mätning.":
+    "Estimated energy curve over the day. An estimate, not a measurement.",
+  "Din egen kapacitet och det du har planerat, sida vid sida. Samma underlag som i Idag och Kalender.":
+    "Your own capacity and your plans, side by side. The same information as in Today and Calendar.",
+  "Din registrerade kapacitet": "Your logged capacity",
+  "Utifrån din morgonincheckning.": "Based on your morning check-in.",
+  "Utifrån din senaste energilogg den här dagen.": "Based on your latest energy log that day.",
+  "Sparat i din energihistorik. Din egen kapacitet ändras när du checkar in.":
+    "Saved in your energy history. Your own capacity changes when you check in.",
+  "Dina energiposter sparas till ditt konto så att du kan se vad som ger och tar energi.":
+    "Your energy entries are saved to your account so you can see what gives and takes energy.",
+  "Dagens energipåverkan": "Today's energy influences",
+  "Plus och minus summerar den styrka du registrerat. De är inte batteriprocent och ändrar inte din egen kapacitet.":
+    "Plus and minus add up the intensity you logged. They are not battery percentages and do not change your own capacity.",
+  "Energihistoriken visar vad som gett och tagit energi. Din kapacitet visas utifrån din egen incheckning.":
+    "Your energy history shows what gave and took energy. Your capacity is based on your own check-in.",
+  "Här summeras styrkan i det du registrerat som gett eller tagit energi. Plus och minus är inte batteriprocent. Din egen kapacitet visas i Idag och Kalender.":
+    "This adds up the intensity of what you logged as giving or taking energy. Plus and minus are not battery percentages. Your own capacity is shown in Today and Calendar.",
   // battery.tsx
   "Mitt batteri": "My battery",
   "Mina mönster": "My patterns",
@@ -318,7 +355,8 @@ export const EN_BATTERY: Record<string, string> = {
 
   // Påverkan & menscykel
   "Vad påverkar din kapacitet?": "What is affecting your capacity?",
-  "Frivilligt – hjälper Paceable att förstå vad som påverkar din dag.": "Optional – helps Paceable understand what affects your day.",
+  "Frivilligt – hjälper Paceable att förstå vad som påverkar din dag.":
+    "Optional – helps Paceable understand what affects your day.",
   "Lägg till om något påverkar dig idag.": "Add anything affecting you today.",
   "Kropp & hälsa": "Body & health",
   "Känslor & tankar": "Feelings & thoughts",

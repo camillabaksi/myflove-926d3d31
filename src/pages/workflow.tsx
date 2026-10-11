@@ -287,8 +287,8 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
             help="Hur mycket som är realistiskt idag utifrån din ork och tiden som är kvar."
           >
             <p className="mt-1 text-sm text-muted-foreground">
-              Anpassat efter dagens balans {flow.score} och energi{" "}
-              {energy ? `${energy}/5` : "okänd"} – ca {flow.capacityMinutes} min fokustid.
+              Planeringsförslag: ungefär {flow.capacityMinutes} min fokustid, beräknat utifrån
+              registrerad energi, mående och planeringen. Du väljer själv vad som passar.
             </p>
             {capacityPlan.plan.length ? (
               <ul className="mt-3 space-y-2">
@@ -319,7 +319,7 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
             )}
             {capacityPlan.plannedMinutes > 0 && (
               <p className="mt-2 text-xs text-muted-foreground">
-                Planerat {capacityPlan.plannedMinutes} min av {flow.capacityMinutes} min.
+                Förslaget innehåller {capacityPlan.plannedMinutes} min.
               </p>
             )}
             {capacityPlan.tooHeavy.length > 0 && (

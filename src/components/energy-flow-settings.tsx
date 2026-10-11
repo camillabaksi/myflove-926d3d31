@@ -1,6 +1,7 @@
 import { MyFloveCard, MyFloveChip } from "@/components/myflove";
 import { Switch } from "@/components/ui/switch";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { useLang } from "@/hooks/use-language";
 import {
   categoryWeightFor,
   ENERGY_CATEGORIES,
@@ -21,6 +22,7 @@ const SHORT: Record<EnergyFlowWeight, string> = {
  * ett huvudreglage plus egen vikt för varje energifaktor.
  */
 export default function EnergyFlowSettings() {
+  const { t } = useLang();
   const { settings, setSettings } = useEnergyFlow();
   const off = !settings.enabled;
 
@@ -29,9 +31,13 @@ export default function EnergyFlowSettings() {
       <MyFloveCard className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="font-medium text-ink">Låt min energi påverka dagens balans</div>
+            <div className="font-medium text-ink">
+              {t("Använd energipåverkan i appens beräkningar")}
+            </div>
             <p className="text-sm text-muted-foreground">
-              Stänger du av räknas ingenting med. Dina poster finns kvar precis som vanligt.
+              {t(
+                "Gäller den beräknade kurvan och planeringsförslagen. Din egen registrerade kapacitet ändras inte. Dina poster finns kvar när du stänger av.",
+              )}
             </p>
           </div>
           <Switch

@@ -34,7 +34,11 @@ export function useDayWindow() {
     (value: number) =>
       setEdges((prev) => ({
         ...(prev ?? {}),
-        [today]: { ...(prev?.[today] ?? {}), morning: value },
+        [today]: {
+          ...(prev?.[today] ?? {}),
+          morning: value,
+          morningLoggedAt: new Date().toISOString(),
+        },
       })),
     [setEdges, today],
   );

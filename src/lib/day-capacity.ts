@@ -26,28 +26,44 @@ const localDate = (iso: string) => {
 /**
  * Gemensam källa för dagens kapacitet i kalendern.
  * Bygger ENDAST på användarens egen registrering för just den dagen:
- * 1) morgonens batteri-incheckning (befintlig skala 1–10 → edgeToPercent),
- * 2) annars senaste energiloggen samma dag (1–5).
+ * Senaste tidsstämplade registreringen gäller: morgonincheckning (1–10)
+ * eller energilogg (1–5). Äldre morgonposter utan tid används som fallback.
  * Planerade aktiviteter och klockan påverkar aldrig värdet; framtida dagar
  * utan egen registrering ger null (visas som "–").
  */
-export function dayCapacity(date: string, edges: DayEdges | null | undefined, logs: EnergyLogEntry[] | null | undefined, today?: string): DayCapacity {
+export function dayCapacity(
+  date: string,
+  edges: DayEdges | null | undefined,
+  logs: EnergyLogEntry[] | null | undefined,
+  today?: string,
+): DayCapacity {
   const now = new Date();
-  const currentDate = today ?? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-  if (date > currentDate) return { percent: null, source: null, morning: null, reportedLevel: null };
+  const currentDate =
+    today ??
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  if (date > currentDate)
+    return { percent: null, source: null, morning: null, reportedLevel: null };
   const m = edges?.[date]?.morning;
   const morning = typeof m === "number" && Number.isFinite(m) ? Math.round(edgeToPercent(m)) : null;
   const latest = (logs ?? [])
-    .filter(e => typeof e?.level === "number" && localDate(e.logged_at) === date)
-    .sort((a, b) => b.logged_at.localeCompare(a.logged_at))[0];
+    .filter((e) => Number.isFinite(e?.level) && localDate(e.logged_at) === date)
+    .sort((a, b) => Date.parse(b.logged_at) - Date.parse(a.logged_at))[0];
   const reportedLevel = latest ? Math.min(5, Math.max(1, latest.level)) : null;
-  // Ny incheckning under dagen (energiloggen) får uppdatera värdet om den är senare än morgonen.
-  if (reportedLevel != null && morning == null) {
-    return { percent: Math.round(((reportedLevel - 1) / 4) * 100), source: "energy-log", morning, reportedLevel };
+  const morningTime = Date.parse(edges?.[date]?.morningLoggedAt ?? "");
+  const logIsLatest =
+    latest && (!Number.isFinite(morningTime) || Date.parse(latest.logged_at) >= morningTime);
+  if (reportedLevel != null && (morning == null || logIsLatest)) {
+    return {
+      percent: Math.round(((reportedLevel - 1) / 4) * 100),
+      source: "energy-log",
+      morning,
+      reportedLevel,
+    };
   }
   if (morning != null) return { percent: morning, source: "morning", morning, reportedLevel };
   return { percent: null, source: null, morning: null, reportedLevel: null };
 }
 
 export type CapacityTone = "high" | "middle" | "low";
-export const capacityTone = (percent: number): CapacityTone => (percent >= 60 ? "high" : percent >= 35 ? "middle" : "low");
+export const capacityTone = (percent: number): CapacityTone =>
+  percent >= 60 ? "high" : percent >= 35 ? "middle" : "low";
