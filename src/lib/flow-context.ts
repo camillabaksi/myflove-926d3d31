@@ -76,7 +76,6 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
 };
 
 const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> = {
-  "/hem": { label: "Hem", prompt: "Vad är viktigast för mig just nu?", area: "vardag" },
   "/idag": { label: "Idag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },
   "/tasks": { label: "Att göra", prompt: "Hjälp mig välja vad jag ska börja med.", area: "vardag" },
   "/kalender": {
@@ -137,6 +136,8 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
 const KEY = "myflove-flow-place";
 
 export function placeFor(path: string): FlowPlace {
+  // Äldre sessionsminnen ska beskriva den aktuella startsidan.
+  if (path === "/hem") path = "/idag";
   const hit = PLACES[path];
   if (hit) return { path, label: hit.label, prompt: hit.prompt, area: hit.area };
   return { path, label: "Paceable", prompt: "Vad snurrar i huvudet just nu?", area: "vardag" };
@@ -159,10 +160,10 @@ export function rememberPlace(path: string) {
 }
 
 export function lastPlace(): FlowPlace {
-  if (typeof window === "undefined") return placeFor("/hem");
+  if (typeof window === "undefined") return placeFor("/idag");
   try {
-    return placeFor(window.sessionStorage.getItem(KEY) ?? "/hem");
+    return placeFor(window.sessionStorage.getItem(KEY) ?? "/idag");
   } catch {
-    return placeFor("/hem");
+    return placeFor("/idag");
   }
 }

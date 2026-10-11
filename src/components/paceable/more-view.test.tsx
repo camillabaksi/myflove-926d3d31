@@ -9,7 +9,7 @@ vi.mock("wouter", () => ({ Link: ({ children, href, ...props }: { children: Reac
 describe("Mer navigation presentation", () => {
   const item = (href: string, essential = false): MoreItem => ({ href, label: href, hint: "Test", icon: User, essential });
   it("covers every existing navigation destination", () => {
-    const existing = ["/hem", "/idag", "/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin", "/quickflow", "/anteckningar", "/assistant", "/kalender", "/paminnelser", "/tasks", "/flowscore", "/pomodoro", "/shopping", "/matlista", "/stadning", "/finances", "/relationer", "/familjeflow", "/familj", "/barn", "/historik", "/statistik", "/beloningar", "/insight", "/flowplan", "/flow", "/friktionsindex", "/studyflow", "/jobb", "/admin", "/admin-statistik", "/installningar"];
+    const existing = ["/idag", "/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin", "/quickflow", "/anteckningar", "/assistant", "/kalender", "/paminnelser", "/tasks", "/flowscore", "/pomodoro", "/shopping", "/matlista", "/stadning", "/finances", "/relationer", "/familjeflow", "/familj", "/barn", "/historik", "/statistik", "/beloningar", "/insight", "/flowplan", "/flow", "/friktionsindex", "/studyflow", "/jobb", "/admin", "/admin-statistik", "/installningar"];
     const covered = [...MORE_FEATURED_HREFS, ...MORE_FAMILY, ...MORE_INSIGHTS, ...MORE_LEGACY, ...MORE_GROUPS.flatMap((group) => [...group.hrefs])];
     expect(new Set(covered)).toEqual(new Set(existing));
   });
@@ -22,8 +22,8 @@ describe("Mer navigation presentation", () => {
     expect(getMoreItems(items, ["/flow", "/flowplan"], false)).toEqual(items);
     expect(items).toHaveLength(2);
   });
-  it("keeps older Home in the separate legacy group", () => {
-    expect(MORE_LEGACY).toContain("/hem");
+  it("retires older Home from all navigation groups", () => {
+    expect(MORE_LEGACY).not.toContain("/hem");
     expect(MORE_GROUPS.flatMap((group) => [...group.hrefs])).not.toContain("/hem");
   });
 

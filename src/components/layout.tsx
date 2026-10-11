@@ -77,7 +77,6 @@ import { useDemoAccount } from "@/hooks/use-demo-account";
 /** Vyer som redan har Flow på sitt eget sätt – där dubblerar vi inte. */
 const FLOW_HIDDEN_PATHS = new Set([
   "/",
-  "/hem",
   "/idag",
   "/kalender",
   "/quickflow",
@@ -256,8 +255,8 @@ export default function Layout({ children }: LayoutProps) {
   // Använd TanStack-routerns faktiska location så tillbakaknappen alltid
   // synkar med appens historik – även vid djupa länkar eller SPA-navigering.
   const goBack = useSmartBack("/idag");
-  // Tillbakapil på alla sidor utom startsidan (/hem och /).
-  const canGoBack = location !== "/" && location !== "/hem" && location !== "/idag";
+  // Tillbakapil på alla sidor utom den publika startsidan och Idag.
+  const canGoBack = location !== "/" && location !== "/idag";
   const handleBack = goBack;
 
   useEffect(() => {
@@ -291,14 +290,6 @@ export default function Layout({ children }: LayoutProps) {
     essential?: boolean;
   };
   const navItems: NavItem[] = [
-    {
-      href: "/hem",
-      label: "Hem",
-      icon: Home,
-      hint: "Dagen, energin och nästa steg",
-      essential: true,
-    },
-
     {
       href: "/idag",
       label: "Idag",
@@ -532,7 +523,7 @@ export default function Layout({ children }: LayoutProps) {
         label: "Min dag",
         hint: "Dagen, kalendern och påminnelser",
         icon: CalendarDays,
-        hrefs: ["/hem", "/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
+        hrefs: ["/idag", "/kalender", "/lagg-till", "/paminnelser", "/pomodoro"],
       },
       {
         id: "flowflow",
@@ -720,7 +711,7 @@ export default function Layout({ children }: LayoutProps) {
         hrefs: ["/familj", "/friktionsindex", "/installningar", "/admin", "/admin-statistik"],
         rename: { "/familj": "Delning & åtkomst", "/admin": "Administration – översikt", "/admin-statistik": "Administration – appstatistik" },
       },
-      { id: "aldre", label: "Äldre funktioner", hrefs: ["/hem", "/flowscore", "/beloningar"], legacy: true },
+      { id: "aldre", label: "Äldre funktioner", hrefs: ["/flowscore", "/beloningar"], legacy: true },
     ];
     return groups
       .map((g) => ({

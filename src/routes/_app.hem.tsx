@@ -1,24 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Page from "@/pages/home";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+/** Äldre bokmärken och installerade appar går till den gemensamma startsidan. */
 export const Route = createFileRoute("/_app/hem")({
-  head: () => ({
-    meta: [
-      { title: "Hem – Paceable" },
-      {
-        name: "description",
-        content:
-          "Din lugna start i Paceable – fånga en tanke, se kalendern, kolla batteriet eller logga hur du mår.",
-      },
-      { property: "og:title", content: "Hem – Paceable" },
-      {
-        property: "og:description",
-        content: "En lugn översikt där du tar en sak i taget.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
-  }),
-  component: Page,
+  beforeLoad: () => {
+    throw redirect({ to: "/idag", replace: true });
+  },
 });
