@@ -15,6 +15,17 @@
 		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		504143450000000000010000 /* paceable_myflove.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000000 /* paceable_myflove.wav */; };
+		504143450000000000010001 /* paceable_mjuk_klocka.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000001 /* paceable_mjuk_klocka.wav */; };
+		504143450000000000010002 /* paceable_litet_pling.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000002 /* paceable_litet_pling.wav */; };
+		504143450000000000010003 /* paceable_mjuk_ton.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000003 /* paceable_mjuk_ton.wav */; };
+		504143450000000000010004 /* paceable_bubblig.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000004 /* paceable_bubblig.wav */; };
+		504143450000000000010005 /* paceable_natur.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000005 /* paceable_natur.wav */; };
+		504143450000000000010006 /* paceable_lugn_melodi.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000006 /* paceable_lugn_melodi.wav */; };
+		504143450000000000010007 /* paceable_klangskal.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000007 /* paceable_klangskal.wav */; };
+		504143450000000000010008 /* paceable_regndroppe.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000008 /* paceable_regndroppe.wav */; };
+		504143450000000000010009 /* paceable_harpa.wav in Resources */ = {isa = PBXBuildFile; fileRef = 504143450000000000000009 /* paceable_harpa.wav */; };
+		50414345000000000001000A /* paceable_silent.wav in Resources */ = {isa = PBXBuildFile; fileRef = 50414345000000000000000A /* paceable_silent.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +39,17 @@
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		504143450000000000000000 /* paceable_myflove.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_myflove.wav; sourceTree = "<group>"; };
+		504143450000000000000001 /* paceable_mjuk_klocka.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_mjuk_klocka.wav; sourceTree = "<group>"; };
+		504143450000000000000002 /* paceable_litet_pling.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_litet_pling.wav; sourceTree = "<group>"; };
+		504143450000000000000003 /* paceable_mjuk_ton.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_mjuk_ton.wav; sourceTree = "<group>"; };
+		504143450000000000000004 /* paceable_bubblig.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_bubblig.wav; sourceTree = "<group>"; };
+		504143450000000000000005 /* paceable_natur.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_natur.wav; sourceTree = "<group>"; };
+		504143450000000000000006 /* paceable_lugn_melodi.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_lugn_melodi.wav; sourceTree = "<group>"; };
+		504143450000000000000007 /* paceable_klangskal.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_klangskal.wav; sourceTree = "<group>"; };
+		504143450000000000000008 /* paceable_regndroppe.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_regndroppe.wav; sourceTree = "<group>"; };
+		504143450000000000000009 /* paceable_harpa.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_harpa.wav; sourceTree = "<group>"; };
+		50414345000000000000000A /* paceable_silent.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = paceable_silent.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,11 +89,30 @@
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
+				504143450000000000020000 /* Sounds */,
 				504EC3131FED79650016851F /* Info.plist */,
 				2FAD9762203C412B000D30F8 /* config.xml */,
 				50B271D01FEDC1A000F3C39B /* public */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		504143450000000000020000 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				504143450000000000000000 /* paceable_myflove.wav */,
+				504143450000000000000001 /* paceable_mjuk_klocka.wav */,
+				504143450000000000000002 /* paceable_litet_pling.wav */,
+				504143450000000000000003 /* paceable_mjuk_ton.wav */,
+				504143450000000000000004 /* paceable_bubblig.wav */,
+				504143450000000000000005 /* paceable_natur.wav */,
+				504143450000000000000006 /* paceable_lugn_melodi.wav */,
+				504143450000000000000007 /* paceable_klangskal.wav */,
+				504143450000000000000008 /* paceable_regndroppe.wav */,
+				504143450000000000000009 /* paceable_harpa.wav */,
+				50414345000000000000000A /* paceable_silent.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,6 +186,17 @@
 				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
+				504143450000000000010000 /* paceable_myflove.wav in Resources */,
+				504143450000000000010001 /* paceable_mjuk_klocka.wav in Resources */,
+				504143450000000000010002 /* paceable_litet_pling.wav in Resources */,
+				504143450000000000010003 /* paceable_mjuk_ton.wav in Resources */,
+				504143450000000000010004 /* paceable_bubblig.wav in Resources */,
+				504143450000000000010005 /* paceable_natur.wav in Resources */,
+				504143450000000000010006 /* paceable_lugn_melodi.wav in Resources */,
+				504143450000000000010007 /* paceable_klangskal.wav in Resources */,
+				504143450000000000010008 /* paceable_regndroppe.wav in Resources */,
+				504143450000000000010009 /* paceable_harpa.wav in Resources */,
+				50414345000000000001000A /* paceable_silent.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,14 +348,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = se.myflove.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -318,14 +370,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				INFOPLIST_FILE = App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = se.myflove.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";

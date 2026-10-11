@@ -1,3 +1,6 @@
+import { isNativeShell } from "./native-caps";
+import { getDataOwner, isActiveOwner } from "./account-scope";
+import { isNativeReminderHandled } from "./native-reminder-delivery";
 import { isQuietNow } from "@/lib/quiet-mode";
 import { buildAlarmWav, buildSilentWav } from "@/lib/alarm-sounds";
 import { getAlarmFormat, getAlarmSoundId, type AlarmSoundId } from "@/lib/personalization";
@@ -51,10 +54,14 @@ export function subscribeAlarmPref(cb: (enabled: boolean) => void): () => void {
   if (typeof window === "undefined") return () => {};
   const handler = () => cb(isAlarmSoundEnabled());
   window.addEventListener(ALARM_EVENT, handler);
-  window.addEventListener("storage", (e) => {
+  const onStorage = (e: StorageEvent) => {
     if (e.key === ALARM_PREF_KEY) handler();
-  });
-  return () => window.removeEventListener(ALARM_EVENT, handler);
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    window.removeEventListener(ALARM_EVENT, handler);
+    window.removeEventListener("storage", onStorage);
+  };
 }
 
 // ------------------------------------------------------------------
@@ -199,39 +206,52 @@ interface FlowNotificationOptions extends NotificationOptions {
 
 export function sendPushNotification(title: string, options?: FlowNotificationOptions): void {
   const { silentAlarm, itemKey, ...rest } = options ?? {};
-  // Tyst läge: hoppa över både ljud och notis medan påminnelser är pausade.
-  if (isQuietNow()) return;
-  if (!silentAlarm) {
-    playAlarmSound();
-  }
-  if (!isNotificationSupported() || Notification.permission !== "granted") return;
+  const native = isNativeShell();
+  const owner = native ? getDataOwner() : null;
+  const fire = () => {
+    if (native && !isActiveOwner(owner)) return;
+    // Tyst läge: hoppa över både ljud och notis medan påminnelser är pausade.
+    if (isQuietNow()) return;
+    if (itemKey && isNativeReminderHandled(itemKey)) return;
+    if (!silentAlarm) {
+      playAlarmSound();
+    }
+    if (!isNotificationSupported() || Notification.permission !== "granted") return;
 
-  // Med service worker kan notisen få knappar ("Klart" / "Skjut upp").
-  if (itemKey && "serviceWorker" in navigator) {
-    void navigator.serviceWorker.ready
-      .then((reg) =>
-        reg.showNotification(title, {
-          ...rest,
-          data: { url: (rest as { data?: { url?: string } }).data?.url ?? "/idag", itemKey },
-          actions: [
-            { action: "done", title: "\u2713 Klart" },
-            { action: "snooze", title: "\u23F0 10 min" },
-          ],
-        } as NotificationOptions),
-      )
-      .catch(() => {
-        try {
-          new Notification(title, rest);
-        } catch {
-          // ignore
-        }
-      });
-    return;
-  }
+    // Med service worker kan notisen få knappar ("Klart" / "Skjut upp").
+    if (itemKey && "serviceWorker" in navigator) {
+      void navigator.serviceWorker.ready
+        .then((reg) =>
+          reg.showNotification(title, {
+            ...rest,
+            data: { url: (rest as { data?: { url?: string } }).data?.url ?? "/idag", itemKey },
+            actions: [
+              { action: "done", title: "\u2713 Klart" },
+              { action: "snooze", title: "\u23F0 10 min" },
+            ],
+          } as NotificationOptions),
+        )
+        .catch(() => {
+          try {
+            new Notification(title, rest);
+          } catch {
+            // ignore
+          }
+        });
+      return;
+    }
 
-  try {
-    new Notification(title, rest);
-  } catch {
-    // ignore
-  }
+    try {
+      new Notification(title, rest);
+    } catch {
+      // ignore
+    }
+  };
+  if (native && itemKey) {
+    void import("./native-reminders")
+      .then(async (m) => {
+        if (!(await m.nativeForegroundHandled(itemKey))) fire();
+      })
+      .catch(() => fire());
+  } else fire();
 }

@@ -1,3 +1,14 @@
+import { isNativeShell } from "@/lib/native-caps";
+import {
+  nativeRemindersSupported,
+  lockedNativeReminderPrefixes,
+  reconcileNativeReminders,
+  nativeReminderPreferences,
+  NATIVE_REMINDERS_EVENT,
+} from "@/lib/native-reminders";
+import { subscribeQuietMode } from "@/lib/quiet-mode";
+import { subscribeAlarmPref } from "@/lib/push-notifications";
+import { PERSONALIZATION_EVENT } from "@/lib/personalization";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
@@ -23,8 +34,7 @@ import { useChildReminderSettings } from "@/lib/child-reminders";
 import { useAdaptiveLead, applyAdaptiveLead } from "@/lib/adaptive-lead";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 
-// Mirror today's + tomorrow's timed tasks and medications into the server
-// so the cron tick can deliver push notifications even when the app is closed.
+// One source of desired reminders: web cron or the native OS queue, depending on this device.
 
 function todayIso(offsetDays = 0): string {
   const d = new Date();
@@ -46,7 +56,12 @@ export function useReminderSync() {
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { openItems: quickflowItems } = useQuickflow();
   const { lectures, settings: studySettings } = useStudySchedule();
-  const { children, items: childItems } = useChildren();
+  const {
+    children,
+    items: childItems,
+    loading: childrenLoading,
+    error: childrenError,
+  } = useChildren();
   const [childSchedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(
     "myflove-child-schedules",
     {},
@@ -74,12 +89,20 @@ export function useReminderSync() {
     window.addEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
     window.addEventListener("online", bump);
     window.addEventListener(ACCOUNT_BOUND_EVENT, bump);
+    window.addEventListener(NATIVE_REMINDERS_EVENT, bump);
+    window.addEventListener(PERSONALIZATION_EVENT, bump);
+    const stopQuiet = subscribeQuietMode(bump);
+    const stopAlarm = subscribeAlarmPref(bump);
     return () => {
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
       window.removeEventListener("online", bump);
       window.removeEventListener(ACCOUNT_BOUND_EVENT, bump);
+      window.removeEventListener(NATIVE_REMINDERS_EVENT, bump);
+      window.removeEventListener(PERSONALIZATION_EVENT, bump);
+      stopQuiet();
+      stopAlarm();
     };
   }, []);
 
@@ -126,6 +149,8 @@ export function useReminderSync() {
       i.shareNotify,
     ]),
     children.map((c) => [c.id, c.name, c.owner_id]),
+    childrenLoading,
+    childrenError,
     childReminders,
     adaptiveLead,
   ]);
@@ -146,11 +171,15 @@ export function useReminderSync() {
       // Har användaren gett tillstånd men tappat prenumerationen (t.ex. efter
       // en webbläsaruppdatering) återskapas den, annars kommer inga notiser
       // när appen är stängd.
-      let sub = await getCurrentSubscription();
-      if (!sub && typeof Notification !== "undefined" && Notification.permission === "granted") {
-        sub = await refreshPushSubscription();
+      const native = isNativeShell();
+      if (native && !nativeRemindersSupported()) return;
+      if (!native) {
+        let sub = await getCurrentSubscription();
+        if (!sub && typeof Notification !== "undefined" && Notification.permission === "granted") {
+          sub = await refreshPushSubscription();
+        }
+        if (!isCurrent() || !sub) return;
       }
-      if (!isCurrent() || !sub) return;
 
       const now = Date.now();
       // Uppgifter, medicin och påminnelser schemaläggs 14 dagar framåt så att
@@ -442,6 +471,24 @@ export function useReminderSync() {
           deliverAt: new Date(item.remindAt).toISOString(),
           url: "/idag",
         });
+      }
+
+      if (native) {
+        // Wait for decrypted medication data before reconciling the complete device queue.
+        if (!medsReady || !isCurrent()) return;
+        await reconcileNativeReminders(
+          user.id,
+          [...desired.values()],
+          nativeReminderPreferences(),
+          isCurrent,
+          [
+            ...lockedNativeReminderPrefixes(),
+            ...(childrenLoading || childrenError
+              ? ["child-schedule:", "child-item:", "child-day:"]
+              : []),
+          ],
+        );
+        return;
       }
 
       // Behåll aktiva förfallna nycklar så att en paus eller ett tillfälligt

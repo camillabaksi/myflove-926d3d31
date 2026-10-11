@@ -14,7 +14,7 @@ const config: CapacitorConfig = {
   appName: "Paceable",
   webDir: "mobile-webroot",
   server: {
-    url: "https://www.myflove.se",
+    url: "https://www.paceable.se",
     cleartext: false,
   },
   ios: {
@@ -28,6 +28,11 @@ const config: CapacitorConfig = {
       launchShowDuration: 1200,
       backgroundColor: "#F9F7FD",
       showSpinner: false,
+    },
+    LocalNotifications: {
+      smallIcon: "ic_stat_paceable",
+      iconColor: "#776287",
+      presentationOptions: ["banner", "list", "sound"],
     },
     StatusBar: {
       style: "DARK",

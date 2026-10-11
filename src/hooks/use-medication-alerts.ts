@@ -1,7 +1,9 @@
+import { isNativeShell } from "@/lib/native-caps";
+import { scheduleNativeOneOff } from "@/lib/native-reminders";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useMedications } from "./use-data";
-import { medicationOccursOn } from "@/lib/medications";
+import { medicationOccursOn, medicationReminderKey } from "@/lib/medications";
 import { sendPushNotification } from "@/lib/push-notifications";
 import { syncReminder } from "@/lib/push.functions";
 import { todayISO } from "@/lib/day";
@@ -51,6 +53,7 @@ export function useMedicationAlerts() {
               sendPushNotification("Dags att ta medicin", {
                 body: `${med.name}${med.dosage ? ` (${med.dosage})` : ""} – ${time}`,
                 tag: key,
+                itemKey: medicationReminderKey(med.id, todayStr, time),
               });
             }
             due.push({ key, medId: med.id, name: med.name, dosage: med.dosage, time });
@@ -85,18 +88,30 @@ export function useMedicationAlerts() {
     snoozedRef.current.set(alert.key, Date.now() + SNOOZE_MINUTES * 60_000);
     setAlerts((prev) => prev.filter((a) => a.key !== alert.key));
     const deliverAt = new Date(Date.now() + SNOOZE_MINUTES * 60_000).toISOString();
-    syncReminder({
-      data: {
-        // Börjar med `med:` så att även den snoozade pushnotisen får
-        // snabbvalsknapparna (Tagit / 10 min / Hoppa över).
-        clientKey: `med:${alert.medId}:snooze:${alert.time}:${Date.now()}`,
-        kind: "medication",
-        title: "💊 Dags att ta medicin",
-        body: `${alert.name}${alert.dosage ? ` (${alert.dosage})` : ""} – ${alert.time}`,
-        deliverAt,
-        url: "/daglig-rutin",
-      },
-    }).catch(() => {});
+    const reminder = {
+      // Börjar med `med:` så att även den snoozade pushnotisen får
+      // snabbvalsknapparna (Tagit / 10 min / Hoppa över).
+      clientKey: `med:${alert.medId}:snooze:${alert.time}:${Date.now()}`,
+      kind: "medication",
+      title: "💊 Dags att ta medicin",
+      body: `${alert.name}${alert.dosage ? ` (${alert.dosage})` : ""} – ${alert.time}`,
+      deliverAt,
+      url: "/daglig-rutin",
+    };
+    if (isNativeShell()) {
+      void scheduleNativeOneOff(
+        reminder,
+        medicationReminderKey(alert.medId, todayISO(), alert.time),
+      )
+        .then((ok) => {
+          if (!ok)
+            toast("Bakgrundspåminnelsen är inte på", {
+              description:
+                "Aktivera notiser på den här telefonen för att få påminnelsen när appen är stängd.",
+            });
+        })
+        .catch(() => toast("Kunde inte schemalägga påminnelsen"));
+    } else void syncReminder({ data: { ...reminder, kind: "medication" } }).catch(() => {});
     toast(`Påminnelse om ${SNOOZE_MINUTES} min`, { description: alert.name });
   };
 

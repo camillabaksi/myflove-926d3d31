@@ -91,12 +91,11 @@ export function useClerk() {
       // Städa FÖRE utloggningen: så länge sessionen lever kan det som ligger
       // i synkkön skrivas upp och bekräftas. Det som molnet inte bekräftar
       // ligger kvar lokalt och synkas vid nästa inloggning.
+      await import("@/lib/native-reminders").then((m) => m.clearNativeReminders());
       await clearLocalUserData();
       setDemoSession(false);
       // Telefonens kopia får inte lägga tillbaka kontots data efter utloggning.
-      await import("@/lib/native-backup")
-        .then((m) => m.clearNativeBackup())
-        .catch(() => undefined);
+      await import("@/lib/native-backup").then((m) => m.clearNativeBackup()).catch(() => undefined);
       await supabase.auth.signOut();
       if (typeof window !== "undefined") window.location.href = "/sign-in";
     },

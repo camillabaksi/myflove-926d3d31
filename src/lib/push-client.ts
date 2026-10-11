@@ -1,3 +1,4 @@
+import { isNativeShell } from "./native-caps";
 // Client-side push helpers: registration guard, subscribe/unsubscribe, key sync.
 // Never registers in Lovable preview, dev, or iframes.
 
@@ -32,6 +33,7 @@ function isRefusedContext(): boolean {
 
 export function pushSupported(): boolean {
   return (
+    !isNativeShell() &&
     typeof window !== "undefined" &&
     "serviceWorker" in navigator &&
     "PushManager" in window &&
@@ -57,7 +59,8 @@ async function unregisterOurWorkers() {
  * se MyFlove som installerbar (PWA-kriterier: manifest + service worker).
  */
 export async function registerAppServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return null;
+  if (isNativeShell() || typeof window === "undefined" || !("serviceWorker" in navigator))
+    return null;
   if (isRefusedContext()) {
     await unregisterOurWorkers();
     return null;

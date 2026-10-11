@@ -1,3 +1,4 @@
+import { NativeReminderSettings } from "@/components/native-reminder-settings";
 import { isNativeShell } from "@/lib/native-caps";
 import { useCallback, useEffect, useState } from "react";
 import { Bell, BellOff, Loader2, Send } from "lucide-react";
@@ -52,6 +53,14 @@ function isStandalone(): boolean {
  * påminnelser (Morgonstart, rutiner, medicin) och låter användaren testa.
  */
 export function PushStatusCard({ className = "" }: { className?: string }) {
+  return isNativeShell() ? (
+    <NativeReminderSettings className={className} />
+  ) : (
+    <WebPushStatusCard className={className} />
+  );
+}
+
+function WebPushStatusCard({ className = "" }: { className?: string }) {
   const subscribeFn = useServerFn(subscribeToPush);
   const unsubscribeFn = useServerFn(unsubscribeFromPush);
   const testFn = useServerFn(sendTestPush);
@@ -253,9 +262,9 @@ export function PushStatusCard({ className = "" }: { className?: string }) {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Appens alarmljud spelas när appen är öppen. Bakgrundsnotisens ljud styrs av telefonen
-        eller datorn. Tillåt notisljud där och kontrollera tyst läge och Stör ej.
-        Strömsparläge kan fördröja notiser.
+        Appens alarmljud spelas när appen är öppen. Bakgrundsnotisens ljud styrs av telefonen eller
+        datorn. Tillåt notisljud där och kontrollera tyst läge och Stör ej. Strömsparläge kan
+        fördröja notiser.
       </p>
     </div>
   );

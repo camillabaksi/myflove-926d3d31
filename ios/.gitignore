@@ -11,3 +11,6 @@ capacitor-cordova-ios-plugins
 # Generated Config files
 App/App/capacitor.config.json
 App/App/config.xml
+
+# Generated from shared alarm-sounds by native:prepare
+App/App/Sounds/paceable_*.wav
