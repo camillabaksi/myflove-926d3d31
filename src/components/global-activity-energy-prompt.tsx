@@ -12,17 +12,29 @@ import type { FlowItem } from "@/lib/flow-items";
  * användaren bockar av något. Samma befintliga prompt och samma data.
  */
 export default function GlobalActivityEnergyPrompt() {
-  const [item, setItem] = useState<FlowItem | null>(null);
+  const [items, setItems] = useState<FlowItem[]>([]);
 
   useEffect(() => {
     const onDone = (event: Event) => {
       const detail = (event as CustomEvent<ActivityDoneDetail>).detail;
       if (!detail?.title) return;
-      setItem(detailToFlowItem(detail));
+      const item = detailToFlowItem(detail);
+      setItems((prev) =>
+        prev.some((queued) => queued.id === item.id && queued.dueDate === item.dueDate)
+          ? prev
+          : [...prev, item],
+      );
     };
     window.addEventListener(ACTIVITY_DONE_EVENT, onDone);
     return () => window.removeEventListener(ACTIVITY_DONE_EVENT, onDone);
   }, []);
 
-  return <ActivityEnergyPrompt item={item} onClose={() => setItem(null)} />;
+  const item = items[0] ?? null;
+  return (
+    <ActivityEnergyPrompt
+      key={item ? `${item.id}|${item.dueDate ?? ""}` : "empty"}
+      item={item}
+      onClose={() => setItems((prev) => prev.slice(1))}
+    />
+  );
 }

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { AlertCircle, Check, Clock, Link2, MoreHorizontal, Unlink } from "lucide-react";
 import { toast } from "sonner";
-import { emitActivityDone } from "@/lib/activity-energy-event";
 
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { FAMILY_ID, PersonAvatar, PersonSwitcher, possessive, type Person, type Perspective } from "@/components/day/person-switcher";
@@ -172,12 +171,7 @@ export default function FamilyDayPerspectives({
   // Only an owned parent's task can be completed; child rows are schedules.
   const toggleDone = async (entry: TimelineEntry) => {
     if (entry.personId !== ME_ID || !entry.taskId || entry.itemId) return;
-    const done = !entry.completed;
     toggleTask(entry.taskId);
-    if (done) {
-      const who = entry.personId === ME_ID ? "" : ` (${personById.get(entry.personId)?.name ?? "barn"})`;
-      emitActivityDone({ id: entry.key, title: `${entry.title}${who}`, dueDate: dayISO });
-    }
   };
 
   // ---- Rendering ----------------------------------------------------------

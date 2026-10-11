@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCloudSyncedStorage, getSyncUser } from "@/lib/cloud-storage";
+import { ACCOUNT_BOUND_EVENT, useCloudSyncedStorage, getSyncUser } from "@/lib/cloud-storage";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
+import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
 import {
   balanceFor,
   DEFAULT_ENERGY_FLOW_SETTINGS,
@@ -47,6 +48,8 @@ const toEntry = (r: Row): EnergyFactorEntry => ({
 });
 
 export interface NewEnergyFactor {
+  /** En aktivitetsförekomst återanvänder sitt id vid ändring och retry. */
+  id?: string;
   title: string;
   direction: EnergyDirection;
   strength: number;
@@ -81,16 +84,19 @@ const setStore = (patch: Partial<EnergyStore>) => {
 };
 
 let loadPromise: Promise<void> | null = null;
+let generation = 0;
 const load = () =>
   (loadPromise ??= (async () => {
+    const currentGeneration = generation;
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const user = await getSyncUser();
+      if (currentGeneration !== generation) return;
       if (!user) {
-        setStore({ userId: null, loading: false });
+        setStore({ userId: null, entries: [], presets: [], loading: false });
         return;
       }
+      setStore({ userId: user.id });
+      const before = new Map(store.entries.map((entry) => [entry.id, entry]));
       const since = new Date(Date.now() - 60 * 86400000).toISOString();
       const [{ data: rows }, { data: presetRows }] = await Promise.all([
         supabase
@@ -98,17 +104,26 @@ const load = () =>
           .select(
             "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
           )
+          .eq("user_id", user.id)
           .gte("occurred_at", since)
           .order("occurred_at", { ascending: false })
           .limit(500),
         supabase
           .from("energy_factor_presets")
           .select("id, title, direction, strength, category, kind, friction")
+          .eq("user_id", user.id)
           .order("created_at", { ascending: true }),
       ]);
+      if (currentGeneration !== generation || !isActiveOwner(user.id)) return;
+      // Läsningen kan ha startat före en ny sparning. Behåll nya/ändrade
+      // poster i samma store i stället för att ersätta dem med ett äldre svar.
+      const entries = new Map(((rows ?? []) as Row[]).map((row) => [row.id, toEntry(row)]));
+      for (const entry of store.entries) {
+        if (before.get(entry.id) !== entry) entries.set(entry.id, entry);
+      }
       setStore({
         userId: user.id,
-        entries: ((rows ?? []) as Row[]).map(toEntry),
+        entries: [...entries.values()].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)),
         presets: (presetRows ?? []).map((p) => ({
           id: p.id as string,
           title: p.title as string,
@@ -121,12 +136,13 @@ const load = () =>
         loading: false,
       });
     } catch {
-      setStore({ loading: false });
+      if (currentGeneration === generation) setStore({ loading: false });
     }
   })());
 
 /** Tvingar en ny inläsning – används när någon loggar in eller ut. */
 const reload = () => {
+  generation++;
   loadPromise = null;
   setStore({ loading: true });
   void load();
@@ -135,15 +151,20 @@ const reload = () => {
 // Håll storen i takt med inloggningen: loggar man in i samma flik ska
 // posterna dyka upp direkt, och loggar man ut ska de försvinna direkt.
 if (typeof window !== "undefined") {
+  window.addEventListener(ACCOUNT_BOUND_EVENT, reload);
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_OUT") {
+      generation++;
       loadPromise = null;
       setStore({ entries: [], presets: [], userId: null, loading: false });
       return;
     }
     if (event === "SIGNED_IN" || event === "USER_UPDATED") {
       const uid = session?.user?.id ?? null;
-      if (uid !== store.userId) reload();
+      if (uid !== store.userId) {
+        setStore({ entries: [], presets: [], userId: null });
+        reload();
+      }
     }
   });
 }
@@ -205,8 +226,11 @@ export function useEnergyFlow(): {
 
   const addFactor = useCallback(
     async (input: NewEnergyFactor): Promise<EnergyFactorEntry | null> => {
+      const requestedOwner = getDataOwner();
+      // Ett tidigt tryck får inte försvinna medan kontots data fortfarande laddas.
+      await load();
       const uid = store.userId;
-      if (!uid) return null;
+      if (!uid || uid !== requestedOwner || !isActiveOwner(uid)) return null;
       const occurredAt = input.occurredAt ?? new Date().toISOString();
       // Dubblettspärr: samma aktivitet och riktning inom en minut räknas som
       // ett dubbeltryck och sparas inte igen.
@@ -217,28 +241,32 @@ export function useEnergyFlow(): {
           Math.abs(new Date(e.occurredAt).getTime() - new Date(occurredAt).getTime()) <
             DUPLICATE_WINDOW_MS,
       );
-      if (dup) return dup;
-      const { data, error } = await supabase
-        .from("energy_factors")
-        .insert({
-          user_id: uid,
-          title: input.title,
-          direction: input.direction,
-          strength: input.strength,
-          category: input.category,
-          kind: input.kind ?? "vardag",
-          friction: input.friction ?? null,
-          note: input.note || null,
-          occurred_at: occurredAt,
-        })
+      if (!input.id && dup) return dup;
+      const payload = {
+        ...(input.id ? { id: input.id } : {}),
+        user_id: uid,
+        title: input.title,
+        direction: input.direction,
+        strength: input.strength,
+        category: input.category,
+        kind: input.kind ?? "vardag",
+        friction: input.friction ?? null,
+        note: input.note || null,
+        occurred_at: occurredAt,
+      };
+      const table = supabase.from("energy_factors");
+      const { data, error } = await (
+        input.id ? table.upsert(payload, { onConflict: "id" }) : table.insert(payload)
+      )
         .select(
           "id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at",
         )
         .single();
+      if (store.userId !== uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
       if (error) {
         // 23505 = serverns dubblettspärr (samma aktivitet, riktning och minut).
         // Då finns posten redan – hämta den och behandla sparningen som lyckad.
-        if ((error as { code?: string }).code === "23505") {
+        if (!input.id && (error as { code?: string }).code === "23505") {
           const { data: existing } = await supabase
             .from("energy_factors")
             .select(
@@ -251,6 +279,7 @@ export function useEnergyFlow(): {
             .limit(1)
             .maybeSingle();
           if (existing) {
+            if (store.userId !== uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
             const dupEntry = toEntry(existing as Row);
             if (!store.entries.some((e) => e.id === dupEntry.id)) {
               setStore({ entries: [dupEntry, ...store.entries] });
@@ -260,8 +289,11 @@ export function useEnergyFlow(): {
         }
         throw error;
       }
+      if (!data) throw new Error("Energiposten kunde inte bekräftas.");
       const entry = toEntry(data as Row);
-      setStore({ entries: [entry, ...store.entries] });
+      setStore({
+        entries: [entry, ...store.entries.filter((previous) => previous.id !== entry.id)],
+      });
       return entry;
     },
     [],

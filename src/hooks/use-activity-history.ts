@@ -3,6 +3,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useMoods } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { dayOf } from "@/lib/day";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
 import {
   expandInstances,
@@ -34,11 +35,11 @@ export function useActivityHistory() {
 
   const sources = useMemo<ActivitySource[]>(() => {
     const fromTasks: ActivitySource[] = tasks
-      .filter((t) => !!t.dueDate)
+      .filter((t) => !!t.dueDate || !!dayOf(t.completedAt))
       .map((t) => ({
         id: `task-${t.id}`,
         title: t.title,
-        plannedDate: t.dueDate as string,
+        plannedDate: t.dueDate ?? dayOf(t.completedAt)!,
         startTime: t.time,
         endTime: t.endTime,
         completed: t.completed,
@@ -68,8 +69,13 @@ export function useActivityHistory() {
   );
 
   const setEnergy = useCallback(
-    (sourceId: string, date: string, energy: ActivityEnergy) => {
-      setRecords((prev) => recordEnergy(prev, sourceId, date, energy));
+    (
+      sourceId: string,
+      date: string,
+      energy: ActivityEnergy,
+      factor?: { id: string; occurredAt: string },
+    ) => {
+      setRecords((prev) => recordEnergy(prev, sourceId, date, energy, Date.now(), factor));
     },
     [setRecords],
   );

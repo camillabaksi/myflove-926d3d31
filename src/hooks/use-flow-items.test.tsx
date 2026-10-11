@@ -1,15 +1,18 @@
-import { describe, it, expect, vi } from "vitest";
-import { renderHook } from "@testing-library/react";
+import { beforeEach, describe, it, expect, vi } from "vitest";
+import { act, renderHook } from "@testing-library/react";
 import { useFlowItems } from "@/hooks/use-flow-items";
-import type { Task } from "@/hooks/use-data";
+import type { Reminder, Task } from "@/hooks/use-data";
+import { ACTIVITY_DONE_EVENT } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/flow-items";
 import type { FlowItem } from "@/lib/flow-items";
 
 const toggleTask = vi.fn();
+const toggleReminder = vi.fn();
+const setInstanceDone = vi.fn();
 
 vi.mock("@/hooks/use-data", () => ({
   useTasks: () => ({ tasks, toggleTask }),
-  useReminders: () => ({ reminders: [], toggleReminder: vi.fn() }),
+  useReminders: () => ({ reminders, toggleReminder }),
 }));
 vi.mock("@/hooks/use-study-schedule", () => ({
   useStudySchedule: () => ({ lectures: [] }),
@@ -31,13 +34,20 @@ vi.mock("@/hooks/use-done-log", () => ({
   useDoneLog: () => ({ isDone: () => false, toggleDone: vi.fn() }),
 }));
 vi.mock("@/hooks/use-instance-status", () => ({
-  useInstanceStatus: () => ({ isInstanceDone: () => false, setInstanceDone: vi.fn() }),
+  useInstanceStatus: () => ({ isInstanceDone: () => false, setInstanceDone }),
 }));
 vi.mock("@/lib/cloud-storage", () => ({
   useCloudSyncedStorage: () => [[], vi.fn()],
 }));
 
 let tasks: Task[] = [];
+let reminders: Reminder[] = [];
+
+beforeEach(() => {
+  tasks = [];
+  reminders = [];
+  vi.clearAllMocks();
+});
 
 const isoDaysAgo = (days: number): string => {
   const d = new Date();
@@ -47,12 +57,57 @@ const isoDaysAgo = (days: number): string => {
 };
 
 describe("useFlowItems – sena uppgifter följer med in i idag", () => {
+  it.each(["2026-10-11", "2026-10-12"])(
+    "registrerar energisvaret på den genomförda förekomsten %s, inte seriens startdatum",
+    (date) => {
+      reminders = [
+        {
+          id: "one",
+          title: "Promenad",
+          date: "2026-10-01",
+          time: "09:00",
+          repeat: "daily",
+          completed: false,
+          createdAt: 1,
+        },
+      ];
+      const events: unknown[] = [];
+      const listener = (event: Event) => events.push((event as CustomEvent).detail);
+      window.addEventListener(ACTIVITY_DONE_EVENT, listener);
+      try {
+        const { result } = renderHook(() => useFlowItems(date));
+        const item = result.current.items.find((entry) => entry.id === "rem-one")!;
+        act(() => result.current.toggleItem(item));
+        expect(events).toEqual([{ id: "rem-one", title: "Promenad", dueDate: date }]);
+        expect(setInstanceDone).toHaveBeenCalledWith("reminder-one", date, true);
+        expect(toggleReminder).not.toHaveBeenCalled();
+      } finally {
+        window.removeEventListener(ACTIVITY_DONE_EVENT, listener);
+      }
+    },
+  );
   it("rejects completion for child schedules even with an incorrect task flag", () => {
     toggleTask.mockClear();
     const { result } = renderHook(() => useFlowItems());
-    result.current.toggleItem({ id: "task-child", title: "Frukost", source: "barn", area: "barn", emoji: "", priority: "idag", completable: true } as FlowItem);
+    result.current.toggleItem({
+      id: "task-child",
+      title: "Frukost",
+      source: "barn",
+      area: "barn",
+      emoji: "",
+      priority: "idag",
+      completable: true,
+    } as FlowItem);
     expect(toggleTask).not.toHaveBeenCalled();
-    result.current.toggleItem({ id: "task-parent", title: "Packa väskan", source: "uppgift", area: "barn", emoji: "", priority: "idag", completable: true } as FlowItem);
+    result.current.toggleItem({
+      id: "task-parent",
+      title: "Packa väskan",
+      source: "uppgift",
+      area: "barn",
+      emoji: "",
+      priority: "idag",
+      completable: true,
+    } as FlowItem);
     expect(toggleTask).toHaveBeenCalledWith("parent");
   });
   it("en öppen uppgift med klockslag från igår syns i dagens lista", () => {
