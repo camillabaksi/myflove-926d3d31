@@ -183,7 +183,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
   if (input.openThoughts > 5) {
     connections.push({
       title: "Huvudet är fullt",
-      body: `${input.openThoughts} osorterade tankar ligger i Quickflow och tar plats även när du inte tänker på dem.`,
+      body: `${input.openThoughts} osorterade tankar ligger i Fånga och tar plats även när du inte tänker på dem.`,
       suggestion: "Sortera tre av dem – kapaciteten stiger direkt.",
       href: "/quickflow",
       hrefLabel: "Sortera tankar",
@@ -232,7 +232,7 @@ export function lifeContextPrompt(input: LifePuzzleInput): string {
   if (input.energy != null) lines.push(`Senast loggad energi (bara historik, styr inte planen): ${input.energy}/5.`);
   if (input.mood != null) lines.push(`Mående: ${input.mood}/5.`);
   lines.push(`Tid kvar av dagen: ${input.minutesLeft} min.`);
-  if (input.openThoughts) lines.push(`Osorterade tankar i Quickflow: ${input.openThoughts}.`);
+  if (input.openThoughts) lines.push(`Osorterade tankar i Fånga: ${input.openThoughts}.`);
 
   const busy = input.areas.filter((a) => a.today + a.overdue + a.soon > 0);
   if (busy.length) {

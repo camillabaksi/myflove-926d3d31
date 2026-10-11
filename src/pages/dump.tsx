@@ -95,7 +95,7 @@ export default function Dump() {
                       <Brain size={20} /> {t("Mina sorteringsregler")}
                     </span>
                   }
-                  id="Fånga-regler"
+                  id="QuickFlow-regler"
                   headingClassName="font-semibold"
                   className="pt-4"
                 >

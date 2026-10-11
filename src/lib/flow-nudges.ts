@@ -85,7 +85,7 @@ export function buildFlowNudges(input: FlowNudgeInput): FlowNudge[] {
     nudges.push({
       key: `flow-quickflow-${day}`,
       title: "Mycket snurrar i huvudet 🧠",
-      body: `${openQuickflowCount} saker ligger i Quickflow. Vill du sortera några?`,
+      body: `${openQuickflowCount} saker ligger i Fånga. Vill du sortera några?`,
       url: "/quickflow",
       deliverAt: at(now, 17),
     });

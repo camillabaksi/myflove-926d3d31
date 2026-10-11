@@ -6,13 +6,13 @@ export const END_OF_STUDY_CHECK = [
   "Anteckningar sparade på rätt ställe",
   "Nästa plugg-pass bestämt",
   "Material framplockat till imorgon",
-  "Saker du behöver komma ihåg → Quickflow",
+  "Saker du behöver komma ihåg → Fånga",
 ];
 
 /** Övergångshjälp mellan föreläsning, plugg och paus. */
 export function studyTransitionPlan(gapMinutes: number): string[] {
   if (gapMinutes <= 5)
-    return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Quickflow"];
+    return ["🧠 Andas ut i 2 minuter", "📝 Skriv ner det du inte får glömma i Fånga"];
   if (gapMinutes <= 15)
     return [
       "📌 Skriv 3 rader om vad föreläsningen handlade om",

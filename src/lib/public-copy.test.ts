@@ -28,7 +28,16 @@ describe("Current public names and translation compatibility", () => {
   it("keeps plain-word accessibility aliases available for renamed functions", () => {
     expect(plainLabel("Planering", true)).toBe("Ordning på dagen");
     expect(plainLabel("Dagens balans", true)).toBe("Hur mycket du orkar");
+    expect(plainLabel("Fånga", true)).toBe("Skriv av dig");
+    expect(plainLabel("Veckans Flow", true)).toBe("Veckan som gick");
     expect(plainLabel("Planering", false)).toBe("Planering");
+  });
+
+  it("handles older capitalization variants in static copy and dictionaries", () => {
+    expect(currentProductCopy("Quickflow, Studyflow, Flowplan och Flowscore")).toBe(
+      "Fånga, Studier, Planering och Dagens balans",
+    );
+    expect(translate("Quickflow", "en")).toBe("Capture");
   });
 
   it("does not rewrite arbitrary Swedish user text through translation", () => {
