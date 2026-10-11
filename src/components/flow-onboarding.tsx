@@ -35,7 +35,7 @@ export default function FlowOnboarding() {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && setDismissed(true)}>
       <DialogContent className="sm:max-w-md rounded-3xl">
-        <BrandLogo compact className="mx-auto w-40" />
+        <BrandLogo compact className="pace-app-brand mx-auto" />
         <DialogHeader>
           <DialogTitle>
             {step === 1

@@ -5,7 +5,10 @@
   --pace-type-family:
     "Fraunces", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
-  --pace-type-page: 2rem;
+  --pace-brand-width: 16rem;
+  --pace-type-welcome: 1.75rem;
+  --pace-type-page: 1.75rem;
+  --pace-type-greeting: 1.5rem;
   --pace-type-section: 1.25rem;
   --pace-type-card: 1.125rem;
   --pace-type-body: 1rem;
@@ -74,7 +77,6 @@ html[data-paceable-typography="true"] body,
     .pace-page-title,
     .pace-next-title,
     .pace-tasks-heading,
-    .pace-editorial-greeting,
     .pace-ds-heading-1
   ) {
   font-size: var(--pace-type-page);
@@ -82,6 +84,57 @@ html[data-paceable-typography="true"] body,
   line-height: 1.25;
   letter-spacing: 0;
   overflow-wrap: anywhere;
+}
+
+/* Brand → welcome/page → greeting → section → card → body → help → metadata.
+   One shared width retains the approved logo's pixels and natural proportions. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-app-brand {
+  width: var(--pace-brand-width);
+  max-width: 100%;
+  justify-self: center;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-navigation {
+  --pace-shell-sidebar-width: calc(var(--pace-brand-width) + 2rem);
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-header {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-actions {
+  grid-column: 2;
+  justify-self: end;
+  margin-top: 0.25rem;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-actions:empty {
+  display: none;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-welcome-title {
+  font-size: var(--pace-type-welcome);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-editorial-greeting {
+  font-size: var(--pace-type-greeting);
+  font-family: var(--pace-type-family);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(.pace-greeting-prefix, .pace-greeting-name-part) {
+  display: inline;
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
@@ -128,7 +181,8 @@ html[data-paceable-typography="true"] body,
     .pace-more-section > h2,
     .pace-more-tool-group h3,
     .pace-more-search-trigger,
-    .pace-more-settings
+    .pace-more-settings,
+    .pace-type-help
   ) {
   font-size: var(--pace-type-help);
   line-height: 1.5;

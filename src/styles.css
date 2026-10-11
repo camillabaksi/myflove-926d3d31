@@ -2021,21 +2021,11 @@ html[data-npf-less="true"] [data-npf="optional"] {
   font-size: 2.375rem;
   line-height: 1.1;
 }
-[data-paceable-surface="true"] .pace-editorial-greeting { font-size: 2.25rem; line-height: 1.05; }
 [data-paceable-surface="true"] .pace-editorial-section { font-size: 1.5rem; line-height: 1.2; }
 [data-paceable-surface="true"] :is(header.sticky, aside, nav) .font-display {
   font-family: var(--font-display);
 }
-@media (min-width: 640px) {
-  [data-paceable-surface="true"] .pace-editorial-greeting { font-size: 2.375rem; }
-}
-
-/* Design-lock: only the narrow greeting and Min plats header proportions. */
-@media (max-width: 379px) {
-  [data-paceable-surface="true"] .pace-editorial-greeting { font-size: 2.125rem; }
-  .pace-greeting-prefix { display: block; }
-  .pace-greeting-name-part { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
-}
+/* Min plats header proportions; shared text sizes live in app-typography.css. */
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial { font-size: 2rem; }
 [data-paceable-surface="true"] .paceable-my-place-header .pace-editorial-title-spacing { margin-left: 0.25rem; }
 .pace-stones-contained .pace-stones-img { filter: none; }
@@ -2079,10 +2069,6 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-text-enlarged .pace-greeting-layout > div:first-child { min-width: 0; max-width: 100%; }
 .pace-text-enlarged .pace-greeting-name-part { display: inline; overflow-wrap: anywhere; }
 .pace-text-enlarged .pace-greeting-layout > :last-child { margin-left: auto; }
-/* Approved Today header only; rem sizing respects enlarged text. */
-[data-paceable-surface="true"] .pace-today-desktop .pace-editorial-greeting { font-size: 2rem; line-height: 1.15; }
-.pace-today-desktop .pace-greeting-prefix { display: inline; }
-.pace-today-desktop .pace-greeting-name-part { display: inline; overflow-wrap: anywhere; }
 .pace-text-enlarged [data-capacity-size="lg"] { flex-wrap: wrap; container-type: inline-size; gap: 8px; }
 .pace-text-enlarged [data-capacity-size="lg"] > [data-capacity-track] { flex: 1 1 120px; min-width: min(120px, 100%); }
 .pace-text-enlarged [data-capacity-size="sm"] { flex-wrap: wrap; justify-content: center; }
