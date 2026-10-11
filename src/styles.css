@@ -2267,6 +2267,14 @@ html[data-paceable-app="true"] [role="alertdialog"] {
   box-shadow: var(--pace-elevation-2);
 }
 
+/* Pausen har en egen mörk helskärmsyta, även när vanliga dialoger är ljusa. */
+.pace-pause-session,
+html[data-paceable-app="true"] [role="dialog"].pace-pause-session {
+  background-color: hsl(276 19% 21%);
+  color: hsl(45 29% 97%);
+  box-shadow: none;
+}
+
 /* Stor text på etapp 1-sidor: en kolumn och tillåten radbrytning utan att ändra normallayouten. */
 .app-shell-bg[data-paceable-app="true"].pace-app-text-enlarged .pace-app-page {
   grid-template-columns: minmax(0, 1fr);

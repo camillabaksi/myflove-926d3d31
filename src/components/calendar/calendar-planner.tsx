@@ -300,7 +300,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     <section aria-label={t("Veckans mål")} className="min-w-0">{weekGoals}</section>
     {(!desktopLayout || textLayout.enlarged) && calendarTools}
     <Dialog open={utility !== null} onOpenChange={open => { if (!open) setUtility(null); }}>
-      <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl sm:max-w-2xl">
+      <DialogContent className="pace-next-page max-h-[88dvh] overflow-y-auto rounded-3xl sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{t(utility === "connection" ? "Kalenderkoppling" : "Dagens verktyg")}</DialogTitle>
           <DialogDescription>{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</DialogDescription>

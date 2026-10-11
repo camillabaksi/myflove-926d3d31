@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Link } from "wouter";
+import { useEffect, useRef } from "react";
+import { Link, useLocation } from "wouter";
 import { ArrowRight, LineChart, Smile, Battery, Zap, MessageCircle } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
@@ -25,6 +25,7 @@ import { useLang } from "@/hooks/use-language";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { orkWord } from "@/lib/ork-word";
+import { setCollapsed } from "@/lib/collapse-store";
 
 /**
  * Mitt batteri – den enda platsen för energi och mående.
@@ -38,7 +39,19 @@ export default function BatteryPage() {
   const { t, lang } = useLang();
   const { reading } = useEnergyBattery();
   const { flow } = useFlowScore();
-  const activeFactors = flow.factors.filter((factor) => factor.delta !== 0).sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta)).slice(0, 4);
+  const [path] = useLocation();
+  const checkinRef = useRef<HTMLDivElement>(null);
+  const openCheckin = () => {
+    setCollapsed(`${path}::battery-log-energy-mood`, false, true);
+    window.requestAnimationFrame(() => {
+      checkinRef.current?.scrollIntoView({ block: "start" });
+      checkinRef.current?.focus({ preventScroll: true });
+    });
+  };
+  const activeFactors = flow.factors
+    .filter((factor) => factor.delta !== 0)
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+    .slice(0, 4);
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -61,11 +74,40 @@ export default function BatteryPage() {
           <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
             <div className="flex flex-wrap items-center gap-2">
               <Battery className="h-6 w-6 text-primary" aria-hidden />
-              <h2 className="font-display text-lg font-bold text-ink">Din uppskattade energi: {t(orkWord(reading.now).short)}</h2>
-              <CollapsibleSection id="battery-why" title="Varför?" defaultCollapsed className="w-full border-t border-border/60 pt-2" headingClassName="text-sm font-semibold text-primary">
-                <p className="text-sm text-muted-foreground">Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning. Kurvan utgår från ditt FlowScore just nu och tar hänsyn till planerade tider och registrerade energipåverkningar. Utan egna mönster används en generell kurva.</p>
-                {activeFactors.length > 0 && <><p className="text-xs font-semibold text-ink">Det här påverkar FlowScore just nu:</p><ul className="space-y-1 text-sm text-muted-foreground">{activeFactors.map((factor) => <li key={factor.source + factor.label}>{factor.label}: {factor.reading}</li>)}</ul></>}
-                <p className="text-xs text-muted-foreground">{t("Din registrerade energi och den uppskattade energikurvan är olika underlag. Dagens Capacity visas i Idag.")}</p>
+              <h2 className="font-display text-lg font-bold text-ink">
+                Din uppskattade energi: {t(orkWord(reading.now).short)}
+              </h2>
+              <CollapsibleSection
+                id="battery-why"
+                title="Varför?"
+                defaultCollapsed
+                className="w-full border-t border-border/60 pt-2"
+                headingClassName="text-sm font-semibold text-primary"
+              >
+                <p className="text-sm text-muted-foreground">
+                  Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning.
+                  Kurvan utgår från ditt FlowScore just nu och tar hänsyn till planerade tider och
+                  registrerade energipåverkningar. Utan egna mönster används en generell kurva.
+                </p>
+                {activeFactors.length > 0 && (
+                  <>
+                    <p className="text-xs font-semibold text-ink">
+                      Det här påverkar FlowScore just nu:
+                    </p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      {activeFactors.map((factor) => (
+                        <li key={factor.source + factor.label}>
+                          {factor.label}: {factor.reading}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  {t(
+                    "Din registrerade energi och den uppskattade energikurvan är olika underlag. Dagens Capacity visas i Idag.",
+                  )}
+                </p>
               </CollapsibleSection>
             </div>
           </section>
@@ -73,15 +115,39 @@ export default function BatteryPage() {
 
         {/* Dagens val styr planen; den uppskattade kurvan gör det inte. */}
         <MyFloveWide>
-          <OrkSummary />
+          <OrkSummary onCheckin={openCheckin} />
         </MyFloveWide>
 
         <MyFloveWide>
-          <Link href="/assistant" className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden /><span className="min-w-0 flex-1 text-sm font-semibold text-ink">Prata med Pace om dagens nästa steg</span><ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden /></Link>
+          <Link
+            href="/assistant"
+            className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+          >
+            <MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 flex-1 text-sm font-semibold text-ink">
+              Prata med Pace om dagens nästa steg
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+          </Link>
         </MyFloveWide>
 
         <MyFloveWide>
-          <CollapsibleSection id="battery-log-energy-mood" title={t("Logga energi & mående")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><SimpleCheckin source="mitt-batteri" /></CollapsibleSection>
+          <div
+            ref={checkinRef}
+            tabIndex={-1}
+            aria-label={t("Logga energi & mående")}
+            className="scroll-mt-24"
+          >
+            <CollapsibleSection
+              id="battery-log-energy-mood"
+              title={t("Logga energi & mående")}
+              defaultCollapsed
+              className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+              headingClassName="text-base font-semibold text-ink"
+            >
+              <SimpleCheckin source="mitt-batteri" />
+            </CollapsibleSection>
+          </div>
         </MyFloveWide>
 
         {/* Kort väg till den befintliga historiken – ingen ny vy, ingen ny data. */}
@@ -109,7 +175,9 @@ export default function BatteryPage() {
             id="battery-more-details"
             defaultCollapsed
             title={t("Kapacitet & mönster")}
-            description={t("Historik som hjälper dig förstå tidigare dagar – den styr inte dagens plan.")}
+            description={t(
+              "Historik som hjälper dig förstå tidigare dagar – den styr inte dagens plan.",
+            )}
             className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
           >

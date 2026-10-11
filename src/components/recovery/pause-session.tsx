@@ -59,7 +59,7 @@ export default function PauseSession({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pause-session-title"
-      className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-foreground px-5 py-10 text-background"
+      className="pace-pause-session fixed inset-0 z-[100] grid place-items-center overflow-y-auto px-5 py-10"
       style={{
         paddingTop: "max(2.5rem, env(safe-area-inset-top))",
         paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))",
@@ -71,20 +71,20 @@ export default function PauseSession({
         variant="ghost"
         onClick={end}
         aria-label="Avsluta pausen"
-        className="absolute right-4 top-4 rounded-full text-background hover:bg-background/10 hover:text-background"
+        className="absolute right-4 top-4 rounded-full text-inherit hover:bg-white/10 hover:text-inherit focus-visible:ring-white"
         style={{ marginTop: "env(safe-area-inset-top)" }}
       >
         <X aria-hidden />
       </Button>
 
       <div className="mx-auto flex w-full max-w-md flex-col items-center text-center">
-        <p className="mt-6 flex items-center gap-2 text-sm font-semibold text-background/70">
+        <p className="mt-6 flex items-center gap-2 text-sm font-semibold opacity-70">
           <Moon className="size-4" aria-hidden /> Paus · {minutes} min
         </p>
-        <h2 id="pause-session-title" className="mt-3 text-xl font-bold text-background sm:text-2xl">
+        <h2 id="pause-session-title" className="mt-3 text-xl font-bold sm:text-2xl">
           Du behöver inte göra någonting nu.
         </h2>
-        <p className="mt-4 text-base leading-relaxed text-background/80">
+        <p className="mt-4 text-base leading-relaxed opacity-80">
           Jag håller koll på tiden. Påminnelser är tysta så länge pausen pågår.
         </p>
         <p className="mt-6 font-display text-3xl font-bold tabular-nums" aria-live="polite">
@@ -94,7 +94,7 @@ export default function PauseSession({
           type="button"
           variant="ghost"
           onClick={end}
-          className="mt-7 rounded-full border border-background/20 text-background hover:bg-background/10 hover:text-background"
+          className="mt-7 rounded-full border border-white/25 text-inherit hover:bg-white/10 hover:text-inherit focus-visible:ring-white"
         >
           Jag är redo att fortsätta
         </Button>
