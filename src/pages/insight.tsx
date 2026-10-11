@@ -307,7 +307,11 @@ export default function InsightPage() {
                 Insikter
               </PacePageTitle>
               <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                Förstå behov. Hitta strategier. Gör vardagen enklare.
+                Se dina egna mönster och hitta ett litet nästa steg.
+              </p>
+              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
+                Här samlas sådant du har loggat om energi, mående och aktiviteter. Du väljer
+                själv vad du vill använda.
               </p>
               <div className="mt-2 [&_[role=region]]:max-w-full">
                 <WhyHint label="insikter">
@@ -321,14 +325,18 @@ export default function InsightPage() {
         {!demoMode && (
           <section data-testid="insight-personal" className="space-y-5">
             <div className="min-w-0 space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]">
-              <p className="font-medium">Vad Flow lärt sig om dig</p>
+              <p className="font-medium">Ditt underlag hittills</p>
               <p className="text-sm text-muted-foreground">{personal.label}</p>
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div aria-hidden="true" className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full bg-primary transition-all duration-700"
                   style={{ width: `${Math.max(6, personal.level)}%` }}
                 />
               </div>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Balken speglar hur mycket underlag som finns från din användning av appen.
+                Du behöver inte fylla den för att få stöd.
+              </p>
             </div>
 
             <EnergyMoodTrend />
@@ -390,8 +398,8 @@ export default function InsightPage() {
                 className="space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]"
               >
                 <p className="leading-relaxed">
-                  Jag har inte lärt känna dig tillräckligt ännu. Använd MyFlove några dagar så
-                  börjar mönstren synas – jag hittar inte på något innan dess. 💜
+                  Det finns ännu för lite underlag för personliga mönster. Börja gärna med en
+                  incheckning eller en liten uppgift när det passar dig. 💜
                 </p>
                 <p className="text-sm font-medium">Exempel på vad som kan komma längre fram</p>
                 <ul className="space-y-1.5 text-sm text-muted-foreground">

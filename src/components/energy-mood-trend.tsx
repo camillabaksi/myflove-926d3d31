@@ -45,7 +45,7 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
     node.scrollBy({ left: direction * node.clientWidth * 0.8, behavior: "auto" });
   };
   return (
-    <div className="min-w-0 space-y-2">
+    <div className="pace-insight-chart min-w-0 space-y-2">
       <div className="flex justify-end gap-2">
         <Button type="button" size="icon" variant="ghost" title="Tidigare perioder" aria-label="Tidigare perioder" aria-controls={timelineId} disabled={edges.start} onClick={() => move(-1)}>
           <ArrowLeft aria-hidden="true" />
@@ -54,7 +54,7 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>
-      <div ref={viewport} id={timelineId} onScroll={updateEdges} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring" role="region" aria-label="Tidslinje för energi och mående" tabIndex={0}>
+      <div ref={viewport} id={timelineId} onScroll={updateEdges} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring" role="region" aria-label="Tidslinje för energipåverkan och mående" tabIndex={0}>
       <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
@@ -68,9 +68,12 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
         items[next]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "auto" });
       }}>
       {periods.map((period) => {
+        const energyCount = period.energyLogs ?? 0;
+        const moodCount = period.moodLogs ?? 0;
+        const sampleLabel = `${energyCount} energisvar · ${moodCount} ${moodCount === 1 ? "måendelogg" : "måendeloggar"}`;
         const description = `${period.accessibleLabel}: ${
-          period.energy == null ? "ingen energilogg" : `energi ${period.energy} procent`
-        }, ${period.mood == null ? "inget mående loggat" : `mående ${period.mood} procent`}`;
+          period.energy == null ? "inga energisvar" : `energipåverkan ${period.energy} av 100`
+        }, ${period.mood == null ? "inget mående loggat" : `mående ${period.mood} av 100`}, ${sampleLabel}`;
         return (
           <div
             key={period.key}
@@ -84,23 +87,24 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
               {period.energy != null && <span
                 aria-hidden="true"
                 data-series="energy"
-                className="w-1/2 rounded-md bg-primary/70 transition-[height] duration-500 motion-reduce:transition-none"
+                className="pace-insight-series-energy w-1/2 rounded-md transition-[height] duration-500 motion-reduce:transition-none"
                 style={{ height: `${Math.max(6, period.energy)}%` }}
               />}
               {period.mood != null && <span
                 aria-hidden="true"
                 data-series="mood"
-                className="w-1/2 rounded-md bg-accent/70 transition-[height] duration-500 motion-reduce:transition-none"
+                className="pace-insight-series-striped w-1/2 rounded-md transition-[height] duration-500 motion-reduce:transition-none"
                 style={{ height: `${Math.max(6, period.mood)}%` }}
               />}
             </div>
             <span className="mt-2 block text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
-             <span aria-hidden="true" className="mt-1 block break-words text-xs leading-relaxed text-muted-foreground">
-               Energi {period.energy == null ? "–" : `${period.energy} %`}<br />
-               Mående {period.mood == null ? "–" : `${period.mood} %`}
-             </span>
+             <div aria-hidden="true" className="mt-1 space-y-1 break-words text-sm leading-relaxed text-foreground">
+               <p>Energipåverkan {period.energy == null ? "–" : `${period.energy}/100`}</p>
+               <p>Mående {period.mood == null ? "–" : `${period.mood}/100`}</p>
+               <p className="text-xs text-muted-foreground">{sampleLabel}</p>
+             </div>
           </div>
         );
       })}
@@ -128,9 +132,9 @@ export default function EnergyMoodTrend() {
   return (
     <CollapsibleSection
       id="insight-energy-mood-trend"
-      title="Energi & mående över tid"
-      description="Hur dina veckor och månader har sett ut"
-      className="@container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
+      title="Energipåverkan & mående"
+      description="Vad som gett eller tagit energi, tillsammans med dina måendekollar"
+      className="pace-insight-chart @container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
       headingClassName="font-semibold"
       data-testid="energy-mood-trend"
     >
@@ -142,7 +146,7 @@ export default function EnergyMoodTrend() {
           <div className="mt-2 min-w-0 @[30rem]:mt-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Bygger på dina egna energisvar och måendekollar.
+              Sammanfattning av de senaste veckorna med uppgifter.
             </p>
           </div>
         </div>
@@ -158,15 +162,15 @@ export default function EnergyMoodTrend() {
         </Tabs>
 
         <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background/60 p-[8px] sm:p-[12px]">
-          <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          <div className="mb-2 flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground" aria-label="Diagramförklaring">
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm bg-primary/70" /> Energi
+              <span aria-hidden="true" className="pace-insight-series-energy h-3 w-3 shrink-0 rounded-sm" /> Energipåverkan · enfärgad
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm bg-accent/70" /> Mående
+              <span aria-hidden="true" className="pace-insight-series-striped h-3 w-3 shrink-0 rounded-sm" /> Mående · randig
             </span>
           </div>
-          <p className="mb-3 text-xs font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
+          <p className="mb-3 text-sm font-medium text-ink">{RANGE_DESCRIPTIONS[range]} · skala 0–100</p>
           <EnergyMoodPeriods periods={periods} />
           {!hasData && (
             <p className="py-2 text-center text-sm text-muted-foreground">
@@ -176,10 +180,29 @@ export default function EnergyMoodTrend() {
           )}
         </div>
 
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Staplarna visar ett snitt per period, inte en bedömning. Perioder utan loggar lämnas
-          tomma.
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Staplarna visar genomsnitt av dina svar. Ett streck betyder att underlag saknas i
+          den här vyn; noll är ett registrerat värde.
         </p>
+        <details className="text-sm leading-relaxed text-muted-foreground">
+          <summary className="min-h-11 cursor-pointer rounded-lg py-3 font-medium text-foreground focus-visible:outline-2 focus-visible:outline-ring">
+            Så läser du diagrammet
+          </summary>
+          <div className="space-y-2 pb-2">
+            <p>
+              Energipåverkan räknas om från det som gett eller tagit energi och hur starkt det
+              känts. 0 betyder mest energikrävande, 50 balans och 100 mest energigivande.
+            </p>
+            <p>
+              Mående räknas om från dina måendekollar: 0 är lägsta och 100 högsta svaret.
+              Skalorna beskriver dina svar och visar inte hur mycket batteri du har kvar.
+            </p>
+            <p>
+              Energisvar hämtas för de senaste 60 dagarna. Äldre perioder kan därför sakna
+              energipåverkan, även om mående visas.
+            </p>
+          </div>
+        </details>
       </div>
     </CollapsibleSection>
   );

@@ -2434,6 +2434,24 @@ html[data-paceable-app="true"] [role="alertdialog"] :is(input, textarea, select,
 .pace-form .pace-form-option-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
 .pace-form :is(a, span) { overflow-wrap: anywhere; }
 
+/* Insikter: opaque series and a second pattern, scoped to these two charts. */
+.pace-insight-chart {
+  --insight-series-one: #755090;
+  --insight-series-two: #34745b;
+  --insight-stripe: rgb(255 255 255 / 22%);
+}
+.dark .pace-insight-chart {
+  --insight-series-one: #d4b9e6;
+  --insight-series-two: #a3ceb8;
+  --insight-stripe: rgb(0 0 0 / 20%);
+}
+.pace-insight-chart .pace-insight-series-energy { background-color: var(--insight-series-one); }
+.pace-insight-chart .pace-insight-series-striped {
+  background-color: var(--insight-series-two);
+  background-image: repeating-linear-gradient(135deg, transparent 0 4px, var(--insight-stripe) 4px 6px);
+  border: 1px solid var(--insight-series-two);
+}
+
 /* Pace design system: explicit opt-in only. Existing pages keep their geometry. */
 .pace-ds {
   /* Semantic reference tokens live only in this explicit scope. #512654 = hsl(295 38% 24%). */
