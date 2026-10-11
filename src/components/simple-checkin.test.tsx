@@ -171,19 +171,22 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     expect(onSaved).toHaveBeenCalledTimes(1);
   });
 
-  it("behåller utkastet och visar ett fel när sparningen misslyckas", async () => {
-    logEnergy.mockRejectedValue(new Error("Account changed"));
-    const onSaved = vi.fn();
-    render(<SimpleCheckin onSaved={onSaved} />);
-    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt utkast" } });
-    fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Dina val finns kvar");
-    expect(screen.getByRole("textbox")).toHaveValue("Mitt utkast");
-    expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
-    expect(onSaved).not.toHaveBeenCalled();
-    expect(logMood).not.toHaveBeenCalled();
-  });
+  it.each(["card", "dialog"] as const)(
+    "behåller utkastet och visar ett fel när sparningen misslyckas i %s",
+    async (presentation) => {
+      logEnergy.mockRejectedValue(new Error("Account changed"));
+      const onSaved = vi.fn();
+      render(<SimpleCheckin presentation={presentation} onSaved={onSaved} />);
+      fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt utkast" } });
+      fireEvent.click(screen.getByRole("button", { name: /^Logga energi & mående$/ }));
+      expect(await screen.findByRole("alert")).toHaveTextContent("Dina val finns kvar");
+      expect(screen.getByRole("textbox")).toHaveValue("Mitt utkast");
+      expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
+      expect(onSaved).not.toHaveBeenCalled();
+      expect(logMood).not.toHaveBeenCalled();
+    },
+  );
 
   it("berättar när observationen väntar på synkning", async () => {
     logEnergy.mockResolvedValue({ synced: false });
