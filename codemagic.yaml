@@ -2,7 +2,7 @@
 # Inga hemligheter här: Apple-nyckeln läggs in som integration i Codemagic (Teams → Integrations).
 workflows:
   ios-release:
-    name: MyFlove iOS (App Store / TestFlight)
+    name: Paceable iOS (App Store / TestFlight)
     max_build_duration: 60
     instance_type: mac_mini_m2
     integrations:
@@ -24,6 +24,8 @@ workflows:
           curl -fsSL https://bun.sh/install | bash
           export PATH="$HOME/.bun/bin:$PATH"
           bun install --frozen-lockfile || bun install
+      - name: Förbered påminnelseljud
+        script: npm run native:prepare
       - name: Synka Capacitor iOS
         script: |
           export PATH="$HOME/.bun/bin:$PATH"
@@ -48,3 +50,43 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
+
+  android-release:
+    name: Paceable Android (signed release bundle)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      # Existing release keystore/passwords only; set this secret group in Codemagic.
+      groups:
+        - paceable_android_signing
+      node: 22
+      java: 21
+    scripts:
+      - name: Installera beroenden
+        script: |
+          curl -fsSL https://bun.sh/install | bash
+          export PATH="$HOME/.bun/bin:$PATH"
+          bun install --frozen-lockfile
+      - name: Förbered native-påminnelser
+        script: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          npm run native:prepare
+          bunx cap sync android
+      - name: Kontrollera befintlig signeringsnyckel och bygg
+        script: |
+          set -eu
+          umask 077
+          # Decode the existing keystore without printing it or its passwords.
+          : "${MYFLOVE_KEYSTORE_BASE64:?Add the existing release keystore to the secret signing group}"
+          : "${MYFLOVE_KEYSTORE_PASSWORD:?Missing existing keystore password}"
+          : "${MYFLOVE_KEY_ALIAS:?Missing existing key alias}"
+          : "${MYFLOVE_KEY_PASSWORD:?Missing existing key password}"
+          MYFLOVE_KEYSTORE_FILE="$CM_BUILD_DIR/paceable-release.keystore"
+          export MYFLOVE_KEYSTORE_FILE
+          printf '%s' "$MYFLOVE_KEYSTORE_BASE64" | base64 --decode > "$MYFLOVE_KEYSTORE_FILE"
+          printf 'sdk.dir=%s\n' "$ANDROID_SDK_ROOT" > android/local.properties
+          cd android
+          ./gradlew testReleaseUnitTest bundleRelease
+    artifacts:
+      - android/app/build/outputs/bundle/release/*.aab
+      - android/app/build/reports/tests/**

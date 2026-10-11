@@ -51,8 +51,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "stylesheet", href: appTypographyCss },
       { rel: "icon", href: "/favicon.ico", sizes: "16x16 32x32 48x48" },
-      { rel: "icon", href: "/favicon-light.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
-      { rel: "icon", href: "/favicon-dark.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
+      {
+        rel: "icon",
+        href: "/favicon-light.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        rel: "icon",
+        href: "/favicon-dark.png",
+        type: "image/png",
+        sizes: "32x32",
+        media: "(prefers-color-scheme: dark)",
+      },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -115,7 +127,8 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const appTypography = useRouterState({
-    select: (s) => s.matches.some((match) => match.routeId === "/_app") ||
+    select: (s) =>
+      s.matches.some((match) => match.routeId === "/_app") ||
       ["/sign-in", "/sign-up", "/designsystem"].includes(s.location.pathname),
   });
   // Portalled dialogs/menus share the same type as their page. Public marketing
@@ -124,11 +137,26 @@ function RootComponent() {
     const root = document.documentElement;
     if (appTypography) root.dataset.paceableTypography = "true";
     else delete root.dataset.paceableTypography;
-    return () => { delete root.dataset.paceableTypography; };
+    return () => {
+      delete root.dataset.paceableTypography;
+    };
   }, [appTypography]);
   useEffect(() => {
     initCacheBusting();
     void import("@/lib/native-backup").then((m) => m.initNativeBackup());
+    let disposed = false;
+    let stopNative: (() => void) | undefined;
+    void import("@/lib/native-reminders")
+      .then((m) => m.initNativeReminders())
+      .then((stop) => {
+        if (disposed) stop();
+        else stopNative = stop;
+      })
+      .catch((error) => console.error("[native-reminders] init", error));
+    return () => {
+      disposed = true;
+      stopNative?.();
+    };
   }, []);
   // Kopplar enhetens anonyma id till kontot en gång, så interna test kan filtreras bort.
   useAnalyticsClaim();
@@ -139,7 +167,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div data-paceable-typography={appTypography ? "true" : undefined} className="pace-type-scope contents">
+        <div
+          data-paceable-typography={appTypography ? "true" : undefined}
+          className="pace-type-scope contents"
+        >
           <Outlet />
           <Toaster />
           <Sonner />

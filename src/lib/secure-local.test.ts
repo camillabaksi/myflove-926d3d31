@@ -53,7 +53,9 @@ describe("krypterad lokal lagring", () => {
       JSON.stringify([{ id: "m1", text: "Jag vill ha lugn" }]),
     );
     await unlockSecureLocal();
-    await new Promise((r) => setTimeout(r, 0));
+    await waitFor(() =>
+      expect(localStorage.getItem("myflove-flow-memories")?.startsWith("enc:v1:")).toBe(true),
+    );
     const raw = localStorage.getItem("myflove-flow-memories");
     expect(raw?.startsWith("enc:v1:")).toBe(true);
     expect(raw).not.toContain("Jag vill ha lugn");

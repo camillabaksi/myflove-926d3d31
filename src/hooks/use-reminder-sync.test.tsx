@@ -6,6 +6,8 @@ const mocks = vi.hoisted(() => ({
   reminders: [] as Reminder[],
   tasks: [] as Task[],
   activeOwner: true,
+  native: false,
+  nativeSync: vi.fn(),
   subscribed: false,
   signedIn: true,
   getUser: vi.fn(),
@@ -13,6 +15,14 @@ const mocks = vi.hoisted(() => ({
   cancel: vi.fn(),
   reconcile: vi.fn(),
   getSubscription: vi.fn(),
+}));
+vi.mock("@/lib/native-caps", () => ({ isNativeShell: () => mocks.native }));
+vi.mock("@/lib/native-reminders", () => ({
+  nativeRemindersSupported: () => true,
+  lockedNativeReminderPrefixes: () => [],
+  reconcileNativeReminders: mocks.nativeSync,
+  nativeReminderPreferences: () => ({}),
+  NATIVE_REMINDERS_EVENT: "test-native-changed",
 }));
 vi.mock("@tanstack/react-start", () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock("@/integrations/supabase/client", () => ({
@@ -57,6 +67,8 @@ import { useReminderSync } from "./use-reminder-sync";
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.subscribed = false;
+  mocks.native = false;
+  mocks.nativeSync.mockResolvedValue(undefined);
   mocks.signedIn = true;
   mocks.activeOwner = true;
   mocks.tasks = [];
@@ -186,3 +198,36 @@ function mocksDate(d: Date) {
 function mocksTime(d: Date) {
   return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
+
+it("uses the OS queue in native apps without requiring or writing a web-push subscription", async () => {
+  mocks.native = true;
+  renderHook(useReminderSync);
+  await waitFor(() => expect(mocks.nativeSync).toHaveBeenCalledOnce());
+  expect(mocks.nativeSync).toHaveBeenCalledWith(
+    "test-account",
+    expect.arrayContaining([
+      expect.objectContaining({
+        clientKey: "rem:test-reminder",
+        title: "🔔 TEST",
+        url: "/kalender",
+      }),
+    ]),
+    {},
+    expect.any(Function),
+    [],
+  );
+  expect(mocks.getSubscription).not.toHaveBeenCalled();
+  expect(mocks.sync).not.toHaveBeenCalled();
+  expect(mocks.reconcile).not.toHaveBeenCalled();
+});
+it("refills the native queue on app resume and keeps the owner check", async () => {
+  mocks.native = true;
+  renderHook(useReminderSync);
+  await waitFor(() => expect(mocks.nativeSync).toHaveBeenCalledOnce());
+  act(() => window.dispatchEvent(new Event("test-native-changed")));
+  await waitFor(() => expect(mocks.nativeSync).toHaveBeenCalledTimes(2));
+  mocks.activeOwner = false;
+  act(() => window.dispatchEvent(new Event("test-native-changed")));
+  await act(async () => {});
+  expect(mocks.nativeSync).toHaveBeenCalledTimes(2);
+});

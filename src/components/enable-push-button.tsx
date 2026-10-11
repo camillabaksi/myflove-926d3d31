@@ -1,3 +1,4 @@
+import { NativeReminderSettings } from "@/components/native-reminder-settings";
 import { isNativeShell } from "@/lib/native-caps";
 import { useEffect, useState } from "react";
 import { Bell, BellOff, Loader2 } from "lucide-react";
@@ -29,6 +30,10 @@ function isPreviewOrIframe(): boolean {
 }
 
 export function EnablePushButton() {
+  return isNativeShell() ? <NativeReminderSettings compact /> : <WebEnablePushButton />;
+}
+
+function WebEnablePushButton() {
   const subscribeFn = useServerFn(subscribeToPush);
   const unsubscribeFn = useServerFn(unsubscribeFromPush);
   const testFn = useServerFn(sendTestPush);
