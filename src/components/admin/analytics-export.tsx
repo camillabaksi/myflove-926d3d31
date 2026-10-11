@@ -22,7 +22,7 @@ function download(blob: Blob, filename: string) {
 function toCsv(data: AnalyticsExport): string {
   const esc = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
   const lines: string[] = [];
-  lines.push(`"MyFlove – anonym appstatistik"`);
+  lines.push(`"Paceable – anonym appstatistik"`);
   lines.push(`"Period",${esc(data.from)},${esc(data.to)}`);
   lines.push(
     `"Totalt","händelser",${data.totals.events},"besökare",${data.totals.sessions},"dagar",${data.totals.days}`,
@@ -45,7 +45,7 @@ async function toPdf(data: AnalyticsExport): Promise<Blob> {
   let y = margin;
 
   doc.setFontSize(18);
-  doc.text("MyFlove - anonym appstatistik", margin, y);
+  doc.text("Paceable - anonym appstatistik", margin, y);
   y += 22;
   doc.setFontSize(11);
   doc.text(`Period: ${data.from} till ${data.to}`, margin, y);

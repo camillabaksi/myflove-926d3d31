@@ -10,13 +10,13 @@ export const Route = createFileRoute("/nytt-losenord")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Välj nytt lösenord – MyFlove" },
+      { title: "Välj nytt lösenord – Paceable" },
       {
         name: "description",
-        content: "Skapa ett nytt lösenord till ditt MyFlove-konto och logga in igen.",
+        content: "Skapa ett nytt lösenord till ditt Paceable-konto och logga in igen.",
       },
-      { property: "og:title", content: "Välj nytt lösenord – MyFlove" },
-      { property: "og:description", content: "Skapa ett nytt lösenord till ditt MyFlove-konto." },
+      { property: "og:title", content: "Välj nytt lösenord – Paceable" },
+      { property: "og:description", content: "Skapa ett nytt lösenord till ditt Paceable-konto." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://myflove.lovable.app/nytt-losenord" },
       { name: "twitter:card", content: "summary" },

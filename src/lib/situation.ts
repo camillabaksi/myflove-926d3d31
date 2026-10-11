@@ -182,7 +182,7 @@ export function situationContext(state: SituationState): string {
     const meta = SITUATION_META[id];
     const note = state.entries[id]?.note?.trim();
     lines.push(`- ${meta.emoji} ${meta.label}${note ? `: ${note}` : ""}`);
-    lines.push(`  Flow: ${meta.flowHint}`);
+    lines.push(`  Pace: ${meta.flowHint}`);
   }
   if (act.length > 1) {
     lines.push(

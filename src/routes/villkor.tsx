@@ -4,25 +4,25 @@ import { LegalShell } from "./integritet";
 export const Route = createFileRoute("/villkor")({
   head: () => ({
     meta: [
-      { title: "Användarvillkor – MyFlove" },
+      { title: "Användarvillkor – Paceable" },
       {
         name: "description",
         content:
-          "Villkor för att använda MyFlove – ansvar, konto, innehåll och avslut. Skrivet enkelt och mänskligt.",
+          "Villkor för att använda Paceable – ansvar, konto, innehåll och avslut. Skrivet enkelt och mänskligt.",
       },
-      { property: "og:title", content: "Användarvillkor – MyFlove" },
+      { property: "og:title", content: "Användarvillkor – Paceable" },
       {
         property: "og:description",
         content:
-          "Villkor för att använda MyFlove – ansvar, konto, innehåll och avslut. Enkelt och mänskligt.",
+          "Villkor för att använda Paceable – ansvar, konto, innehåll och avslut. Enkelt och mänskligt.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Användarvillkor – MyFlove" },
+      { name: "twitter:title", content: "Användarvillkor – Paceable" },
       { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "MyFlove – Bär mindre. Gör inte mer." },
+      { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
       { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
       { property: "og:url", content: "https://myflove.lovable.app/villkor" },
     ],
@@ -35,14 +35,14 @@ function TermsPage() {
   return (
     <LegalShell title="Användarvillkor" updated="28 augusti 2026">
       <p>
-        Välkommen till MyFlove. Genom att skapa konto och använda tjänsten godkänner du dessa
+        Välkommen till Paceable. Genom att skapa konto och använda tjänsten godkänner du dessa
         villkor. Vi håller dem korta och begripliga.
       </p>
 
       <h2>Om tjänsten</h2>
       <p>
-        MyFlove är ett digitalt stöd för vardagen – Idag, kalender, uppgifter, rutiner, Mitt
-        batteri, ekonomi, matlista, inköp, studier, jobb, reseinfo och AI-följeslagaren Flow.
+        Paceable är ett digitalt stöd för vardagen – Idag, kalender, uppgifter, rutiner, Mitt
+        batteri, ekonomi, matlista, inköp, studier, jobb, reseinfo och AI-följeslagaren Pace.
         Tjänsten är ett hjälpmedel och ersätter inte medicinsk, juridisk eller ekonomisk rådgivning.
         Den är inte en medicinteknisk produkt och ska inte användas i akuta lägen – mår du dåligt,
         kontakta vården eller ring 112.
@@ -57,15 +57,15 @@ function TermsPage() {
 
       <h2>Ditt innehåll</h2>
       <p>
-        Allt du skapar i MyFlove tillhör dig. Vi gör inga anspråk på ditt innehåll och säljer det
+        Allt du skapar i Paceable tillhör dig. Vi gör inga anspråk på ditt innehåll och säljer det
         inte vidare. Vi behöver dock en teknisk licens att lagra och visa det för att tjänsten ska
         fungera. Laddar du upp material (t.ex. scheman) ansvarar du för att du har rätt att göra
         det.
       </p>
 
-      <h2>AI-assistenten Flow</h2>
+      <h2>AI-assistenten Pace</h2>
       <p>
-        Flow är en AI-baserad följeslagare. Svaren kan innehålla fel och ska ses som förslag – inte
+        Pace är en AI-baserad följeslagare. Svaren kan innehålla fel och ska ses som förslag – inte
         fakta, diagnos eller behandling. Du är själv ansvarig för beslut du tar utifrån dem. Sparade
         samtal är din egen historik och kan raderas när som helst.
       </p>
@@ -86,7 +86,7 @@ function TermsPage() {
       <h2>Tillgänglighet</h2>
       <p>
         Vi strävar efter hög drifttid men kan inte garantera att tjänsten alltid är tillgänglig. Vi
-        kan uppdatera, ändra eller pausa funktioner för att förbättra upplevelsen. MyFlove utvecklas
+        kan uppdatera, ändra eller pausa funktioner för att förbättra upplevelsen. Paceable utvecklas
         löpande och vissa delar kan finnas kvar i testversion.
       </p>
 
@@ -98,7 +98,7 @@ function TermsPage() {
 
       <h2>Ansvarsbegränsning</h2>
       <p>
-        MyFlove tillhandahålls "i befintligt skick". Vi ansvarar inte för indirekta skador eller
+        Paceable tillhandahålls "i befintligt skick". Vi ansvarar inte för indirekta skador eller
         förluster som uppstår genom användning av tjänsten, i den utsträckning gällande lag
         tillåter. Inget i dessa villkor begränsar dina rättigheter som konsument enligt tvingande
         lag.

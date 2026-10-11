@@ -77,7 +77,7 @@ export const sendTestPush = createServerFn({ method: "POST" })
     let sent = 0;
     for (const s of subs) {
       const result = await sendPushTo(s, {
-        title: "MyFlove",
+        title: "Paceable",
         body: "Notiser är på 🌿 Du får dem även när appen är stängd.",
         url: "/idag",
       }, { userId, source: "test" });

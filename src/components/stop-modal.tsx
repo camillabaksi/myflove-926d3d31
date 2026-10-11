@@ -259,7 +259,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
               {sending && (
                 <div className="flex justify-start">
                   <div className="bg-secondary text-muted-foreground rounded-2xl px-4 py-2.5 text-sm">
-                    Flow tänker …
+                    Pace tänker …
                   </div>
                 </div>
               )}
@@ -282,7 +282,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
                 onClick={() => void send()}
                 disabled={!input.trim() || sending}
                 size="icon"
-                aria-label="Skicka meddelande till Flow"
+                aria-label="Skicka meddelande till Pace"
                 className="rounded-full h-11 w-11 shrink-0"
               >
                 <Send size={18} aria-hidden="true" />

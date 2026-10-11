@@ -100,5 +100,5 @@ export const EVENING_ANSWERS: { id: EveningAnswer; label: string; emoji: string 
 export function eveningReply(answer: EveningAnswer): string {
   if (answer === "lattare") return "Vad fint. Det tar vi med oss till imorgon.";
   if (answer === "tyngre") return "Tack för att du berättar. Imorgon känner vi efter på nytt.";
-  return "Tack. Nu vet MyFlove lite mer om hur dina dagar blir.";
+  return "Tack. Nu vet Paceable lite mer om hur dina dagar blir.";
 }

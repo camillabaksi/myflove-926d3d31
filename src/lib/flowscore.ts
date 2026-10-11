@@ -237,7 +237,7 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
             ? "Igår kändes bra"
             : "Igår var sådär",
       delta: m.d,
-      source: "Flow Reset igår",
+      source: "Kvällsavslut igår",
       reading: `Du beskrev igår som "${input.yesterdayFeel === "sadar" ? "sådär" : input.yesterdayFeel}"`,
       why: m.why,
     });

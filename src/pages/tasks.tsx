@@ -650,7 +650,7 @@ export default function Tasks() {
                           href="/flow"
                           className="press rounded-pill bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
                         >
-                          Låt Flow föreslå en ordning
+                          Låt Pace föreslå en ordning
                         </Link>
                         <span className="rounded-pill border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground">
                           Du bestämmer – gör ändå om du vill

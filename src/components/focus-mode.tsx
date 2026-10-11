@@ -91,7 +91,7 @@ export default function FocusMode({
                 onClick={() => onOpenChange(false)}
                 className="w-full rounded-2xl py-3 text-sm text-muted-foreground flex items-center justify-center gap-2"
               >
-                <Home size={16} /> Tillbaka till Flow
+                <Home size={16} /> Tillbaka till Pace
               </button>
             </div>
           </div>

@@ -51,7 +51,7 @@ export interface ImportResult {
 }
 
 
-const system = (today: string, weekday: string) => `Du är Flow i appen MyFlove. Du läser en bild, ett foto, en screenshot, en PDF eller text och hittar ALLT som kan höra hemma i en kalender.
+const system = (today: string, weekday: string) => `Du är Pace i appen Paceable. Du läser en bild, ett foto, en screenshot, en PDF eller text och hittar ALLT som kan höra hemma i en kalender.
 Dagens datum är ${today} (${weekday}). Tolka relativa uttryck ("nästa torsdag", "imorgon") utifrån det.
 
 Absoluta regler:
@@ -154,18 +154,18 @@ export const analyzeCalendarImport = createServerFn({ method: "POST" })
         }),
       });
     } catch {
-      return { status: "error", items: [], message: "Kunde inte nå Flow just nu." };
+      return { status: "error", items: [], message: "Kunde inte nå Pace just nu." };
     }
 
     if (!res.ok) {
       const message =
         res.status === 429
-          ? "Flow har mycket att göra just nu. Vänta en stund och försök igen."
+          ? "Pace har mycket att göra just nu. Vänta en stund och försök igen."
           : res.status === 402
             ? "AI-krediterna är slut för tillfället."
             : res.status === 400
-              ? "Flow kunde inte läsa filen. Prova en annan bild eller PDF."
-              : "Något gick fel när Flow läste filen.";
+              ? "Pace kunde inte läsa filen. Prova en annan bild eller PDF."
+              : "Något gick fel när Pace läste filen.";
       console.error("calendar-import gateway", res.status, await res.text().catch(() => ""));
       return { status: "error", items: [], message };
     }
@@ -183,8 +183,8 @@ export const analyzeCalendarImport = createServerFn({ method: "POST" })
       return { status: items.length ? "ok" : "empty", items: items.slice(0, 40) };
     } catch (error) {
       if (error instanceof Error && error.message === "refused") {
-        return { status: "error", items: [], message: "Flow kan inte tolka den här filen." };
+        return { status: "error", items: [], message: "Pace kan inte tolka den här filen." };
       }
-      return { status: "error", items: [], message: "Flow fick ett otydligt svar. Försök igen." };
+      return { status: "error", items: [], message: "Pace fick ett otydligt svar. Försök igen." };
     }
   });

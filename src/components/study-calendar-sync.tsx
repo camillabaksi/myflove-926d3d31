@@ -128,7 +128,7 @@ export function StudyCalendarSync() {
         headingClassName={sectionTitle}
       >
         <p className="mt-1 text-sm text-muted-foreground">
-          Lägg in dina föreläsningar en gång. Flow lägger lugna repetitionspass i luckorna som blir
+          Lägg in dina föreläsningar en gång. Pace lägger lugna repetitionspass i luckorna som blir
           kvar – automatiskt i{" "}
           <Link href="/kalender" className="underline">
             kalendern
@@ -341,7 +341,7 @@ export function StudyCalendarSync() {
         ) : (
           <p className="mt-4 text-sm text-muted-foreground">
             Inget planerat än. Lägg in en föreläsning ovan eller ett provdatum i Studiehjälp – så
-            fyller Flow kalendern åt dig. 💙
+            fyller Pace kalendern åt dig. 💙
           </p>
         )}
       </CollapsibleSection>

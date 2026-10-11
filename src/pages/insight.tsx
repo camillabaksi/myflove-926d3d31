@@ -47,7 +47,7 @@ const ANALYSIS_STEPS = [
   "Identifierar styrkor",
   "Identifierar områden som kan kräva stöd",
   "Matchar möjliga strategier",
-  "Förbereder MyFlow-förslag",
+  "Förbereder Paceable-förslag",
 ];
 
 function AnalysisView({ onDone }: { onDone: () => void }) {
@@ -166,11 +166,11 @@ function AreaStrategies({
                       >
                         {added ? (
                           <>
-                            <Check size={14} /> Tillagd i MyFlow
+                            <Check size={14} /> Tillagd som uppgift
                           </>
                         ) : (
                           <>
-                            <Plus size={14} /> Lägg till i MyFlow
+                            <Plus size={14} /> Lägg till som uppgift
                           </>
                         )}
                       </Button>
@@ -268,7 +268,7 @@ export default function InsightPage() {
       ...(withNudges && nudges[0] ? { time: nudges[0].when, reminderMinutesBefore: 0 } : {}),
     });
     setAddFlow(null);
-    toast.success("Tillagd i MyFlow 💙", {
+    toast.success("Tillagd som uppgift 💙", {
       description: withNudges
         ? "Påminnelserna ligger som steg på uppgiften – du kan ändra dem när du vill."
         : "Du kan lägga till påminnelser senare.",
@@ -315,7 +315,7 @@ export default function InsightPage() {
               </p>
               <div className="mt-2 [&_[role=region]]:max-w-full">
                 <WhyHint label="insikter">
-                  När du loggar över tid kan Flow hjälpa dig upptäcka vad som brukar ge eller ta
+                  När du loggar över tid kan Pace hjälpa dig upptäcka vad som brukar ge eller ta
                   energi.
                 </WhyHint>
               </div>

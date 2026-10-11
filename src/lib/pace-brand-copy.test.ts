@@ -16,7 +16,7 @@ describe("approved first Pace text stage", () => {
     for (const [sv, en] of [["Pace & samtal", "Pace & conversations"], ["Prata med Pace", "Talk to Pace"], ["Pace-inställningar", "Pace settings"], ["Pace tänker…", "Pace is thinking…"]]) {
       expect(translate(sv, "en")).toBe(en);
     }
-    expect(translate("Flow", "en")).toBe("Flow");
+    expect(translate("Flow", "en")).toBe("Pace");
     expect(translate("Dagens Pace", "en")).toBe("Today's Pace");
     expect(LANGUAGE_KEY).toBe("myflove-language");
   });

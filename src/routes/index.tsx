@@ -39,7 +39,7 @@ const FEATURES = [
     id: "quickflow",
     icon: Zap,
     title: "Fånga",
-    text: "Få ner tankar, uppgifter och idéer innan de försvinner. Flow hjälper dig att sortera resten.",
+    text: "Få ner tankar, uppgifter och idéer innan de försvinner. Pace hjälper dig att sortera resten.",
     accent: "bg-lavender text-primary",
   },
   {

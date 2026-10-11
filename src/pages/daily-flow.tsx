@@ -37,7 +37,7 @@ export default function DailyFlowPage() {
               </div>
               <p className="text-muted-foreground">
                 Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och
-                Flow.
+                Pace.
               </p>
             </header>
 

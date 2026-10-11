@@ -8,17 +8,17 @@ export const Route = createFileRoute("/dev-session")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Utvecklingsläge – testsession | MyFlove" },
+      { title: "Utvecklingsläge – testsession | Paceable" },
       {
         name: "description",
         content:
-          "Internt utvecklingsläge för MyFlove: skapa en testsession för att QA:a klickflöden i previewen.",
+          "Internt utvecklingsläge för Paceable: skapa en testsession för att QA:a klickflöden i previewen.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Utvecklingsläge – testsession | MyFlove" },
+      { property: "og:title", content: "Utvecklingsläge – testsession | Paceable" },
       {
         property: "og:description",
-        content: "Internt utvecklingsläge för QA av klickflöden i MyFlove-previewen.",
+        content: "Internt utvecklingsläge för QA av klickflöden i Paceable-previewen.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

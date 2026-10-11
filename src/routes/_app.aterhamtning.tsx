@@ -4,13 +4,13 @@ import Page from "@/pages/pause";
 export const Route = createFileRoute("/_app/aterhamtning")({
   head: () => ({
     meta: [
-      { title: "Återhämtning – lugn och paus i MyFlove" },
+      { title: "Återhämtning – lugn och paus i Paceable" },
       {
         name: "description",
         content:
-          "Samlad återhämtning i MyFlove: mikropaus, akut lugn, ljusboost och stopp-knappen när du behöver landa.",
+          "Samlad återhämtning i Paceable: mikropaus, akut lugn, ljusboost och stopp-knappen när du behöver landa.",
       },
-      { property: "og:title", content: "Återhämtning – lugn och paus i MyFlove" },
+      { property: "og:title", content: "Återhämtning – lugn och paus i Paceable" },
       {
         property: "og:description",
         content: "Mikropaus, akut lugn, ljusboost och stopp-knappen samlat på ett lugnt ställe.",

@@ -81,14 +81,14 @@ export default function FlowOnboarding() {
               onClick={() => setDismissed(true)}
               className="block rounded-2xl border border-border px-4 py-4 font-medium hover:border-primary/50"
             >
-              ⚡ QuickFlow
+              ⚡ Fånga
             </Link>
             <button
               type="button"
               onClick={() => setDismissed(true)}
               className="w-full rounded-2xl border border-border px-4 py-4 text-left font-medium hover:border-primary/50"
             >
-              🎯 Min första dag i Flow
+              🎯 Min första dag med Pace
             </button>
             <Link
               href="/kalender"

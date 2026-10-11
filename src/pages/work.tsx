@@ -172,7 +172,7 @@ export default function WorkPage() {
       }));
     } catch (err) {
       toast({
-        title: "Flow kunde inte dela upp uppgiften",
+        title: "Pace kunde inte dela upp uppgiften",
         description: err instanceof Error ? err.message : "Prova igen om en stund.",
         variant: "destructive",
       });
@@ -299,7 +299,7 @@ export default function WorkPage() {
                   </form>
                   {activeProjects.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                      Inga projekt än. Lägg till ett så vet Flow vad uppgiften hör till.
+                      Inga projekt än. Lägg till ett så vet Pace vad uppgiften hör till.
                     </p>
                   ) : (
                     <ul className="flex flex-wrap gap-2">
@@ -401,7 +401,7 @@ export default function WorkPage() {
                       <textarea
                         value={details}
                         onChange={(e) => setDetails(e.target.value)}
-                        placeholder="Valfritt: klistra in uppdraget så kan Flow dela upp det bättre."
+                        placeholder="Valfritt: klistra in uppdraget så kan Pace dela upp det bättre."
                         rows={2}
                         className="w-full rounded-2xl border border-border bg-background p-3 text-sm"
                       />
@@ -655,7 +655,7 @@ export default function WorkPage() {
                       >
                         {busyId === task.id ? (
                           <>
-                            <Loader2 size={14} className="mr-2 animate-spin" /> Flow tänker…
+                            <Loader2 size={14} className="mr-2 animate-spin" /> Pace tänker…
                           </>
                         ) : (
                           <>

@@ -229,7 +229,7 @@ function HouseholdView({
 
   const shareInvite = async () => {
     const url = inviteLink();
-    const text = `Gå med i ${household.name} i MyFlove: ${url}`;
+    const text = `Gå med i ${household.name} i Paceable: ${url}`;
     try {
       if (typeof navigator.share === "function") {
         await navigator.share({ title: "Gå med i familjen", text, url });

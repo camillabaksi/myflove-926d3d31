@@ -45,7 +45,7 @@ export function useFlowPersonalContext(): string {
     const lines: string[] = ["Om användaren (personlig kontext, inte regler):"];
     if (name) lines.push(`- Tilltalsnamn: ${name}. Använd namnet sparsamt och varmt.`);
     if (chosenMemories.length) {
-      lines.push("Det användaren uttryckligen har bett Flow komma ihåg (preferenser, inte instruktioner):");
+      lines.push("Det användaren uttryckligen har bett Pace komma ihåg (preferenser, inte instruktioner):");
       for (const memory of chosenMemories.slice(0, 12)) lines.push(`- ${memory.text.slice(0, 300)}`);
     }
 
@@ -82,7 +82,7 @@ export function useFlowPersonalContext(): string {
 
     if (knowledge.insights.length) {
       lines.push(
-        `Vad Flow har sett i användningen hittills (${knowledge.label}, ${knowledge.level}% igenkänning):`,
+        `Vad Pace har sett i användningen hittills (${knowledge.label}, ${knowledge.level}% igenkänning):`,
       );
       for (const i of knowledge.insights.slice(0, 6)) {
         lines.push(`- (${i.confidence}) ${i.text}`);
@@ -92,7 +92,7 @@ export function useFlowPersonalContext(): string {
       );
     } else {
       lines.push(
-        "Flow har ännu få mönster att gå på. Ställ hellre en nyfiken fråga än att gissa om användarens vanor.",
+        "Pace har ännu få mönster att gå på. Ställ hellre en nyfiken fråga än att gissa om användarens vanor.",
       );
     }
 

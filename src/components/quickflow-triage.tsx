@@ -371,7 +371,7 @@ export default function QuickflowTriage() {
         <div className="surface-card p-4 flex flex-wrap items-center gap-3">
           <p className="flex-1 min-w-[12rem] text-sm text-ink">
             Du har {openItems.length - resting.length}{" "}
-            {openItems.length - resting.length === 1 ? "sak" : "saker"} i QuickFlow. Vill du att jag
+            {openItems.length - resting.length === 1 ? "sak" : "saker"} i Fånga. Vill du att jag
             hjälper dig sortera dem?
             {resting.length > 0 && (
               <span className="block text-xs text-muted-foreground">
@@ -573,7 +573,7 @@ export default function QuickflowTriage() {
                 ) : laterFor === item.id ? (
                   <div className="space-y-2">
                     <p className="text-xs text-muted-foreground">
-                      När vill du se den igen? Den ligger kvar i QuickFlow tills dess – inget krav.
+                      När vill du se den igen? Den ligger kvar i Fånga tills dess – inget krav.
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {laterPresets().map((p) => (
@@ -645,7 +645,7 @@ export default function QuickflowTriage() {
                     type="button"
                     onClick={() => {
                       uncomplete(item.id);
-                      toast.success("Ångrad – tanken är tillbaka i QuickFlow. 💜");
+                      toast.success("Ångrad – tanken är tillbaka i Fånga. 💜");
                     }}
                     className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
                   >

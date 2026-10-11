@@ -79,7 +79,7 @@ const SECTIONS: {
   {
     id: "program",
     label: "Träningsprogram",
-    desc: "Mål, nivå och ditt program från Flow.",
+    desc: "Mål, nivå och ditt program från Pace.",
     icon: Dumbbell,
     hue: "205 45% 34%",
   },
@@ -434,7 +434,7 @@ export default function TrainingPage() {
           limitations: workout.limitations.join(", "),
         },
         {
-          intro: "Ditt Flow-pass ligger redo i programmet.",
+          intro: "Ditt Pace-pass ligger redo i programmet.",
           sessions: [session],
           note: "Du väljer själv när passet passar.",
         },
@@ -758,7 +758,7 @@ export default function TrainingPage() {
                     <p className="text-xs text-muted-foreground flex items-start gap-2">
                       <Smartphone size={14} className="mt-0.5 shrink-0" />
                       Automatisk stegräkning läses från Apple Hälsa eller Health Connect när du
-                      använder MyFlove som app i mobilen. I webbläsaren fyller du i stegen själv.
+                      använder Paceable som app i mobilen. I webbläsaren fyller du i stegen själv.
                     </p>
                   )}
                 </div>
@@ -994,15 +994,15 @@ export default function TrainingPage() {
 
             {view === "program" && (
               <>
-                <section className="surface-card space-y-3 p-5" aria-label="Skapa mitt pass med Flow">
+                <section className="surface-card space-y-3 p-5" aria-label="Skapa mitt pass med Pace">
                   <div className="flex items-start gap-3">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                       <Sparkles size={20} aria-hidden />
                     </span>
                     <div className="min-w-0">
-                      <h2 className="text-lg font-semibold text-ink">Skapa mitt pass med Flow</h2>
+                      <h2 className="text-lg font-semibold text-ink">Skapa mitt pass med Pace</h2>
                       <p className="text-sm text-muted-foreground">
-                        Flow bygger ett pass efter din energi, tid och det kroppen behöver idag.
+                        Pace bygger ett pass efter din energi, tid och det kroppen behöver idag.
                       </p>
                     </div>
                   </div>
@@ -1012,7 +1012,7 @@ export default function TrainingPage() {
                     className="min-h-12 w-full rounded-2xl"
                     onClick={() => setShowWorkoutBuilder(true)}
                   >
-                    <Sparkles size={18} aria-hidden /> Skapa mitt pass med Flow
+                    <Sparkles size={18} aria-hidden /> Skapa mitt pass med Pace
                   </Button>
                 </section>
 
@@ -1516,7 +1516,7 @@ export default function TrainingPage() {
                 </div>
 
                 <p className="text-xs text-muted-foreground">
-                  MyFlove ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med
+                  Paceable ger inga kost- eller kaloriråd. Prata med vården om du behöver stöd med
                   kost eller hälsa.
                 </p>
               </CollapsibleSection>

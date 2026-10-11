@@ -74,7 +74,7 @@ const GREETING =
   "Hej! Vad behöver du just nu?";
 
 const QUICK_PROMPTS = [
-  { label: "Få hjälp att planera", prompt: "Hjälp mig planera med FlowPlan utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
+  { label: "Få hjälp att planera", prompt: "Hjälp mig planera utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
   { label: "Jag känner mig stressad", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
   { label: "Jag behöver motivation", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
   { label: "Jag vill ta en paus", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
@@ -295,7 +295,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         (cid) => childProfiles.find((c) => c.id === cid)?.name,
       );
       const childNames = childProfiles.length
-        ? `Barnprofiler i Family Flow: ${childProfiles.map((c) => c.name).join(", ")}`
+        ? `Barnprofiler i Familj: ${childProfiles.map((c) => c.name).join(", ")}`
         : "";
       const context =
         `${exerciseContext}\n${childNames}\n\n${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`

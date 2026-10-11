@@ -231,7 +231,7 @@ export default function FamilySituation({
           <div>
             <h3 className="font-display text-lg font-bold text-ink">{selectedChildId ? t("Vad behöver ni hjälp med just nu?") : t("Vad händer?")}</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("Du behöver inte formulera dig perfekt. Berätta bara lite så hjälper Flow dig vidare.")}
+              {t("Du behöver inte formulera dig perfekt. Berätta bara lite så hjälper Pace dig vidare.")}
             </p>
           </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">

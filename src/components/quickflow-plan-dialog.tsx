@@ -164,13 +164,13 @@ export function QuickflowPlanDialog({
                 </SelectContent>
               </Select>
               <span className="block text-xs text-muted-foreground">
-                Signalen gäller bara den här QuickFlow-uppgiften.
+                Signalen gäller bara den här Fånga-uppgiften.
               </span>
             </label>
           )}
 
           <WhyHint label="varför väljer du själv?">
-            Flow sätter aldrig tider, deadlines eller påminnelser åt dig. Du bestämmer om saken bara
+            Pace sätter aldrig tider, deadlines eller påminnelser åt dig. Du bestämmer om saken bara
             ska ligga på en dag, ha en tid eller även ge en egen signal.
           </WhyHint>
 

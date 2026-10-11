@@ -64,7 +64,7 @@ export interface FlowUsageEvent {
 }
 
 export const USAGE_META: Record<FlowUsageKind, { emoji: string; label: string }> = {
-  quickflow: { emoji: "⚡", label: "QuickFlow" },
+  quickflow: { emoji: "⚡", label: "Fånga" },
   fokus: { emoji: "🎯", label: "Fokusläge" },
   planering: { emoji: "📅", label: "Planering" },
   omplanering: { emoji: "↻", label: "Omplanering" },

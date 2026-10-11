@@ -16,7 +16,7 @@ export default defineTool({
   name: "list_tasks",
   title: "Lista uppgifter",
   description:
-    "Listar den inloggade användarens MyFlove-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
+    "Listar den inloggade användarens Paceable-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
   inputSchema: {
     status: z
       .enum(["open", "completed", "all"])

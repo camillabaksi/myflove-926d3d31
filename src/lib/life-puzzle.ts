@@ -122,7 +122,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
       title: "Du har utrymme idag",
       body: `Ungefär ${input.capacityMinutes} minuters fokus finns i dagen. Det räcker för något tyngre du brukar skjuta på.`,
       href: "/flow",
-      hrefLabel: "Öppna Flow",
+      hrefLabel: "Öppna Pace",
     });
   }
 
@@ -202,7 +202,7 @@ export function buildLifePuzzle(input: LifePuzzleInput): LifePuzzle {
   }
 
   const flowPrompt = lowCapacity
-    ? "Mitt FlowScore är lågt idag. Hjälp mig prioritera vad som faktiskt behöver göras och vad som kan flyttas."
+    ? "Mitt Dagens balans är lågt idag. Hjälp mig prioritera vad som faktiskt behöver göras och vad som kan flyttas."
     : manyAreas
       ? "Jag har flera saker på gång i olika delar av livet. Hjälp mig se vad som hör ihop och vad jag börjar med."
       : "Hjälp mig hitta en bra nästa sak att göra utifrån hur jag mår idag.";

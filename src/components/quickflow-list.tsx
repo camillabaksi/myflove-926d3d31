@@ -68,7 +68,7 @@ export function QuickflowList() {
       if (item.remindAt > now) continue;
       if (notifiedRef.current.has(item.id)) continue;
       notifiedRef.current.add(item.id);
-      sendPushNotification("🔔 MyFlove: Du bad mig komma ihåg detta.", {
+      sendPushNotification("🔔 Paceable: Du bad mig komma ihåg detta.", {
         body: item.text,
         tag: `quickflow:${item.id}`,
       });
@@ -102,7 +102,7 @@ export function QuickflowList() {
               store.lon,
             );
             if (d <= NEARBY_M) {
-              sendPushNotification("🔔 MyFlove: Du bad mig komma ihåg detta.", {
+              sendPushNotification("🔔 Paceable: Du bad mig komma ihåg detta.", {
                 body: `${item.text} – du är nära ${store.name}.`,
                 tag: `quickflow:${item.id}`,
               });
@@ -427,7 +427,7 @@ export function QuickflowList() {
                   aria-label={t("Ångra")}
                   onClick={() => {
                     uncomplete(item.id);
-                    toast.success(t("Ångrad – tanken är tillbaka i QuickFlow. 💜"));
+                    toast.success(t("Ångrad – tanken är tillbaka i Fånga. 💜"));
                   }}
                   className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1.5 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
                 >

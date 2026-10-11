@@ -110,9 +110,9 @@ export default function FlowCheckinPopup() {
               <span aria-hidden>{copy.emoji}</span>
               {copy.cta}
             </Button>
-            <WhyHint label="Flow frågar vid olika tider">
+            <WhyHint label="Pace frågar vid olika tider">
               Vi frågar vid olika tider för att se hur din energi och ditt mående förändras under
-              dagen. Med tiden kan Flow hjälpa dig att upptäcka vad som brukar påverka dig.
+              dagen. Med tiden kan Pace hjälpa dig att upptäcka vad som brukar påverka dig.
             </WhyHint>
             <Button
               type="button"

@@ -360,7 +360,7 @@ export default function RelationsPage() {
                 <MyFloveHeart size={26} /> Relationer
               </PacePageTitle>
               <p className="text-muted-foreground">
-                Människorna – och djuren – som hör till ditt liv. Flow använder dem som kontext i
+                Människorna – och djuren – som hör till ditt liv. Pace använder dem som kontext i
                 Fånga, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder
                 för dig.
               </p>

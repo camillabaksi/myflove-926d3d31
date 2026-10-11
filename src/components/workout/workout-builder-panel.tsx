@@ -208,7 +208,7 @@ export default function WorkoutBuilderPanel({
         {showBuilder && (
           <header className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Träning</p>
-            <h1 className="text-2xl font-semibold text-ink">Flow skapar ditt pass</h1>
+            <h1 className="text-2xl font-semibold text-ink">Pace skapar ditt pass</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Berätta vad du behöver, så gör jag ett pass som passar dagen.
             </p>
@@ -349,7 +349,7 @@ export default function WorkoutBuilderPanel({
           <>
             <div className="surface-card p-8 text-center">
               <Sparkles size={28} className="mx-auto animate-pulse text-primary" aria-hidden />
-              <p className="mt-3 text-base font-medium text-ink">Flow tänker...</p>
+              <p className="mt-3 text-base font-medium text-ink">Pace tänker...</p>
               <p className="text-sm text-muted-foreground">Sätter ihop något som passar dagen.</p>
             </div>
           </>

@@ -71,7 +71,7 @@ export const SOURCE_LABEL: Record<FlowItemSource, string> = {
   barn: "Barnen",
   rutin: "Rutin",
   tanke: "Tanke",
-  quickflow: "QuickFlow",
+  quickflow: "Fånga",
   gjort: "Gjort",
 };
 

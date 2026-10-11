@@ -74,7 +74,7 @@ export default function TomorrowWithFlow() {
     const fromCal = suggestFromEvents(events);
     const fromQf = openItems
       .filter((i) => mentionsTomorrow(i.text))
-      .map((i) => ({ id: `qf-${i.id}`, text: quickflowReminderText(i.text), source: "QuickFlow" }));
+      .map((i) => ({ id: `qf-${i.id}`, text: quickflowReminderText(i.text), source: "Fånga" }));
     return [...fromQf, ...fromCal];
   }, [events, openItems]);
   const travel = useMemo(() => events.map(travelHint).filter((x) => x !== null), [events]);
@@ -108,9 +108,9 @@ export default function TomorrowWithFlow() {
   const prepared = doneOn === today;
 
   return (
-    <section data-testid="tomorrow-with-flow" aria-label={t("Imorgon med Flow")} className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
+    <section data-testid="tomorrow-with-flow" aria-label={t("Imorgon med Pace")} className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
       <p className="flex items-center gap-2 text-xs font-semibold uppercase text-primary">
-        <Moon className="h-4 w-4" aria-hidden /> {t("Imorgon med Flow")}
+        <Moon className="h-4 w-4" aria-hidden /> {t("Imorgon med Pace")}
       </p>
       {prepared ? (
         <>
@@ -230,7 +230,7 @@ export default function TomorrowWithFlow() {
               </div>
               <DialogTitle className="mt-4 font-display text-xl">{t("Klart.")}</DialogTitle>
               <DialogDescription className="mt-2 text-base text-ink">{t("Morgondagen är förberedd.")}</DialogDescription>
-              <p className="mt-2 text-sm text-muted-foreground">{t("Du behöver inte hålla allt i huvudet inatt. Flow har koll.")}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t("Du behöver inte hålla allt i huvudet inatt. Pace har koll.")}</p>
               <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="mt-4 min-h-11 rounded-full">{t("God natt")}</Button>
             </div>
           )}

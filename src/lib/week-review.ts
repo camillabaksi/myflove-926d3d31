@@ -231,7 +231,7 @@ export function buildWeekReview(input: WeekReviewInput): WeekReview {
   let summary: string;
   if (!enoughData) {
     summary =
-      "Vi lär fortfarande känna din vardag. Fortsätt använda MyFlove så kan vi ge dig bättre överblick över tid.";
+      "Vi lär fortfarande känna din vardag. Fortsätt använda Paceable så kan vi ge dig bättre överblick över tid.";
   } else {
     const tone =
       instances.length >= 15

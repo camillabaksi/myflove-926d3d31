@@ -41,9 +41,9 @@ describe("Mer navigation presentation", () => {
     const tools = container.querySelector("#pace-more-group-tools");
     expect(tools).not.toBeNull();
     if (!tools) return;
-    const parents: Record<string, string> = { "Min dag": "MIN VARDAG", "Hem och vardag": "MIN VARDAG", "Ork och återhämtning": "HÄLSA & VÄLMÅENDE", "Flow och samtal": "STÖD & SAMTAL" };
+    const parents: Record<string, string> = { "Min dag": "MIN VARDAG", "Hem och vardag": "MIN VARDAG", "Ork och återhämtning": "HÄLSA & VÄLMÅENDE", "Pace och samtal": "STÖD & SAMTAL" };
     for (const group of MORE_GROUPS.slice(0, 4)) {
-      const toggle = screen.getByRole("button", { name: new RegExp(group.title === "Flow och samtal" ? "Pace & samtal" : group.title) });
+      const toggle = screen.getByRole("button", { name: new RegExp(group.title === "Pace och samtal" ? "Pace & samtal" : group.title) });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
       expect(toggle.closest(".pace-more-section")?.querySelector("h2")?.textContent).toBe(parents[group.title]);
       expect(document.getElementById(`pace-more-group-direct-${group.title}`)).toBeNull();
@@ -87,7 +87,7 @@ describe("Mer navigation presentation", () => {
 
   it("omits empty subcategories without removing the existing tools menu", () => {
     show([item("/installningar")]);
-    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title === "Flow och samtal" ? "Pace & samtal" : group.title) })).toBeNull();
+    for (const group of MORE_GROUPS.slice(0, 4)) expect(screen.queryByRole("button", { name: new RegExp(group.title === "Pace och samtal" ? "Pace & samtal" : group.title) })).toBeNull();
     expect(screen.queryByRole("heading", { name: "STÖD & SAMTAL" })).toBeNull();
     expect(screen.getByRole("button", { name: /Fler funktioner/ })).toBeInTheDocument();
   });

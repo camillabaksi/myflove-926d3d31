@@ -59,7 +59,7 @@ export default function HowItWorksGuide() {
     {
       n: 3,
       kicker: t("Anpassa"),
-      title: "Flow",
+      title: "Pace",
       text: t("Få hjälp att hitta nästa steg."),
       href: "/flow",
       icon: Sparkles,
@@ -134,7 +134,7 @@ export default function HowItWorksGuide() {
         <FlowMascot size="sm" mood="calm" alt="" />
         <span className="min-w-0 flex-1">
           <span className="block font-display text-base font-bold text-ink">
-            {t("Ny på MyFlove?")}
+            {t("Ny på Paceable?")}
           </span>
           <span className="block text-sm text-muted-foreground">{t("Så funkar det")} →</span>
         </span>
@@ -171,12 +171,12 @@ export default function HowItWorksGuide() {
           <div className="flex items-center gap-3 rounded-2xl bg-muted/60 p-3">
             <Lightbulb className="h-4 w-4 shrink-0 text-primary" aria-hidden />
             <p className="text-xs text-muted-foreground">
-              {t("Tips! Du kan alltid fråga Flow om du inte vet var du ska börja.")}
+              {t("Tips! Du kan alltid fråga Pace om du inte vet var du ska börja.")}
             </p>
           </div>
           <Button asChild className="w-full rounded-2xl">
             <Link href="/flow" onClick={() => track("home_widget_opened", { source: "guide-ask-flow" })}>
-              {t("Fråga Flow")} <ArrowRight className="h-4 w-4" aria-hidden />
+              {t("Fråga Pace")} <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </Button>
           <Link
@@ -184,7 +184,7 @@ export default function HowItWorksGuide() {
             onClick={() => track("home_widget_opened", { source: "guide-overview" })}
             className="block text-center text-xs font-medium text-primary underline underline-offset-2"
           >
-            {t("Se allt som finns i MyFlove")}
+            {t("Se allt som finns i Paceable")}
           </Link>
         </div>
       )}

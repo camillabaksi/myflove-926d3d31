@@ -60,7 +60,7 @@ function QuickflowDemo() {
         Prova Fånga
       </DialogTitle>
       <DialogDescription className="mt-2 text-sm leading-6">
-        Skriv en tanke innan den försvinner. I appen hjälper Flow dig sedan att sortera den till kalender, uppgift eller påminnelse.
+        Skriv en tanke innan den försvinner. I appen hjälper Pace dig sedan att sortera den till kalender, uppgift eller påminnelse.
       </DialogDescription>
       <form
         className="mt-4 flex gap-2"

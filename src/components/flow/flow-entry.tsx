@@ -21,7 +21,7 @@ export default function FlowEntry({
 }) {
 
   return (
-    <section className="space-y-4" aria-label="Flow – vad passar bäst just nu">
+    <section className="space-y-4" aria-label="Pace – vad passar bäst just nu">
       <div className="flex flex-col items-center gap-4 p-5 text-center animate-fade-in sm:p-8">
         <FlowMascot size="lg" glow className="flow-entry" />
         <div className="space-y-1.5">
@@ -51,22 +51,22 @@ export default function FlowEntry({
       </div>
 
       <CollapsibleSection
-        title="Mer om Flow"
+        title="Mer om Pace"
         id="flow-mer-om"
         defaultCollapsed
-        description="Flow är appens lugna hjälpare. Öppna om du undrar vad de olika lägena gör."
+        description="Pace är appens lugna hjälpare. Öppna om du undrar vad de olika lägena gör."
       >
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li>
-            <strong className="font-medium text-ink">Förslag</strong> – Flow föreslår en sak som
+            <strong className="font-medium text-ink">Förslag</strong> – Pace föreslår en sak som
             passar dagens kapacitetsläge. Du väljer själv om du vill börja.
           </li>
           <li>
-            <strong className="font-medium text-ink">Planera</strong> – Flow ordnar dagens saker i
+            <strong className="font-medium text-ink">Planera</strong> – Pace ordnar dagens saker i
             en rimlig ordning utifrån vad som är viktigt och hur mycket som ryms.
           </li>
           <li>
-            <strong className="font-medium text-ink">Chatta</strong> – skriv av dig till Flow. Det
+            <strong className="font-medium text-ink">Chatta</strong> – skriv av dig till Pace. Det
             känns för mycket, en uppgift känns klurig eller du bara vill fundera högt.
           </li>
         </ul>

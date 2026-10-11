@@ -72,7 +72,7 @@ const OutputSchema = z.object({
 
 export type TrainingProgram = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, empatiska AI-kompanjon.
 Här bygger du ett realistiskt träningsprogram (styrka/kondition) utifrån användarens mål.
 
 Regler:

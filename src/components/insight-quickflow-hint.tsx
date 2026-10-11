@@ -46,7 +46,7 @@ export function InsightQuickflowHint() {
     }
     absorb(candidate.text);
     setPlanFor(null);
-    toast.success(t("Planen ligger i MyFlow 💙"), {
+    toast.success(t("Planen ligger i Paceable 💙"), {
       description: t("Du kan ändra tider eller ta bort stegen när du vill."),
     });
   };

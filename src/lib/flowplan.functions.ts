@@ -37,7 +37,7 @@ const OutputSchema = z.object({
 
 export type FlowPlanResult = z.infer<typeof OutputSchema>;
 
-const SYSTEM = `Du är Flow – MyFloves lugna, empatiska AI-kompanjon.
+const SYSTEM = `Du är Pace – Paceables lugna, empatiska AI-kompanjon.
 Uppgifterna kommer i en redan beslutad ordning. Ändra aldrig ordningen och utelämna aldrig en uppgift.
 Din uppgift är endast att ge en kort praktisk förklaring och uppskatta tid för varje uppgift.
 

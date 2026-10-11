@@ -223,7 +223,7 @@ export function LifeProfileSections() {
       <div key="sick" className="space-y-3">
         <h3 className="font-medium text-ink">🌿 Vad vill du ha hjälp med?</h3>
         <p className="text-sm text-muted-foreground">
-          Du behöver inte berätta något om hälsa eller diagnos. Skriv bara vad du vill att Flow
+          Du behöver inte berätta något om hälsa eller diagnos. Skriv bara vad du vill att Pace
           hjälper dig med i vardagen just nu.
         </p>
         {text("Vardagen just nu (frivilligt)", "sickLeaveHelp", "T.ex. en sak per dag räcker", 3)}
@@ -245,12 +245,12 @@ export function LifeProfileSections() {
         <h2 className="mb-2 flex items-center gap-2 font-display text-xl text-ink">
           <User size={22} className="text-primary" aria-hidden="true" /> Min livsprofil
           <HelpHint label="Min livsprofil">
-            Allt är frivilligt. Profilen är kontext till Flow – aldrig regler och aldrig diagnoser.
+            Allt är frivilligt. Profilen är kontext till Pace – aldrig regler och aldrig diagnoser.
             Du kan ändra eller ta bort vad som helst när du vill.
           </HelpHint>
         </h2>
         <p className="text-sm text-muted-foreground">
-          Berätta lite om din vardag, dina styrkor och vad du vill ha hjälp med. Flow använder det
+          Berätta lite om din vardag, dina styrkor och vad du vill ha hjälp med. Pace använder det
           för att göra sina förslag mer personliga. Du kan använda appen även om profilen är tom.
         </p>
       </div>
@@ -274,7 +274,7 @@ export function LifeProfileSections() {
             className="h-4 w-4 accent-[hsl(var(--primary))]"
           />
           <span className="text-muted-foreground">
-            Låt Flow använda min livsprofil (stäng av utan att radera)
+            Låt Pace använda min livsprofil (stäng av utan att radera)
           </span>
         </label>
       </section>
@@ -337,7 +337,7 @@ export function LifeProfileSections() {
       {/* 3–7 */}
       <ChipField
         title="Mina styrkor"
-        hint="Vad är du bra på? Flow kan luta sig mot dina styrkor."
+        hint="Vad är du bra på? Pace kan luta sig mot dina styrkor."
         options={STRENGTH_OPTIONS}
         selected={profile.strengths}
         onToggle={(v) => chip("strengths", v)}
@@ -351,7 +351,7 @@ export function LifeProfileSections() {
       />
       <ChipField
         title="Det här vill jag ha hjälp med"
-        hint="Det här väger Flow tyngst när förslagen formuleras."
+        hint="Det här väger Pace tyngst när förslagen formuleras."
         options={HELP_OPTIONS}
         selected={profile.helpWith}
         onToggle={(v) => chip("helpWith", v)}
@@ -370,15 +370,15 @@ export function LifeProfileSections() {
         onToggle={(v) => chip("energyTakes", v)}
       />
       <ChipField
-        title="Hur vill jag att Flow hjälper mig?"
-        hint="Så här vill du att Flow pratar med dig och föreslår saker."
+        title="Hur vill jag att Pace hjälper mig?"
+        hint="Så här vill du att Pace pratar med dig och föreslår saker."
         options={FLOW_PREFERENCE_OPTIONS}
         selected={profile.flowPreferences}
         onToggle={(v) => chip("flowPreferences", v)}
       />
 
       <section className={card}>
-        <h2 className="font-display text-lg text-ink">Något mer Flow bör veta?</h2>
+        <h2 className="font-display text-lg text-ink">Något mer Pace bör veta?</h2>
         <Textarea
           className="mt-3"
           value={profile.note}
@@ -389,7 +389,7 @@ export function LifeProfileSections() {
       </section>
 
       <p className="text-xs text-muted-foreground">
-        Din livsprofil sparas automatiskt och används som kontext av Flow. Allt om dig samlas här i
+        Din livsprofil sparas automatiskt och används som kontext av Pace. Allt om dig samlas här i
         Min profil.
       </p>
     </div>

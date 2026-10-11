@@ -9,10 +9,10 @@ const projectRef = import.meta.env.VITE_SUPABASE_PROJECT_ID ?? "project-ref-unse
 
 export default defineMcp({
   name: "myflove-mcp",
-  title: "MyFlove",
+  title: "Paceable",
   version: "0.1.0",
   instructions:
-    "Verktyg för MyFlove — ditt lugna livsflöde. Använd list_tasks/add_task för användarens uppgifter och log_mood för att logga humör. Alla verktyg agerar som den inloggade användaren.",
+    "Verktyg för Paceable — ditt lugna livsflöde. Använd list_tasks/add_task för användarens uppgifter och log_mood för att logga humör. Alla verktyg agerar som den inloggade användaren.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",

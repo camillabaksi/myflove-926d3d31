@@ -50,7 +50,7 @@ export default function IntroTour() {
         </div>
 
         <div className="mx-auto grid h-24 w-24 place-items-center rounded-3xl bg-lavender/70">
-          <FlowMascot size="md" mood="calm" alt="Flow hälsar dig välkommen" />
+          <FlowMascot size="md" mood="calm" alt="Pace hälsar dig välkommen" />
         </div>
 
         <div className="flex flex-col items-center gap-2">

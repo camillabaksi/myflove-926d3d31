@@ -172,7 +172,7 @@ export function QuickflowCapture({
       titles.length > 1
         ? `${titles.length} ${t("saker är ute ur huvudet. 💙")}`
         : t("Ute ur huvudet. 💙"),
-      { description: t("De ligger i din lista – Flow har föreslagit en ordning.") },
+      { description: t("De ligger i din lista – Pace har föreslagit en ordning.") },
     );
     void navigate({ to: "/quickflow" });
   };
@@ -230,7 +230,7 @@ export function QuickflowCapture({
     addTask(dateSuggestion.title, dateSuggestion.date, {
       time: dateSuggestion.startTime ?? undefined,
       endTime: dateSuggestion.endTime ?? undefined,
-      note: "Källa: QuickFlow",
+      note: "Källa: Fånga",
     });
     track("quickflow_created", { source: "quickflow", method: "kalender" });
     setOpen(false);
@@ -426,7 +426,7 @@ export function QuickflowCapture({
                     </p>
                     <WhyHint label="uppdelningen">
                       {t(
-                        "Flow delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra eller ta bort – du bestämmer.",
+                        "Pace delar upp texten i separata saker så att inget klumpas ihop. Du kan ändra eller ta bort – du bestämmer.",
                       )}
                     </WhyHint>
                   </div>

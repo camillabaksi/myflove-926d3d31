@@ -30,7 +30,7 @@ export function AdaptiveLeadSettings() {
       >
         <p className="text-sm text-muted-foreground flex items-start gap-2">
           <Timer size={16} className="mt-0.5 shrink-0" />
-          MyFlove flyttar påminnelsen lite tidigare om du ofta blir sen – och lite senare om du
+          Paceable flyttar påminnelsen lite tidigare om du ofta blir sen – och lite senare om du
           brukar vara tidig.
           <HelpHint label="smart framförhållning">
             Efter varje hållpunkt kan du säga hur det gick. Efter ett par svar justeras notisen

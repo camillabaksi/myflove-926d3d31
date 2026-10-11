@@ -262,7 +262,7 @@ export default function Home() {
         <MyFloveWide style={{ order: 6 }} className="min-w-0" data-npf="optional">
           <CollapsibleSection
             id="mer-i-myflove"
-            title={t("Mer i MyFlove")}
+            title={t("Mer i Paceable")}
             description={t("Rutiner & medicin och dina mönster.")}
             defaultCollapsed
             className="rounded-3xl border border-border/60 bg-card/60 p-4 shadow-soft"
@@ -300,7 +300,7 @@ export default function Home() {
             <AreaSwitcher size="sm" />
             <p className="text-xs text-muted-foreground">
               {activeArea === "alla"
-                ? t("MyFlove ser hela din dag – oavsett vilket rum sakerna hör till.")
+                ? t("Paceable ser hela din dag – oavsett vilket rum sakerna hör till.")
                 : `Du är i ${AREA_META[activeArea].label.toLowerCase()}rummet. Resten väntar tills du vill se det.`}
             </p>
           </MyFloveWide>

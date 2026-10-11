@@ -48,7 +48,7 @@ export function NextLectureCard() {
           headingClassName={sectionTitle}
         >
           <p className="mt-1 text-sm text-muted-foreground">
-            Ladda upp eller klistra in ditt schema nedan – sen håller Flow koll på vad som är nästa
+            Ladda upp eller klistra in ditt schema nedan – sen håller Pace koll på vad som är nästa
             och var det är. 💙
           </p>
         </CollapsibleSection>

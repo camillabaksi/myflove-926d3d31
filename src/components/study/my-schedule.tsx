@@ -180,7 +180,7 @@ export function MySchedule() {
       {editing && (
         <div className="mt-3 space-y-2">
           <p className="text-sm text-muted-foreground">
-            Här kan du ändra allt i schemat – även tider som Flow läst in åt dig.
+            Här kan du ändra allt i schemat – även tider som Pace läst in åt dig.
           </p>
           {allSorted.length ? (
             <ul className="space-y-1">

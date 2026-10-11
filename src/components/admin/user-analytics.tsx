@@ -36,7 +36,7 @@ function label(s: SessionRow): string {
 function toCsv(data: UserAnalytics, rows: SessionRow[]): string {
   const esc = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
   const lines: string[] = [];
-  lines.push(`"MyFlove – analys per användare"`);
+  lines.push(`"Paceable – analys per användare"`);
   lines.push(
     `"Händelser totalt",${data.totals.events},"Interna",${data.totals.internalEvents},"Externa",${data.totals.externalEvents},"Okända",${data.totals.unknownEvents}`,
   );
@@ -73,7 +73,7 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   let y = margin;
 
   doc.setFontSize(18);
-  doc.text("MyFlove - analys per anvandare", margin, y);
+  doc.text("Paceable - analys per anvandare", margin, y);
   y += 24;
   doc.setFontSize(11);
   doc.text(

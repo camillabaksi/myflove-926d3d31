@@ -72,7 +72,7 @@ export function FlowMicButton({
           ? "Stoppa inspelningen"
           : state === "transcribing"
             ? "Skriver ut det du sa…"
-            : "Prata in till Flow"
+            : "Prata in till Pace"
       }
     >
       {state === "recording" ? (

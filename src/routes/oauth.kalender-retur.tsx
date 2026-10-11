@@ -5,12 +5,12 @@ export const Route = createFileRoute("/oauth/kalender-retur")({
   component: OAuthReturn,
   head: () => ({
     meta: [
-      { property: "og:title", content: "Kopplar kalendern – MyFlove" },
-      { property: "og:description", content: "Avslutar kopplingen mellan MyFlove och din kalender." },
+      { property: "og:title", content: "Kopplar kalendern – Paceable" },
+      { property: "og:description", content: "Avslutar kopplingen mellan Paceable och din kalender." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { title: "Kopplar kalendern – MyFlove" },
-      { name: "description", content: "Avslutar kopplingen mellan MyFlove och din kalender." },
+      { title: "Kopplar kalendern – Paceable" },
+      { name: "description", content: "Avslutar kopplingen mellan Paceable och din kalender." },
       { name: "robots", content: "noindex" },
     ],
   }),

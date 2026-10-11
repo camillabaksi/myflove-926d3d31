@@ -23,7 +23,7 @@ export interface AreaMeta {
 
 export const AREAS: Record<AreaId, AreaMeta> = {
   halsa: { id: "halsa", label: "Hälsa", hue: "mjuk teal/salvia" },
-  flow: { id: "flow", label: "Flow", hue: "mjuk lila" },
+  flow: { id: "flow", label: "Pace", hue: "mjuk lila" },
   idag: { id: "idag", label: "Idag", hue: "mjuk blå" },
   planera: { id: "planera", label: "Planera", hue: "blå/lila" },
   hem: { id: "hem", label: "Hem", hue: "varm persika" },

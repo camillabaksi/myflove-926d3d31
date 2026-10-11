@@ -1,5 +1,7 @@
 /** Public landing copy: deterministic, no account or translation service required. */
-export const LANDING_EN: Record<string, string> = {
+import { currentCopyDictionary } from "@/lib/public-copy";
+
+export const LANDING_EN: Record<string, string> = currentCopyDictionary({
   "Paceable, startsida": "Paceable, home page",
   "Huvudmeny": "Main menu",
   "Mobil meny": "Mobile menu",
@@ -181,4 +183,4 @@ export const LANDING_EN: Record<string, string> = {
   "Prova Planering utifrån energi": "Try energy-aware planning",
   "Prova Planering utifrån energi direkt på sidan": "Try energy-aware planning on this page",
   "Prova Ett steg i taget direkt på sidan": "Try one step at a time on this page",
-};
+});

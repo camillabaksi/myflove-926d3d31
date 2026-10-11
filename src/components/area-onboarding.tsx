@@ -35,7 +35,7 @@ export function AreaOnboarding() {
       <div>
         <h2 className="text-lg font-semibold">Vilka delar av livet vill du ha hjälp med?</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Du får egna rum för olika delar av livet – men Flow ser fortfarande helheten. Du kan ändra
+          Du får egna rum för olika delar av livet – men Pace ser fortfarande helheten. Du kan ändra
           det här när du vill.
         </p>
       </div>

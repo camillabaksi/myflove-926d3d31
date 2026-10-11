@@ -15,7 +15,7 @@ export default defineTool({
   name: "add_task",
   title: "Lägg till uppgift",
   description:
-    "Skapar en ny uppgift i MyFlove för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
+    "Skapar en ny uppgift i Paceable för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
   inputSchema: {
     title: z.string().trim().min(1).max(200).describe("Uppgiftens titel."),
     dueDate: z

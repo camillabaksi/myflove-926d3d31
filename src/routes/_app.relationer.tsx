@@ -4,13 +4,13 @@ import Page from "@/pages/relations";
 export const Route = createFileRoute("/_app/relationer")({
   head: () => ({
     meta: [
-      { title: "Relationer – MyFlove" },
+      { title: "Relationer – Paceable" },
       {
         name: "description",
         content:
           "Samla partner, barn, familj, vänner, anhöriga och husdjur på ett ställe – som kontext i Fånga, kalender och påminnelser.",
       },
-      { property: "og:title", content: "Relationer – MyFlove" },
+      { property: "og:title", content: "Relationer – Paceable" },
       {
         property: "og:description",
         content:

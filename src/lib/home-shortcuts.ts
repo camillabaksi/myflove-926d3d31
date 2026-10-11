@@ -41,7 +41,7 @@ export const HOME_SHORTCUT_CATALOG: HomeShortcut[] = [
   { href: "/idag", label: "Idag", hint: "Dagens lista", icon: ClipboardList },
   { href: "/kalender", label: "Kalender", hint: "Se och lägg till", icon: CalendarDays },
   { href: "/tasks", label: "Uppgifter", hint: "Det du vill få gjort", icon: ListTodo },
-  { href: "/quickflow", label: "QuickFlow", hint: "Få ur dig det som snurrar", icon: Brain },
+  { href: "/quickflow", label: "Fånga", hint: "Få ur dig det som snurrar", icon: Brain },
   { href: "/anteckningar", label: "Anteckningar", hint: "Sådant du vill spara", icon: NotebookPen },
   { href: "/assistant", label: "Prata med Pace", hint: "Fråga eller tänk högt", icon: MessageCircle },
   { href: "/mitt-batteri", label: "Mitt batteri", hint: "Din energi just nu", icon: BatteryMedium },
