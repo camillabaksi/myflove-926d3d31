@@ -25,13 +25,6 @@ function formatMinutes(minutes: number): string {
   return rest === 0 ? `${hours} h` : `${hours} h ${rest} min`;
 }
 
-function batteryTone(battery: number | null): string {
-  if (battery == null) return "bg-muted/60";
-  if (battery >= 70) return "bg-primary/75";
-  if (battery >= 40) return "bg-accent/75";
-  return "bg-secondary";
-}
-
 export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }) {
   const viewport = useRef<HTMLDivElement>(null);
   const timelineId = useId();
@@ -57,7 +50,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
   };
   const maxMinutes = Math.max(1, ...periods.map((period) => period.loadMinutes));
   return (
-    <div className="min-w-0 space-y-2">
+    <div className="pace-insight-chart min-w-0 space-y-2">
       <div className="flex justify-end gap-2">
         <Button type="button" size="icon" variant="ghost" title="Tidigare perioder" aria-label="Tidigare perioder" aria-controls={timelineId} disabled={edges.start} onClick={() => move(-1)}>
           <ArrowLeft aria-hidden="true" />
@@ -66,7 +59,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>
-      <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och faktisk tid" tabIndex={0} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
+      <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och aktivitetstid" tabIndex={0} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
       <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
@@ -82,7 +75,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
       {periods.map((period) => {
         const loadHeight =
           period.loadMinutes === 0 ? 0 : Math.max(12, (period.loadMinutes / maxMinutes) * 100);
-        const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${formatMinutes(period.loadMinutes)} på ${period.loadCount} genomförda aktiviteter`;
+        const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${formatMinutes(period.loadMinutes)} på ${period.loadCount} genomförda aktiviteter, ${period.observedDays} dagar med incheckningar. Tiden kan vara uppskattad.`;
         return (
           <div
             key={period.key}
@@ -95,23 +88,24 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             <div aria-hidden="true" className="relative mx-auto h-20 w-full max-w-14 overflow-hidden rounded-xl border border-border bg-background">
               {period.loadMinutes > 0 && <div
                 data-series="time"
-                className="absolute inset-x-0 bottom-0 bg-accent/35 transition-[height] duration-500 motion-reduce:transition-none"
+                className="pace-insight-series-striped absolute inset-x-0 bottom-0 transition-[height] duration-500 motion-reduce:transition-none"
                 style={{ height: `${loadHeight}%` }}
               />}
               {period.battery != null && <div
                 data-series="battery"
-                className={`absolute left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-card shadow-sm transition-[bottom,background-color] duration-500 motion-reduce:transition-none ${batteryTone(period.battery)}`}
+                className="pace-insight-series-energy absolute left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-card shadow-sm transition-[bottom] duration-500 motion-reduce:transition-none"
                 style={{ bottom: `${Math.max(5, Math.min(82, period.battery))}%` }}
               />}
             </div>
             <span className="mt-2 block break-words text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
-            <div aria-hidden="true" className="mt-1 space-y-1 break-words text-xs leading-relaxed text-muted-foreground">
+            <div aria-hidden="true" className="mt-1 space-y-1 break-words text-sm leading-relaxed text-foreground">
               <p>Batteri {period.battery == null ? "–" : `${period.battery} %`}</p>
               {period.battery == null && <p>Ej incheckat</p>}
               <p>Tid {formatMinutes(period.loadMinutes)}</p>
               <p>{period.loadCount} genomförda aktiviteter</p>
+              <p className="text-xs text-muted-foreground">{period.observedDays} {period.observedDays === 1 ? "dag" : "dagar"} med incheckningar</p>
             </div>
           </div>
         );
@@ -137,9 +131,9 @@ export default function BatteryLoadTrend() {
   return (
     <CollapsibleSection
       id="insight-battery-load-trend"
-      title="Batteri & faktisk tid"
-      description="Din energi över tid, jämförd med den tid som faktiskt gått åt"
-      className="@container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
+      title="Batteri & aktivitetstid"
+      description="Dina batteriincheckningar och tiden för genomförda aktiviteter"
+      className="pace-insight-chart @container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
       headingClassName="font-semibold"
       data-testid="battery-load-trend"
     >
@@ -151,7 +145,7 @@ export default function BatteryLoadTrend() {
           <div className="mt-2 min-w-0 @[30rem]:mt-0">
             <p className="font-medium text-ink">{trend.summary}</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Upp till 12 månader · {formatMinutes(trend.loadMinutes)} på {trend.loadOccasions}{" "}
+              Totalt upp till 12 månader · {formatMinutes(trend.loadMinutes)} på {trend.loadOccasions}{" "}
               genomförda tillfällen · {trend.energyLogs} incheckningar
             </p>
           </div>
@@ -168,19 +162,19 @@ export default function BatteryLoadTrend() {
         </Tabs>
 
         <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background/60 p-[8px] sm:p-[12px]">
-          <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          <div className="mb-2 flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground" aria-label="Diagramförklaring">
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full bg-primary/75" /> Batteri
+              <span aria-hidden="true" className="pace-insight-series-energy h-3 w-3 shrink-0 rounded-full" /> Batteri · punkt
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-sm bg-accent" /> Tid som gått åt
+              <span aria-hidden="true" className="pace-insight-series-striped h-3 w-3 shrink-0 rounded-sm" /> Aktivitetstid · randig stapel
             </span>
           </div>
-          <p className="mb-3 text-xs font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
+          <p className="mb-3 text-sm font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
           <BatteryLoadPeriods periods={periods} />
           {visibleEnergyPeriods === 0 && (
             <p className="py-2 text-center text-sm text-muted-foreground">
-              Din karta börjar synas efter dina första batteriincheckningar.
+              Batteripunkter visas när du checkar in.
             </p>
           )}
         </div>
@@ -189,20 +183,45 @@ export default function BatteryLoadTrend() {
           <div className="min-w-0 rounded-2xl bg-secondary/30 p-[12px]">
             <Clock size={16} className="mb-1 text-primary" aria-hidden />
             <p className="font-medium text-ink">{formatMinutes(trend.loadMinutes)}</p>
-            <p className="text-xs text-muted-foreground">faktisk tid på aktiviteter</p>
+            <p className="text-sm text-muted-foreground">registrerad eller uppskattad aktivitetstid</p>
           </div>
           <div className="min-w-0 rounded-2xl bg-secondary/30 p-[12px]">
             <Activity size={16} className="mb-1 text-primary" aria-hidden />
             <p className="font-medium text-ink">{trend.pairedOccasions} tillfällen</p>
-            <p className="text-xs text-muted-foreground">med mätning före och efter</p>
+            <p className="text-sm text-muted-foreground">med incheckning före och efter</p>
           </div>
         </div>
 
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          Punkten visar genomsnittligt batteri. Den mjuka stapeln visar faktisk tid som gått åt —
-          sluttid minus starttid, eller uppskattat 30 minuter när tider saknas. Bara genomförda
-          aktiviteter räknas; namn och privata anteckningar visas aldrig här.
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Tiden kan vara uppskattad. Ett streck vid batteriet betyder att incheckningar saknas;
+          noll betyder att du har checkat in på lägsta nivån.
         </p>
+        <details className="text-sm leading-relaxed text-muted-foreground">
+          <summary className="min-h-11 cursor-pointer rounded-lg py-3 font-medium text-foreground focus-visible:outline-2 focus-visible:outline-ring">
+            Så läser du diagrammet
+          </summary>
+          <div className="space-y-2 pb-2">
+            <p>
+              Punkten visar genomsnitt av dina batteriincheckningar på skalan 0–100 %. Stapeln
+              visar den sammanlagda aktivitetstiden och blir högre när mer tid har registrerats
+              i den valda perioden.
+            </p>
+            <p>
+              Tiden räknas som sluttid minus starttid, eller uppskattat 30 minuter när tider saknas.
+              Stapelns höjd jämförs med den längsta tiden i den valda vyn; den har en annan skala
+              än batteriet.
+            </p>
+            <p>
+              Förändringstrenden använder de senaste 14 dagarna. Incheckningar före och efter
+              aktiviteter kan ingå från hela underlaget. Antalet dagar med incheckningar visas
+              under varje period.
+            </p>
+            <p>
+              Mönstren visar vad som sammanfaller, men förklarar inte säkert varför. Namn och
+              privata anteckningar visas inte i diagrammet.
+            </p>
+          </div>
+        </details>
       </div>
     </CollapsibleSection>
   );

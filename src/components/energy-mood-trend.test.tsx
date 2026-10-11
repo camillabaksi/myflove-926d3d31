@@ -24,17 +24,16 @@ describe("Energi och mående – periodpresentation", () => {
     render(<EnergyMoodPeriods periods={periods} />);
     const items = screen.getAllByRole("listitem");
     expect(items[0]?.querySelectorAll("[data-series]")).toHaveLength(0);
-    expect(items[0]?.getAttribute("aria-label")).toContain("ingen energilogg");
-    expect(items[1]?.getAttribute("aria-label")).toContain("energi 0 procent");
+    expect(items[0]?.getAttribute("aria-label")).toContain("inga energisvar");
+    expect(items[1]?.getAttribute("aria-label")).toContain("energipåverkan 0 av 100");
     expect(items[1]?.querySelectorAll('[data-series="energy"]')).toHaveLength(1);
-    expect(items[2]?.getAttribute("aria-label")).toContain("mående 50 procent");
+    expect(items[2]?.getAttribute("aria-label")).toContain("mående 50 av 100");
   });
   it("gör datum och båda värdena åtkomliga utan att förlita sig på färger", () => {
     render(<EnergyMoodPeriods periods={periods} />);
-    expect(screen.getByRole("listitem", { name: "Vecka 3: energi 70 procent, mående 50 procent" })).toBeTruthy();
-    const item = screen.getByRole("listitem", { name: "Vecka 3: energi 70 procent, mående 50 procent" });
-    expect(item.textContent).toContain("Energi 70 %");
-    expect(item.textContent).toContain("Mående 50 %");
+    const item = screen.getByRole("listitem", { name: "Vecka 3: energipåverkan 70 av 100, mående 50 av 100, 1 energisvar · 1 måendelogg" });
+    expect(item.textContent).toContain("Energipåverkan 70/100");
+    expect(item.textContent).toContain("Mående 50/100");
   });
   it("stöder piltangenter, Home och End utan att fånga vertikala pilar", () => {
     const scroll = vi.fn();

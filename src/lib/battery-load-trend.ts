@@ -270,13 +270,13 @@ export function buildBatteryLoadTrend(input: {
 
   const summary =
     observed.length < 4
-      ? "Fortsätt checka in batteriet. När det finns minst fyra dagar kan Flow visa en trygg trend."
+      ? "När batteriet är loggat för minst fyra dagar kan en första trend visas."
       : timeEffect != null
         ? timeEffect <= -8
-          ? `Dagar med mer faktisk tid på aktiviteter har batteriet i snitt varit ${Math.abs(timeEffect)} punkter lägre.`
+          ? `Dagar med mer aktivitetstid har batteriet i snitt varit ${Math.abs(timeEffect)} procentenheter lägre.`
           : timeEffect >= 8
-            ? `Dagar med mer faktisk tid på aktiviteter har batteriet i snitt varit ${timeEffect} punkter högre.`
-            : "Batteriet har varit ungefär lika även när den faktiska tiden varierat."
+            ? `Dagar med mer aktivitetstid har batteriet i snitt varit ${timeEffect} procentenheter högre.`
+            : "Batteriet har varit ungefär lika även när aktivitetstiden varierat."
         : loadEffect == null
           ? direction === "up"
             ? "Batteriet har stigit under den senaste delen av perioden."
@@ -284,9 +284,9 @@ export function buildBatteryLoadTrend(input: {
               ? "Batteriet har varit lägre under den senaste delen av perioden."
               : "Batteriet har legat ganska jämnt under perioden."
           : loadEffect <= -8
-            ? `Vid högre faktisk belastning har batteriet i snitt varit ${Math.abs(loadEffect)} punkter lägre.`
+            ? `Vid högre faktisk belastning har batteriet i snitt varit ${Math.abs(loadEffect)} procentenheter lägre.`
             : loadEffect >= 8
-              ? `Vid högre faktisk belastning har batteriet i snitt varit ${loadEffect} punkter högre.`
+              ? `Vid högre faktisk belastning har batteriet i snitt varit ${loadEffect} procentenheter högre.`
               : "Batteriet har varit ungefär lika även när den faktiska belastningen varierat.";
 
   return {
