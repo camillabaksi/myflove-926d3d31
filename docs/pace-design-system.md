@@ -43,6 +43,8 @@ The app uses Fraunces for all text roles, including body text, controls and lega
 
 Rem units preserve browser and existing NPF larger-text settings. Headings use weight 600, normal letter spacing and consistent line heights. Small legacy 9–11px labels join the metadata role. Large timers, decorative emoji and special numeric/chart geometry remain separate. Typography changes never own field behavior, storage, permissions or submission. Existing editorial component props/classes remain compatible but use the shared Fraunces typography in the app scope.
 
+The scoped family rule explicitly overrides `.font-sans`: Tailwind's inline theme compiles this utility to a literal Inter stack, so changing only `--font-sans` cannot reach activity titles or health-entry labels. The health tool links use one full-width list with natural word wrapping rather than narrow legacy area cards. The public reference renders the same presentation-only list at a maximum width of 20rem to verify its typography and navigation destinations without account data.
+
 ## Patterns
 Import from `@/components/paceable/design-system`:
 - PacePage: scope only, no navigation or main landmark.
