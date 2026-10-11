@@ -1,10 +1,13 @@
 import { useState, type CSSProperties } from "react";
-import { ArrowLeft, Minimize2 } from "lucide-react";
+import { ArrowLeft, Copy, Image, Minimize2, MoreHorizontal, Plus } from "lucide-react";
 import { BrandLogo } from "./brand-logo";
 import { AppBrandHeader } from "./app-brand-header";
 import { DayGreeting } from "@/components/day/day-greeting";
 import { PacePage, PaceContent, PaceHeading, PaceSection, PaceCard, PaceInfoBlock, PaceField, PaceInput, PaceTextarea, PaceChoiceGroup, PaceChoice, PaceActions, PaceButton, PaceHelp, PaceSwitch, PaceDialogContent, PaceStatus, PaceSelectTrigger, PaceSelectContent } from "./design-system";
-import { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { DailyActivityRow } from "@/components/day/daily-activity-row";
+import type { FlowItem } from "@/lib/flow-items";
 import { Select, SelectItem, SelectValue } from "@/components/ui/select";
 import { HealthToolLinks } from "@/components/health-tool-links";
 import { TrainingCreationChoice } from "@/components/workout/training-creation-choice";
@@ -19,6 +22,31 @@ const SAMPLE_WORKOUT: Workout = {
   minutes: 10, energy: "normal", place: "hemma", equipment: ["kroppsvikt"], focus: ["helkropp"], limitations: [], intent: "styrka", kcalLow: 0, kcalHigh: 0,
   blocks: [{ exerciseId: "sit-to-stand", sets: 2, reps: 8, restSeconds: 30, section: "huvuddel" }],
 };
+
+const SAMPLE_DAY: FlowItem[] = [
+  { id: "example-breakfast", title: "Göra frukost", source: "rutin", area: "vardag", time: "06:00", done: true, completable: true, priority: "idag", emoji: "" },
+  { id: "example-calendar", title: "Ett lugnt besök", source: "kalender", area: "vardag", time: "10:30", done: false, completable: true, priority: "idag", emoji: "" },
+  { id: "example-evening", title: "Förbereda morgondagen", source: "uppgift", area: "vardag", time: "18:30", done: false, completable: true, priority: "idag", emoji: "" },
+];
+
+function CalendarDayToolsExample() {
+  const [items, setItems] = useState(SAMPLE_DAY);
+  const [pictograms, setPictograms] = useState(false);
+  return <Dialog><DialogTrigger asChild><PaceButton variant="outline">Öppna Dagens verktyg – mobilbredd</PaceButton></DialogTrigger>
+    <DialogContent className="pace-next-page pace-calendar-day-tools max-w-xs rounded-3xl sm:max-w-xs">
+      <DialogHeader><DialogTitle>Dagens verktyg</DialogTitle><DialogDescription>Söndag 11 oktober · exempel</DialogDescription></DialogHeader>
+      <div className="space-y-3">
+        <div className="pace-calendar-actions flex flex-wrap items-center gap-2">
+          <button type="button" disabled className="flex items-center rounded-2xl"><Plus size={16} aria-hidden />Lägg till</button>
+          <button type="button" disabled className="flex items-center rounded-2xl"><Plus size={16} aria-hidden />Påminnelse</button>
+          <button type="button" disabled className="flex items-center rounded-2xl"><Copy size={16} aria-hidden />Kopiera dagen</button>
+          <button type="button" aria-pressed={pictograms} onClick={() => setPictograms(!pictograms)} className="flex items-center rounded-2xl"><Image size={16} aria-hidden />Bildstöd</button>
+        </div>
+        <div className="border-t border-border/60 pt-1"><ul className="divide-y divide-border/50" aria-label="Dagens innehåll – exempel">{items.map(item => <li key={item.id}><DailyActivityRow item={item} integrated showPictograms={pictograms} onToggle={() => setItems(current => current.map(row => row.id === item.id ? { ...row, done: !row.done } : row))} actions={<Button variant="ghost" size="icon" disabled aria-label={`Fler val för ${item.title} – exempel`} className="h-11 w-11 text-muted-foreground"><MoreHorizontal size={14} /></Button>} /></li>)}</ul></div>
+      </div>
+    </DialogContent>
+  </Dialog>;
+}
 
 /** Isolated examples only. Never imports account stores, analytics or mutations. */
 export default function DesignSystemReference() {
@@ -59,6 +87,7 @@ export default function DesignSystemReference() {
         <PaceSection title="Typografi och handlingar">
           <PaceInfoBlock><PaceHeading editorial level={3}>Rubriker och klockslag i Fraunces</PaceHeading><p className="pace-type-activity text-lg">Aktiviteter och lästext i Lora</p><p>Logotypen är störst. Välkomsttext och sidrubriker: 28. Hälsning: 24. Sektionsrubriker: 20. Kortrubriker: 18. Brödtext och kontroller: 16. Hjälptext och underkategorier: 14. Små etiketter: 12. Storlekarna följer din inställning för större text.</p></PaceInfoBlock>
           <div className="max-w-xs"><PaceHeading level={2}>Tider idag</PaceHeading><div className="mt-3 grid grid-cols-[3.5rem_minmax(0,1fr)] gap-3"><time className="pace-type-time font-semibold tabular-nums">18:30</time><div><p className="pace-type-activity">Lugn promenad</p><p className="pace-type-category text-muted-foreground">Hälsa · Egen tid</p></div></div></div>
+          <CalendarDayToolsExample />
           <PaceActions><PaceButton>Primär handling</PaceButton><PaceButton variant="outline">Sekundär handling</PaceButton><PaceButton variant="ghost">Diskret handling</PaceButton><PaceButton variant="destructive">Destruktiv handling</PaceButton></PaceActions>
           <p className="pace-ds-help">Kontroller kan se 36–40 px höga ut men behåller minst 44×44 px faktisk tryckyta.</p>
         </PaceSection>

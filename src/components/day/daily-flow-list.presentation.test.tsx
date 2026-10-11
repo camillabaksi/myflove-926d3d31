@@ -25,7 +25,7 @@ vi.mock("@/components/flow-item-actions", () => ({
 vi.mock("@/components/myflove/motion", () => ({ MyFloveTransition: ({ children }: { children: ReactNode }) => <div data-testid="legacy-transition">{children}</div> }));
 vi.mock("@/components/adaptive-activity-card", () => ({ default: () => null }));
 
-describe("Today-only activity presentation", () => {
+describe("Compact day activity presentation", () => {
   it("keeps completion, read-only family rows, ordering and accessible controls", () => {
     const completed = vi.fn();
     const { container } = render(<DailyFlowList presentation="integrated" dayHeadings onCompleted={completed} />);
@@ -51,5 +51,17 @@ describe("Today-only activity presentation", () => {
     expect(container.querySelectorAll(".shadow-sm")).toHaveLength(rows.length);
     expect(screen.getAllByTestId("legacy-transition")).toHaveLength(rows.length);
     expect(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` })).toHaveClass("h-8", "w-8");
+  });
+
+  it("keeps calendar family projections read-only with compact pictograms", () => {
+    const completed = vi.fn();
+    const shared: FlowItem = { id: "childitem-shared", title: "Delad familjeaktivitet", source: "barn", area: "barn", time: "16:00", done: true, completable: true, priority: "idag", emoji: "" };
+    render(<DailyFlowList date="2026-10-10" extraItems={[shared]} presentation="integrated" showPictograms onCompleted={completed} />);
+    expect(screen.getByText(shared.title)).not.toHaveClass("line-through");
+    expect(screen.queryByRole("button", { name: `Klarmarkera ${shared.title}` })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: `Ångra ${shared.title}` })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` }));
+    expect(completed).toHaveBeenCalledWith(rows[1]);
+    expect(screen.getByText(rows[1].title)).toHaveClass("line-through");
   });
 });

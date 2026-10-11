@@ -487,17 +487,8 @@ export function CalendarContent() {
       connection={selectedDateStr ? <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} /> : null}
       tools={<>
             {selectedDateStr && (
-              <div className="animate-in fade-in slide-in-from-bottom-4 mt-5 space-y-4 border-t border-border/60 pt-5 duration-500">
+              <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="min-w-0 truncate text-lg font-medium sm:text-xl">
-                    {selectedDateStr === todayStr
-                      ? t("Idag")
-                      : parseISODate(selectedDateStr).toLocaleDateString(locale, {
-                          weekday: "long",
-                          day: "numeric",
-                          month: "long",
-                        })}
-                  </h3>
                   <div className="pace-calendar-actions flex w-full flex-wrap items-center gap-2 sm:w-auto">
                     <button
                       type="button"
@@ -549,8 +540,8 @@ export function CalendarContent() {
 
 
                 {allInDay && (
-                  <div className="rounded-3xl border border-border/60 bg-card px-4 shadow-soft sm:px-5">
-                    <DailyFlowList date={selectedDateStr} extraItems={selectedSharedEvents} />
+                  <div className="border-t border-border/60 pt-1">
+                    <DailyFlowList date={selectedDateStr} extraItems={selectedSharedEvents} presentation="integrated" showPictograms={pictoMode} />
                   </div>
                 )}
 
