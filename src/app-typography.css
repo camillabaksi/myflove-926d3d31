@@ -1,0 +1,174 @@
+/* One app type scale. Loaded after the legacy stylesheet so page-specific
+   heading rules converge without touching colors, data or calendar geometry.
+   Rem units keep browser/system text enlargement and the existing NPF setting. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] {
+  --pace-type-family: var(--font-sans);
+  --pace-type-page: 2rem;
+  --pace-type-section: 1.25rem;
+  --pace-type-card: 1.125rem;
+  --pace-type-body: 1rem;
+  --pace-type-help: 0.875rem;
+  --pace-type-meta: 0.75rem;
+  --font-display: var(--pace-type-family);
+  --font-handwritten: var(--pace-type-family);
+  --font-editorial: var(--pace-type-family);
+  --font-serif: var(--pace-type-family);
+  font-family: var(--pace-type-family);
+  line-height: 1.5;
+}
+
+html[data-paceable-typography="true"] body,
+.pace-type-scope[data-paceable-typography="true"] {
+  font-size: var(--pace-type-body);
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(.pace-ds, [data-paceable-app], [data-paceable-surface]) {
+  --font-editorial: var(--pace-type-family);
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-display,
+    .font-handwritten,
+    .font-serif,
+    .font-mono,
+    code,
+    pre,
+    .pace-editorial,
+    .pace-editorial-role,
+    .pace-app-title,
+    .pace-tasks-heading,
+    .pace-more-reminder p,
+    button,
+    input,
+    textarea,
+    select,
+    label,
+    legend
+  ) {
+  font-family: var(--pace-type-family);
+  font-variation-settings: normal;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] :is(h4, h5, h6) {
+  font-size: var(--pace-type-body);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(
+    h1,
+    .pace-app-title,
+    .pace-page-title,
+    .pace-next-title,
+    .pace-tasks-heading,
+    .pace-editorial-greeting,
+    .pace-ds-heading-1
+  ) {
+  font-size: var(--pace-type-page);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(h2, .pace-editorial-section, .pace-ds-heading-2) {
+  font-size: var(--pace-type-section);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(h3, .pace-ds-heading-3, .pace-tasks-title, .pace-more-card-title) {
+  font-size: var(--pace-type-card);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(
+    button,
+    [role="button"],
+    [role="combobox"],
+    input,
+    textarea,
+    select,
+    .pace-more-link,
+    .pace-more-search input,
+    .pace-more-reminder p
+  ) {
+  font-size: var(--pace-type-body);
+  line-height: 1.5;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(
+    label,
+    legend,
+    .pace-ds-help,
+    .pace-ds-error,
+    .pace-ds-status,
+    .pace-more-card-hint,
+    .pace-more-header p,
+    .pace-more-section > h2,
+    .pace-more-tool-group h3,
+    .pace-more-search-trigger,
+    .pace-more-settings
+  ) {
+  font-size: var(--pace-type-help);
+  line-height: 1.5;
+}
+
+/* Old 9–11px labels join the same small-label role. Decorative emojis, large
+   timers and numeric readouts retain their sizes and tabular-number behavior. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is(
+    [class~="text-[9px]"],
+    [class~="text-[10px]"],
+    [class~="text-[11px]"],
+    [class~="text-[12px]"],
+    [class~="text-[0.65rem]"],
+    [class~="text-[0.7rem]"],
+    .pace-mobile-nav-label
+  ) {
+  font-size: var(--pace-type-meta);
+  line-height: 1.4;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is([class~="text-[13px]"], [class~="text-[14px]"], [class~="text-[0.8rem]"]) {
+  font-size: var(--pace-type-help);
+  line-height: 1.5;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"]
+  :is([class~="text-[15px]"], [class~="text-[16px]"]) {
+  font-size: var(--pace-type-body);
+  line-height: 1.5;
+}
+
+/* Larger labels can use another line inside a month cell; timed blocks keep
+   their existing positions and heights. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] [data-month-date] {
+  height: auto;
+  min-height: 6rem;
+}
+
+:is(html, .pace-type-scope)[data-paceable-typography="true"] [data-month-capacity] {
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
