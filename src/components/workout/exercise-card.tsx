@@ -58,7 +58,7 @@ export default function ExerciseCard({
             </span>
             <h3
               className={cn(
-                "truncate text-base font-semibold text-ink",
+                "break-words text-base font-semibold text-ink",
                 done && "line-through",
               )}
             >

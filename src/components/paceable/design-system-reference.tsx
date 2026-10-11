@@ -4,6 +4,16 @@ import { PacePage, PaceContent, PaceHeading, PaceSection, PaceCard, PaceInfoBloc
 import { Dialog, DialogTrigger, DialogClose, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectItem, SelectValue } from "@/components/ui/select";
 import { HealthToolLinks } from "@/components/health-tool-links";
+import { TrainingCreationChoice } from "@/components/workout/training-creation-choice";
+import { TrainingSessionVisual } from "@/components/workout/training-session-visual";
+import { ManualExercises } from "@/components/workout/manual-exercises";
+import type { Workout, WorkoutBlock } from "@/lib/workout-generator";
+
+const SAMPLE_WORKOUT: Workout = {
+  id: "reference-only", title: "Ett lugnt styrkepass", note: "Ett fristående exempel.", createdAt: 0,
+  minutes: 10, energy: "normal", place: "hemma", equipment: ["kroppsvikt"], focus: ["helkropp"], limitations: [], intent: "styrka", kcalLow: 0, kcalHigh: 0,
+  blocks: [{ exerciseId: "sit-to-stand", sets: 2, reps: 8, restSeconds: 30, section: "huvuddel" }],
+};
 
 /** Isolated examples only. Never imports account stores, analytics or mutations. */
 export default function DesignSystemReference() {
@@ -13,6 +23,8 @@ export default function DesignSystemReference() {
   const [choice, setChoice] = useState("Hemma");
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+  const [trainingExample, setTrainingExample] = useState<"pace" | "manual" | null>(null);
+  const [manualBlocks, setManualBlocks] = useState<WorkoutBlock[]>([]);
   return <div className={dark ? "dark" : undefined}>
     <PacePage className={still ? "pace-ds-still" : undefined}>
       <PaceContent width="wide">
@@ -36,6 +48,13 @@ export default function DesignSystemReference() {
             <p className="pace-place-section-title font-sans font-semibold text-ink">Mer inom hälsa</p>
             <HealthToolLinks />
           </PaceCard>
+        </PaceSection>
+        <PaceSection title="Träning – fristående exempel">
+          <div className="max-w-xs space-y-3">
+            <TrainingCreationChoice onPace={() => setTrainingExample("pace")} onManual={() => setTrainingExample("manual")} />
+            {trainingExample === "pace" && <div className="surface-card p-4"><p className="font-semibold">{SAMPLE_WORKOUT.title}</p><p className="text-sm text-muted-foreground">Exempel på ett bildpass, inget skapas eller sparas på ditt konto här.</p><TrainingSessionVisual workout={SAMPLE_WORKOUT} /></div>}
+            {trainingExample === "manual" && <div className="surface-card p-4"><ManualExercises blocks={manualBlocks} onChange={setManualBlocks} /></div>}
+          </div>
         </PaceSection>
         <PaceSection title="Formulär och val">
           <PaceContent width="reading"><form className="pace-ds-card pace-ds-field" onSubmit={(event) => { event.preventDefault(); if (!draft.trim()) { setError("Skriv ett namn innan du fortsätter."); setSaved(false); return; } setError(""); setSaved(true); }} noValidate>
