@@ -565,12 +565,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             <Link to="/hem" className="hover:text-foreground">
               Hem
             </Link>
-            {place && (
+            {place && place.path !== "/hem" && place.path !== "/idag" && (
               <>
-                <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
-                <span style={{ color: areaColor(place.area) }} className="font-medium">
-                  {AREA_META[place.area].emoji} {AREA_META[place.area].label}
-                </span>
                 <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
                 <Link to={place.path} className="hover:text-foreground">
                   {place.label}
@@ -606,9 +602,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 borderColor: areaTint(place.area, 0.3),
               }}
             >
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">Du är i</p>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">Utgår från</p>
               <p className="text-sm font-semibold" style={{ color: areaColor(place.area) }}>
-                {AREA_META[place.area].emoji} {AREA_META[place.area].label} · {place.label}
+                {AREA_META[place.area].emoji} {AREA_META[place.area].label}
+                {place.label !== AREA_META[place.area].label && ` · ${place.label}`}
               </p>
               <p data-npf="optional" className="mt-1 text-xs text-muted-foreground">
                 {AREA_META[place.area].blurb}

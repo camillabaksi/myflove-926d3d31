@@ -99,7 +99,12 @@ const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> 
   "/mitt-batteri": {
     label: "Mitt batteri",
     prompt: "Jag känner så här idag – vad är rimligt?",
-    area: "vardag",
+    area: "halsa",
+  },
+  "/aterhamtning": {
+    label: "Återhämtning",
+    prompt: "Hjälp mig hitta en lugn paus som passar just nu.",
+    area: "halsa",
   },
   "/traning": { label: "Träning", prompt: "Vad orkar jag röra på mig idag?", area: "vardag" },
   "/shopping": { label: "Inköp", prompt: "Hjälp mig få ordning på inköpen.", area: "privat" },
@@ -134,7 +139,7 @@ const KEY = "myflove-flow-place";
 export function placeFor(path: string): FlowPlace {
   const hit = PLACES[path];
   if (hit) return { path, label: hit.label, prompt: hit.prompt, area: hit.area };
-  return { path, label: "MyFlove", prompt: "Vad snurrar i huvudet just nu?", area: "vardag" };
+  return { path, label: "Paceable", prompt: "Vad snurrar i huvudet just nu?", area: "vardag" };
 }
 
 /** Genvägar som passar platsen: först området, sen platsens egen sida sist bort. */
