@@ -2165,7 +2165,12 @@ html[data-npf-less="true"] [data-npf="optional"] {
   --more-peach: color-mix(in srgb, var(--stone-apricot) 32%, transparent);
   --more-blush: hsl(var(--blush) / 0.6);
 }
-.pace-more-desktop { width: min(42rem, calc(100vw - 13rem)); border-right: 1px solid var(--pace-border-warm); box-shadow: var(--pace-elevation-2); }
+/* The sidebar keeps readable text without taking half the viewport at 200% text. */
+.pace-shell-navigation { --pace-shell-sidebar-width: clamp(208px, 13rem, 256px); }
+.pace-shell-sidebar { width: var(--pace-shell-sidebar-width); padding: 16px; }
+.pace-shell-sidebar > ul :is(a, button) { gap: 12px; min-height: 44px; padding: 8px 12px; }
+.pace-shell-sidebar > ul :is(a, button) > span { overflow-wrap: normal; word-break: normal; }
+.pace-more-desktop { left: var(--pace-shell-sidebar-width); width: min(42rem, calc(100vw - var(--pace-shell-sidebar-width))); border-right: 1px solid var(--pace-border-warm); box-shadow: var(--pace-elevation-2); }
 .pace-more-mobile { bottom: calc(4.5rem + env(safe-area-inset-bottom)); }
 .pace-more-view { max-width: 42rem; margin-inline: auto; padding: 0.6rem 1rem 1.5rem; font-family: var(--font-sans); }
 .pace-more-tools { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }

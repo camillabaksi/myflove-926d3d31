@@ -727,12 +727,12 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} className={`app-shell-bg h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${paceableApp && textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
+    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} className={`app-shell-bg pace-shell-navigation h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${paceableApp && textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
       <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       {/* Desktop Sidebar */}
       <nav
         aria-label={t("Huvudnavigation")}
-        className="relative z-30 hidden md:flex flex-col w-[13rem] border-r border-border bg-card/95 p-4 shrink-0 overflow-y-auto"
+        className="pace-shell-sidebar relative z-30 hidden md:flex flex-col border-r border-border bg-card/95 shrink-0 overflow-y-auto"
       >
         <div className="mb-6 flex items-center justify-between gap-2 px-1 py-1">
           <BrandLogo compact className="w-full" />
@@ -751,7 +751,7 @@ export default function Layout({ children }: LayoutProps) {
                   }`}
                 >
                   <Icon size={20} strokeWidth={1.8} className="shrink-0" />
-                  <span className="min-w-0 whitespace-normal break-words">{item.label}</span>
+                  <span className="min-w-0 whitespace-normal">{item.label}</span>
                 </Link>
               </li>
             );
@@ -768,20 +768,20 @@ export default function Layout({ children }: LayoutProps) {
               }`}
             >
               <Menu size={20} strokeWidth={1.8} className="shrink-0" />
-              <span className="min-w-0 whitespace-normal break-words">{t("Mer")}</span>
+              <span className="min-w-0 whitespace-normal">{t("Mer")}</span>
             </button>
           </li>
         </ul>
       </nav>
 
       {desktopMoreOpen && (
-        <aside id="desktop-more-panel" aria-label={t("Mer")} data-paceable-surface="true" className="pace-more-desktop fixed inset-y-0 left-[13rem] z-30 hidden overflow-y-auto md:block">
+        <aside id="desktop-more-panel" aria-label={t("Mer")} data-paceable-surface="true" className="pace-more-desktop fixed inset-y-0 z-30 hidden overflow-y-auto md:block">
           <MoreView items={navItems} simpleMode={simpleMode} enlarged={textLayout.enlarged} t={t} onClose={closeDesktopMore} onNavigate={prepareDesktopMoreNavigation} />
         </aside>
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
+      <main className="flex-1 flex flex-col min-h-0 min-w-0 overflow-hidden relative">
         <DemoBanner isDemo={isDemo} />
         <SyncStatusNote />
         <UnownedDataPrompt />
