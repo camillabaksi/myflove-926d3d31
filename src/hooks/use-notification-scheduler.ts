@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useTasks, useReminders } from "./use-data";
-import { sendPushNotification, getNotificationPermission } from "../lib/push-notifications";
+import { sendPushNotification } from "../lib/push-notifications";
 import { todayISO } from "@/lib/day";
 
 /**
@@ -16,8 +16,6 @@ export function useNotificationScheduler() {
 
   useEffect(() => {
     const tick = () => {
-      if (getNotificationPermission() !== "granted") return;
-
       const now = new Date();
       const todayStr = todayISO(now);
       const nowMinutes = now.getHours() * 60 + now.getMinutes();

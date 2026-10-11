@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { supabase } from "@/integrations/supabase/client";
 import { useTasks, useMedications, useReminders } from "@/hooks/use-data";
 import { syncReminder, cancelReminder, reconcileReminders } from "@/lib/push.functions";
 import {
@@ -13,7 +12,9 @@ import {
   refreshPushSubscription,
   PUSH_SUBSCRIPTION_EVENT,
 } from "@/lib/push-client";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { ACCOUNT_BOUND_EVENT, getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { isActiveOwner } from "@/lib/account-scope";
+import { todayISO } from "@/lib/day";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
 import { useQuickflow } from "@/hooks/use-quickflow";
 import { useStudySchedule } from "@/hooks/use-study-schedule";
@@ -28,7 +29,7 @@ import type { ChildScheduleEntry } from "@/components/child-schedule";
 function todayIso(offsetDays = 0): string {
   const d = new Date();
   d.setDate(d.getDate() + offsetDays);
-  return d.toISOString().slice(0, 10);
+  return todayISO(d);
 }
 
 function combineDateTime(date: string, time: string): Date | null {
@@ -40,7 +41,7 @@ function combineDateTime(date: string, time: string): Date | null {
 
 export function useReminderSync() {
   const { tasks } = useTasks();
-  const { medications, isTaken, ready: medsReady } = useMedications();
+  const { medications, isTaken, log: medicationLog, ready: medsReady } = useMedications();
   const { reminders } = useReminders();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const { openItems: quickflowItems } = useQuickflow();
@@ -56,6 +57,7 @@ export function useReminderSync() {
   const cancelFn = useServerFn(cancelReminder);
   const reconcileFn = useServerFn(reconcileReminders);
   const lastKeys = useRef<Set<string>>(new Set());
+  const inFlight = useRef<Promise<void> | undefined>(undefined);
 
   // Regelbunden omsynk: annars ligger bara det som schemalades vid senaste
   // ändringen kvar, och notiser kan sluta komma efter midnatt eller när
@@ -70,10 +72,14 @@ export function useReminderSync() {
     };
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
+    window.addEventListener("online", bump);
+    window.addEventListener(ACCOUNT_BOUND_EVENT, bump);
     return () => {
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener(PUSH_SUBSCRIPTION_EVENT, bump);
+      window.removeEventListener("online", bump);
+      window.removeEventListener(ACCOUNT_BOUND_EVENT, bump);
     };
   }, []);
 
@@ -82,6 +88,7 @@ export function useReminderSync() {
   const syncSignature = JSON.stringify([
     tasks.map((t) => [
       t.id,
+      t.title,
       t.completed,
       t.time,
       t.dueDate,
@@ -90,6 +97,7 @@ export function useReminderSync() {
       t.deadlineReminderTime,
     ]),
     medsReady,
+    medicationLog,
     medications.map((m) => [m.id, m.name, m.dosage, m.times.join(","), m.repeat, m.startDate]),
     reminders.map((r) => [
       r.id,
@@ -107,7 +115,16 @@ export function useReminderSync() {
     lectures.map((l) => [l.id, l.title, l.weekday, l.start, l.location]),
     studySettings.lectureReminderMinutes,
     childSchedules ?? {},
-    childItems.map((i) => [i.id, i.child_id, i.title, i.date, i.time, i.completed]),
+    childItems.map((i) => [
+      i.id,
+      i.child_id,
+      i.title,
+      i.date,
+      i.time,
+      i.completed,
+      i.owner_id,
+      i.shareNotify,
+    ]),
     children.map((c) => [c.id, c.name, c.owner_id]),
     childReminders,
     adaptiveLead,
@@ -115,10 +132,17 @@ export function useReminderSync() {
 
   useEffect(() => {
     let alive = true;
-    (async () => {
+    let retryTimer: number | undefined;
+    const previous = inFlight.current;
+    const run = (async () => {
+      // En gammal tidsändring får inte skriva efter den nya vid långsamt nät.
+      await previous;
+      if (!alive) return;
       // Only sync when signed in AND actually subscribed to push
-      const { data } = await supabase.auth.getUser();
-      if (!alive || !data.user) return;
+      const user = await getSyncUser();
+      if (!alive || !user) return;
+      const isCurrent = () => alive && isActiveOwner(user.id);
+      if (!isCurrent()) return;
       // Har användaren gett tillstånd men tappat prenumerationen (t.ex. efter
       // en webbläsaruppdatering) återskapas den, annars kommer inga notiser
       // när appen är stängd.
@@ -126,15 +150,15 @@ export function useReminderSync() {
       if (!sub && typeof Notification !== "undefined" && Notification.permission === "granted") {
         sub = await refreshPushSubscription();
       }
-      if (!alive || !sub) return;
+      if (!isCurrent() || !sub) return;
 
       const now = Date.now();
       // Uppgifter, medicin och påminnelser schemaläggs 14 dagar framåt så att
       // notiser kommer även om appen inte öppnas på flera dagar.
       const taskDates: string[] = [];
-      for (let i = 0; i < 14; i++) taskDates.push(todayIso(i));
+      for (let i = -1; i < 14; i++) taskDates.push(todayIso(i));
       const medDates: string[] = [];
-      for (let i = 0; i < 14; i++) medDates.push(todayIso(i));
+      for (let i = -1; i < 14; i++) medDates.push(todayIso(i));
       const desired = new Map<
         string,
         {
@@ -157,7 +181,6 @@ export function useReminderSync() {
         if (!when) continue;
         const minsBefore = applyAdaptiveLead(t.reminderMinutesBefore ?? 0, adaptiveLead, "uppgift");
         const deliver = new Date(when.getTime() - minsBefore * 60_000);
-        if (deliver.getTime() < now + 30_000) continue; // skip past-due
         const key = `task:${t.id}`;
         desired.set(key, {
           clientKey: key,
@@ -183,7 +206,7 @@ export function useReminderSync() {
           if (date > horizon) continue;
           const when = combineDateTime(date, at);
           if (!when) continue;
-          if (when.getTime() < now + 30_000) continue;
+          if (when.getTime() < now - 24 * 60 * 60_000) continue;
           const key = `deadline:${t.id}:${lead}`;
           desired.set(key, {
             clientKey: key,
@@ -209,8 +232,7 @@ export function useReminderSync() {
             if (!medicationOccursOn(med, date)) continue;
             const when = combineDateTime(date, time);
             if (!when) continue;
-            if (date === medDates[0] && isTaken(med.id, time, date)) continue;
-            if (when.getTime() < now + 30_000) continue;
+            if (isTaken(med.id, time, date)) continue;
             const key = medicationReminderKey(med.id, date, time);
             desired.set(key, {
               clientKey: key,
@@ -225,7 +247,7 @@ export function useReminderSync() {
       }
       // Calendar reminders: one-off or recurring (daily / weekdays / weekly) for 14 dagar
       const horizonDates: string[] = [];
-      for (let i = 0; i < 14; i++) horizonDates.push(todayIso(i));
+      for (let i = -1; i < 14; i++) horizonDates.push(todayIso(i));
       for (const r of reminders) {
         if (r.completed || r.canceled || !r.time) continue;
         const repeat = r.repeat ?? "none";
@@ -251,7 +273,6 @@ export function useReminderSync() {
           const when = combineDateTime(date, r.time);
           if (!when) continue;
           const deliverAt = new Date(when.getTime() - leadMins * 60_000);
-          if (deliverAt.getTime() < now + 30_000) continue;
           const key = repeat === "none" ? `rem:${r.id}` : `rem:${r.id}:${date}`;
           desired.set(key, {
             clientKey: key,
@@ -271,7 +292,6 @@ export function useReminderSync() {
           if (!routineOccursOn(routine, date)) continue;
           const when = combineDateTime(date, routine.time);
           if (!when) continue;
-          if (when.getTime() < now + 30_000) continue;
           const key = `routine:${routine.id}:${date}`;
           desired.set(key, {
             clientKey: key,
@@ -298,7 +318,6 @@ export function useReminderSync() {
             const when = combineDateTime(date, lecture.start);
             if (!when) continue;
             const deliver = new Date(when.getTime() - lead * 60_000);
-            if (deliver.getTime() < now + 30_000) continue;
             const key = `lecture:${lecture.id}:${date}`;
             desired.set(key, {
               clientKey: key,
@@ -317,7 +336,7 @@ export function useReminderSync() {
       // Barnens hållpunkter: skolschema + inlagda aktiviteter, 14 dagar framåt.
       if (childReminders.enabled) {
         // Egna barn/aktiviteter, plus delat från familjemedlemmar man själv valt.
-        const myId = data.user.id;
+        const myId = user.id;
         const allowedOwners = new Set<string>([myId, ...(childReminders.familyFrom ?? [])]);
         const nameOf = new Map(
           children.filter((c) => allowedOwners.has(c.owner_id)).map((c) => [c.id, c.name]),
@@ -347,7 +366,6 @@ export function useReminderSync() {
               const when = combineDateTime(date, e.start);
               if (!when) continue;
               const deliver = new Date(when.getTime() - childLead * 60_000);
-              if (deliver.getTime() < now + 30_000) continue;
               const key = `child-schedule:${childId}:${e.id}:${date}`;
               desired.set(key, {
                 clientKey: key,
@@ -377,7 +395,6 @@ export function useReminderSync() {
           const when = combineDateTime(i.date, time);
           if (!when) continue;
           const deliver = new Date(when.getTime() - childLead * 60_000);
-          if (deliver.getTime() < now + 30_000) continue;
           const key = `child-item:${i.id}`;
           desired.set(key, {
             clientKey: key,
@@ -395,7 +412,6 @@ export function useReminderSync() {
             if (list.length === 0) continue;
             const when = combineDateTime(date, childReminders.morningTime || "07:00");
             if (!when) continue;
-            if (when.getTime() < now + 30_000) continue;
             const sorted = [...list].sort((a, b) => a.time.localeCompare(b.time));
             const key = `child-day:${date}`;
             desired.set(key, {
@@ -416,7 +432,7 @@ export function useReminderSync() {
       // Quickflow – "du bad mig komma ihåg". Får aldrig försvinna.
       for (const item of quickflowItems) {
         if (!item.remindAt || item.done) continue;
-        if (item.remindAt < now + 30_000) continue;
+        if (item.remindAt < now - 24 * 60 * 60_000) continue;
         const key = `quickflow:${item.id}`;
         desired.set(key, {
           clientKey: key,
@@ -428,27 +444,39 @@ export function useReminderSync() {
         });
       }
 
-      // Push all desired
+      // Behåll aktiva förfallna nycklar så att en paus eller ett tillfälligt
+      // utskicksfel inte avbokas bara för att klockslaget passerat.
+      // Återskapa däremot aldrig gamla notiser vid öppning/omsynk.
+      let failed = false;
       for (const r of desired.values()) {
+        if (!isCurrent()) return;
+        if (new Date(r.deliverAt).getTime() < now) continue;
         try {
           await syncFn({ data: r });
         } catch (err) {
+          failed = true;
           console.error("[reminder-sync] sync", r.clientKey, err);
         }
       }
 
       // Cancel ones we previously scheduled but no longer want
       for (const oldKey of lastKeys.current) {
+        if (!isCurrent()) return;
         if (!desired.has(oldKey)) {
           try {
             await cancelFn({ data: { clientKey: oldKey } });
           } catch (err) {
+            failed = true;
             console.error("[reminder-sync] cancel", oldKey, err);
           }
         }
       }
 
-      lastKeys.current = new Set(desired.keys());
+      if (!isCurrent()) return;
+      // Misslyckade avbokningar måste finnas kvar för nästa försök.
+      lastKeys.current = failed
+        ? new Set([...lastKeys.current, ...desired.keys()])
+        : new Set(desired.keys());
 
       // Medicin: städa bort köade notiser som inte längre motsvarar en aktiv
       // medicin. Detta gäller även rader som schemalades i en tidigare session
@@ -461,12 +489,21 @@ export function useReminderSync() {
             data: { prefix: MEDICATION_REMINDER_PREFIX, keepKeys: medKeys },
           });
         } catch (err) {
+          failed = true;
           console.error("[reminder-sync] reconcile medication", err);
         }
       }
-    })();
+      if (failed && isCurrent()) {
+        retryTimer = window.setTimeout(() => setResyncTick((n) => n + 1), 5_000);
+      }
+    })().catch((error) => {
+      console.error("[reminder-sync] retry after failure", error);
+      if (alive) retryTimer = window.setTimeout(() => setResyncTick((n) => n + 1), 5_000);
+    });
+    inFlight.current = run;
     return () => {
       alive = false;
+      if (retryTimer) window.clearTimeout(retryTimer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncSignature, resyncTick]);
