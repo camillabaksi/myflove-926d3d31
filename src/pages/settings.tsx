@@ -5,7 +5,6 @@ import {
   Accessibility,
   Check,
   Compass,
-  Home,
   Languages,
   LayoutGrid,
   LogOut,
@@ -168,7 +167,6 @@ export default function SettingsPage() {
         </MyFloveBlock>
 
         <MyFloveBlock defaultCollapsed title="Anpassning" subtitle="Vad som visas och hur Pace hjälper" icon={LayoutGrid} tone="mint" surface="mint">
-          <SettingsLink href="/anpassa-hem" icon={Home} label="Hemskärm" hint="Välj block, ordning och genvägar" />
           <SettingsLink href="/flow-installningar" icon={Sparkles} label="Pace-inställningar" hint="Hjälpnivå, tider och prioriteringar" />
           <Button variant="outline" className="h-auto w-full justify-start gap-3 rounded-2xl py-3 text-left" onClick={toggleSimpleMode}>
             {simpleMode ? <Check className="size-5 shrink-0" /> : <LayoutGrid className="size-5 shrink-0" />}

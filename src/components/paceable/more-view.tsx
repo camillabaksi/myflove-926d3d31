@@ -24,7 +24,7 @@ export const MORE_GROUPS = [
 export const MORE_TOOL_GROUPS = MORE_GROUPS.slice(4);
 export const MORE_FAMILY = ["/familjeflow", "/barn", "/relationer", "/familj"];
 export const MORE_INSIGHTS = ["/insight", "/historik", "/statistik"];
-export const MORE_LEGACY = ["/hem", "/flowscore", "/beloningar"];
+export const MORE_LEGACY = ["/flowscore", "/beloningar"];
 const DAILY = [
   { href: "/tasks", label: "Uppgifter", hint: "Det du behöver göra", icon: CheckSquare, tone: "lavender" },
   { href: "/finances", label: "Ekonomi", hint: "Pengar och överblick", icon: Wallet, tone: "sage" },
@@ -79,7 +79,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const Icon = item.icon;
     return <li key={item.href}><Link href={item.href} onClick={(event) => navigate(event, item.href)} className="pace-more-link">
       <Icon size={18} className="shrink-0" />
-      <span className="min-w-0"><span className="block font-semibold">{item.href === "/hem" ? t("Äldre Hem") : item.label}</span><span className="pace-more-muted block text-xs">{item.hint}</span></span>
+      <span className="min-w-0"><span className="block font-semibold">{item.label}</span><span className="pace-more-muted block text-xs">{item.hint}</span></span>
       <ChevronRight size={16} className="shrink-0" />
     </Link></li>;
   })}</ul>;
@@ -152,7 +152,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
           const entries = visible(group.hrefs);
           return entries.length ? <section key={group.title} className="pace-more-tool-group"><h3>{t(group.title)}</h3>{rows(entries)}</section> : null;
         }))}
-        {legacy.length > 0 && <div className="pace-more-legacy">{card("Äldre funktioner", "Äldre Hem, balans och belöningar", History, "plain", undefined, "legacy", rows(legacy))}</div>}
+        {legacy.length > 0 && <div className="pace-more-legacy">{card("Äldre funktioner", "Balans och belöningar", History, "plain", undefined, "legacy", rows(legacy))}</div>}
       </>)}
       <div className="pace-more-reminder"><Sprig /><p>{t("Allt behöver inte få plats på en dag.")}</p><Sprig /></div>
     </>}

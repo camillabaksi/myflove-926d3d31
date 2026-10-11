@@ -81,9 +81,9 @@ describe("MyFlove Insight", () => {
     expect(back.className).toContain("pace-ds-button");
     fireEvent.click(back);
     expect(goBack).toHaveBeenCalledOnce();
-    const home = within(header).getByRole("link", { name: "Till hem" });
-    expect(home.getAttribute("to")).toBe("/hem");
-    expect(home.className).toContain("pace-ds-button");
+    const today = within(header).getByRole("link", { name: "Till Idag" });
+    expect(today.getAttribute("to")).toBe("/idag");
+    expect(today.className).toContain("pace-ds-button");
   });
 
   it("behåller den befintliga frivilliga förklaringen under rubriken", () => {

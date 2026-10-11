@@ -529,9 +529,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
           <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
-<Button asChild variant="outline" className="rounded-2xl"><Link to="/hem">
+<Button asChild variant="outline" className="rounded-2xl"><Link to="/idag">
               <ArrowLeft size={16} />
-              Hem
+              Idag
             </Link></Button>
           </div>
 
@@ -539,10 +539,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             aria-label="Brödsmulor"
             className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground"
           >
-            <Link to="/hem" className="hover:text-foreground">
-              Hem
+            <Link to="/idag" className="hover:text-foreground">
+              Idag
             </Link>
-            {place && place.path !== "/hem" && place.path !== "/idag" && (
+            {place && place.path !== "/idag" && (
               <>
                 <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
                 <Link to={place.path} className="hover:text-foreground">

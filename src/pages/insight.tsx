@@ -297,8 +297,8 @@ export default function InsightPage() {
               <ArrowLeft size={18} strokeWidth={2.2} />
             </PaceButton>
             <PaceButton asChild variant="ghost" className="min-w-[44px] justify-self-end gap-1 rounded-full px-2 text-foreground">
-              <Link to="/hem" aria-label="Till hem">
-                <Home size={14} /> Hem
+              <Link to="/idag" aria-label="Till Idag">
+                <Home size={14} /> Idag
               </Link>
             </PaceButton>
           </div>

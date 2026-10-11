@@ -14,10 +14,10 @@ export default function OverviewPage() {
       <div className="flex flex-col gap-6">
         <div>
           <Link
-            href="/hem"
+            href="/idag"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft size={14} /> Till Hem
+            <ArrowLeft size={14} /> Till Idag
           </Link>
           <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mt-2">
             Så funkar Paceable

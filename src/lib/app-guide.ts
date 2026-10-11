@@ -23,7 +23,6 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Börja här",
     hint: "Det du använder varje dag",
     entries: [
-      { href: "/hem", label: "Hem", what: "Din överblick: nästa sak, energi och genvägar" },
       { href: "/idag", label: "Idag", what: "Allt som händer idag – och det du redan gjort" },
       {
         href: "/lagg-till",
@@ -130,11 +129,6 @@ export const APP_GUIDE: GuideGroup[] = [
     hint: "Anpassning och profil",
     entries: [
       { href: "/profil", label: "Min profil", what: "Namn, barn, din vardag och dina behov" },
-      {
-        href: "/anpassa-hem",
-        label: "Anpassa hemskärmen",
-        what: "Välj block, ordning och genvägar",
-      },
       { href: "/anpassa", label: "Anpassa appen", what: "Lugnare färger, färre saker, tyst läge" },
       { href: "/insight", label: "Insight", what: "Testa strategier och se vad som funkar" },
     ],

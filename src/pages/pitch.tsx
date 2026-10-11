@@ -85,10 +85,10 @@ export default function PitchPage() {
     <Layout>
       <div className="max-w-3xl mx-auto space-y-6">
         <Link
-          to={isAdmin ? "/admin" : "/hem"}
+          to={isAdmin ? "/admin" : "/idag"}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft size={16} /> {isAdmin ? "Tillbaka till admin" : "Tillbaka till hem"}
+          <ArrowLeft size={16} /> {isAdmin ? "Tillbaka till admin" : "Tillbaka till Idag"}
         </Link>
 
         <header className="space-y-1">

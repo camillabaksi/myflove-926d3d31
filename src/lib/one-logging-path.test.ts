@@ -14,17 +14,16 @@ describe("En enda plats för energi & mående", () => {
     expect(battery).toContain('source="mitt-batteri"');
   });
 
-  it("Hem visar faktisk kapacitet och leder till samma centrala loggning", () => {
-    const home = read("src/pages/home.tsx");
-    expect(home).toContain("HomePriorityActions");
-    expect(home).not.toContain("CapacityPlanCard");
-    expect(home).not.toContain("simple-checkin");
-    expect(home).not.toContain("QuickLogButton");
-    expect(home).not.toContain("EnergyBattery");
-    const actions = read("src/components/home/priority-actions.tsx");
-    expect(actions).toContain("useDayCapacity");
-    expect(actions).toContain("SimpleCheckin");
-    expect(actions).not.toContain("useCapacityMode");
+  it("Idag visar faktisk kapacitet och använder samma centrala loggning", () => {
+    const today = read("src/pages/today.tsx");
+    expect(today).toContain("TodayCapacity");
+    expect(today).toContain("useDayCapacity");
+    expect(today).not.toContain("CapacityPlanCard");
+    expect(today).not.toContain("QuickLogButton");
+    expect(today).not.toContain("EnergyBattery");
+    const capacity = read("src/components/day/today-capacity.tsx");
+    expect(capacity).toContain("SimpleCheckin");
+    expect(capacity).not.toContain("useCapacityMode");
   });
 
   it("den gamla dubbletten QuickCheckin finns inte kvar", () => {
