@@ -1,104 +1,66 @@
-import Layout from "@/components/layout";
+import { useMemo } from "react";
 import { Link } from "wouter";
-import { Gauge, Zap, Briefcase, GraduationCap } from "lucide-react";
-import { FlowScoreCard } from "@/components/flow-score-card";
+import { CalendarDays, Gauge } from "lucide-react";
+import Layout from "@/components/layout";
+import { TodayCapacity } from "@/components/day/today-capacity";
+import { TodayPace } from "@/components/day/today-pace";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { Button } from "@/components/ui/button";
+import { useDayCapacity } from "@/hooks/use-day-capacity";
+import { useVisualCalendar } from "@/hooks/use-visual-calendar";
+import { useLang } from "@/hooks/use-language";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { todayISO } from "@/lib/day";
+import { deriveDayPace } from "@/lib/day-pace";
 import {
-  MyFloveBlock,
-  MyFloveStat,
-  MyFlovePageGrid,
-  MyFloveWide,
-} from "@/components/myflove/block";
-import { useFlowScore } from "@/hooks/use-flowscore";
-import { MyFloveEnergyDots } from "@/components/myflove/motion";
+  applyFamilyPresence,
+  DEFAULT_FAMILY_LAYER,
+  type FamilyLayerPreferences,
+} from "@/lib/family-calendar";
 
+/** Befintlig länk visar samma registrering och tolkning som Idag, utan ett separat poängvärde. */
 export default function FlowScorePage() {
-  const { flow, energy, mood, minutesLeft } = useFlowScore();
+  const { t } = useLang();
+  const today = todayISO();
+  const dates = useMemo(() => [today], [today]);
+  const { days } = useVisualCalendar(dates);
+  const capacity = useDayCapacity()(today);
+  const [preferences] = useCloudSyncedStorage<FamilyLayerPreferences>(
+    "myflove-calendar-family-layer",
+    DEFAULT_FAMILY_LAYER,
+  );
+  const entries = applyFamilyPresence(days[today] ?? [], preferences);
+  const pace = deriveDayPace({ date: today, today, capacity: capacity.percent, entries });
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
         <MyFloveWide>
           <header>
-            <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
-              <Gauge className="h-7 w-7 text-primary" /> Dagens balans
+            <h1 className="pace-app-title flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
+              <Gauge className="h-7 w-7 shrink-0 text-primary" aria-hidden /> {t("Dagens balans")}
             </h1>
-            <p className="mt-1 text-muted-foreground">
-              Dagens balans visar hur väl dagens krav matchar din energi och kapacitet just nu. Det
-              är ingen prestation och inget betyg – bara en realistisk bild av vad som är rimligt.
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              {t(
+                "Din egen kapacitet och det du har planerat, sida vid sida. Samma underlag som i Idag och Kalender.",
+              )}
             </p>
           </header>
         </MyFloveWide>
-
-        <MyFloveWide span="wide">
-          <MyFloveBlock
-            title="Dagens balans"
-            subtitle="En ögonblicksbild av vad som är rimligt idag"
-            icon={Gauge}
-            tone="lavender"
-            surface="lavender"
-          >
-            <FlowScoreCard flow={flow} minutesLeft={minutesLeft} />
-          </MyFloveBlock>
+        <MyFloveWide>
+          <TodayCapacity percent={capacity.percent} />
         </MyFloveWide>
-
-        <Link href="/mitt-batteri" className="min-w-0">
-          <MyFloveStat
-            label="Energi"
-            value={
-              energy ? (
-                <span className="flex items-center gap-2">
-                  {energy}/5 <MyFloveEnergyDots value={energy} />
-                </span>
-              ) : (
-                "–"
-              )
-            }
-            hint="Öppna Mitt batteri för att logga"
-            tone="sun"
-          />
-        </Link>
-        <Link href="/mitt-batteri" className="min-w-0">
-          <MyFloveStat
-            label="Mående"
-            value={mood ? `${mood}/5` : "–"}
-            hint="Senaste registrerade värde"
-            tone="blush"
-          />
-        </Link>
-        <MyFloveStat
-          label="Kvar av dagen"
-          value={`${Math.floor(minutesLeft / 60)} h ${minutesLeft % 60} min`}
-          hint="Tiden som återstår"
-          tone="sky"
-        />
-
-        <MyFloveBlock
-          title={
-            <span className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" /> Använd dagens balans
-            </span>
-          }
-          subtitle="Planerna i jobb och studier anpassas efter nivån"
-          icon={Zap}
-          tone="lavender"
-          collapsible
-          collapseId="flowscore::anvand-balans"
-        >
-          <div className="grid gap-2 sm:grid-cols-2">
-            <Link
-              href="/jobb"
-              className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
-            >
-              <Briefcase className="h-4 w-4 text-primary" /> Jobb
+        <MyFloveWide>
+          <TodayPace pace={pace} />
+        </MyFloveWide>
+        <MyFloveWide>
+          <Button asChild variant="outline" className="min-h-11 rounded-2xl">
+            <Link href="/kalender">
+              <CalendarDays size={16} aria-hidden />
+              {t("Öppna kalendern")}
             </Link>
-            <Link
-              href="/studyflow"
-              className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink transition hover:bg-muted"
-            >
-              <GraduationCap className="h-4 w-4 text-primary" /> Studier
-            </Link>
-          </div>
-        </MyFloveBlock>
+          </Button>
+        </MyFloveWide>
       </MyFlovePageGrid>
     </Layout>
   );

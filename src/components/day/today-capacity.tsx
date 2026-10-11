@@ -48,6 +48,9 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
             ) : (
               <>
                 <CapacityBattery percent={percent} size="lg" className="mt-2 w-full max-w-md" />
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {t("Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}
+                </p>
                 <p className="mt-2 text-sm text-muted-foreground">{t(capacityCopy(percent))}</p>
               </>
             )}

@@ -48,7 +48,8 @@ vi.mock("@/hooks/use-energy-battery", () => ({
   useEnergyBattery: () => ({ reading: { now: 50 } }),
 }));
 vi.mock("@/hooks/use-flowscore", () => ({ useFlowScore: () => ({ flow: { factors: [] } }) }));
-vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => ({ percent: null }) }));
+const capacity = vi.hoisted(() => ({ percent: null as number | null }));
+vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => capacity }));
 
 describe("battery check-in entry", () => {
   it("opens and focuses the existing check-in without navigating or resetting its draft", () => {
@@ -84,5 +85,21 @@ describe("battery check-in entry", () => {
       "href",
       "/mitt-batteri",
     );
+  });
+
+  it("keeps the registered capacity first and lets an existing value be logged again", () => {
+    capacity.percent = 25;
+    render(<BatteryPage />);
+    expect(screen.getByTestId("capacity-summary")).toHaveTextContent("Din kapacitet idag");
+    expect(screen.getByTestId("capacity-summary")).toHaveTextContent("25 %");
+    expect(screen.queryByText(/Din uppskattade energi/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Historik & mönster" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+    const buttons = screen.getAllByRole("button", { name: "Logga energi & mående" });
+    fireEvent.click(buttons[0]);
+    expect(screen.getByTestId("existing-checkin")).toBeVisible();
+    capacity.percent = null;
   });
 });

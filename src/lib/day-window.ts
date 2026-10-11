@@ -12,6 +12,8 @@ export interface DayWindow {
 /** 1–10-värden per datum (YYYY-MM-DD). */
 export interface DayEdgeEntry {
   morning?: number;
+  /** Tid för den egna morgonregistreringen; äldre poster saknar detta. */
+  morningLoggedAt?: string;
   evening?: number;
 }
 

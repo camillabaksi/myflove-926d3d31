@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { ArrowRight, BatteryCharging, ChevronDown, Gauge, Sparkles } from "lucide-react";
+import { ArrowRight, BatteryCharging, ChevronDown, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { useAnimatedNumber } from "@/hooks/use-animated-number";
 import { minutesToTime } from "@/lib/energy-battery";
 import { orkWord } from "@/lib/ork-word";
@@ -25,7 +24,6 @@ export default function EnergyBattery({
 }) {
   const { t } = useLang();
   const { reading, suggestions } = useEnergyBattery();
-  const { moodValue } = useQuickCheckin();
   const [open, setOpen] = useState(defaultOpen);
   const level = Math.round(reading.now);
   const shownLevel = Math.round(useAnimatedNumber(level));
@@ -46,15 +44,15 @@ export default function EnergyBattery({
         onClick={onNavigate}
         data-testid="battery-card"
         data-area="halsa"
-        aria-label={`${t("Mitt batteri")}, ${levelWord}. ${t("Öppna för att logga energi och mående.")}`}
+        aria-label={`${t("Beräknad energikurva")}, ${levelWord}. ${t("Öppna för att logga energi och mående.")}`}
         className="press relative flex min-h-[9rem] min-w-0 flex-col items-center gap-2.5 rounded-3xl border-2 border-[hsl(var(--area-aterhamtning)/0.45)] bg-sun/50 p-4 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:p-5"
       >
         <MyFloveIcon icon={BatteryCharging} tone="sun" size="lg" className="rounded-full" />
         <span className="min-w-0">
           <span className="block font-display text-base font-bold leading-tight text-ink">
-            {t("Mitt batteri")}
+            {t("Beräknad energikurva")}
           </span>
-          <span className="block text-xs text-muted-foreground">{t("Energi och mående")}</span>
+          <span className="block text-xs text-muted-foreground">{t("Appens uppskattning")}</span>
         </span>
         <span className="w-full space-y-1 border-t border-border/50 pt-3">
           <span className="block font-display text-3xl font-bold leading-none text-ink">
@@ -74,38 +72,34 @@ export default function EnergyBattery({
 
   const content = (
     <>
-      <div className="grid grid-cols-1 gap-2 @min-[240px]:grid-cols-2 sm:gap-3">
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        {t(
+          "Appens uppskattning utifrån registreringar, mönster och planerade aktiviteter. Din egen registrering är huvudvärdet i Idag och Kalender.",
+        )}
+      </p>
+      <div>
         <MyFloveStat
-          label={t("Energi")}
+          label={t("Beräknad energi")}
           value={levelWord}
           hint={`${t("Ungefär")} ${shownLevel} % · ${trendWord}`}
           icon={BatteryCharging}
           tone="sun"
         />
-        <MyFloveStat
-          label={t("Mående")}
-          value={moodValue != null ? `${Math.round(moodValue / 2)}/5` : "–"}
-          hint={
-            moodValue != null ? t("Senaste registrerade värde") : t("Logga ett mående när du vill")
-          }
-          icon={Gauge}
-          tone="blush"
-        />
       </div>
       <BatteryCurve reading={reading} compact={false} />
       {!reading.personal && (
         <p className="text-xs text-muted-foreground">
-          {t("Preliminär kurva – blir din egen när du loggat energi några dagar.")}
+          {t("Generell kurva tills det finns tillräckligt med egna energiloggar.")}
         </p>
       )}
       {open && (
         <div className="space-y-3 border-t border-border/50 pt-3">
           <p className="text-sm text-ink">
             {reading.trend === "stiger"
-              ? t("Din energi ökar.")
+              ? t("Kurvan visar en möjlig ökning.")
               : reading.trend === "sjunker"
-                ? t("Din energi minskar.")
-                : t("Din energi är stabil.")}
+                ? t("Kurvan visar en möjlig minskning.")
+                : t("Kurvan visar en ganska jämn nivå.")}
           </p>
           <div className="flex flex-wrap gap-2 text-xs">
             {reading.peak && (
@@ -138,8 +132,8 @@ export default function EnergyBattery({
 
   const block = (
     <MyFloveBlock
-      title={t("Just nu")}
-      subtitle={t("Din energi och ditt mående – det senaste du loggat")}
+      title={t("Beräknad energikurva")}
+      subtitle={t("En uppskattning, inte en mätning av din ork")}
       icon={BatteryCharging}
       tone="sun"
       surface="sun"
@@ -170,7 +164,7 @@ export default function EnergyBattery({
         )
       }
       collapsible={!href}
-      collapseId="energy-battery-now"
+      collapseId="energy-battery-estimate"
       className="@container"
     >
       {content}
@@ -214,7 +208,7 @@ function BatteryCurve({
         preserveAspectRatio="none"
         className={compact ? "h-10 w-full" : "h-24 w-full"}
         role="img"
-        aria-label={`${t("Energikurva över dagen.")} ${reading.summary}`}
+        aria-label={t("Beräknad energikurva över dagen. En uppskattning, inte en mätning.")}
       >
         <polygon
           points={`0,${h} ${points.join(" ")} ${w},${h}`}

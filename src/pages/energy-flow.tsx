@@ -32,7 +32,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
-import { useFlowScore } from "@/hooks/use-flowscore";
 import {
   categoryEmoji,
   categoryLabel,
@@ -113,7 +112,6 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
     addPreset,
     removePreset,
   } = useEnergyFlow();
-  const { flow } = useFlowScore();
   const { toast } = useToast();
   const { t } = useLang();
 
@@ -152,7 +150,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       setTitle("");
       setNote("");
       setAddOpen(false);
-      toast({ description: t("Tack – det räknas med i din kapacitet idag.") });
+      toast({ description: t("Sparat i din energihistorik. Din egen kapacitet ändras när du checkar in.") });
     } catch {
       toast({ description: t("Kunde inte spara just nu. Försök igen."), variant: "destructive" });
     } finally {
@@ -184,7 +182,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         emoji="🔋"
         title={t("Logga in för att använda Min energi")}
         description={t(
-          "Dina energiposter sparas till ditt konto så att Pace kan förstå din kapacitet.",
+          "Dina energiposter sparas till ditt konto så att du kan se vad som ger och tar energi.",
         )}
       />
     );
@@ -220,7 +218,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveBlock
           area="halsa"
           icon={Scale}
-          title={t("Dagens balans")}
+          title={t("Dagens energipåverkan")}
           subtitle={t("Vad har gett och tagit energi idag?")}
           collapsible
           status={`${t("Netto")} ${balance.net > 0 ? "+" : ""}${balance.net}`}
@@ -234,14 +232,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
               value={`${balance.net > 0 ? "+" : ""}${balance.net}`}
             />
           </div>
-          <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <span>
-              {t("Balans just nu:")} <span className="font-semibold text-ink">{flow.score}</span> (
-              {flow.label})
-            </span>
-            <Link href="/flowscore" className="underline">
-              {t("Så räknas den")}
-            </Link>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {t("Plus och minus summerar den styrka du registrerat. De är inte batteriprocent och ändrar inte din egen kapacitet.")}
           </p>
         </MyFloveBlock>
       </MyFloveWide>
@@ -648,7 +640,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
           <EnergyFlowSettings />
           <p className="text-sm text-muted-foreground">
             {t(
-              "Energiflödet skapar aldrig kalenderhändelser eller uppgifter. Det beskriver bara din kapacitet.",
+              "Energihistoriken visar vad som gett och tagit energi. Din kapacitet visas utifrån din egen incheckning.",
             )}
           </p>
         </MyFloveBlock>

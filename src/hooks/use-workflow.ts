@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { supabase } from "@/integrations/supabase/client";
+import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 import { todayKey, type WorkMeta } from "@/lib/workflow";
 
 const META_KEY = "myflove-workflow-meta";
@@ -48,28 +48,8 @@ export function useWorkflow() {
   return { metaMap, setMeta, dayChecks, toggleCheck, settings, setSettings };
 }
 
-/** Senaste energinivån (1–5) från Energikartan. */
+/** Samma kontobundna och reaktiva energiloggar som incheckningen. Ingen logg idag ger null. */
 export function useLatestEnergy() {
-  const [energy, setEnergy] = useState<number | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user || cancelled) return;
-      const { data } = await supabase
-        .from("energy_logs")
-        .select("level, logged_at")
-        .order("logged_at", { ascending: false })
-        .limit(1);
-      if (!cancelled && data && data.length) setEnergy(data[0].level as number);
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return energy;
+  const { todayEnergy } = useQuickCheckin();
+  return todayEnergy?.level ?? null;
 }

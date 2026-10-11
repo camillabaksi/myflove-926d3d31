@@ -22,9 +22,6 @@ import { EnergyFlowContent } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
-import { useEnergyBattery } from "@/hooks/use-energy-battery";
-import { useFlowScore } from "@/hooks/use-flowscore";
-import { orkWord } from "@/lib/ork-word";
 import { setCollapsed } from "@/lib/collapse-store";
 
 /**
@@ -37,8 +34,6 @@ import { setCollapsed } from "@/lib/collapse-store";
 export default function BatteryPage() {
   const { name } = useUserProfile();
   const { t, lang } = useLang();
-  const { reading } = useEnergyBattery();
-  const { flow } = useFlowScore();
   const [path] = useLocation();
   const checkinRef = useRef<HTMLDivElement>(null);
   const openCheckin = () => {
@@ -48,10 +43,6 @@ export default function BatteryPage() {
       checkinRef.current?.focus({ preventScroll: true });
     });
   };
-  const activeFactors = flow.factors
-    .filter((factor) => factor.delta !== 0)
-    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
-    .slice(0, 4);
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -70,50 +61,7 @@ export default function BatteryPage() {
           />
         </MyFloveWide>
 
-        <MyFloveWide>
-          <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
-            <div className="flex flex-wrap items-center gap-2">
-              <Battery className="h-6 w-6 text-primary" aria-hidden />
-              <h2 className="font-display text-lg font-bold text-ink">
-                Din uppskattade energi: {t(orkWord(reading.now).short)}
-              </h2>
-              <CollapsibleSection
-                id="battery-why"
-                title="Varför?"
-                defaultCollapsed
-                className="w-full border-t border-border/60 pt-2"
-                headingClassName="text-sm font-semibold text-primary"
-              >
-                <p className="text-sm text-muted-foreground">
-                  Ungefär {Math.round(reading.now)} %. Det här är en uppskattning, inte en mätning.
-                  Kurvan utgår från ditt Dagens balans just nu och tar hänsyn till planerade tider och
-                  registrerade energipåverkningar. Utan egna mönster används en generell kurva.
-                </p>
-                {activeFactors.length > 0 && (
-                  <>
-                    <p className="text-xs font-semibold text-ink">
-                      Det här påverkar Dagens balans just nu:
-                    </p>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      {activeFactors.map((factor) => (
-                        <li key={factor.source + factor.label}>
-                          {factor.label}: {factor.reading}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-                <p className="text-xs text-muted-foreground">
-                  {t(
-                    "Din registrerade energi och den uppskattade energikurvan är olika underlag. Dagens Capacity visas i Idag.",
-                  )}
-                </p>
-              </CollapsibleSection>
-            </div>
-          </section>
-        </MyFloveWide>
-
-        {/* Dagens val styr planen; den uppskattade kurvan gör det inte. */}
+        {/* Samma egenregistrerade värde som i Idag och Kalender. */}
         <MyFloveWide>
           <OrkSummary onCheckin={openCheckin} />
         </MyFloveWide>
@@ -174,10 +122,8 @@ export default function BatteryPage() {
           <CollapsibleSection
             id="battery-more-details"
             defaultCollapsed
-            title={t("Kapacitet & mönster")}
-            description={t(
-              "Historik som hjälper dig förstå tidigare dagar – den styr inte dagens plan.",
-            )}
+            title={t("Historik & mönster")}
+            description={t("Dina loggningar och en separat beräknad energikurva.")}
             className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
           >

@@ -123,7 +123,7 @@ export function DayEnergyFlow({
           help={
             <>
               {t(
-                "Mönster över vad du faktiskt gjort idag – inte din nuvarande nivå. Din energibild just nu är Mitt energibatteri. Minus betyder att det tog energi, plus att det gav.",
+                "Här summeras styrkan i det du registrerat som gett eller tagit energi. Plus och minus är inte batteriprocent. Din egen kapacitet visas i Idag och Kalender.",
               )}
             </>
           }

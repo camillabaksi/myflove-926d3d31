@@ -11,7 +11,7 @@ export { orkWord };
 export default function OrkSummary({ onCheckin }: { onCheckin?: () => void }) {
   return (
     <div data-testid="capacity-summary">
-      <CapacitySelector title="Dagens kapacitet" onCheckin={onCheckin} />
+      <CapacitySelector onCheckin={onCheckin} />
     </div>
   );
 }

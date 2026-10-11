@@ -198,7 +198,10 @@ export function useQuickCheckin() {
 
   /** Alla dagens energiobservationer, äldst → nyast. */
   const todayEnergyEntries = useMemo<EnergyLogEntry[]>(
-    () => energyEntries.filter((e) => isToday(e.logged_at)),
+    () =>
+      energyEntries
+        .filter((e) => isToday(e.logged_at))
+        .sort((a, b) => Date.parse(a.logged_at) - Date.parse(b.logged_at)),
     [energyEntries],
   );
 

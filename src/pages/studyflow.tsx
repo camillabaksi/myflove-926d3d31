@@ -338,8 +338,8 @@ export default function StudyflowPage() {
                   help="Utgår från din ork idag. Siffran är ett förslag, inte ett krav."
                 >
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Anpassat efter dagens balans {flow.score} och energi{" "}
-                    {energy ? `${energy}/5` : "okänd"} – ca {flow.capacityMinutes} min fokustid.
+                    Planeringsförslag: ungefär {flow.capacityMinutes} min fokustid, beräknat utifrån
+                    registrerad energi, mående och planeringen. Du väljer själv vad som passar.
                   </p>
                   {capacityPlan.plan.length ? (
                     <ul className="mt-3 space-y-2">
@@ -370,7 +370,7 @@ export default function StudyflowPage() {
                   )}
                   {capacityPlan.plannedMinutes > 0 && (
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Planerat {capacityPlan.plannedMinutes} min av {flow.capacityMinutes} min.
+                      Förslaget innehåller {capacityPlan.plannedMinutes} min.
                     </p>
                   )}
                   {capacityPlan.tooHeavy.length > 0 && (
