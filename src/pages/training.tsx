@@ -4,6 +4,9 @@ import Layout from "@/components/layout";
 import AdaptiveIntentPrompt from "@/components/adaptive-intent-prompt";
 import AreaFocus from "@/components/area-focus";
 import WorkoutBuilderPanel from "@/components/workout/workout-builder-panel";
+import { TrainingCreationChoice } from "@/components/workout/training-creation-choice";
+import { TrainingSessionVisual } from "@/components/workout/training-session-visual";
+import { ManualExercises } from "@/components/workout/manual-exercises";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -52,8 +55,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import CollapsibleSection from "@/components/collapsible-section";
 import { celebrateFromEvent } from "@/lib/celebrate";
-import { exerciseById } from "@/lib/exercise-library";
-import type { Workout } from "@/lib/workout-generator";
+import { manualWorkout, sessionFromWorkout } from "@/lib/training-program";
+import type { Workout, WorkoutBlock } from "@/lib/workout-generator";
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
@@ -79,7 +82,7 @@ const SECTIONS: {
   {
     id: "program",
     label: "Träningsprogram",
-    desc: "Mål, nivå och ditt program från Pace.",
+    desc: "Visuella pass med Pace eller ett eget upplägg.",
     icon: Dumbbell,
     hue: "205 45% 34%",
   },
@@ -131,6 +134,7 @@ export default function TrainingPage() {
     clearProgram,
     updateSession,
     addSession,
+    addSessions,
     removeSession,
     toggleSessionDone,
     setSteps,
@@ -164,6 +168,9 @@ export default function TrainingPage() {
     false,
   );
   const [showWorkoutBuilder, setShowWorkoutBuilder] = useState(false);
+  const [showProgramCreator, setShowProgramCreator] = useState(false);
+  const [programWorkout, setProgramWorkout] = useState<Workout | null>(null);
+  const [builderCreationKey, setBuilderCreationKey] = useState(0);
   const [weightInput, setWeightInput] = useState("");
   const [weightDate, setWeightDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [weightNote, setWeightNote] = useState("");
@@ -188,6 +195,11 @@ export default function TrainingPage() {
   const [limitations, setLimitations] = useState(state.goal?.limitations ?? "");
   const [loading, setLoading] = useState(false);
   const settingsRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!showProgramCreator) return;
+    settingsRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    settingsRef.current?.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
+  }, [showProgramCreator]);
 
   const [sessionEdit, setSessionEdit] = useState<{
     index: number | null;
@@ -196,6 +208,7 @@ export default function TrainingPage() {
     type: TrainingSession["type"];
     minutes: string;
     exercises: string;
+    blocks: WorkoutBlock[];
   } | null>(null);
 
   const openAddSession = () =>
@@ -206,6 +219,7 @@ export default function TrainingPage() {
       type: "styrka",
       minutes: "45",
       exercises: "",
+      blocks: [],
     });
 
   const openEditSession = (index: number) => {
@@ -217,7 +231,8 @@ export default function TrainingPage() {
       title: s.title,
       type: s.type,
       minutes: s.minutes ? String(s.minutes) : "",
-      exercises: s.exercises.join("\n"),
+      exercises: s.workout ? "" : s.exercises.join("\n"),
+      blocks: s.workout?.blocks ?? [],
     });
   };
 
@@ -243,18 +258,21 @@ export default function TrainingPage() {
       return;
     }
     const mins = Number(sessionEdit.minutes);
+    const previousWorkout = sessionEdit.index === null ? undefined : state.program?.sessions[sessionEdit.index]?.workout;
+    const visual = sessionEdit.blocks.length ? manualWorkout(sessionEdit.title.trim(), sessionEdit.blocks, sessionEdit.type, previousWorkout) : undefined;
     const base: Omit<TrainingSession, "day"> = {
       title: sessionEdit.title.trim(),
       type: sessionEdit.type,
       ...(Number.isFinite(mins) && mins > 0 ? { minutes: Math.round(mins) } : {}),
-      exercises: sessionEdit.exercises
+      exercises: visual ? sessionFromWorkout(visual).exercises : sessionEdit.exercises
         .split("\n")
         .map((l) => l.replace(/^[-•*\s]+/, "").trim())
         .filter(Boolean),
+      ...(visual ? { workout: visual, minutes: visual.minutes } : {}),
     };
     if (sessionEdit.index === null) {
       // Skapa ett pass per vald dag – samma innehåll, flera dagar.
-      for (const day of sessionEdit.days) addSession({ ...base, day });
+      addSessions(sessionEdit.days.map((day) => ({ ...base, day, ...(visual ? { workout: { ...visual, id: `manual-${crypto.randomUUID()}` } } : {}) })));
       toast({
         title:
           sessionEdit.days.length > 1
@@ -262,7 +280,11 @@ export default function TrainingPage() {
             : "Passet är tillagt",
       });
     } else {
-      updateSession(sessionEdit.index, { ...base, day: sessionEdit.days[0]! });
+      updateSession(sessionEdit.index, {
+        ...base,
+        day: sessionEdit.days[0]!,
+        workout: visual,
+      });
       toast({ title: "Passet är ändrat" });
     }
     setSessionEdit(null);
@@ -345,6 +367,7 @@ export default function TrainingPage() {
             }
           : program;
       saveProgram(payload, adjusted);
+      setShowProgramCreator(false);
       toast({ title: successTitle, description: program.intro });
     } catch (err) {
       toast({
@@ -369,6 +392,7 @@ export default function TrainingPage() {
     setLevel(g.level);
     setEquipment(g.equipment ?? "");
     setLimitations(g.limitations ?? "");
+    setShowProgramCreator(true);
     settingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     toast({
       title: "Redigera programmet",
@@ -404,20 +428,7 @@ export default function TrainingPage() {
   };
 
   const addWorkoutToProgram = (workout: Workout) => {
-    const session: TrainingSession = {
-      day: "Valfri dag",
-      title: workout.title,
-      type:
-        workout.intent === "rörlighet"
-          ? "rörlighet"
-          : workout.intent === "återhämtning"
-            ? "vila"
-            : "styrka",
-      minutes: workout.minutes,
-      exercises: workout.blocks
-        .map((block) => exerciseById(block.exerciseId)?.name)
-        .filter((name): name is string => name != null),
-    };
+    const session = sessionFromWorkout(workout);
 
     if (state.program) {
       addSession(session);
@@ -445,6 +456,7 @@ export default function TrainingPage() {
       title: "Tillagt i ditt program",
       description: `${workout.title} finns nu bland dina färdiga pass.`,
     });
+    setProgramWorkout(workout);
   };
 
   const week = lastDays(7);
@@ -994,50 +1006,19 @@ export default function TrainingPage() {
 
             {view === "program" && (
               <>
-                <section className="surface-card space-y-3 p-5" aria-label="Skapa mitt pass med Pace">
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                      <Sparkles size={20} aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <h2 className="text-lg font-semibold text-ink">Skapa mitt pass med Pace</h2>
-                      <p className="text-sm text-muted-foreground">
-                        Pace bygger ett pass efter din energi, tid och det kroppen behöver idag.
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    type="button"
-                    size="lg"
-                    className="min-h-12 w-full rounded-2xl"
-                    onClick={() => setShowWorkoutBuilder(true)}
-                  >
-                    <Sparkles size={18} aria-hidden /> Skapa mitt pass med Pace
-                  </Button>
-                </section>
-
-                <WorkoutBuilderPanel
-                  showBuilder={showWorkoutBuilder}
-                  onOpenBuilder={() => setShowWorkoutBuilder(true)}
-                  onCloseBuilder={() => setShowWorkoutBuilder(false)}
-                  onAddToProgram={addWorkoutToProgram}
+                <TrainingCreationChoice
+                  disabled={loading}
+                  onPace={() => setShowProgramCreator(true)}
+                  onManual={openAddSession}
                 />
 
-                <div className="pt-2">
-                  <h2 className="font-display text-xl font-bold text-ink">Mina program</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Dina färdiga veckoprogram och inställningar finns kvar här.
-                  </p>
-                </div>
-
-                <CollapsibleSection
-                  className="surface-card p-5"
-                  headingClassName="text-lg font-semibold text-ink"
-                  title="Ditt mål"
-                  help="Vad du tränar mot. Passen anpassas efter målet och hur mycket du orkar."
-                >
-                  <div ref={settingsRef as React.RefObject<HTMLDivElement>} />
+                {showProgramCreator && <section ref={settingsRef} className="surface-card space-y-4 p-5" aria-label="Mina önskemål för Pace">
+                  <h2 tabIndex={-1} className="text-xl font-semibold text-ink">Mina önskemål för Pace</h2>
+                  <p className="text-sm text-muted-foreground">Välj dagar och berätta vad som passar dig. Pace gör ett program med bildpass.</p>
+                  {state.program && <p className="text-sm text-muted-foreground">Ett nytt program ersätter passen i ditt nuvarande program när det är klart.</p>}
                   <Input
+                    aria-label="Ditt träningsmål"
+                    maxLength={300}
                     placeholder="T.ex. bli starkare i ryggen och orka springa 5 km"
                     value={goal}
                     onChange={(e) => setGoal(e.target.value)}
@@ -1098,10 +1079,10 @@ export default function TrainingPage() {
                       <Input
                         type="number"
                         min={10}
-                        max={180}
+                        max={90}
                         value={minutes}
                         onChange={(e) =>
-                          setMinutes(Math.min(180, Math.max(10, Number(e.target.value) || 45)))
+                          setMinutes(Math.min(90, Math.max(10, Number(e.target.value) || 45)))
                         }
                         className="rounded-xl mt-1"
                       />
@@ -1126,13 +1107,17 @@ export default function TrainingPage() {
                   </div>
 
                   <Input
+                    aria-label="Utrustning"
+                    maxLength={300}
                     placeholder="Utrustning (gym, hantlar, inget alls…)"
                     value={equipment}
                     onChange={(e) => setEquipment(e.target.value)}
                     className="rounded-xl"
                   />
                   <Input
-                    placeholder="Något att ta hänsyn till? (t.ex. ont i knät, låg energi)"
+                    aria-label="Något att ta hänsyn till"
+                    maxLength={500}
+                    placeholder="Något att ta hänsyn till? (t.ex. ont i knät)"
                     value={limitations}
                     onChange={(e) => setLimitations(e.target.value)}
                     className="rounded-xl"
@@ -1141,7 +1126,7 @@ export default function TrainingPage() {
                   {loading && (
                     <MyFloveThinking
                       steps={["🏃", "⚡", "📋", "✨"]}
-                      label="Jag sätter ihop ett pass som passar dig…"
+                      label="Pace sätter ihop ditt visuella program…"
                     />
                   )}
 
@@ -1155,16 +1140,38 @@ export default function TrainingPage() {
                     ) : (
                       <Sparkles size={16} />
                     )}
-                    {state.program ? "Gör ett nytt program" : "Skapa mitt program"}
+                    {state.program ? "Skapa nytt program med Pace" : "Skapa mitt program med Pace"}
                   </Button>
-                </CollapsibleSection>
+                  <Button type="button" variant="ghost" disabled={loading} onClick={() => setShowProgramCreator(false)}>Stäng önskemål</Button>
+                </section>}
 
+
+                <Button type="button" variant="outline" className="min-h-12 h-auto w-full whitespace-normal rounded-2xl" onClick={() => {
+                  setProgramWorkout(null);
+                  setBuilderCreationKey((key) => key + 1);
+                  setShowWorkoutBuilder(true);
+                }}>
+                  <Sparkles size={18} className="shrink-0" aria-hidden /> Skapa ett bildpass för idag
+                </Button>
+                <WorkoutBuilderPanel
+                  key={builderCreationKey}
+                  showBuilder={showWorkoutBuilder}
+                  programWorkout={programWorkout}
+                  onOpenBuilder={() => setShowWorkoutBuilder(true)}
+                  onCloseBuilder={() => setShowWorkoutBuilder(false)}
+                  onAddToProgram={addWorkoutToProgram}
+                  onWorkoutFinished={(workout) => {
+                    const index = state.program?.sessions.findIndex((session) => session.workout?.id === workout.id) ?? -1;
+                    if (index >= 0 && !doneToday.includes(index)) toggleSessionDone(index);
+                  }}
+                />
                 {/* Programmet */}
                 {state.program && (
                   <CollapsibleSection
                     className="surface-card p-5"
                     headingClassName="text-lg font-semibold text-ink"
-                    title="Din vecka"
+                    title="Mitt träningsprogram"
+                    id="Din vecka"
                     description={state.program.intro}
                     actions={
                       <Button
@@ -1215,8 +1222,8 @@ export default function TrainingPage() {
                               borderColor: `hsl(${hue} / 0.3)`,
                             }}
                           >
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
+                            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                              <div className="min-w-0">
                                 <div
                                   className="text-xs uppercase tracking-wide"
                                   style={{ color: `hsl(${hue})` }}
@@ -1226,12 +1233,12 @@ export default function TrainingPage() {
                                 </div>
                                 <div className="font-semibold text-ink">{s.title}</div>
                               </div>
-                              <div className="flex shrink-0 items-center gap-2">
+                              <div className="flex shrink-0 items-center justify-end gap-1">
                                 <button
                                   type="button"
                                   aria-label="Ändra passet"
                                   onClick={() => openEditSession(i)}
-                                  className="text-muted-foreground hover:text-ink"
+                                  className="flex h-11 w-11 items-center justify-center rounded-xl text-muted-foreground hover:text-ink"
                                 >
                                   <Pencil size={17} />
                                 </button>
@@ -1242,7 +1249,7 @@ export default function TrainingPage() {
                                     removeSession(i);
                                     toast({ title: "Passet är borttaget" });
                                   }}
-                                  className="text-muted-foreground hover:text-destructive"
+                                  className="flex h-11 w-11 items-center justify-center rounded-xl text-muted-foreground hover:text-destructive"
                                 >
                                   <Trash2 size={17} />
                                 </button>
@@ -1253,7 +1260,7 @@ export default function TrainingPage() {
                                     if (!done) celebrateFromEvent(e);
                                     toggleSessionDone(i);
                                   }}
-                                  className="shrink-0 text-primary"
+                                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-primary"
                                 >
                                   {done ? (
                                     <CheckCircle2 size={22} />
@@ -1263,7 +1270,10 @@ export default function TrainingPage() {
                                 </button>
                               </div>
                             </div>
-                            {s.exercises.length > 0 && (
+                            {s.workout ? <TrainingSessionVisual workout={s.workout} onOpen={() => {
+                              setProgramWorkout({ ...s.workout! });
+                              setShowWorkoutBuilder(true);
+                            }} /> : s.exercises.length > 0 && (
                               <ul className="mt-2 space-y-1 text-sm text-ink/80">
                                 {s.exercises.map((ex, j) => (
                                   <li key={j}>• {ex}</li>
@@ -1526,10 +1536,10 @@ export default function TrainingPage() {
       </MyFlovePageGrid>
 
       <Dialog open={sessionEdit !== null} onOpenChange={(o) => !o && setSessionEdit(null)}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="max-h-[85dvh] overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              {sessionEdit?.index === null ? "Lägg till pass" : "Ändra passet"}
+              {sessionEdit?.index === null ? "Skapa pass manuellt" : "Ändra passet"}
             </DialogTitle>
           </DialogHeader>
           {sessionEdit && (
@@ -1564,7 +1574,7 @@ export default function TrainingPage() {
                   </p>
                 )}
               </fieldset>
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
+              {sessionEdit.blocks.length === 0 && <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 <label className="text-sm text-muted-foreground">
                   Minuter
                   <Input
@@ -1576,7 +1586,7 @@ export default function TrainingPage() {
                     className="rounded-xl mt-1"
                   />
                 </label>
-              </div>
+              </div>}
               <label className="text-sm text-muted-foreground block">
                 Namn på passet
                 <Input
@@ -1601,7 +1611,9 @@ export default function TrainingPage() {
                   </button>
                 ))}
               </div>
-              <label className="text-sm text-muted-foreground block">
+              <ManualExercises disabled={Boolean(sessionEdit.exercises.trim() && !sessionEdit.blocks.length)} blocks={sessionEdit.blocks} onChange={(blocks) => setSessionEdit({ ...sessionEdit, blocks })} />
+              {sessionEdit.exercises.trim() && !sessionEdit.blocks.length && <p className="text-sm text-muted-foreground">Töm listan med egna övningar om du vill välja övningar med bilder istället.</p>}
+              {sessionEdit.blocks.length > 0 ? <p className="text-sm text-muted-foreground">Tiden räknas från dina övningar, set och vilor. Bildpasset sparas med dina val.</p> : <label className="text-sm text-muted-foreground block">
                 Övningar – en per rad
                 <Textarea
                   rows={5}
@@ -1609,7 +1621,7 @@ export default function TrainingPage() {
                   onChange={(e) => setSessionEdit({ ...sessionEdit, exercises: e.target.value })}
                   className="rounded-xl mt-1"
                 />
-              </label>
+              </label>}
             </div>
           )}
           <DialogFooter>

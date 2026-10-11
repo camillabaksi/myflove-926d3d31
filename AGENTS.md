@@ -15,6 +15,7 @@ Flow appearance, room scenes and memories: see src/components/flow/AGENTS.md.
 
 Paceable editorial/capture/help opt in to isolate legacy. BrandLogo uses approved originals and .dark; brand stones stay unchanged to prevent identity drift.
 Desktop Träning uses document navigation to avoid stalls.
+Training programs keep complete optional Workout payloads in the existing account-owned training store, retaining images, doses and runners across reloads; legacy text sessions stay valid. Pace's weekly generator selects only illustrated catalog IDs compatible with declared equipment/limitations, without forecasting energy. Manual creation uses the same store and never calls AI; edits preserve chosen visual blocks.
 Public landing demos never use account data/sync, protecting saved plans. Local data has one account owner; sync only while that owner is signed in to prevent shared-device leaks.
 Sync user_kv by read → three-way merge (sync-merge) → conditional write on updated_at, so concurrent devices never overwrite each other silently.
 Sensitive local keys never fall back to plaintext: keep them in memory and show status; encryption at rest must not depend on startup timing.

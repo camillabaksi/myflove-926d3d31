@@ -75,6 +75,8 @@ export function useTraining() {
         goal,
         program,
         createdAt: Date.now(),
+        // Completion indices from the replaced program cannot mark new passes done.
+        done: Object.fromEntries(Object.entries(prev.done).filter(([date]) => date !== todayKey())),
         stepGoal: program.stepGoal ?? prev.stepGoal,
       }));
     },
@@ -94,18 +96,32 @@ export function useTraining() {
     [setState],
   );
 
-  const addSession = useCallback(
-    (session: TrainingSession) => {
+  const addSessions = useCallback(
+    (added: TrainingSession[]) => {
+      if (!added.length) return;
       setState((prev) => {
-        if (!prev.program) return prev;
+        const first = added[0]!;
         return {
           ...prev,
-          program: { ...prev.program, sessions: [...prev.program.sessions, session] },
+          goal: prev.goal ?? {
+            goal: "Mitt eget träningsprogram",
+            focus: first.type === "styrka" || first.type === "kondition" ? first.type : "blandat",
+            daysPerWeek: new Set(added.map((session) => session.day)).size,
+            days: [...new Set(added.map((session) => session.day))],
+            minutesPerSession: first.minutes ?? 30,
+            level: "nybörjare",
+          },
+          program: {
+            ...(prev.program ?? { intro: "Ditt program, i din takt.", note: "Ändra passen när du vill." }),
+            sessions: [...(prev.program?.sessions ?? []), ...added],
+          },
         };
       });
     },
     [setState],
   );
+
+  const addSession = useCallback((session: TrainingSession) => addSessions([session]), [addSessions]);
 
   const removeSession = useCallback(
     (index: number) => {
@@ -303,6 +319,7 @@ export function useTraining() {
     clearProgram,
     updateSession,
     addSession,
+    addSessions,
     removeSession,
     toggleSessionDone,
     setSteps,

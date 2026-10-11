@@ -96,6 +96,8 @@ export interface WorkoutBuilderPanelProps {
   onOpenBuilder: () => void;
   onCloseBuilder: () => void;
   onAddToProgram: (workout: Workout) => void;
+  programWorkout?: Workout | null;
+  onWorkoutFinished?: (workout: Workout) => void;
 }
 
 export default function WorkoutBuilderPanel({
@@ -103,12 +105,15 @@ export default function WorkoutBuilderPanel({
   onOpenBuilder,
   onCloseBuilder,
   onAddToProgram,
+  programWorkout,
+  onWorkoutFinished,
 }: WorkoutBuilderPanelProps) {
   const [step, setStep] = useState<Step>("intent");
   const [req, setReq] = useState<WorkoutRequest>(DEFAULT_REQUEST);
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [autoMode, setAutoMode] = useState(true);
+  const [usedTemplate, setUsedTemplate] = useState(false);
   const { saved, logs, saveWorkout, removeWorkout, logWorkout } = useWorkouts();
   const { percent: capacityPercent } = useCapacityMode();
   const { addTask } = useTasks();
@@ -120,6 +125,14 @@ export default function WorkoutBuilderPanel({
   useEffect(() => {
     if (showBuilder) track("workout_builder_opened", { source: "traningsprogram" });
   }, [showBuilder]);
+
+  useEffect(() => {
+    if (!programWorkout) return;
+    setWorkout(programWorkout);
+    setDoneIds([]);
+    setUsedTemplate(false);
+    setStep("resultat");
+  }, [programWorkout]);
 
   useEffect(() => {
     setReq((r) => ({ ...r, energy: suggestedEnergy }));
@@ -181,6 +194,7 @@ export default function WorkoutBuilderPanel({
     }
 
     setWorkout(result ?? generateWorkout(parsed));
+    setUsedTemplate(!result);
     setDoneIds([]);
     setStep("resultat");
   };
@@ -200,6 +214,7 @@ export default function WorkoutBuilderPanel({
       title: `Träningspass: ${workout.title}`,
       dueDate: new Date().toISOString().slice(0, 10),
     });
+    if (doneCount > 0) onWorkoutFinished?.(workout);
     setStep("klar");
   };
 
@@ -361,6 +376,7 @@ export default function WorkoutBuilderPanel({
               <div className="surface-card p-4">
                 <h2 className="text-xl font-semibold text-ink">{workout.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{workout.note}</p>
+                {usedTemplate && <p role="status" className="mt-2 text-sm text-muted-foreground">Pace kunde inte svara just nu. Här är ett pass från bildbiblioteket utifrån dina val.</p>}
                 <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
                   <Badge>{workout.minutes} min</Badge>
                   <Badge>Energi: {workout.energy}</Badge>
@@ -444,6 +460,7 @@ export default function WorkoutBuilderPanel({
                     variant="outline"
                     className="h-12 flex-1 rounded-2xl"
                     onClick={() => onAddToProgram(workout)}
+                    disabled={programWorkout?.id === workout.id}
                   >
                     <Dumbbell size={16} className="mr-1" aria-hidden /> Lägg i mitt program
                   </Button>
