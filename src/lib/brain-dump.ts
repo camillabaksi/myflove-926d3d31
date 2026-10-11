@@ -286,6 +286,6 @@ export const CATEGORY_LABELS: Record<DumpCategory, string> = {
   task: "Att göra",
   shopping: "Inköp",
   reminder: "Kalender",
-  idea: "Quickflow",
+  idea: "Fånga",
   mood: "Mående",
 };

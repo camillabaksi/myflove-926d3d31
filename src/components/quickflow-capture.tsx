@@ -353,7 +353,7 @@ export function QuickflowCapture({
                     onClick={() => setLongChoice("keep")}
                     className="w-full rounded-xl sm:flex-1"
                   >
-                    {t("Behåll i Quickflow")}
+                    {t("Behåll i Fånga")}
                   </Button>
                 </div>
               </div>

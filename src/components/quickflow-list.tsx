@@ -340,7 +340,7 @@ export function QuickflowList() {
           </span>
         }
         help={t(
-          "Allt du skrivit i Quickflow. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar.",
+          "Allt du skrivit i Fånga. Välj om det ska bli en uppgift, en tid i kalendern – eller bara ligga kvar.",
         )}
         headingClassName="text-xl font-semibold"
         description={t("Ingenting här försvinner av sig självt. Jag håller det åt dig. 💙")}
@@ -348,7 +348,7 @@ export function QuickflowList() {
         {needsAnswer.length > 0 && (
           <div className="space-y-3">
             <p className="text-sm text-ink">
-              {t("Du har något i Quickflow som verkar ha blivit liggande 💜")}
+              {t("Du har något i Fånga som verkar ha blivit liggande 💜")}
             </p>
             {needsAnswer.map((item) => renderRow(item, renderStaleActions(item)))}
           </div>

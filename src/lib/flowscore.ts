@@ -164,9 +164,9 @@ export function computeFlowScore(input: FlowScoreInput, now = new Date()): FlowS
     factors.push({
       label: `${input.openThoughts} öppna tankar`,
       delta: d,
-      source: "Quickflow",
+      source: "Fånga",
       reading: `${input.openThoughts} osorterade tankar`,
-      why: "Osorterade tankar tar plats i huvudet. Sortera några i Quickflow så stiger scoren.",
+      why: "Osorterade tankar tar plats i huvudet. Sortera några i Fånga så stiger scoren.",
     });
   }
 

@@ -55,12 +55,12 @@ export function applyToDocument(s: NpfSettings) {
 const PLAIN_WORDS: Record<string, string> = {
   FlowPlan: "Ordning på dagen",
   FlowScore: "Hur mycket du orkar",
-  "Veckans översikt": "Veckan som gick",
+  "Veckans Flow": "Veckan som gick",
   Quickflow: "Skriv av dig",
   StudyFlow: "Plugg",
   StudyBuddy: "Plugghjälp",
   WorkFlow: "Jobbfokus",
-  "Insikter": "Tips för dig",
+  "MyFlove Insight": "Tips för dig",
   Pomodoro: "Timer",
   Feedback: "Tyck till",
 };
