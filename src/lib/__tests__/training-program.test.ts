@@ -19,6 +19,22 @@ const goal: TrainingGoal = {
 };
 
 describe("visual programs", () => {
+  it("keeps a chosen time limit across saving and reload without changing manual doses", () => {
+    const blocks = [
+      {
+        exerciseId: "sit-to-stand",
+        sets: 1,
+        reps: 6,
+        restSeconds: 30,
+        section: "huvuddel" as const,
+      },
+    ];
+    const workout = manualWorkout("Mitt korta pass", blocks, "styrka", undefined, 15);
+    const session = JSON.parse(JSON.stringify(sessionFromWorkout(workout)));
+    expect(session.minutes).toBe(15);
+    expect(session.workout.maxMinutes).toBe(15);
+    expect(session.workout.blocks).toEqual(blocks);
+  });
   it("preserves visual blocks, timing and instructions through saving and reload", () => {
     const workout = generateWorkout({ ...DEFAULT_REQUEST, minutes: 20 });
     const reloaded = JSON.parse(JSON.stringify(sessionFromWorkout(workout, "Fredag")));
@@ -105,7 +121,9 @@ describe("visual programs", () => {
     ];
     const workout = manualWorkout("Mitt pass", blocks, "styrka");
     expect(workout.blocks).toEqual(blocks);
-    expect(sessionFromWorkout(workout).exercises).toEqual(["Sitt-till-stå (box squat) – 1 × 6 reps"]);
+    expect(sessionFromWorkout(workout).exercises).toEqual([
+      "Sitt-till-stå (box squat) – 1 × 6 reps",
+    ]);
     expect(manualWorkout("Nytt namn", blocks, "styrka", workout).id).toBe(workout.id);
   });
 });

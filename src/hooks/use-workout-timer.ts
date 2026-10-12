@@ -17,6 +17,7 @@ export interface WorkoutTimerState {
   remaining: number | null;
   running: boolean;
   finished: boolean;
+  elapsedSeconds: number;
   /** Övning x av y, räknat på unika block. */
   exerciseNumber: number;
   totalExercises: number;
@@ -24,6 +25,7 @@ export interface WorkoutTimerState {
   resume: () => void;
   toggle: () => void;
   next: () => void;
+  completeStep: () => void;
   previous: () => void;
   restart: () => void;
 }
@@ -35,13 +37,21 @@ export function useWorkoutTimer(
     onStepStart?: (step: TimelineStep) => void;
     onFinish?: () => void;
     autoStart?: boolean;
+    limitSeconds?: number;
+    onStepComplete?: (step: TimelineStep) => void;
   },
 ): WorkoutTimerState {
-  const { totalExercises, onStepStart, onFinish, autoStart = true } = options;
+  const { totalExercises, onStepStart, onFinish, autoStart = true, limitSeconds } = options;
   const [stepIndex, setStepIndex] = useState(0);
   const [running, setRunning] = useState(autoStart);
   const [finished, setFinished] = useState(false);
   const [remaining, setRemaining] = useState<number | null>(null);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const elapsedMsRef = useRef(0);
+  const activeSinceRef = useRef<number | null>(null);
+  const finishedRef = useRef(false);
+  const onStepCompleteRef = useRef(options.onStepComplete);
+  onStepCompleteRef.current = options.onStepComplete;
 
   const endsAtRef = useRef<number | null>(null);
   const startedRef = useRef<string | null>(null);
@@ -51,6 +61,33 @@ export function useWorkoutTimer(
   onFinishRef.current = onFinish;
 
   const step = steps[stepIndex];
+
+  const finish = useCallback(() => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    setFinished(true);
+    setRunning(false);
+    onFinishRef.current?.();
+  }, []);
+
+  // Maxtiden gäller aktiv passtid och räknar därför inte pauser.
+  useEffect(() => {
+    if (!running || finished) return;
+    activeSinceRef.current = Date.now();
+    const tick = () => {
+      const ms = elapsedMsRef.current + Date.now() - (activeSinceRef.current ?? Date.now());
+      const seconds = Math.floor(ms / 1000);
+      setElapsedSeconds(seconds);
+      if (Number.isFinite(limitSeconds) && limitSeconds! > 0 && seconds >= limitSeconds!) finish();
+    };
+    const id = window.setInterval(tick, 250);
+    return () => {
+      window.clearInterval(id);
+      if (activeSinceRef.current != null)
+        elapsedMsRef.current += Date.now() - activeSinceRef.current;
+      activeSinceRef.current = null;
+    };
+  }, [running, finished, limitSeconds, finish]);
 
   // Nytt moment: nollställ klockan och meddela UI:t en gång.
   useEffect(() => {
@@ -70,14 +107,12 @@ export function useWorkoutTimer(
   const goTo = useCallback(
     (index: number) => {
       if (index >= steps.length) {
-        setFinished(true);
-        setRunning(false);
-        onFinishRef.current?.();
+        finish();
         return;
       }
       setStepIndex(Math.max(0, index));
     },
-    [steps.length],
+    [steps.length, finish],
   );
 
   // Själva nedräkningen.
@@ -88,7 +123,10 @@ export function useWorkoutTimer(
       if (endsAt == null) return;
       const left = Math.max(0, Math.ceil((endsAt - Date.now()) / 1000));
       setRemaining(left);
-      if (left <= 0) goTo(stepIndex + 1);
+      if (left <= 0 && !finishedRef.current) {
+        onStepCompleteRef.current?.(step);
+        goTo(stepIndex + 1);
+      }
     };
     const id = window.setInterval(tick, 250);
     tick();
@@ -122,6 +160,10 @@ export function useWorkoutTimer(
   }, [running, pause, resume]);
 
   const next = useCallback(() => goTo(stepIndex + 1), [goTo, stepIndex]);
+  const completeStep = useCallback(() => {
+    if (step) onStepCompleteRef.current?.(step);
+    goTo(stepIndex + 1);
+  }, [step, goTo, stepIndex]);
 
   const previous = useCallback(() => {
     if (stepIndex === 0) {
@@ -144,6 +186,7 @@ export function useWorkoutTimer(
       while (target > 0 && steps[target - 1]?.blockIndex === steps[target]?.blockIndex) target -= 1;
     }
     setFinished(false);
+    finishedRef.current = false;
     goTo(target);
   }, [goTo, stepIndex, steps]);
 
@@ -152,6 +195,10 @@ export function useWorkoutTimer(
     setFinished(false);
     setStepIndex(0);
     setRunning(true);
+    finishedRef.current = false;
+    elapsedMsRef.current = 0;
+    activeSinceRef.current = Date.now();
+    setElapsedSeconds(0);
   }, []);
 
   const exerciseNumber = useMemo(() => {
@@ -166,12 +213,14 @@ export function useWorkoutTimer(
     remaining,
     running,
     finished,
+    elapsedSeconds,
     exerciseNumber,
     totalExercises,
     pause,
     resume,
     toggle,
     next,
+    completeStep,
     previous,
     restart,
   };

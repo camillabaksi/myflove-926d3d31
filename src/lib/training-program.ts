@@ -21,7 +21,7 @@ export function sessionFromWorkout(workout: Workout, day = "Valfri dag"): Traini
         : workout.intent === "återhämtning"
           ? "vila"
           : "styrka",
-    minutes: workout.minutes,
+    minutes: workout.maxMinutes ?? workout.minutes,
     exercises: workout.blocks.map((block) => {
       const name = exerciseById(block.exerciseId)?.name ?? block.exerciseId;
       const dose = block.seconds
@@ -50,6 +50,7 @@ export function manualWorkout(
   blocks: WorkoutBlock[],
   type: TrainingSession["type"],
   previous?: Workout,
+  maxMinutes?: number,
 ): Workout {
   const workout: Workout = {
     ...DEFAULT_REQUEST,
@@ -71,6 +72,9 @@ export function manualWorkout(
     intent: type === "rörlighet" ? "rörlighet" : type === "vila" ? "återhämtning" : "eget",
     kcalLow: 0,
     kcalHigh: 0,
+    ...(Number.isFinite(maxMinutes) && maxMinutes! >= 5 && maxMinutes! <= 180
+      ? { maxMinutes: Math.round(maxMinutes!) }
+      : {}),
   };
   workout.minutes = workoutMinutes(workout);
   // Use the same coarse range as the existing generator.
