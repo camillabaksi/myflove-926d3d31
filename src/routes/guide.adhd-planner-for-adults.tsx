@@ -1,3 +1,4 @@
+import { PublicPage } from "@/components/landing/public-page";
 import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -47,11 +48,9 @@ export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
 
 function GuidePage() {
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-16">
+    <PublicPage>
+      <div className="px-5 py-12 sm:px-8 sm:py-16">
       <div className="mx-auto max-w-2xl">
-        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-[#7C5CE0] font-semibold">
-          ← Paceable
-        </Link>
         <h1 className="mt-4 font-display text-4xl md:text-5xl font-bold leading-tight">
           ADHD-planner för vuxna: så väljer du en som faktiskt håller
         </h1>
@@ -151,18 +150,9 @@ function GuidePage() {
           </p>
         </article>
 
-        <div className="mt-16 flex flex-wrap gap-4 text-sm">
-          <Link to="/" className="text-[#7C5CE0] underline">
-            Hem
-          </Link>
-          <Link to="/sign-up" className="text-[#7C5CE0] underline">
-            Skapa konto
-          </Link>
-          <Link to="/integritet" className="text-[#7C5CE0] underline">
-            Integritet
-          </Link>
-        </div>
+
       </div>
-    </main>
+      </div>
+    </PublicPage>
   );
 }

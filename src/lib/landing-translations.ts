@@ -3,6 +3,8 @@ import { currentCopyDictionary } from "@/lib/public-copy";
 
 export const LANDING_EN: Record<string, string> = currentCopyDictionary({
   "Paceable, startsida": "Paceable, home page",
+  "ADHD-guide": "ADHD guide",
+  "Till innehållet": "Skip to content",
   "Huvudmeny": "Main menu",
   "Mobil meny": "Mobile menu",
   "Hem": "Home",
