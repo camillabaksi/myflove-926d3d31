@@ -1,5 +1,13 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_BATTERY: Record<string, string> = {
+  "Energipåverkan sparad": "Energy influence saved",
+  "Du har loggat något som tog energi. Uppdatera batteriet om din ork har ändrats.":
+    "You logged something that took energy. Update your battery if your energy has changed.",
+  "Du har loggat något som gav energi. Uppdatera batteriet om din ork har ändrats.":
+    "You logged something that gave energy. Update your battery if your energy has changed.",
+  "Sparat i din energihistorik.": "Saved in your energy history.",
+  "Uppdatera mitt batteri": "Update my battery",
+  "Batteriet är uppdaterat.": "Your battery is updated.",
   "Använd energipåverkan i appens beräkningar": "Use energy influences in the app's estimates",
   "Gäller den beräknade kurvan och planeringsförslagen. Din egen registrerade kapacitet ändras inte. Dina poster finns kvar när du stänger av.":
     "Applies to the estimated curve and planning suggestions. Your own logged capacity does not change. Your entries remain when you turn this off.",

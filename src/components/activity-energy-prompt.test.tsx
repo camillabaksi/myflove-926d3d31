@@ -20,6 +20,7 @@ const savedEntry = (input: NewEnergyFactor): EnergyFactorEntry => ({
 const addFactor = vi.fn<(input: NewEnergyFactor) => Promise<EnergyFactorEntry | null>>();
 const setTaskActualEnergy = vi.fn();
 const setHistoryEnergy = vi.fn();
+const announceSavedEnergy = vi.hoisted(() => vi.fn());
 let records: InstanceRecord[] = [];
 let entries: EnergyFactorEntry[] = [];
 vi.mock("@/hooks/use-energy-flow", () => ({ useEnergyFlow: () => ({ addFactor, entries }) }));
@@ -28,6 +29,7 @@ vi.mock("@/hooks/use-activity-history", () => ({
   useActivityHistory: () => ({ records, setEnergy: setHistoryEnergy }),
 }));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
+vi.mock("@/lib/energy-save-feedback", () => ({ announceSavedEnergy }));
 
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
@@ -42,6 +44,7 @@ beforeEach(() => {
   addFactor.mockImplementation(async (input) => savedEntry(input));
   setTaskActualEnergy.mockReset();
   setHistoryEnergy.mockReset();
+  announceSavedEnergy.mockReset();
 });
 
 describe("aktivitetens faktiska energipåverkan", () => {
@@ -58,6 +61,10 @@ describe("aktivitetens faktiska energipåverkan", () => {
       occurredAt: input.occurredAt,
     });
     expect(setTaskActualEnergy).not.toHaveBeenCalled();
+    expect(announceSavedEnergy).toHaveBeenCalledWith(
+      expect.objectContaining({ id: input.id }),
+      "2026-10-10",
+    );
   });
 
   it("låter användaren försöka igen med samma energipost efter ett fel", async () => {
@@ -69,6 +76,7 @@ describe("aktivitetens faktiska energipåverkan", () => {
     expect(onClose).not.toHaveBeenCalled();
     expect(setHistoryEnergy).not.toHaveBeenCalled();
     expect(setTaskActualEnergy).not.toHaveBeenCalled();
+    expect(announceSavedEnergy).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: /Tog energi/ }));
     await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
     expect(addFactor.mock.calls[1][0].id).toBe(addFactor.mock.calls[0][0].id);
@@ -84,6 +92,7 @@ describe("aktivitetens faktiska energipåverkan", () => {
     await screen.findByRole("alert");
     expect(setHistoryEnergy).not.toHaveBeenCalled();
     expect(onClose).not.toHaveBeenCalled();
+    expect(announceSavedEnergy).not.toHaveBeenCalled();
   });
 
   it("uppdaterar en befintlig förekomst i samma energipost", async () => {
@@ -153,6 +162,7 @@ describe("aktivitetens faktiska energipåverkan", () => {
     expect(setHistoryEnergy).not.toHaveBeenCalled();
     expect(setTaskActualEnergy).not.toHaveBeenCalled();
     expect(onClose).toHaveBeenCalledOnce();
+    expect(announceSavedEnergy).not.toHaveBeenCalled();
   });
 
   it("väntar på bekräftelse och stoppar dubbeltryck", async () => {

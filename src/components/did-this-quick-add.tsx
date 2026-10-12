@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { track } from "@/lib/analytics";
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 import {
   DID_SUGGESTIONS,
   FRICTION_LEVELS,
@@ -88,11 +89,14 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
         friction: s.friction,
         occurredAt: occurredAtFor(when),
       });
+      if (!entry) throw new Error("Energiposten kunde inte sparas.");
       track("did_this_logged", { source: "lagg-till" });
-      setLast(entry ?? null);
-      toast({ description: `${s.title} – tillagt. Det påverkar ditt batteri.` });
+      setLast(entry);
+      announceSavedEnergy(entry);
+      return true;
     } catch {
       toast({ description: "Kunde inte spara just nu.", variant: "destructive" });
+      return false;
     } finally {
       setBusy(false);
     }
@@ -101,7 +105,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   const addCustom = async () => {
     const title = text.trim();
     if (!title) return;
-    await add({
+    const saved = await add({
       title,
       emoji: "✨",
       direction,
@@ -110,7 +114,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
       kind: when === "nu" ? "spontant" : "vardag",
       friction: 2,
     });
-    setText("");
+    if (saved) setText("");
   };
 
   if (!signedIn) return null;
