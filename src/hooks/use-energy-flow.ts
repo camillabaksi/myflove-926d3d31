@@ -1,3 +1,4 @@
+import { addDaysISO, dayOf, parseISODate } from "@/lib/day";
 import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ACCOUNT_BOUND_EVENT, useCloudSyncedStorage, getSyncUser } from "@/lib/cloud-storage";
@@ -119,7 +120,7 @@ const load = () =>
       // poster i samma store i stället för att ersätta dem med ett äldre svar.
       const entries = new Map(((rows ?? []) as Row[]).map((row) => [row.id, toEntry(row)]));
       for (const entry of store.entries) {
-        if (before.get(entry.id) !== entry) entries.set(entry.id, entry);
+        if (entry.occurredAt < since || before.get(entry.id) !== entry) entries.set(entry.id, entry);
       }
       setStore({
         userId: user.id,
@@ -185,6 +186,7 @@ export function useEnergyFlow(): {
   setSettings: (s: EnergyFlowSettings) => void;
   loading: boolean;
   signedIn: boolean;
+  loadDay: (date: string) => Promise<void>;
   addFactor: (input: NewEnergyFactor) => Promise<EnergyFactorEntry | null>;
   removeFactor: (id: string) => Promise<void>;
   updateFactor: (
@@ -317,40 +319,81 @@ export function useEnergyFlow(): {
     }
   }, []);
 
+  const loadDay = useCallback(async (date: string) => {
+    const uid = store.userId;
+    const epoch = generation;
+    if (!uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error("Ogiltigt datum.");
+    const start = parseISODate(date); start.setHours(0, 0, 0, 0);
+    const end = parseISODate(addDaysISO(date, 1)); end.setHours(0, 0, 0, 0);
+    const before = new Map(store.entries.map((entry) => [entry.id, entry]));
+    const fetched: EnergyFactorEntry[] = [];
+    for (let offset = 0; ; offset += 500) {
+      const { data, error } = await supabase.from("energy_factors")
+        .select("id, title, direction, strength, category, kind, friction, note, counts_toward_score, occurred_at")
+        .eq("user_id", uid).gte("occurred_at", start.toISOString()).lt("occurred_at", end.toISOString())
+        .order("occurred_at", { ascending: false }).order("id").range(offset, offset + 499);
+      if (error) throw error;
+      if (store.userId !== uid || !isActiveOwner(uid) || epoch !== generation) throw new Error("Kontot ändrades.");
+      const rows = (data ?? []) as Row[];
+      fetched.push(...rows.map(toEntry));
+      if (rows.length < 500) break;
+    }
+    const merged = new Map(fetched.map((entry) => [entry.id, entry]));
+    for (const entry of store.entries) {
+      if (dayOf(entry.occurredAt) !== date || before.get(entry.id) !== entry) merged.set(entry.id, entry);
+    }
+    // A deletion made during the read must not be resurrected by its response.
+    for (const [id, entry] of before) {
+      if (dayOf(entry.occurredAt) === date && !store.entries.some((current) => current.id === id)) merged.delete(id);
+    }
+    setStore({ entries: [...merged.values()].sort((a, b) => b.occurredAt.localeCompare(a.occurredAt)) });
+  }, []);
+
   const updateFactor = useCallback(
     async (
       id: string,
-      patch: Partial<
-        Pick<EnergyFactorEntry, "direction" | "strength" | "friction" | "kind" | "title">
-      >,
+      patch: Partial<Pick<EnergyFactorEntry, "direction" | "strength" | "friction" | "kind" | "title">>,
     ) => {
-      const prev = store.entries;
-      setStore({ entries: prev.map((e) => (e.id === id ? { ...e, ...patch } : e)) });
-      const { error } = await supabase
-        .from("energy_factors")
-        .update({
+      const uid = store.userId;
+      if (!uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+      const previous = store.entries.find((entry) => entry.id === id);
+      if (!previous) throw new Error("Posten finns inte längre.");
+      const rollback = Object.fromEntries(Object.keys(patch).map((key) => [key, previous[key]]));
+      setStore({ entries: store.entries.map((entry) => entry.id === id ? { ...entry, ...patch } : entry) });
+      try {
+        const { error } = await supabase.from("energy_factors").update({
           ...(patch.direction ? { direction: patch.direction } : {}),
           ...(patch.strength != null ? { strength: patch.strength } : {}),
           ...(patch.friction !== undefined ? { friction: patch.friction } : {}),
           ...(patch.kind ? { kind: patch.kind } : {}),
           ...(patch.title ? { title: patch.title } : {}),
-        })
-        .eq("id", id);
-      if (error) setStore({ entries: prev });
-    },
-    [],
+        }).eq("id", id).eq("user_id", uid);
+        if (error) throw error;
+        if (store.userId !== uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+      } catch (error) {
+        if (store.userId === uid && isActiveOwner(uid))
+          setStore({ entries: store.entries.map((entry) => entry.id === id ? { ...entry, ...rollback } : entry) });
+        throw error;
+      }
+    }, [],
   );
 
   const toggleCounts = useCallback(async (id: string, counts: boolean) => {
-    const prev = store.entries;
-    setStore({
-      entries: prev.map((e) => (e.id === id ? { ...e, countsTowardScore: counts } : e)),
-    });
-    const { error } = await supabase
-      .from("energy_factors")
-      .update({ counts_toward_score: counts })
-      .eq("id", id);
-    if (error) setStore({ entries: prev });
+    const uid = store.userId;
+    if (!uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+    const previous = store.entries.find((entry) => entry.id === id);
+    if (!previous) throw new Error("Posten finns inte längre.");
+    setStore({ entries: store.entries.map((entry) => entry.id === id ? { ...entry, countsTowardScore: counts } : entry) });
+    try {
+      const { error } = await supabase.from("energy_factors").update({ counts_toward_score: counts }).eq("id", id).eq("user_id", uid);
+      if (error) throw error;
+      if (store.userId !== uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+    } catch (error) {
+      if (store.userId === uid && isActiveOwner(uid))
+        setStore({ entries: store.entries.map((entry) => entry.id === id ? { ...entry, countsTowardScore: previous.countsTowardScore } : entry) });
+      throw error;
+    }
   }, []);
 
   const addPreset = useCallback(async (input: Omit<EnergyPreset, "id">) => {
@@ -403,6 +446,7 @@ export function useEnergyFlow(): {
     loading,
     signedIn: !!userId,
     addFactor,
+    loadDay,
     removeFactor,
     updateFactor,
     toggleCounts,
