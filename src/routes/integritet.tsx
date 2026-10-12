@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/integritet")({
@@ -18,14 +19,14 @@ export const Route = createFileRoute("/integritet")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Integritetspolicy – Paceable" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { property: "og:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
-      { property: "og:url", content: "https://myflove.lovable.app/integritet" },
+      { name: "twitter:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/integritet` },
     ],
-    links: [{ rel: "canonical", href: "https://myflove.lovable.app/integritet" }],
+    links: [{ rel: "canonical", href: `${PUBLIC_BASE_URL}/integritet` }],
   }),
   component: PrivacyPage,
 });

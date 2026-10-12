@@ -73,6 +73,7 @@ import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppProfilRouteImport } from './routes/_app.profil'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
 import { Route as AppRelationerRouteImport } from './routes/_app.relationer'
+import { Route as AppRutinerRouteImport } from './routes/_app.rutiner'
 import { Route as AppShoppingRouteImport } from './routes/_app.shopping'
 import { Route as AppSkapaPassRouteImport } from './routes/_app.skapa-pass'
 import { Route as AppStadningRouteImport } from './routes/_app.stadning'
@@ -418,6 +419,11 @@ const AppRelationerRoute = AppRelationerRouteImport.update({
   path: '/relationer',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRutinerRoute = AppRutinerRouteImport.update({
+  id: '/rutiner',
+  path: '/rutiner',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppShoppingRoute = AppShoppingRouteImport.update({
   id: '/shopping',
   path: '/shopping',
@@ -601,6 +607,7 @@ export interface FileRoutesByFullPath {
   '/profil': typeof AppProfilRoute
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
+  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/skapa-pass': typeof AppSkapaPassRoute
   '/stadning': typeof AppStadningRoute
@@ -689,6 +696,7 @@ export interface FileRoutesByTo {
   '/profil': typeof AppProfilRoute
   '/quickflow': typeof AppQuickflowRoute
   '/relationer': typeof AppRelationerRoute
+  '/rutiner': typeof AppRutinerRoute
   '/shopping': typeof AppShoppingRoute
   '/skapa-pass': typeof AppSkapaPassRoute
   '/stadning': typeof AppStadningRoute
@@ -779,6 +787,7 @@ export interface FileRoutesById {
   '/_app/profil': typeof AppProfilRoute
   '/_app/quickflow': typeof AppQuickflowRoute
   '/_app/relationer': typeof AppRelationerRoute
+  '/_app/rutiner': typeof AppRutinerRoute
   '/_app/shopping': typeof AppShoppingRoute
   '/_app/skapa-pass': typeof AppSkapaPassRoute
   '/_app/stadning': typeof AppStadningRoute
@@ -869,6 +878,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/quickflow'
     | '/relationer'
+    | '/rutiner'
     | '/shopping'
     | '/skapa-pass'
     | '/stadning'
@@ -957,6 +967,7 @@ export interface FileRouteTypes {
     | '/profil'
     | '/quickflow'
     | '/relationer'
+    | '/rutiner'
     | '/shopping'
     | '/skapa-pass'
     | '/stadning'
@@ -1046,6 +1057,7 @@ export interface FileRouteTypes {
     | '/_app/profil'
     | '/_app/quickflow'
     | '/_app/relationer'
+    | '/_app/rutiner'
     | '/_app/shopping'
     | '/_app/skapa-pass'
     | '/_app/stadning'
@@ -1549,6 +1561,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRelationerRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/rutiner': {
+      id: '/_app/rutiner'
+      path: '/rutiner'
+      fullPath: '/rutiner'
+      preLoaderRoute: typeof AppRutinerRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/shopping': {
       id: '/_app/shopping'
       path: '/shopping'
@@ -1762,6 +1781,7 @@ interface AppRouteChildren {
   AppProfilRoute: typeof AppProfilRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
   AppRelationerRoute: typeof AppRelationerRoute
+  AppRutinerRoute: typeof AppRutinerRoute
   AppShoppingRoute: typeof AppShoppingRoute
   AppSkapaPassRoute: typeof AppSkapaPassRoute
   AppStadningRoute: typeof AppStadningRoute
@@ -1827,6 +1847,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProfilRoute: AppProfilRoute,
   AppQuickflowRoute: AppQuickflowRoute,
   AppRelationerRoute: AppRelationerRoute,
+  AppRutinerRoute: AppRutinerRoute,
   AppShoppingRoute: AppShoppingRoute,
   AppSkapaPassRoute: AppSkapaPassRoute,
   AppStadningRoute: AppStadningRoute,

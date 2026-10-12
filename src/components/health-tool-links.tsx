@@ -15,7 +15,7 @@ const tools = [
     description: "Rutiner och dagens doser.",
   },
   {
-    href: "/daglig-rutin",
+    href: "/daglig-rutin#Morgonstart",
     icon: Sunrise,
     title: "Morgonstart",
     description: "En lugn start på dagen.",

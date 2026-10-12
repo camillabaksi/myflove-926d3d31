@@ -1,3 +1,4 @@
+import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
@@ -183,7 +184,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
     return (
       <MyFloveEmptyState
         emoji="🔋"
-        title={t("Logga in för att använda Min energi")}
+        title={t("Logga in för att använda Energimönster")}
         description={t(
           "Dina energiposter sparas till ditt konto så att du kan se vad som ger och tar energi.",
         )}
@@ -197,7 +198,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         <MyFloveWide>
           <MyFloveHeader
             area="halsa"
-            title={t("Min energi – historik och mönster")}
+            title={t(APP_DESTINATIONS["/energifloede"].label)}
             emoji="📈"
             description={t("Se vad som brukar ge och ta energi över tid.")}
             why={t(

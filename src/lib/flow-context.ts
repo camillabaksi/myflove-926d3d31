@@ -1,3 +1,4 @@
+import { APP_DESTINATIONS } from "./app-destinations";
 // Flow ska veta var i appen du står, så första förslaget passar platsen.
 
 import type { LifeArea } from "./life-areas";
@@ -74,6 +75,11 @@ export const AREA_SHORTCUTS: Record<LifeArea, FlowShortcut[]> = {
     { href: "/idag", label: "Idag", emoji: "❤️" },
   ],
 };
+Object.values(AREA_SHORTCUTS).forEach((shortcuts) => shortcuts.forEach((shortcut) => {
+  const destination = APP_DESTINATIONS[shortcut.href];
+  if (destination) shortcut.label = destination.label;
+}));
+
 
 const PLACES: Record<string, { label: string; prompt: string; area: LifeArea }> = {
   "/idag": { label: "Idag", prompt: "Hjälp mig göra dagens plan rimlig.", area: "vardag" },

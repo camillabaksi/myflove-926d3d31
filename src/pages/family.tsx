@@ -1,3 +1,4 @@
+import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useUser, useClerk, Show } from "@clerk/react";
@@ -407,7 +408,7 @@ export default function FamilyPage() {
           <div className="space-y-8">
             <div>
               <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
-                <MyFloveHeart size={26} /> Familj
+                <MyFloveHeart size={26} /> {APP_DESTINATIONS["/familj"].label}
               </h1>
               <p className="text-muted-foreground">
                 Skapa eller gå med i en familj för att dela kalender och matlista.

@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { track } from "@/lib/analytics";
 import { isDemoUser, setDemoSession } from "@/lib/demo-account";
 import { useState } from "react";
@@ -31,9 +32,9 @@ export const Route = createFileRoute("/sign-in")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Logga in – Paceable" },
-      { property: "og:url", content: "https://myflove.lovable.app/sign-in" },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/sign-in` },
     ],
-    links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-in" }],
+    links: [{ rel: "canonical", href: `${PUBLIC_BASE_URL}/sign-in` }],
   }),
   validateSearch: (s: Record<string, unknown>): { next?: string } =>
     typeof s.next === "string" ? { next: s.next } : {},

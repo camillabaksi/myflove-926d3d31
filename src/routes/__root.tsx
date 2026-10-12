@@ -1,5 +1,7 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  Link,
   Outlet,
   createRootRouteWithContext,
   HeadContent,
@@ -82,20 +84,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@graph": [
             {
               "@type": "Organization",
-              "@id": "https://myflove.lovable.app/#organization",
+              "@id": `${PUBLIC_BASE_URL}/#organization`,
               name: "Paceable",
-              url: "https://myflove.lovable.app/",
-              logo: `https://myflove.lovable.app${brandLight.url}`,
+              url: `${PUBLIC_BASE_URL}/`,
+              logo: `${PUBLIC_BASE_URL}${brandLight.url}`,
               description:
                 "Paceable är ett lugnt dashboard för vardagen – kalender, uppgifter, humör, ekonomi, familj och studier på ett ställe.",
             },
             {
               "@type": "WebSite",
-              "@id": "https://myflove.lovable.app/#website",
+              "@id": `${PUBLIC_BASE_URL}/#website`,
               name: "Paceable",
-              url: "https://myflove.lovable.app/",
+              url: `${PUBLIC_BASE_URL}/`,
               inLanguage: "sv-SE",
-              publisher: { "@id": "https://myflove.lovable.app/#organization" },
+              publisher: { "@id": `${PUBLIC_BASE_URL}/#organization` },
               description:
                 "Ett mjukt dashboard för din vardag — fokus, humör, uppgifter, ekonomi och mer.",
             },
@@ -105,6 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
   }),
 
+  notFoundComponent: NotFoundPage,
   shellComponent: RootShell,
   component: RootComponent,
 });
@@ -177,5 +180,18 @@ function RootComponent() {
         </div>
       </TooltipProvider>
     </QueryClientProvider>
+  );
+}
+
+function NotFoundPage() {
+  return (
+    <main className="mx-auto max-w-lg space-y-4 px-6 py-16">
+      <h1 className="font-display text-3xl">Sidan kunde inte hittas</h1>
+      <p>Länken kan vara gammal. Du kan gå tillbaka eller fortsätta till Idag.</p>
+      <div className="flex flex-wrap gap-4">
+        <Link to="/idag" className="rounded-2xl bg-primary px-4 py-3 text-primary-foreground">Till Idag</Link>
+        <button type="button" className="rounded-2xl border px-4 py-3" onClick={() => window.history.back()}>Tillbaka</button>
+      </div>
+    </main>
   );
 }

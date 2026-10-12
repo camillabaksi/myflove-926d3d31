@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { track } from "@/lib/analytics";
 import { useState } from "react";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
@@ -28,9 +29,9 @@ export const Route = createFileRoute("/sign-up")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Skapa konto – Paceable" },
-      { property: "og:url", content: "https://myflove.lovable.app/sign-up" },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/sign-up` },
     ],
-    links: [{ rel: "canonical", href: "https://myflove.lovable.app/sign-up" }],
+    links: [{ rel: "canonical", href: `${PUBLIC_BASE_URL}/sign-up` }],
   }),
   validateSearch: (s: Record<string, unknown>): { next?: string } =>
     typeof s.next === "string" ? { next: s.next } : {},

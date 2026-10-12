@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalShell } from "./integritet";
 
@@ -19,14 +20,14 @@ export const Route = createFileRoute("/villkor")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Användarvillkor – Paceable" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { property: "og:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
-      { property: "og:url", content: "https://myflove.lovable.app/villkor" },
+      { name: "twitter:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/villkor` },
     ],
-    links: [{ rel: "canonical", href: "https://myflove.lovable.app/villkor" }],
+    links: [{ rel: "canonical", href: `${PUBLIC_BASE_URL}/villkor` }],
   }),
   component: TermsPage,
 });

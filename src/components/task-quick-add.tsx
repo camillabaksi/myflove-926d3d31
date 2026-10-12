@@ -68,15 +68,17 @@ export function TaskQuickAdd({
   className,
   defaultDate,
   label = "Lägg till",
+  initialMode,
 }: {
   onAdd: (result: QuickAddResult) => void;
   className?: string;
   /** Förvalt datum, t.ex. dagen man står på i kalendern. */
   defaultDate?: string;
   label?: string;
+  initialMode?: AddMode;
 }) {
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<AddMode | null>(null);
+  const [mode, setMode] = useState<AddMode | null>(initialMode ?? null);
   const [title, setTitle] = useState("");
   const baseDate =
     defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
@@ -86,7 +88,7 @@ export function TaskQuickAdd({
   const { addItem: addShoppingItem } = useSharedShoppingList();
 
   const reset = () => {
-    setMode(null);
+    setMode(initialMode ?? null);
     setTitle("");
     setDate(baseDate);
     setTime("");

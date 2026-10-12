@@ -97,7 +97,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
     }
     for (const r of data.routines) if (r.enabled && routineOccursOn(r, date)) {
       out.push({ id: `routine-${r.id}`, sourceId: r.id, source: "routine", date, title: r.title,
-        time: r.time || undefined, done: false, editable: false, href: "/rutiner", label: "Rutin" });
+        time: r.time || undefined, done: false, editable: false, href: "/daglig-rutin#Rutiner", label: "Rutin" });
     }
     const weekday = (new Date(`${date}T12:00:00`).getDay() + 6) % 7;
     for (const l of data.lectures) {
