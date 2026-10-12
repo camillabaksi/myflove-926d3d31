@@ -1,3 +1,13 @@
+## 2026-10-12 – Sammanhängande Paceable och personligare energi
+- **Dokumentation och pitch:** Paceable Living Blueprint 5.1 beskriver aktuell produktstatus och ersätter 5.0 som senaste nedladdning. Äldre versioner bevaras som arkiv. Sex riktiga skärmbilder med demokontots exempeldata har tagits för pitchdeck.
+- **Publicerat på www.paceable.se:** #33 samordnar rutinlänkar, vardagsloggning, energimönster, medicin/morgonstart, Pace-chatt, familj/delning, namn, rubriker, tillbaka-knappar och offentlig domänmetadata.
+- **Små energiförändringar:** manuella aktiviteter som sparas som redan gjorda utlöser energifrågan direkt. ”Tog lite energi” och ”Gav lite energi” sparas som små observationer. Batteriet ändras endast efter användarens uttryckliga godkännande; självskattad energi kan finjusteras 0–100 %.
+- **Energihistorik (#34):** Idag, Igår, dagpilar och datumval, med hämtning per lokal dag och paginering. Påverkan och styrka kan rättas i befintlig post. Historikrättning ändrar inte dagens batteri. 0 % visas visuellt tomt.
+- **Dokument och notislänkar (#35):** barn-, studie- och jobbdokument reserverar en flik vid klicket, visar fel vid blockering och skyddar mot kontobyte under hämtningen. Webbläsarnotiser behåller avsnittslänkar och navigerar inom appens domän.
+- **Offentliga sidor (#36):** startsidan, Om oss och ADHD-guiden använder samma meny, logotyp och sidfot. Funktioner går till startsidans avsnitt och språkvalet återanvänds mellan sidorna.
+- **Kontroller:** riktade tester, bygg och typkontroll godkända för varje etapp. 32 statiska pitch-/blueprintfiler klarade lokal filintegritetskontroll. Publicerad kod kontrollerad för energihistorik, 0 %-batteri, dokumentöppning och notislänkar.
+- **Återstår:** privata filers verkliga öppning, fullständiga live-nedladdningar samt notistryck på fysisk iOS/Android. Om oss har kontrollerats i produktion med gemensam meny, språkval, sidfot och korrekt funktionslänk. Inga nya native-byggen eller schema-/delningsändringar ingår.
+
 ## 2026-10-10 – Insikter, endast etapp 2B
 - **Insikter** (2026-10-10): separat navigeringsrad, Fraunces-rubrik och Inter-undertitel med befintlig Paceable-listbredd och semantiska teman. Sidmetadata heter Insikter · Paceable. Navigation, data och diagramlogik bevarade; ingen publicering eller etapp 2C/2D.
 
