@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { track } from "@/lib/analytics";
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
+import { newEnergyFactorId } from "@/lib/energy-factor-id";
 
 /**
  * Frivillig snabb energikoll efter en återhämtning (Paus, Ljusboost …).
@@ -21,21 +23,34 @@ export default function EnergyAfterCheck({
 }) {
   const { addFactor } = useEnergyFlow();
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(false);
+  const pending = useRef<{ id: string; occurredAt: string } | null>(null);
+  const savingRef = useRef(false);
 
   const choose = async (direction: "gives" | "neutral" | "drains") => {
-    if (saving) return;
+    if (savingRef.current) return;
+    savingRef.current = true;
     setSaving(true);
+    setError(false);
     track("recovery_energy_checkin", { source, method: direction });
     try {
-      await addFactor({
+      pending.current ??= { id: newEnergyFactorId(), occurredAt: new Date().toISOString() };
+      const entry = await addFactor({
+        ...pending.current,
         title,
         direction,
         strength: direction === "neutral" ? 1 : 2,
         category: "aterhamtning",
         kind: "aterhamtning",
       });
-    } finally {
+      if (!entry) throw new Error("Energiposten kunde inte sparas.");
+      announceSavedEnergy(entry);
       onDone();
+    } catch {
+      setError(true);
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
     }
   };
 
@@ -75,6 +90,11 @@ export default function EnergyAfterCheck({
           🔴 Mindre
         </Button>
       </div>
+      {error && (
+        <p role="alert" className="mt-3 text-sm text-destructive">
+          Kunde inte spara just nu. Försök igen.
+        </p>
+      )}
       <button
         type="button"
         onClick={onDone}

@@ -1,5 +1,11 @@
 import { useRef, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import WhyHint from "@/components/why-hint";
 import { cn } from "@/lib/utils";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
@@ -11,13 +17,8 @@ import type { ActivityEnergy } from "@/lib/activity-history";
 import { todayISO } from "@/lib/day";
 import { track } from "@/lib/analytics";
 import { activityEnergySourceId } from "@/lib/activity-energy-event";
-
-const newFactorId = () =>
-  globalThis.crypto?.randomUUID?.() ??
-  "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (ch) => {
-    const n = Math.floor(Math.random() * 16);
-    return (ch === "x" ? n : (n & 3) | 8).toString(16);
-  });
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
+import { newEnergyFactorId } from "@/lib/energy-factor-id";
 
 /** Fyra svar – alltid frivilliga, alltid ett tryck. */
 const CHOICES: {
@@ -94,7 +95,7 @@ export function ActivityEnergyPrompt({
         ? { id: legacy[0].id, occurredAt: legacy[0].occurredAt }
         : undefined;
     const write = previous ??
-      writes.current.get(key) ?? { id: newFactorId(), occurredAt: new Date().toISOString() };
+      writes.current.get(key) ?? { id: newEnergyFactorId(), occurredAt: new Date().toISOString() };
     writes.current.set(key, write);
 
     try {
@@ -120,6 +121,7 @@ export function ActivityEnergyPrompt({
           occurredAt: entry.occurredAt,
         });
       track("activity_energy_logged", { source: "idag", result: "completed" });
+      announceSavedEnergy(entry, date);
       onClose();
     } catch {
       setError("Energipåverkan kunde inte sparas. Försök igen – aktiviteten är fortfarande klar.");
@@ -134,8 +136,8 @@ export function ActivityEnergyPrompt({
       <DialogContent className="max-w-sm rounded-3xl">
         <DialogHeader>
           <DialogTitle>Hur kändes det?</DialogTitle>
+          <DialogDescription>{item?.title}</DialogDescription>
         </DialogHeader>
-        {item && <p className="-mt-2 text-sm text-muted-foreground">{item.title}</p>}
         <WhyHint label="vi frågar om energin" className="self-start">
           Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
           och tar energi för just dig. Svaret är alltid frivilligt.

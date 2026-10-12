@@ -19,6 +19,7 @@ import DidThisQuickAdd from "@/components/did-this-quick-add";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 
 import {
   MyFloveButton,
@@ -138,7 +139,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
     }
     setSaving(true);
     try {
-      await addFactor({
+      const entry = await addFactor({
         title: value,
         direction,
         strength,
@@ -147,10 +148,11 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         friction,
         note: note.trim(),
       });
+      if (!entry) throw new Error("Energiposten kunde inte sparas.");
       setTitle("");
       setNote("");
       setAddOpen(false);
-      toast({ description: t("Sparat i din energihistorik. Din egen kapacitet ändras när du checkar in.") });
+      announceSavedEnergy(entry);
     } catch {
       toast({ description: t("Kunde inte spara just nu. Försök igen."), variant: "destructive" });
     } finally {
@@ -160,7 +162,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
 
   const quickAdd = async (p: (typeof presets)[number]) => {
     try {
-      await addFactor({
+      const entry = await addFactor({
         title: p.title,
         direction: p.direction,
         strength: p.strength,
@@ -168,7 +170,8 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
         kind: p.kind,
         friction: p.friction,
       });
-      toast({ description: `${p.title} ${t("tillagd.")}` });
+      if (!entry) throw new Error("Energiposten kunde inte sparas.");
+      announceSavedEnergy(entry);
     } catch {
       toast({ description: t("Kunde inte spara just nu."), variant: "destructive" });
     }

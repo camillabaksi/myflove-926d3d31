@@ -14,6 +14,7 @@ import type { FlowNote } from "@/lib/notes";
 import { useLang } from "@/hooks/use-language";
 import { parseWhenFromText } from "@/lib/quickflow";
 import { toISODate, todayISO } from "@/lib/day";
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 
 export type ConvertTarget = "uppgift" | "kalender" | "energi";
 
@@ -113,12 +114,9 @@ export default function NoteConvertDialog({
         if (remind) addReminder(title.trim(), date, time);
         toast.success(t("Anteckningen ligger nu i kalendern. 📅"));
       } else {
-        await addFactor({ title: title.trim(), direction, strength, category });
-        toast.success(
-          direction === "gives"
-            ? t("Sparad som något som ger energi. 🔋")
-            : t("Sparad som något som tar energi. 🪫"),
-        );
+        const entry = await addFactor({ title: title.trim(), direction, strength, category });
+        if (!entry) throw new Error("Energiposten kunde inte sparas.");
+        announceSavedEnergy(entry);
       }
       onConverted(target);
       onOpenChange(false);

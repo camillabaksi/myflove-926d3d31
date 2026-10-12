@@ -17,6 +17,7 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import { useRelations } from "@/hooks/use-relations";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 import {
   RELATION_TYPES,
   relationTypeMeta,
@@ -252,18 +253,15 @@ function RelationsContent() {
   }, [people, enabledTypes]);
 
   const logEnergy = async (person: RelationPerson, direction: "gives" | "drains") => {
-    await addFactor({
+    const entry = await addFactor({
       title: person.name,
       direction,
       strength: 3,
       category: "socialt",
       note: relationTypeMeta(person.type).label,
     });
-    toast.success(
-      direction === "gives"
-        ? `Sparad som något som gav energi. 🔋`
-        : `Sparad som något som tog energi. 🪫`,
-    );
+    if (!entry) throw new Error("Energiposten kunde inte sparas.");
+    announceSavedEnergy(entry);
   };
 
   return (
