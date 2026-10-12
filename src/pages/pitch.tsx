@@ -31,9 +31,10 @@ function useIsInvestor() {
 }
 
 const BLUEPRINT_VERSIONS = [
+  { version: "5.1", fileStem: "Paceable_Living_Blueprint_5.1", label: "Senaste – Paceable, personlig energi och aktuell produktstatus" },
   {
     version: "5.0",
-    label: "Senaste – Flow-åtgärder, riktig kalendersynkning och komplett belastningsbild",
+    label: "Arkiv – Flow-åtgärder, riktig kalendersynkning och komplett belastningsbild",
   },
   {
     version: "4.2",
@@ -338,14 +339,14 @@ export default function PitchPage() {
                 </div>
                 <div className="flex gap-2">
                   <a
-                    href={`/blueprint/MyFlove_Living_Blueprint_${v.version}.docx`}
+                    href={`/blueprint/${"fileStem" in v ? v.fileStem : `MyFlove_Living_Blueprint_${v.version}`}.docx`}
                     download
                     className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90"
                   >
                     <Download size={14} /> DOCX
                   </a>
                   <a
-                    href={`/blueprint/MyFlove_Living_Blueprint_${v.version}.pdf`}
+                    href={`/blueprint/${"fileStem" in v ? v.fileStem : `MyFlove_Living_Blueprint_${v.version}`}.pdf`}
                     download
                     className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-medium hover:bg-secondary"
                   >

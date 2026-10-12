@@ -3,12 +3,25 @@ export type ChangelogSection = {
   items: string[];
 };
 
-export const CHANGELOG_TITLE = "MyFlove Changelog";
+export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
-  "Komplett logg över allt som byggts i MyFlove – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-10";
+  "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
+export const CHANGELOG_UPDATED = "2026-10-12";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-12 – Energi, historik och en sammanhängande app",
+    items: [
+      "Paceable Living Blueprint 5.1 finns som Word och PDF under Pitch. Äldre utgåvor behålls som arkiv. Sex pitchbilder visar appen med demokontots exempeldata.",
+      "Aktiviteter som sparas som redan gjorda frågar direkt om energipåverkan. Tog lite energi och Gav lite energi ger plats för små förändringar. Batteriet finjusteras 0–100 % endast efter uttryckligt godkännande.",
+      "Energimönster visar Idag, Igår och äldre datum. Påverkan och styrka rättas i samma post utan att ändra dagens batteri. Hämtning sker per lokal dag med paginering och kontokontroll. 0 % ser helt tomt ut.",
+      "Rutinlänkar, medicin och morgonstart leder rätt. Chatt, familj/delning, namn, rubriker och tillbaka-knappar är samordnade. Offentlig metadata använder www.paceable.se.",
+      "Barn-, studie- och jobbdokument har tydligare öppning och felåterkoppling. Webbläsarnotiser behåller avsnitt och öppnar endast appens domän.",
+      "Startsidan, Om oss och ADHD-guiden har samma meny, logotyp och sidfot. Funktioner leder till startsidans rätta avsnitt.",
+      "Riktade tester, bygge och typkontroll godkända. Privata filer, fullständiga live-nedladdningar och fysisk iOS/Android-verifiering återstår. Inga nya native-byggen ingår.",
+    ],
+  },
+
   { title: "Insikter – endast etapp 2B", items: ["Insikter (2026-10-10): separat navigeringsrad, Fraunces-rubrik och Inter-undertitel med befintlig Paceable-listbredd och semantiska teman. Sidmetadata heter Insikter · Paceable. Navigation, data och diagramlogik bevarade; ingen publicering eller etapp 2C/2D."] },
   { title: "Paceable designsystem – etapp 1", items: ["Designreferens (2026-10-10): semantiska HSL-variabler för Paceables befintliga #512654, sidmarginaler, innehållsbredder, kort, informationsblock, kontroller, formulär, dialoger och typografi. Allt är explicit opt-in och påverkar inte befintliga vyer. Fyra kända mobilproblem dokumenterade för senare avgränsade etapper; ingen publicering."] },
   { title: "Appnamn Paceable", items: ["Appnamn (2026-10-10): synligt appnamn ändrat från MyFlove till Paceable på Android och iOS. Appen använder fortfarande www.myflove.se internt tills lokal data migrerats säkert. Paket-ID, Bundle ID, lagring, kryptering, inloggning och synk oförändrade. Inga byggen skapade."] },
