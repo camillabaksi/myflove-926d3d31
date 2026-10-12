@@ -291,12 +291,12 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                   </span>
 
                   <span className="flex shrink-0 items-center gap-1">
-                    {(["drains", "neutral", "gives"] as const).map((d) => (
+                    {(["drains", "neutral", "both", "gives"] as const).map((d) => (
                       <button
                         key={d}
                         type="button"
                         aria-label={`Ändra påverkan till ${
-                          d === "gives" ? "gav energi" : d === "neutral" ? "neutralt" : "tog energi"
+                          d === "gives" ? "gav energi" : d === "both" ? "både och" : d === "neutral" ? "neutralt" : "tog energi"
                         }`}
                         onClick={() => updateFactor(e.id, { direction: d })}
                         className={`press rounded-full border px-2 py-0.5 text-xs ${
@@ -305,14 +305,14 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
                             : "border-border/60 text-muted-foreground"
                         }`}
                       >
-                        {d === "gives" ? "🔺" : d === "neutral" ? "➖" : "🔻"}
+                        {d === "gives" ? "🔺" : d === "both" ? "↔️" : d === "neutral" ? "➖" : "🔻"}
                       </button>
                     ))}
                     <span className="ml-0.5 text-xs text-muted-foreground">
                       {e.direction === "gives"
                         ? `+${e.strength}`
-                        : e.direction === "neutral"
-                          ? "0"
+                        : e.direction === "neutral" || e.direction === "both"
+                          ? e.direction === "both" ? "↔️" : "0"
                           : `−${e.strength}`}
                     </span>
                   </span>

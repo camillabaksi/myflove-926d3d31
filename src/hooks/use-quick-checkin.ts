@@ -5,7 +5,8 @@ import { useMoods, type MoodEntry } from "@/hooks/use-data";
 import { useLocalStorage } from "@/lib/storage";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { subscribeToAccountTable } from "@/lib/account-realtime";
-import { isActiveOwner } from "@/lib/account-scope";
+import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
+import { energyPercent, percentNote, percentToLevel } from "@/lib/energy-percent";
 import { todayISO } from "@/lib/day";
 
 import { PENDING_ENERGY_KEY, ensurePendingUuids, migratePendingEnergy } from "@/lib/energy-pending";
@@ -242,9 +243,11 @@ export function useQuickCheckin() {
   const queueRef = useRef<Promise<void>>(Promise.resolve());
 
   const logEnergy = useCallback(
-    (level10: number, note?: string) => {
-      const level = toScale5(level10);
+    (level10: number, note?: string, exactPercent?: number) => {
+      const level = exactPercent == null ? toScale5(level10) : percentToLevel(exactPercent);
+      const storedNote = exactPercent == null ? note?.trim() : percentNote(exactPercent, note);
       const uid = userIdRef.current;
+      const ownerAtStart = getDataOwner();
       const run = async () => {
         const now = new Date().toISOString();
         // Stabilt id (UUID när webbläsaren stöder det) så att en post som
@@ -252,9 +255,13 @@ export function useQuickCheckin() {
         const {
           entries: [local],
         } = ensurePendingUuids([
-          { id: "", level, logged_at: now, ...(note?.trim() ? { note: note.trim() } : {}) },
+          { id: "", level, logged_at: now, ...(storedNote ? { note: storedNote } : {}) },
         ]);
-        if (uid !== userIdRef.current || (uid && !isActiveOwner(uid))) {
+        if (
+          ownerAtStart !== getDataOwner() ||
+          uid !== userIdRef.current ||
+          (uid && !isActiveOwner(uid))
+        ) {
           throw new Error("Kontot ändrades. Öppna incheckningen igen.");
         }
         setCheckin10((prev) => ({
@@ -302,6 +309,11 @@ export function useQuickCheckin() {
     [setLocalEnergy, setPendingEnergy, setCheckin10],
   );
 
+  const logEnergyPercent = useCallback(
+    (percent: number, note?: string) => logEnergy(1 + percent * 0.09, note, percent),
+    [logEnergy],
+  );
+
   const sameDay = checkin10?.day === todayKey();
   /** Dagens visade värden på 1–10-skalan (null = inget loggat idag). */
   const moodValue =
@@ -323,5 +335,7 @@ export function useQuickCheckin() {
     energyValue,
     logMood,
     logEnergy,
+    logEnergyPercent,
+    energyPercentValue: todayEnergy ? energyPercent(todayEnergy) : null,
   };
 }

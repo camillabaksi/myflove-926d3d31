@@ -23,13 +23,14 @@ export const STATUS_LABELS: Record<ActivityStatus, string> = {
 };
 
 /** Hur en genomförd aktivitet faktiskt påverkade orken. */
-export type ActivityEnergy = "gives" | "neutral" | "drains_little" | "drains_much";
+export type ActivityEnergy = "gives" | "both" | "neutral" | "drains_little" | "drains_much";
 
 export const ENERGY_META: Record<
   ActivityEnergy,
   { dot: string; label: string; ask: string; score: number }
 > = {
   gives: { dot: "🟢", label: "Gav energi", ask: "Ge energi", score: 2 },
+  both: { dot: "↔️", label: "Både och", ask: "Både och", score: 0 },
   neutral: { dot: "🟡", label: "Neutral", ask: "Neutral", score: 0 },
   drains_little: { dot: "🟠", label: "Tog lite energi", ask: "Ta lite", score: -1 },
   drains_much: { dot: "🔴", label: "Tog mycket energi", ask: "Ta mycket", score: -2 },
@@ -44,11 +45,12 @@ export const ENERGY_CHOICES: ActivityEnergy[] = [
 
 /** Äldre svar (Att göra™) översätts till historikens fyra nivåer. */
 export function fromTaskEnergy(
-  value: "drains" | "gives" | "both" | "unknown" | undefined,
+  value: "drains" | "gives" | "both" | "neutral" | "unknown" | undefined,
 ): ActivityEnergy | undefined {
   if (value === "gives") return "gives";
   if (value === "drains") return "drains_little";
-  if (value === "both") return "drains_much";
+  if (value === "both") return "both";
+  if (value === "neutral") return "neutral";
   return undefined;
 }
 

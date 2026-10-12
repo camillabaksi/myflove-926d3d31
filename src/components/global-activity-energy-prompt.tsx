@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import {
   ACTIVITY_DONE_EVENT,
   detailToFlowItem,
   type ActivityDoneDetail,
 } from "@/lib/activity-energy-event";
+import { ENERGY_FEEDBACK_CLEAR_EVENT } from "@/lib/energy-save-feedback";
+import { getDataOwner } from "@/lib/account-scope";
+import { ACCOUNT_BOUND_EVENT } from "@/lib/cloud-storage";
 import type { FlowItem } from "@/lib/flow-items";
 
 /**
@@ -14,7 +17,14 @@ import type { FlowItem } from "@/lib/flow-items";
 export default function GlobalActivityEnergyPrompt() {
   const [items, setItems] = useState<FlowItem[]>([]);
 
+  const owner = useRef(getDataOwner());
   useEffect(() => {
+    const onAccountChanged = () => {
+      if (owner.current !== getDataOwner()) {
+        owner.current = getDataOwner();
+        setItems([]);
+      }
+    };
     const onDone = (event: Event) => {
       const detail = (event as CustomEvent<ActivityDoneDetail>).detail;
       if (!detail?.title) return;
@@ -26,10 +36,17 @@ export default function GlobalActivityEnergyPrompt() {
       );
     };
     window.addEventListener(ACTIVITY_DONE_EVENT, onDone);
-    return () => window.removeEventListener(ACTIVITY_DONE_EVENT, onDone);
+    window.addEventListener(ACCOUNT_BOUND_EVENT, onAccountChanged);
+    return () => {
+      window.removeEventListener(ACTIVITY_DONE_EVENT, onDone);
+      window.removeEventListener(ACCOUNT_BOUND_EVENT, onAccountChanged);
+    };
   }, []);
 
   const item = items[0] ?? null;
+  useEffect(() => {
+    if (item) window.dispatchEvent(new Event(ENERGY_FEEDBACK_CLEAR_EVENT));
+  }, [item]);
   return (
     <ActivityEnergyPrompt
       key={item ? `${item.id}|${item.dueDate ?? ""}` : "empty"}

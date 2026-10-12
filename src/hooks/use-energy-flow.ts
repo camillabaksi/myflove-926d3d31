@@ -32,7 +32,7 @@ interface Row {
 }
 
 const toDirection = (v: string): EnergyDirection =>
-  v === "gives" ? "gives" : v === "neutral" ? "neutral" : "drains";
+  v === "gives" ? "gives" : v === "both" ? "both" : v === "neutral" ? "neutral" : "drains";
 
 const toEntry = (r: Row): EnergyFactorEntry => ({
   id: r.id,
@@ -300,11 +300,21 @@ export function useEnergyFlow(): {
   );
 
   const removeFactor = useCallback(async (id: string) => {
-    const prev = store.entries;
-    setStore({ entries: prev.filter((e) => e.id !== id) });
-    const { error } = await supabase.from("energy_factors").delete().eq("id", id);
-    // Gick det inte att ta bort på riktigt ska posten tillbaka i vyn.
-    if (error) setStore({ entries: prev });
+    const uid = store.userId;
+    if (!uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+    const removed = store.entries.find((entry) => entry.id === id);
+    setStore({ entries: store.entries.filter((e) => e.id !== id) });
+    const { error } = await supabase
+      .from("energy_factors")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", uid);
+    if (store.userId !== uid || !isActiveOwner(uid)) throw new Error("Kontot ändrades.");
+    if (error) {
+      if (removed && !store.entries.some((entry) => entry.id === id))
+        setStore({ entries: [removed, ...store.entries] });
+      throw error;
+    }
   }, []);
 
   const updateFactor = useCallback(

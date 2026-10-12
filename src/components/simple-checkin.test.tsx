@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from "@testing-library/react"
 
 const logMood = vi.fn();
 const logEnergy = vi.fn();
+const logEnergyPercent = vi.fn();
 const addFactor = vi.fn(async () => undefined);
 const trackCalls: { event: string; payload?: Record<string, unknown> }[] = [];
 
@@ -13,7 +14,7 @@ let checkinState: {
 };
 
 vi.mock("@/hooks/use-quick-checkin", () => ({
-  useQuickCheckin: () => ({ ...checkinState, logMood, logEnergy }),
+  useQuickCheckin: () => ({ ...checkinState, logMood, logEnergy, logEnergyPercent }),
 }));
 vi.mock("@/hooks/use-energy-flow", () => ({
   useEnergyFlow: () => ({ addFactor }),
@@ -208,4 +209,14 @@ describe("Mitt batteri – den kanoniska loggningsvyn", () => {
     await waitFor(() => expect(logMood).toHaveBeenCalledWith(8, undefined));
     expect(logEnergy).toHaveBeenCalledWith(3);
   });
+});
+
+it("sparar en finjusterad procent bara efter Spara", async () => {
+  logEnergyPercent.mockResolvedValue({ synced: true });
+  logEnergyPercent.mockClear();
+  render(<SimpleCheckin />);
+  fireEvent.change(screen.getByRole("slider"), { target: { value: "57" } });
+  expect(logEnergyPercent).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: "Logga energi & mående" }));
+  await waitFor(() => expect(logEnergyPercent).toHaveBeenCalledWith(57));
 });

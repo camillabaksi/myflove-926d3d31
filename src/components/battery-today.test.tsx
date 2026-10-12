@@ -13,7 +13,7 @@ vi.mock("@/hooks/use-quick-checkin", async () => {
 });
 
 import BatteryToday from "@/components/battery-today";
-import { toScale10 } from "@/hooks/use-quick-checkin";
+import { energyPercent } from "@/lib/energy-percent";
 
 describe("BatteryToday – dagens observationer", () => {
   it("visar lugnt tomt läge innan första loggningen", () => {
@@ -48,8 +48,8 @@ describe("BatteryToday – dagens observationer", () => {
     expect(screen.getByText("Mående idag")).toBeTruthy();
     // Båda energiobservationerna syns – inget skrivs över.
     // Energin visas som ordnivå (Låg/Lagom/God), inte som procent.
-    expect(screen.getByText(orkWord(toScale10(2) * 10).short)).toBeTruthy();
-    expect(screen.getByText(orkWord(toScale10(4) * 10).short)).toBeTruthy();
+    expect(screen.getByText(orkWord(energyPercent({ level: 2 })).short)).toBeTruthy();
+    expect(screen.getByText(orkWord(energyPercent({ level: 4 })).short)).toBeTruthy();
     // Fritexten följer med sin observation.
     expect(screen.getByText("Sovit bara 4 timmar.")).toBeTruthy();
     expect(screen.getByText("Känner mig bättre.")).toBeTruthy();

@@ -4,7 +4,7 @@
 
 import type { FlowFactor } from "./flowscore";
 
-export type EnergyDirection = "gives" | "drains" | "neutral";
+export type EnergyDirection = "gives" | "drains" | "both" | "neutral";
 
 /**
  * Var aktiviteten kom ifrån. Samma dag kan bestå av planerat, vardag,
@@ -69,7 +69,7 @@ export interface EnergyPreset {
   friction: number | null;
 }
 
-/** Vanliga vardagsaktiviteter – ett tryck räcker. */
+/** Vanliga vardagsaktiviteter – användaren väljer faktisk påverkan. */
 export interface DidSuggestion {
   title: string;
   emoji: string;
@@ -154,6 +154,33 @@ export const DID_SUGGESTIONS: DidSuggestion[] = [
     friction: 2,
   },
   {
+    title: "Många avbrott",
+    emoji: "🔀",
+    direction: "neutral",
+    strength: 3,
+    category: "stress",
+    kind: "vardag",
+    friction: 2,
+  },
+  {
+    title: "Tyst stund",
+    emoji: "🌿",
+    direction: "neutral",
+    strength: 3,
+    category: "aterhamtning",
+    kind: "aterhamtning",
+    friction: 1,
+  },
+  {
+    title: "Musik / skapande",
+    emoji: "🎵",
+    direction: "neutral",
+    strength: 3,
+    category: "egentid",
+    kind: "aterhamtning",
+    friction: 1,
+  },
+  {
     title: "Promenad",
     emoji: "🚶",
     direction: "gives",
@@ -183,14 +210,7 @@ export const DID_SUGGESTIONS: DidSuggestion[] = [
 ];
 
 export type EnergyCategory =
-  | "somn"
-  | "socialt"
-  | "rorelse"
-  | "miljo"
-  | "stress"
-  | "aterhamtning"
-  | "egentid"
-  | "annat";
+  "somn" | "socialt" | "rorelse" | "miljo" | "stress" | "aterhamtning" | "egentid" | "annat";
 
 export const ENERGY_CATEGORIES: { id: EnergyCategory; label: string; emoji: string }[] = [
   { id: "somn", label: "Sömn", emoji: "😴" },
@@ -490,7 +510,7 @@ export function energyInsight(
   const boosts = trends.filter((t) => t.net > 0);
   if (boosts[0]) {
     return {
-      message: `${boosts[0].label} verkar ofta ge dig energi. Kanske något att lägga in idag om det finns utrymme.`,
+      message: `Du har loggat att ${boosts[0].label.toLowerCase()} gav energi vid ${boosts[0].count} tillfällen. Kanske något för dig idag, om du vill.`,
       suggestLighterPlan: false,
     };
   }

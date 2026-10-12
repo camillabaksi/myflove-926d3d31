@@ -61,11 +61,11 @@ export interface Task {
   note?: string; // fri anteckning: vad det handlar om, vad du behöver ta med
 
   /** Förväntad energipåverkan (Att göra™): tar / ger / både och / vet inte. */
-  energyImpact?: "drains" | "gives" | "both" | "unknown";
+  energyImpact?: "drains" | "gives" | "both" | "neutral" | "unknown";
   /** Friktion/storlek: hur tungt det känns att komma igång. */
   friction?: "small" | "medium" | "large";
   /** Faktisk energipåverkan, loggad när uppgiften markerades klar. */
-  actualEnergy?: "drains" | "gives" | "both" | "unknown";
+  actualEnergy?: "drains" | "gives" | "both" | "neutral" | "unknown";
   /** När den faktiska energin loggades. */
   actualEnergyAt?: number;
 

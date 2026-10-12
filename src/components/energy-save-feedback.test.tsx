@@ -1,13 +1,15 @@
-import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { EnergyFactorEntry } from "@/lib/energy-flow";
 import { DATA_OWNER_KEY } from "@/lib/account-scope";
 import { dayOf } from "@/lib/day";
 import { announceSavedEnergy, ENERGY_SAVED_EVENT } from "@/lib/energy-save-feedback";
+import EnergyBatteryOffer from "./energy-battery-offer";
 import EnergySaveFeedback from "./energy-save-feedback";
 import { Toaster } from "@/components/ui/toaster";
-
 const mocks = vi.hoisted(() => ({
+  percent: 52 as number | null,
+  logEnergyPercent: vi.fn(),
   logEnergy: vi.fn(),
   logMood: vi.fn(),
   addFactor: vi.fn(),
@@ -15,11 +17,15 @@ const mocks = vi.hoisted(() => ({
   t: (text: string) => text,
 }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: mocks.t, lang: "sv" }) }));
+vi.mock("@/hooks/use-day-capacity", () => ({
+  useDayCapacity: () => () => ({ percent: mocks.percent }),
+}));
 vi.mock("@/hooks/use-quick-checkin", () => ({
   useQuickCheckin: () => ({
     energyValue: 6,
     moodValue: null,
     logEnergy: mocks.logEnergy,
+    logEnergyPercent: mocks.logEnergyPercent,
     logMood: mocks.logMood,
   }),
 }));
@@ -44,132 +50,139 @@ vi.mock("@/integrations/supabase/client", () => ({
     },
   },
 }));
-
 const entry = (patch: Partial<EnergyFactorEntry> = {}): EnergyFactorEntry => ({
   id: "factor-one",
   title: "Promenad",
-  direction: "drains",
-  strength: 4,
+  direction: "gives",
+  strength: 3,
   category: "annat",
   kind: "planerat",
-  friction: 2,
+  friction: null,
   note: null,
   countsTowardScore: true,
   occurredAt: new Date().toISOString(),
   ...patch,
 });
-const Host = ({ page = "Idag" }: { page?: string }) => (
+const Host = () => (
   <>
-    <p>{page}</p>
     <EnergySaveFeedback />
     <Toaster />
   </>
 );
 const announce = (factor = entry(), date?: string) => act(() => announceSavedEnergy(factor, date));
-const openCheckin = () =>
-  fireEvent.click(screen.getByRole("button", { name: "Uppdatera mitt batteri" }));
-
 beforeEach(() => {
   window.localStorage.setItem(DATA_OWNER_KEY, "owner-a");
+  mocks.percent = 52;
+  mocks.logEnergyPercent.mockReset();
+  mocks.logEnergyPercent.mockResolvedValue({ synced: true });
   mocks.logEnergy.mockReset();
   mocks.logEnergy.mockResolvedValue({ synced: true });
   mocks.logMood.mockClear();
   mocks.addFactor.mockClear();
 });
-
-describe("confirmed energy to battery check-in", () => {
-  it("offers the existing check-in and only logs the user's chosen value after Save", async () => {
+describe("optional small battery update", () => {
+  it("records no capacity until the explicit second tap, with no mood or duplicate factor", async () => {
     render(<Host />);
     announce();
-    expect(screen.getByText("Energipåverkan sparad")).toBeVisible();
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
-    openCheckin();
-    const dialog = screen.getByRole("dialog", { name: "Uppdatera mitt batteri" });
-    fireEvent.click(within(dialog).getByRole("button", { name: "Lågt" }));
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
-    fireEvent.click(within(dialog).getByRole("button", { name: "Logga energi & mående" }));
-    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
-    expect(mocks.logEnergy).toHaveBeenCalledOnce();
-    expect(mocks.logEnergy).toHaveBeenCalledWith(3);
+    expect(mocks.logEnergyPercent).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Uppdatera till 57 %" }));
+    await screen.findByText("Batteriet är uppdaterat.");
+    expect(mocks.logEnergyPercent).toHaveBeenCalledExactlyOnceWith(57);
     expect(mocks.addFactor).not.toHaveBeenCalled();
-    expect(screen.getByText("Batteriet är uppdaterat.")).toBeVisible();
+    expect(mocks.logMood).not.toHaveBeenCalled();
   });
-  it("retains the draft after a failed save and across an authenticated page change", async () => {
-    mocks.logEnergy.mockRejectedValueOnce(new Error("Offline"));
-    const view = render(<Host />);
-    announce();
-    openCheckin();
-    fireEvent.click(screen.getByRole("button", { name: "Lågt" }));
-    fireEvent.change(screen.getByRole("textbox"), { target: { value: "Mitt utkast" } });
-    fireEvent.click(screen.getByRole("button", { name: "Logga energi & mående" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("Dina val finns kvar");
-    view.rerender(<Host page="Kalender" />);
-    act(() => window.dispatchEvent(new Event("myflove-account-bound")));
-    expect(screen.getByRole("textbox")).toHaveValue("Mitt utkast");
-    expect(screen.getByRole("button", { name: "Lågt" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.queryByText("Batteriet är uppdaterat.")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Logga energi & mående" }));
-    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
-  });
-  it("offers the same update for gained energy without selecting a battery value", () => {
+  it("retains an adjusted draft after a failed save and saves on retry", async () => {
+    mocks.logEnergyPercent.mockRejectedValueOnce(new Error("Offline"));
     render(<Host />);
-    announce(entry({ direction: "gives" }));
-    expect(screen.getByText(/loggat något som gav energi/)).toBeVisible();
-    openCheckin();
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: "Avbryt" }));
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
-    expect(mocks.addFactor).not.toHaveBeenCalled();
+    announce(entry({ direction: "drains" }));
+    fireEvent.click(screen.getByRole("button", { name: "Justera" }));
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "49" } });
+    fireEvent.click(screen.getByRole("button", { name: "Uppdatera till 49 %" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Ditt val finns kvar");
+    expect(screen.getByRole("slider")).toHaveValue("49");
+    fireEvent.click(screen.getByRole("button", { name: "Uppdatera till 49 %" }));
+    await screen.findByText("Batteriet är uppdaterat.");
+    expect(mocks.logEnergyPercent).toHaveBeenLastCalledWith(49);
   });
-  it("confirms historical or neutral entries without inviting an update of today's battery", () => {
+  it("guards a draft against a newer capacity registration", async () => {
+    const props = {
+      detail: { owner: "owner-a", direction: "gives" as const, date: dayOf(new Date()) },
+      onSaved: vi.fn(),
+      onCheckin: vi.fn(),
+    };
+    const view = render(<EnergyBatteryOffer {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Justera" }));
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "57" } });
+    mocks.percent = 70;
+    view.rerender(<EnergyBatteryOffer {...props} />);
+    expect(screen.getByRole("button", { name: "Uppdatera till 57 %" })).toBeDisabled();
+    expect(mocks.logEnergyPercent).not.toHaveBeenCalled();
+  });
+  it("does not dismiss while saving or accept duplicate taps", async () => {
+    let finish!: (result: { synced: boolean }) => void;
+    mocks.logEnergyPercent.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          finish = resolve;
+        }),
+    );
+    render(<Host />);
+    announce();
+    const save = screen.getByRole("button", { name: "Uppdatera till 57 %" });
+    fireEvent.click(save);
+    fireEvent.click(save);
+    expect(mocks.logEnergyPercent).toHaveBeenCalledOnce();
+    expect(save).toBeDisabled();
+    await act(async () => finish({ synced: false }));
+    expect(screen.getByText(/väntar på synkning/)).toBeVisible();
+  });
+  it.each(["neutral", "both"] as const)("does not offer a battery change for %s", (direction) => {
+    render(<Host />);
+    announce(entry({ direction }));
+    expect(screen.getByText("Sparat i din energihistorik.")).toBeVisible();
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
+  });
+  it("does not change today's battery for a historical observation", () => {
     render(<Host />);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     announce(entry(), dayOf(yesterday)!);
-    expect(screen.getByText("Sparat i din energihistorik.")).toBeVisible();
-    expect(
-      screen.queryByRole("button", { name: "Uppdatera mitt batteri" }),
-    ).not.toBeInTheDocument();
-    announce(entry({ direction: "neutral" }));
-    expect(
-      screen.queryByRole("button", { name: "Uppdatera mitt batteri" }),
-    ).not.toBeInTheDocument();
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
   });
-  it("clears the check-in on account changes and ignores feedback belonging to another owner", () => {
+  it("opens the existing check-in when there is no baseline, without inventing a starting percentage", async () => {
+    mocks.percent = null;
     render(<Host />);
     announce();
-    openCheckin();
+    fireEvent.click(screen.getByRole("button", { name: "Uppdatera mitt batteri" }));
+    expect(screen.getByRole("dialog")).toBeVisible();
+    expect(mocks.logEnergyPercent).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "37" } });
+    fireEvent.click(screen.getByRole("button", { name: "Logga energi & mående" }));
+    await screen.findByText("Batteriet är uppdaterat.");
+    expect(mocks.logEnergyPercent).toHaveBeenCalledWith(37);
+  });
+  it("clears transient feedback on account change and ignores another owner's event", () => {
+    render(<Host />);
+    announce();
     act(() => {
       window.localStorage.setItem(DATA_OWNER_KEY, "owner-b");
       window.dispatchEvent(new Event("myflove-account-bound"));
     });
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
     act(() =>
       window.dispatchEvent(
         new CustomEvent(ENERGY_SAVED_EVENT, {
-          detail: { owner: "owner-a", direction: "drains", date: dayOf(new Date()) },
+          detail: { owner: "owner-a", direction: "gives", date: dayOf(new Date()) },
         }),
       ),
     );
-    expect(
-      screen.queryByRole("button", { name: "Uppdatera mitt batteri" }),
-    ).not.toBeInTheDocument();
-    expect(mocks.logEnergy).not.toHaveBeenCalled();
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
+    expect(mocks.logEnergyPercent).not.toHaveBeenCalled();
   });
-  it("dismisses the check-in on sign-out and does not emit an ownerless confirmation", () => {
-    const listener = vi.fn();
-    window.addEventListener(ENERGY_SAVED_EVENT, listener);
+  it("dismisses feedback on sign-out", () => {
     render(<Host />);
     announce();
-    openCheckin();
     act(() => mocks.authCallback?.("SIGNED_OUT"));
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    listener.mockClear();
-    window.localStorage.removeItem(DATA_OWNER_KEY);
-    announce();
-    expect(listener).not.toHaveBeenCalled();
-    window.removeEventListener(ENERGY_SAVED_EVENT, listener);
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
   });
 });

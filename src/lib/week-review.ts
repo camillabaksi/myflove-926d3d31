@@ -127,6 +127,7 @@ export function buildWeekReview(input: WeekReviewInput): WeekReview {
   const impact: Record<ActivityEnergy, number> = {
     gives: 0,
     neutral: 0,
+    both: 0,
     drains_little: 0,
     drains_much: 0,
   };

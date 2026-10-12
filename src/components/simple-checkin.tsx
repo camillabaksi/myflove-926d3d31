@@ -26,7 +26,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EnergyChoices, MoodChoices } from "@/components/checkin-choices";
 
-import { orkFromValue10 } from "@/lib/ork";
+import { capacityTone } from "@/lib/day-capacity";
+import { ORK_LEVELS, orkFromValue10 } from "@/lib/ork";
 const FACTOR_ICONS: Record<string, LucideIcon> = {
   somn: Moon,
   stress: Wind,
@@ -65,12 +66,14 @@ export default function SimpleCheckin({
   presetFactors?: string[];
 }) {
   const { t } = useLang();
-  const { moodValue, energyValue, logMood, logEnergy } = useQuickCheckin();
+  const { moodValue, energyValue, energyPercentValue, logMood, logEnergy, logEnergyPercent } =
+    useQuickCheckin();
   const { addFactor } = useEnergyFlow();
   const { explain } = useFlowExplainer();
   const energyExplainer = explain("energi");
   const moodExplainer = explain("maende");
   const [battery, setBattery] = useState(energyValue ?? 6);
+  const [exactPercent, setExactPercent] = useState<number | null>(energyPercentValue ?? null);
   const [mood, setMood] = useState<number | null>(moodValue);
   const [factors, setFactors] = useState<string[]>(presetFactors ?? []);
   const [note, setNote] = useState("");
@@ -83,7 +86,8 @@ export default function SimpleCheckin({
 
   useEffect(() => {
     if (!started && energyValue != null) setBattery(energyValue);
-  }, [energyValue, started]);
+    if (!started) setExactPercent(energyPercentValue ?? null);
+  }, [energyValue, energyPercentValue, started]);
   useEffect(() => {
     if (!started && moodValue != null) setMood(moodValue);
   }, [moodValue, started]);
@@ -105,7 +109,8 @@ export default function SimpleCheckin({
     setSaved(false);
     setSaveError(null);
     try {
-      const result = await logEnergy(battery);
+      const result =
+        exactPercent == null ? await logEnergy(battery) : await logEnergyPercent(exactPercent);
       setPendingSync(result?.synced === false);
       track("battery_checkin_completed", { source, method: "knapp", result: "completed" });
       track("battery_logged", { source, method: "knapp" });
@@ -141,7 +146,14 @@ export default function SimpleCheckin({
     }
   };
 
-  const ork = orkFromValue10(battery);
+  const tone = exactPercent == null ? null : capacityTone(exactPercent);
+  const ork =
+    tone == null
+      ? orkFromValue10(battery)
+      : ORK_LEVELS.find(
+          (level) => level.id === (tone === "high" ? "fullt" : tone === "low" ? "lagt" : "mellan"),
+        );
+  const displayedPercent = exactPercent ?? Math.round((Math.round(battery / 2) - 1) * 25);
   // Formuläret har redan en fokuskontur; undvik dubbel ring runt "Varför?".
   const whyClass = "focus-visible:ring-0 focus-visible:ring-offset-0";
 
@@ -168,8 +180,30 @@ export default function SimpleCheckin({
           onChange={(value) => {
             markStarted("battery");
             setBattery(value);
+            setExactPercent(null);
           }}
         />
+        <label className="block space-y-1 text-sm">
+          {t("Min energi i procent")}: {displayedPercent} %
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            aria-label={t("Min energi i procent")}
+            value={displayedPercent}
+            disabled={saving}
+            className="min-h-11 w-full accent-primary"
+            onChange={(e) => {
+              markStarted("battery");
+              setExactPercent(Number(e.target.value));
+              setBattery(1 + Number(e.target.value) * 0.09);
+            }}
+          />
+          <span className="block text-xs text-muted-foreground">
+            {t("Din uppskattning, ingen mätning. Finjustera om du vill.")}
+          </span>
+        </label>
       </div>
 
       <div className="space-y-2">
