@@ -1,4 +1,4 @@
-import { toScale10 } from "@/hooks/use-quick-checkin";
+import { energyPercent } from "@/lib/energy-percent";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
 import type { MoodEntry } from "@/hooks/use-data";
 
@@ -30,7 +30,7 @@ export function buildObservations(
     out.push({
       key: e.id,
       ts,
-      energyPct: Math.min(100, toScale10(e.level) * 10),
+      energyPct: energyPercent(e),
       ...(paired ? { mood: paired.score, ...(paired.note ? { note: paired.note } : {}) } : {}),
     });
   }

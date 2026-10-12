@@ -68,7 +68,13 @@ describe("buildWeekReview", () => {
         ],
       }),
     );
-    expect(review.impact).toEqual({ gives: 1, neutral: 1, drains_little: 1, drains_much: 1 });
+    expect(review.impact).toEqual({
+      gives: 1,
+      both: 0,
+      neutral: 1,
+      drains_little: 1,
+      drains_much: 1,
+    });
   });
 
   it("pekar ut lättare och tyngre dagar när ork loggats flera dagar", () => {

@@ -167,3 +167,24 @@ describe("incheckningens sparande och delade visning", () => {
     expect(window.localStorage.getItem("myflove-energy-log")).toBeNull();
   });
 });
+
+it("behåller exakt procent genom offline, återanslutning och ny enhet utan sidolagring", async () => {
+  server.failWrites = true;
+  const writer = renderHook(() => useQuickCheckin());
+  await waitFor(() => expect(server.reads).toBe(1));
+  await act(async () => {
+    expect(await writer.result.current.logEnergyPercent(57)).toEqual({ synced: false });
+  });
+  expect(writer.result.current.energyPercentValue).toBe(57);
+  const id = writer.result.current.todayEnergy!.id;
+  writer.unmount();
+  server.failWrites = false;
+  const online = renderHook(() => useQuickCheckin());
+  await waitFor(() => expect(server.rows).toHaveLength(1));
+  expect(server.rows[0].id).toBe(id);
+  online.unmount();
+  window.localStorage.removeItem("myflove-energy-log");
+  window.localStorage.removeItem("myflove-checkin-10");
+  const otherDevice = renderHook(() => useQuickCheckin());
+  await waitFor(() => expect(otherDevice.result.current.energyPercentValue).toBe(57));
+});

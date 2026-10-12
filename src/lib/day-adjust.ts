@@ -16,7 +16,7 @@ export interface AdjustTask {
   /** Dagar kvar till deadline. Negativt = passerad. */
   daysUntil?: number;
   friction?: "small" | "medium" | "large";
-  energyImpact?: "drains" | "gives" | "both" | "unknown";
+  energyImpact?: "drains" | "gives" | "both" | "neutral" | "unknown";
   kind?: "uppgift" | "arende" | "projekt";
   /** Antal delsteg som redan finns. */
   steps?: number;

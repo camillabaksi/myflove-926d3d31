@@ -8,7 +8,7 @@
 import type { Task } from "@/hooks/use-data";
 
 /** Hur en uppgift påverkar energin – förväntad eller faktisk. */
-export type EnergyImpact = "drains" | "gives" | "both" | "unknown";
+export type EnergyImpact = "drains" | "gives" | "both" | "neutral" | "unknown";
 
 /** Friktion/storlek – hur tungt det känns att komma igång. */
 export type TaskFriction = "small" | "medium" | "large";
@@ -20,6 +20,7 @@ export const ENERGY_IMPACT_META: Record<
   drains: { emoji: "⚡", label: "Tar energi", doneLabel: "Tog energi" },
   gives: { emoji: "❤️", label: "Ger energi", doneLabel: "Gav energi" },
   both: { emoji: "↔️", label: "Både och", doneLabel: "Både och" },
+  neutral: { emoji: "➖", label: "Ingen skillnad", doneLabel: "Ingen skillnad" },
   unknown: { emoji: "🤷", label: "Vet inte", doneLabel: "Vet inte" },
 };
 

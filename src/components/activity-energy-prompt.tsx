@@ -1,11 +1,4 @@
 import { useRef, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import WhyHint from "@/components/why-hint";
 import { cn } from "@/lib/utils";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
@@ -20,7 +13,7 @@ import { activityEnergySourceId } from "@/lib/activity-energy-event";
 import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 import { newEnergyFactorId } from "@/lib/energy-factor-id";
 
-/** Fyra svar – alltid frivilliga, alltid ett tryck. */
+/** Fem svar – alltid frivilliga, alltid ett tryck. */
 const CHOICES: {
   id: EnergyImpact;
   history: ActivityEnergy | null;
@@ -30,7 +23,8 @@ const CHOICES: {
 }[] = [
   { id: "gives", history: "gives", emoji: "🟢", label: "Gav energi", strength: 3 },
   { id: "drains", history: "drains_much", emoji: "🔴", label: "Tog energi", strength: 4 },
-  { id: "both", history: "drains_little", emoji: "🟣", label: "Både och", strength: 2 },
+  { id: "both", history: "both", emoji: "🟣", label: "Både och", strength: 1 },
+  { id: "neutral", history: "neutral", emoji: "➖", label: "Ingen skillnad", strength: 1 },
   { id: "unknown", history: null, emoji: "⚪", label: "Vet inte", strength: 0 },
 ];
 
@@ -102,11 +96,11 @@ export function ActivityEnergyPrompt({
       const entry = await addFactor({
         ...write,
         title: item.title,
-        direction: choice.id === "gives" ? "gives" : "drains",
+        direction: choice.id as "gives" | "drains" | "both" | "neutral",
         strength: choice.strength,
         category: "annat",
         kind: "planerat",
-        friction: choice.id === "both" ? 4 : 2,
+        friction: null,
         note: "Genomförd aktivitet",
       });
       if (!entry) throw new Error("Energiposten kunde inte sparas.");
@@ -131,54 +125,57 @@ export function ActivityEnergyPrompt({
     }
   };
 
+  if (!item) return null;
   return (
-    <Dialog open={!!item} onOpenChange={(o) => !o && !saving.current && onClose()}>
-      <DialogContent className="max-w-sm rounded-3xl">
-        <DialogHeader>
-          <DialogTitle>Hur kändes det?</DialogTitle>
-          <DialogDescription>{item?.title}</DialogDescription>
-        </DialogHeader>
-        <WhyHint label="vi frågar om energin" className="self-start">
-          Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
-          och tar energi för just dig. Svaret är alltid frivilligt.
-        </WhyHint>
-        <div className="grid grid-cols-2 gap-2 pt-1">
-          {CHOICES.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              disabled={busy}
-              onClick={() => pick(c)}
-              className={cn(
-                "press min-h-[4.5rem] rounded-2xl border-2 border-border bg-background px-2 py-3 text-sm font-medium",
-                "hover:border-primary hover:text-primary disabled:opacity-60",
-              )}
-            >
-              <span className="block text-xl">{c.emoji}</span>
-              {c.label}
-            </button>
-          ))}
-        </div>
-        {busy && (
-          <p role="status" className="text-center text-sm text-muted-foreground">
-            Sparar energipåverkan…
-          </p>
-        )}
-        {error && (
-          <p role="alert" className="text-sm text-destructive">
-            {error}
-          </p>
-        )}
-        <button
-          type="button"
-          disabled={busy}
-          onClick={onClose}
-          className="mx-auto text-xs text-muted-foreground underline underline-offset-4"
-        >
-          Hoppa över
-        </button>
-      </DialogContent>
-    </Dialog>
+    <section
+      role="region"
+      aria-label="Hur kändes det?"
+      className="fixed inset-x-2 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 mx-auto max-h-[70dvh] max-w-sm space-y-3 overflow-y-auto rounded-3xl border border-border bg-card p-4 shadow-lg"
+    >
+      <h2 className="text-base font-semibold">Hur kändes det?</h2>
+      <p className="text-sm">{item.title}</p>
+      <WhyHint label="vi frågar om energin" className="self-start">
+        Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
+        och tar energi för just dig. Svaret är alltid frivilligt.
+      </WhyHint>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2 pt-1">
+        {CHOICES.map((c) => (
+          <button
+            key={c.id}
+            type="button"
+            disabled={busy}
+            onClick={() => pick(c)}
+            className={cn(
+              "press min-h-11 rounded-xl border border-border bg-background px-2 py-2 text-sm font-medium",
+              "hover:border-primary hover:text-primary disabled:opacity-60",
+            )}
+          >
+            <span aria-hidden className="mr-1">
+              {c.emoji}
+            </span>
+            {c.label}
+          </button>
+        ))}
+      </div>
+      {busy && (
+        <p role="status" className="text-center text-sm text-muted-foreground">
+          Sparar energipåverkan…
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
+      <button
+        type="button"
+        disabled={busy}
+        onClick={onClose}
+        className="min-h-11 text-sm text-muted-foreground underline underline-offset-4"
+      >
+        Hoppa över
+      </button>
+    </section>
   );
 }
 

@@ -29,7 +29,10 @@ vi.mock("@/hooks/use-activity-history", () => ({
   useActivityHistory: () => ({ records, setEnergy: setHistoryEnergy }),
 }));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
-vi.mock("@/lib/energy-save-feedback", () => ({ announceSavedEnergy }));
+vi.mock("@/lib/energy-save-feedback", () => ({
+  announceSavedEnergy,
+  ENERGY_FEEDBACK_CLEAR_EVENT: "myflove:energy-feedback-clear",
+}));
 
 import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
 import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
@@ -196,10 +199,23 @@ describe("aktivitetens faktiska energipåverkan", () => {
     fireEvent.click(screen.getByRole("button", { name: /Tog energi/ }));
     expect(await screen.findByText("Diska")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: /Gav energi/ }));
-    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    await waitFor(() =>
+      expect(screen.queryByRole("region", { name: "Hur kändes det?" })).toBeNull(),
+    );
     expect(setTaskActualEnergy.mock.calls).toEqual([
       ["one", "drains"],
       ["two", "gives"],
     ]);
   });
+});
+
+it.each([
+  ["Både och", "both"],
+  ["Ingen skillnad", "neutral"],
+] as const)("sparar %s utan att klassificera det som en förlust", async (label, direction) => {
+  const close = vi.fn();
+  render(<ActivityEnergyPrompt item={item()} onClose={close} />);
+  fireEvent.click(screen.getByRole("button", { name: new RegExp(label) }));
+  await waitFor(() => expect(close).toHaveBeenCalledOnce());
+  expect(addFactor).toHaveBeenCalledWith(expect.objectContaining({ direction, friction: null }));
 });

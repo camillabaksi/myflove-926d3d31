@@ -7,20 +7,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ToastAction } from "@/components/ui/toast";
+import EnergyBatteryOffer from "@/components/energy-battery-offer";
 import { useToast } from "@/hooks/use-toast";
 import { useLang } from "@/hooks/use-language";
 import { supabase } from "@/integrations/supabase/client";
 import { getDataOwner } from "@/lib/account-scope";
 import { ACCOUNT_BOUND_EVENT } from "@/lib/cloud-storage";
 import { todayISO } from "@/lib/day";
-import { ENERGY_SAVED_EVENT, type EnergySavedDetail } from "@/lib/energy-save-feedback";
+import {
+  ENERGY_SAVED_EVENT,
+  ENERGY_FEEDBACK_CLEAR_EVENT,
+  type EnergySavedDetail,
+} from "@/lib/energy-save-feedback";
 
 /** One host across authenticated routes; a toast invites, never forces, a fresh check-in. */
 export default function EnergySaveFeedback() {
   const { toast } = useToast();
   const { t } = useLang();
   const [openOwner, setOpenOwner] = useState<string | null>(null);
+  const activeOffer = useRef<symbol | null>(null);
   const owner = useRef(getDataOwner());
   const lastToast = useRef<{ dismiss: () => void } | null>(null);
 
@@ -29,6 +34,7 @@ export default function EnergySaveFeedback() {
       lastToast.current?.dismiss();
       lastToast.current = null;
       setOpenOwner(null);
+      activeOffer.current = null;
       owner.current = getDataOwner();
     };
     const onAccountChanged = () => {
@@ -38,41 +44,51 @@ export default function EnergySaveFeedback() {
       const detail = (event as CustomEvent<EnergySavedDetail>).detail;
       if (!detail?.owner || detail.owner !== getDataOwner()) return;
       owner.current = detail.owner;
-      const canUpdate = detail.date === todayISO() && detail.direction !== "neutral";
+      const canUpdate =
+        detail.date === todayISO() &&
+        (detail.direction === "gives" || detail.direction === "drains");
+      lastToast.current?.dismiss();
+      const offer = Symbol();
+      activeOffer.current = offer;
       lastToast.current = toast({
         title: t("Energipåverkan sparad"),
-        description: t(
-          canUpdate
-            ? detail.direction === "drains"
-              ? "Du har loggat något som tog energi. Uppdatera batteriet om din ork har ändrats."
-              : "Du har loggat något som gav energi. Uppdatera batteriet om din ork har ändrats."
-            : "Sparat i din energihistorik.",
-        ),
-        duration: canUpdate ? 20_000 : 5_000,
-        className: "flex-col items-stretch gap-3 space-x-0 rounded-2xl p-4 pr-8",
-        action: canUpdate ? (
-          <ToastAction
-            altText={t("Uppdatera mitt batteri")}
-            className="h-auto min-h-11 w-full whitespace-normal rounded-xl px-3 py-2"
-            onClick={() => {
-              if (detail.owner !== getDataOwner()) return;
+        description: canUpdate ? (
+          <EnergyBatteryOffer
+            key={detail.factorId}
+            detail={detail}
+            onCheckin={() => {
+              if (detail.owner !== getDataOwner() || detail.date !== todayISO()) return;
               lastToast.current?.dismiss();
               setOpenOwner(detail.owner);
             }}
-          >
-            {t("Uppdatera mitt batteri")}
-          </ToastAction>
-        ) : undefined,
+            onSaved={(synced) => {
+              if (detail.owner !== getDataOwner() || activeOffer.current !== offer) return;
+              lastToast.current = toast({
+                description: t(
+                  synced
+                    ? "Batteriet är uppdaterat."
+                    : "Batteriet är sparat här och väntar på synkning till kontot.",
+                ),
+              });
+            }}
+          />
+        ) : (
+          t("Sparat i din energihistorik.")
+        ),
+        duration: canUpdate ? Infinity : 5_000,
+        className: "flex-col items-stretch gap-3 space-x-0 rounded-2xl p-4 pr-8 [&>div]:min-w-0",
       });
     };
     window.addEventListener(ENERGY_SAVED_EVENT, onSaved);
     window.addEventListener(ACCOUNT_BOUND_EVENT, onAccountChanged);
+    window.addEventListener(ENERGY_FEEDBACK_CLEAR_EVENT, clear);
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") clear();
     });
     return () => {
       window.removeEventListener(ENERGY_SAVED_EVENT, onSaved);
       window.removeEventListener(ACCOUNT_BOUND_EVENT, onAccountChanged);
+      window.removeEventListener(ENERGY_FEEDBACK_CLEAR_EVENT, clear);
       data.subscription.unsubscribe();
       lastToast.current?.dismiss();
     };

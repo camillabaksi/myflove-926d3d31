@@ -1,3 +1,4 @@
+import { energyPercent } from "./energy-percent";
 import type { ActivityInstance } from "@/lib/activity-history";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
 
@@ -49,7 +50,6 @@ const dayKey = (date: Date) => {
 };
 
 const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0) / values.length;
-const levelToPercent = (level: number) => Math.round(((level - 1) / 4) * 100);
 
 function mondayKey(day: string): string {
   const date = new Date(`${day}T12:00:00`);
@@ -166,7 +166,7 @@ export function buildBatteryLoadTrend(input: {
   for (const entry of validEnergy) {
     const key = dayKey(new Date(entry.timestamp));
     const levels = energyByDay.get(key) ?? [];
-    levels.push(levelToPercent(entry.level));
+    levels.push(energyPercent(entry));
     energyByDay.set(key, levels);
   }
 
@@ -261,8 +261,7 @@ export function buildBatteryLoadTrend(input: {
     const after = sameDay.find(
       (entry) => entry.timestamp > moment && entry.timestamp - moment <= fourHours,
     );
-    if (before && after)
-      pairedChanges.push(levelToPercent(after.level) - levelToPercent(before.level));
+    if (before && after) pairedChanges.push(energyPercent(after) - energyPercent(before));
   }
 
   const pairedEffect = pairedChanges.length >= 2 ? Math.round(mean(pairedChanges)) : null;

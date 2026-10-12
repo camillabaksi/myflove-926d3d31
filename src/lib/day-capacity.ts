@@ -1,8 +1,10 @@
+import { energyPercent } from "./energy-percent";
 import { edgeToPercent, type DayEdges } from "@/lib/day-window";
 
 export interface EnergyLogEntry {
   level: number;
   logged_at: string;
+  note?: string | null;
 }
 
 export type CapacitySource = "morning" | "energy-log";
@@ -54,7 +56,7 @@ export function dayCapacity(
     latest && (!Number.isFinite(morningTime) || Date.parse(latest.logged_at) >= morningTime);
   if (reportedLevel != null && (morning == null || logIsLatest)) {
     return {
-      percent: Math.round(((reportedLevel - 1) / 4) * 100),
+      percent: energyPercent(latest!),
       source: "energy-log",
       morning,
       reportedLevel,

@@ -105,17 +105,19 @@ const clamp = (n: number, lo = 3, hi = 100) => Math.min(hi, Math.max(lo, n));
 
 /** Hur mycket en sak drar eller ger, i procentenheter. */
 export function itemCost(item: BatteryItem): number {
-  const size = item.friction === "large" ? 15 : item.friction === "medium" ? 9 : 5;
+  // Startmotstånd säger inget om den faktiska energikostnaden.
+  const size = 9;
   switch (item.energyImpact) {
     case "gives":
       return size * 0.8;
     case "both":
-      return -size * 0.3;
+    case "neutral":
+      return 0;
     case "drains":
       return -size;
     default:
-      // Okänd påverkan behandlas som mild kostnad – tid tar alltid något.
-      return -size * 0.5;
+      // Okänd påverkan är inte en registrerad energiförlust.
+      return 0;
   }
 }
 

@@ -15,7 +15,10 @@ vi.mock("@/hooks/use-energy-flow", () => ({
 }));
 vi.mock("@/hooks/use-voice-input", () => ({ useVoiceInput: () => ({ isSupported: false }) }));
 vi.mock("@/hooks/use-toast", () => ({ useToast: () => ({ toast: mocks.toast }) }));
-vi.mock("@/lib/energy-save-feedback", () => ({ announceSavedEnergy: mocks.announce }));
+vi.mock("@/lib/energy-save-feedback", () => ({
+  announceSavedEnergy: mocks.announce,
+  ENERGY_FEEDBACK_CLEAR_EVENT: "myflove:energy-feedback-clear",
+}));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 import DidThisQuickAdd from "./did-this-quick-add";
 import EnergyAfterCheck from "./recovery/energy-after-check";
@@ -43,14 +46,14 @@ it("waits for a confirmed observation before offering a battery update", async (
       }),
   );
   render(<DidThisQuickAdd />);
-  fireEvent.click(screen.getByRole("button", { name: /Tar energi/ }));
   expect(mocks.announce).not.toHaveBeenCalled();
   fireEvent.change(screen.getByPlaceholderText("Något annat du gjorde…"), {
     target: { value: "Diska" },
   });
   fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
+  fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
   expect(mocks.announce).not.toHaveBeenCalled();
-  expect(screen.getByPlaceholderText("Något annat du gjorde…")).toHaveValue("Diska");
+  expect(screen.getByText(/Diska · Hur kändes det/)).toBeVisible();
   finish(savedEntry(mocks.addFactor.mock.calls[0][0]));
   await waitFor(() => expect(mocks.announce).toHaveBeenCalledOnce());
   expect(mocks.announce).toHaveBeenCalledWith(
@@ -72,21 +75,22 @@ it.each([null, new Error("Offline")])(
       target: { value: "Mitt utkast" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
-    await waitFor(() =>
-      expect(mocks.toast).toHaveBeenCalledWith(expect.objectContaining({ variant: "destructive" })),
-    );
-    expect(screen.getByPlaceholderText("Något annat du gjorde…")).toHaveValue("Mitt utkast");
+    fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Ditt val finns kvar");
+    expect(screen.getByText(/Mitt utkast · Hur kändes det/)).toBeVisible();
     expect(mocks.announce).not.toHaveBeenCalled();
   },
 );
 
 it("passes the actual historical date rather than claiming yesterday changed today's battery", async () => {
   render(<DidThisQuickAdd />);
+  fireEvent.click(screen.getByRole("button", { name: "Annan tid" }));
   fireEvent.click(screen.getByRole("button", { name: "Igår" }));
   fireEvent.change(screen.getByPlaceholderText("Något annat du gjorde…"), {
     target: { value: "Promenad" },
   });
   fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
+  fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
   await waitFor(() => expect(mocks.announce).toHaveBeenCalledOnce());
   const at = new Date(mocks.announce.mock.calls[0][0].occurredAt);
   const yesterday = new Date();
@@ -118,4 +122,15 @@ describe("recovery feedback", () => {
       mocks.addFactor.mock.calls[0][0].occurredAt,
     );
   });
+});
+
+it("låter användaren avgöra promenadens påverkan i två tryck", async () => {
+  render(<DidThisQuickAdd />);
+  fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
+  expect(mocks.addFactor).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
+  await waitFor(() => expect(mocks.announce).toHaveBeenCalled());
+  expect(mocks.addFactor).toHaveBeenCalledWith(
+    expect.objectContaining({ title: "Promenad", direction: "drains", friction: null }),
+  );
 });
