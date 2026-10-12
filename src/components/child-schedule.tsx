@@ -1,3 +1,4 @@
+import { openSignedDocument } from "@/lib/open-signed-document";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Plus, Trash2, MapPin, CalendarClock, Upload, FileText, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -125,8 +126,7 @@ export default function ChildSchedule({
 
   const open = async (path: string) => {
     try {
-      const url = await openDoc(path);
-      window.open(url, "_blank", "noopener");
+      await openSignedDocument(() => openDoc(path));
     } catch {
       toast.error("Kunde inte öppna filen");
     }
