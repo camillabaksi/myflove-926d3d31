@@ -60,6 +60,8 @@ export interface Workout {
   intent: WorkoutIntent;
   blocks: WorkoutBlock[];
   /** Grov uppskattning, aldrig exakt. */
+  /** Valfri maxtid för spelaren, utan att skriva om övningar eller doser. */
+  maxMinutes?: number;
   kcalLow: number;
   kcalHigh: number;
 }
@@ -112,8 +114,7 @@ export function parseWorkoutText(text: string, base: WorkoutRequest): WorkoutReq
   const time = t.match(/(\d{1,3})\s*(min|minuter)/);
   if (time) {
     const m = Number(time[1]);
-    const allowed = [10, 20, 30, 45, 60];
-    next.minutes = allowed.reduce((a, b) => (Math.abs(b - m) < Math.abs(a - m) ? b : a), 30);
+    next.minutes = Math.max(5, Math.min(90, m));
   }
 
   if (/(hemma|hemmet)/.test(t)) next.place = "hemma";
@@ -233,7 +234,7 @@ export function generateWorkout(input: WorkoutRequest, now = Date.now()): Workou
     ...input,
     equipment: input.equipment.length ? input.equipment : ["kroppsvikt"],
     focus: input.focus.length ? input.focus : ["helkropp"],
-    minutes: Math.max(10, Math.min(90, input.minutes)),
+    minutes: Math.max(5, Math.min(90, input.minutes)),
   };
 
   const used = new Set<string>();
@@ -350,7 +351,7 @@ export function buildWorkoutFromPlan(
     ...input,
     equipment: input.equipment.length ? input.equipment : ["kroppsvikt"],
     focus: input.focus.length ? input.focus : ["helkropp"],
-    minutes: Math.max(10, Math.min(90, input.minutes)),
+    minutes: Math.max(5, Math.min(90, input.minutes)),
   };
 
   const seen = new Set<string>();

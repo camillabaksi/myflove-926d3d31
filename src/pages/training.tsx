@@ -258,8 +258,12 @@ export default function TrainingPage() {
       return;
     }
     const mins = Number(sessionEdit.minutes);
+    if (sessionEdit.blocks.length && (!Number.isInteger(mins) || mins < 5 || mins > 180)) {
+      toast({ title: "Välj en maxtid mellan 5 och 180 minuter" });
+      return;
+    }
     const previousWorkout = sessionEdit.index === null ? undefined : state.program?.sessions[sessionEdit.index]?.workout;
-    const visual = sessionEdit.blocks.length ? manualWorkout(sessionEdit.title.trim(), sessionEdit.blocks, sessionEdit.type, previousWorkout) : undefined;
+    const visual = sessionEdit.blocks.length ? manualWorkout(sessionEdit.title.trim(), sessionEdit.blocks, sessionEdit.type, previousWorkout, mins) : undefined;
     const base: Omit<TrainingSession, "day"> = {
       title: sessionEdit.title.trim(),
       type: sessionEdit.type,
@@ -268,7 +272,7 @@ export default function TrainingPage() {
         .split("\n")
         .map((l) => l.replace(/^[-•*\s]+/, "").trim())
         .filter(Boolean),
-      ...(visual ? { workout: visual, minutes: visual.minutes } : {}),
+      ...(visual ? { workout: visual, minutes: visual.maxMinutes ?? visual.minutes } : {}),
     };
     if (sessionEdit.index === null) {
       // Skapa ett pass per vald dag – samma innehåll, flera dagar.
@@ -1574,9 +1578,9 @@ export default function TrainingPage() {
                   </p>
                 )}
               </fieldset>
-              {sessionEdit.blocks.length === 0 && <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
                 <label className="text-sm text-muted-foreground">
-                  Minuter
+                  {sessionEdit.blocks.length ? "Maxtid (minuter)" : "Minuter"}
                   <Input
                     type="number"
                     min={5}
@@ -1586,7 +1590,8 @@ export default function TrainingPage() {
                     className="rounded-xl mt-1"
                   />
                 </label>
-              </div>}
+              </div>
+              {sessionEdit.blocks.length > 0 && <p className="text-sm text-muted-foreground">Maxtiden sparas med bildpasset. Dina valda övningar och doser behålls.</p>}
               <label className="text-sm text-muted-foreground block">
                 Namn på passet
                 <Input
@@ -1613,7 +1618,7 @@ export default function TrainingPage() {
               </div>
               <ManualExercises disabled={Boolean(sessionEdit.exercises.trim() && !sessionEdit.blocks.length)} blocks={sessionEdit.blocks} onChange={(blocks) => setSessionEdit({ ...sessionEdit, blocks })} />
               {sessionEdit.exercises.trim() && !sessionEdit.blocks.length && <p className="text-sm text-muted-foreground">Töm listan med egna övningar om du vill välja övningar med bilder istället.</p>}
-              {sessionEdit.blocks.length > 0 ? <p className="text-sm text-muted-foreground">Tiden räknas från dina övningar, set och vilor. Bildpasset sparas med dina val.</p> : <label className="text-sm text-muted-foreground block">
+              {sessionEdit.blocks.length > 0 ? <p className="text-sm text-muted-foreground">Övningarnas uppskattade tid beror på set och vilor. Spelaren stannar senast vid vald maxtid.</p> : <label className="text-sm text-muted-foreground block">
                 Övningar – en per rad
                 <Textarea
                   rows={5}

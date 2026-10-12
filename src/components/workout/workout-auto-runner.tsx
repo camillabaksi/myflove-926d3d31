@@ -1,15 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Hand,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Hand, Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExerciseVisual from "@/components/workout/exercise-visual";
 import { useWorkoutTimer } from "@/hooks/use-workout-timer";
@@ -38,20 +28,24 @@ export default function WorkoutAutoRunner({
   onManual,
 }: {
   workout: Workout;
-  onFinish: (doneCount: number) => void;
+  onFinish: (doneCount: number, elapsedSeconds: number) => void;
   onClose: () => void;
   onManual: () => void;
 }) {
-  const steps = useMemo(() => buildWorkoutTimeline(workout), [workout]);
+  const steps = useMemo(() => buildWorkoutTimeline(workout, { timeReps: true }), [workout]);
   const [soundOn, setSoundOn] = useState(() => isWorkoutSoundEnabled());
   const [finished, setFinished] = useState(false);
   const doneBlocks = useRef<Set<number>>(new Set());
+  const completedSteps = useRef<Set<string>>(new Set());
+  const maxMinutes =
+    Number.isFinite(workout.maxMinutes) && workout.maxMinutes! >= 5 && workout.maxMinutes! <= 180
+      ? workout.maxMinutes
+      : undefined;
 
   useEffect(() => subscribeWorkoutSound(setSoundOn), []);
 
   const handleStepStart = useCallback((step: TimelineStep) => {
     if (step.kind === "arbete") {
-      doneBlocks.current.add(step.blockIndex);
       announceWorkout(step.announce, step.announce === "Byt sida" ? "byt" : "start");
     } else if (step.kind === "vila") {
       announceWorkout("Vila", "vila");
@@ -62,6 +56,17 @@ export default function WorkoutAutoRunner({
 
   const timer = useWorkoutTimer(steps, {
     totalExercises: workout.blocks.length,
+    limitSeconds: maxMinutes ? maxMinutes * 60 : undefined,
+    onStepComplete: (step) => {
+      if (step.kind !== "arbete") return;
+      completedSteps.current.add(step.id);
+      if (
+        steps
+          .filter((s) => s.blockIndex === step.blockIndex && s.kind === "arbete")
+          .every((s) => completedSteps.current.has(s.id))
+      )
+        doneBlocks.current.add(step.blockIndex);
+    },
     onStepStart: handleStepStart,
     onFinish: () => {
       announceWorkout("Passet är klart", "klar");
@@ -106,15 +111,19 @@ export default function WorkoutAutoRunner({
   if (finished) {
     return (
       <section className="surface-card p-6 text-center">
-        <h2 className="text-2xl font-semibold text-ink">Passet klart 💜</h2>
+        <h2 className="text-2xl font-semibold text-ink">
+          {doneBlocks.current.size === workout.blocks.length
+            ? "Passet klart 💜"
+            : "Passet avslutat"}
+        </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Du gick igenom {doneBlocks.current.size} av {workout.blocks.length} övningar. Fint jobbat.
+          Du slutförde {doneBlocks.current.size} av {workout.blocks.length} övningar.
         </p>
         <div className="mt-5 grid gap-2">
           <Button
             size="lg"
             className="h-14 rounded-2xl text-base"
-            onClick={() => onFinish(doneBlocks.current.size)}
+            onClick={() => onFinish(doneBlocks.current.size, timer.elapsedSeconds)}
           >
             <Check size={18} className="mr-2" aria-hidden /> Spara och logga passet
           </Button>
@@ -126,7 +135,18 @@ export default function WorkoutAutoRunner({
     );
   }
 
-  if (!step || !ex) return null;
+  if (!step || !ex)
+    return (
+      <section className="surface-card space-y-3 p-5">
+        <p role="alert">
+          Det här passet saknar övningar som spelaren kan visa. Öppna passet och välj övningar från
+          bildbiblioteket.
+        </p>
+        <Button onClick={onClose} variant="outline">
+          Tillbaka till passet
+        </Button>
+      </section>
+    );
 
   const isRest = step.kind === "vila";
   const isPrep = step.kind === "förvarning";
@@ -154,6 +174,12 @@ export default function WorkoutAutoRunner({
           </Button>
         </div>
       </div>
+      {maxMinutes && (
+        <p className="text-center text-sm text-muted-foreground">
+          Maxtid {maxMinutes} min ·{" "}
+          {Math.max(0, Math.ceil((maxMinutes * 60 - timer.elapsedSeconds) / 60))} min kvar
+        </p>
+      )}
 
       <div
         className="h-2 w-full overflow-hidden rounded-full bg-muted"
@@ -197,6 +223,12 @@ export default function WorkoutAutoRunner({
         <p className="text-sm text-muted-foreground">
           {isReps ? "repetitioner – tryck klart när du är färdig" : "sekunder"}
         </p>
+        {step.estimated && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Uppskattad tid för {step.reps} repetitioner{step.side ? " på denna sida" : ""}. Anpassa
+            tempot och pausa vid behov.
+          </p>
+        )}
 
         {!isRest && ex.cues.length > 0 && (
           <ul className="mx-auto mt-4 max-w-[280px] space-y-1 text-left text-sm text-ink">
@@ -219,7 +251,7 @@ export default function WorkoutAutoRunner({
 
         <div className="mt-5 grid gap-2">
           {isReps ? (
-            <Button size="lg" className="h-16 rounded-2xl text-lg" onClick={timer.next}>
+            <Button size="lg" className="h-16 rounded-2xl text-lg" onClick={timer.completeStep}>
               <Check size={20} className="mr-2" aria-hidden /> Klar
             </Button>
           ) : (

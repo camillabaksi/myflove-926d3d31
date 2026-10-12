@@ -10,6 +10,10 @@ import {
 } from "@/lib/workout-generator";
 
 describe("parseWorkoutText", () => {
+  it("keeps a custom duration rather than rounding it to a preset", () => {
+    expect(parseWorkoutText("Jag vill träna 25 minuter", DEFAULT_REQUEST).minutes).toBe(25);
+    expect(parseWorkoutText("Bara 5 min idag", DEFAULT_REQUEST).minutes).toBe(5);
+  });
   it("läser tid, plats, utrustning, fokus och ömma områden", () => {
     const req = parseWorkoutText(
       "Jag vill träna hemma i 30 minuter. Jag har hantlar och kettlebell. Jag har ont i knäna och höger skuldra och vill fokusera på rumpa och mage.",

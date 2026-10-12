@@ -22,6 +22,28 @@ function workoutWith(blocks: Workout["blocks"]): Workout {
 }
 
 describe("buildWorkoutTimeline", () => {
+  it("provides estimated timed repetitions per side only when the player requests them", () => {
+    const workout = workoutWith([
+      {
+        exerciseId: "reverse-lunge",
+        sets: 1,
+        reps: 10,
+        sideSplit: true,
+        restSeconds: 0,
+        section: "huvuddel",
+      },
+    ]);
+    const work = buildWorkoutTimeline(workout, { timeReps: true }).filter(
+      (step) => step.kind === "arbete",
+    );
+    expect(work.map((step) => [step.side, step.seconds, step.reps, step.estimated])).toEqual([
+      ["höger", 40, 10, true],
+      ["vänster", 40, 10, true],
+    ]);
+    expect(
+      buildWorkoutTimeline(workout).find((step) => step.kind === "arbete")?.seconds,
+    ).toBeNull();
+  });
   it("lägger en förvarning före varje övning", () => {
     const steps = buildWorkoutTimeline(
       workoutWith([
