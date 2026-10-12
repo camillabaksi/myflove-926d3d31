@@ -23,6 +23,8 @@ const db = vi.hoisted(() => ({
   readGate: null as Promise<{ data: Row[]; error: null }> | null,
   writeGate: null as Promise<void> | null,
   auth: [] as ((event: string, session: { user: { id: string } } | null) => void)[],
+  updateError: null as Error | null,
+  filters: [] as [string, string][],
   realtime: [] as (() => void)[],
 }));
 vi.mock("@/lib/cloud-storage", () => ({
@@ -48,17 +50,22 @@ vi.mock("@/integrations/supabase/client", () => ({
       },
     },
     from: (table: string) => {
+      let lower: string | null = null;
+      let upper: string | null = null;
+      let slice: [number, number] | null = null;
       const query = {
         select: () => query,
         eq: () => query,
-        gte: () => query,
+        gte: (_key: string, value: string) => { lower = value; return query; },
+        lt: (_key: string, value: string) => { upper = value; return query; },
+        range: (start: number, end: number) => { slice = [start, end]; return query; },
         order: () => query,
         limit: () => query,
         then: (resolve: (value: unknown) => unknown, reject: (reason: unknown) => unknown) => {
           if (table === "energy_factors") db.reads++;
           return (
             table === "energy_factors"
-              ? (db.readGate ?? Promise.resolve({ data: [...db.rows], error: null }))
+              ? (db.readGate ?? Promise.resolve({ data: db.rows.filter((row) => (!lower || row.occurred_at >= lower) && (!upper || row.occurred_at < upper)).slice(slice?.[0] ?? 0, slice ? slice[1] + 1 : undefined), error: null }))
               : Promise.resolve({ data: [], error: null })
           ).then(resolve, reject);
         },
@@ -78,7 +85,18 @@ vi.mock("@/integrations/supabase/client", () => ({
           },
         }),
       });
-      return { ...query, insert: save, upsert: save };
+      return { ...query, insert: save, upsert: save, update: (patch: Partial<Row>) => {
+        const filters: [string, string][] = [];
+        const mutation = {
+          eq: (key: string, value: string) => { filters.push([key, value]); return mutation; },
+          then: (resolve: (value: unknown) => unknown) => {
+            db.filters = filters;
+            if (!db.updateError) db.rows = db.rows.map((row) => filters.every(([key, value]) => row[key] === value) ? { ...row, ...patch } : row);
+            return Promise.resolve({ error: db.updateError }).then(resolve);
+          },
+        };
+        return mutation;
+      } };
     },
   },
 }));
@@ -95,6 +113,8 @@ const input = {
 };
 beforeEach(() => {
   db.auth.forEach((callback) => callback("SIGNED_OUT", null));
+  db.updateError = null;
+  db.filters = [];
   db.userId = "u1";
   db.rows = [];
   db.writes = [];
@@ -221,4 +241,53 @@ describe("energipåverkan från en aktivitet", () => {
     });
     expect(view.result.current.entries).toHaveLength(0);
   });
+});
+
+
+it("hämtar en äldre lokal dag utan att ta med grannens datum", async () => {
+  db.rows = [
+    { ...input, friction: null, note: null, counts_toward_score: true, id: "old", occurred_at: new Date(2026, 0, 2, 12).toISOString(), user_id: "u1" } as Row,
+    { ...input, friction: null, note: null, counts_toward_score: true, id: "next", occurred_at: new Date(2026, 0, 3, 12).toISOString(), user_id: "u1" } as Row,
+  ];
+  const view = renderHook(() => useEnergyFlow());
+  await waitFor(() => expect(view.result.current.loading).toBe(false));
+  expect(view.result.current.entries).toHaveLength(0);
+  await act(async () => { await view.result.current.loadDay("2026-01-02"); });
+  expect(view.result.current.entries.map((entry) => entry.id)).toEqual(["old"]);
+});
+
+it("rättar samma post med kontofilter och återställer den vid sparfel", async () => {
+  const view = renderHook(() => useEnergyFlow());
+  await waitFor(() => expect(view.result.current.loading).toBe(false));
+  await act(async () => { await view.result.current.addFactor(input); });
+  await act(async () => { await view.result.current.updateFactor(input.id, { strength: 1 }); });
+  expect(view.result.current.entries[0].strength).toBe(1);
+  expect(db.filters).toContainEqual(["user_id", "u1"]);
+  db.updateError = new Error("Offline");
+  await act(async () => { await expect(view.result.current.updateFactor(input.id, { strength: 5 })).rejects.toThrow("Offline"); });
+  expect(view.result.current.entries[0].strength).toBe(1);
+});
+
+it("hämtar även poster efter den första sidan på en äldre dag", async () => {
+  db.rows = Array.from({ length: 501 }, (_, index) => ({ ...input, friction: null, note: null, counts_toward_score: true, id: `old-${index}`, occurred_at: new Date(2026, 0, 2, 12).toISOString(), user_id: "u1" }) as Row);
+  const view = renderHook(() => useEnergyFlow());
+  await waitFor(() => expect(view.result.current.loading).toBe(false));
+  await act(async () => { await view.result.current.loadDay("2026-01-02"); });
+  expect(view.result.current.entries).toHaveLength(501);
+});
+
+it("lägger inte en gammal dags svar i nästa kontos vy", async () => {
+  const view = renderHook(() => useEnergyFlow());
+  await waitFor(() => expect(view.result.current.loading).toBe(false));
+  let finish!: (value: { data: Row[]; error: null }) => void;
+  db.readGate = new Promise((resolve) => { finish = resolve; });
+  const reading = view.result.current.loadDay("2026-01-02");
+  const rejected = expect(reading).rejects.toThrow("Kontot ändrades");
+  await waitFor(() => expect(db.reads).toBe(2));
+  act(() => db.auth.forEach((callback) => callback("SIGNED_OUT", null)));
+  await act(async () => {
+    finish({ data: [{ ...input, friction: null, note: null, counts_toward_score: true, id: "old", occurred_at: new Date(2026, 0, 2, 12).toISOString(), user_id: "u1" } as Row], error: null });
+    await rejected;
+  });
+  expect(view.result.current.entries).toHaveLength(0);
 });

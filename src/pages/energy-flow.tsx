@@ -1,16 +1,15 @@
+import EnergyHistory from "@/components/energy-history";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
 import {
   Activity,
   BarChart3,
-  CalendarClock,
   Plus,
   Repeat,
   Scale,
   Settings2,
   Sparkles,
-  Trash2,
   X,
 } from "lucide-react";
 import Layout from "@/components/layout";
@@ -42,9 +41,7 @@ import {
   ENERGY_KINDS,
   FRICTION_LEVELS,
   frictionEmoji,
-  frictionLabel,
   frictionTrends,
-  isSameDay,
   kindEmoji,
   kindLabel,
   titleTrends,
@@ -108,9 +105,6 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
     loading,
     signedIn,
     addFactor,
-    removeFactor,
-    updateFactor,
-    toggleCounts,
     addPreset,
     removePreset,
   } = useEnergyFlow();
@@ -127,7 +121,6 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   const [saving, setSaving] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
 
-  const today = useMemo(() => entries.filter((e) => isSameDay(e.occurredAt)), [entries]);
   const catTrends = useMemo(() => categoryTrends(entries, 14), [entries]);
   const nameTrends = useMemo(() => titleTrends(entries, 30).slice(0, 6), [entries]);
   const frictionRows = useMemo(() => frictionTrends(entries, 30).slice(0, 5), [entries]);
@@ -258,112 +251,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
       )}
 
       <MyFloveWide>
-        <MyFloveBlock
-          area="halsa"
-          icon={CalendarClock}
-          title={t("Idag")}
-          subtitle={t("Det här har påverkat din energi.")}
-          collapsible
-          status={`${today.length} ${t("registrerat")}`}
-        >
-          {today.length === 0 ? (
-            <MyFloveEmptyState
-              emoji="🌤️"
-              title={t("Inget registrerat idag")}
-              description={t("Lägg till en sak som gett eller tagit energi – det räcker med en.")}
-            />
-          ) : (
-            <ul className="space-y-2">
-              {today.map((e) => (
-                <li
-                  key={e.id}
-                  className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl bg-secondary/40 px-3 py-2"
-                >
-                  <span
-                    className={`min-w-0 flex-1 truncate text-sm font-medium text-ink ${
-                      e.countsTowardScore ? "" : "opacity-60"
-                    }`}
-                  >
-                    {kindEmoji(e.kind)} {e.title}
-                  </span>
-
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {categoryEmoji(e.category)} {categoryLabel(e.category)}
-                  </span>
-
-                  <span className="flex shrink-0 items-center gap-1">
-                    {(["drains", "neutral", "both", "gives"] as const).map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        aria-label={`Ändra påverkan till ${
-                          d === "gives" ? "gav energi" : d === "both" ? "både och" : d === "neutral" ? "neutralt" : "tog energi"
-                        }`}
-                        onClick={() => updateFactor(e.id, { direction: d })}
-                        className={`press rounded-full border px-2 py-0.5 text-xs ${
-                          e.direction === d
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border/60 text-muted-foreground"
-                        }`}
-                      >
-                        {d === "gives" ? "🔺" : d === "both" ? "↔️" : d === "neutral" ? "➖" : "🔻"}
-                      </button>
-                    ))}
-                    <span className="ml-0.5 text-xs text-muted-foreground">
-                      {e.direction === "gives"
-                        ? `+${e.strength}`
-                        : e.direction === "neutral" || e.direction === "both"
-                          ? e.direction === "both" ? "↔️" : "0"
-                          : `−${e.strength}`}
-                    </span>
-                  </span>
-
-                  <span className="flex shrink-0 items-center gap-1">
-                    {FRICTION_LEVELS.map((f) => (
-                      <button
-                        key={f.value}
-                        type="button"
-                        title={t(f.label)}
-                        aria-label={`${t("Svårighetsgrad")} ${t(f.label)}`}
-                        onClick={() => updateFactor(e.id, { friction: f.value })}
-                        className={`press rounded-full border px-2 py-0.5 text-xs ${
-                          e.friction === f.value
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border/60 text-muted-foreground"
-                        }`}
-                      >
-                        {f.emoji}
-                      </button>
-                    ))}
-                  </span>
-
-                  <span className="ml-auto flex shrink-0 items-center gap-1">
-                    <button
-                      type="button"
-                      title={e.countsTowardScore ? t("Räkna inte med") : t("Räkna med")}
-                      aria-label={e.countsTowardScore ? t("Räkna inte med") : t("Räkna med")}
-                      onClick={() => toggleCounts(e.id, !e.countsTowardScore)}
-                      className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-ink"
-                    >
-                      {e.countsTowardScore ? <X size={14} /> : <Plus size={14} />}
-                    </button>
-                    <button
-                      type="button"
-                      title={t("Ta bort")}
-                      aria-label={`${t("Ta bort")} ${e.title}`}
-                      onClick={() => removeFactor(e.id)}
-                      className="press grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:text-destructive"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </span>
-
-                  {e.note && <p className="w-full text-xs text-muted-foreground">{e.note}</p>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </MyFloveBlock>
+        <EnergyHistory />
       </MyFloveWide>
 
       <MyFloveWide>
