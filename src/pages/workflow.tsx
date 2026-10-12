@@ -211,9 +211,9 @@ export function WorkflowContent({ section = "all" }: { section?: "plan" | "more"
           <header className={card}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h1 className={sectionTitle}>
+                <h2 className={sectionTitle}>
                   <Zap className="h-5 w-5 text-gold" /> Jobb – din planering
-                </h1>
+                </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Du behöver inte välja bland allt. Jag säger vad som är rimligt just nu.
                 </p>

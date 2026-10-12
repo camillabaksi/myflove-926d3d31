@@ -101,7 +101,7 @@ export default function BatteryPage() {
         {/* Kort väg till den befintliga historiken – ingen ny vy, ingen ny data. */}
         <MyFloveWide>
           <Link
-            href="/historik"
+            href="/energifloede"
             data-testid="battery-patterns-link"
             className="press flex items-center justify-between gap-3 rounded-3xl border-2 border-border/60 bg-card px-4 py-4 shadow-soft hover:border-primary sm:px-5"
           >
@@ -161,7 +161,7 @@ export default function BatteryPage() {
                 <Battery size={14} className="mr-1" /> {t("Energi")}
               </TabsTrigger>
               <TabsTrigger value="flow" className="rounded-xl text-xs">
-                <Zap size={14} className="mr-1" /> {t("Flöde")}
+                <Zap size={14} className="mr-1" /> {t("Energimönster")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="mood" className="mt-6">

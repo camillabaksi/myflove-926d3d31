@@ -306,7 +306,7 @@ export function MyFloveHeader({
   description,
   why,
   action,
-  back = true,
+  back = false,
   backTo = "/idag",
   area,
   children,

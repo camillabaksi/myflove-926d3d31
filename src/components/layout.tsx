@@ -70,6 +70,7 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
+import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
 import AutoTranslateProvider from "@/components/auto-translate-provider";
 import DemoBanner from "@/components/demo-banner";
@@ -445,13 +446,7 @@ export default function Layout({ children }: LayoutProps) {
       icon: Sparkles,
       hint: "Planeringsläget i Pace – ordna dagens saker",
     },
-    {
-      href: "/flow",
-      label: "Pace",
-      icon: Sparkles,
-      hint: "Hjälp, planering och chatt på ett ställe",
-      essential: true,
-    },
+
 
     {
       href: "/friktionsindex",
@@ -507,7 +502,10 @@ export default function Layout({ children }: LayoutProps) {
       hint: "Anpassa Paceable, konto och appens inställningar",
       essential: true,
     },
-  ].map((i) => ({ ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) }));
+  ].map((item) => {
+    const i = { ...item, ...APP_DESTINATIONS[item.href] };
+    return { ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) };
+  });
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.
   const categories = useMemo(() => {

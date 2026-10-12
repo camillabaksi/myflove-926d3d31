@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/nytt-losenord")({
       { property: "og:title", content: "Välj nytt lösenord – Paceable" },
       { property: "og:description", content: "Skapa ett nytt lösenord till ditt Paceable-konto." },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://myflove.lovable.app/nytt-losenord" },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/nytt-losenord` },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],

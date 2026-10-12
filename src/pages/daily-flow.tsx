@@ -1,3 +1,4 @@
+import { useRouterState } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { RoutinesContent } from "@/pages/routines";
@@ -23,6 +24,8 @@ function MorningContent() {
 }
 
 export default function DailyFlowPage() {
+  const location = useRouterState({ select: (state) => state.location });
+  const reveal = (id: string) => location.hash === id ? location.href : undefined;
   return (
     <Layout>
       <MyFlovePageGrid area="idag">
@@ -59,6 +62,7 @@ export default function DailyFlowPage() {
                 }
                 description="Lägg till, ändra eller pausa dina återkommande hållpunkter."
                 id="Rutiner"
+                revealToken={reveal("Rutiner")}
                 defaultCollapsed
                 className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"
@@ -74,6 +78,7 @@ export default function DailyFlowPage() {
                 }
                 description="Hantera mediciner, doser och tider på samma ställe."
                 id="Medicin"
+                revealToken={reveal("Medicin")}
                 defaultCollapsed
                 className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"
@@ -89,6 +94,7 @@ export default function DailyFlowPage() {
                 }
                 description="Ditt lugna stöd för att komma igång med dagen."
                 id="Morgonstart"
+                revealToken={reveal("Morgonstart")}
                 defaultCollapsed
                 className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"

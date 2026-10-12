@@ -4,4 +4,4 @@ Disallow: /api/
 Disallow: /mcp
 Disallow: /.lovable/
 
-Sitemap: https://myflove.lovable.app/sitemap.xml
+Sitemap: https://www.paceable.se/sitemap.xml

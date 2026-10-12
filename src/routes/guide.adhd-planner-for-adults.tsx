@@ -1,6 +1,7 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-const URL = "https://myflove.lovable.app/guide/adhd-planner-for-adults";
+const URL = `${PUBLIC_BASE_URL}/guide/adhd-planner-for-adults`;
 const TITLE = "ADHD-planner för vuxna: så väljer du rätt (2026)";
 const DESC =
   "Guide för vuxna med ADHD som söker en planner som faktiskt håller. Jämför digitala och analoga lösningar och se hur Paceable minskar mental belastning.";
@@ -13,11 +14,11 @@ export const Route = createFileRoute("/guide/adhd-planner-for-adults")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "article" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { property: "og:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { name: "twitter:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
       { property: "og:url", content: URL },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },

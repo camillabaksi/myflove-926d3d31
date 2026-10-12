@@ -1,7 +1,7 @@
-import { type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { useLocation } from "wouter";
-import { useCollapsible } from "@/lib/collapse-store";
+import { useCollapsible, setCollapsed } from "@/lib/collapse-store";
 import HelpHint from "@/components/help-hint";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ interface CollapsibleSectionProps {
   title: ReactNode;
   /** Text-id om rubriken inte är ren text. */
   id?: string;
+  revealToken?: string;
   /** Knappar eller liknande som ska ligga kvar i rubrikraden. */
   actions?: ReactNode;
   /** Liten hjälptext under rubriken. */
@@ -29,6 +30,7 @@ interface CollapsibleSectionProps {
 export default function CollapsibleSection({
   title,
   id,
+  revealToken,
   actions,
   description,
   help,
@@ -42,9 +44,19 @@ export default function CollapsibleSection({
   const key = id ?? (typeof title === "string" ? title : "sektion");
   const storeId = `${path}::${key.slice(0, 60)}`;
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
+  const section = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!revealToken) return;
+    setCollapsed(storeId, false, true);
+    const frame = requestAnimationFrame(() => {
+      section.current?.scrollIntoView?.({ block: "start", behavior: "auto" });
+      section.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [revealToken, storeId]);
 
   return (
-    <section className={cn("space-y-4", className)}>
+    <section ref={section} id={id} className={cn("space-y-4", className)}>
       <div className="flex items-center gap-2">
         <button
           type="button"

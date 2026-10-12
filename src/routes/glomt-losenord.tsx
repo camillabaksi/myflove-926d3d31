@@ -1,3 +1,4 @@
+import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,15 +23,15 @@ export const Route = createFileRoute("/glomt-losenord")({
         content: "Få en återställningslänk till din e-post och välj ett nytt lösenord.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://myflove.lovable.app/og-image.jpg" },
+      { property: "og:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Paceable – Bär mindre. Gör inte mer." },
-      { name: "twitter:image", content: "https://myflove.lovable.app/og-image.jpg" },
-      { property: "og:url", content: "https://myflove.lovable.app/glomt-losenord" },
+      { name: "twitter:image", content: `${PUBLIC_BASE_URL}/og-image.jpg` },
+      { property: "og:url", content: `${PUBLIC_BASE_URL}/glomt-losenord` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://myflove.lovable.app/glomt-losenord" }],
+    links: [{ rel: "canonical", href: `${PUBLIC_BASE_URL}/glomt-losenord` }],
   }),
   component: ForgotPasswordPage,
 });

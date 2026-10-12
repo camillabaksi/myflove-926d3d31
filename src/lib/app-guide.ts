@@ -2,6 +2,8 @@
  * En enkel sammanfattning av vad som finns i MyFlove – och vart man går
  * för att göra respektive sak. Används av översiktssidan (/oversikt).
  */
+import { APP_DESTINATIONS } from "@/lib/app-destinations";
+
 export interface GuideEntry {
   href: string;
   label: string;
@@ -29,7 +31,6 @@ export const APP_GUIDE: GuideGroup[] = [
         label: "Lägg till",
         what: "Vägen in för aktivitet, påminnelse, rutin eller medicin",
       },
-      { href: "/flow", label: "Pace hjälper", what: "Ett förslag i taget när du kört fast" },
       {
         href: "/flowplan",
         label: "Planering",
@@ -37,7 +38,7 @@ export const APP_GUIDE: GuideGroup[] = [
       },
       {
         href: "/assistant",
-        label: "Prata med Pace",
+        label: "Chatta med Pace",
         what: "Chatta med Pace när du vill prata av dig eller tänka högt",
       },
       { href: "/quickflow", label: "Fånga", what: "Skriv av dig snabbt – sortera sen" },
@@ -70,7 +71,7 @@ export const APP_GUIDE: GuideGroup[] = [
     label: "Hälsa",
     hint: "Energi, mående, träning, medicin och vila",
     entries: [
-      { href: "/halsa", label: "Hälsa", what: "Ingången till allt som rör hur du mår" },
+      { href: "/halsa", label: "Min plats", what: "Ingången till allt som rör hur du mår" },
       {
         href: "/mitt-batteri",
         label: "Mitt batteri",
@@ -82,6 +83,7 @@ export const APP_GUIDE: GuideGroup[] = [
         label: "Rutiner & medicin",
         what: "Morgonstart, fasta rutiner och dagens doser",
       },
+      { href: "/energifloede", label: "Energimönster", what: "Vad som brukar ge och ta energi" },
       { href: "/statistik", label: "Statistik", what: "Dina mönster över tid" },
     ],
   },
@@ -104,7 +106,8 @@ export const APP_GUIDE: GuideGroup[] = [
     hint: "De du delar vardagen med",
     entries: [
       { href: "/relationer", label: "Relationer", what: "Partner, vänner, familj och husdjur" },
-      { href: "/familj", label: "Familj", what: "Dela listor och kalender" },
+      { href: "/familjeflow", label: "Familj", what: "Familjens vardag" },
+      { href: "/familj", label: "Dela & bjud in", what: "Dela listor och kalender" },
       { href: "/barn", label: "Barn", what: "Scheman och rutiner för barnen" },
     ],
   },
@@ -130,7 +133,12 @@ export const APP_GUIDE: GuideGroup[] = [
     entries: [
       { href: "/profil", label: "Min profil", what: "Namn, barn, din vardag och dina behov" },
       { href: "/anpassa", label: "Anpassa appen", what: "Lugnare färger, färre saker, tyst läge" },
-      { href: "/insight", label: "Insight", what: "Testa strategier och se vad som funkar" },
+      { href: "/insight", label: "Insikter", what: "Beskrivande mönster från din egen data" },
     ],
   },
 ];
+
+APP_GUIDE.forEach((group) => group.entries.forEach((entry) => {
+  const destination = APP_DESTINATIONS[entry.href];
+  if (destination) { entry.label = destination.label; entry.what = destination.hint; }
+}));

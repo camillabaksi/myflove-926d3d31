@@ -53,6 +53,23 @@ describe("CollapsibleSection", () => {
     expect(screen.queryByText("innehåll")).toBeNull();
   });
 
+  it("öppnar en länkad sektion även när användaren tidigare fällt ihop den", () => {
+    const view = render(
+      <CollapsibleSection title="Doser" id="Medicin" defaultCollapsed>
+        <p>medicinens innehåll</p>
+      </CollapsibleSection>,
+    );
+    expect(screen.queryByText("medicinens innehåll")).toBeNull();
+    view.rerender(
+      <CollapsibleSection title="Doser" id="Medicin" defaultCollapsed revealToken="/testsida#Medicin">
+        <p>medicinens innehåll</p>
+      </CollapsibleSection>,
+    );
+    expect(screen.getByText("medicinens innehåll")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /Doser/ }));
+    expect(screen.queryByText("medicinens innehåll")).toBeNull();
+  });
+
   it("gör vanliga MyFlove-block hopfällbara som standard och sparar valet", () => {
     const view = render(
       <MyFloveBlock title="Min plan">

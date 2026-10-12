@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import DidThisQuickAdd from "@/components/did-this-quick-add";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import { useTasks } from "@/hooks/use-data";
 import { useActiveArea } from "@/lib/life-areas";
@@ -9,8 +10,8 @@ import { Bell, Pill, Repeat, Baby, ArrowRight, Plus } from "lucide-react";
 /** De vägar som inte är vanliga aktiviteter – en rad var, utan dubbletter. */
 const MORE: { href: string; icon: typeof Bell; label: string; what: string }[] = [
   { href: "/paminnelser", icon: Bell, label: "Påminnelse", what: "Något du vill bli påmind om" },
-  { href: "/daglig-rutin", icon: Repeat, label: "Rutin", what: "Något som återkommer" },
-  { href: "/halsa", icon: Pill, label: "Medicin", what: "Doser och tider" },
+  { href: "/daglig-rutin#Rutiner", icon: Repeat, label: "Rutin", what: "Något som återkommer" },
+  { href: "/daglig-rutin#Medicin", icon: Pill, label: "Medicin", what: "Doser och tider" },
   { href: "/barn", icon: Baby, label: "Barnens dag", what: "Hållpunkter för barnen" },
 ];
 
@@ -44,7 +45,11 @@ export function AddToDay() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <TaskQuickAdd onAdd={handleAdd} />
+        <TaskQuickAdd onAdd={handleAdd} initialMode="planned" label={t("Lägg i min plan")} />
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <DidThisQuickAdd />
       </MyFloveWide>
 
       <MyFloveWide>

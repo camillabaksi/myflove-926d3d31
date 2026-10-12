@@ -1,3 +1,4 @@
+import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -123,7 +124,7 @@ export default function Pomodoro() {
           <div className="space-y-8">
             <div>
               <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">
-                Pomodoro-timer
+                {APP_DESTINATIONS["/pomodoro"].label}
               </h1>
               <p className="text-muted-foreground">
                 Jobba i korta pass med tydliga pauser emellan.
