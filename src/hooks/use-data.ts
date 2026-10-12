@@ -383,7 +383,11 @@ export function useTasks() {
       haptic("success");
       flowDone(task.title);
       // Snabb, frivillig incheckning: "Hur kändes det?" – samma befintliga logik.
-      emitActivityDone({ id: `task-${task.id}`, title: task.title, ...(task.dueDate ? { dueDate: task.dueDate } : {}) });
+      emitActivityDone({
+        id: `task-${task.id}`,
+        title: task.title,
+        ...(task.dueDate ? { dueDate: task.dueDate } : {}),
+      });
     } else if (task) {
       track("task_reopened", { source: "app" });
     }
@@ -837,6 +841,8 @@ export function useReminders() {
       remindMinutesBefore?: number | undefined;
       note?: string | undefined;
       area?: LifeArea;
+      completed?: boolean;
+      canceled?: boolean;
     },
   ) => {
     setReminders((prev) =>

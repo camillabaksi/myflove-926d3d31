@@ -1,15 +1,22 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import CollapsibleSection from "@/components/collapsible-section";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import PushStatusCard from "@/components/push-status-card";
 import { paceFormSurface } from "@/components/paceable/design-system";
 import { useToast } from "@/hooks/use-toast";
+import { todayISO } from "@/lib/day";
+import { groupReminders, reminderStatus, type ReminderStatus } from "@/lib/reminder-status";
 import {
   ArrowRight,
   BellRing,
@@ -21,97 +28,109 @@ import {
   X,
   CalendarClock,
   Pill,
+  History,
 } from "lucide-react";
-
-const todayIso = () => new Date().toISOString().slice(0, 10);
 
 const inputClass =
   "p-3 rounded-xl bg-secondary/50 border border-transparent focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base w-full";
+const statusLabels: Record<ReminderStatus, string> = {
+  active: "Aktiv",
+  passed: "Passerad",
+  completed: "Klar",
+  canceled: "Avbokad",
+};
+const repeatLabels: Record<RepeatMode, string> = {
+  none: "",
+  daily: "varje dag",
+  weekdays: "vardagar",
+  weekly: "varje vecka",
+};
+type EditPatch = Pick<Reminder, "title" | "date" | "time" | "note"> &
+  Partial<Pick<Reminder, "endDate" | "endTime" | "completed" | "canceled">>;
 
-function StatusBadge({ canceled }: { canceled: boolean }) {
+function StatusBadge({ status }: { status: ReminderStatus }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-1 text-xs font-semibold ${
-        canceled ? "bg-muted text-muted-foreground" : "bg-primary/12 text-primary"
-      }`}
+      className={`inline-flex shrink-0 items-center gap-1.5 rounded-pill px-2.5 py-1 text-xs font-semibold ${status === "active" ? "bg-primary/12 text-primary" : "bg-muted text-muted-foreground"}`}
     >
       <span
         aria-hidden
-        className={`h-1.5 w-1.5 rounded-full ${canceled ? "bg-muted-foreground" : "bg-primary"}`}
+        className={`h-1.5 w-1.5 rounded-full ${status === "active" ? "bg-primary" : "bg-muted-foreground"}`}
       />
-      {canceled ? "Avbokad" : "Aktiv"}
+      {statusLabels[status]}
     </span>
   );
 }
 
 function ReminderRow({
   reminder,
-  onSave,
+  status,
+  onEdit,
+  onPlanAgain,
   onCancel,
   onRestore,
   onDelete,
 }: {
   reminder: Reminder;
-  onSave: (patch: {
-    title: string;
-    date: string;
-    time: string | undefined;
-    note: string | undefined;
-  }) => void;
+  status: ReminderStatus;
+  onEdit: () => void;
+  onPlanAgain: () => void;
   onCancel: () => void;
   onRestore: () => void;
   onDelete: () => void;
 }) {
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(reminder.title);
-  const [date, setDate] = useState(reminder.date);
-  const [time, setTime] = useState(reminder.time ?? "");
-  const [note, setNote] = useState(reminder.note ?? "");
-  const canceled = Boolean(reminder.canceled);
-
-  const startEdit = () => {
-    setTitle(reminder.title);
-    setDate(reminder.date);
-    setTime(reminder.time ?? "");
-    setNote(reminder.note ?? "");
-    setEditing(true);
-  };
-
+  const canceled = status === "canceled";
+  const repeat = reminder.repeat ?? "none";
   return (
     <li
       className={`rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className={`font-medium text-ink ${canceled ? "line-through" : ""}`}>
+          <p
+            className={`pace-type-activity font-medium text-ink ${canceled ? "line-through" : ""}`}
+          >
             {reminder.title}
           </p>
-          <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <CalendarClock size={14} />
+          <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+            <CalendarClock size={14} aria-hidden />
+            {repeat !== "none" ? "Från " : ""}
             {reminder.date}
+            {reminder.endDate && reminder.endDate > reminder.date ? ` – ${reminder.endDate}` : ""}
             {reminder.time ? (
-              <span className="pace-type-time"> · {reminder.time}</span>
+              <span className="pace-type-time">
+                {" "}
+                · {reminder.time}
+                {reminder.endTime ? `–${reminder.endTime}` : ""}
+              </span>
             ) : (
               " · hela dagen"
             )}
-            {reminder.repeat && reminder.repeat !== "none" ? " · återkommande" : ""}
+            {repeat !== "none" ? ` · ${repeatLabels[repeat]}` : ""}
           </p>
           {reminder.note && <p className="mt-1 text-sm text-muted-foreground">{reminder.note}</p>}
         </div>
-        <StatusBadge canceled={canceled} />
+        <StatusBadge status={status} />
       </div>
-
       <div className="mt-3 flex flex-wrap gap-2">
-        <Button variant="secondary" size="sm" className="rounded-xl" onClick={startEdit}>
-          <Pencil size={14} className="mr-1.5" /> Ändra
+        <Button variant="secondary" size="sm" className="rounded-xl" onClick={onEdit}>
+          <Pencil size={14} className="mr-1.5" aria-hidden /> Ändra
         </Button>
-        {canceled ? (
-          <Button variant="secondary" size="sm" className="rounded-xl" onClick={onRestore}>
-            <Undo2 size={14} className="mr-1.5" /> Aktivera igen
+        {status === "passed" ||
+        status === "completed" ||
+        (canceled &&
+          (reminder.completed || reminderStatus({ ...reminder, canceled: false }) === "passed")) ? (
+          <Button variant="secondary" size="sm" className="rounded-xl" onClick={onPlanAgain}>
+            <CalendarClock size={14} className="mr-1.5" aria-hidden /> Planera igen
           </Button>
-        ) : (
+        ) : canceled ? (
+          <Button variant="secondary" size="sm" className="rounded-xl" onClick={onRestore}>
+            <Undo2 size={14} className="mr-1.5" aria-hidden /> Aktivera igen
+          </Button>
+        ) : null}
+        {!canceled && status !== "completed" && (
           <Button variant="secondary" size="sm" className="rounded-xl" onClick={onCancel}>
-            <X size={14} className="mr-1.5" /> Avboka
+            <X size={14} className="mr-1.5" aria-hidden /> Avboka
           </Button>
         )}
         <Button
@@ -120,66 +139,153 @@ function ReminderRow({
           className="rounded-xl text-muted-foreground hover:text-destructive"
           onClick={onDelete}
         >
-          <Trash2 size={14} className="mr-1.5" /> Ta bort
+          <Trash2 size={14} className="mr-1.5" aria-hidden /> Ta bort
         </Button>
       </div>
-
-      <Dialog open={editing} onOpenChange={setEditing}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
-          <DialogHeader>
-            <DialogTitle>Ändra påminnelse</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            <input
-              className={inputClass}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Vad gäller det?"
-            />
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
-              <input
-                className={inputClass}
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-              <input
-                className={inputClass}
-                type="time"
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-            </div>
-            <input
-              className={inputClass}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Anteckning (valfritt)"
-            />
-            <div className="flex gap-2">
-              <Button
-                className="rounded-xl"
-                onClick={() => {
-                  if (!title.trim() || !date) return;
-                  onSave({
-                    title: title.trim(),
-                    date,
-                    time: time || undefined,
-                    note: note.trim() || undefined,
-                  });
-                  setEditing(false);
-                }}
-              >
-                <Check size={16} className="mr-1.5" /> Spara
-              </Button>
-              <Button variant="ghost" className="rounded-xl" onClick={() => setEditing(false)}>
-                <X size={16} className="mr-1.5" /> Avbryt
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </li>
+  );
+}
+
+/** A page-level snapshot keeps an open draft intact when the clock moves its row to history. */
+function ReminderEditor({
+  reminder,
+  planAgain,
+  onSave,
+  onClose,
+}: {
+  reminder: Reminder;
+  planAgain: boolean;
+  onSave: (patch: EditPatch) => void;
+  onClose: () => void;
+}) {
+  const [title, setTitle] = useState(reminder.title);
+  const [date, setDate] = useState(planAgain ? todayISO() : reminder.date);
+  const [time, setTime] = useState(reminder.time ?? "");
+  const [endDate, setEndDate] = useState(reminder.endDate ?? "");
+  const [endTime, setEndTime] = useState(reminder.endTime ?? "");
+  const [note, setNote] = useState(reminder.note ?? "");
+  const [error, setError] = useState("");
+  const handleSave = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!title.trim() || !date) return;
+    if (endDate && endDate < date) {
+      setError("Slutdatum behöver vara samma dag som startdatum eller senare.");
+      return;
+    }
+    const patch: EditPatch = {
+      title: title.trim(),
+      date,
+      time: time || undefined,
+      note: note.trim() || undefined,
+      ...(reminder.endDate ? { endDate: endDate || undefined } : {}),
+      ...(reminder.endTime ? { endTime: endTime || undefined } : {}),
+      ...(planAgain ? { completed: false, canceled: false } : {}),
+    };
+    // A new plan must start in the future, even if the original period ends later.
+    if (
+      planAgain &&
+      reminderStatus({
+        ...reminder,
+        ...patch,
+        repeat: "none",
+        endDate: undefined,
+        endTime: undefined,
+      }) === "passed"
+    ) {
+      setError("Välj ett datum eller klockslag som inte har passerat.");
+      return;
+    }
+    onSave(patch);
+    onClose();
+  };
+  return (
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+        <DialogHeader>
+          <DialogTitle>{planAgain ? "Planera påminnelsen igen" : "Ändra påminnelse"}</DialogTitle>
+          <DialogDescription>
+            {planAgain
+              ? "Välj ett nytt datum eller klockslag. Påminnelsen aktiveras när du sparar."
+              : "Ändra datum, klockslag eller anteckning för påminnelsen."}
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSave} className="space-y-3">
+          <input
+            className={inputClass}
+            aria-label="Vad gäller det?"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Vad gäller det?"
+          />
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+            <input
+              className={inputClass}
+              type="date"
+              aria-label="Datum"
+              required
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <input
+              className={inputClass}
+              type="time"
+              aria-label="Klockslag"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+            />
+          </div>
+          {(reminder.endDate || reminder.endTime) && (
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+              {reminder.endDate && (
+                <input
+                  className={inputClass}
+                  type="date"
+                  aria-label="Slutdatum"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              )}
+              {reminder.endTime && (
+                <input
+                  className={inputClass}
+                  type="time"
+                  aria-label="Sluttid"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              )}
+            </div>
+          )}
+          <input
+            className={inputClass}
+            aria-label="Anteckning (valfritt)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Anteckning (valfritt)"
+          />
+          {error && (
+            <p role="alert" className="text-sm text-destructive">
+              {error}
+            </p>
+          )}
+          <div className="flex gap-2">
+            <Button type="submit" className="rounded-xl">
+              <Check size={16} className="mr-1.5" aria-hidden />{" "}
+              {planAgain ? "Spara och aktivera" : "Spara"}
+            </Button>
+            <Button type="button" variant="ghost" className="rounded-xl" onClick={onClose}>
+              <X size={16} className="mr-1.5" aria-hidden /> Avbryt
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -193,28 +299,34 @@ export default function RemindersPage() {
     restoreReminder,
   } = useReminders();
   const { toast } = useToast();
+  const [now, setNow] = useState(() => new Date());
+  const [editor, setEditor] = useState<{ reminder: Reminder; planAgain: boolean } | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState(todayIso());
+  const [date, setDate] = useState(() => todayISO());
   const [time, setTime] = useState("");
   const [note, setNote] = useState("");
   const [repeat, setRepeat] = useState<RepeatMode>("none");
   const [lead, setLead] = useState(0);
 
-  const { active, canceled } = useMemo(() => {
-    const sorted = [...reminders].sort((a, b) => {
-      const d = a.date.localeCompare(b.date);
-      if (d !== 0) return d;
-      return (a.time ?? "").localeCompare(b.time ?? "");
-    });
-    return {
-      active: sorted.filter((r) => !r.canceled),
-      canceled: sorted.filter((r) => r.canceled),
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    const timer = window.setInterval(tick, 30_000);
+    window.addEventListener("focus", tick);
+    document.addEventListener("visibilitychange", tick);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", tick);
+      document.removeEventListener("visibilitychange", tick);
     };
-  }, [reminders]);
+  }, []);
+  const { active, history, canceled } = useMemo(
+    () => groupReminders(reminders, now),
+    [reminders, now],
+  );
 
-  const handleAdd = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAdd = (event: React.FormEvent) => {
+    event.preventDefault();
     if (!title.trim() || !date) return;
     addReminder(
       title.trim(),
@@ -231,6 +343,24 @@ export default function RemindersPage() {
     toast({ description: "Påminnelsen är tillagd 🔔" });
     setAddOpen(false);
   };
+  const renderRow = (reminder: Reminder) => (
+    <ReminderRow
+      key={reminder.id}
+      reminder={reminder}
+      status={reminderStatus(reminder, now)}
+      onEdit={() => setEditor({ reminder: { ...reminder }, planAgain: false })}
+      onPlanAgain={() => setEditor({ reminder: { ...reminder }, planAgain: true })}
+      onCancel={() => {
+        cancelReminder(reminder.id);
+        toast({ description: "Påminnelsen är avbokad" });
+      }}
+      onRestore={() => {
+        restoreReminder(reminder.id);
+        toast({ description: "Påminnelsen är aktiv igen" });
+      }}
+      onDelete={() => deleteReminder(reminder.id)}
+    />
+  );
 
   return (
     <Layout>
@@ -239,11 +369,10 @@ export default function RemindersPage() {
           <MyFloveHeader
             title="Påminnelser"
             emojiKey="reminder"
-            description="Lägg till, ändra eller avboka. Aktiva påminnelser ger en notis när det är dags."
+            description="Lägg till, ändra eller avboka. Välj klockslag för att få en notis när det är dags."
             why="Påminnelser ska avlasta minnet – inte skapa fler saker att hålla reda på."
           />
         </MyFloveWide>
-
         <MyFloveBlock
           title="Aviseringar"
           subtitle="Notis när det är dags"
@@ -254,21 +383,29 @@ export default function RemindersPage() {
         >
           <PushStatusCard />
         </MyFloveBlock>
-
         <MyFloveWide>
-          <Button onClick={() => setAddOpen(true)} className="h-12 w-full rounded-xl">
-            <Plus size={18} className="mr-2" /> Lägg till påminnelse
+          <Button
+            onClick={() => {
+              setAddOpen(true);
+            }}
+            className="h-12 w-full rounded-xl"
+          >
+            <Plus size={18} className="mr-2" aria-hidden /> Lägg till påminnelse
           </Button>
         </MyFloveWide>
-
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
             <DialogHeader>
               <DialogTitle>Ny påminnelse</DialogTitle>
+              <DialogDescription>
+                Välj datum och lägg till ett klockslag om du vill få en notis.
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleAdd} className="space-y-3">
               <input
                 className={inputClass}
+                aria-label="Vad ska du påminnas om?"
+                required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Vad ska du påminnas om?"
@@ -277,12 +414,15 @@ export default function RemindersPage() {
                 <input
                   className={inputClass}
                   type="date"
+                  aria-label="Datum"
+                  required
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
                 />
                 <input
                   className={inputClass}
                   type="time"
+                  aria-label="Klockslag"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
                 />
@@ -314,54 +454,47 @@ export default function RemindersPage() {
               </div>
               <input
                 className={inputClass}
+                aria-label="Anteckning (valfritt)"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="Anteckning (valfritt)"
               />
               <Button type="submit" className="h-12 w-full rounded-xl">
-                <Plus size={18} className="mr-2" /> Lägg till påminnelse
+                <Plus size={18} className="mr-2" aria-hidden /> Lägg till påminnelse
               </Button>
             </form>
           </DialogContent>
         </Dialog>
-
+        {editor && (
+          <ReminderEditor
+            key={editor.reminder.id}
+            reminder={editor.reminder}
+            planAgain={editor.planAgain}
+            onClose={() => setEditor(null)}
+            onSave={(patch) => {
+              updateReminder(editor.reminder.id, patch);
+              toast({
+                description: editor.planAgain
+                  ? "Påminnelsen är planerad och aktiv igen"
+                  : "Ändringen är sparad",
+              });
+            }}
+          />
+        )}
         <MyFloveWide>
           <MyFloveBlock
             title={`Aktiva (${active.length})`}
             collapseId="reminders-active"
             icon={BellRing}
           >
-            <CollapsibleSection
-              title={`Aktiva (${active.length})`}
-              id="Aktiva påminnelser"
-              headingClassName="sr-only"
-              className="space-y-3"
-            >
-              {active.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {active.map((r) => (
-                    <ReminderRow
-                      key={r.id}
-                      reminder={r}
-                      onSave={(patch) => {
-                        updateReminder(r.id, patch);
-                        toast({ description: "Ändringen är sparad" });
-                      }}
-                      onCancel={() => {
-                        cancelReminder(r.id);
-                        toast({ description: "Påminnelsen är avbokad" });
-                      }}
-                      onRestore={() => restoreReminder(r.id)}
-                      onDelete={() => deleteReminder(r.id)}
-                    />
-                  ))}
-                </ul>
-              )}
-            </CollapsibleSection>
+            {active.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
+            ) : (
+              <ul className="space-y-3" aria-label="Aktiva påminnelser">
+                {active.map(renderRow)}
+              </ul>
+            )}
           </MyFloveBlock>
-
           <MyFloveBlock title="Medicinpåminnelser" icon={Pill} surface="mint">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
@@ -375,39 +508,39 @@ export default function RemindersPage() {
               </Link>
             </div>
           </MyFloveBlock>
-
+          <MyFloveBlock
+            title={`Historik (${history.length})`}
+            collapseId="reminders-history"
+            defaultCollapsed
+            icon={History}
+            surface="plain"
+          >
+            <p className="text-sm text-muted-foreground">
+              Passerade engångspåminnelser och påminnelser du markerat som klara. Passerad betyder
+              att tiden har gått, inte att en notis säkert har kommit fram. Välj Planera igen för
+              ett nytt datum.
+            </p>
+            {history.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Ingen historik ännu.</p>
+            ) : (
+              <ul className="space-y-3" aria-label="Påminnelsehistorik">
+                {history.map(renderRow)}
+              </ul>
+            )}
+          </MyFloveBlock>
           <MyFloveBlock
             title={`Avbokade (${canceled.length})`}
             collapseId="reminders-canceled"
             icon={BellRing}
             surface="plain"
           >
-            <CollapsibleSection
-              title={`Avbokade (${canceled.length})`}
-              id="Avbokade påminnelser"
-              headingClassName="sr-only"
-              className="space-y-3"
-            >
-              {canceled.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Inget avbokat.</p>
-              ) : (
-                <ul className="space-y-3">
-                  {canceled.map((r) => (
-                    <ReminderRow
-                      key={r.id}
-                      reminder={r}
-                      onSave={(patch) => updateReminder(r.id, patch)}
-                      onCancel={() => cancelReminder(r.id)}
-                      onRestore={() => {
-                        restoreReminder(r.id);
-                        toast({ description: "Påminnelsen är aktiv igen" });
-                      }}
-                      onDelete={() => deleteReminder(r.id)}
-                    />
-                  ))}
-                </ul>
-              )}
-            </CollapsibleSection>
+            {canceled.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Inget avbokat.</p>
+            ) : (
+              <ul className="space-y-3" aria-label="Avbokade påminnelser">
+                {canceled.map(renderRow)}
+              </ul>
+            )}
           </MyFloveBlock>
         </MyFloveWide>
       </MyFlovePageGrid>
