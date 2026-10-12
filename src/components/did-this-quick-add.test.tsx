@@ -134,3 +134,14 @@ it("låter användaren avgöra promenadens påverkan i två tryck", async () => 
     expect.objectContaining({ title: "Promenad", direction: "drains", friction: null }),
   );
 });
+
+it.each([
+  ["Tog lite energi", "drains"],
+  ["Gav lite energi", "gives"],
+] as const)("registrerar %s utan en ny uppgift", async (label, direction) => {
+  render(<DidThisQuickAdd />);
+  fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
+  fireEvent.click(screen.getByRole("button", { name: label }));
+  await waitFor(() => expect(mocks.announce).toHaveBeenCalledOnce());
+  expect(mocks.addFactor).toHaveBeenCalledWith(expect.objectContaining({ direction, strength: 1 }));
+});

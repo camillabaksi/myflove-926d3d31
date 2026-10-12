@@ -18,8 +18,10 @@ import {
   type EnergyFactorEntry,
 } from "@/lib/energy-flow";
 
-const DIRECTIONS: { id: EnergyDirection; label: string }[] = [
+const DIRECTIONS: { id: EnergyDirection; label: string; strength?: number }[] = [
+  { id: "gives", label: "Gav lite energi", strength: 1 },
   { id: "gives", label: "Gav energi" },
+  { id: "drains", label: "Tog lite energi", strength: 1 },
   { id: "drains", label: "Tog energi" },
   { id: "both", label: "Både och" },
   { id: "neutral", label: "Ingen skillnad" },
@@ -84,7 +86,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
     setMore(false);
     write.current = { id: newEnergyFactorId(), occurredAt: occurredAtFor(when) };
   };
-  const add = async (direction: EnergyDirection) => {
+  const add = async (direction: EnergyDirection, strength?: number) => {
     if (!selected || saving.current) return;
     const uid = getDataOwner();
     if (uid !== owner.current) return;
@@ -96,7 +98,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
         ...write.current!,
         title: selected.title,
         direction,
-        strength: direction === "both" || direction === "neutral" ? 1 : 3,
+        strength: strength ?? (direction === "both" || direction === "neutral" ? 1 : 3),
         category: selected.category,
         kind: selected.kind,
         friction: null,
@@ -138,10 +140,10 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2">
             {DIRECTIONS.map((d) => (
               <button
-                key={d.id}
+                key={d.label}
                 type="button"
                 disabled={busy}
-                onClick={() => void add(d.id)}
+                onClick={() => void add(d.id, d.strength)}
                 className="press min-h-11 rounded-xl border border-border px-3 py-2 text-sm disabled:opacity-60"
               >
                 {d.label}

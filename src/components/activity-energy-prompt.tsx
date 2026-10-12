@@ -13,7 +13,7 @@ import { activityEnergySourceId } from "@/lib/activity-energy-event";
 import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 import { newEnergyFactorId } from "@/lib/energy-factor-id";
 
-/** Fem svar – alltid frivilliga, alltid ett tryck. */
+/** Actual impact, including a small effect, stays voluntary and one tap. */
 const CHOICES: {
   id: EnergyImpact;
   history: ActivityEnergy | null;
@@ -21,7 +21,9 @@ const CHOICES: {
   label: string;
   strength: number;
 }[] = [
+  { id: "gives", history: "gives", emoji: "🟢", label: "Gav lite energi", strength: 1 },
   { id: "gives", history: "gives", emoji: "🟢", label: "Gav energi", strength: 3 },
+  { id: "drains", history: "drains_little", emoji: "🔴", label: "Tog lite energi", strength: 1 },
   { id: "drains", history: "drains_much", emoji: "🔴", label: "Tog energi", strength: 4 },
   { id: "both", history: "both", emoji: "🟣", label: "Både och", strength: 1 },
   { id: "neutral", history: "neutral", emoji: "➖", label: "Ingen skillnad", strength: 1 },
@@ -141,7 +143,7 @@ export function ActivityEnergyPrompt({
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2 pt-1">
         {CHOICES.map((c) => (
           <button
-            key={c.id}
+            key={c.label}
             type="button"
             disabled={busy}
             onClick={() => pick(c)}

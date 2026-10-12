@@ -271,6 +271,11 @@ export function useTasks() {
       ];
     });
     track("task_created", { source: "app" });
+    // A manual "I did this" is a completion too. QuickFlow hydration must
+    // not replay a prompt when it restores an already completed record.
+    if (opts?.completed && !opts.quickflowId) {
+      emitActivityDone({ id: `task-${id}`, title: cleanTitle, dueDate: targetDate });
+    }
   };
 
   /** Fri anteckning på en uppgift – tom text tar bort anteckningen. */
