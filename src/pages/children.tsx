@@ -1,3 +1,4 @@
+import { openSignedDocument } from "@/lib/open-signed-document";
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useClerk, Show } from "@clerk/react";
@@ -262,8 +263,7 @@ function ChildrenContent() {
 
   const handleOpenDoc = async (path: string) => {
     try {
-      const url = await openDoc(path);
-      window.open(url, "_blank", "noopener");
+      await openSignedDocument(() => openDoc(path));
     } catch {
       toast({ description: "Kunde inte öppna dokumentet.", variant: "destructive" });
     }

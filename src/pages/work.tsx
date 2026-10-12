@@ -1,3 +1,4 @@
+import { openSignedDocument } from "@/lib/open-signed-document";
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
@@ -209,12 +210,15 @@ export default function WorkPage() {
   };
 
   const openAttachment = async (path: string) => {
-    const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, 300);
-    if (error || !data) {
-      toast({ title: "Kunde inte öppna dokumentet", variant: "destructive" });
-      return;
+    try {
+      await openSignedDocument(async () => {
+        const { data, error } = await supabase.storage.from(BUCKET).createSignedUrl(path, 300);
+        if (error || !data) throw new Error("Kunde inte hämta dokumentlänken.");
+        return data.signedUrl;
+      });
+    } catch (error) {
+      toast({ title: "Kunde inte öppna dokumentet", description: error instanceof Error ? error.message : "Försök igen.", variant: "destructive" });
     }
-    window.open(data.signedUrl, "_blank", "noopener");
   };
 
   const deleteAttachment = async (task: Task, path: string) => {

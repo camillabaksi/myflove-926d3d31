@@ -141,10 +141,16 @@ self.addEventListener("notificationclick", (event) => {
   const info = event.notification.data || {};
   const itemKey = info.itemKey;
   const action = event.action; // "done" | "snooze" | ""
-  let targetUrl = info.url || "/idag";
+  let destination = new URL("/idag", self.location.origin);
+  try {
+    const candidate = new URL(info.url || "/idag", self.location.origin);
+    if (candidate.origin === self.location.origin && candidate.protocol === "https:") destination = candidate;
+  } catch (_) {}
   if (action && itemKey) {
-    targetUrl = `${targetUrl}${targetUrl.includes("?") ? "&" : "?"}notis=${encodeURIComponent(itemKey)}&atgard=${action}`;
+    destination.searchParams.set("notis", itemKey);
+    destination.searchParams.set("atgard", action);
   }
+  const targetUrl = `${destination.pathname}${destination.search}${destination.hash}`;
 
   event.waitUntil(
     (async () => {
