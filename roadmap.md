@@ -1,4 +1,9 @@
 # Roadmap
+## Harmoniska Paceable-pitchdeck (2026-10-13)
+- [x] Godkänd plan och endast demobilder, svenska/engelska, redigerbar PPTX + PDF.
+- [x] Gemensam berättelse byggd; omslag, produkt och pilot provgranskade.
+- [x] Två 16-slidesdeck validerade och återöppnade; alla 32 slides granskade, etikettöverlappning, sidfotsluft och bildproportioner rättade och omgranskade.
+- [x] PPTX/PDF och bildöversikter sparade i Files och tillagda i befintlig materialsamling (medlemsstatus pending vid tillägget); ingen appfunktion eller publicering ändrad.
 ## Paceable blueprint, pitchfilmer och nya skärmbilder (2026-10-13)
 - [x] Bekräfta Paceable, blueprint på svenska/engelska och pitchfilmer i båda bildformaten.
 - [x] Materialplanen godkänd; ingen appändring eller publicering.

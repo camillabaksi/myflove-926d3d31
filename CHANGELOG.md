@@ -1,4 +1,5 @@
 ## 2026-10-13 – Fristående Paceable-material
+- **Harmoniska pitchdeck** (2026-10-13): svenska och engelska redigerbara 16:9-presentationer med 16 slides vardera, PDF och bildöversikter. Kombinerar uppladdad pappers-/pastelldesign med aktuell produktberättelse och enbart demobilder; pris, pilot och budget är tydligt märkta hypoteser. Ingen appfunktion, kontodata eller publicering ändrad.
 - Tvåspråkig, sammanhängande Living Blueprint med aktuella produktgränser, behovsramverk, daterad affärshistorik och tydligt skilda datadefinitioner. Word/PDF levereras i Files; befintliga appnedladdningar ersätts inte.
 - Nya läsande produktbilder från befintligt demokonto i mobil-/datorbredd och båda teman. Glesa data har inte fyllts ut; blockerade skrivförsök och kvarvarande fysisk verifiering redovisas i materialet.
 - Pitchmaterial tas fram på svenska och engelska för 16:9 och 9:16. Ingen appfunktion, kontodata, inställning, native-identitet eller publicering ändras för materialet.
