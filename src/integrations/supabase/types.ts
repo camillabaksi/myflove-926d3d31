@@ -813,10 +813,10 @@ export type Database = {
           deliver_at: string
           delivered_at: string | null
           id: string
-          sent_endpoints: string[]
+          kind: string
           processing_token: string | null
           processing_until: string | null
-          kind: string
+          sent_endpoints: string[]
           title: string
           url: string | null
           user_id: string
@@ -829,10 +829,10 @@ export type Database = {
           deliver_at: string
           delivered_at?: string | null
           id?: string
-          sent_endpoints?: string[]
+          kind: string
           processing_token?: string | null
           processing_until?: string | null
-          kind: string
+          sent_endpoints?: string[]
           title: string
           url?: string | null
           user_id: string
@@ -845,10 +845,10 @@ export type Database = {
           deliver_at?: string
           delivered_at?: string | null
           id?: string
-          sent_endpoints?: string[]
+          kind?: string
           processing_token?: string | null
           processing_until?: string | null
-          kind?: string
+          sent_endpoints?: string[]
           title?: string
           url?: string | null
           user_id?: string
@@ -1149,6 +1149,7 @@ export type Database = {
         Returns: undefined
       }
       touch_last_active: { Args: never; Returns: undefined }
+      validate_push_tick_secret: { Args: { _secret: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
