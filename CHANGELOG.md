@@ -1,3 +1,8 @@
+## 2026-10-13 – Fristående Paceable-material
+- Tvåspråkig, sammanhängande Living Blueprint med aktuella produktgränser, behovsramverk, daterad affärshistorik och tydligt skilda datadefinitioner. Word/PDF levereras i Files; befintliga appnedladdningar ersätts inte.
+- Nya läsande produktbilder från befintligt demokonto i mobil-/datorbredd och båda teman. Glesa data har inte fyllts ut; blockerade skrivförsök och kvarvarande fysisk verifiering redovisas i materialet.
+- Pitchmaterial tas fram på svenska och engelska för 16:9 och 9:16. Ingen appfunktion, kontodata, inställning, native-identitet eller publicering ändras för materialet.
+
 ## 2026-10-12 – Sammanhängande Paceable och personligare energi
 - **Dokumentation och pitch:** Paceable Living Blueprint 5.1 beskriver aktuell produktstatus och ersätter 5.0 som senaste nedladdning. Äldre versioner bevaras som arkiv. Sex riktiga skärmbilder med demokontots exempeldata har tagits för pitchdeck.
 - **Publicerat på www.paceable.se:** #33 samordnar rutinlänkar, vardagsloggning, energimönster, medicin/morgonstart, Pace-chatt, familj/delning, namn, rubriker, tillbaka-knappar och offentlig domänmetadata.

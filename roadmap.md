@@ -1,8 +1,8 @@
 # Roadmap
 ## Paceable blueprint, pitchfilmer och nya skärmbilder (2026-10-13)
 - [x] Bekräfta Paceable, blueprint på svenska/engelska och pitchfilmer i båda bildformaten.
-- [ ] Invänta godkännande av materialplanen; ingen appändring eller publicering.
-- [ ] Verifiera aktuell produkt och fånga läsande, integritetssäkra produktbilder.
+- [x] Materialplanen godkänd; ingen appändring eller publicering.
+- [x] Verifiera aktuell produkt och fånga läsande, integritetssäkra produktbilder.
 - [ ] Skapa två blueprintversioner (Word/PDF) och fyra pitchfilmer från gemensamt faktaunderlag.
 - [ ] Granska alla dokumentsidor och filmscener, paketera skärmbilder och leverera i Files med redovisade begränsningar.
 
