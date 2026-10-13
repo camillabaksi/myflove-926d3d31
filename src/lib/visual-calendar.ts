@@ -1,3 +1,4 @@
+import type { PictogramId } from "@/lib/child-visual-schedule";
 import type { Task, Reminder } from "@/hooks/use-data";
 import { occursOn, routineOccursOn, type Routine } from "@/lib/recurrence";
 import type { Lecture } from "@/lib/study-calendar";
@@ -25,6 +26,7 @@ export interface CalendarEntry {
   label?: string;
   familyMembers?: Array<{ id: string; name: string }>;
   requiresParent?: boolean;
+  pictogram?: PictogramId;
   parentTaskId?: string;
   prepMinutes?: number;
   travelMinutes?: number;

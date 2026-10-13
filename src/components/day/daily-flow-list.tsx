@@ -36,6 +36,7 @@ export function DailyFlowList({
   dayHeadings = false,
   presentation = "card",
   showPictograms = false,
+  pictogramLibrary = "lucide",
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -48,6 +49,7 @@ export function DailyFlowList({
   presentation?: "card" | "integrated";
   /** Optional compact visual support; legacy cards always show pictograms. */
   showPictograms?: boolean;
+  pictogramLibrary?: "lucide" | "mulberry";
 }) {
   const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
@@ -180,6 +182,7 @@ export function DailyFlowList({
                   item={item}
                   integrated={integrated}
                   showPictograms={showPictograms}
+                  pictogramLibrary={pictogramLibrary}
                   onToggle={() => {
                     const wasDone = item.done;
                     toggleItem(item);

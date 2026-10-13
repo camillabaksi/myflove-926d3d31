@@ -51,7 +51,8 @@ import DailyFlowList from "@/components/day/daily-flow-list";
 import type { FlowItem } from "@/lib/flow-items";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { pictogramFor } from "@/lib/pictograms";
+import { MulberryPictogram } from "@/components/calendar/mulberry-pictogram";
+import { calendarPictogramsEnabled, mulberryForTitle } from "@/lib/mulberry-symbols";
 import { useNpfSettings } from "@/lib/npf-mode";
 import { ALL_AREAS, AREA_META, getArea, type LifeArea } from "@/lib/life-areas";
 import { useLang } from "@/hooks/use-language";
@@ -166,14 +167,14 @@ export function CalendarContent() {
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useCloudSyncedStorage<CalView>("myflove-calendar-view", "manad");
-  /** Bildstöd: stora symboler per händelse i dagsvyn. */
+  /** Optional compact symbols; an explicit local off also overrides global opt-in. */
   const { settings: npfSettings } = useNpfSettings();
-  const [pictoStored, setPictoMode] = useCloudSyncedStorage<boolean>(
+  const [pictoStored, setPictoMode] = useCloudSyncedStorage<boolean | null>(
     "myflove-calendar-pictograms",
-    false,
+    null,
   );
   // Globalt bildstöd (Anpassa appen) slår på symboler överallt där det finns.
-  const pictoMode = pictoStored || npfSettings.pictograms;
+  const pictoMode = calendarPictogramsEnabled(pictoStored, npfSettings.pictograms);
   const [visible, setVisible] = useCloudSyncedStorage<CalCategory[]>(
     "myflove-calendar-categories",
     ALL_CATEGORIES,
@@ -472,7 +473,7 @@ export function CalendarContent() {
     time: event.time ?? undefined,
     source: "kalender",
     area: "socialt",
-    emoji: pictoMode ? pictogramFor(event.title, "👨‍👩‍👧") : "👨‍👩‍👧",
+    emoji: "👨‍👩‍👧",
     priority: "idag",
     done: false,
     completable: false,
@@ -481,6 +482,8 @@ export function CalendarContent() {
 
   return (
     <CalendarPlanner
+      showPictograms={pictoMode}
+      onPictogramsChange={setPictoMode}
       onDateChange={setSelectedDateStr}
       weekGoals={<WeekGoals />}
       checkin={<ImpactCheckin calendarMobile draft={impactDraft} onDraftChange={setImpactDraft} />}
@@ -513,7 +516,7 @@ export function CalendarContent() {
                     <button
                       onClick={() => setPictoMode(!pictoMode)}
                       aria-pressed={pictoMode}
-                      title={t("Visa stora symboler för varje händelse")}
+                      title={t("Visa bildstöd för aktiviteter")}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
                         pictoMode
                           ? "bg-accent/30 border-accent/40 text-foreground"
@@ -541,7 +544,7 @@ export function CalendarContent() {
 
                 {allInDay && (
                   <div className="border-t border-border/60 pt-1">
-                    <DailyFlowList date={selectedDateStr} extraItems={selectedSharedEvents} presentation="integrated" showPictograms={pictoMode} />
+                    <DailyFlowList date={selectedDateStr} extraItems={selectedSharedEvents} presentation="integrated" showPictograms={pictoMode} pictogramLibrary="mulberry" />
                   </div>
                 )}
 
@@ -572,7 +575,7 @@ export function CalendarContent() {
                           className="w-1.5 h-1.5 rounded-full"
                           style={{ backgroundColor: r.color ?? "hsl(var(--primary))" }}
                         />
-                        {pictoMode && <span aria-hidden>{pictogramFor(r.title, "🔁")}</span>}
+                        {pictoMode && <MulberryPictogram id={mulberryForTitle(r.title)} className="h-8 w-8" />}
                         <span className="font-display text-lg font-semibold leading-none">{r.title}</span>
                         {r.time && ` · ${r.time}`}
                       </span>
@@ -605,9 +608,7 @@ export function CalendarContent() {
                         >
                           <Link href="/barn" className="flex items-center gap-4 min-w-0 flex-1">
                             {pictoMode ? (
-                              <span className="text-3xl leading-none shrink-0" aria-hidden>
-                                {pictogramFor(e.title, "🐣")}
-                              </span>
+                              <MulberryPictogram id={mulberryForTitle(e.title)} className="h-8 w-8" />
                             ) : (
                               <Baby style={{ color }} size={24} />
                             )}
@@ -644,9 +645,7 @@ export function CalendarContent() {
                       >
                         <div className="flex items-center gap-4">
                           {pictoMode ? (
-                            <span className="text-3xl leading-none shrink-0" aria-hidden>
-                              {pictogramFor(e.title, "👨‍👩‍👧")}
-                            </span>
+                            <MulberryPictogram id={mulberryForTitle(e.title)} className="h-8 w-8" />
                           ) : (
                             <Users
                               style={{ color: e.member?.color ?? DEFAULT_MEMBER_COLOR }}
@@ -677,9 +676,7 @@ export function CalendarContent() {
                     {selectedItems.focus && (
                       <div className="flex items-center gap-4 p-4 bg-accent/20 border border-accent/30 rounded-2xl">
                         {pictoMode ? (
-                          <span className="text-3xl leading-none shrink-0" aria-hidden>
-                            {pictogramFor(selectedItems.focus.text, "🎯")}
-                          </span>
+                          <MulberryPictogram id={mulberryForTitle(selectedItems.focus.text)} className="h-8 w-8" />
                         ) : (
                           <Target className="text-accent-foreground" size={24} />
                         )}
@@ -699,9 +696,7 @@ export function CalendarContent() {
                       >
                         <div className="flex items-center gap-4 min-w-0">
                           {pictoMode ? (
-                            <span className="text-3xl leading-none shrink-0" aria-hidden>
-                              {pictogramFor(r.title, "🔔")}
-                            </span>
+                            <MulberryPictogram id={mulberryForTitle(r.title)} className="h-8 w-8" />
                           ) : (
                             <Bell className="text-primary shrink-0" size={24} />
                           )}
@@ -759,9 +754,7 @@ export function CalendarContent() {
                       >
                         <div className="flex items-center gap-4 min-w-0">
                           {pictoMode ? (
-                            <span className="text-3xl leading-none shrink-0" aria-hidden>
-                              {pictogramFor(task.title, "✅")}
-                            </span>
+                            <MulberryPictogram id={mulberryForTitle(task.title)} className="h-8 w-8" />
                           ) : (
                             <CheckSquare
                               className={task.completed ? "text-primary" : "text-muted-foreground"}

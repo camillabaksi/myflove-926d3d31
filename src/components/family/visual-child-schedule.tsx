@@ -64,7 +64,7 @@ import {
   type ChildRepeatMode,
   type FamilyActivityLabel,
 } from "@/lib/child-visual-schedule";
-import { ActivityPictogram } from "@/components/family/activity-pictogram";
+import { MulberryPictogram as ActivityPictogram, MulberryAttribution } from "@/components/calendar/mulberry-pictogram";
 import type { ChildScheduleTemplate } from "@/lib/child-schedule-templates";
 import type { Child, ChildItem, ChildItemPatch } from "@/hooks/use-children";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
@@ -112,7 +112,7 @@ function signedImage(path: string, openDoc: (path: string) => Promise<string>, s
   void openDoc(path).then(setUrl).catch(() => undefined);
 }
 
-function ActivityImage({ path, title, openDoc }: { path: string; title: string; openDoc: (path: string) => Promise<string> }) {
+function ActivityImage({ path, title, openDoc, className }: { path: string; title: string; className?: string; openDoc: (path: string) => Promise<string> }) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     let active = true;
@@ -121,16 +121,17 @@ function ActivityImage({ path, title, openDoc }: { path: string; title: string; 
       active = false;
     };
   }, [path, openDoc]);
-  if (!url) return <div className="h-12 w-12 animate-pulse rounded-2xl bg-muted" aria-hidden />;
-  return <img src={url} alt={title} className="h-12 w-12 rounded-2xl object-cover" />;
+  if (!url) return <div className={cn("h-11 w-11 shrink-0 animate-pulse rounded-xl bg-muted", className)} aria-hidden />;
+  return <img src={url} alt={title} className={cn("h-11 w-11 shrink-0 rounded-xl object-cover", className)} />;
 }
 
-function ActivityVisual({ item, className, openDoc }: { item: ChildItem; className?: string; openDoc: (path: string) => Promise<string> }) {
+function ActivityVisual({ item, className, openDoc, enabled = true }: { item: ChildItem; enabled?: boolean; className?: string; openDoc: (path: string) => Promise<string> }) {
   const { meta } = decodeVisualNotes(item.notes);
+  if (!enabled) return null;
   return item.file_path ? (
-    <ActivityImage path={item.file_path} title={item.title} openDoc={openDoc} />
+    <ActivityImage path={item.file_path} title={item.title} openDoc={openDoc} className={className} />
   ) : (
-    <ActivityPictogram id={pictogramForActivity(item.title, meta.pictogram)} tone={meta.tone} className={cn("rounded-2xl", className)} />
+    <ActivityPictogram id={pictogramForActivity(item.title, meta.pictogram)} tone={meta.tone} className={cn("h-11 w-11 rounded-xl", className)} />
   );
 }
 
@@ -164,6 +165,8 @@ export default function VisualChildSchedule({
   const { t, locale } = useLang();
   const { openItems: quickItems, absorb } = useQuickflow();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>(SCHEDULE_KEY, {});
+  const [picturePreferences, setPicturePreferences] = useCloudSyncedStorage<Record<string, boolean>>("myflove-child-picture-support", {});
+  const showPictograms = picturePreferences[child.id] !== false;
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);
   const [mode, setMode] = useState<"week" | "today">("today");
   const [viewDate, setViewDate] = useState<string | null>(null);
@@ -464,6 +467,11 @@ export default function VisualChildSchedule({
         {!readOnly && <Button type="button" variant={selectionMode ? "default" : "outline"} onClick={() => { setSelectionMode((currentMode) => !currentMode); setSelectedIds([]); }} className="h-10 rounded-xl px-3"><Check size={15} /><span className="hidden sm:inline">{t(selectionMode ? "Klar" : "Välj flera")}</span></Button>}
       </header>
 
+      <div className="flex items-center justify-between gap-3 px-1">
+        <label htmlFor={`child-picture-support-${child.id}`} className="flex min-h-11 items-center gap-2 text-sm"><Images size={16} aria-hidden />{t("Visa bildstöd")}</label>
+        <Switch id={`child-picture-support-${child.id}`} checked={showPictograms} onCheckedChange={(enabled) => setPicturePreferences(current => ({ ...current, [child.id]: enabled }))} />
+      </div>
+
       {mode === "today" && <p className="flex items-center justify-center gap-2 rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary"><Heart size={15} fill="currentColor" /> {t("En sak i taget, i din takt.")} <Heart size={15} fill="currentColor" /></p>}
 
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
@@ -505,14 +513,14 @@ export default function VisualChildSchedule({
             <section className="space-y-3 rounded-2xl border border-border bg-card p-3" aria-label={t("Nu och nästa") }>
               <div className="flex items-center gap-3">
                 {current && <><span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
-                <ActivityVisual item={current} openDoc={openDoc} />
+                <ActivityVisual enabled={showPictograms} item={current} openDoc={openDoc} />
                  <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="pace-type-activity font-display text-lg font-bold text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="pace-type-time text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
                 </>}
               </div>
               {next && (
                 <div className="border-t border-primary/15 pt-3">
                   <p className="text-xs font-bold uppercase text-muted-foreground">{t("Sedan")}</p>
-                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
+                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual enabled={showPictograms} item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
                   {wantsWarning && nextPrompt && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{nextPrompt}</p>}
                 </div>
               )}
@@ -527,7 +535,7 @@ export default function VisualChildSchedule({
               <h3 className="text-sm font-bold text-ink">{t("Skolschema idag")}</h3>
               {todaySchoolEntries.map((entry) => (
                 <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-sky bg-card px-3 py-2 shadow-sm">
-                  <ActivityPictogram id="school" tone="sky" className="h-11 w-11" />
+                  {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-10 w-10" />}
                   <div className="min-w-0 flex-1">
                     <p className="font-medium text-ink">{entry.title}</p>
                     <p className="text-xs text-muted-foreground">{entry.start}{entry.end ? `–${entry.end}` : ""} · {t("återkommer varje vecka")}</p>
@@ -547,7 +555,7 @@ export default function VisualChildSchedule({
                  const category = decodeVisualNotes(item.notes).meta.category;
                  return <li key={item.id} className={cn("flex items-center gap-2 rounded-xl border px-2 py-1.5 shadow-sm transition-opacity", CATEGORY_STYLES[category].subtle, (isCurrent || isNext) && "ring-1 ring-primary/30")}>
                    {selectionMode ? <Button type="button" variant={selectedIds.includes(item.id) ? "default" : "outline"} size="icon" onClick={() => toggleSelected(item.id)} className="h-10 w-10 shrink-0 rounded-full" aria-label={t("Välj aktivitet")}><Check size={16} /></Button> : null}
-                    <ActivityVisual item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={"font-semibold text-ink"}>{item.title}</p><p className="text-xs text-muted-foreground"><span className="pace-type-time">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""}</span> · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Behöver mig")}` : ""}</p></div>{!selectionMode && !readOnly && <div className="flex shrink-0"><div className="flex flex-col"><Button type="button" variant="ghost" size="icon" disabled={todayItems[0]?.id === item.id} onClick={() => void reorderItem(item.id, -1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta upp")}><ChevronUp size={14} /></Button><Button type="button" variant="ghost" size="icon" disabled={todayItems[todayItems.length - 1]?.id === item.id} onClick={() => void reorderItem(item.id, 1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta ner")}><ChevronDown size={14} /></Button></div><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item, dayDate)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
+                    <ActivityVisual enabled={showPictograms} item={item} className="h-11 w-11 rounded-xl" openDoc={openDoc} /><div className="min-w-0 flex-1"><p className={"font-semibold text-ink"}>{item.title}</p><p className="text-xs text-muted-foreground"><span className="pace-type-time">{item.time?.slice(0, 5) || t("Ingen tid")}{decodeVisualNotes(item.notes).meta.endTime ? `–${decodeVisualNotes(item.notes).meta.endTime}` : ""}</span> · {contextLabel(decodeVisualNotes(item.notes).meta)}{isCurrent ? ` · ${t("Nu")}` : isNext ? ` · ${t("Nästa")}` : ""}{decodeVisualNotes(item.notes).meta.parentPresence === true ? ` · ${t("Behöver mig")}` : ""}</p></div>{!selectionMode && !readOnly && <div className="flex shrink-0"><div className="flex flex-col"><Button type="button" variant="ghost" size="icon" disabled={todayItems[0]?.id === item.id} onClick={() => void reorderItem(item.id, -1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta upp")}><ChevronUp size={14} /></Button><Button type="button" variant="ghost" size="icon" disabled={todayItems[todayItems.length - 1]?.id === item.id} onClick={() => void reorderItem(item.id, 1)} className="h-5 w-8 rounded-md" aria-label={t("Flytta ner")}><ChevronDown size={14} /></Button></div><Button type="button" variant="ghost" size="icon" onClick={() => openMove([item.id])} className="h-10 w-10 rounded-full" aria-label={t("Flytta")}><Move size={16} /></Button><Button type="button" variant="ghost" size="icon" onClick={() => openEdit(item, dayDate)} className="h-10 w-10 rounded-full" aria-label={t("Ändra")}><Ellipsis size={18} /></Button></div>}</li>;
               })}</ul></section>;
             })}
           </div>
@@ -563,7 +571,7 @@ export default function VisualChildSchedule({
             {dates.map((date, index) => {
                const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
                const recurring = schoolEntries.filter((entry) => entry.weekday === index);
-                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 rounded-xl p-1 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex items-start justify-between gap-0.5"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="min-w-0 flex-1 rounded-md text-center hover:bg-card/60"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-6 w-6 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-sky bg-sky/30 p-1 text-center shadow-sm"><ActivityPictogram id="school" tone="sky" className="mx-auto h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={`${item.id}-${date}`} type="button" variant="ghost" draggable={!selectionMode && !readOnly} onDragStart={(event) => event.dataTransfer.setData("text/plain", item.id)} onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border p-1 text-center shadow-sm", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}><ActivityPictogram id={pictogramForActivity(item.title, meta.pictogram)} tone={meta.tone} className="h-8 w-8 rounded-lg" iconClassName="h-5 w-5" /><span className={"block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs"}>{item.title}</span><span className="hidden text-[8px] text-muted-foreground sm:block">{contextLabel(meta)}</span></Button>; })}{!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}</div></section>;
+                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 rounded-xl p-1 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex items-start justify-between gap-0.5"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="min-w-0 flex-1 rounded-md text-center hover:bg-card/60"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-6 w-6 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-sky bg-sky/30 p-1 text-center shadow-sm">{showPictograms && <ActivityPictogram id="school" tone="sky" className="mx-auto h-8 w-8 rounded-lg" />}<p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={`${item.id}-${date}`} type="button" variant="ghost" draggable={!selectionMode && !readOnly} onDragStart={(event) => event.dataTransfer.setData("text/plain", item.id)} onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border p-1 text-center shadow-sm", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}><ActivityVisual enabled={showPictograms} item={item} className="h-8 w-8 rounded-lg" openDoc={openDoc} /><span className={"block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs"}>{item.title}</span><span className="hidden text-[8px] text-muted-foreground sm:block">{contextLabel(meta)}</span></Button>; })}{!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}</div></section>;
             })}
           </div>
           {!readOnly && <><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-11 w-full rounded-xl"><Plus size={16} /> {t("Lägg till aktivitet")}</Button>
@@ -595,6 +603,8 @@ export default function VisualChildSchedule({
         </section>
       )}
       </DialogContent></Dialog>
+
+      <MulberryAttribution />
 
       <Dialog open={adding} onOpenChange={(open) => { if (!open) { setAdding(false); setEditing(null); } }}>
         <DialogContent className="max-h-[90dvh] overflow-y-auto rounded-3xl p-4 sm:max-w-xl">
