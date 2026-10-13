@@ -1,4 +1,9 @@
 # Roadmap
+## Engelska kontobilder och appfilmer (2026-10-13)
+- [x] Plan godkänd; animerade produktfilmer och samtycke för synligt kontoinnehåll.
+- [ ] Verifiera isolerat engelskt språkval och skrivspärr; ta och granska kontobilder.
+- [ ] Producera sex filmer: tre teman i 9:16 och 16:9; kontrollera rapporterade resultat.
+- [ ] Leverera bilder, zip, filmer och begränsningar i egen Files-samling; ingen publicering.
 ## Harmoniska Paceable-pitchdeck (2026-10-13)
 - [x] Godkänd plan och endast demobilder, svenska/engelska, redigerbar PPTX + PDF.
 - [x] Gemensam berättelse byggd; omslag, produkt och pilot provgranskade.
