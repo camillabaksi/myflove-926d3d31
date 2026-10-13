@@ -1,3 +1,4 @@
+import { useAreaColors } from "@/lib/area-premium";
 import * as React from "react";
 import { SyncStatusNote } from "@/components/sync-status-note";
 import { UnownedDataPrompt } from "@/components/unowned-data-prompt";
@@ -58,7 +59,7 @@ import MoreView from "@/components/paceable/more-view";
 import { BrandLogo } from "@/components/paceable/brand-logo";
 import { AppBrandHeader } from "@/components/paceable/app-brand-header";
 import { initAlarmAudioUnlock } from "@/lib/push-notifications";
-import { initPersonalization } from "@/lib/personalization";
+import { usePersonalization } from "@/lib/personalization";
 import { useMedicationAlerts } from "@/hooks/use-medication-alerts";
 import { useShoppingProximityAlerts } from "@/hooks/use-shopping-proximity-alerts";
 import { useNotificationScheduler } from "@/hooks/use-notification-scheduler";
@@ -250,6 +251,8 @@ export default function Layout({ children }: LayoutProps) {
 
   const { isAdmin } = useIsAdmin();
   const { isDemo } = useDemoAccount();
+  const { personalization } = usePersonalization(true);
+  useAreaColors();
   const { enabled: enabledAreas } = useEnabledAreas();
   const { settings: npf } = useNpfSettings();
   const { t } = useLang();
@@ -263,7 +266,6 @@ export default function Layout({ children }: LayoutProps) {
 
   useEffect(() => {
     initAlarmAudioUnlock();
-    initPersonalization();
   }, []);
   // Ett app_opened per webbläsarsession (inte per navigering).
   useEffect(() => {
@@ -894,7 +896,7 @@ export default function Layout({ children }: LayoutProps) {
           tabIndex={-1}
           data-page-focus-target
           className="pace-mobile-content-scroll flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
-          style={PACEABLE_PATHS.has(location) ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
+          style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}

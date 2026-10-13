@@ -2627,3 +2627,39 @@ html[data-npf-space="roomy"] .pace-checkin :is(.pace-form-ork, .pace-form-moods)
 .pace-next-tools [aria-pressed="true"] { color: var(--pace-control-ink); }
 .pace-next-tools button:focus-visible { outline: 2px solid var(--pace-control-ink); outline-offset: 2px; }
 .pace-next-tools button { min-height: 44px; min-width: 44px; }
+
+
+/* Personal choices override only authenticated app palettes. Reference, brand
+   stones, energy/status tokens and public marketing keep their own colors. */
+html[data-personalized-app="true"][data-theme] :is(
+  .app-shell-bg, .pace-form,
+  [data-pace-design="true"], [data-paceable-surface="true"],
+  .pace-ds, .pace-next-page, [role="dialog"], [role="alertdialog"]
+) {
+  --primary: var(--personal-primary);
+  --primary-foreground: var(--personal-primary-foreground);
+  --ring: var(--personal-ring);
+  --accent: var(--personal-accent);
+  --accent-foreground: var(--personal-accent-foreground);
+  --secondary: var(--personal-secondary);
+  --background: var(--personal-background);
+  --border: var(--personal-border);
+  --lavender: var(--personal-lavender);
+  --forest: var(--personal-primary);
+  --pace-canvas: hsl(var(--personal-background));
+  --pace-primary: hsl(var(--personal-primary));
+  --pace-on-primary: hsl(var(--personal-primary-foreground));
+  --pace-control-ink: hsl(var(--personal-primary));
+  --pace-control-selected: hsl(var(--personal-lavender));
+  --pace-control-outline: hsl(var(--personal-primary) / 0.5);
+  --pace-control-on-fill: hsl(var(--personal-primary-foreground));
+}
+html[data-personalized-app="true"][data-theme]:not([data-theme="paceable"]) :is(
+  .app-shell-bg, .pace-form,
+  [data-pace-design="true"], [data-paceable-surface="true"], .pace-ds,
+  [role="dialog"], [role="alertdialog"]
+) {
+  --pace-surface: color-mix(in srgb, hsl(var(--personal-background)) 55%, hsl(var(--card)));
+  --pace-surface-raised: color-mix(in srgb, hsl(var(--personal-background)) 25%, hsl(var(--card)));
+  --pace-border-warm: hsl(var(--personal-border) / 0.8);
+}

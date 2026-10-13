@@ -27,10 +27,7 @@ const USER_DATA_PREFIXES = ["myflove", "myflow", "flow-", "sb-"];
 /** Nycklar som beskriver enheten/visningen och inte flyttas mellan konton. */
 export const DEVICE_KEYS = new Set<string>([
   "myflove-alarm-enabled",
-  "myflove-theme",
   "myflove-text-size",
-  "myflove-alarm-sound",
-  "myflove-alarm-format",
   "myflove-cloud-keys",
   DATA_OWNER_KEY,
 ]);

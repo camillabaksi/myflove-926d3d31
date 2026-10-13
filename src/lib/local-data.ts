@@ -1,3 +1,4 @@
+import { PERSONALIZATION_KEY, THEME_KEY, ALARM_SOUND_KEY, ALARM_FORMAT_KEY, APPEARANCE_KEY } from "@/lib/personalization";
 /**
  * Lokal användardata på enheten.
  *
@@ -48,6 +49,13 @@ function hasPendingEnergy(): boolean {
 export function unsafeToClearKeys(): string[] {
   if (typeof window === "undefined") return [];
   const keep: string[] = [];
+  // A quick/offline logout can happen before legacy preference import finishes.
+  // Park these account-owned raw values until the canonical cloud value exists.
+  if (!secureGetItem(PERSONALIZATION_KEY)) {
+    for (const key of [THEME_KEY, ALARM_SOUND_KEY, ALARM_FORMAT_KEY, APPEARANCE_KEY]) {
+      if (secureGetItem(key) !== null) keep.push(key);
+    }
+  }
   try {
     for (let i = 0; i < window.localStorage.length; i++) {
       const key = window.localStorage.key(i);

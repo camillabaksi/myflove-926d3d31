@@ -2,8 +2,7 @@
  * Personalisering – "Din MyFlove".
  *
  * Här bor de val som gör appen lite mer personlig: färgtema, alarmsignal
- * och alarmformat (ljud/vibration). Allt sparas i befintlig localStorage
- * (samma arkitektur som övriga enhetsval) – inget parallellt system.
+ * och alarmformat (ljud/vibration). Valen sparas kontoseparerat och synkas via appens befintliga user_kv-store.
  *
  * VIKTIGT: temat byter bara appens *identitetsfärger* (primary/ring/accent
  * och mjuka ytor). Semantiska färger – energi upp/ner, status, varning,
@@ -14,9 +13,13 @@
  * byts bara den funktionen ut – UI och datamodell kan stå kvar.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useCloudSyncedStorage, requestSync } from "@/lib/cloud-storage";
+import { getDataOwner } from "@/lib/account-scope";
+import { secureGetItem } from "@/lib/secure-local";
 
 export type ThemeId =
+  | "paceable"
   | "lavendel"
   | "rosa"
   | "salvia"
@@ -38,7 +41,6 @@ export type AlarmSoundId =
   | "regndroppe"
   | "harpa";
 
-
 /** Hur en påminnelse ska märkas av. */
 export type AlarmFormat = "ljud" | "vibration" | "bada" | "tyst";
 
@@ -49,7 +51,7 @@ export interface Personalization {
 }
 
 export const PERSONALIZATION_DEFAULTS: Personalization = {
-  theme: "lavendel",
+  theme: "paceable",
   alarmSound: "myflove",
   alarmFormat: "bada",
 };
@@ -86,14 +88,42 @@ export interface ThemePreset {
 
 export const THEMES: ThemePreset[] = [
   {
+    id: "paceable",
+    label: "Paceable",
+    swatch: "hsl(276 19% 21%)",
+    premium: false,
+    light: {
+      primary: "276 19% 21%",
+      primaryForeground: "45 29% 97%",
+      ring: "276 19% 21%",
+      accent: "267 32% 93%",
+      accentForeground: "276 19% 21%",
+      secondary: "37 30% 94%",
+      background: "45 29% 97%",
+      border: "291 12% 89%",
+      lavender: "267 32% 92%",
+    },
+    dark: {
+      primary: "40 24% 93%",
+      primaryForeground: "276 24% 13%",
+      ring: "267 30% 72%",
+      accent: "264 18% 23%",
+      accentForeground: "40 24% 93%",
+      secondary: "276 12% 19%",
+      background: "276 16% 10%",
+      border: "276 10% 26%",
+      lavender: "264 18% 23%",
+    },
+  },
+  {
     id: "lavendel",
     label: "Lavendel",
     swatch: "hsl(258 68% 62%)",
     premium: false,
     light: {
-      primary: "258 68% 62%",
+      primary: "258 68% 45%",
       primaryForeground: "0 0% 100%",
-      ring: "258 68% 62%",
+      ring: "258 68% 45%",
       accent: "327 70% 94%",
       accentForeground: "327 45% 38%",
       secondary: "262 55% 95%",
@@ -119,9 +149,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(335 62% 60%)",
     premium: true,
     light: {
-      primary: "335 60% 56%",
+      primary: "335 60% 38%",
       primaryForeground: "0 0% 100%",
-      ring: "335 60% 56%",
+      ring: "335 60% 38%",
       accent: "340 72% 94%",
       accentForeground: "335 45% 36%",
       secondary: "336 55% 95%",
@@ -147,9 +177,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(150 34% 42%)",
     premium: true,
     light: {
-      primary: "150 34% 38%",
+      primary: "150 34% 30%",
       primaryForeground: "0 0% 100%",
-      ring: "150 34% 38%",
+      ring: "150 34% 30%",
       accent: "150 40% 92%",
       accentForeground: "150 35% 26%",
       secondary: "150 30% 94%",
@@ -175,9 +205,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(210 66% 52%)",
     premium: true,
     light: {
-      primary: "210 66% 48%",
+      primary: "210 66% 35%",
       primaryForeground: "0 0% 100%",
-      ring: "210 66% 48%",
+      ring: "210 66% 35%",
       accent: "205 72% 93%",
       accentForeground: "210 48% 32%",
       secondary: "208 55% 95%",
@@ -203,9 +233,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(20 72% 54%)",
     premium: true,
     light: {
-      primary: "20 68% 48%",
+      primary: "20 68% 34%",
       primaryForeground: "0 0% 100%",
-      ring: "20 68% 48%",
+      ring: "20 68% 34%",
       accent: "24 80% 93%",
       accentForeground: "20 52% 32%",
       secondary: "24 60% 95%",
@@ -231,9 +261,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(42 62% 44%)",
     premium: true,
     light: {
-      primary: "40 62% 38%",
+      primary: "40 62% 30%",
       primaryForeground: "0 0% 100%",
-      ring: "40 62% 38%",
+      ring: "40 62% 30%",
       accent: "44 82% 91%",
       accentForeground: "38 48% 28%",
       secondary: "44 60% 94%",
@@ -259,9 +289,9 @@ export const THEMES: ThemePreset[] = [
     swatch: "hsl(184 60% 38%)",
     premium: true,
     light: {
-      primary: "184 62% 34%",
+      primary: "184 62% 26%",
       primaryForeground: "0 0% 100%",
-      ring: "184 62% 34%",
+      ring: "184 62% 26%",
       accent: "184 58% 91%",
       accentForeground: "184 45% 24%",
       secondary: "184 45% 94%",
@@ -331,7 +361,6 @@ export const ALARM_SOUNDS: AlarmSoundPreset[] = [
   { id: "harpa", label: "Mjuk harpa", hint: "Varm och dämpad", premium: true },
 ];
 
-
 export const ALARM_FORMATS: Array<{ id: AlarmFormat; label: string; icon: string }> = [
   { id: "ljud", label: "Ljud", icon: "🔔" },
   { id: "vibration", label: "Vibration", icon: "📳" },
@@ -356,7 +385,7 @@ function readKey(key: string, fallback: string): string {
   }
 }
 
-export function readPersonalization(): Personalization {
+function readLegacyPersonalization(): Personalization {
   const theme = readKey(THEME_KEY, PERSONALIZATION_DEFAULTS.theme) as ThemeId;
   const alarmSound = readKey(ALARM_SOUND_KEY, PERSONALIZATION_DEFAULTS.alarmSound) as AlarmSoundId;
   const alarmFormat = readKey(
@@ -372,6 +401,40 @@ export function readPersonalization(): Personalization {
       ? alarmFormat
       : PERSONALIZATION_DEFAULTS.alarmFormat,
   };
+}
+
+export const PERSONALIZATION_KEY = "myflove-personal-preferences";
+export type PersonalPreferences = Personalization & { appearance: Appearance };
+export const PREFERENCE_DEFAULTS: PersonalPreferences = {
+  ...PERSONALIZATION_DEFAULTS,
+  appearance: "ljust",
+};
+
+export function normalizePersonalPreferences(value: unknown): PersonalPreferences {
+  const v = value && typeof value === "object" ? (value as Partial<PersonalPreferences>) : {};
+  return {
+    theme: THEMES.some((t) => t.id === v.theme) ? v.theme! : PREFERENCE_DEFAULTS.theme,
+    alarmSound: ALARM_SOUNDS.some((s) => s.id === v.alarmSound)
+      ? v.alarmSound!
+      : PREFERENCE_DEFAULTS.alarmSound,
+    alarmFormat: ALARM_FORMATS.some((f) => f.id === v.alarmFormat)
+      ? v.alarmFormat!
+      : PREFERENCE_DEFAULTS.alarmFormat,
+    appearance: v.appearance === "auto" || v.appearance === "morkt" ? v.appearance : "ljust",
+  };
+}
+
+// Synchronous readers used by web and native reminders share the account's store.
+export function readPersonalization(): PersonalPreferences {
+  if (!getDataOwner()) return PREFERENCE_DEFAULTS;
+  try {
+    const raw = secureGetItem(PERSONALIZATION_KEY);
+    if (raw) return normalizePersonalPreferences(JSON.parse(raw));
+  } catch {
+    /* malformed legacy data falls back to validated choices */
+  }
+  const appearance = readKey(APPEARANCE_KEY, "ljust");
+  return normalizePersonalPreferences({ ...readLegacyPersonalization(), appearance });
 }
 
 export function getAlarmSoundId(): AlarmSoundId {
@@ -391,6 +454,11 @@ export function applyTheme(themeId: ThemeId): void {
   const vars = dark ? preset.dark : preset.light;
 
   el.dataset["theme"] = preset.id;
+  // Scoped aliases allow authenticated Paceable surfaces to inherit the selection.
+  for (const [name, value] of Object.entries(vars)) {
+    const token = name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+    el.style.setProperty(`--personal-${token}`, value);
+  }
   el.style.setProperty("--primary", vars.primary);
   el.style.setProperty("--primary-foreground", vars.primaryForeground);
   el.style.setProperty("--ring", vars.ring);
@@ -403,7 +471,7 @@ export function applyTheme(themeId: ThemeId): void {
   el.style.setProperty("--forest", vars.primary);
 }
 
-/** Ljust, mörkt eller följ telefonen. Sparas per enhet. */
+/** Ljust, mörkt eller följ telefonen. Sparas på kontot. */
 export type Appearance = "auto" | "ljust" | "morkt";
 export const APPEARANCE_KEY = "myflove-appearance";
 export const APPEARANCES: Array<{ id: Appearance; label: string; hint: string }> = [
@@ -413,83 +481,111 @@ export const APPEARANCES: Array<{ id: Appearance; label: string; hint: string }>
 ];
 
 export function readAppearance(): Appearance {
-  const v = readKey(APPEARANCE_KEY, "ljust");
-  return v === "auto" || v === "morkt" ? v : "ljust";
+  return readPersonalization().appearance;
 }
 
 export function applyAppearance(a: Appearance = readAppearance()): void {
   if (typeof document === "undefined") return;
   const dark =
     a === "morkt" ||
-    (a === "auto" && typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches);
+    (a === "auto" &&
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-color-scheme: dark)").matches);
   document.documentElement.classList.toggle("dark", Boolean(dark));
 }
 
-export function setAppearance(a: Appearance): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(APPEARANCE_KEY, a);
-  } catch {
-    /* gäller bara denna session */
-  }
-  applyAppearance(a);
-  applyTheme(readPersonalization().theme);
-  window.dispatchEvent(new CustomEvent(PERSONALIZATION_EVENT, { detail: readPersonalization() }));
-}
-
-export function setPersonalization(patch: Partial<Personalization>): void {
-  if (typeof window === "undefined") return;
-  try {
-    if (patch.theme) window.localStorage.setItem(THEME_KEY, patch.theme);
-    if (patch.alarmSound) window.localStorage.setItem(ALARM_SOUND_KEY, patch.alarmSound);
-    if (patch.alarmFormat) window.localStorage.setItem(ALARM_FORMAT_KEY, patch.alarmFormat);
-  } catch {
-    /* utan lagring gäller valet bara denna session */
-  }
-  if (patch.theme) applyTheme(patch.theme);
-  window.dispatchEvent(new CustomEvent(PERSONALIZATION_EVENT, { detail: readPersonalization() }));
-}
-
-/** Kallas vid appstart så temat finns på plats direkt. */
-export function initPersonalization(): void {
-  applyAppearance();
-  applyTheme(readPersonalization().theme);
-}
-
-export function usePersonalization() {
-  const [value, setValue] = useState<Personalization>(PERSONALIZATION_DEFAULTS);
-  const [appearance, setAppearanceState] = useState<Appearance>("ljust");
+/** The authenticated layout owns live theme/OS listeners, even outside settings. */
+export function usePersonalization(activate = false) {
+  const [stored, setStored] = useCloudSyncedStorage<PersonalPreferences>(
+    PERSONALIZATION_KEY,
+    PREFERENCE_DEFAULTS,
+  );
+  const value = normalizePersonalPreferences(stored);
 
   useEffect(() => {
-    const sync = () => {
-      setValue(readPersonalization());
-      setAppearanceState(readAppearance());
+    if (!activate) return;
+    const el = document.documentElement;
+    const names = [
+      "primary",
+      "primary-foreground",
+      "ring",
+      "accent",
+      "accent-foreground",
+      "secondary",
+      "background",
+      "border",
+      "lavender",
+      "forest",
+    ];
+    const tokens = [
+      ...names.map((n) => `--${n}`),
+      ...names.filter((n) => n !== "forest").map((n) => `--personal-${n}`),
+    ];
+    const previous = tokens.map((token) => [token, el.style.getPropertyValue(token)] as const);
+    const oldTheme = el.dataset.theme;
+    const oldDark = el.classList.contains("dark");
+    return () => {
+      for (const [token, value] of previous) {
+        if (value) el.style.setProperty(token, value);
+        else el.style.removeProperty(token);
+      }
+      if (oldTheme) el.dataset.theme = oldTheme;
+      else delete el.dataset.theme;
+      el.classList.toggle("dark", oldDark);
     };
-    sync();
-    initPersonalization();
+  }, [activate]);
+
+  useEffect(() => {
+    if (!activate) return;
+    const owner = getDataOwner();
+    let active = true;
+    // Read existing cloud settings before importing old device choices. Never
+    // stamp defaults or overwrite preferences already present on another device.
+    void requestSync(PERSONALIZATION_KEY).then(() => {
+      if (!active || !owner || getDataOwner() !== owner || secureGetItem(PERSONALIZATION_KEY))
+        return;
+      const hasLegacy = [THEME_KEY, ALARM_SOUND_KEY, ALARM_FORMAT_KEY, APPEARANCE_KEY].some(
+        (key) => readKey(key, "") !== "",
+      );
+      if (hasLegacy) setStored(readPersonalization());
+    });
+    return () => {
+      active = false;
+    };
+  }, [activate, setStored]);
+
+  useEffect(() => {
+    if (!activate) return;
+    const apply = () => {
+      applyAppearance(value.appearance);
+      applyTheme(value.theme);
+    };
+    document.documentElement.dataset.personalizedApp = "true";
+    apply();
+    window.dispatchEvent(new CustomEvent(PERSONALIZATION_EVENT));
     const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
     const onScheme = () => {
-      if (readAppearance() === "auto") initPersonalization();
+      if (value.appearance === "auto") apply();
     };
     mq?.addEventListener?.("change", onScheme);
-    window.addEventListener(PERSONALIZATION_EVENT, sync);
-    window.addEventListener("storage", sync);
     return () => {
       mq?.removeEventListener?.("change", onScheme);
-      window.removeEventListener(PERSONALIZATION_EVENT, sync);
-      window.removeEventListener("storage", sync);
+      delete document.documentElement.dataset.personalizedApp;
     };
-  }, []);
+  }, [activate, value.theme, value.appearance, value.alarmSound, value.alarmFormat]);
 
-  const update = useCallback((patch: Partial<Personalization>) => setPersonalization(patch), []);
-  const reset = useCallback(() => {
-    setPersonalization(PERSONALIZATION_DEFAULTS);
-    setAppearance("ljust");
-  }, []);
-
+  const update = useCallback(
+    (patch: Partial<PersonalPreferences>) => {
+      if (!getDataOwner() || !isPersonalizationUnlocked()) return;
+      setStored((prev) => ({ ...normalizePersonalPreferences(prev), ...patch }));
+    },
+    [setStored],
+  );
+  const setAppearance = useCallback((appearance: Appearance) => update({ appearance }), [update]);
+  const reset = useCallback(() => update(PREFERENCE_DEFAULTS), [update]);
   return {
     personalization: value,
-    appearance,
+    appearance: value.appearance,
     setAppearance,
     update,
     reset,
