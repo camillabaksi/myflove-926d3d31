@@ -27,8 +27,8 @@ export function toPlanInput(i: FlowItem): FlowPlanItem {
 }
 
 /**
- * Dagens FlowPlan – det Hem, Nästa steg, Idag och Flow visar.
- * Inputs: dagens öppna saker + kapacitetsläget. Inget batteri.
+ * Delad FlowPlan för vald dag. Framtida dagar visas neutralt eftersom orken ännu är okänd.
+ * Dagens plan använder kapacitetsläget; inget batteri är input.
  */
 export function useFlowPlan(skip: string[] = [], targetDay: string = todayISO()): FlowPlan<FlowPlanItem> {
   const isToday = targetDay === todayISO();
