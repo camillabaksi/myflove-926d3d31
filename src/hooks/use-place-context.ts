@@ -8,6 +8,7 @@ type PlaceState = {
   autoEnabled: boolean;
   savedPlaces: Partial<Record<SavedPlaceContext, Coordinates>>;
   manualOverrideDate?: string;
+  selectedDate?: string;
 };
 type PlaceStatus = "idle" | "checking" | "matched" | "no-match" | "error";
 
@@ -27,11 +28,13 @@ function readState(): PlaceState {
     const savedPlaces = parsed.savedPlaces && typeof parsed.savedPlaces === "object"
       ? parsed.savedPlaces
       : {};
+    const selectedDate = typeof parsed.selectedDate === "string" ? parsed.selectedDate : undefined;
     return {
-      selected: validPlace,
+      selected: selectedDate === todayISO() ? validPlace : null,
       autoEnabled: parsed.autoEnabled === true,
       savedPlaces,
       manualOverrideDate: typeof parsed.manualOverrideDate === "string" ? parsed.manualOverrideDate : undefined,
+      selectedDate,
     };
   } catch {
     return EMPTY;
@@ -92,7 +95,8 @@ export function usePlaceContext(autoDetect = false) {
   }, []);
 
   const setPlace = useCallback((place: PlaceContext) => {
-    update({ selected: place, manualOverrideDate: todayISO() });
+    update({ selected: place, manualOverrideDate: todayISO(), selectedDate: todayISO() });
+    setStatus("idle");
   }, [update]);
 
   const setAutoEnabled = useCallback((autoEnabled: boolean) => {
@@ -107,6 +111,7 @@ export function usePlaceContext(autoDetect = false) {
         const savedPlaces = { ...readState().savedPlaces, [saveAs]: current };
         update({
           selected: saveAs,
+          selectedDate: todayISO(),
           savedPlaces,
           autoEnabled: true,
           manualOverrideDate: undefined,
@@ -121,10 +126,11 @@ export function usePlaceContext(autoDetect = false) {
         .filter((candidate) => candidate.distance <= MATCH_RADIUS_METERS)
         .sort((a, b) => a.distance - b.distance)[0];
       if (!match) {
+        update({ selected: null, selectedDate: todayISO() });
         setStatus("no-match");
         return;
       }
-      update({ selected: match.place, manualOverrideDate: undefined });
+      update({ selected: match.place, selectedDate: todayISO(), manualOverrideDate: undefined });
       setStatus("matched");
     } catch {
       setStatus("error");
