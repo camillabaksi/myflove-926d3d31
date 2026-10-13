@@ -192,11 +192,11 @@ export function filterByArea<T extends { area?: LifeArea }>(items: T[], filter: 
 
 /** Inline-stil med områdets färg – används för prickar, kanter och chips. */
 export function areaColor(area: LifeArea): string {
-  return `hsl(${AREA_META[area].hue})`;
+  return `hsl(var(--calendar-${area}, ${AREA_META[area].hue}))`;
 }
 
 export function areaTint(area: LifeArea, alpha = 0.12): string {
-  return `hsl(${AREA_META[area].hue} / ${alpha})`;
+  return `hsl(var(--calendar-${area}, ${AREA_META[area].hue}) / ${alpha})`;
 }
 
 /** Färgsatt chip-stil för ett område. */

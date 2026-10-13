@@ -82,6 +82,7 @@ function ensureAudio(soundId?: AlarmSoundId): HTMLAudioElement | null {
   const wanted = soundId ?? getAlarmSoundId();
   if (audioEl && audioSoundId === wanted) return audioEl;
   try {
+    audioEl?.pause();
     if (audioUrl) URL.revokeObjectURL(audioUrl);
     audioUrl = URL.createObjectURL(buildAlarmWav(wanted));
     audioEl = new Audio(audioUrl);
@@ -179,17 +180,18 @@ export function playAlarmSound(): void {
 }
 
 /** Kort testljud för preferens-UI (spelar även när alarm är avstängt). */
-export function playAlarmPreview(soundId?: AlarmSoundId): void {
+export async function playAlarmPreview(soundId?: AlarmSoundId): Promise<boolean> {
   const el = ensureAudio(soundId);
-  if (!el) return;
+  if (!el) return false;
   try {
     if (audioUrl && el.src !== audioUrl) el.src = audioUrl;
     el.currentTime = 0;
     el.muted = false;
     el.volume = 1;
-    void el.play().catch(() => {});
+    await el.play();
+    return true;
   } catch {
-    // ignore
+    return false;
   }
 }
 

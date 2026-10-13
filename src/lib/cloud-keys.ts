@@ -6,6 +6,7 @@
  */
 export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-flow-appearance",
+  "myflove-personal-preferences",
   "myflove-flow-memories",
   "myflove-saved-exercises",
   "myflove-rebuild-dismissed",

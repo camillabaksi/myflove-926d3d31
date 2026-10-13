@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { useAreaCustomization, AREA_COLOR_OPTIONS } from "@/lib/area-premium";
+import { AREA_META, type LifeArea } from "@/lib/life-areas";
 /**
  * "Din Paceable" – färgtema, alarmsignal och alarmformat på ett ställe.
  * Kompakt och mobil först: små färgcirklar och täta valrader.
@@ -6,11 +9,16 @@ import { Check, Play, Palette, Bell, BellRing, SunMoon, Languages } from "lucide
 import { useLang } from "@/hooks/use-language";
 import { LANGUAGES } from "@/lib/i18n";
 import { clearTranslationCache } from "@/lib/auto-translate";
-import { MyFloveBlock } from "@/components/myflove/block";
+import { MyFloveBlock, MyFloveWide } from "@/components/myflove/block";
 import { paceFormSurface } from "@/components/paceable/design-system";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { playAlarmPreview } from "@/lib/push-notifications";
+import {
+  playAlarmPreview,
+  isAlarmSoundEnabled,
+  setAlarmSoundEnabled,
+  subscribeAlarmPref,
+} from "@/lib/push-notifications";
 import { haptic } from "@/lib/haptics";
 import {
   ALARM_FORMATS,
@@ -24,8 +32,13 @@ import {
 } from "@/lib/personalization";
 
 export function PersonalizationSettings() {
-  const { personalization, update, appearance, setAppearance } = usePersonalization();
+  const { personalization, update, appearance, setAppearance, reset } = usePersonalization();
   const { lang, setLang } = useLang();
+  const { customization, setColor, resetColors } = useAreaCustomization();
+  const [previewError, setPreviewError] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(isAlarmSoundEnabled);
+  useEffect(() => subscribeAlarmPref(setSoundEnabled), []);
+  const preview = async (id: AlarmSoundId) => setPreviewError(!(await playAlarmPreview(id)));
 
   const chooseTheme = (id: ThemeId) => {
     update({ theme: id });
@@ -39,6 +52,8 @@ export function PersonalizationSettings() {
 
   const chooseFormat = (id: AlarmFormat) => {
     update({ alarmFormat: id });
+    // Explicit selection can enable sound; choosing a theme/signal never does.
+    if (id === "ljud" || id === "bada") setAlarmSoundEnabled(true);
     if (id === "vibration" || id === "bada") haptic("success");
   };
 
@@ -152,7 +167,7 @@ export function PersonalizationSettings() {
                   className="grid size-6 place-items-center rounded-full"
                   style={{ backgroundColor: theme.swatch }}
                 >
-                  {active ? <Check size={13} className="text-primary-foreground" /> : null}
+                  {active ? <Check size={13} className="text-white" /> : null}
                 </span>
                 <span className="font-medium leading-tight text-ink">{theme.label}</span>
               </Button>
@@ -165,8 +180,70 @@ export function PersonalizationSettings() {
       </MyFloveBlock>
 
       <MyFloveBlock
+        title="Livskategoriernas färger"
+        subtitle="Känn igen dina livsområden i kalendern och appen."
+        icon={Palette}
+        tone="lavender"
+        surface="plain"
+        className={paceFormSurface}
+        collapsible
+        defaultCollapsed
+        collapseId="anpassa::omradesfarger"
+        status={
+          Object.values(customization.overrides).some((o) => o?.hue)
+            ? "Egna färger"
+            : "Standardfärger"
+        }
+        data-testid="personalization-areas"
+      >
+        <div className="space-y-2">
+          {(Object.keys(AREA_META) as LifeArea[]).map((id) => {
+            const area = AREA_META[id];
+            const hue = customization.overrides[id]?.hue;
+            return (
+              <label
+                key={id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/50 p-3"
+              >
+                <span className="flex items-center gap-2 text-sm font-medium">
+                  <span
+                    aria-hidden
+                    className="size-3 shrink-0 rounded-full"
+                    style={{ backgroundColor: `hsl(${hue ?? area.hue})` }}
+                  />
+                  {area.label}
+                </span>
+                <select
+                  aria-label={`Färg för ${area.label}`}
+                  value={hue ?? ""}
+                  className="min-h-[44px] max-w-full rounded-xl border border-border bg-card px-3 text-sm text-foreground"
+                  onChange={(event) => setColor(id, event.target.value || undefined)}
+                >
+                  <option value="">Standard</option>
+                  {hue && !AREA_COLOR_OPTIONS.some((c) => c.hue === hue) && (
+                    <option value={hue}>Sparad färg</option>
+                  )}
+                  {AREA_COLOR_OPTIONS.map((c) => (
+                    <option key={c.hue} value={c.hue}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            );
+          })}
+        </div>
+        <Button type="button" variant="ghost" className="mt-2 min-h-[44px]" onClick={resetColors}>
+          Återställ kategoriernas färger
+        </Button>
+        <p className="text-xs text-muted-foreground">
+          Färgerna ändrar inte dina aktiviteter eller energifärger.
+        </p>
+      </MyFloveBlock>
+
+      <MyFloveBlock
         title="Alarmsignal"
-        subtitle="Välj ljudet som påminner dig."
+        subtitle="Välj ljud och lyssna innan du bestämmer dig."
         icon={Bell}
         tone="mint"
         surface="plain"
@@ -177,6 +254,12 @@ export function PersonalizationSettings() {
         status={activeSound ? `Valt: ${activeSound.label}` : undefined}
         data-testid="personalization-sound"
       >
+        {!soundEnabled && (
+          <p className="mb-3 text-xs text-muted-foreground">
+            Ljud är avstängt på den här enheten. Du kan ändå provlyssna. Välj Ljud eller Ljud och
+            vibration under Alarm för att slå på det.
+          </p>
+        )}
         <div className="space-y-2">
           {ALARM_SOUNDS.map((sound) => {
             const active = personalization.alarmSound === sound.id;
@@ -197,7 +280,9 @@ export function PersonalizationSettings() {
                   size="sm"
                   variant="ghost"
                   className="shrink-0 rounded-full"
-                  onClick={() => playAlarmPreview(sound.id)}
+                  onClick={() => {
+                    void preview(sound.id);
+                  }}
                   aria-label={`Lyssna på ${sound.label}`}
                 >
                   <Play size={15} />
@@ -216,6 +301,11 @@ export function PersonalizationSettings() {
             );
           })}
         </div>
+        {previewError && (
+          <p role="alert" className="mt-2 text-sm text-foreground">
+            Ljudet kunde inte spelas. Tryck på Lyssna igen.
+          </p>
+        )}
       </MyFloveBlock>
 
       <MyFloveBlock
@@ -253,7 +343,25 @@ export function PersonalizationSettings() {
             );
           })}
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Gäller appens påminnelser. Vibration beror på enheten. Webbläsarens systemnotiser använder
+          enhetens eget ljud.
+        </p>
       </MyFloveBlock>
+      <MyFloveWide>
+        <p className="text-xs text-muted-foreground">
+          Dina färg- och ljudval sparas på ditt konto. Personlig anpassning är tillgänglig för alla
+          nu.
+        </p>
+        <Button
+          type="button"
+          variant="ghost"
+          className="mt-2 h-auto min-h-[44px] whitespace-normal text-left"
+          onClick={reset}
+        >
+          Återställ tema, ljusläge och alarmval
+        </Button>
+      </MyFloveWide>
     </>
   );
 }
