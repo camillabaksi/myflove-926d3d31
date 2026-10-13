@@ -13,13 +13,13 @@
     "server": {
       "name": "myflove-mcp",
       "version": "0.1.0",
-      "title": "MyFlove"
+      "title": "Paceable"
     },
     "tools": [
       {
         "name": "list_tasks",
         "title": "Lista uppgifter",
-        "description": "Listar den inloggade användarens MyFlove-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
+        "description": "Listar den inloggade användarens Paceable-uppgifter. Filtrera med `status` (open/completed/all) och begränsa antalet med `limit`.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -53,7 +53,7 @@
       {
         "name": "add_task",
         "title": "Lägg till uppgift",
-        "description": "Skapar en ny uppgift i MyFlove för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
+        "description": "Skapar en ny uppgift i Paceable för den inloggade användaren. `dueDate` är YYYY-MM-DD och `time` är HH:MM.",
         "annotations": {
           "readOnlyHint": false,
           "destructiveHint": false,
