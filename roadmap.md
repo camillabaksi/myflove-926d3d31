@@ -3,8 +3,8 @@
 - [x] Bekräfta Paceable, blueprint på svenska/engelska och pitchfilmer i båda bildformaten.
 - [x] Materialplanen godkänd; ingen appändring eller publicering.
 - [x] Verifiera aktuell produkt och fånga läsande, integritetssäkra produktbilder.
-- [ ] Skapa två blueprintversioner (Word/PDF) och fyra pitchfilmer från gemensamt faktaunderlag.
-- [ ] Granska alla dokumentsidor och filmscener, paketera skärmbilder och leverera i Files med redovisade begränsningar.
+- [x] Skapa två blueprintversioner (Word/PDF) och fyra pitchfilmer från gemensamt faktaunderlag.
+- [x] Granska alla dokumentsidor och filmscener, paketera skärmbilder och leverera i Files med redovisade begränsningar. Filmversion v2: 180 sekunder, ljudlösa text-/bildfilmer; 48 scener visuellt granskade och samtliga MP4 avkodade utan fel.
 
 ## Insikter – endast etapp 2B (2026-10-10)
 - [x] Godkänd avgränsning: endast Insikters sida, metadata och isolerade presentationstester; inga andra vyer, datakällor eller publicering.
