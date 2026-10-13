@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { Bell, Plus } from "lucide-react";
+import { ArrowRight, Bell, Plus } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -86,6 +86,13 @@ export function TodayContent() {
           </header>
           <div className="pt-2">
             <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" />} />
+            <div className="mt-1 flex justify-end">
+              <Button asChild size="sm" variant="ghost" className="min-h-10 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
+                <Link href="/flowplan?day=tomorrow">
+                  {t("Planera morgondagen")} <ArrowRight size={16} aria-hidden />
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
       </MyFloveWide>

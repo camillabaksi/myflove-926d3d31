@@ -27,28 +27,32 @@ export function toPlanInput(i: FlowItem): FlowPlanItem {
 }
 
 /**
- * Dagens FlowPlan – det Hem, Nästa steg, Idag och Flow visar.
- * Inputs: dagens öppna saker + kapacitetsläget. Inget batteri.
+ * Delad FlowPlan för vald dag. Framtida dagar visas neutralt eftersom orken ännu är okänd.
+ * Dagens plan använder kapacitetsläget; inget batteri är input.
  */
-export function useFlowPlan(skip: string[] = []): FlowPlan<FlowPlanItem> {
-  const { todayOpen } = useFlowItems();
+export function useFlowPlan(skip: string[] = [], targetDay: string = todayISO()): FlowPlan<FlowPlanItem> {
+  const isToday = targetDay === todayISO();
+  const { todayOpen } = useFlowItems(targetDay);
   const { mode } = useCapacityMode();
   const [minutes, setMinutes] = useState(nowMinutes);
 
   useEffect(() => {
+    if (!isToday) return;
     const id = window.setInterval(() => setMinutes(nowMinutes()), 60_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [isToday]);
 
+  // Framtida ork är okänd; visa en neutral förhandsplan utan dagens kapacitetsläge.
+  const planMode = isToday ? mode : "fullt";
   const skipKey = skip.join("|");
   return useMemo(
     () =>
       buildFlowPlan(todayOpen.map(toPlanInput), {
-        mode,
-        today: todayISO(),
-        nowMinutes: minutes,
+        mode: planMode,
+        today: targetDay,
+        nowMinutes: isToday ? minutes : 0,
         skip: skipKey ? skipKey.split("|") : [],
       }),
-    [todayOpen, mode, minutes, skipKey],
+    [todayOpen, planMode, targetDay, isToday, minutes, skipKey],
   );
 }

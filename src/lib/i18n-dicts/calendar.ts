@@ -127,6 +127,12 @@ export const EN_CALENDAR: Record<string, string> = {
     "The time-bound stuff – the rest of the day doesn't need a clock.",
   "Inga tider idag.": "No times today.",
   "Dagens ordning": "Today's order",
+  "Morgondagens ordning": "Tomorrow's order",
+  "Planera morgondagen": "Plan tomorrow",
+  Imorgon: "Tomorrow",
+  "Det här är en förhandsplan. Orken kan du känna efter i morgon.":
+    "This is a preview plan. You can check in with your energy tomorrow.",
+  "Inget är inplanerat för i morgon ännu.": "Nothing is planned for tomorrow yet.",
   "Planen du valt i Planera": "The plan you chose in Plan",
   Ordning: "Order",
   ca: "approx.",
