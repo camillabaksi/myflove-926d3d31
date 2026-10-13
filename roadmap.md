@@ -2,8 +2,9 @@
 ## Engelska kontobilder och appfilmer (2026-10-13)
 - [x] Plan godkänd; animerade produktfilmer och samtycke för synligt kontoinnehåll.
 - [x] Isolerat engelskt språkval och nätverksspärr verifierade; 25 kontobilder granskade och bild-zip sparad. Endast osparat 25 %-exempel, ingen faktisk batteriändring eller omplanering.
-- [ ] Producera sex filmer: tre teman i 9:16 och 16:9; kontrollera rapporterade resultat.
-- [ ] Leverera bilder, zip, filmer och begränsningar i egen Files-samling; ingen publicering.
+- [x] Fyra filmutkast om dagen/batteriet och omplanering sparade; ljudspår, format, längder och full avkodning kontrollerade, tidsbilder granskade.
+- [ ] Två filmer om Min plats/chatt/återhämtning blockerade av filmverktygets renderfel; inga partiella filer levererade.
+- [x] Leverera 25 bilder, zip, fyra filmutkast och begränsningar i egen Files-samling; ingen publicering. Omplaneringsverktygets slutrapport ännu inte mottagen.
 ## Harmoniska Paceable-pitchdeck (2026-10-13)
 - [x] Godkänd plan och endast demobilder, svenska/engelska, redigerbar PPTX + PDF.
 - [x] Gemensam berättelse byggd; omslag, produkt och pilot provgranskade.
