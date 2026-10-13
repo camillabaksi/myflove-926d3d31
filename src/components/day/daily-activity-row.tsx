@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { CheckCircle2, Circle, Link2, Video } from "lucide-react";
+import { MulberryPictogram } from "@/components/calendar/mulberry-pictogram";
+import { mulberryForTitle } from "@/lib/mulberry-symbols";
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
 import { Button } from "@/components/ui/button";
 import { dailyActivityVisual } from "@/lib/daily-activity-visual";
@@ -12,12 +14,14 @@ export function DailyActivityRow({
   item,
   integrated = false,
   showPictograms = false,
+  pictogramLibrary = "lucide",
   onToggle,
   actions,
 }: {
   item: FlowItem;
   integrated?: boolean;
   showPictograms?: boolean;
+  pictogramLibrary?: "lucide" | "mulberry";
   onToggle?: () => void;
   actions: ReactNode;
 }) {
@@ -39,7 +43,9 @@ export function DailyActivityRow({
           "pace-activity-row-grid grid min-w-0 items-center",
           integrated
             ? showPictograms
-              ? "pace-activity-row-pictograms grid-cols-[2.5rem_1.5rem_minmax(0,1fr)_2.75rem] gap-1.5"
+              ? pictogramLibrary === "mulberry"
+                ? "pace-activity-row-pictograms grid-cols-[2.5rem_2rem_minmax(0,1fr)_2.75rem] gap-1.5"
+                : "pace-activity-row-pictograms grid-cols-[2.5rem_1.5rem_minmax(0,1fr)_2.75rem] gap-1.5"
               : "grid-cols-[2.5rem_0.5rem_minmax(0,1fr)_2.75rem] gap-1.5 sm:gap-2"
             : "grid-cols-[2.5rem_2.75rem_minmax(0,1fr)_auto] gap-2 sm:grid-cols-[3rem_3rem_minmax(0,1fr)_auto] sm:gap-3",
         )}
@@ -53,6 +59,8 @@ export function DailyActivityRow({
             style={visualColor ? { backgroundColor: visualColor } : undefined}
             aria-hidden
           />
+        ) : pictogramLibrary === "mulberry" ? (
+          <MulberryPictogram id={mulberryForTitle(item.title, visual.pictogram)} tone={visual.tone} className="h-8 w-8" />
         ) : (
           <ActivityPictogram
             id={visual.pictogram}

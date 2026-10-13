@@ -1,4 +1,4 @@
-import { activityOccursOn, decodeVisualNotes } from "@/lib/child-visual-schedule";
+import { activityOccursOn, decodeVisualNotes, pictogramForActivity } from "@/lib/child-visual-schedule";
 import { isFamilyEntry, minuteOf, type CalendarEntry } from "@/lib/visual-calendar";
 import type { Child, ChildItem } from "@/hooks/use-children";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
@@ -23,7 +23,7 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
     const member = members.get(item.child_id) ?? { id: item.child_id, name: "Delad barnaktivitet" };
     out.push({ id: `c-${item.id}`, sourceId: item.id, source: "child", date, title: item.title,
       time: item.time?.slice(0, 5) || undefined, endTime: meta.endTime, done: false, editable: false,
-      familyMembers: [member], label: member.name, href: "/barn",
+      familyMembers: [member], label: member.name, href: "/barn", pictogram: pictogramForActivity(item.title, meta.pictogram),
       requiresParent: mine && meta.parentPresence === true,
       ...(mine ? { parentTaskId: meta.parentTaskId, prepMinutes: meta.prepMinutes, travelMinutes: meta.travelMinutes } : {}) });
   }
@@ -36,7 +36,7 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
       if (out.some(e => e.familyMembers?.some(m => m.id === child.id) && e.title.trim().toLocaleLowerCase("sv") === item.title.trim().toLocaleLowerCase("sv") && e.time === item.start && e.endTime === item.end)) continue;
       out.push({ id: `school-${child.id}-${item.id}`, sourceId: `school-${child.id}-${item.id}`, source: "child", date,
         title: item.title, time: item.start, endTime: item.end, done: false, editable: false,
-        familyMembers: [{ id: child.id, name: child.name }], label: child.name, requiresParent: false, href: "/barn" });
+        familyMembers: [{ id: child.id, name: child.name }], label: child.name, requiresParent: false, href: "/barn", pictogram: "school" });
     }
   }
   return out;
@@ -58,7 +58,7 @@ export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerP
       o.title.trim().toLocaleLowerCase("sv") === e.title.trim().toLocaleLowerCase("sv") &&
       o.date === e.date && o.time === e.time && o.endTime === e.endTime &&
       o.requiresParent === e.requiresParent && o.parentTaskId === e.parentTaskId &&
-      o.prepMinutes === e.prepMinutes && o.travelMinutes === e.travelMinutes &&
+      o.prepMinutes === e.prepMinutes && o.travelMinutes === e.travelMinutes && o.pictogram === e.pictogram &&
       !o.familyMembers?.some(m => members?.some(n => n.id === m.id)));
     if (match) {
       match.familyMembers = [...(match.familyMembers ?? []), ...(members ?? [])];
