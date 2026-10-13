@@ -330,7 +330,7 @@ function UsersSection() {
   const sorted = data ? [...data].sort(sortUsers(sortKey, sortDir)) : [];
 
   const filterBar = (
-    <div className="flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
+    <div className="pace-card-surface flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
       <label className="text-xs text-muted-foreground">
         {t("Från")}
         <input

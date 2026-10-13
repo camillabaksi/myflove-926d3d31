@@ -81,7 +81,7 @@ export default function PausePage() {
             )}
 
             <section
-              className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+              className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
               aria-label={t("Paus")}
               data-testid="pause-choices"
             >
@@ -147,7 +147,7 @@ export default function PausePage() {
                   track("recovery_lightboost_opened");
                   setLightBoost(true);
                 }}
-                className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
+                className="pace-card-surface press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
               >
                 <span
                   aria-hidden
@@ -167,7 +167,7 @@ export default function PausePage() {
               <Link
                 href="/stop-paus"
                 onClick={() => track("home_widget_opened", { source: "stop_paus" })}
-                className="press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
+                className="pace-card-surface press flex min-h-16 w-full items-center gap-3 rounded-3xl border border-border/60 bg-card px-4 py-3 text-left shadow-soft transition-colors hover:border-primary/35"
               >
                 <span
                   aria-hidden
@@ -184,8 +184,8 @@ export default function PausePage() {
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
               </Link>
             </div>
-            <CollapsibleSection id="recovery-library-entry" title={t("Återhämtningsbibliotek")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryLibrary /></CollapsibleSection>
-            <CollapsibleSection id="recovery-gap-entry" title={t("Hitta en lugnare väg")} defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard /></CollapsibleSection>
+            <CollapsibleSection id="recovery-library-entry" title={t("Återhämtningsbibliotek")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryLibrary /></CollapsibleSection>
+            <CollapsibleSection id="recovery-gap-entry" title={t("Hitta en lugnare väg")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard /></CollapsibleSection>
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>

@@ -116,7 +116,7 @@ export default function ProfilePage() {
             title="Vad ska jag kalla dig?"
             headingClassName="text-base font-semibold"
             description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri.${savedName ? " Sparat ✓" : " Sparas automatiskt."}`}
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <form
               className="mt-3 flex items-center gap-2"
@@ -148,7 +148,7 @@ export default function ProfilePage() {
             title="Mina barn"
             headingClassName="text-base font-semibold"
             description="Valfritt – lägg till barnens namn så får de en egen plats i appen."
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             {myChildren.length > 0 && (
               <ul className="mt-3 space-y-2" data-testid="profile-children-list">
@@ -285,7 +285,7 @@ export default function ProfilePage() {
             title={t("Språk")}
             headingClassName="text-base font-semibold"
             description={t("Appens språk – texterna byts direkt.")}
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div
               className="mt-3 flex flex-wrap gap-2"
@@ -323,7 +323,7 @@ export default function ProfilePage() {
             description={t(
               "Helt frivilligt. Väljer du Nej visas ingenting om menscykel och Pace tar inte hänsyn till det.",
             )}
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <div
               className="mt-3 flex flex-wrap gap-2"
@@ -363,7 +363,7 @@ export default function ProfilePage() {
             id="profile-life-profile"
             title="Min livsprofil"
             headingClassName="text-base font-semibold"
-            className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <LifeProfileSections />
           </CollapsibleSection>

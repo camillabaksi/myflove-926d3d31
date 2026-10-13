@@ -63,7 +63,7 @@ import {
   studyTransitionPlan,
 } from "@/lib/studyflow";
 
-const card = "pace-app-card rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
+const card = "pace-card-surface pace-app-card rounded-3xl border-2 border-border bg-card p-5 shadow-sm";
 const sectionTitle = "flex items-center gap-2 font-display text-lg text-ink";
 
 function tomorrowISO() {

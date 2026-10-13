@@ -408,7 +408,7 @@ export default function MealPlannerPage() {
               </div>
             )}
 
-            <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+            <div className="pace-card-surface rounded-3xl border border-border bg-card p-5 shadow-sm">
               <h2 className="text-sm font-semibold text-ink">Vilka måltider vill du planera?</h2>
               <p className="mt-1 text-xs text-muted-foreground">
                 Välj bara det du orkar. Ditt val sparas till nästa gång.

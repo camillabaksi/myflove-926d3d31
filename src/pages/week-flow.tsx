@@ -88,7 +88,7 @@ export default function WeekFlowPage() {
               title="Din vecka"
               id="week-summary"
               headingClassName="text-base font-semibold"
-              className="surface-card p-5"
+              className="pace-card-surface surface-card p-5"
             >
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>✓ {doneCount} saker genomförda</li>
@@ -102,7 +102,7 @@ export default function WeekFlowPage() {
               title="Vad hjälpte dig mest?"
               id="week-helped-most"
               headingClassName="text-base font-semibold"
-              className="surface-card p-5"
+              className="pace-card-surface surface-card p-5"
             >
               {usageRows.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
@@ -124,7 +124,7 @@ export default function WeekFlowPage() {
                 title="Jag börjar lära mig hur du fungerar bäst"
                 id="week-patterns"
                 headingClassName="text-base font-semibold"
-                className="surface-card p-5"
+                className="pace-card-surface surface-card p-5"
               >
                 <ul className="text-sm text-muted-foreground space-y-1">
                   {patterns.map((p) => (

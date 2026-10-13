@@ -399,7 +399,7 @@ function ChildrenContent() {
           </section>
 
           {isOwner && (
-            <section className="surface-card p-5">
+            <section className="pace-card-surface surface-card p-5">
               <CollapsibleSection
                 title={`Lägg till för ${activeChild.name}`}
                 id="Lägg till för barn"
@@ -512,7 +512,7 @@ function ChildrenContent() {
           )}
 
            {/* Alla poster finns kvar, men tidslinjen ovan är första nivån. */}
-           <CollapsibleSection id="barn-all-items" title={`Alla aktiviteter och dokument för ${activeChild.name}`} defaultCollapsed className="surface-card p-4" headingClassName="text-base font-semibold text-ink">
+           <CollapsibleSection id="barn-all-items" title={`Alla aktiviteter och dokument för ${activeChild.name}`} defaultCollapsed className="pace-card-surface surface-card p-4" headingClassName="text-base font-semibold text-ink">
            <section className="space-y-3">
             <div className="flex gap-2 flex-wrap">
               {FILTERS.map((f) => (

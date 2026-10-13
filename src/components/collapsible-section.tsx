@@ -56,13 +56,13 @@ export default function CollapsibleSection({
   }, [revealToken, storeId]);
 
   return (
-    <section ref={section} id={id} className={cn("space-y-4", className)}>
-      <div className="flex items-center gap-2">
+    <section ref={section} id={id} className={cn("pace-collapse-section space-y-4", className)}>
+      <div className="pace-collapse-header flex items-center gap-2">
         <button
           type="button"
           onClick={toggle}
           aria-expanded={!collapsed}
-          className="flex flex-1 items-center gap-2 text-left group"
+          className="pace-collapse-trigger flex flex-1 items-center gap-2 text-left group"
         >
           <ChevronDown
             size={16}
@@ -72,7 +72,7 @@ export default function CollapsibleSection({
               collapsed && "-rotate-90",
             )}
           />
-          <span className={cn("text-xl font-medium", headingClassName)}>{title}</span>
+          <span className={cn("pace-collapse-title text-xl font-medium", headingClassName)}>{title}</span>
         </button>
         {help && <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>}
         {actions}

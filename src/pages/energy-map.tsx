@@ -164,7 +164,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
 
       {!userId && !loading && (
         <MyFloveWide>
-          <div className="rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
+          <div className="pace-card-surface rounded-2xl bg-card border border-border p-4 text-sm text-muted-foreground">
             {t("Logga in för att spara din energi över tid.")}
           </div>
         </MyFloveWide>
@@ -179,7 +179,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             )}
             headingClassName="font-medium"
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
-            className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+            className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
           >
             <div className="grid grid-cols-5 gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
@@ -250,7 +250,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
                   ? t("Ingen loggning idag än – lägg en när det passar.")
                   : `${todayLogs.length} ${todayLogs.length === 1 ? t("loggning idag.") : t("loggningar idag.")}`
               }
-              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+              className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
               {todayLogs.length > 0 && (
                 <div className="h-48">
@@ -286,7 +286,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
               )}
               headingClassName="font-medium"
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
-              className="rounded-2xl bg-card border border-border p-5 shadow-sm"
+              className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
             >
               {hourAverages.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">

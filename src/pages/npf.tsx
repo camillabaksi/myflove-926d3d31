@@ -48,7 +48,7 @@ function ToggleRowView({
   onCheckedChange: (v: boolean) => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
+    <label className="pace-card-surface flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
       <span className="min-w-0 font-medium text-ink">{row.title}</span>
       <Switch
         checked={checked}
@@ -173,7 +173,7 @@ export default function NpfPage() {
           collapseId="anpassa::integritet"
           status={statsOptOut ? "Delning av" : "Delning på"}
         >
-          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
+          <label className="pace-card-surface flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/70 p-3">
             <span className="min-w-0 font-medium text-ink">Dela statistik</span>
             <Switch
               checked={!statsOptOut}

@@ -69,7 +69,7 @@ export default function BatteryPage() {
         <MyFloveWide>
           <Link
             href="/assistant"
-            className="flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+            className="pace-card-surface flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
           >
             <MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden />
             <span className="min-w-0 flex-1 text-sm font-semibold text-ink">
@@ -90,7 +90,7 @@ export default function BatteryPage() {
               id="battery-log-energy-mood"
               title={t("Logga energi & mående")}
               defaultCollapsed
-              className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+              className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
               headingClassName="text-base font-semibold text-ink"
             >
               <SimpleCheckin source="mitt-batteri" />
@@ -124,7 +124,7 @@ export default function BatteryPage() {
             defaultCollapsed
             title={t("Historik & mönster")}
             description={t("Dina loggningar och en separat beräknad energikurva.")}
-            className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+            className="pace-card-surface rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">

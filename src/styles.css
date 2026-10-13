@@ -2663,3 +2663,123 @@ html[data-personalized-app="true"][data-theme]:not([data-theme="paceable"]) :is(
   --pace-surface-raised: color-mix(in srgb, hsl(var(--personal-background)) 25%, hsl(var(--card)));
   --pace-border-warm: hsl(var(--personal-border) / 0.8);
 }
+
+
+/* Complete the secondary-page refresh through explicit presentation markers.
+   No selectors target saved values, chart fills, images or activity status. */
+html[data-pace-refresh="true"] :is([data-pace-block], [data-pace-expandable], .pace-card-surface, .surface-card) {
+  border-radius: var(--pace-radius-card, 1.5rem);
+  border-width: 1px;
+  background-color: var(--pace-surface);
+  background-image: none;
+  box-shadow: var(--pace-highlight-top), var(--pace-elevation-1);
+}
+html[data-pace-refresh="true"] [data-pace-block] {
+  padding: 1rem;
+  gap: 1rem;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  justify-content: flex-start;
+}
+html[data-pace-refresh="true"] .pace-block-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+html[data-pace-refresh="true"] .pace-block-header { align-items: center; gap: 0.75rem; }
+html[data-pace-refresh="true"] .pace-block-trigger {
+  min-height: 44px;
+  min-width: 0;
+  align-items: center;
+}
+html[data-pace-refresh="true"] .pace-block-heading {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+html[data-pace-refresh="true"] .pace-block-heading[data-has-icon="false"] { grid-template-columns: minmax(0, 1fr) 18px; }
+html[data-pace-refresh="true"] .pace-block-icon-row { display: contents; }
+html[data-pace-refresh="true"] .pace-block-icon-row > svg { grid-column: 3; grid-row: 1; }
+html[data-pace-refresh="true"] .pace-block-heading[data-has-icon="false"] .pace-block-icon-row > svg { grid-column: 2; }
+html[data-pace-refresh="true"] .pace-block-icon {
+  grid-column: 1;
+  grid-row: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 0.75rem;
+}
+html[data-pace-refresh="true"] .pace-block-copy { grid-column: 2; grid-row: 1; }
+html[data-pace-refresh="true"] .pace-block-heading[data-has-icon="false"] .pace-block-copy { grid-column: 1; }
+html[data-pace-refresh="true"] .pace-block-header :is(h2, p, [class*="line-clamp"]) {
+  display: block;
+  -webkit-line-clamp: unset;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+html[data-pace-refresh="true"] .pace-block-copy h2 { font-weight: 600; line-height: 1.4; }
+html[data-pace-refresh="true"] .pace-stat-card {
+  background-color: var(--pace-surface);
+  border-color: var(--pace-border-warm);
+  border-radius: var(--pace-radius-block, 1.25rem);
+  box-shadow: none;
+}
+html[data-pace-refresh="true"] [data-pace-expandable][data-expanded="false"] { min-height: 0; }
+html[data-pace-refresh="true"] [data-pace-expandable][data-expanded="false"] > :is(a, button) {
+  min-height: 72px;
+  padding: 1rem;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.75rem;
+}
+html[data-pace-refresh="true"] [data-pace-expandable][data-expanded="false"] > :is(a, button) > div { min-width: 0; }
+html[data-pace-refresh="true"] .pace-collapse-header { min-width: 0; flex-wrap: wrap; }
+html[data-pace-refresh="true"] .pace-collapse-trigger { min-width: 0; min-height: 44px; }
+html[data-pace-refresh="true"] .pace-collapse-title { min-width: 0; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.4; font-weight: 600; }
+html[data-pace-refresh="true"] .pace-page-header {
+  padding: 0.5rem 0;
+  background: none !important;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+html[data-pace-refresh="true"] .pace-page-header .pace-app-glow { display: none; }
+html[data-pace-refresh="true"] .pace-page-header h1 { overflow-wrap: anywhere; }
+html[data-pace-refresh="true"] .pace-empty-state {
+  background: var(--pace-surface);
+  border-radius: var(--pace-radius-card, 1.5rem);
+  box-shadow: none;
+  animation: none;
+}
+html[data-pace-refresh="true"] .pace-block-trigger:focus-visible,
+html[data-pace-refresh="true"] .pace-collapse-trigger:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 4px;
+  border-radius: 0.75rem;
+}
+@media (min-width: 640px) {
+  html[data-pace-refresh="true"] .pace-block-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  html[data-pace-refresh="true"] [data-pace-block] { padding: 1.25rem; }
+}
+
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 24px;
+}
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > span:first-child { grid-column: 1; grid-row: 1; }
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > span:first-child > span { width: 32px; height: 32px; }
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > div:first-of-type { grid-column: 2; grid-row: 1; }
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > div:nth-of-type(2) {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  width: auto;
+  max-width: none;
+  text-align: left;
+}
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > span:last-child { position: static; grid-column: 3; grid-row: 1; width: 24px; height: 24px; }
+html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][data-expanded="false"] > button > span:last-child { white-space: normal; overflow: visible; overflow-wrap: anywhere; }

@@ -47,7 +47,7 @@ function SettingsLink({ href, icon: Icon, label, hint }: SettingsLinkProps) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-2xl border border-border/60 bg-card/70 p-3 text-left transition-colors hover:bg-card"
+      className="pace-card-surface flex items-center gap-3 rounded-2xl border border-border/60 bg-card/70 p-3 text-left transition-colors hover:bg-card"
     >
       <Icon className="size-5 shrink-0 text-primary" aria-hidden />
       <span className="min-w-0 flex-1">
@@ -175,7 +175,7 @@ export default function SettingsPage() {
               <span className="block text-xs font-normal text-muted-foreground">Bestäm hur många områden som syns i Mer</span>
             </span>
           </Button>
-          <div className="rounded-2xl border border-border/60 bg-card/70 p-3">
+          <div className="pace-card-surface rounded-2xl border border-border/60 bg-card/70 p-3">
             <p className="text-sm font-semibold text-ink">Din bottenmeny</p>
             <p className="mt-1 text-xs text-muted-foreground">Idag, Kalender, Fånga, Min plats och Mer ligger fast för alla.</p>
           </div>

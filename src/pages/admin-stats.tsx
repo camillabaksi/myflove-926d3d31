@@ -316,7 +316,7 @@ export default function AdminStats() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-2xl border border-border bg-card p-4 shadow-sm"
+                    className="pace-card-surface rounded-2xl border border-border bg-card p-4 shadow-sm"
                   >
                     <p className="text-2xl font-bold text-primary">{item.value}</p>
                     <p className="mt-1 text-sm font-semibold">{item.label}</p>
