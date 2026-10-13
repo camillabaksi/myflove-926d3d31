@@ -70,7 +70,7 @@ export default function AdminPage() {
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="min-w-0 max-w-5xl mx-auto space-y-6">
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
             <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
@@ -96,7 +96,7 @@ export default function AdminPage() {
 
         <UserAnalytics />
 
-        <div className="flex gap-2 border-b border-border">
+        <div className="flex min-w-0 max-w-full gap-2 overflow-x-auto border-b border-border">
           <TabBtn
             active={tab === "friction"}
             onClick={() => setTab("friction")}
@@ -136,7 +136,6 @@ export default function AdminPage() {
         ) : (
           <ChangelogExport />
         )}
-
       </div>
     </Layout>
   );
@@ -155,8 +154,10 @@ function TabBtn({
 }) {
   return (
     <button
+      type="button"
+      aria-pressed={active}
       onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 -mb-px transition ${
+      className={`flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap [overflow-wrap:normal] [&>svg]:shrink-0 px-4 py-2 text-sm font-medium border-b-2 transition ${
         active
           ? "border-primary text-primary"
           : "border-transparent text-muted-foreground hover:text-foreground"
@@ -331,22 +332,22 @@ function UsersSection() {
 
   const filterBar = (
     <div className="pace-card-surface flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
-      <label className="text-xs text-muted-foreground">
+      <label className="w-full min-w-0 text-xs text-muted-foreground sm:w-auto">
         {t("Från")}
         <input
           type="date"
           value={from}
           onChange={(e) => setFrom(e.target.value)}
-          className="mt-1 block rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
+          className="mt-1 block min-h-11 w-full min-w-0 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
         />
       </label>
-      <label className="text-xs text-muted-foreground">
+      <label className="w-full min-w-0 text-xs text-muted-foreground sm:w-auto">
         {t("Till")}
         <input
           type="date"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          className="mt-1 block rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
+          className="mt-1 block min-h-11 w-full min-w-0 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
         />
       </label>
       {hasFilter && (
@@ -397,8 +398,75 @@ function UsersSection() {
       <p className="text-sm text-muted-foreground">
         {data.length} {t("användare")}
       </p>
-      <div className="overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full text-sm">
+      <div className="space-y-3 md:hidden">
+        <div className="grid items-end gap-2 sm:flex sm:flex-wrap">
+          <label className="min-w-0 flex-1 text-xs text-muted-foreground">
+            {t("Sortera efter")}
+            <select
+              value={sortKey}
+              onChange={(e) => handleSort(e.target.value as SortKey)}
+              className="mt-1 block min-h-11 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground"
+            >
+              <option value="name">{t("Namn")}</option>
+              <option value="last_visit">{t("Senast aktiv")}</option>
+              <option value="last_login">{t("Senaste inloggning")}</option>
+              <option value="created">{t("Skapad")}</option>
+              <option value="roles">{t("Roller")}</option>
+            </select>
+          </label>
+          <button
+            type="button"
+            onClick={() => handleSort(sortKey)}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm"
+          >
+            {sortDir === "asc" ? (
+              <ArrowUp size={16} aria-hidden="true" />
+            ) : (
+              <ArrowDown size={16} aria-hidden="true" />
+            )}
+            {t(sortDir === "asc" ? "Stigande" : "Fallande")}
+          </button>
+        </div>
+        {sorted.map((u) => (
+          <article
+            key={u.user_id}
+            className="min-w-0 rounded-2xl border border-border bg-card p-4 space-y-4"
+          >
+            <div className="min-w-0 space-y-1">
+              <h3 className="font-medium [overflow-wrap:anywhere]">{u.name ?? u.email ?? "—"}</h3>
+              <p className="text-sm text-muted-foreground [overflow-wrap:anywhere]">
+                {u.email ?? "—"}
+              </p>
+              <UserRoleBadges roles={u.roles} />
+            </div>
+            <dl className="grid min-w-0 gap-3 sm:grid-cols-2">
+              {[
+                [t("Senast aktiv"), fmtDateTime(u.last_visit_at, locale)],
+                [t("Senaste inloggning"), fmtDateTime(u.last_sign_in_at, locale)],
+                [
+                  t("Skapad"),
+                  u.created_at ? new Date(u.created_at).toLocaleDateString(locale) : "—",
+                ],
+              ].map(([label, value]) => (
+                <div key={label} className="min-w-0 [overflow-wrap:normal]">
+                  <dt className="text-xs text-muted-foreground">{label}</dt>
+                  <dd className="text-sm break-normal">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="border-t border-border pt-3">
+              <UserRoleAction
+                user={u}
+                pending={grant.isPending || revoke.isPending}
+                onGrant={() => grant.mutate({ userId: u.user_id, role: "admin" })}
+                onRevoke={() => revoke.mutate({ userId: u.user_id, role: "admin" })}
+              />
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="hidden overflow-x-auto rounded-2xl border border-border md:block">
+        <table className="w-full min-w-[56rem] text-sm">
           <thead className="bg-muted text-left">
             <tr>
               <SortHeader
@@ -442,7 +510,6 @@ function UsersSection() {
 
           <tbody>
             {sorted.map((u) => {
-              const isAdminRow = u.roles.includes("admin");
               return (
                 <tr key={u.user_id} className="border-t border-border">
                   <td className="p-3">
@@ -460,51 +527,15 @@ function UsersSection() {
                   </td>
 
                   <td className="p-3">
-                    {u.roles.length === 0 ? (
-                      <span className="text-xs text-muted-foreground">{t("användare")}</span>
-                    ) : (
-                      <div className="flex flex-wrap gap-1">
-                        {u.roles.map((r) => (
-                          <span
-                            key={r}
-                            className={`text-xs rounded-full px-2 py-0.5 ${
-                              r === "admin" ? "bg-primary/15 text-primary" : "bg-secondary"
-                            }`}
-                          >
-                            {r}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <UserRoleBadges roles={u.roles} />
                   </td>
                   <td className="p-3 text-right">
-                    {isAdminRow ? (
-                      <button
-                        onClick={() => {
-                          if (
-                            confirm(
-                              t("Ta bort admin-roll från {email}?").replace(
-                                "{email}",
-                                u.email ?? "",
-                              ),
-                            )
-                          )
-                            revoke.mutate({ userId: u.user_id, role: "admin" });
-                        }}
-                        disabled={revoke.isPending}
-                        className="inline-flex items-center gap-1 text-xs text-destructive hover:underline disabled:opacity-50"
-                      >
-                        <ShieldOff size={14} /> {t("Ta bort admin")}
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => grant.mutate({ userId: u.user_id, role: "admin" })}
-                        disabled={grant.isPending}
-                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline disabled:opacity-50"
-                      >
-                        <Shield size={14} /> {t("Gör till admin")}
-                      </button>
-                    )}
+                    <UserRoleAction
+                      user={u}
+                      pending={grant.isPending || revoke.isPending}
+                      onGrant={() => grant.mutate({ userId: u.user_id, role: "admin" })}
+                      onRevoke={() => revoke.mutate({ userId: u.user_id, role: "admin" })}
+                    />
                   </td>
                 </tr>
               );
@@ -513,6 +544,63 @@ function UsersSection() {
         </table>
       </div>
     </div>
+  );
+}
+
+function UserRoleBadges({ roles }: { roles: AdminUserRow["roles"] }) {
+  const { t } = useLang();
+  return (
+    <div className="flex flex-wrap gap-1">
+      {roles.length === 0 ? (
+        <span className="text-xs text-muted-foreground whitespace-nowrap">{t("användare")}</span>
+      ) : (
+        roles.map((role) => (
+          <span
+            key={role}
+            className={`whitespace-nowrap rounded-full px-2 py-0.5 text-xs ${role === "admin" ? "bg-primary/15 text-primary" : "bg-secondary"}`}
+          >
+            {role}
+          </span>
+        ))
+      )}
+    </div>
+  );
+}
+
+function UserRoleAction({
+  user,
+  pending,
+  onGrant,
+  onRevoke,
+}: {
+  user: AdminUserRow;
+  pending: boolean;
+  onGrant: () => void;
+  onRevoke: () => void;
+}) {
+  const { t } = useLang();
+  const isAdmin = user.roles.includes("admin");
+  return (
+    <button
+      type="button"
+      disabled={pending}
+      onClick={() => {
+        if (isAdmin) {
+          if (confirm(t("Ta bort admin-roll från {email}?").replace("{email}", user.email ?? "")))
+            onRevoke();
+        } else {
+          onGrant();
+        }
+      }}
+      className={`inline-flex min-h-11 items-center gap-2 rounded-lg px-2 py-2 text-sm break-normal [overflow-wrap:normal] hover:underline disabled:opacity-50 ${isAdmin ? "text-destructive" : "text-primary"}`}
+    >
+      {isAdmin ? (
+        <ShieldOff size={16} className="shrink-0" aria-hidden="true" />
+      ) : (
+        <Shield size={16} className="shrink-0" aria-hidden="true" />
+      )}
+      {t(isAdmin ? "Ta bort admin" : "Gör till admin")}
+    </button>
   );
 }
 
@@ -528,11 +616,11 @@ function SortHeader({
   children: React.ReactNode;
 }) {
   return (
-    <th className="p-3">
+    <th className="p-3 whitespace-nowrap">
       <button
         type="button"
         onClick={onClick}
-        className="flex items-center gap-1 font-semibold hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+        className="flex min-h-11 items-center gap-1 whitespace-nowrap [&>svg]:shrink-0 font-semibold hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
       >
         {children}
         {active && (dir === "asc" ? <ArrowUp size={14} /> : <ArrowDown size={14} />)}
