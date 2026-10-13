@@ -9,6 +9,9 @@ export const EN_ADMIN: Record<string, string> = {
   "Energipåverkan efter aktivitet": "Energy impact after activity",
   "Flow totalt": "Flow total",
   // src/pages/admin.tsx
+  "Sortera efter": "Sort by",
+  Stigande: "Ascending",
+  Fallande: "Descending",
   Öppen: "Open",
   Planerad: "Planned",
   Pågår: "In progress",
