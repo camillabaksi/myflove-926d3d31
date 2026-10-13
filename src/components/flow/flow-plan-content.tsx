@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CheckCircle2, ListOrdered, Sparkles } from "lucide-react";
 import DayAdjust from "@/components/journey/day-adjust";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -6,13 +7,20 @@ import { Button } from "@/components/ui/button";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { useLang } from "@/hooks/use-language";
+import { addDaysISO, todayISO } from "@/lib/day";
 
 /** Planera visar den gemensamma dagsplanen. Ingen egen energi- eller sorteringsmodell. */
 export function FlowPlanContent() {
   const { t } = useLang();
+  const [showTomorrow, setShowTomorrow] = useState(
+    () => new URLSearchParams(window.location.search).get("day") === "tomorrow",
+  );
+  const today = todayISO();
+  const isTomorrow = showTomorrow;
+  const targetDay = isTomorrow ? addDaysISO(today, 1) : today;
   const { toggleItem } = useFlowItems();
-  const plan = useFlowPlan();
-  const low = plan.mode === "lagt";
+  const plan = useFlowPlan([], targetDay);
+  const low = !isTomorrow && plan.mode === "lagt";
   const visible = low ? plan.order.slice(0, 1) : plan.order;
 
   return (
@@ -25,9 +33,20 @@ export function FlowPlanContent() {
         />
       </MyFloveWide>
 
+      <MyFloveWide>
+        <div className="inline-flex rounded-full border border-border/70 bg-card/70 p-1" role="group" aria-label={t("Välj dag")}>
+          <Button type="button" size="sm" variant={!isTomorrow ? "secondary" : "ghost"} className="min-h-10 rounded-full px-4" aria-pressed={!isTomorrow} onClick={() => setShowTomorrow(false)}>
+            {t("Idag")}
+          </Button>
+          <Button type="button" size="sm" variant={isTomorrow ? "secondary" : "ghost"} className="min-h-10 rounded-full px-4" aria-pressed={isTomorrow} onClick={() => setShowTomorrow(true)}>
+            {t("Imorgon")}
+          </Button>
+        </div>
+      </MyFloveWide>
+
       <MyFloveBlock
-        title={low ? t("Nu") : t("Dagens ordning")}
-        subtitle={t(plan.message)}
+        title={isTomorrow ? t("Morgondagens ordning") : low ? t("Nu") : t("Dagens ordning")}
+        subtitle={isTomorrow ? t("Det här är en förhandsplan. Orken kan du känna efter i morgon.") : t(plan.message)}
         icon={ListOrdered}
         tone="lavender"
         surface="lavender"
@@ -36,7 +55,7 @@ export function FlowPlanContent() {
       >
         {visible.length === 0 ? (
           <p className="rounded-2xl bg-secondary/40 p-4 text-sm text-muted-foreground">
-            {t("Det finns inget som väntar just nu.")}
+            {isTomorrow ? t("Inget är inplanerat för i morgon ännu.") : t("Det finns inget som väntar just nu.")}
           </p>
         ) : (
           <ol className="space-y-3">
@@ -55,7 +74,7 @@ export function FlowPlanContent() {
                         </p>
                       )}
                     </div>
-                    {item.completable && (
+                    {!isTomorrow && item.completable && (
                       <Button
                         type="button"
                         size="sm"
@@ -74,7 +93,7 @@ export function FlowPlanContent() {
         )}
       </MyFloveBlock>
 
-      {!low && plan.waiting.length > 0 && (
+      {!isTomorrow && !low && plan.waiting.length > 0 && (
         <MyFloveBlock
           title={t("Kan vänta")}
           subtitle={t("Det här ligger kvar, men behöver inte ta plats i dagens plan.")}
@@ -93,7 +112,7 @@ export function FlowPlanContent() {
         </MyFloveBlock>
       )}
 
-      {!low && (
+      {!isTomorrow && !low && (
         <MyFloveBlock
           title={t("Behöver du planera om?")}
           subtitle={t("Flytta, förenkla eller dela upp – inget händer förrän du säger ja")}
