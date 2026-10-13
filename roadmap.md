@@ -4,7 +4,8 @@
 - [x] Isolerat engelskt språkval och nätverksspärr verifierade; 25 kontobilder granskade och bild-zip sparad. Endast osparat 25 %-exempel, ingen faktisk batteriändring eller omplanering.
 - [x] Fyra filmutkast om dagen/batteriet och omplanering sparade; ljudspår, format, längder och full avkodning kontrollerade, tidsbilder granskade.
 - [ ] Två filmer om Min plats/chatt/återhämtning blockerade av filmverktygets renderfel; inga partiella filer levererade.
-- [x] Leverera 25 bilder, zip, fyra filmutkast och begränsningar i egen Files-samling; ingen publicering. Omplaneringsverktygets slutrapport ännu inte mottagen.
+- [x] Leverera 25 bilder, zip, fyra filmutkast och begränsningar i egen Files-samling; ingen publicering. Slutrapport mottagen; FILMRAPPORT-v2 dokumenterar fördröjd märkning.
+- [ ] Omplaneringsfilmernas osparat-märkning behöver täcka hela intoningen; filmverktygets rättningsrendering misslyckades, v1 endast för granskning.
 ## Harmoniska Paceable-pitchdeck (2026-10-13)
 - [x] Godkänd plan och endast demobilder, svenska/engelska, redigerbar PPTX + PDF.
 - [x] Gemensam berättelse byggd; omslag, produkt och pilot provgranskade.
