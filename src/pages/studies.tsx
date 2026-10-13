@@ -238,7 +238,7 @@ export function StudiesSection() {
         lowHint="Låg ork idag – 5 minuters repetition räknas."
       />
       {/* Nästa steg – en sak i taget */}
-      <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+      <section className="pace-card-surface rounded-3xl border border-border bg-card p-5 shadow-sm">
         <h2 className="text-sm font-semibold text-ink">Nästa steg</h2>
         {nextUp ? (
           <>
@@ -288,7 +288,7 @@ export function StudiesSection() {
         title="Dina kurser"
         help="Kurserna du läser. Lägg till en kurs så kan uppgifter kopplas till den."
         headingClassName="text-lg font-semibold"
-        className="bg-card border border-border rounded-2xl p-5"
+        className="pace-card-surface bg-card border border-border rounded-2xl p-5"
       >
         <form onSubmit={handleAddCourse} className="flex gap-2">
           <Input
@@ -334,7 +334,7 @@ export function StudiesSection() {
       </CollapsibleSection>
 
       {/* Ny inlämning */}
-      <section className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between gap-3">
+      <section className="pace-card-surface bg-card border border-border rounded-2xl p-5 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold text-ink">Ny skoluppgift</h2>
           <p className="text-sm text-muted-foreground">Lägg till en inlämning eller deadline.</p>

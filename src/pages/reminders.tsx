@@ -83,7 +83,7 @@ function ReminderRow({
   const repeat = reminder.repeat ?? "none";
   return (
     <li
-      className={`rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
+      className={`pace-card-surface rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">

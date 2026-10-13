@@ -169,7 +169,7 @@ function PersonRow({
   return (
     <>
       {editDialog}
-    <div className="rounded-2xl border border-border bg-card p-3">
+    <div className="pace-card-surface rounded-2xl border border-border bg-card p-3">
       <div className="flex items-center gap-2">
         <span className="text-lg">{relationTypeMeta(person.type).emoji}</span>
         <div className="min-w-0 flex-1">
@@ -296,7 +296,7 @@ function RelationsContent() {
         id="relationer-mer"
         defaultCollapsed
         headingClassName="font-display text-base text-ink"
-        className="surface-card p-5"
+        className="pace-card-surface surface-card p-5"
         help={
           <>
             Du väljer själv vilka relationstyper som visas. Inget läggs till automatiskt och du kan

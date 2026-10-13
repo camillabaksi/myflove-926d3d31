@@ -52,7 +52,7 @@ export default function Stats() {
               title="Den här veckan"
               id="weekly-mood-statistics"
               headingClassName="text-base font-semibold"
-              className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border"
+              className="pace-card-surface bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border"
             >
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>

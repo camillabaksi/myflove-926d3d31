@@ -421,7 +421,7 @@ export default function InsightPage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-3xl bg-card border border-border">
+            <div className="pace-card-surface p-5 rounded-3xl bg-card border border-border">
               <p className="leading-relaxed">
                 Insight hjälper dig att omvandla information om behov och styrkor till konkreta
                 strategier i vardagen.
@@ -433,7 +433,7 @@ export default function InsightPage() {
                 <button
                   key={p.id}
                   onClick={() => startAnalysis(p)}
-                  className="w-full text-left p-5 rounded-3xl bg-card border border-border hover:shadow-lifted transition-all active:scale-[0.99] flex items-center gap-4"
+                  className="pace-card-surface w-full text-left p-5 rounded-3xl bg-card border border-border hover:shadow-lifted transition-all active:scale-[0.99] flex items-center gap-4"
                 >
                   <span className="text-2xl" aria-hidden>
                     {p.emoji}
@@ -454,7 +454,7 @@ export default function InsightPage() {
             <CollapsibleSection
               title="Skapa en egen testprofil"
               headingClassName="font-semibold"
-              className="p-5 rounded-3xl bg-card border border-border"
+              className="pace-card-surface p-5 rounded-3xl bg-card border border-border"
               description="Skriv fiktiva exempel – ett behov per rad. Inga riktiga uppgifter."
             >
               <input
@@ -562,7 +562,7 @@ export default function InsightPage() {
             {saved.map((s) => (
               <div
                 key={s.id}
-                className="p-4 rounded-2xl bg-card border border-border flex items-start gap-3"
+                className="pace-card-surface p-4 rounded-2xl bg-card border border-border flex items-start gap-3"
               >
                 <span className="text-xl" aria-hidden>
                   {AREA_BY_ID[s.areaId]?.emoji}

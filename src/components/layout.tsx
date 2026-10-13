@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { usesRefreshedDesign } from "@/lib/design-refresh";
 import { useAreaColors } from "@/lib/area-premium";
 import * as React from "react";
 import { SyncStatusNote } from "@/components/sync-status-note";
@@ -213,13 +215,16 @@ export default function Layout({ children }: LayoutProps) {
     return () => observer.disconnect();
   }, []);
   const paceableApp = isPaceableAppPath(location);
+  const refreshDesign = usesRefreshedDesign(location);
   const textLayout = useTextLayout();
   React.useLayoutEffect(() => {
     const root = document.documentElement;
     if (paceableApp) root.dataset.paceableApp = "true";
     else delete root.dataset.paceableApp;
-    return () => { delete root.dataset.paceableApp; };
-  }, [paceableApp]);
+    if (refreshDesign) root.dataset.paceRefresh = "true";
+    else delete root.dataset.paceRefresh;
+    return () => { delete root.dataset.paceableApp; delete root.dataset.paceRefresh; };
+  }, [paceableApp, refreshDesign]);
   const desktopMoreTriggerRef = React.useRef<HTMLButtonElement>(null);
   React.useLayoutEffect(() => {
     mainScrollRef.current?.scrollTo({ top: 0 });
@@ -898,7 +903,7 @@ export default function Layout({ children }: LayoutProps) {
           className="pace-mobile-content-scroll flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
-          <div key={location} className="max-w-6xl mx-auto w-full p-4 md:p-6 page-enter">
+          <div key={location} className={cn("max-w-6xl mx-auto w-full p-4 md:p-6 page-enter", refreshDesign && "pace-ds pace-design-refresh")}>
             {!FLOW_HIDDEN_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />

@@ -208,6 +208,8 @@ export function ExpandableBlock({
     return (
       <section
         ref={sectionRef}
+        data-pace-expandable="true"
+        data-pace-widget={Boolean(widget)}
         data-testid={dataTestId}
         data-expanded="false"
         {...areaProps(area)}
@@ -234,6 +236,8 @@ export function ExpandableBlock({
   return (
     <section
       ref={sectionRef}
+      data-pace-expandable="true"
+        data-pace-widget={Boolean(widget)}
       data-testid={dataTestId}
       data-expanded={open ? "true" : "false"}
       {...areaProps(area)}

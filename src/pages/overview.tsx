@@ -38,7 +38,7 @@ export default function OverviewPage() {
               </span>
             }
             headingClassName="text-base font-semibold"
-            className="rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft"
+            className="pace-card-surface rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft"
           >
             <p className="mt-0.5 text-xs text-muted-foreground">{group.hint}</p>
 

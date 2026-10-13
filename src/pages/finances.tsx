@@ -249,7 +249,7 @@ export default function Finances() {
 
         {transactions.length > 0 && (
           <MyFloveWide>
-            <div className="rounded-3xl border-2 border-border/60 bg-card p-3 sm:p-5 shadow-soft">
+            <div className="pace-card-surface rounded-3xl border-2 border-border/60 bg-card p-3 sm:p-5 shadow-soft">
               <CollapsibleSection
                 title="Senaste transaktioner"
                 help="De tio senaste sakerna du lagt in. Bra för att snabbt se vart pengarna tog vägen."
@@ -258,7 +258,7 @@ export default function Finances() {
                   {transactions.slice(0, 10).map((t) => (
                     <div
                       key={t.id}
-                      className="flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-soft"
+                      className="pace-card-surface flex items-center justify-between p-4 bg-card border border-border rounded-2xl shadow-soft"
                     >
                       <div className="flex items-center gap-4">
                         <div

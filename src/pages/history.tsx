@@ -123,14 +123,14 @@ export default function History() {
                   id={`history-impact-${d}`}
                   title={formatDay(d, locale)}
                   headingClassName="text-base font-semibold capitalize"
-                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                  className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
                   <DayImpact day={d} history={impactHistory} />
                 </CollapsibleSection>
               ))}
 
             {grouped.length === 0 ? (
-              <p className="rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-soft">
+              <p className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 text-sm text-muted-foreground shadow-soft">
                 {t("Inga aktiviteter den här veckan.")}
               </p>
             ) : (
@@ -140,7 +140,7 @@ export default function History() {
                   id={`history-day-${day.date}`}
                   title={formatDay(day.date, locale)}
                   headingClassName="text-base font-semibold capitalize"
-                  className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
+                  className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
                 >
                   <DayImpact day={day.date} history={impactHistory} />
 

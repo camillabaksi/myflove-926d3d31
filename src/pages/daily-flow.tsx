@@ -64,7 +64,7 @@ export default function DailyFlowPage() {
                 id="Rutiner"
                 revealToken={reveal("Rutiner")}
                 defaultCollapsed
-                className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
+                className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"
               >
                 <RoutinesContent showHeader={false} />
@@ -80,7 +80,7 @@ export default function DailyFlowPage() {
                 id="Medicin"
                 revealToken={reveal("Medicin")}
                 defaultCollapsed
-                className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
+                className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"
               >
                 <MedicationContent showHeader={false} />
@@ -96,7 +96,7 @@ export default function DailyFlowPage() {
                 id="Morgonstart"
                 revealToken={reveal("Morgonstart")}
                 defaultCollapsed
-                className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft sm:p-5"
+                className="pace-card-surface rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft sm:p-5"
                 headingClassName="text-lg font-semibold"
               >
                 <MorningContent />

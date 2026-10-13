@@ -270,7 +270,7 @@ export default function Shopping() {
                 value={newItem}
                 onChange={(e) => setNewItem(e.target.value)}
                 placeholder="T.ex. Mjölk, toalettpapper..."
-                className="h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
+                className="pace-card-surface h-14 rounded-2xl text-lg bg-card border-border shadow-sm px-6"
               />
               {voiceSupported && (
                 <Button
@@ -348,7 +348,7 @@ export default function Shopping() {
                     {completedItems.map((item) => (
                       <div
                         key={item.id}
-                        className="flex min-h-14 items-center justify-between gap-2 rounded-2xl border border-border/60 bg-card/70 px-4 py-2.5"
+                        className="pace-card-surface flex min-h-14 items-center justify-between gap-2 rounded-2xl border border-border/60 bg-card/70 px-4 py-2.5"
                       >
                         <button
                           onClick={() => handleToggle(item)}

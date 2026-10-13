@@ -342,7 +342,7 @@ function HouseholdView({
         </div>
       </section>
 
-      <CollapsibleSection id="family-sharing-settings" title="Välj vad familjen delar" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
+      <CollapsibleSection id="family-sharing-settings" title="Välj vad familjen delar" defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
         <FamilyAreaSharing />
         <FamilySharing members={household.members} />
       </CollapsibleSection>
@@ -352,7 +352,7 @@ function HouseholdView({
         id="familj-mer"
         defaultCollapsed
         headingClassName="font-display text-base text-ink"
-        className="bg-card border border-border rounded-3xl p-5 shadow-sm"
+        className="pace-card-surface bg-card border border-border rounded-3xl p-5 shadow-sm"
       >
         <Button
           variant="outline"

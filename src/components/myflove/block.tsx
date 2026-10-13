@@ -86,14 +86,14 @@ export function MyFloveBlock({
   const { collapsed, toggle } = useCollapsible(storeId, defaultCollapsed);
 
   const heading = (
-    <div className="flex min-w-0 flex-1 flex-col items-start gap-2 text-left">
-      <div className="flex w-full items-start justify-between gap-2">
+    <div className="pace-block-heading flex min-w-0 flex-1 flex-col items-start gap-2 text-left" data-has-icon={Boolean(icon)}>
+      <div className="pace-block-icon-row flex w-full items-start justify-between gap-2">
         {icon && (
           <MyFloveIcon
             icon={icon}
             tone={tone}
             size="sm"
-            className={area ? "area-bg-soft area-text" : undefined}
+            className={cn("pace-block-icon", area && "area-bg-soft area-text")}
           />
         )}
         {collapsible && (
@@ -107,7 +107,7 @@ export function MyFloveBlock({
           />
         )}
       </div>
-      <div className="min-w-0 flex-1">
+      <div className="pace-block-copy min-w-0 flex-1">
         {eyebrow && (
           <span className="mb-1 inline-flex rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-primary">
             {eyebrow}
@@ -128,6 +128,7 @@ export function MyFloveBlock({
 
   return (
     <section
+      data-pace-block="true"
       data-testid={dataTestId}
       {...areaProps(area)}
       data-expanded={!collapsed}
@@ -140,14 +141,14 @@ export function MyFloveBlock({
         className,
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="pace-block-header flex items-start gap-3">
         {collapsible ? (
           <button
             type="button"
             onClick={toggle}
             aria-expanded={!collapsed}
             title={collapsed ? "Visa mer" : "Minimera"}
-            className="press flex min-w-0 flex-1 items-start"
+            className="pace-block-trigger press flex min-w-0 flex-1 items-start"
           >
             {heading}
           </button>
@@ -181,7 +182,7 @@ export function MyFloveBlockGrid({
   return (
     <div
       className={cn(
-        "grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "pace-block-grid grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min sm:gap-4 md:grid-cols-3 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -212,7 +213,7 @@ export function MyFlovePageGrid({
       style={style}
       {...areaProps(area)}
       className={cn(
-        "pace-app-page grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
+        "pace-app-page pace-block-grid grid min-w-0 grid-cols-2 items-start gap-3 auto-rows-min md:grid-cols-3 md:gap-5 xl:grid-cols-4 [&>*]:min-w-0 [&>*:has([data-expanded='true'])]:col-span-full",
         className,
       )}
     >
@@ -269,7 +270,7 @@ export function MyFloveStat({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
+        "pace-stat-card flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
         SURFACE[tone],
         className,
       )}

@@ -172,7 +172,7 @@ export function StudyBuddyContent() {
         source="studier"
         chips={["Jag behöver plugga", "Jag behöver repetera", "Jag har prov snart"]}
         placeholder="Vad behöver du plugga?"
-        className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+        className="pace-card-surface rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
       />
 
       {(stats.dueCards > 0 || stats.dueQuestions > 0) && (
@@ -666,7 +666,7 @@ function FlashcardRunner({
       </p>
       <button
         onClick={() => setFlipped((f) => !f)}
-        className="w-full text-left rounded-xl bg-card border border-border p-4 min-h-24"
+        className="pace-card-surface w-full text-left rounded-xl bg-card border border-border p-4 min-h-24"
       >
         <p className="text-base">{flipped ? card.back : card.front}</p>
         {!flipped && <p className="text-xs text-muted-foreground mt-2">Tryck för att se svaret</p>}

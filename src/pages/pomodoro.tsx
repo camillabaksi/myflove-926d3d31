@@ -131,7 +131,7 @@ export default function Pomodoro() {
               </p>
             </div>
 
-            <div className="bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border flex flex-col items-center gap-6">
+            <div className="pace-card-surface bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border flex flex-col items-center gap-6">
               <div className="flex items-center gap-2">
                 <span
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
