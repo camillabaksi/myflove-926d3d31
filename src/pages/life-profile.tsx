@@ -87,7 +87,7 @@ function ChipField({
             </Chip>
           ))}
         </div>
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <Input
             value={custom}
             onChange={(e) => setCustom(e.target.value)}
@@ -98,8 +98,14 @@ function ChipField({
               }
             }}
             placeholder="Annat – skriv eget"
+            className="min-w-0"
           />
-          <Button type="button" variant="secondary" onClick={addCustom}>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={addCustom}
+            className="w-full shrink-0 whitespace-nowrap sm:w-auto"
+          >
             <Plus size={14} className="mr-1" aria-hidden="true" />
             Lägg till
           </Button>
