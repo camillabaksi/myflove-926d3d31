@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
 import { Link } from "wouter";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FlowItemActions } from "@/components/flow-item-actions";
 import { useChildren } from "@/hooks/use-children";
-import { decodeVisualNotes, encodeVisualNotes } from "@/lib/child-visual-schedule";
+import { activityPresetForTitle, decodeVisualNotes, encodeVisualNotes } from "@/lib/child-visual-schedule";
 import { useTasks, useReminders, type Task } from "@/hooks/use-data";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
@@ -29,6 +29,8 @@ import { mulberryForTitle } from "@/lib/mulberry-symbols";
 import { Images } from "lucide-react";
 import { FlowMascot } from "@/components/flow-mascot";
 import { flowDaySupport } from "@/lib/flow-day-support";
+import { ChildScheduleRecipients } from "@/components/family/child-schedule-recipients";
+import { addToChildSchedules } from "@/lib/add-child-schedule";
 import { FamilyLayerSettings } from "@/components/calendar/family-layer-settings";
 import { applyFamilyPresence, DEFAULT_FAMILY_LAYER, familyLayerEntries, familyPlanningContext, type FamilyLayerPreferences } from "@/lib/family-calendar";
 
@@ -94,7 +96,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [familyAlternatives, setFamilyAlternatives] = useState<{ day: string; duration: number } | null>(null);
   const { tasks, addTask, updateTask } = useTasks();
   const { reminders, addReminder, updateReminder } = useReminders();
-  const { items: originalChildItems, updateItem: updateChildItem } = useChildren();
+  const { children, items: originalChildItems, updateItem: updateChildItem, addItem: addChildItem } = useChildren();
+  const ownedChildren = (children ?? []).filter(child => child.owner_id === owner);
   const { today: flowItems, toggleItem } = useFlowItems(date);
   const capacity = useCapacityMode();
   const capacityOf = useDayCapacity();
@@ -106,6 +109,13 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [details, setDetails] = useState<CalendarEntry | null>(null);
   const [cluster, setCluster] = useState<CalendarEntry[]>([]);
   const [adding, setAdding] = useState(false);
+  const [childIds, setChildIds] = useState<string[]>([]);
+  const [savingChildren, setSavingChildren] = useState(false);
+  const savingChildrenRef = useRef(false);
+  const liveOwner = useRef(owner);
+  liveOwner.current = owner;
+  const mounted = useRef(true);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [title, setTitle] = useState("");
   const [kind, setKind] = useState("task");
   const [editDate, setEditDate] = useState(date);
@@ -118,7 +128,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [suggestions, setSuggestions] = useState(false);
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => { const tick = () => { const d = new Date(); setNow(d.getHours() * 60 + d.getMinutes()); }; tick(); const timer = setInterval(tick, 30000); return () => clearInterval(timer); }, []);
-  useEffect(() => { setDetails(null); setCluster([]); setAdding(false); setPlanning(false); setSuggestions(false); setDismissed(null); setUtility(null); setFamilySettings(false); setFamilyConfirm(null); setFamilyAlternatives(null); }, [owner]);
+  useEffect(() => { setDetails(null); setCluster([]); setAdding(false); setPlanning(false); setSuggestions(false); setDismissed(null); setUtility(null); setFamilySettings(false); setFamilyConfirm(null); setFamilyAlternatives(null); setChildIds([]); }, [owner]);
   const timed = entries.filter(e => !!e.time);
   const untimed = myEntries.filter(e => !e.time && ["task", "quickflow", "priority"].includes(e.source));
   const gaps = calendarGaps(planningEntries);
@@ -130,7 +140,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     if (view === "manad") { const d = new Date(`${date}T12:00:00`); d.setDate(1); d.setMonth(d.getMonth() + direction); setDate(calendarDate(d)); }
     else setDate(shiftDate(date, direction * (view === "vecka" ? 7 : 1)));
   };
-  const openAdd = () => { setEditDate(date); setTitle(""); setTime(""); setLength(""); setImpact("unknown"); setKind("task"); setNotify(false); setAdding(true); };
+  const openAdd = (forChildren = false) => { setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(date); setTitle(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
   const openDetails = (entry: CalendarEntry) => {
     setDetails(entry); setPlanning(false); setEditDate(entry.date); setTime(entry.time ?? "");
     const start = minuteOf(entry.time), end = minuteOf(entry.endTime);
@@ -172,11 +182,33 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     } } });
   };
   useEffect(() => { document.documentElement.dataset.calendarOwner = owner ?? ""; return () => { delete document.documentElement.dataset.calendarOwner; }; }, [owner]);
+  const saveForChildren = async (endTime?: string) => {
+    if (!owner || savingChildrenRef.current || !childIds.length) return;
+    const canContinue = async () => mounted.current && liveOwner.current === owner && isActiveOwner(owner) && (await getSyncUser())?.id === owner;
+    savingChildrenRef.current = true;
+    setSavingChildren(true);
+    try {
+      const preset = activityPresetForTitle(title);
+      const notes = encodeVisualNotes({ pictogram: preset?.pictogram ?? "calendar", category: preset?.category ?? "familj", tone: preset?.tone ?? "lavender", familyLabel: "child", ...(endTime ? { endTime } : {}), linkGroup: crypto.randomUUID() });
+      const result = await addToChildSchedules({ owner, children: ownedChildren, selectedIds: childIds, items: originalChildItems, input: { title, date: editDate, time: time || undefined, notes }, addItem: addChildItem, canContinue });
+      if (!await canContinue()) return;
+      if (result.failed.length) {
+        setChildIds(result.failed);
+        toast.error(t("Några barn återstår."), { description: `${result.created.length + result.skipped.length} ${t("klara. Tryck Spara igen för de återstående barnen.")}` });
+      } else {
+        setAdding(false);
+        toast.success(t("Tillagt i barnens schema"), { description: `${result.created.length} ${t("nya aktiviteter")}${result.skipped.length ? ` · ${result.skipped.length} ${t("fanns redan")}` : ""}` });
+      }
+    } catch { if (mounted.current && liveOwner.current === owner) toast.error(t("Kunde inte spara. Kontrollera aktiviteten och valda barn.")); }
+    finally { savingChildrenRef.current = false; if (mounted.current) setSavingChildren(false); }
+  };
+
   const saveNew = (confirmed = false) => {
     if (!title.trim() || !editDate || !owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner) return;
     const start = minuteOf(time), duration = Number(length);
     if (time && start === null || length && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
     const end = start !== null && duration > 0 ? timeOf(start + duration) : undefined;
+    if (kind === "child") { void saveForChildren(end); return; }
     if (!confirmed && time && confirmFamily(editDate, time, end, duration || 0, () => saveNew(true))) return;
     const energy = kind === "recovery" ? "gives" : impact;
     if (kind === "task") addTask(title.trim(), editDate, { time: time || undefined, endTime: end, energyImpact: energy, reminderMinutesBefore: notify && time ? 0 : undefined });
@@ -261,7 +293,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   return <div className={cn("pace-next-page pace-calendar-desktop mx-auto max-w-6xl space-y-4", textLayout.enlarged && "pace-text-enlarged")} data-testid="visual-calendar">
     <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
     <div className="pace-calendar-heading">
-    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-sans text-2xl font-semibold text-ink">{t("Kalender")}</h1><Button onClick={openAdd} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
+    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-sans text-2xl font-semibold text-ink">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
     <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
     <div className="pace-calendar-capacity">
@@ -270,9 +302,10 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     <div className="pace-calendar-period grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Föregående period")} onClick={() => step(-1)}><ChevronLeft size={18} /></Button><div className="min-w-0 text-center"><p className="break-words font-display text-sm font-bold capitalize">{view === "vecka" ? `${dateHeading(dates[0] ?? date)} – ${dateHeading(dates[6] ?? date)}` : period}</p><Button variant="ghost" size="sm" onClick={() => setDate(today)} className="min-h-11 text-xs text-primary">{t("Idag")}</Button></div><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Nästa period")} onClick={() => step(1)}><ChevronRight size={18} /></Button></div>
     <div className="flex flex-wrap items-center gap-x-1 gap-y-1 border-y border-border/50 py-1" aria-label={t("Visningsval")}>
       <Button variant="ghost" className="pace-compact-control px-2 text-xs font-medium text-ink" onClick={() => setFamilySettings(true)}><Users size={16} className="text-primary" />{t("Familj")}</Button>
+      {ownedChildren.length > 0 && <Button variant="ghost" className="pace-compact-control px-2 text-xs text-muted-foreground" onClick={() => openAdd(true)}><Plus size={14} aria-hidden />{t("Lägg till för barn")}</Button>}
       {onPictogramsChange && <Button variant="ghost" className="pace-compact-control px-2 text-xs" aria-pressed={showPictograms} onClick={() => onPictogramsChange(!showPictograms)}><Images size={16} aria-hidden />{t("Bildstöd")}{showPictograms && <Check size={12} aria-hidden />}</Button>}
       <span className="h-4 w-px bg-border" aria-hidden />
-      <details className="min-w-0 flex-1 px-2">
+      <details className={cn("min-w-0 flex-1 px-2", ownedChildren.length > 0 && "basis-full sm:basis-auto")}>
         <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-medium"><SlidersHorizontal size={16} className="text-primary" aria-hidden />{t("Visa i kalendern")}<span className="ml-auto text-muted-foreground">{visible.filter(v => ["privat", "jobb", "studier"].includes(v)).length}/3</span></summary>
         <div className="flex flex-wrap gap-2 pb-3" role="group" aria-label={t("Visa kategorier")}>{[["privat", "Privat"], ["jobb", "Jobb"], ["studier", "Studier"]].map(([id, label]) => <Button key={id} size="sm" variant="outline" className={cn("pace-compact-control", visible.includes(id ?? "") && "pace-compact-selected")} aria-pressed={visible.includes(id ?? "")} onClick={() => setVisible(prev => prev.includes(id ?? "") ? prev.filter(x => x !== id) : [...prev, id ?? "privat"])}>{t(label ?? "")}</Button>)}</div>
       </details>
@@ -316,7 +349,20 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       </DialogContent>
     </Dialog>
     <Dialog open={cluster.length > 0} onOpenChange={open => { if (!open) setCluster([]); }}><DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Aktiviteter vid samma tid")}</DialogTitle><DialogDescription>{date}</DialogDescription></DialogHeader><ul className="space-y-2">{cluster.map(e => <li key={e.id} onClick={() => setCluster([])}>{blockButton(e)}</li>)}</ul></DialogContent></Dialog>
-    <Dialog open={adding} onOpenChange={setAdding}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader><div className="space-y-4"><div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div><label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => setTitle(e.target.value)} maxLength={240} /></label>{scheduleFields}{energyFields}{time && <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} />{t("Påminn mig vid start")}</label>}<Button className="w-full min-h-11 rounded-2xl" disabled={!title.trim() || !editDate} onClick={() => saveNew()}><Plus size={16} />{t("Lägg till")}</Button></div></DialogContent></Dialog>
+    <Dialog open={adding} onOpenChange={open => { if (!savingChildrenRef.current) setAdding(open); }}>
+      <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">
+        <DialogHeader><DialogTitle>{t(kind === "child" ? "Lägg till i barnens schema" : "Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader>
+        <fieldset disabled={savingChildren} className="min-w-0 space-y-4">
+          {kind !== "child" && <div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div>}
+          <label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => setTitle(e.target.value)} maxLength={240} autoFocus /></label>
+          {kind === "child" && <ChildScheduleRecipients children={ownedChildren} selectedIds={childIds} onChange={setChildIds} disabled={savingChildren} />}
+          {scheduleFields}
+          {kind === "child" ? (title.trim() && <div className="flex items-center gap-2 text-xs text-muted-foreground"><MulberryPictogram id={activityPresetForTitle(title)?.pictogram ?? "calendar"} className="h-8 w-8" />{t("Bildstödet kan ändras i barnets schema.")}</div>) : energyFields}
+          {kind !== "child" && time && <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} />{t("Påminn mig vid start")}</label>}
+          <Button className="w-full min-h-11 rounded-2xl" disabled={savingChildren || !title.trim() || !editDate || kind === "child" && !childIds.length} onClick={() => saveNew()}><Plus size={16} />{savingChildren ? t("Sparar...") : kind === "child" ? `${t("Spara för")} ${childIds.length} ${t("barn")}` : t("Lägg till")}</Button>
+        </fieldset>
+      </DialogContent>
+    </Dialog>
     <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle className="break-words">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4"><p data-calendar-area={calendarArea(details)} className="flex items-center gap-2 text-sm"><span className="h-2.5 w-2.5 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(calendarArea(details)))}</p>{isFamilyEntry(details) && <div className="space-y-2 rounded-2xl bg-secondary/35 p-3"><p className="text-xs text-muted-foreground">{t("Familjekontext, inte en egen uppgift.")}</p><Button variant="outline" aria-pressed={details.requiresParent === true} className="min-h-11 w-full" onClick={() => void setPresence(details)}><UserRound size={16} />{t(details.requiresParent ? "Behöver mig" : "Markera: Behöver mig")}</Button></div>}{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && !details.recurring && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Planera tid")}</Button>}{details.editable && !details.recurring && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{details.editable && (details.source === "task" || details.source === "reminder") && <div className="flex items-center justify-between gap-2">{(() => { const match = flowItems.find(i => i.id === details.id); return match?.completable ? <Button variant="outline" className="min-h-11" onClick={() => { toggleItem(match); setDetails(null); }}><Check size={16} />{t(match.done ? "Ångra klart" : "Markera klar")}</Button> : null; })()}<FlowItemActions itemId={details.id} /></div>}{details.href && <Button asChild variant="outline" className="min-h-11 w-full"><Link href={details.href}>{t("Öppna där aktiviteten hör hemma")}<ArrowRight size={16} /></Link></Button>}</>}</div>}</DialogContent></Dialog>
     <Dialog open={!!capInfo} onOpenChange={open => { if (!open) setCapInfo(null); }}><DialogContent className="rounded-3xl"><DialogHeader><DialogTitle>{t(capInfo === today ? "Din kapacitet idag" : "Kapacitet")}</DialogTitle><DialogDescription>{capInfo}</DialogDescription></DialogHeader>{infoCap && <div className="space-y-3 text-sm">
       {infoCap.percent !== null && <div className="rounded-2xl bg-lavender/50 p-3"><p className="text-xs text-muted-foreground">{t("Din registrerade kapacitet")}</p><CapacityBattery percent={infoCap.percent} size="md" className="mt-1" /><p className="mt-2 text-xs text-muted-foreground">{t(infoCap.source === "morning" ? "Utifrån din morgonincheckning." : "Utifrån din senaste energilogg den här dagen.")}</p></div>}
