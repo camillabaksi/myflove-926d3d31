@@ -32,7 +32,10 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useLang } from "@/hooks/use-language";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { isActiveOwner } from "@/lib/account-scope";
+import { addToChildSchedules } from "@/lib/add-child-schedule";
+import { ChildScheduleRecipients } from "@/components/family/child-schedule-recipients";
+import { getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { addDaysISO, parseISODate, todayISO } from "@/lib/day";
 import {
   ACTIVITY_BANK,
@@ -176,6 +179,14 @@ export default function VisualChildSchedule({
   const [editingDate, setEditingDate] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft>(() => defaultDraft(todayISO()));
   const [saving, setSaving] = useState(false);
+  const [addChildIds, setAddChildIds] = useState<string[]>([child.id]);
+  const ownedChildren = children.filter(candidate => candidate.owner_id === child.owner_id);
+  const savingRef = useRef(false);
+  const liveChildOwner = useRef(child.owner_id);
+  liveChildOwner.current = child.owner_id;
+  const mounted = useRef(true);
+  const draftFilePaths = useRef<{ file: File | null; paths: Map<string, string> }>({ file: null, paths: new Map() });
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [search, setSearch] = useState("");
   const [pickerCategory, setPickerCategory] = useState<VisualActivityCategory | "alla">("alla");
   const [copying, setCopying] = useState<{ scope: "activity" | "day" | "week"; item?: ChildItem; sourceDate?: string } | null>(null);
@@ -234,6 +245,8 @@ export default function VisualChildSchedule({
   const openAdd = (preset?: ActivityBankItem, date = mode === "today" ? dayDate : anchor) => {
     if (readOnly) return;
     setEditing(null);
+    setAddChildIds([child.id]);
+    draftFilePaths.current = { file: null, paths: new Map() };
     setDraft({ ...defaultDraft(date), ...(preset ? { title: preset.title, meta: preset } : {}) });
     setAdding(true);
   };
@@ -280,39 +293,45 @@ export default function VisualChildSchedule({
 
   const saveDraft = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!draft.title.trim() || !draft.date) return;
+    if (readOnly || savingRef.current || !draft.title.trim() || !draft.date || !editing && !addChildIds.length) return;
+    const owner = child.owner_id;
+    const canContinue = async () => mounted.current && liveChildOwner.current === owner && isActiveOwner(owner) && (await getSyncUser())?.id === owner;
+    if (!await canContinue()) return;
+    if (savingRef.current) return;
+    savingRef.current = true;
     setSaving(true);
     if (mode === "today") setViewDate(draft.date === today ? null : draft.date);
     else setAnchor(draft.date);
     try {
-      let filePath = editing?.file_path ?? undefined;
-      if (draft.file) filePath = await uploadDoc(child.id, draft.file);
+      const notes = encodeVisualNotes({ ...draft.meta, endTime: draft.endTime || undefined, ...(!editing && addChildIds.length > 1 ? { linkGroup: crypto.randomUUID() } : {}) }, draft.note);
       if (editing) {
-        await updateItem(editing.id, {
-          title: draft.title.trim(),
-          date: draft.date,
-          time: draft.time || null,
-          repeat: draft.repeat,
-          notes: encodeVisualNotes({ ...draft.meta, ...(draft.endTime ? { endTime: draft.endTime } : { endTime: undefined }) }, draft.note),
-          file_path: filePath ?? null,
-        });
+        let filePath = editing.file_path ?? undefined;
+        if (draft.file) filePath = await uploadDoc(child.id, draft.file);
+        if (!await canContinue()) return;
+        await updateItem(editing.id, { title: draft.title.trim(), date: draft.date, time: draft.time || null, repeat: draft.repeat, notes, file_path: filePath ?? null });
       } else {
-        const key = activityDedupKey({ childId: child.id, title: draft.title, date: draft.date, time: draft.time });
-        if (childItems.some((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time }) === key)) {
-          toast.info(t("Aktiviteten finns redan den dagen."));
+        const fileForChild = async (target: string) => {
+          if (!draft.file) return undefined;
+          if (draftFilePaths.current.file !== draft.file) draftFilePaths.current = { file: draft.file, paths: new Map() };
+          const paths = draftFilePaths.current.paths;
+          if (paths.has(target)) return paths.get(target);
+          const source = paths.values().next().value;
+          const path = source ? await copyDoc(source, target) : await uploadDoc(target, draft.file);
+          paths.set(target, path);
+          return path;
+        };
+        const result = await addToChildSchedules({ owner, children: ownedChildren, selectedIds: addChildIds, items, input: { title: draft.title, date: draft.date, time: draft.time || undefined, repeat: draft.repeat, notes }, addItem, canContinue, fileForChild });
+        if (!await canContinue()) return;
+        if (result.failed.length) {
+          setAddChildIds(result.failed);
+          toast.error(t("Några barn återstår."), { description: `${result.created.length + result.skipped.length} ${t("klara. Tryck Spara igen för de återstående barnen.")}` });
           return;
         }
-        await addItem({ childId: child.id, kind: "activity", title: draft.title.trim(), date: draft.date, time: draft.time || undefined, repeat: draft.repeat, notes: encodeVisualNotes({ ...draft.meta, ...(draft.endTime ? { endTime: draft.endTime } : { endTime: undefined }) }, draft.note), filePath });
-        toast.success(t("Aktiviteten är tillagd."));
+        if (result.skipped.length) toast.info(t("Aktiviteter som redan finns hoppades över."));
       }
-      setAdding(false);
-      setEditing(null);
-      toast.success(t(editing ? "Aktiviteten är ändrad." : "Aktiviteten är tillagd."));
-    } catch {
-      toast.error(t("Kunde inte spara aktiviteten."));
-    } finally {
-      setSaving(false);
-    }
+      if (await canContinue()) { setAdding(false); setEditing(null); }
+    } catch { if (mounted.current && liveChildOwner.current === owner) toast.error(t("Kunde inte spara aktiviteten.")); }
+    finally { savingRef.current = false; if (mounted.current) setSaving(false); }
   };
 
   const toggleSelected = (id: string) => {
@@ -606,11 +625,12 @@ export default function VisualChildSchedule({
 
       <MulberryAttribution />
 
-      <Dialog open={adding} onOpenChange={(open) => { if (!open) { setAdding(false); setEditing(null); } }}>
+      <Dialog open={adding} onOpenChange={(open) => { if (!savingRef.current && !open) { setAdding(false); setEditing(null); } }}>
         <DialogContent className="max-h-[90dvh] overflow-y-auto rounded-3xl p-4 sm:max-w-xl">
           <DialogTitle className="sr-only">{t(editing ? "Ändra aktivitet" : "Lägg till aktivitet")}</DialogTitle>
-        <form onSubmit={saveDraft} className="min-w-0 space-y-4">
+        <form onSubmit={saveDraft}><fieldset disabled={saving} className="min-w-0 space-y-4">
           <h3 className="pr-8 font-display text-lg font-bold text-ink">{t(editing ? "Ändra aktivitet" : "Lägg till aktivitet")}</h3>
+          {!editing && ownedChildren.length > 1 && <ChildScheduleRecipients children={ownedChildren} selectedIds={addChildIds} onChange={setAddChildIds} disabled={saving} />}
           <Accordion type="single" collapsible defaultValue={editing ? undefined : "bank"} className="rounded-2xl border border-border bg-card px-3"><AccordionItem value="bank" className="border-0"><AccordionTrigger>{t(editing ? "Byt pictogram" : "Pictogram")}</AccordionTrigger><AccordionContent><div className="space-y-3"><div className="relative"><Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" /><Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t("Sök aktivitet") } className="h-11 rounded-xl pl-9" /></div><div className="flex gap-1.5 overflow-x-auto pb-1"><Button type="button" variant={pickerCategory === "alla" ? "default" : "outline"} onClick={() => setPickerCategory("alla")} className="h-9 shrink-0 rounded-full px-3">{t("Alla")}</Button>{CATEGORY_KEYS.map((category) => <Button key={category} type="button" variant={pickerCategory === category ? "default" : "outline"} onClick={() => setPickerCategory(category)} className="h-9 shrink-0 rounded-full px-3">{t(CATEGORY_LABELS[category])}</Button>)}</div><div className="grid max-h-[40dvh] grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-4">{pickerItems.map((preset) => <Button key={`${preset.category}-${preset.title}`} type="button" variant="outline" onClick={() => setDraft((currentDraft) => ({ ...currentDraft, ...(!editing ? { title: preset.title } : {}), meta: { ...currentDraft.meta, ...preset, ...(currentDraft.endTime ? { endTime: currentDraft.endTime } : {}) } }))} className={cn("h-auto min-h-20 min-w-0 flex-col whitespace-normal rounded-xl px-1 py-2", CATEGORY_STYLES[preset.category].subtle, draft.meta.pictogram === preset.pictogram && "ring-2 ring-primary")}><ActivityPictogram id={preset.pictogram} tone={preset.tone} className="h-10 w-10" iconClassName="h-6 w-6" /><span className="text-xs">{t(preset.title)}</span></Button>)}</div>{pickerItems.length === 0 && <p className="py-3 text-center text-sm text-muted-foreground">{t("Inga pictogram hittades.")}</p>}</div></AccordionContent></AccordionItem></Accordion>
           <Input value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder={t("Aktivitetens namn")} className="h-12 rounded-2xl" />
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3"><label className="col-span-2 space-y-1 text-sm font-medium text-ink sm:col-span-1"><span>{t("Dag")}</span><Input type="date" value={draft.date} onChange={(event) => setDraft({ ...draft, date: event.target.value })} className="h-12 rounded-2xl" />{/^\d{4}-\d{2}-\d{2}$/.test(draft.date) && <span className="block text-xs font-semibold text-primary">{new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(draft.date))}</span>}</label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Starttid")}</span><Input type="time" value={draft.time} onChange={(event) => setDraft({ ...draft, time: event.target.value })} className="h-12 rounded-2xl" /></label><label className="space-y-1 text-sm font-medium text-ink"><span>{t("Sluttid")}</span><Input type="time" value={draft.endTime} onChange={(event) => setDraft({ ...draft, endTime: event.target.value })} className="h-12 rounded-2xl" /></label></div>
@@ -649,9 +669,9 @@ export default function VisualChildSchedule({
           <div className="grid grid-cols-2 gap-2"><Button type="button" variant="outline" onClick={() => void deviceAccessReady().then((ok) => (ok ? cameraRef.current?.click() : toast.error(UPDATE_APP_FOR_DEVICE_ACCESS)))} className="h-12 rounded-2xl"><Camera size={17} /> {t("Ta foto")}</Button><Button type="button" variant="outline" onClick={() => galleryRef.current?.click()} className="h-12 rounded-2xl"><ImagePlus size={17} /> {t("Egna bilder")}</Button></div>
           {draft.file && <p className="truncate text-xs text-muted-foreground">{draft.file.name}</p>}
           <p className="text-xs text-muted-foreground">{t("Bilden är privat och öppnas bara med en tillfällig säker länk.")}</p>
-          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim()} className="h-12 rounded-2xl">{saving ? t("Sparar...") : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
+          <div className="flex flex-wrap gap-2"><Button type="submit" disabled={saving || !draft.title.trim() || !editing && !addChildIds.length} className="h-12 rounded-2xl">{saving ? t("Sparar...") : !editing && addChildIds.length > 1 ? `${t("Spara för")} ${addChildIds.length} ${t("barn")}` : t("Spara")}</Button>{editing && <Button type="button" variant="outline" onClick={() => openMove([editing.id])} className="h-12 rounded-2xl"><Move size={16} /> {t("Flytta")}</Button>}{editing && <Button type="button" variant="outline" onClick={() => void removeEditing()} className="h-12 rounded-2xl text-destructive"><Trash2 size={16} /> {t("Ta bort")}</Button>}</div>
           <p className="flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays size={13} /> {t("Aktiviteten visas också i familjens vanliga dag och kalender.")}</p>
-        </form>
+        </fieldset></form>
         </DialogContent>
       </Dialog>
     </section>
