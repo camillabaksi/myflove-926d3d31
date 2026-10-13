@@ -6,6 +6,7 @@ import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
+import { PlaceContextPicker } from "@/components/place-context-picker";
 import { useLang } from "@/hooks/use-language";
 import { addDaysISO, todayISO } from "@/lib/day";
 
@@ -30,7 +31,12 @@ export function FlowPlanContent() {
           title={t("Planera")}
           emojiKey="flowplan"
           description={t("Se vad som är Nu, Sedan och vad som kan vänta.")}
+          titleClassName="text-xl sm:text-2xl"
         />
+      </MyFloveWide>
+
+      <MyFloveWide>
+        <PlaceContextPicker />
       </MyFloveWide>
 
       <MyFloveWide>
@@ -67,7 +73,7 @@ export function FlowPlanContent() {
                   <p className="text-xs font-semibold uppercase text-primary">{label}</p>
                   <div className="mt-1 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                     <div className="min-w-0">
-                      <p className="break-words font-medium text-ink">{item.title}</p>
+                      <p className="break-words text-sm font-medium text-ink">{item.title}</p>
                       {(item.time || entry.reason) && (
                         <p className="mt-0.5 text-xs text-muted-foreground">
                           {item.time ? `${item.time} · ` : ""}{t(entry.reason)}
@@ -90,6 +96,16 @@ export function FlowPlanContent() {
               );
             })}
           </ol>
+        )}
+        {!isTomorrow && plan.unavailableByPlace.length > 0 && (
+          <details className="mt-4 rounded-2xl border border-border/50 bg-card/60 px-4 py-3">
+            <summary className="cursor-pointer text-sm font-medium text-muted-foreground">
+              {t("Visa förslag som passar bättre på en annan plats")} ({plan.unavailableByPlace.length})
+            </summary>
+            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              {plan.unavailableByPlace.map((item) => <li key={item.id}>{item.title}</li>)}
+            </ul>
+          </details>
         )}
       </MyFloveBlock>
 
