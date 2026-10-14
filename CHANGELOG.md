@@ -1,3 +1,6 @@
+## 2026-10-14 – Min dag och barnens schema
+- Min dag visar egna aktiviteter även när barnens schema är markerat som att det kräver föräldern. Barnhändelser visas under respektive barn och i Familj. Egna familjeuppgifter och deras kopplingsetiketter finns kvar. Samma visningsfilter används på Idag och Family Flow.
+
 ## 2026-10-14 – Offentlig introduktionsfilm
 - **Introduktionsfilm** (2026-10-14): den färdiga svenska Paceable-filmen på 54 sekunder används som beständig projektasset i startsidans videodialog. Äldre MyFlove-sources och fallback används inte; knapptexten visar ca 54 sek. Dialog och övrig app oförändrade. Ingen publicering.
 

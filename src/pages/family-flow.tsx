@@ -173,7 +173,7 @@ export default function FamilyFlowPage() {
                  defaultCollapsed
                 className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5"
               >
-                <FamilyDayPerspectives myDay={<DailyFlowList />} defaultPerspective="familj" />
+                <FamilyDayPerspectives myDay={<DailyFlowList includeChildSchedules={false} />} defaultPerspective="familj" />
               </CollapsibleSection>
             )}
 

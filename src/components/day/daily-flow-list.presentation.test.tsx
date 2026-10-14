@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { FlowItem } from "@/lib/flow-items";
 import DailyFlowList from "./daily-flow-list";
+import FamilyDayPerspectives from "./family-day-perspectives";
 
 const rows: FlowItem[] = [
   { id: "task-first", title: "En redan klar aktivitet", source: "uppgift", area: "vardag", time: "08:00", done: true, completable: true, priority: "idag", emoji: "" },
@@ -24,6 +25,16 @@ vi.mock("@/components/flow-item-actions", () => ({
 }));
 vi.mock("@/components/myflove/motion", () => ({ MyFloveTransition: ({ children }: { children: ReactNode }) => <div data-testid="legacy-transition">{children}</div> }));
 vi.mock("@/components/adaptive-activity-card", () => ({ default: () => null }));
+vi.mock("@/hooks/use-children", () => ({
+  useChildren: () => ({ children: [{ id: "bella", name: "Bella" }, { id: "bianca", name: "Bianca" }], items: [], updateItem: vi.fn() }),
+}));
+vi.mock("@/hooks/use-child-events", () => ({
+  useChildEvents: () => [
+    { childId: "bella", childName: "Bella", itemId: "wake-bella", title: "Vakna Bella", time: "05:30", requiresParent: true },
+    { childId: "bianca", childName: "Bianca", itemId: "breakfast-bianca", title: "Frukost Bianca", time: "06:15", requiresParent: true },
+  ],
+}));
+vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ updateTask: vi.fn(), toggleTask: vi.fn() }) }));
 
 describe("Compact day activity presentation", () => {
   it("keeps completion, read-only family rows, ordering and accessible controls", () => {
@@ -63,5 +74,53 @@ describe("Compact day activity presentation", () => {
     fireEvent.click(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` }));
     expect(completed).toHaveBeenCalledWith(rows[1]);
     expect(screen.getByText(rows[1].title)).toHaveClass("line-through");
+  });
+
+  it("keeps child schedules out of Min dag without hiding owned family tasks", () => {
+    const own: FlowItem = { id: "task-pickup", title: "Hämta på förskolan", source: "uppgift", area: "barn", time: "16:00", completable: true, priority: "idag", emoji: "", linkedLabel: "Bella – Förskola" };
+    const children: FlowItem[] = [
+      { id: "childitem-breakfast", title: "Frukost (Bianca)", source: "barn", area: "barn", time: "06:15", priority: "idag", emoji: "" },
+      { id: "child-legacy", title: "Vakna (Bella)", source: "kalender", area: "barn", time: "05:30", priority: "idag", emoji: "" },
+      { ...own, id: "childitem-pickup", source: "barn" },
+    ];
+    const completed = vi.fn();
+    render(<DailyFlowList includeChildSchedules={false} extraItems={[...children, own]} presentation="integrated" onCompleted={completed} />);
+
+    expect(screen.queryByText("Familjens schema")).not.toBeInTheDocument();
+    expect(screen.queryByText("Frukost (Bianca)")).not.toBeInTheDocument();
+    expect(screen.queryByText("Vakna (Bella)")).not.toBeInTheDocument();
+    expect(screen.getByText(own.title)).toBeInTheDocument();
+    expect(screen.getByText(own.linkedLabel!)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: `Klarmarkera ${own.title}` }));
+    expect(completed).toHaveBeenCalledWith(own);
+  });
+
+  it("shows only the selected person's day and restores Min dag after viewing children or family", () => {
+    render(<FamilyDayPerspectives myDay={<DailyFlowList includeChildSchedules={false} presentation="integrated" />} />);
+    expect(screen.getByRole("radio", { name: "Min dag" })).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByText(rows[1].title)).toBeInTheDocument();
+    expect(screen.queryByText(rows[2].title)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("radio", { name: "Bella" }));
+    expect(screen.getByText("Vakna Bella")).toBeInTheDocument();
+    expect(screen.queryByText("Frukost Bianca")).not.toBeInTheDocument();
+    expect(screen.queryByText(rows[1].title)).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Markera som klar/ })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("radio", { name: "Bianca" }));
+    expect(screen.getByText("Frukost Bianca")).toBeInTheDocument();
+    expect(screen.queryByText("Vakna Bella")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("radio", { name: "Familj" }));
+    // Family has separate mobile and desktop renderings of the same timeline.
+    expect(screen.getAllByText("Vakna Bella")[0]).toBeInTheDocument();
+    expect(screen.getAllByText("Frukost Bianca")[0]).toBeInTheDocument();
+    expect(screen.getAllByText(rows[1].title)[0]).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("radio", { name: "Min dag" }));
+    expect(screen.queryByText("Vakna Bella")).not.toBeInTheDocument();
+    expect(screen.queryByText("Frukost Bianca")).not.toBeInTheDocument();
+    expect(screen.queryByText(rows[2].title)).not.toBeInTheDocument();
+    expect(screen.getByText(rows[1].title)).toBeInTheDocument();
   });
 });
