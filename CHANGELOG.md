@@ -1,3 +1,6 @@
+## 2026-10-14 – Offentlig introduktionsfilm
+- **Introduktionsfilm** (2026-10-14): den färdiga svenska Paceable-filmen på 54 sekunder används som beständig projektasset i startsidans videodialog. Äldre MyFlove-sources och fallback används inte; knapptexten visar ca 54 sek. Dialog och övrig app oförändrade. Ingen publicering.
+
 ## 2026-10-13 – Fristående Paceable-material
 - **Harmoniska pitchdeck** (2026-10-13): svenska och engelska redigerbara 16:9-presentationer med 16 slides vardera, PDF och bildöversikter. Kombinerar uppladdad pappers-/pastelldesign med aktuell produktberättelse och enbart demobilder; pris, pilot och budget är tydligt märkta hypoteser. Ingen appfunktion, kontodata eller publicering ändrad.
 - Tvåspråkig, sammanhängande Living Blueprint med aktuella produktgränser, behovsramverk, daterad affärshistorik och tydligt skilda datadefinitioner. Word/PDF levereras i Files; befintliga appnedladdningar ersätts inte.
