@@ -16,6 +16,10 @@ function itemKey(item: FlowItem) {
   return `${item.title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim()}|${item.time ?? ""}`;
 }
 
+function isChildSchedule(item: FlowItem) {
+  return item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-");
+}
+
 function sortAsDay(items: FlowItem[]) {
   return items
     .map((item, index) => ({ item, index }))
@@ -37,6 +41,7 @@ export function DailyFlowList({
   presentation = "card",
   showPictograms = false,
   pictogramLibrary = "lucide",
+  includeChildSchedules = true,
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -50,6 +55,8 @@ export function DailyFlowList({
   /** Optional compact visual support; legacy cards always show pictograms. */
   showPictograms?: boolean;
   pictogramLibrary?: "lucide" | "mulberry";
+  /** Min dag visar egna aktiviteter; barnens schema finns i barn- och familjevyer. */
+  includeChildSchedules?: boolean;
 }) {
   const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
@@ -68,10 +75,14 @@ export function DailyFlowList({
     "myflove-day-order",
     {},
   );
+  const sourceItems = useMemo(
+    () => [...today, ...extraItems].filter((item) => includeChildSchedules || !isChildSchedule(item)),
+    [today, extraItems, includeChildSchedules],
+  );
   const items = useMemo(() => {
     const merged = new Map<string, FlowItem>();
-    for (const item of [...today, ...extraItems]) {
-      const schedule = item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-");
+    for (const item of sourceItems) {
+      const schedule = isChildSchedule(item);
       const projected = schedule ? { ...item, done: false, completable: false } : item;
       const key = itemKey(projected);
       const previous = merged.get(key);
@@ -91,7 +102,7 @@ export function DailyFlowList({
     }
     for (const item of sorted) if (byKey.has(itemKey(item))) out.push(item);
     return out;
-  }, [today, extraItems, orderMap, dayISO]);
+  }, [sourceItems, orderMap, dayISO]);
 
   /**
    * Samma titel + tid visas som en rad. Tar man bort raden ska även dolda
@@ -101,14 +112,14 @@ export function DailyFlowList({
    */
   const duplicatesByKey = useMemo(() => {
     const map = new Map<string, string[]>();
-    for (const item of [...today, ...extraItems]) {
+    for (const item of sourceItems) {
       const key = itemKey(item);
       const ids = map.get(key) ?? [];
       if (!ids.includes(item.id)) ids.push(item.id);
       map.set(key, ids);
     }
     return map;
-  }, [today, extraItems]);
+  }, [sourceItems]);
 
   const move = useCallback(
     (index: number, direction: -1 | 1) => {

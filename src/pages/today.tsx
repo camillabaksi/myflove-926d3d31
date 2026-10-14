@@ -85,7 +85,7 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-2">
-            <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" />} />
+            <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} />} />
             <div className="mt-1 flex justify-end">
               <Button asChild size="sm" variant="ghost" className="min-h-10 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
                 <Link href="/flowplan?day=tomorrow">

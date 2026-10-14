@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-14";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-14 – Min dag och barnens schema",
+    items: ["Min dag visar dina egna aktiviteter. Barnens schema visas under respektive barn och i Familj, även när en barnhändelse kräver dig. Dina egna familjeuppgifter och deras kopplingar finns kvar. Samma visningsfilter används på Idag och Family Flow."],
+  },
+  {
     title: "2026-10-14 – Offentlig introduktionsfilm",
     items: ["Introduktionsfilm (2026-10-14): den färdiga svenska Paceable-filmen på 54 sekunder används som beständig projektasset i startsidans videodialog. Äldre MyFlove-sources och fallback används inte; knapptexten visar ca 54 sek. Dialog och övrig app oförändrade. Ingen publicering."],
   },
