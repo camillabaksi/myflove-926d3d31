@@ -1,4 +1,11 @@
 # Roadmap
+## Tankar – personlig reflektionsbok (2026-10-15)
+- [x] Ta emot godkänt koncept och granska befintliga funktioner, navigation, datakällor och integritetsgränser.
+- [ ] Visa konkret etappplan; invänta godkännande före appkodändringar enligt projektets planregel.
+- [ ] Etapp 1: privat lagringsgrund, sammanhängande ingångar och autosparande dagbok; bevara Fånga och anteckningar.
+- [ ] Etapp 2: beslut med inlinepunkter, två spalter/fokusläge och frivillig reflektionsdel.
+- [ ] Etapp 3: tankekarta med pek-/tangentbordsalternativ och icke-destruktiva dagbokslänkar.
+- [ ] Verifiera sparning/återläsning, offline, kontobyte, konflikter, navigation, mobil/200 % och ändringsloggar; ingen publicering/native-versionering.
 ## Engelska kontobilder och appfilmer (2026-10-13)
 - [x] Plan godkänd; animerade produktfilmer och samtycke för synligt kontoinnehåll.
 - [x] Isolerat engelskt språkval och nätverksspärr verifierade; 25 kontobilder granskade och bild-zip sparad. Endast osparat 25 %-exempel, ingen faktisk batteriändring eller omplanering.
