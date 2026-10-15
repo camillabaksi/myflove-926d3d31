@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { ArrowUp, ArrowDown, Star, Strikethrough, Flag, Plus, Trash2 } from "lucide-react";
+import { ArrowUp, ArrowDown, Star, Flag, Plus, Trash2, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel,
+  DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { useBookDraft, type NotebookStore } from "@/hooks/use-notebook";
 import { localBookDate, type BookEntity, type Column } from "@/lib/notebook";
 import { BookHistory, SourceLink } from "./book-editor";
@@ -49,88 +53,46 @@ function DecisionPoint({
         placeholder="Skriv här…"
         onChange={(e) => update({ text: e.target.value })}
       />
-      <div className="book-small-tools">
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Viktig"
-          aria-label="Markera viktig"
-          aria-pressed={!!draft.important}
-          onClick={() => update({ important: !draft.important })}
-        >
-          <Flag aria-hidden />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Stjärna"
-          aria-label="Stjärnmarkera"
-          aria-pressed={!!draft.starred}
-          onClick={() => update({ starred: !draft.starred })}
-        >
-          <Star aria-hidden fill={draft.starred ? "currentColor" : "none"} />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Stryk över"
-          aria-label="Stryk över"
-          aria-pressed={!!draft.crossed}
-          onClick={() => update({ crossed: !draft.crossed })}
-        >
-          <Strikethrough aria-hidden />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Flytta upp"
-          aria-label="Flytta upp"
-          disabled={siblingIds[0] === entity.id}
-          onClick={() => move(-1)}
-        >
-          <ArrowUp aria-hidden />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Flytta ner"
-          aria-label="Flytta ner"
-          disabled={siblingIds.at(-1) === entity.id}
-          onClick={() => move(1)}
-        >
-          <ArrowDown aria-hidden />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          title="Ta bort punkt"
-          aria-label="Ta bort punkt"
-          onClick={() => {
-            update({ deleted: true });
-            flush();
-          }}
-        >
-          <Trash2 aria-hidden />
-        </Button>
+      <div className="book-point-marks">
+        {draft.important && <span role="img" aria-label="Viktig"><Flag aria-hidden /></span>}
+        {draft.starred && <span role="img" aria-label="Stjärnmarkerad"><Star aria-hidden /></span>}
       </div>
-      <label className="sr-only" htmlFor={`column-${entity.id}`}>
-        Flytta till
-      </label>
-      <select
-        id={`column-${entity.id}`}
-        className="book-move-select"
-        value={draft.column ?? "pros"}
-        onChange={(e) => {
-          update({ column: e.target.value as Column, order: Date.now() });
-          flush();
-        }}
-      >
-        {columns.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.label}
-          </option>
-        ))}
-      </select>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="book-point-menu" variant="ghost" size="icon" title="Fler alternativ" aria-label="Fler alternativ">
+            <MoreHorizontal aria-hidden />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="notebook book-decision-menu" align="end" collisionPadding={12}>
+          <DropdownMenuLabel>Fler alternativ</DropdownMenuLabel>
+          <DropdownMenuCheckboxItem checked={!!draft.important} onCheckedChange={() => update({ important: !draft.important })}>
+            Markera som viktig
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked={!!draft.starred} onCheckedChange={() => update({ starred: !draft.starred })}>
+            Stjärnmarkera
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked={!!draft.crossed} onCheckedChange={() => update({ crossed: !draft.crossed })}>
+            Stryk över
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuSeparator />
+          {columns.filter((c) => c.id !== (draft.column ?? "pros")).map((c) => (
+            <DropdownMenuItem key={c.id} onSelect={() => {
+              update({ column: c.id, order: Date.now() });
+              flush();
+            }}>Flytta till {c.label}</DropdownMenuItem>
+          ))}
+          <DropdownMenuItem disabled={siblingIds[0] === entity.id} onSelect={() => move(-1)}>
+            <ArrowUp aria-hidden />Flytta upp
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={siblingIds.at(-1) === entity.id} onSelect={() => move(1)}>
+            <ArrowDown aria-hidden />Flytta ner
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={() => { update({ deleted: true }); flush(); }}>
+            <Trash2 aria-hidden />Ta bort punkt
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <SourceLink entity={entity} store={store} />
       {entity.heads.length > 1 && <BookHistory entity={entity} store={store} />}
     </article>
@@ -150,58 +112,27 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
       points.some((p) => p.content.column === "uncertain"),
   );
   return (
-    <>
-      <label className="book-label" htmlFor="decision-title">
-        Vad funderar du på?
-      </label>
-      <input
+    <div className="book-decision">
+      <label className="sr-only" htmlFor="decision-title">Vad funderar du på?</label>
+      <textarea
         id="decision-title"
-        className="book-field"
+        className="book-decision-title"
+        rows={1}
         placeholder="Ett beslut, stort eller litet…"
         value={draft.title}
         onChange={(e) => update({ title: e.target.value })}
       />
-      <div className="book-tools mt-4">
-        <Button
-          variant="outline"
-          aria-pressed={!!draft.uncertain}
-          onClick={() => update({ uncertain: !draft.uncertain })}
-        >
+      <div className="book-decision-options">
+        <Button variant="ghost" aria-pressed={!!draft.uncertain} onClick={() => update({ uncertain: !draft.uncertain })}>
           Osäkert än
         </Button>
-        <Button
-          variant="outline"
-          aria-expanded={help}
-          aria-controls="decision-perspectives"
-          onClick={() => setHelp((v) => !v)}
-        >
-          Hjälp mig sortera tankarna
-        </Button>
+        <label className="sr-only" htmlFor="decision-focus">Visa spalter</label>
+        <select id="decision-focus" className="book-decision-focus" value={focus} onChange={(e) => setFocus(e.target.value as Column | "all")}>
+          <option value="all">Alla spalter</option>
+          {visibleColumns.map((c) => <option key={c.id} value={c.id}>{c.label} – fokusläge</option>)}
+        </select>
       </div>
-      {help && (
-        <div id="decision-perspectives" className="book-question">
-          <p>Vad känns viktigt för dig just nu?</p>
-          <p>Vad vet du, och vad skulle du vilja få veta?</p>
-          <p>Finns det något du vill låta vara öppet ett tag?</p>
-        </div>
-      )}
-      <label className="book-label" htmlFor="decision-focus">
-        Visa spalter
-      </label>
-      <select
-        id="decision-focus"
-        className="book-field"
-        value={focus}
-        onChange={(e) => setFocus(e.target.value as Column | "all")}
-      >
-        <option value="all">Alla spalter</option>
-        {visibleColumns.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.label} – fokusläge
-          </option>
-        ))}
-      </select>
-      <div className="book-columns book-sheet">
+      <div className="book-columns book-sheet" data-focused={focus !== "all"}>
         {visibleColumns
           .filter((c) => focus === "all" || focus === c.id)
           .map((c) => {
@@ -237,12 +168,22 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
                   }
                 >
                   <Plus aria-hidden />
-                  Ny punkt
+                  Lägg till…
                 </Button>
               </section>
             );
           })}
       </div>
+      <Button className="book-decision-help" variant="outline" aria-expanded={help} aria-controls="decision-perspectives" onClick={() => setHelp((v) => !v)}>
+        Hjälp mig sortera tankarna
+      </Button>
+      {help && (
+        <div id="decision-perspectives" className="book-question">
+          <p>Vad känns viktigt för dig just nu?</p>
+          <p>Vad vet du, och vad skulle du vilja få veta?</p>
+          <p>Finns det något du vill låta vara öppet ett tag?</p>
+        </div>
+      )}
       <label className="book-label" htmlFor="decision-note">
         En egen eftertanke, om du vill
       </label>
@@ -255,7 +196,7 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
       <p className="book-status" role="status">
         {store.status}
       </p>
-      <BookHistory entity={entity} store={store} onRestore={reset} />
-    </>
+      <div className="book-decision-history"><BookHistory entity={entity} store={store} onRestore={reset} /></div>
+    </div>
   );
 }

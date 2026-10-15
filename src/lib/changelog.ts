@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Beslut som personlig papperssida",
+    items: ["Handskrivet redigerbart ämne, diskreta salvia-/aprikosrubriker och mjuka papperslinjer. Punktåtgärder samlas i Fler alternativ; viktighet och stjärna syns intill texten. Spalter anpassas efter läsbart utrymme och textstorlek. Sparanrop, versioner, kontogränser och övriga bokdelar bevaras. Ingen publicering."],
+  },
+  {
     title: "2026-10-15 – Tankar som reflektionsbok",
     items: ["Reflektionsbok (2026-10-15): Dagbok, Beslut, Tankekarta och Reflektioner har sammanhängande ingångar under befintliga Tankar/Fånga. Privat autosparning återanvänder kontolagring, kryptering och synk med separata återställbara textversioner och synlig hantering av samtidiga ändringar. Beslut har inlinepunkter, markeringar, spaltflytt och fokusläge; kartor har draggrepp, riktningar, zoom och listvy. Dagbokscitat kopieras med bekräftelse och stabil källänk utan att originalet ändras. Äldre Fånga/anteckningar bevaras. Inga nya paket, databasändringar, AI-anrop för boktext, familjedelning, native-versioner eller publicering."],
   },

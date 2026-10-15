@@ -13,3 +13,4 @@
 
 Read docs/architecture-rules.md before any changes; it preserves the project’s full architecture and privacy rules.
 Read src/components/flow/AGENTS.md and src/components/paceable/AGENTS.md before changes in those directories.
+Decision presentation stays scoped to `.book-decision` and its notebook workspace; point actions reuse the shared accessible dropdown without changing draft or persistence ownership, so other notebook editors and account data remain unaffected.
