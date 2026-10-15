@@ -308,6 +308,13 @@ export function pictogramForActivity(title: string, fallback: PictogramId): Pict
 export function startOfWeekISO(dateISO: string): string { const date = parseISODate(dateISO); date.setDate(date.getDate() - ((date.getDay() + 6) % 7)); return toISODate(date); }
 export function weekDates(dateISO: string): string[] { const monday = startOfWeekISO(dateISO); return Array.from({ length: 7 }, (_, index) => addDaysISO(monday, index)); }
 export function activityDedupKey(input: { childId: string; title: string; date?: string | null; time?: string | null }) { return [input.childId, input.date ?? "", input.time?.slice(0, 5) ?? "", input.title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim()].join("|"); }
+/** Compare the occurrence day, not the start date of an existing recurring activity. */
+export function hasChildActivityOn(items: Array<{ child_id: string; kind: string; title: string; date: string | null; time: string | null; repeat: ChildRepeatMode; notes?: string | null }>, input: { childId: string; title: string; date: string; time?: string | null }): boolean {
+  const key = activityDedupKey(input);
+  return items.some(item => (item.kind === "activity" || item.kind === "task") &&
+    item.child_id === input.childId && activityOccursOn(item, input.date) &&
+    activityDedupKey({ childId: item.child_id, title: item.title, date: input.date, time: item.time }) === key);
+}
 export function shiftDateBetween(sourceDate: string, sourceAnchor: string, targetAnchor: string): string { const source = parseISODate(sourceDate); const anchor = parseISODate(sourceAnchor); const target = parseISODate(targetAnchor); const offset = Math.round((source.getTime() - anchor.getTime()) / 86400000); target.setDate(target.getDate() + offset); return toISODate(target); }
 export function copiedVisualNotes(notes: string | null | undefined, includePrivateNote: boolean): string {
   const decoded = decodeVisualNotes(notes);

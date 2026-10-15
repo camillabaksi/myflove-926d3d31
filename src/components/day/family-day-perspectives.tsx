@@ -18,10 +18,12 @@ import { dailyActivityVisual } from "@/lib/daily-activity-visual";
 import {
   buildParallelTimeline,
   entriesFromChildEvents,
+  entrySources,
   hasTimeMismatch,
   linkedSiblings,
   ME_ID,
   nowNextFor,
+  uniqueChildEntries,
   type TimelineCell,
   type TimelineEntry,
 } from "@/lib/family-perspective";
@@ -91,10 +93,10 @@ export default function FamilyDayPerspectives({
         })),
     [myItems],
   );
-  const childEntries = useMemo<TimelineEntry[]>(() => [
+  const childEntries = useMemo<TimelineEntry[]>(() => uniqueChildEntries([
     ...entriesFromChildEvents(childEvents),
     ...childItems.filter(i => i.kind === "activity" && !i.time && activityOccursOn(i, dayISO)).map(i => ({ key: `childitem-${i.id}`, personId: i.child_id, time: "", title: i.title, itemId: i.id })),
-  ], [childEvents, childItems, dayISO]);
+  ]), [childEvents, childItems, dayISO]);
   const allEntries = useMemo(() => [...myEntries, ...childEntries], [myEntries, childEntries]);
   const myItemByKey = useMemo(() => new Map(myItems.map((i) => [i.id, i])), [myItems]);
   const childItemById = useMemo(() => new Map(childItems.map((i) => [i.id, i])), [childItems]);
@@ -128,16 +130,19 @@ export default function FamilyDayPerspectives({
   const saveChild = async (itemId: string, patch: { time?: string; notes?: string }) => {
     try {
       await updateItem(itemId, patch, { force: true });
+      return true;
     } catch {
       toast.error("Det gick inte att spara just nu. Försök igen.");
+      return false;
     }
   };
 
   const changeTime = async (entry: TimelineEntry, time: string, alsoLinked: boolean) => {
-    const targets = [entry, ...(alsoLinked ? linkedSiblings(entry, allEntries) : [])];
+    const targets = [entry, ...(alsoLinked ? linkedSiblings(entry, allEntries) : [])].flatMap(entrySources);
     for (const t of targets) {
-      if (t.itemId) await saveChild(t.itemId, { time });
-      else if (t.taskId) updateTask(t.taskId, { time });
+      if (t.itemId) {
+        if (!await saveChild(t.itemId, { time })) return;
+      } else if (t.taskId) updateTask(t.taskId, { time });
     }
     toast.success(targets.length > 1 ? `Tiden ändrades för ${targets.length} kopplade aktiviteter.` : "Tiden ändrades.");
     setDialog(null);
@@ -145,16 +150,17 @@ export default function FamilyDayPerspectives({
 
   const linkTo = async (entry: TimelineEntry, target: TimelineEntry) => {
     if (!entry.itemId) return;
-    const item = childItemById.get(entry.itemId);
-    if (!item) return;
     if (target.taskId) {
-      await saveChild(entry.itemId, { notes: withLinkMeta(item.notes, { parentTaskId: target.taskId }, item.title) });
+      for (const source of entrySources(entry)) {
+        const item = source.itemId ? childItemById.get(source.itemId) : null;
+        if (item && !await saveChild(item.id, { notes: withLinkMeta(item.notes, { parentTaskId: target.taskId }, item.title) })) return;
+      }
     } else if (target.itemId) {
-      const other = childItemById.get(target.itemId);
-      if (!other) return;
       const group = entry.linkGroup ?? target.linkGroup ?? newLinkGroup();
-      await saveChild(entry.itemId, { notes: withLinkMeta(item.notes, { linkGroup: group }, item.title) });
-      await saveChild(target.itemId, { notes: withLinkMeta(other.notes, { linkGroup: group }, other.title) });
+      for (const source of [...entrySources(entry), ...entrySources(target)]) {
+        const item = source.itemId ? childItemById.get(source.itemId) : null;
+        if (item && !await saveChild(item.id, { notes: withLinkMeta(item.notes, { linkGroup: group }, item.title) })) return;
+      }
     }
     toast.success("Aktiviteterna är kopplade. Båda finns kvar som egna aktiviteter.");
     setDialog(null);
@@ -162,9 +168,10 @@ export default function FamilyDayPerspectives({
 
   const unlink = async (entry: TimelineEntry) => {
     if (!entry.itemId) return;
-    const item = childItemById.get(entry.itemId);
-    if (!item) return;
-    await saveChild(entry.itemId, { notes: withLinkMeta(item.notes, { linkGroup: null, parentTaskId: null }, item.title) });
+    for (const source of entrySources(entry)) {
+      const item = source.itemId ? childItemById.get(source.itemId) : null;
+      if (item && !await saveChild(item.id, { notes: withLinkMeta(item.notes, { linkGroup: null, parentTaskId: null }, item.title) })) return;
+    }
     toast.success("Kopplingen är borttagen. Aktiviteterna finns kvar.");
   };
 
@@ -193,7 +200,7 @@ export default function FamilyDayPerspectives({
               <Link2 /> {linked ? "Ändra koppling" : "Koppla till…"}
             </DropdownMenuItem>
           )}
-          {entry.itemId && (entry.linkGroup || entry.parentTaskId) && (
+          {entry.itemId && entrySources(entry).some(source => source.linkGroup || source.parentTaskId) && (
             <DropdownMenuItem onSelect={() => void unlink(entry)}>
               <Unlink /> Ta bort koppling
             </DropdownMenuItem>
@@ -416,6 +423,9 @@ function TimeDialog({
           <DialogDescription>{entry?.title}</DialogDescription>
         </DialogHeader>
         <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} aria-label="Ny tid" />
+        {entry && entrySources(entry).filter(source => source.itemId).length > 1 && (
+          <p className="text-sm text-muted-foreground">Tiden ändras för alla sparade versioner av aktiviteten i samma barns schema.</p>
+        )}
         {siblings.length > 0 && (
           <p className="text-sm text-muted-foreground">
             Kopplad till: {siblings.map((s) => `${nameOf(s.personId)} – ${s.title}`).join(", ")}. Vill du uppdatera även dem?

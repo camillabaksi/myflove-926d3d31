@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-14";
+export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-15 – Dubbletter i barnens dag",
+    items: ["Identiska tidsatta hållpunkter visas en gång per barn, med rätt Nu/Nästa. Originalposter, privata anteckningar och familjekopplingar bevaras. En uttrycklig tids- eller kopplingsändring gäller alla versioner av samma visade aktivitet. Kopiering och dagsmallar hoppar över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering."],
+  },
   {
     title: "2026-10-14 – Min dag och barnens schema",
     items: ["Min dag visar dina egna aktiviteter. Barnens schema visas under respektive barn och i Familj, även när en barnhändelse kräver dig. Dina egna familjeuppgifter och deras kopplingar finns kvar. Samma visningsfilter används på Idag och Family Flow."],

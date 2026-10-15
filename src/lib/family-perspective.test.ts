@@ -4,11 +4,13 @@ import {
   buildParallelTimeline,
   childEventsForMyDay,
   entriesFromChildEvents,
+  entrySources,
   hasTimeMismatch,
   linkLabelsByTask,
   linkedSiblings,
   ME_ID,
   nowNextFor,
+  uniqueChildEntries,
   type TimelineEntry,
 } from "@/lib/family-perspective";
 import { withLinkMeta } from "@/lib/activity-links";
@@ -21,6 +23,54 @@ const ev = (p: Partial<ChildEvent> & Pick<ChildEvent, "time" | "title" | "childI
   ...p,
 });
 const me = (time: string, title: string, taskId: string): TimelineEntry => ({ key: `task-${taskId}`, personId: ME_ID, time, title, taskId });
+
+describe("En hållpunkt per barn", () => {
+  it("visar kopior en gång men behåller båda originalen och deras olika familjekopplingar", () => {
+    const originals = entriesFromChildEvents([
+      ev({ childId: "b2", itemId: "copy-b", time: "06:15", title: "Frukost", linkGroup: "family-b" }),
+      ev({ childId: "b2", itemId: "copy-a", time: "06:15", title: " frukost ", parentTaskId: "parent" }),
+      ev({ childId: "b1", itemId: "bella", time: "06:15", title: "Frukost", linkGroup: "family-b" }),
+    ]);
+    const snapshot = JSON.stringify(originals);
+    const grouped = uniqueChildEntries(originals);
+    const bianca = grouped.find(entry => entry.personId === "b2")!;
+    const parent = me("06:15", "Ordna frukost", "parent");
+    expect(grouped).toHaveLength(2);
+    expect(entrySources(bianca).map(source => source.itemId)).toEqual(["copy-a", "copy-b"]);
+    expect(linkedSiblings(bianca, [...grouped, parent]).map(entry => entry.personId)).toEqual(["b1", ME_ID]);
+    expect(linkedSiblings(parent, [...grouped, parent])).toEqual([bianca]);
+    expect(nowNextFor([bianca], 6 * 60 + 30)).toEqual({ now: bianca.key, next: null });
+    expect(uniqueChildEntries([...originals].reverse()).find(entry => entry.personId === "b2")?.key).toBe(bianca.key);
+    expect(JSON.stringify(originals)).toBe(snapshot);
+  });
+
+  it("behåller andra barn, tider, sluttider, titlar och förälderns egna uppgifter", () => {
+    const entries = entriesFromChildEvents([
+      ev({ childId: "b2", time: "06:15", title: "Frukost" }),
+      ev({ childId: "b1", time: "06:15", title: "Frukost" }),
+      ev({ childId: "b2", time: "07:15", title: "Frukost" }),
+      ev({ childId: "b2", time: "06:15", title: "Frukost", itemId: "longer", endTime: "07:00" }),
+      ev({ childId: "b2", time: "06:15", title: "Medicin" }),
+      ev({ childId: "b2", time: "", title: "Packa", itemId: "bag-a" }),
+      ev({ childId: "b2", time: "", title: "Packa", itemId: "bag-b" }),
+    ]);
+    entries.push(me("06:15", "Frukost", "a"), me("06:15", "Frukost", "b"));
+    expect(uniqueChildEntries(entries)).toHaveLength(entries.length);
+  });
+
+  it("tappar inte Nu/Nästa eller koppling från en dold kopia", () => {
+    const [breakfast, dress] = uniqueChildEntries(entriesFromChildEvents([
+      ev({ childId: "b2", itemId: "a", time: "06:15", title: "Frukost" }),
+      ev({ childId: "b2", itemId: "b", time: "06:15", title: "Frukost", linkGroup: "family" }),
+      ev({ childId: "b2", itemId: "c", time: "06:45", title: "Klä på sig" }),
+      ev({ childId: "b2", itemId: "d", time: "06:45", title: "Klä på sig" }),
+    ]));
+    const [bella] = entriesFromChildEvents([ev({ childId: "b1", time: "06:30", title: "Frukost", linkGroup: "family" })]);
+    expect(nowNextFor([breakfast!, dress!], 6 * 60 + 30)).toEqual({ now: breakfast!.key, next: dress!.key });
+    expect(hasTimeMismatch(breakfast!, [breakfast!, dress!, bella!])).toBe(true);
+    expect(buildParallelTimeline([breakfast!, { ...bella!, time: "06:15" }], ["b1", "b2"])[0]?.cells[0]?.linked).toBe(true);
+  });
+});
 
 describe("Min dag", () => {
   it("visar inga barnaktiviteter som inte kräver föräldern", () => {

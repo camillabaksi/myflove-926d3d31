@@ -43,6 +43,7 @@ import {
   CATEGORY_STYLES,
   FAMILY_LABELS,
   activityDedupKey,
+  hasChildActivityOn,
   compareDayItems,
   activityOccursOn,
   buildMultiMovePatches,
@@ -394,13 +395,13 @@ export default function VisualChildSchedule({
   };
 
   const copyItems = async (source: ChildItem[], targetChildId: string, targetAnchor: string, sourceAnchor: string, sameDay = false) => {
-    const existing = new Set(items.map((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time })));
+    const existing = new Set<string>();
     let copied = 0;
     for (const item of source) {
       if (!item.date) continue;
       const targetDate = sameDay ? targetAnchor : shiftDateBetween(item.date, sourceAnchor, targetAnchor);
       const key = activityDedupKey({ childId: targetChildId, title: item.title, date: targetDate, time: item.time });
-      if (existing.has(key)) continue;
+      if (existing.has(key) || hasChildActivityOn(items, { childId: targetChildId, title: item.title, date: targetDate, time: item.time })) continue;
       let filePath = item.file_path ?? undefined;
       if (filePath) filePath = await copyDoc(filePath, targetChildId);
       await addItem({ childId: targetChildId, kind: "activity", title: item.title, date: targetDate, time: item.time ?? undefined, notes: copiedVisualNotes(item.notes, targetChildId === item.child_id || includePrivateNote), filePath });
@@ -449,11 +450,11 @@ export default function VisualChildSchedule({
   };
 
   const applyTemplate = async (template: ChildScheduleTemplate, targetDate: string) => {
-    const existing = new Set(items.map((item) => activityDedupKey({ childId: item.child_id, title: item.title, date: item.date, time: item.time })));
+    const existing = new Set<string>();
     let copied = 0;
     for (const templateItem of template.items) {
       const key = activityDedupKey({ childId: child.id, title: templateItem.title, date: targetDate, time: templateItem.time });
-      if (existing.has(key)) continue;
+      if (existing.has(key) || hasChildActivityOn(items, { childId: child.id, title: templateItem.title, date: targetDate, time: templateItem.time })) continue;
       await addItem({ childId: child.id, kind: "activity", title: templateItem.title, date: targetDate, time: templateItem.time ?? undefined, notes: encodeVisualNotes(templateItem) });
       existing.add(key); copied += 1;
     }
