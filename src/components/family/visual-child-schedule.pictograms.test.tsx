@@ -2,7 +2,7 @@ import { useState } from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import VisualChildSchedule from "./visual-child-schedule";
-import { todayISO } from "@/lib/day";
+import { addDaysISO, todayISO } from "@/lib/day";
 import { encodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { Child, ChildItem } from "@/hooks/use-children";
 import type { ChildScheduleInput } from "@/lib/add-child-schedule";
@@ -49,6 +49,30 @@ describe("Child schedule picture support", () => {
 
 
 describe("Add from a child schedule", () => {
+  it("does not copy a routine onto a day where its recurring occurrence already exists", async () => {
+    const addItem = vi.fn(async () => "created");
+    const routine = { ...item, date: addDaysISO(todayISO(), -7), time: "06:15", repeat: "daily" as const };
+    render(<VisualChildSchedule child={child} children={[child]} items={[routine]} {...callbacks} addItem={addItem} />);
+    fireEvent.click(screen.getByRole("button", { name: "Kopiera dagen" }));
+    fireEvent.click(screen.getByRole("button", { name: "Kopiera" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(addItem).not.toHaveBeenCalled();
+  });
+
+  it("does not add a day template over an existing recurring occurrence", async () => {
+    const addItem = vi.fn(async () => "created");
+    const prompt = vi.spyOn(window, "prompt").mockReturnValue("Min frukostmall");
+    // Save an actual one-off as a template, then replace the fixture with its recurring form.
+    const dated = { ...item, time: "06:15" };
+    const view = render(<VisualChildSchedule child={child} children={[child]} items={[dated]} {...callbacks} addItem={addItem} />);
+    fireEvent.click(screen.getByRole("tab", { name: "Vecka" }));
+    fireEvent.click(screen.getByRole("button", { name: "Spara dagen som mall" }));
+    prompt.mockRestore();
+    view.rerender(<VisualChildSchedule child={child} children={[child]} items={[{ ...dated, date: addDaysISO(todayISO(), -7), repeat: "daily" }]} {...callbacks} addItem={addItem} />);
+    fireEvent.click(screen.getByRole("button", { name: "Min frukostmall" }));
+    expect(addItem).not.toHaveBeenCalled();
+  });
+
   it("preselects the current child and can add the same visual activity to another owned child", async () => {
     const other = { ...child, id: "second", name: "Andra barnet" };
     const addItem = vi.fn(async () => "created");

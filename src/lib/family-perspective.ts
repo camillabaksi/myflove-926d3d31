@@ -23,6 +23,8 @@ export interface TimelineEntry {
   /** Id på förälderns uppgift när posten är förälderns egen. */
   taskId?: string;
   completed?: boolean;
+  /** Originalposter bakom en enda visad hållpunkt. Ingen lagrad sammanslagning. */
+  sources?: TimelineEntry[];
 }
 
 export interface TimelineCell {
@@ -42,6 +44,38 @@ export interface TimelineRow {
 
 export function normalizeTitle(title: string): string {
   return title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim();
+}
+
+export function entrySources(entry: TimelineEntry): TimelineEntry[] {
+  return entry.sources ?? [entry];
+}
+
+/** En hållpunkt per barn, tid, titel och sluttid. Behåll varje original för åtgärder/kopplingar. */
+export function uniqueChildEntries(entries: TimelineEntry[]): TimelineEntry[] {
+  const groups = new Map<string, TimelineEntry[]>();
+  for (const entry of entries.flatMap(entrySources)) {
+    // Untimed activities can be separate instructions; owned parent tasks stay independent.
+    const key = entry.personId === ME_ID || !entry.time
+      ? JSON.stringify(["id", entry.key])
+      : JSON.stringify([entry.personId, entry.itemId ? "activity" : "school", entry.time.slice(0, 5), entry.endTime ?? "", normalizeTitle(entry.title)]);
+    const group = groups.get(key) ?? [];
+    if (!group.some(source => source.key === entry.key)) group.push(entry);
+    groups.set(key, group);
+  }
+  return [...groups.values()].map(group => {
+    // Keep the representative stable across reload ordering. School and child_items stay separate.
+    const sorted = [...group].sort((a, b) => a.key.localeCompare(b.key));
+    const first = sorted[0]!;
+    return sorted.length > 1 ? { ...first, sources: sorted } : first;
+  });
+}
+
+function areLinked(a: TimelineEntry, b: TimelineEntry): boolean {
+  return entrySources(a).some(left => entrySources(b).some(right =>
+    (!!left.linkGroup && left.linkGroup === right.linkGroup) ||
+    (!!left.parentTaskId && (left.parentTaskId === right.taskId || left.parentTaskId === right.parentTaskId)) ||
+    (!!right.parentTaskId && right.parentTaskId === left.taskId),
+  ));
 }
 
 /** Barnaktiviteter som hör hemma i Min dag: kräver mig och saknar redan en egen kopplad uppgift. */
@@ -101,19 +135,12 @@ export function buildParallelTimeline(entries: TimelineEntry[], personIds: strin
       const match = cells.find((cell) =>
         cell.entries.some(
           (other) =>
-            (entry.linkGroup && other.linkGroup === entry.linkGroup) ||
-            (entry.parentTaskId && other.taskId === entry.parentTaskId) ||
-            (other.parentTaskId && entry.taskId === other.parentTaskId) ||
-            (entry.parentTaskId && other.parentTaskId === entry.parentTaskId) ||
+            areLinked(entry, other) ||
             normalizeTitle(other.title) === normalizeTitle(entry.title),
         ),
       );
-      const isLink = (a: TimelineEntry, b: TimelineEntry) =>
-        (!!a.linkGroup && a.linkGroup === b.linkGroup) ||
-        (!!a.parentTaskId && (a.parentTaskId === b.taskId || a.parentTaskId === b.parentTaskId)) ||
-        (!!b.parentTaskId && b.parentTaskId === a.taskId);
       if (match) {
-        if (match.entries.some((o) => isLink(o, entry))) match.linked = true;
+        if (match.entries.some((o) => areLinked(o, entry))) match.linked = true;
         match.entries.push(entry);
         if (!match.personIds.includes(entry.personId)) match.personIds.push(entry.personId);
       } else {
@@ -130,10 +157,7 @@ export function buildParallelTimeline(entries: TimelineEntry[], personIds: strin
 export function linkedSiblings(entry: TimelineEntry, all: TimelineEntry[]): TimelineEntry[] {
   return all.filter(
     (o) =>
-      o.key !== entry.key &&
-      ((!!entry.linkGroup && o.linkGroup === entry.linkGroup) ||
-        (!!entry.parentTaskId && (o.taskId === entry.parentTaskId || o.parentTaskId === entry.parentTaskId)) ||
-        (!!entry.taskId && o.parentTaskId === entry.taskId)),
+      o.key !== entry.key && areLinked(entry, o),
   );
 }
 

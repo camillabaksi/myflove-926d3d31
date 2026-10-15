@@ -1,3 +1,6 @@
+## 2026-10-15 – Dubbletter i barnens dag
+- Identiska tidsatta hållpunkter visas en gång per barn i Idag och Family Flow, med gemensam Nu/Nästa-markering. Originalposter, privata anteckningar och familjekopplingar bevaras; uttryckliga tids-/kopplingsändringar gäller alla versioner i samma visade aktivitet. Separata tider, sluttider, barn, skolscheman och föräldrauppgifter behålls. Kopiering och dagsmallar hoppar även över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering.
+
 ## 2026-10-14 – Min dag och barnens schema
 - Min dag visar egna aktiviteter även när barnens schema är markerat som att det kräver föräldern. Barnhändelser visas under respektive barn och i Familj. Egna familjeuppgifter och deras kopplingsetiketter finns kvar. Samma visningsfilter används på Idag och Family Flow.
 

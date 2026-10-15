@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   activityDedupKey,
   activityOccursOn,
+  hasChildActivityOn,
   buildMultiMovePatches,
   CATEGORY_STYLES,
   dayPart,
@@ -84,6 +85,19 @@ describe("child visual schedule", () => {
   it("normalizes duplicate activities", () => {
     expect(activityDedupKey({ childId: "a", title: "  Packa  väskan ", date: "2026-09-23", time: "08:00:00" }))
       .toBe(activityDedupKey({ childId: "a", title: "packa väskan", date: "2026-09-23", time: "08:00" }));
+  });
+
+  it("recognizes an existing recurring occurrence on a copy/template target day", () => {
+    const routine = { child_id: "bianca", kind: "activity", title: " Frukost ", date: "2026-10-01", time: "06:15:00", repeat: "weekdays" as const, notes: null };
+    const target = { childId: "bianca", title: "frukost", date: "2026-10-15", time: "06:15" };
+    expect(hasChildActivityOn([routine], target)).toBe(true);
+    expect(hasChildActivityOn([routine], { ...target, childId: "bella" })).toBe(false);
+    expect(hasChildActivityOn([routine], { ...target, time: "07:15" })).toBe(false);
+    expect(hasChildActivityOn([routine], { ...target, date: "2026-10-17" })).toBe(false);
+    expect(hasChildActivityOn([{ ...routine, repeat: "none" }], target)).toBe(false);
+    expect(hasChildActivityOn([{ ...routine, kind: "note" }], target)).toBe(false);
+    const notes = encodeVisualNotes({ pictogram: "breakfast", category: "mat", tone: "sun", repeatUntil: "2026-10-14" });
+    expect(hasChildActivityOn([{ ...routine, notes }], target)).toBe(false);
   });
 
   it("groups the day and softens a full schedule by capacity", () => {
