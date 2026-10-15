@@ -23,11 +23,13 @@ export function useVisualCalendar(dates: string[]) {
   const { isInstanceDone } = useInstanceStatus();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
   const [doneLog] = useCloudSyncedStorage<Record<string, string[]>>("myflove-done-log", {});
-  const { items: childItems, children } = useChildren();
+  const { items: childItems, children, loading: childrenLoading, error: childrenError } = useChildren();
   const { isSignedIn, user } = useUser();
   const [schedules] = useCloudSyncedStorage<Record<string, ChildScheduleEntry[]>>("myflove-child-schedules", {});
-  const { data: household } = useGetMyHousehold({ query: { queryKey: getGetMyHouseholdQueryKey(), enabled: !!isSignedIn } });
-  const { data: family = [] } = useListFamilyEvents({ query: { queryKey: getListFamilyEventsQueryKey(), enabled: !!isSignedIn && !!household?.id } });
+  const householdQuery = useGetMyHousehold({ query: { queryKey: getGetMyHouseholdQueryKey(), enabled: !!isSignedIn } });
+  const { data: household } = householdQuery;
+  const familyQuery = useListFamilyEvents({ query: { queryKey: getListFamilyEventsQueryKey(), enabled: !!isSignedIn && !!household?.id } });
+  const { data: family = [] } = familyQuery;
   const connection = useCalendarConnection();
   const first = dates[0] ?? "";
   const last = dates[dates.length - 1] ?? "";
@@ -62,5 +64,7 @@ export function useVisualCalendar(dates: string[]) {
     for (const item of childItems) if (item.kind === "activity" && !members.has(item.child_id)) members.set(item.child_id, { id: item.child_id, name: "Delad barnaktivitet" });
     return [...members.values()];
   }, [children, childItems]);
-  return { days, familyMembers, externalError: external.error, externalLoading: external.isFetching };
+  const planningError = childrenError || householdQuery.error || familyQuery.error || external.error;
+  const planningReady = !childrenLoading && !householdQuery.isFetching && !familyQuery.isFetching && !external.isFetching && !planningError;
+  return { days, familyMembers, externalError: external.error, externalLoading: external.isFetching, planningReady: !!planningReady, planningError: !!planningError };
 }

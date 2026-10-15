@@ -32,8 +32,8 @@ export function summarizePilotAccounts(accounts: AccountActivity[], adminIds: Se
 
 /** Explicit recorded actions only. Page views, opens and onboarding never establish core use. */
 export const PILOT_FEATURES = [
-  { id: "plan", label: "Fånga och planera", detail: "Skapat uppgift, anteckning eller påminnelse, eller sparat via Fånga.",
-    actions: ["task_created", "note_created", "reminder_created", "quickflow_created", "quickflow_planned", "plan_created", "plan_updated"] },
+  { id: "plan", label: "Fånga och planera", detail: "Skapat uppgift, anteckning eller påminnelse, sparat via Fånga eller godkänt en omplanering.",
+    actions: ["task_created", "note_created", "reminder_created", "quickflow_created", "quickflow_planned", "plan_created", "plan_updated", "day_replanned"] },
   { id: "do", label: "Genomföra", detail: "Markerat en uppgift eller ett fokuspass som klart.",
     actions: ["task_completed", "focus_completed", "quickflow_completed"] },
   { id: "energy", label: "Checka in energi", detail: "Slutfört en energiincheckning. Själva energivärdet läses inte.",
