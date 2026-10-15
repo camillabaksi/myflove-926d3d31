@@ -27,7 +27,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
-import UserAnalytics from "@/components/admin/user-analytics";
+import UserFunnelCard from "@/components/admin/user-funnel";
 import InvestorDocs from "@/components/admin/investor-docs";
 import RegistrationPlatformSummary from "@/components/admin/registration-platform-summary";
 import { REGISTRATION_PLATFORM_LABELS, type RegistrationPlatform } from "@/lib/registration-platform";
@@ -97,7 +97,7 @@ export default function AdminPage() {
           </div>
         </header>
 
-        <UserAnalytics />
+        <UserFunnelCard className="rounded-3xl border border-border bg-card p-4 sm:p-6" />
 
         <div className="flex min-w-0 max-w-full gap-2 overflow-x-auto border-b border-border">
           <TabBtn

@@ -11,7 +11,7 @@ const LogInput = z.object({
 
 /**
  * Anonym loggning: vi sparar ENDAST vilken del av appen som användes, vilken
- * handling det var, ett slumpat sessions-id (roteras dygnsvis i klienten) och
+ * handling det var, ett slumpat app-/webbläsar-id (beständigt tills lagringen återställs) och
  * tidpunkt. Ingen användar-id, e-post, IP eller innehåll sparas någonsin.
  */
 export const logAnalyticsEventFn = createServerFn({ method: "POST" })

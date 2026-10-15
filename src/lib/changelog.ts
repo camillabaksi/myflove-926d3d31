@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Konkret pilotstatistik",
+    items: ["Admin och Appstatistik visar aktiva externa konton, ursprung per plattform, konkreta kärnhandlingar och återkommande användning med tydliga perioder och nämnare. Sidvisningar räknas inte som kärnanvändning och app-/webbläsar-ID skiljs från konton. Märkta interna ID undantas; okänd status och mätluckor förklaras. Upplevd avlastning och appens egen belastning följer testprotokollets frågor och visas som saknat underlag tills enkätsvar ansluts. Historik, granskning och export finns som fördjupning, med en kort aggregerad översikt att kopiera. Inga privata appinnehåll läses och ingen ny spårning eller enkätinsamling införs."],
+  },
+  {
     title: "2026-10-15 – Aktiva konton i adminstatistiken",
     items: ["Kontolistan, plattformsfördelningen och kontostatistiken visar aktiva senaste 30 dagarna som standard. Aktivitet betyder registrerad användning eller inloggning. Visa även inaktiva och Visa äldre aktivitet tar fram historik utan att ändra eller radera konton. Registreringsdiagram och exporter använder samma tydliga period. Saknade aktivitetsuppgifter visas som okända, inte som noll. Anonym webbläsarstatistik förblir separat."],
   },
