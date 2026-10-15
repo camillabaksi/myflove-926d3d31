@@ -4,17 +4,17 @@ import Page from "@/pages/dump";
 export const Route = createFileRoute("/_app/quickflow")({
   head: () => ({
     meta: [
-      { title: "Fånga – få ut det ur huvudet | Paceable" },
+      { title: "Tankar & Fånga · Paceable" },
       {
         name: "description",
         content:
-          "Skriv eller prata in allt du bär på. Fånga sorterar det till rätt plats – och håller det som inte får glömmas.",
+          "Din privata reflektionsbok med dagbok, beslut, tankekartor och reflektioner. Fånga finns kvar för text, röst och import.",
       },
-      { property: "og:title", content: "Fånga – få ut det ur huvudet" },
+      { property: "og:title", content: "Tankar & Fånga · Paceable" },
       {
         property: "og:description",
         content:
-          "Snabbfångst för ett fullt huvud. Paceable håller tanken åt dig tills du orkar sortera.",
+          "Din privata reflektionsbok och befintlig Fånga, samlade i Paceable.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

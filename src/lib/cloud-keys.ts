@@ -5,6 +5,7 @@
  * tidigare session utan att dess hook monteras före utloggning.
  */
 export const CLOUD_USER_DATA_KEYS = new Set([
+  "myflove-notebook-revisions-v1",
   "myflove-flow-appearance",
   "myflove-personal-preferences",
   "myflove-flow-memories",

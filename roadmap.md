@@ -3,11 +3,12 @@
 - [x] Ta emot godkänt koncept och granska befintliga funktioner, navigation, datakällor och integritetsgränser.
 - [x] Användaren ber att få se förslaget; visa den färdiga etappplanen direkt, utan appändringar.
 - [x] Skapa och granska tydligt märkt konceptbild med syntetisk text; befintlig app, logotyp och navigation är inte ändrade.
-- [ ] Visa konkret etappplan; invänta godkännande före appkodändringar enligt projektets planregel.
-- [ ] Etapp 1: privat lagringsgrund, sammanhängande ingångar och autosparande dagbok; bevara Fånga och anteckningar.
-- [ ] Etapp 2: beslut med inlinepunkter, två spalter/fokusläge och frivillig reflektionsdel.
-- [ ] Etapp 3: tankekarta med pek-/tangentbordsalternativ och icke-destruktiva dagbokslänkar.
-- [ ] Verifiera sparning/återläsning, offline, kontobyte, konflikter, navigation, mobil/200 % och ändringsloggar; ingen publicering/native-versionering.
+- [x] Konkret etappplan visad; användaren godkände genomförandet 2026-10-15: ”Underbart, gör denna funktion”.
+- [x] Etapp 1: privat lagringsgrund, sammanhängande ingångar och autosparande dagbok; Fånga och anteckningar bevarade.
+- [x] Etapp 2: beslut med inlinepunkter, två spalter/fokusläge och frivillig reflektionsdel.
+- [x] Etapp 3: tankekarta med pek-/tangentbordsalternativ och icke-destruktiva dagbokslänkar.
+- [x] Lokal sparning/återläsning, navigation och 96 bredd-/tema-/textkontroller verifierade med syntetisk text och blockerade molnskrivningar; riktade tester för offline/synk, kontobyte och konflikter samt båda ändringsloggarna klara. Ingen publicering/native-versionering.
+- [ ] Verklig sparning/återläsning i molnet och två-enhetstest: blockerad kontroll tills isolerat testkonto finns; inga testskrivningar görs i Camillas privata konto. Fysisk Android/iOS och skärmläsare kräver enheter.
 ## Engelska kontobilder och appfilmer (2026-10-13)
 - [x] Plan godkänd; animerade produktfilmer och samtycke för synligt kontoinnehåll.
 - [x] Isolerat engelskt språkval och nätverksspärr verifierade; 25 kontobilder granskade och bild-zip sparad. Endast osparat 25 %-exempel, ingen faktisk batteriändring eller omplanering.
