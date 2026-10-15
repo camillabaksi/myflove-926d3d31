@@ -1,8 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
+import { registrationPlatform, type RegistrationPlatform } from "@/lib/registration-platform";
 
 // Verify the calling user is admin. Uses the caller's RLS-scoped client to
 // read their own user_roles row — no dependency on has_role EXECUTE grants.
@@ -124,6 +125,7 @@ export type AdminUserRow = {
   last_visit_at: string | null;
   visits: number;
   roles: string[];
+  registration_platform: RegistrationPlatform;
 };
 
 const UserFilter = z
@@ -152,11 +154,14 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: users, error: uErr } = await supabaseAdmin.auth.admin.listUsers({
-      page: 1,
-      perPage: 200,
-    });
-    if (uErr) throw new Error(uErr.message);
+    // Include every account in the platform totals, also beyond the first API page.
+    const users = new Map<string, User>();
+    for (let page = 1; ; page++) {
+      const { data: batch, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+      if (error) throw new Error(error.message);
+      for (const user of batch.users) users.set(user.id, user);
+      if (batch.users.length < 200) break;
+    }
 
     const { data: roles, error: rErr } = await supabaseAdmin
       .from("user_roles")
@@ -182,7 +187,7 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
       return true;
     };
 
-    const rows = (users.users ?? []).map((u) => {
+    const rows = [...users.values()].map((u) => {
       return {
         user_id: u.id,
         name: displayName((u.user_metadata ?? {}) as Record<string, unknown>, u.email ?? null),
@@ -194,6 +199,7 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
         last_visit_at: u.updated_at ?? null,
         visits: 0,
         roles: rolesByUser.get(u.id) ?? [],
+        registration_platform: registrationPlatform(u.user_metadata),
       };
     });
 
