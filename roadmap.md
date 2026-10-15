@@ -1,6 +1,6 @@
 # Roadmap
 ## Beslut – visuell referens (2026-10-15)
-- [ ] Visa en tydligt märkt konceptbild utifrån användarens referens före godkännande; ingen appändring eller publicering.
+- [x] Skapat och granskat tydligt märkt konceptbild utifrån användarens referens före godkännande; ingen appändring eller publicering.
 - Genomförande av den nya presentationen inväntar godkänd plan.
 ## Tankar – personlig reflektionsbok (2026-10-15)
 - [x] Ta emot godkänt koncept och granska befintliga funktioner, navigation, datakällor och integritetsgränser.
