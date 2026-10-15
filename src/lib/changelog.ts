@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Tankar som reflektionsbok",
+    items: ["Reflektionsbok (2026-10-15): Dagbok, Beslut, Tankekarta och Reflektioner har sammanhängande ingångar under befintliga Tankar/Fånga. Privat autosparning återanvänder kontolagring, kryptering och synk med separata återställbara textversioner och synlig hantering av samtidiga ändringar. Beslut har inlinepunkter, markeringar, spaltflytt och fokusläge; kartor har draggrepp, riktningar, zoom och listvy. Dagbokscitat kopieras med bekräftelse och stabil källänk utan att originalet ändras. Äldre Fånga/anteckningar bevaras. Inga nya paket, databasändringar, AI-anrop för boktext, familjedelning, native-versioner eller publicering."],
+  },
+  {
     title: "2026-10-15 – Få ihop dagen på Idag",
     items: ["En lugn knapp under Din dag öppnar valbara förslag som kan lösa tidskrockar mellan egna uppgifter när längder och luckor är kända. Den senaste loggade kapaciteten från Idag kan frivilligt ge förslag om ett mindre första steg vid låg ork; den blir aldrig en minutbudget eller en prognos. Planering fungerar utan incheckning. Byte till imorgon kräver ett eget val, visas utan bestämd tid och ändrar inget innan godkännande. Påminnelser, bokningar, barnens schema och kända deadlines skyddas. Registrerad förberedelse/restid och beroenden bevaras. Ändringar görs i befintliga kontobundna uppgifter; gammalt underlag och kontobyten stoppas. Inga nya aktiviteter, AI-anrop eller ändringar av kapacitet skapas av planeringen."],
   },

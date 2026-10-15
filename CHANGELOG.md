@@ -1,3 +1,6 @@
+## 2026-10-15 – Tankar som reflektionsbok
+- **Reflektionsbok** (2026-10-15): Dagbok, Beslut, Tankekarta och Reflektioner har sammanhängande ingångar under befintliga Tankar/Fånga. Privat autosparning återanvänder kontolagring, kryptering och synk med separata återställbara textversioner och synlig hantering av samtidiga ändringar. Beslut har inlinepunkter, markeringar, spaltflytt och fokusläge; kartor har draggrepp, riktningar, zoom och listvy. Dagbokscitat kopieras med bekräftelse och stabil källänk utan att originalet ändras. Äldre Fånga/anteckningar bevaras. Inga nya paket, databasändringar, AI-anrop för boktext, familjedelning, native-versioner eller publicering.
+
 ## 2026-10-15 – Aktiva konton i adminstatistiken
 - Kontolistan och plattformsfördelningen visar aktiva de senaste 30 dagarna som standard. Visa även inaktiva tar fram alla konton utan radering. Senast aktiv använder registrerad användning eller faktisk inloggning, inte kontots ändringsdatum. Kontosiffror och registreringsdiagram på statistiksidan gäller samma aktiva grupp; demo räknas bort där. Analysvyn visar senaste 30 dagarnas aktivitet, med separat val för äldre historik. CSV/PDF märker kontosiffran med den valda perioden. Saknade aktivitetsuppgifter visas som okända i stället för noll. Ingen ny koppling mellan anonyma händelser och konton.
 

@@ -94,6 +94,10 @@ import { Route as OauthKalenderReturRouteImport } from './routes/oauth.kalender-
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AppAssistantChatIdRouteImport } from './routes/_app.assistant_.$chatId'
+import { Route as AppTankarBeslutRouteImport } from './routes/_app.tankar.beslut'
+import { Route as AppTankarDagbokRouteImport } from './routes/_app.tankar.dagbok'
+import { Route as AppTankarReflektionerRouteImport } from './routes/_app.tankar.reflektioner'
+import { Route as AppTankarTankekartaRouteImport } from './routes/_app.tankar.tankekarta'
 import { Route as ApiPublicCspReportRouteImport } from './routes/api/public/csp-report'
 import { Route as ApiPublicHooksPushResubscribeRouteImport } from './routes/api/public/hooks/push-resubscribe'
 import { Route as ApiPublicHooksPushTickRouteImport } from './routes/api/public/hooks/push-tick'
@@ -526,6 +530,26 @@ const AppAssistantChatIdRoute = AppAssistantChatIdRouteImport.update({
   path: '/assistant/$chatId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTankarBeslutRoute = AppTankarBeslutRouteImport.update({
+  id: '/tankar/beslut',
+  path: '/tankar/beslut',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTankarDagbokRoute = AppTankarDagbokRouteImport.update({
+  id: '/tankar/dagbok',
+  path: '/tankar/dagbok',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTankarReflektionerRoute = AppTankarReflektionerRouteImport.update({
+  id: '/tankar/reflektioner',
+  path: '/tankar/reflektioner',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTankarTankekartaRoute = AppTankarTankekartaRouteImport.update({
+  id: '/tankar/tankekarta',
+  path: '/tankar/tankekarta',
+  getParentRoute: () => AppRoute,
+} as any)
 const ApiPublicCspReportRoute = ApiPublicCspReportRouteImport.update({
   id: '/api/public/csp-report',
   path: '/api/public/csp-report',
@@ -628,6 +652,10 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
+  '/tankar/beslut': typeof AppTankarBeslutRoute
+  '/tankar/dagbok': typeof AppTankarDagbokRoute
+  '/tankar/reflektioner': typeof AppTankarReflektionerRoute
+  '/tankar/tankekarta': typeof AppTankarTankekartaRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -717,6 +745,10 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/assistant/$chatId': typeof AppAssistantChatIdRoute
+  '/tankar/beslut': typeof AppTankarBeslutRoute
+  '/tankar/dagbok': typeof AppTankarDagbokRoute
+  '/tankar/reflektioner': typeof AppTankarReflektionerRoute
+  '/tankar/tankekarta': typeof AppTankarTankekartaRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -808,6 +840,10 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_app/assistant_/$chatId': typeof AppAssistantChatIdRoute
+  '/_app/tankar/beslut': typeof AppTankarBeslutRoute
+  '/_app/tankar/dagbok': typeof AppTankarDagbokRoute
+  '/_app/tankar/reflektioner': typeof AppTankarReflektionerRoute
+  '/_app/tankar/tankekarta': typeof AppTankarTankekartaRoute
   '/api/public/csp-report': typeof ApiPublicCspReportRoute
   '/api/public/hooks/push-resubscribe': typeof ApiPublicHooksPushResubscribeRoute
   '/api/public/hooks/push-tick': typeof ApiPublicHooksPushTickRoute
@@ -899,6 +935,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
+    | '/tankar/beslut'
+    | '/tankar/dagbok'
+    | '/tankar/reflektioner'
+    | '/tankar/tankekarta'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
@@ -988,6 +1028,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/assistant/$chatId'
+    | '/tankar/beslut'
+    | '/tankar/dagbok'
+    | '/tankar/reflektioner'
+    | '/tankar/tankekarta'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
@@ -1078,6 +1122,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_app/assistant_/$chatId'
+    | '/_app/tankar/beslut'
+    | '/_app/tankar/dagbok'
+    | '/_app/tankar/reflektioner'
+    | '/_app/tankar/tankekarta'
     | '/api/public/csp-report'
     | '/api/public/hooks/push-resubscribe'
     | '/api/public/hooks/push-tick'
@@ -1708,6 +1756,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAssistantChatIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/tankar/beslut': {
+      id: '/_app/tankar/beslut'
+      path: '/tankar/beslut'
+      fullPath: '/tankar/beslut'
+      preLoaderRoute: typeof AppTankarBeslutRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tankar/dagbok': {
+      id: '/_app/tankar/dagbok'
+      path: '/tankar/dagbok'
+      fullPath: '/tankar/dagbok'
+      preLoaderRoute: typeof AppTankarDagbokRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tankar/reflektioner': {
+      id: '/_app/tankar/reflektioner'
+      path: '/tankar/reflektioner'
+      fullPath: '/tankar/reflektioner'
+      preLoaderRoute: typeof AppTankarReflektionerRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/tankar/tankekarta': {
+      id: '/_app/tankar/tankekarta'
+      path: '/tankar/tankekarta'
+      fullPath: '/tankar/tankekarta'
+      preLoaderRoute: typeof AppTankarTankekartaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/api/public/csp-report': {
       id: '/api/public/csp-report'
       path: '/api/public/csp-report'
@@ -1796,6 +1872,10 @@ interface AppRouteChildren {
   AppVeckansFlowRoute: typeof AppVeckansFlowRoute
   AppWorkflowRoute: typeof AppWorkflowRoute
   AppAssistantChatIdRoute: typeof AppAssistantChatIdRoute
+  AppTankarBeslutRoute: typeof AppTankarBeslutRoute
+  AppTankarDagbokRoute: typeof AppTankarDagbokRoute
+  AppTankarReflektionerRoute: typeof AppTankarReflektionerRoute
+  AppTankarTankekartaRoute: typeof AppTankarTankekartaRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1862,6 +1942,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppVeckansFlowRoute: AppVeckansFlowRoute,
   AppWorkflowRoute: AppWorkflowRoute,
   AppAssistantChatIdRoute: AppAssistantChatIdRoute,
+  AppTankarBeslutRoute: AppTankarBeslutRoute,
+  AppTankarDagbokRoute: AppTankarDagbokRoute,
+  AppTankarReflektionerRoute: AppTankarReflektionerRoute,
+  AppTankarTankekartaRoute: AppTankarTankekartaRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

@@ -15,6 +15,7 @@ import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
+import { BookEntrances } from "@/components/notebook/book-navigation";
 
 /**
  * QuickFlow = få ut saker ur huvudet → Flow delar upp → du granskar →
@@ -32,6 +33,7 @@ export default function Dump() {
       <MyFlovePageGrid className="pace-next-page pace-next-capture">
         <MyFloveWide>
           <div className="space-y-8">
+            <BookEntrances />
             <section className="pop-in space-y-5" aria-labelledby="thoughts-title">
               <header className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
