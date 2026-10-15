@@ -457,4 +457,5 @@
 - [x] Nytt krav 2026-10-15 inventerat: ingen redigerbar källa till denna MP4; exakta text- och rörelsekrav dokumenterade.
 - [x] Avgränsad lagerplan godkänd; rent underlag samt öppnings-/slutbild med fasta textobjekt framtagna och visuellt granskade.
 - [x] Utseende godkänt av Camilla 2026-10-15: skärminnehållet är ombyggt, originalbubblorna beskurna och liten retuschskarv finns vid telefonens överkant.
-- [ ] Producera och granska korrigerad animation; redovisa vad som är webbförhandsvisning respektive exporterad MP4. Inget byte av publicerat intro.
+- [x] Exporterat lagerbaserat v3-granskningsutkast: 20 s, 1344×756, 16:9, H.264/AAC; fasta texter, kategoribanor och slutruta granskade, full avkodning utan fel. Inget byte av publicerat intro.
+- [ ] Full realtidsgranskning återstår: testwebbläsarens MP4-spelare stannar med mediafel 4. Kräver fungerande spelare. Utkastets kända avvikelser redovisas: kort överlapp vid uppgiftsvisning, rosa bana över Appointments-hörnet och liten menytext.
