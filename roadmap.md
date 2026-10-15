@@ -1,9 +1,9 @@
 # Roadmap
 ## Paceable – endast visuell filmfinish (2026-10-15)
 - [x] Registrerat avgränsningen: endast rökslingor/partiklar, korrekta statusikoner och skärmperspektiv/glasreflex; bevara kod, timing, banor, texter, kamera och publicerat intro.
-- [ ] Lokalisera exakt redigerbar v3-källa; tidigare tillfälliga animationsmapp saknas i aktuell arbetsmiljö. Ingen rekonstruktion utan separat godkännande.
-- [ ] Visa avgränsad plan för godkännande före animationsändringar.
-- [ ] Förfina, exportera versionsnamngiven MP4 och kontrollera hela filmen; blockerad tills källan finns och planen godkänts.
+- [x] Eftersökt exakt redigerbar v3-källa: den tidigare tillfälliga animationsmappen saknas, och ingen beständig kopia hittades i projektet eller Files. MP4, stillbilder och stillbildsskript finns, inte animationens exakta källkod.
+- [x] Avgränsad plan godkänd 2026-10-15 före animationsändringar.
+- [ ] Förfina, exportera versionsnamngiven MP4 och kontrollera hela filmen; blockerad av saknad exakt v3-källa. Ingen rekonstruktion eller uppskattning av låsta banor/timing tillåts enligt godkänd plan. App och intro orörda; ingen ny förhandsvisning exporterad.
 ## Beslut – visuell referens (2026-10-15)
 - [x] Skapat och granskat tydligt märkt konceptbild utifrån användarens referens före godkännande; ingen appändring eller publicering.
 - [x] Användaren godkände designförslaget och genomförandet 2026-10-15.
