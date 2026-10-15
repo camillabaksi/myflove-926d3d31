@@ -38,14 +38,15 @@ function DecisionPoint({
   };
   return (
     <article className="book-point" data-crossed={draft.crossed} data-important={draft.important}>
-      <label className="book-label" htmlFor={`point-${entity.id}`}>
+      <label className="sr-only" htmlFor={`point-${entity.id}`}>
         Punkt {siblingIds.indexOf(entity.id) + 1}
       </label>
       <textarea
         id={`point-${entity.id}`}
-        className="book-field"
+        className="book-hand"
+        rows={1}
         value={draft.text}
-        placeholder="Skriv en tanke…"
+        placeholder="Skriv här…"
         onChange={(e) => update({ text: e.target.value })}
       />
       <div className="book-small-tools">
@@ -112,12 +113,12 @@ function DecisionPoint({
           <Trash2 aria-hidden />
         </Button>
       </div>
-      <label className="book-label" htmlFor={`column-${entity.id}`}>
+      <label className="sr-only" htmlFor={`column-${entity.id}`}>
         Flytta till
       </label>
       <select
         id={`column-${entity.id}`}
-        className="book-field"
+        className="book-move-select"
         value={draft.column ?? "pros"}
         onChange={(e) => {
           update({ column: e.target.value as Column, order: Date.now() });
@@ -200,7 +201,7 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
           </option>
         ))}
       </select>
-      <div className="book-columns">
+      <div className="book-columns book-sheet">
         {visibleColumns
           .filter((c) => focus === "all" || focus === c.id)
           .map((c) => {
@@ -222,8 +223,8 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
                   />
                 ))}
                 <Button
-                  className="mt-3"
-                  variant="outline"
+                  className="book-add-line"
+                  variant="ghost"
                   onClick={() =>
                     store.create("point", {
                       title: "",
