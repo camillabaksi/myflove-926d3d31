@@ -12,7 +12,7 @@ vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, 
 vi.mock("@/hooks/use-is-admin", () => ({ useIsAdmin: () => ({ isAdmin: true, loading: false }) }));
 vi.mock("@/components/layout", () => ({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> }));
 vi.mock("@/components/changelog-export", () => ({ default: () => null }));
-vi.mock("@/components/admin/user-analytics", () => ({ default: () => null }));
+vi.mock("@/components/admin/user-funnel", () => ({ default: () => null }));
 vi.mock("@/components/admin/investor-docs", () => ({ default: () => null }));
 vi.mock("@tanstack/react-router", () => ({ Link: ({ children }: { children: ReactNode }) => <a>{children}</a> }));
 const platforms = ["ios", "android", "web", "unknown"] as const;

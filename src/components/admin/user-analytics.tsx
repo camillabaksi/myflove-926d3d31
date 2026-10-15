@@ -36,7 +36,7 @@ function label(s: SessionRow): string {
 function toCsv(data: UserAnalytics, rows: SessionRow[]): string {
   const esc = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
   const lines: string[] = [];
-  lines.push(`"Paceable – analys per användare"`);
+  lines.push(`"Paceable – granskning per webbläsar-ID"`);
   lines.push(
     `"Händelser totalt",${data.totals.events},"Interna",${data.totals.internalEvents},"Externa",${data.totals.externalEvents},"Okända",${data.totals.unknownEvents}`,
   );
@@ -73,7 +73,7 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   let y = margin;
 
   doc.setFontSize(18);
-  doc.text("Paceable - analys per anvandare", margin, y);
+  doc.text("Paceable - granskning per webblasar-ID", margin, y);
   y += 24;
   doc.setFontSize(11);
   doc.text(
@@ -101,7 +101,7 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   };
 
   doc.setFontSize(10);
-  line(["Anvandare / ID", "Typ", "Hand.", "Dagar", "Senast"], true);
+  line(["Webblasar-ID", "Typ", "Hand.", "Dagar", "Senast"], true);
   for (const s of rows) {
     line([
       (s.email ?? s.sessionId).slice(0, 28),
@@ -141,7 +141,10 @@ export default function UserAnalytics() {
 
   const toggle = useMutation({
     mutationFn: (vars: { sessionId: string; isInternal: boolean }) => mark({ data: vars }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["user-analytics"] }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["user-analytics"] });
+      void qc.invalidateQueries({ queryKey: ["pilot-usage"] });
+    },
   });
 
   const myId = typeof window !== "undefined" ? getAnalyticsSessionId() : "";
@@ -157,7 +160,7 @@ export default function UserAnalytics() {
 
   return (
     <CollapsibleSection
-      title={t("Analys per användare")}
+      title={t("Granska webbläsarhistorik")}
       headingClassName="text-lg font-semibold"
       className="bg-card p-6 rounded-3xl border-2 border-border shadow-sm"
       description={t(
@@ -176,9 +179,9 @@ export default function UserAnalytics() {
         <div className="space-y-5">
           <div className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-secondary/30 p-4">
             <div>
-              <p className="text-sm font-medium">{t("Endast externa användare")}</p>
+              <p className="text-sm font-medium">{t("Dölj märkta interna webbläsare")}</p>
               <p className="text-xs text-muted-foreground">
-                {t("Döljer allt som är märkt som grundare, admin, demo eller test.")}
+                {t("Okänd intern/extern status finns kvar i listan. Totalkorten visar hela det hämtade underlaget.")}
               </p>
             </div>
             <Switch checked={externalOnly} onCheckedChange={setExternalOnly} />

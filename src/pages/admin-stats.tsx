@@ -1,693 +1,135 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { BarChart3, Copy, Lock } from "lucide-react";
 import Layout from "@/components/layout";
-import { useGetAnalyticsSummary } from "@workspace/api-client-react";
-import { BarChart3, Users, Activity, Repeat, Sparkles, Lock, Info, MapPinned } from "lucide-react";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import { useLang } from "@/hooks/use-language";
-import { useState } from "react";
 import CollapsibleSection from "@/components/collapsible-section";
-import { AdminListSorter, sortAdminRows, type AdminSortKey } from "@/components/admin/list-sorter";
-import AnalyticsExport from "@/components/admin/analytics-export";
+import { AccountStatistics, usePilotAccounts } from "@/components/admin/user-funnel";
 import UserAnalytics from "@/components/admin/user-analytics";
-import UserFunnelCard from "@/components/admin/user-funnel";
-import { actionLabel, pageLabel, sectionLabel } from "@/lib/analytics-labels";
+import AnalyticsExport from "@/components/admin/analytics-export";
+import { Button } from "@/components/ui/button";
+import { getPilotUsageFn } from "@/lib/pilot-statistics.functions";
+import { PILOT_FEATURES, pilotDate, type PilotUsage, type PilotAccounts } from "@/lib/pilot-statistics";
 
-/** Kort förklaring under varje block: vad vi mäter och varför det spelar roll. */
-function WhyBox({ what, why }: { what: string; why: string }) {
-  const { t } = useLang();
-  return (
-    <div className="rounded-2xl border border-border bg-secondary/30 p-3 text-xs text-muted-foreground space-y-1">
-      <p>
-        <strong className="text-foreground">{t("Vad mäter vi?")}</strong> {what}
-      </p>
-      <p>
-        <strong className="text-foreground">{t("Varför är det viktigt?")}</strong> {why}
-      </p>
-    </div>
-  );
+const card = "rounded-3xl border border-border bg-card p-4 sm:p-6 space-y-4";
+const rate = (value: number | null) => value === null ? "—" : `${value} %`;
+
+/** Aggregate-only sharing. Account and anonymous browser metrics retain their separate units. */
+export function pilotSnapshot(accounts: PilotAccounts, usage: PilotUsage): string {
+  return [
+    `Paceable – pilotöversikt, ${pilotDate(usage.from)}–${pilotDate(usage.to)} (30 dagar).`,
+    `Aktiva externa konton: ${accounts.active30d} senaste 30 dagarna; ${accounts.active7d} senaste 7 dagarna. Admin/demo borträknade. Aktiv = registrerad användning eller inloggning.`,
+    `Registrerad kärnanvändning: ${usage.meaningfulBrowsers} anonyma app-/webbläsar-ID.`,
+    `Återkommande kärnanvändning på minst två svenska kalenderdagar: ${usage.repeatedBrowsers} av ${usage.meaningfulBrowsers} (${rate(usage.repeatRate)}).`,
+    `Märkta interna ID är borträknade (${usage.internalBrowsersExcluded}). ${usage.unknownBrowsers} ID har okänd intern/extern status. ID är inte personer och kan omfatta flera enheter eller återställd lagring.`,
+    "Upplevd avlastning och appens egen belastning: enkätsvar är ännu inte anslutna till denna vy. Användningsdata visar inte effekt.",
+  ].join("\n");
 }
-
-function Bar({ value, max }: { value: number; max: number }) {
-  return (
-    <div className="h-2 rounded-full bg-secondary/50 overflow-hidden">
-      <div
-        className="h-full bg-primary rounded-full"
-        style={{ width: `${(value / Math.max(1, max)) * 100}%` }}
-      />
-    </div>
-  );
-}
-
-const CORE_LOOP_ICON: Record<string, string> = {
-  Fånga: "🧠",
-  Planera: "📋",
-  Göra: "✨",
-  Reflektera: "💭",
-};
-
-/** Delar av appen vi visar med människovänliga namn i översikten. */
-const FRIENDLY_PARTS: Array<{ label: string; sections: string[] }> = [
-  { label: "Hem", sections: ["hem", "home"] },
-  { label: "Idag", sections: ["idag", "today", "my-day", "min-dag"] },
-  { label: "Pace", sections: ["flow", "flowplan", "flowscore", "assistant"] },
-  { label: "Kalender", sections: ["kalender", "calendar"] },
-  { label: "Mitt batteri", sections: ["batteri", "energi", "energifloede", "energikarta"] },
-  { label: "Mående", sections: ["mood", "halsa", "how-are-you", "wellness"] },
-];
 
 export default function AdminStats() {
-  const { isAdmin, loading: adminLoading } = useIsAdmin();
+  const { isAdmin, loading } = useIsAdmin();
   const { t } = useLang();
-  const { data, isLoading, isError } = useGetAnalyticsSummary();
-  const [partsSort, setPartsSort] = useState<AdminSortKey>("most");
-  const [capacitySort, setCapacitySort] = useState<AdminSortKey>("most");
-  const [recoverySort, setRecoverySort] = useState<AdminSortKey>("most");
-  const [viewsSort, setViewsSort] = useState<AdminSortKey>("most");
-  const [pagesSort, setPagesSort] = useState<AdminSortKey>("most");
-  const [actionsSort, setActionsSort] = useState<AdminSortKey>("most");
+  if (loading) return <Layout><p>{t("Laddar…")}</p></Layout>;
+  if (!isAdmin) return <Layout><div className="max-w-md mx-auto text-center space-y-3 py-16">
+    <Lock size={40} className="mx-auto" /><h1 className="text-2xl font-semibold">{t("Endast för grundaren")}</h1>
+    <p>{t("Den här sidan är privat.")}</p>
+  </div></Layout>;
+  return <Layout><PilotDashboard /></Layout>;
+}
 
-  if (adminLoading) {
-    return (
-      <Layout>
-        <p className="text-muted-foreground">{t("Laddar…")}</p>
-      </Layout>
-    );
+export function PilotDashboard() {
+  const { t } = useLang();
+  const accounts = usePilotAccounts();
+  const usage = useQuery({ queryKey: ["pilot-usage"], queryFn: () => getPilotUsageFn() as Promise<PilotUsage>, retry: false });
+  const [copyStatus, setCopyStatus] = useState("");
+  const data = usage.data;
+  async function copySnapshot() {
+    if (!accounts.data || !data) return;
+    try { await navigator.clipboard.writeText(pilotSnapshot(accounts.data, data)); setCopyStatus(t("Översikten är kopierad.")); }
+    catch { setCopyStatus(t("Kunde inte kopiera. Försök igen i en webbläsare med tillgång till urklipp.")); }
   }
-
-  if (!isAdmin) {
-    return (
-      <Layout>
-        <div className="max-w-md mx-auto text-center space-y-3 py-16">
-          <Lock size={40} className="mx-auto text-muted-foreground" />
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-            {t("Endast för grundaren")}
-          </h1>
-          <p className="text-muted-foreground">{t("Den här sidan är privat.")}</p>
-        </div>
-      </Layout>
-    );
-  }
-
-  const usage = data?.featureUsage ?? [];
-
-  const viewsBySection = sortAdminRows(
-    usage
-      .filter((row) => row.action === "view" && row.section !== "page")
-      .map((row) => ({ ...row, label: t(sectionLabel(row.section)) })),
-    viewsSort,
-  );
-
-  const pageViews = sortAdminRows(
-    usage
-      .filter((row) => row.section === "page")
-      .map((row) => ({ ...row, label: t(pageLabel(row.action)) })),
-    pagesSort,
-  );
-
-  const otherActions = sortAdminRows(
-    usage
-      .filter((row) => row.action !== "view" && row.section !== "page")
-      .map((row) => ({
-        ...row,
-        label: `${t(sectionLabel(row.section))} — ${t(actionLabel(row.action))}`,
-      })),
-    actionsSort,
-  );
-
-  const findUsage = (section: string, action: string) =>
-    usage.find((row) => row.section === section && row.action === action);
-  const sumSection = (sections: string[]) =>
-    usage
-      .filter((row) => sections.includes(row.section))
-      .reduce(
-        (acc, row) => ({
-          events: acc.events + row.events,
-          sessions: Math.max(acc.sessions, row.sessions),
-        }),
-        { events: 0, sessions: 0 },
-      );
-
-  const flowUsage = sumSection(["flow", "flowplan", "flowscore", "assistant"]);
-
-  const capacityStats = [
-    { label: t("Energi loggad"), ...findUsage("batteri", "battery_logged") },
-    { label: t("Mående loggat"), ...findUsage("mood", "mood_logged") },
-    { label: t("Påverkan registrerad"), ...findUsage("batteri", "impact_logged") },
-    {
-      label: t("Energipåverkan efter aktivitet"),
-      ...findUsage("energi", "activity_energy_logged"),
-    },
-    { label: t("Hälsofaktor loggad"), ...findUsage("halsa", "health_factor_logged") },
-    { label: t("Pace totalt"), ...sumSection(["flow", "flowplan"]) },
-  ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
-  const sortedCapacity = sortAdminRows(capacityStats, capacitySort);
-
-  // Återhämtning: vilka pausvägar som faktiskt används.
-  const recoveryStats = [
-    { label: t("Mikropaus"), ...findUsage("aterhamtning", "recovery_micro_opened") },
-    { label: t("Akut Lugn"), ...findUsage("aterhamtning", "recovery_acute_opened") },
-    { label: t("Ljusboost"), ...findUsage("aterhamtning", "recovery_lightboost_opened") },
-    { label: t("Stopp-knappen"), ...findUsage("aterhamtning", "recovery_stop_opened") },
-  ].map((row) => ({ label: row.label, events: row.events ?? 0, sessions: row.sessions ?? 0 }));
-  const sortedRecovery = sortAdminRows(recoveryStats, recoverySort);
-  const maxRecovery = Math.max(1, ...recoveryStats.map((row) => row.events));
-  const recoveryTotal = recoveryStats.reduce((acc, row) => acc + row.events, 0);
-  const recoveryViews = findUsage("aterhamtning", "recovery_viewed")?.events ?? 0;
-  const maxCapacity = Math.max(1, ...capacityStats.map((row) => row.events));
-
-  const friendlyParts = sortAdminRows(
-    FRIENDLY_PARTS.map((part) => ({
-      label: t(part.label),
-      ...sumSection(part.sections),
-    })),
-    partsSort,
-  );
-  const maxFriendly = Math.max(1, ...friendlyParts.map((p) => p.events));
-
-  const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
-  const maxPageViews = Math.max(1, ...pageViews.map((row) => row.events));
-  const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
-  const maxSignups = Math.max(1, ...(data?.activeDailySignups ?? []).map((d) => d.users));
-
-  const kpis = data
-    ? [
-        {
-          icon: Activity,
-          label: t("Aktivitet"),
-          value: `${data.avgEventsPerSession ?? 0}`,
-          hint: t("Händelser per användare"),
-        },
-        {
-          icon: Users,
-          label: t("Aktiva enheter"),
-          value: `${data.activeSessions7d ?? 0}`,
-          hint: t("Webbläsare senaste 7 dagarna"),
-        },
-        {
-          icon: Repeat,
-          label: t("Återkomst"),
-          value: `${data.returningRate ?? 0}%`,
-          hint: t("Kommer tillbaka en annan dag"),
-        },
-        {
-          icon: Sparkles,
-          label: t("Pace-användning"),
-          value: `${flowUsage.events}`,
-          hint: t("Gånger Pace använts"),
-        },
-      ]
-    : [];
-
-  const cardClass = "bg-card p-5 rounded-3xl border-2 border-border shadow-sm";
-
-  return (
-    <Layout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
-            <BarChart3 className="text-primary" /> {t("Hur går Paceable?")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("Anonym, sammanslagen statistik om hur Paceable används.")}
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground flex items-start gap-2 bg-secondary/40 border border-border rounded-2xl p-3">
-            <Info size={14} className="mt-0.5 shrink-0" />
-            <span>
-              {t("Period: senaste 30 dagarna.")}{" "}
-              {t(
-                "Siffrorna är tidiga MVP-signaler från en liten grupp användare — riktningsvisare, inte statistiskt säkerställda resultat.",
-              )}
-            </span>
-          </p>
-        </div>
-
-        {isLoading && <p className="text-muted-foreground">{t("Laddar statistik…")}</p>}
-        {isError && <p className="text-destructive">{t("Kunde inte hämta statistik just nu.")}</p>}
-
-        {data && (
-          <>
-            {/* 1. Överst: fyra tydliga KPI-kort */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {kpis.map((kpi) => (
-                <div
-                  key={kpi.label}
-                  className="bg-card p-4 rounded-3xl border-2 border-border shadow-sm space-y-1"
-                >
-                  <kpi.icon size={18} className="text-primary" />
-                  <p className="text-2xl font-bold leading-tight">{kpi.value}</p>
-                  <p className="text-sm font-medium leading-tight">{kpi.label}</p>
-                  <p className="text-xs text-muted-foreground leading-tight">{kpi.hint}</p>
-                </div>
-              ))}
-            </div>
-
-            <UserFunnelCard className={cardClass} />
-
-            <CollapsibleSection
-              title={t("Återhämtning – vilka pausvägar används?")}
-              id="admin-recovery-usage"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2 -mt-2">
-                <p className="text-sm text-muted-foreground">
-                  {recoveryTotal} {t("pauser startade")} · {recoveryViews}{" "}
-                  {t("besök på Återhämtning")}
-                </p>
-                <AdminListSorter value={recoverySort} onChange={setRecoverySort} />
-              </div>
-              <div className="space-y-3">
-                {sortedRecovery.map((row) => (
-                  <div key={row.label}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">{row.label}</span>
-                      <span className="text-muted-foreground">
-                        {row.events} {t("gånger")} · {row.sessions} {t("användare")}
-                      </span>
-                    </div>
-                    <Bar value={row.events} max={maxRecovery} />
-                  </div>
-                ))}
-              </div>
-              <WhyBox
-                what={t(
-                  "Hur många gånger Mikropaus, Akut Lugn, Ljusboost och Stopp-knappen startas.",
-                )}
-                why={t("Visar vilken återhämtningsväg som hjälper mest och vad vi bör utveckla.")}
-              />
-            </CollapsibleSection>
-
-            <CollapsibleSection
-              title={t("Marknadsanalys – Sverige först")}
-              id="admin-market-analysis-sweden"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <div className="flex items-start gap-3 rounded-2xl border border-border bg-secondary/30 p-4">
-                <MapPinned className="mt-0.5 shrink-0 text-primary" size={22} />
-                <div className="space-y-1">
-                  <p className="font-semibold">
-                    {t("En stor vardagsutmaning. Vi börjar i Sverige.")}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {t(
-                      "Sverige är första marknaden där Paceable kan validera nytta, återkomst och betalningsvilja innan nordisk expansion.",
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {[
-                  {
-                    value: "≈500 000",
-                    label: t("barn och vuxna med adhd eller autism"),
-                    detail: t("Svensk uppskattning; grupperna kan överlappa."),
-                  },
-                  {
-                    value: "~3 %",
-                    label: t("vuxna i Sverige med adhd"),
-                    detail: t("Extern prevalensuppskattning från Socialstyrelsen."),
-                  },
-                  {
-                    value: t("Sverige först"),
-                    label: t("pilot → validering → B2C"),
-                    detail: t("Därefter Norden och B2B/B2G."),
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="pace-card-surface rounded-2xl border border-border bg-card p-4 shadow-sm"
-                  >
-                    <p className="text-2xl font-bold text-primary">{item.value}</p>
-                    <p className="mt-1 text-sm font-semibold">{item.label}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-xs text-muted-foreground">
-                <p>
-                  {t("Källa:")}{" "}
-                  <a
-                    href="https://www.socialstyrelsen.se/publikationer/diagnostik-och-lakemedelsbehandling-vid-adhd--forekomst-trend-och-konsskillnader-2023-11-8862/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-primary underline underline-offset-2"
-                  >
-                    {t("Socialstyrelsen – förekomst, trend och könsskillnader vid adhd")}
-                  </a>
-                  . {t("Siffrorna är externa marknadsuppskattningar, inte Paceables användardata.")}
-                </p>
-              </div>
-
-              <WhyBox
-                what={t("Målgruppens storlek i den första marknaden och vägen vidare.")}
-                why={t("Binder ihop svenska behov, tidig validering och Paceables expansionsplan.")}
-              />
-            </CollapsibleSection>
-
-            {/* 2. Kärnflödet som funnel */}
-            <CollapsibleSection
-              title={t("Paceables kärnflöde")}
-              id="admin-core-flow"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <p className="text-sm text-muted-foreground -mt-2">
-                🧠 {t("Fånga")} → 📋 {t("Planera")} → ✨ {t("Göra")} → 💭 {t("Reflektera")}
-              </p>
-              <div className="space-y-3">
-                {(data.coreLoop ?? []).map((step) => {
-                  const max = Math.max(1, ...(data.coreLoop ?? []).map((s) => s.sessions));
-                  return (
-                    <div key={step.step}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="font-medium">
-                          {CORE_LOOP_ICON[step.step] ?? ""} {t(step.step)}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {step.sessions} {t("användare")}
-                        </span>
-                      </div>
-                      <Bar value={step.sessions} max={max} />
-                    </div>
-                  );
-                })}
-              </div>
-              <WhyBox
-                what={t("Hur många användare som når varje steg i Paceables dagliga loop.")}
-                why={t("Visar om hela flödet håller ihop eller om något steg tappar folk.")}
-              />
-            </CollapsibleSection>
-
-            {/* 3. Vad använder människor? */}
-            <CollapsibleSection
-              title={t("Vad använder människor?")}
-              id="admin-feature-use"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <AdminListSorter value={partsSort} onChange={setPartsSort} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                {friendlyParts.map((part) => (
-                  <div key={part.label}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">{part.label}</span>
-                      <span className="text-muted-foreground">
-                        {part.events} {t("ggr")} · {part.sessions} {t("användare")}
-                      </span>
-                    </div>
-                    <Bar value={part.events} max={maxFriendly} />
-                  </div>
-                ))}
-              </div>
-              <WhyBox
-                what={t("Vilka delar av appen som faktiskt öppnas och används.")}
-                why={t("Visar var värdet finns i dag och vad vi ska bygga vidare på.")}
-              />
-            </CollapsibleSection>
-
-            {/* 4. Kapacitet & mående */}
-            <CollapsibleSection
-              title={`🔋 ${t("Kapacitet & mående")}`}
-              id="admin-capacity"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <AdminListSorter value={capacitySort} onChange={setCapacitySort} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                {sortedCapacity.map((row) => (
-                  <div key={row.label}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="font-medium">{row.label}</span>
-                      <span className="text-muted-foreground">
-                        {row.events} {t("ggr")} · {row.sessions} {t("användare")}
-                      </span>
-                    </div>
-                    <Bar value={row.events} max={maxCapacity} />
-                  </div>
-                ))}
-              </div>
-              <WhyBox
-                what={t("Hur ofta människor loggar energi, mående och påverkan — helt anonymt.")}
-                why={t(
-                  "Det här är Paceables kärna: att planera efter kapacitet, inte bara att-göra.",
-                )}
-              />
-            </CollapsibleSection>
-
-            {/* 5. Återkomst */}
-            <CollapsibleSection
-              title={`🔄 ${t("Återkomst")}`}
-              id="admin-returning"
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-            >
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                {[
-                  { label: t("Aktiva enheter idag"), value: `${data.activeSessions1d}` },
-                  { label: t("Aktiva enheter 7 dagar"), value: `${data.activeSessions7d}` },
-                  { label: t("Aktiva enheter 30 dagar"), value: `${data.activeSessions30d}` },
-                  { label: t("Återkommer"), value: `${data.returningRate ?? 0}%` },
-                ].map((row) => (
-                  <div
-                    key={row.label}
-                    className="rounded-2xl border border-border bg-secondary/30 p-3"
-                  >
-                    <p className="text-xl font-bold">{row.value}</p>
-                    <p className="text-xs text-muted-foreground">{row.label}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {t(
-                  "Kohortbaserad Dag 1 / Dag 7 / Dag 30 går inte att räkna fram ur nuvarande anonyma data, så vi visar bara det som faktiskt kan mätas.",
-                )}
-              </p>
-              <WhyBox
-                what={t("Hur många som är aktiva över tid och hur stor andel som kommer tillbaka.")}
-                why={t("Återkomst är den starkaste signalen på att appen gör verklig nytta.")}
-              />
-            </CollapsibleSection>
-
-            {/* Aktiva användare (inloggade konton) */}
-            <section className={cardClass}>
-              <h2 className="text-lg font-semibold mb-3">{t("Aktiva användare")}</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {[
-                  { label: t("Aktiva konton senaste 30 dagarna"), value: data.activeUsers30d ?? "—" },
-                  { label: t("Inloggade senaste 7 dagarna"), value: data.accountActivity?.active7d ?? 0 },
-                  { label: t("Inloggade senaste 30 dagarna"), value: data.accountActivity?.active30d ?? 0 },
-                  { label: t("Har inte bekräftat e-post"), value: data.accountActivity?.unconfirmed ?? 0 },
-                  { label: t("Använt appen senaste dygnet"), value: data.accountActivity?.used1d ?? 0 },
-                  { label: t("Använt appen senaste 7 dagarna"), value: data.accountActivity?.used7d ?? 0 },
-                  { label: t("Använt appen senaste 30 dagarna"), value: data.accountActivity?.used30d ?? 0 },
-                ].map((kpi) => (
-                  <div key={kpi.label} className="rounded-2xl border border-border bg-secondary/30 p-3">
-                    <p className="text-xl font-bold">{kpi.value}</p>
-                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-3 text-xs text-muted-foreground">
-                {t("Aktiva konton har använt appen eller loggat in de senaste 30 dagarna. Demokonton räknas bort. Inaktiva konton ingår inte i antalet.")} {" "}
-                {t("Inloggningar räknas på senaste inloggning. \"Använt appen\" räknas på senaste aktivitet i inloggat läge (bara tidpunkt, inget innehåll) och mäts från och med nu.")}
-              </p>
-            </section>
-
-            {/* 6. Detaljerad statistik – sekundär och expanderbar */}
-            <CollapsibleSection
-              title={`📋 ${t("Detaljerad statistik")}`}
-              headingClassName="text-lg font-semibold"
-              className={cardClass}
-              defaultCollapsed
-              description={t("Rådata och detaljerade mått — för egen analys, inte för demo.")}
-            >
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                  {[
-                    { label: t("Aktiva konton senaste 30 dagarna"), value: `${data.activeUsers30d ?? "—"}` },
-                    { label: t("Aktiva konton skapade senaste 7 dagarna"), value: `${data.activeNewUsers7d ?? "—"}` },
-                    { label: t("Aktiva enheter (30 d)"), value: `${data.totalSessions}` },
-                    { label: t("Händelser (30 d)"), value: `${data.totalEvents ?? 0}` },
-                    { label: t("Dagligt bruk (DAU/MAU)"), value: `${data.stickiness ?? 0}%` },
-                    { label: t("Delar per besökare"), value: `${data.avgSectionsPerSession ?? 0}` },
-                    { label: t("Gör något"), value: `${data.actionRate ?? 0}%` },
-                  ].map((kpi) => (
-                    <div
-                      key={kpi.label}
-                      className="rounded-2xl border border-border bg-secondary/30 p-3"
-                    >
-                      <p className="text-xl font-bold">{kpi.value}</p>
-                      <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">
-                    {t("Händelser per dag (senaste 14 dagarna)")}
-                  </h3>
-                  <div className="flex items-end gap-1.5 h-28">
-                    {(data.dailyEvents ?? []).map((day) => {
-                      const max = Math.max(1, ...(data.dailyEvents ?? []).map((d) => d.events));
-                      return (
-                        <div
-                          key={day.date}
-                          className="flex-1 flex flex-col items-center justify-end gap-1"
-                        >
-                          <div
-                            className="w-full bg-accent rounded-t-md"
-                            style={{
-                              height: `${(day.events / max) * 100}%`,
-                              minHeight: day.events > 0 ? "4px" : "0",
-                            }}
-                            title={`${day.date}: ${day.events}`}
-                          />
-                          <span className="text-[9px] text-muted-foreground">
-                            {day.date.slice(5)}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">
-                    {t("Aktiva enheter per dag (senaste 14 dagarna)")}
-                  </h3>
-                  <div className="flex items-end gap-1.5 h-28">
-                    {(data.dailyActiveSessions ?? []).map((day) => (
-                      <div
-                        key={day.date}
-                        className="flex-1 flex flex-col items-center justify-end gap-1"
-                      >
-                        <div
-                          className="w-full bg-primary rounded-t-md"
-                          style={{
-                            height: `${(day.sessions / maxDaily) * 100}%`,
-                            minHeight: day.sessions > 0 ? "4px" : "0",
-                          }}
-                          title={`${day.date}: ${day.sessions}`}
-                        />
-                        <span className="text-[9px] text-muted-foreground">
-                          {day.date.slice(5)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">
-                    {t("Registreringsdag för aktiva konton (senaste 14 dagarna)")}
-                  </h3>
-                  {data.activeDailySignups == null && <p className="text-sm text-muted-foreground">{t("Aktivitetsuppgifterna kunde inte hämtas.")}</p>}
-                  <div className="flex items-end gap-1.5 h-28">
-                    {(data.activeDailySignups ?? []).map((day) => (
-                      <div
-                        key={day.date}
-                        className="flex-1 flex flex-col items-center justify-end gap-1"
-                      >
-                        <div
-                          className="w-full bg-primary rounded-t-md"
-                          style={{
-                            height: `${(day.users / maxSignups) * 100}%`,
-                            minHeight: day.users > 0 ? "4px" : "0",
-                          }}
-                          title={`${day.date}: ${day.users}`}
-                        />
-                        <span className="text-[9px] text-muted-foreground">
-                          {day.date.slice(5)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">{t("Mest använda delar av appen")}</h3>
-                  <AdminListSorter value={viewsSort} onChange={setViewsSort} />
-                  {viewsBySection.length === 0 && (
-                    <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
-                  )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                    {viewsBySection.map((row) => (
-                      <div key={`${row.section}-${row.action}`}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">{row.label}</span>
-                          <span className="text-muted-foreground">
-                            {row.events} {t("besök")} · {row.sessions} {t("användare")}
-                          </span>
-                        </div>
-                        <Bar value={row.events} max={maxViews} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">{t("Mest besökta sidor")}</h3>
-                  <AdminListSorter value={pagesSort} onChange={setPagesSort} />
-                  {pageViews.length === 0 && (
-                    <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
-                  )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
-                    {pageViews.map((row) => (
-                      <div key={row.action}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">
-                            {row.label}{" "}
-                            <span className="text-xs text-muted-foreground">/{row.action}</span>
-                          </span>
-                          <span className="text-muted-foreground">
-                            {row.events} {t("visningar")} · {row.sessions} {t("besökare")}
-                          </span>
-                        </div>
-                        <Bar value={row.events} max={maxPageViews} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-semibold mb-2">
-                    {t("Funktioner som faktiskt används")}
-                  </h3>
-                  <AdminListSorter value={actionsSort} onChange={setActionsSort} />
-                  {otherActions.length === 0 && (
-                    <p className="text-sm text-muted-foreground">{t("Ingen data än.")}</p>
-                  )}
-                  <div className="divide-y divide-border">
-                    {otherActions.map((row) => (
-                      <div
-                        key={`${row.section}-${row.action}`}
-                        className="flex items-center justify-between gap-3 py-2 text-sm"
-                      >
-                        <span>{row.label}</span>
-                        <span className="text-muted-foreground whitespace-nowrap">
-                          {row.events} {t("ggr")} · {row.sessions} {t("användare")}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <UserAnalytics />
-                <AnalyticsExport />
-              </div>
-            </CollapsibleSection>
-
-            <p className="text-xs text-muted-foreground bg-secondary/40 border border-border rounded-2xl p-3">
-              <strong>{t("Integritet:")}</strong>{" "}
-              {t(
-                "vi mäter bara vilken del av appen som används och vilken typ av handling som sker. Inget användar-id, ingen e-post, ingen IP och inget innehåll (mående, texter, uppgifter) sparas — händelser går inte att koppla till en person.",
-              )}
-            </p>
-          </>
-        )}
+  return <div className="min-w-0 max-w-5xl mx-auto space-y-6">
+    <header className="space-y-3">
+      <Link to="/admin" className="text-sm underline underline-offset-4">{t("Till adminöversikten")}</Link>
+      <h1 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2"><BarChart3 size={25} aria-hidden="true" />{t("Paceable i test")}</h1>
+      <p className="text-muted-foreground">{t("Kommer stödet till användning, kommer man tillbaka och blir vardagen lättare? Här följer vi pilotens viktigaste frågor.")}</p>
+      <p className="text-sm">{t("Senaste 30 dagarna, löpande. Dagindelning: svensk tid.")}{data && ` ${pilotDate(data.from)}–${pilotDate(data.to)}.`}</p>
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" onClick={copySnapshot} disabled={!accounts.data || !data || accounts.isError || usage.isError}><Copy size={16} className="mr-2" />{t("Kopiera översikt att dela")}</Button>
+        <Button variant="outline" onClick={() => { void accounts.refetch(); void usage.refetch(); }} disabled={accounts.isFetching || usage.isFetching}>{t("Uppdatera")}</Button>
       </div>
-    </Layout>
-  );
+      <p role="status" className="text-sm text-muted-foreground">{copyStatus}</p>
+    </header>
+
+    <AccountStatistics {...accounts} className={card} />
+
+    <section className={card} aria-label={t("Kärnanvändning")}>
+      <div><h2 className="text-lg font-semibold">{t("Kommer stödet till användning?")}</h2>
+        <p className="text-sm text-muted-foreground mt-1">{t("Registrerade handlingar i planering, genomförande, energi, paus och nästa steg. Sidvisningar och öppnade menyer räknas inte som kärnanvändning.")}</p></div>
+      {usage.isLoading && <p role="status">{t("Laddar användningsstatistik…")}</p>}
+      {usage.isError && <p role="alert" className="text-destructive">{t("Användningsstatistiken kunde inte hämtas fullständigt. Försök igen senare.")}</p>}
+      {data && !usage.isError && <>
+        <dl className="grid sm:grid-cols-2 gap-3">
+          <div className="rounded-2xl bg-secondary/30 border border-border p-4">
+            <dt className="text-sm font-medium">{t("Minst en kärnhandling · 30 dagar")}</dt><dd className="text-3xl font-semibold my-1">{data.meaningfulBrowsers}</dd>
+            <p className="text-xs text-muted-foreground">{t("Anonyma app-/webbläsar-ID. Samma ID räknas en gång, även med många handlingar.")}</p>
+          </div>
+          <div className="rounded-2xl bg-secondary/30 border border-border p-4">
+            <dt className="text-sm font-medium">{t("Återkommande kärnanvändning · 30 dagar")}</dt><dd className="text-3xl font-semibold my-1">{rate(data.repeatRate)}</dd>
+            <p className="text-xs text-muted-foreground">{data.repeatedBrowsers} {t("av")} {data.meaningfulBrowsers} {t("ID har gjort kärnhandlingar på minst två kalenderdagar. Nya ID har kortare tid att hinna återkomma. Detta är inte D7-retention.")}</p>
+          </div>
+        </dl>
+        {data.meaningfulBrowsers === 0 && <p className="text-sm">{t("Inga kärnhandlingar har registrerats under perioden. Det betyder inte säkert att ingen har använt appen.")}</p>}
+        <p className="text-sm text-muted-foreground">{t("En person kan ha flera ID, och ett ID kan delas eller återställas. Siffrorna får därför inte läggas ihop med kontosiffrorna. Avstängd analys och äldre appversioner kan ge luckor.")}</p>
+        <div className="space-y-4">
+          <h3 className="font-semibold text-sm">{t("Vilket stöd används? · unika ID per del")}</h3>
+          {PILOT_FEATURES.map(feature => {
+            const count = data.features.find(row => row.id === feature.id)?.browsers ?? 0;
+            return <div key={feature.id} className="space-y-1">
+              <div className="flex justify-between gap-3 text-sm"><span className="font-medium">{t(feature.label)}</span><span>{count} {t("av")} {data.meaningfulBrowsers}</span></div>
+              <div className="h-2 bg-secondary rounded-full overflow-hidden" aria-hidden="true"><div className="h-full bg-primary rounded-full" style={{ width: `${data.meaningfulBrowsers ? count / data.meaningfulBrowsers * 100 : 0}%` }} /></div>
+              <p className="text-xs text-muted-foreground">{t(feature.detail)}</p>
+            </div>;
+          })}
+          <p className="text-xs text-muted-foreground">{t("Ett ID kan finnas i flera delar. Delarna är inte en tratt och ska inte summeras till antal användare. Måtten visar registrerad användning, inte om stödet hjälpte.")}</p>
+        </div>
+        <details>
+          <summary className="cursor-pointer min-h-11 flex items-center text-sm underline underline-offset-4">{t("Visa daglig användning och mätunderlag")}</summary>
+          <p className="text-xs text-muted-foreground my-2">{t("Unika ID med kärnhandling per dag, senaste 14 kalenderdagarna. Dagens värde är ännu inte en hel dag.")}</p>
+          <table className="w-full text-sm"><thead><tr className="text-left"><th className="py-2">{t("Datum")}</th><th className="text-right">{t("ID med kärnhandling")}</th></tr></thead><tbody>
+            {data.daily.map(row => <tr key={row.date} className="border-t border-border"><td className="py-1">{row.date}</td><td className="text-right">{row.browsers}</td></tr>)}
+          </tbody></table>
+          <p className="text-xs mt-3 text-muted-foreground">{data.internalBrowsersExcluded} {t("märkta interna ID är borträknade.")} {data.unknownBrowsers} {t("av")} {data.browsers} {t("kvarvarande ID har okänd intern/extern status. De ingår, men är inte verifierade externa testare. Märk din egen webbläsare som intern under Granskning och export.")}</p>
+          {data.unidentifiedEvents > 0 && <p className="text-xs mt-2 text-muted-foreground">{data.unidentifiedEvents} {t("händelser saknar ett beständigt ID och är undantagna från ID-måtten.")}</p>}
+        </details>
+        <div className="rounded-2xl border border-border p-4 space-y-2">
+          <h3 className="font-semibold text-sm">{t("Finns friktion i energiincheckningen?")}</h3>
+          <p className="text-lg font-semibold">{rate(data.energyCheckin.completionRate)} · {data.energyCheckin.completedAfterStart} {t("av")} {data.energyCheckin.started} {t("ID med registrerad start")}</p>
+          <p className="text-xs text-muted-foreground">{t("Har både start och slutförd incheckning i rätt ordning inom 30 minuter, under perioden. Varje ID räknas en gång. Det är inte en andel lyckade försök: samma ID kan ha flera försök, och vissa ingångar saknar starthändelse. Uteblivet klart visar inte säkert ett avbrott.")}</p>
+        </div>
+      </>}
+    </section>
+
+    <section className={card} aria-label={t("Upplevd nytta")}>
+      <div><h2 className="text-lg font-semibold">{t("Blir vardagen lättare?")}</h2><p className="text-sm text-muted-foreground mt-1">{t("Detta behöver vi fråga testarna om. Enkätsvar är ännu inte anslutna till denna vy.")}</p></div>
+      <p className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-medium">{t("Upplevd nytta · underlag saknas här")}</p>
+      <p className="text-sm">{t("Veckopuls enligt testprotokollet, frivilligt och med samma skala 1–5:")}</p>
+      <ul className="list-disc pl-5 space-y-2 text-sm">
+        <li>{t("Paceable hjälpte mig att få överblick denna vecka.")}</li>
+        <li>{t("Paceable minskade min upplevda mentala belastning.")}</li>
+        <li>{t("Att använda Paceable kändes som ytterligare en uppgift.")}</li>
+      </ul>
+      <p className="text-sm text-muted-foreground">{t("Redovisa varje fråga separat med antal svar av antal inbjudna och svarens fördelning. Jämför de fem identiska före-/efterfrågorna inom samma deltagare när T0 och T1 finns. Uteblivna svar är inte negativa svar.")}</p>
+      <p className="text-sm text-muted-foreground">{t("Användning och återkomst är beteendesignaler. De visar inte minskad belastning eller att appen orsakat en förbättring. Målvärden behöver bestämmas före nästa mätperiod.")}</p>
+    </section>
+
+    <CollapsibleSection title={t("Granskning och export")} defaultCollapsed className={card}
+      description={t("Detaljer för felsökning, internmärkning och historik. Exporterna nedan har egna periodval och ska inte blandas med pilotöversiktens 30 dagar.")}>
+      <UserAnalytics />
+      <AnalyticsExport />
+    </CollapsibleSection>
+    <p className="text-xs text-muted-foreground">{t("Underlag: kontons registrerings- och aktivitetsuppgifter samt anonyma händelsetyper. Översikten läser inga privata planer, energivärden, meddelanden eller fritextsvar. Ingen ny spårning eller kontokoppling införs.")}</p>
+  </div>;
 }
