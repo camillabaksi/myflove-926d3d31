@@ -346,6 +346,17 @@
 }
 
 /* Beslut: local paper presentation; other notebook editors stay unchanged. */
+.notebook:has(.book-decision) .book-workspace {
+  display: flex;
+  flex-wrap: wrap;
+}
+.notebook:has(.book-decision) .book-list { flex: 1 1 11rem; }
+.notebook:has(.book-decision) .book-page {
+  flex: 3 1 30rem;
+  max-width: 100%;
+  border-left: 0;
+  padding-left: 0;
+}
 .book-decision {
   container-type: inline-size;
 }

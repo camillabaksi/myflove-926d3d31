@@ -1,7 +1,9 @@
 # Roadmap
 ## Beslut – visuell referens (2026-10-15)
 - [x] Skapat och granskat tydligt märkt konceptbild utifrån användarens referens före godkännande; ingen appändring eller publicering.
-- Genomförande av den nya presentationen inväntar godkänd plan.
+- [x] Användaren godkände designförslaget och genomförandet 2026-10-15.
+- [x] Lokal papperspresentation med handskrivet ämne, mjuka spaltrubriker och tillgänglig punktmeny; befintliga sparanrop bevarade.
+- [ ] Verifiera presentationstester, före-/efterbilder och skärm-/textmatris; ingen publicering.
 ## Tankar – personlig reflektionsbok (2026-10-15)
 - [x] Ta emot godkänt koncept och granska befintliga funktioner, navigation, datakällor och integritetsgränser.
 - [x] Användaren ber att få se förslaget; visa den färdiga etappplanen direkt, utan appändringar.
