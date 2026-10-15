@@ -456,5 +456,5 @@
 - [x] Originalreferenser och scenplan framtagna; startbilder och första genererade MP4-utkast levererade.
 - [x] Nytt krav 2026-10-15 inventerat: ingen redigerbar källa till denna MP4; exakta text- och rörelsekrav dokumenterade.
 - [x] Avgränsad lagerplan godkänd; rent underlag samt öppnings-/slutbild med fasta textobjekt framtagna och visuellt granskade.
-- [ ] Utseendegodkännande av granskningsbilderna före animation: skärminnehållet är ombyggt, originalbubblorna beskurna och liten retuschskarv finns vid telefonens överkant.
+- [x] Utseende godkänt av Camilla 2026-10-15: skärminnehållet är ombyggt, originalbubblorna beskurna och liten retuschskarv finns vid telefonens överkant.
 - [ ] Producera och granska korrigerad animation; redovisa vad som är webbförhandsvisning respektive exporterad MP4. Inget byte av publicerat intro.
