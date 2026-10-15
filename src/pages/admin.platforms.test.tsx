@@ -18,7 +18,7 @@ vi.mock("@tanstack/react-router", () => ({ Link: ({ children }: { children: Reac
 const platforms = ["ios", "android", "web", "unknown"] as const;
 const rows: AdminUserRow[] = platforms.map(platform => ({
   user_id: platform, registration_platform: platform, name: `Testkonto ${platform}`, email: `${platform}@example.test`,
-  created_at: "2026-10-15T12:00:00Z", last_sign_in_at: null, last_visit_at: null, visits: 0, roles: [],
+  created_at: "2026-10-15T12:00:00Z", last_sign_in_at: null, last_visit_at: new Date(Date.now() - 1000).toISOString(), visits: 0, roles: [],
 }));
 function show() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
@@ -55,5 +55,20 @@ describe("Admin registration platform breakdown", () => {
     expect(screen.getAllByText("Testkonto android")).toHaveLength(2);
     fireEvent.click(screen.getByRole("button", { name: "Rensa filter" }));
     await waitFor(() => expect(screen.getByRole("button", { name: "Alla plattformar · 4" })).toBeInTheDocument());
+  });
+  it("hides inactive and unobserved accounts from the platform counts until explicitly included", async () => {
+    const extra = [{ ...rows[0], user_id: "inactive", name: "Gammalt konto", last_visit_at: "2020-01-01T12:00:00Z" },
+      { ...rows[0], user_id: "unobserved", name: "Ingen aktivitet", last_visit_at: null }];
+    mock.listUsers.mockResolvedValue([...rows, ...extra]);
+    show();
+    await screen.findByRole("button", { name: "Alla plattformar · 4" });
+    expect(screen.queryByText("Gammalt konto")).not.toBeInTheDocument();
+    expect(screen.queryByText("Ingen aktivitet")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "Visa även inaktiva konton" }));
+    expect(screen.getByRole("button", { name: "Alla plattformar · 6" })).toBeInTheDocument();
+    expect(screen.getAllByText("Gammalt konto")).toHaveLength(2);
+    expect(screen.getAllByText("Ingen aktivitet")).toHaveLength(2);
+    fireEvent.click(screen.getByRole("checkbox", { name: "Visa även inaktiva konton" }));
+    expect(screen.getByRole("button", { name: "Alla plattformar · 4" })).toBeInTheDocument();
   });
 });

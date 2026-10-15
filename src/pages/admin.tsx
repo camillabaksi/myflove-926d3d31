@@ -31,6 +31,7 @@ import UserAnalytics from "@/components/admin/user-analytics";
 import InvestorDocs from "@/components/admin/investor-docs";
 import RegistrationPlatformSummary from "@/components/admin/registration-platform-summary";
 import { REGISTRATION_PLATFORM_LABELS, type RegistrationPlatform } from "@/lib/registration-platform";
+import { isActiveAccount } from "@/lib/account-activity";
 
 import type { AdminUserRow } from "@/lib/admin.functions";
 
@@ -304,11 +305,12 @@ export function UsersSection() {
   const [sortKey, setSortKey] = useState<SortKey>("last_login");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [platform, setPlatform] = useState<RegistrationPlatform | "all">("all");
+  const [includeInactive, setIncludeInactive] = useState(false);
   const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
   const hasFilter = Boolean(from || to);
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["admin-users", from, to],
+    queryKey: ["admin-users", "observed-activity", from, to],
     queryFn: () => listUsersWithRolesFn(hasFilter ? { data: filter } : undefined),
     retry: false,
   });
@@ -331,7 +333,9 @@ export function UsersSection() {
     }
   };
 
-  const sorted = data ? data.filter(user => platform === "all" || (user.registration_platform ?? "unknown") === platform).sort(sortUsers(sortKey, sortDir)) : [];
+  const active = (data ?? []).filter(user => isActiveAccount(user.last_visit_at));
+  const scoped = includeInactive ? data ?? [] : active;
+  const sorted = scoped.filter(user => platform === "all" || (user.registration_platform ?? "unknown") === platform).sort(sortUsers(sortKey, sortDir));
 
   const filterBar = (
     <div className="pace-card-surface flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
@@ -398,7 +402,15 @@ export function UsersSection() {
   return (
     <div className="space-y-3">
       {filterBar}
-      <RegistrationPlatformSummary users={data} value={platform} onChange={setPlatform} />
+      <div className="space-y-2 rounded-2xl border border-border bg-card p-4">
+        <label className="flex min-h-11 items-center gap-2 text-sm">
+          <input type="checkbox" checked={includeInactive} onChange={event => setIncludeInactive(event.target.checked)} />
+          {t("Visa även inaktiva konton")}
+        </label>
+        <p className="text-xs text-muted-foreground">{t("Aktiv betyder användning eller inloggning de senaste 30 dagarna. Konton utan registrerad aktivitet döljs också. Inga konton raderas.")}</p>
+        <p className="text-sm" aria-live="polite">{includeInactive ? t("Alla konton visas") : t("Visar aktiva senaste 30 dagarna")} · {scoped.length} / {data.length}</p>
+      </div>
+      <RegistrationPlatformSummary users={scoped} value={platform} onChange={setPlatform} />
       <p className="text-sm text-muted-foreground" aria-live="polite">
         {sorted.length} {t("användare")}{platform !== "all" && ` · ${t(REGISTRATION_PLATFORM_LABELS[platform])}`}
       </p>

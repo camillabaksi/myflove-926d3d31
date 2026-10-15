@@ -41,7 +41,7 @@ function toCsv(data: UserAnalytics, rows: SessionRow[]): string {
     `"Händelser totalt",${data.totals.events},"Interna",${data.totals.internalEvents},"Externa",${data.totals.externalEvents},"Okända",${data.totals.unknownEvents}`,
   );
   lines.push(
-    `"Webbläsare totalt",${data.totals.sessions},"Interna",${data.totals.internalSessions},"Externa",${data.totals.externalSessions},"Registrerade konton",${data.registeredUsers}`,
+    `"Webbläsare totalt",${data.totals.sessions},"Interna",${data.totals.internalSessions},"Externa",${data.totals.externalSessions},"Aktiva konton (${data.activityDays} dagar)",${data.activeRegisteredUsers ?? "saknas"}`,
   );
   lines.push("");
   lines.push(
@@ -83,7 +83,7 @@ async function toPdf(data: UserAnalytics, rows: SessionRow[]): Promise<Blob> {
   );
   y += 16;
   doc.text(
-    `Webblasare: ${data.totals.sessions}  ·  registrerade konton: ${data.registeredUsers}`,
+    `Webblasare: ${data.totals.sessions}  ·  aktiva konton (${data.activityDays} dagar): ${data.activeRegisteredUsers ?? "saknas"}`,
     margin,
     y,
   );
@@ -127,13 +127,15 @@ export default function UserAnalytics() {
   const { t } = useLang();
   const qc = useQueryClient();
   const [externalOnly, setExternalOnly] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
+  const days = showHistory ? 400 : 30;
   const [sortKey, setSortKey] = useState<SortKey>("newest");
   const load = useServerFn(getUserAnalyticsFn);
   const mark = useServerFn(setSessionInternalFn);
 
   const { data, isLoading, isError } = useQuery<UserAnalytics>({
-    queryKey: ["user-analytics"],
-    queryFn: () => load({ data: { days: 400 } }) as Promise<UserAnalytics>,
+    queryKey: ["user-analytics", days],
+    queryFn: () => load({ data: { days } }) as Promise<UserAnalytics>,
     retry: false,
   });
 
@@ -162,6 +164,11 @@ export default function UserAnalytics() {
         "Händelser per webbläsare, med möjlighet att räkna bort dina egna och andra interna test.",
       )}
     >
+      <label className="flex min-h-11 items-center gap-2 text-sm">
+        <input type="checkbox" checked={showHistory} onChange={event => setShowHistory(event.target.checked)} />
+        {t("Visa äldre aktivitet (upp till 400 dagar)")}
+      </label>
+      <p className="text-xs text-muted-foreground">{showHistory ? t("Visar historik upp till 400 dagar") : t("Visar aktivitet de senaste 30 dagarna")}</p>
       {isLoading && <p className="text-muted-foreground">{t("Laddar…")}</p>}
       {isError && <p className="text-destructive">{t("Kunde inte hämta granskningen.")}</p>}
 
@@ -186,7 +193,7 @@ export default function UserAnalytics() {
               { label: t("Webbläsare totalt"), value: data.totals.sessions },
               { label: t("Interna webbläsare"), value: data.totals.internalSessions },
               { label: t("Externa webbläsare"), value: data.totals.externalSessions },
-              { label: t("Registrerade konton"), value: data.registeredUsers },
+              { label: t(showHistory ? "Aktiva konton under historikperioden" : "Aktiva konton senaste 30 dagarna"), value: data.activeRegisteredUsers ?? "—" },
             ].map((kpi) => (
               <div
                 key={kpi.label}
@@ -197,6 +204,8 @@ export default function UserAnalytics() {
               </div>
             ))}
           </div>
+
+          <p className="text-xs text-muted-foreground">{t("Kontosiffran gäller användning eller inloggning under perioden och inkluderar admin, men räknar bort demo. Webbläsarstatistiken är separat och kan omfatta flera enheter per person.")}</p>
 
           <div className="flex flex-wrap items-center gap-3">
             <Button

@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { isActiveAccount, isCountedAccount } from "@/lib/account-activity";
 
 const LogInput = z.object({
   sessionId: z.string().min(1).max(128),
@@ -35,6 +36,9 @@ export type AnalyticsSummary = {
   activeSessions7d: number;
   activeSessions30d: number;
   totalUsers: number;
+  activeUsers30d: number | null;
+  activeNewUsers7d: number | null;
+  activeDailySignups: Array<{ date: string; users: number }> | null;
   newUsers7d: number;
   /** Konton som loggat in senaste 7/30 dagarna samt obekräftade e-postadresser. */
   accountActivity: { active7d: number; active30d: number; unconfirmed: number; used1d: number; used7d: number; used30d: number };
@@ -224,12 +228,31 @@ export const getAnalyticsSummaryFn = createServerFn({ method: "GET" })
       dailySignups.push({ date: d, users: signupsByDay.get(d) ?? 0 });
     }
 
+    let activeUsers30d: number | null = null;
+    let activeNewUsers7d: number | null = null;
+    let activeDailySignups: Array<{ date: string; users: number }> | null = null;
+    try {
+      const { readAdminAccounts } = await import("@/lib/admin-accounts.server");
+      const accounts = await readAdminAccounts(supabaseAdmin, now);
+      const active = accounts.filter(({ user, lastActiveAt }) => isCountedAccount(user) && isActiveAccount(lastActiveAt, 30, now));
+      activeUsers30d = active.length;
+      activeNewUsers7d = active.filter(({ user }) => isActiveAccount(user.created_at, 7, now)).length;
+      activeDailySignups = dailySignups.map(({ date }) => ({ date,
+        users: active.filter(({ user }) => user.created_at?.slice(0, 10) === date).length,
+      }));
+    } catch (error) {
+      console.warn("[analytics] active accounts unavailable:", error);
+    }
+
     return {
       totalSessions: sessionCount,
       activeSessions1d: sessions1d.size,
       activeSessions7d: sessions7d.size,
       activeSessions30d: sessions30d.size,
       totalUsers,
+      activeUsers30d,
+      activeNewUsers7d,
+      activeDailySignups,
       newUsers7d,
       accountActivity,
       totalEvents: rows.length,

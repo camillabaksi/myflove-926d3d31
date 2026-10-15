@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Aktiva konton i adminstatistiken",
+    items: ["Kontolistan, plattformsfördelningen och kontostatistiken visar aktiva senaste 30 dagarna som standard. Aktivitet betyder registrerad användning eller inloggning. Visa även inaktiva och Visa äldre aktivitet tar fram historik utan att ändra eller radera konton. Registreringsdiagram och exporter använder samma tydliga period. Saknade aktivitetsuppgifter visas som okända, inte som noll. Anonym webbläsarstatistik förblir separat."],
+  },
+  {
     title: "2026-10-15 – Konton per registreringsplattform",
     items: ["Användare & roller visar antal för iOS-appen, Androidappen, Webben och Okänd. Tryck på en plattform för att filtrera användarlistan. Plattformen sparas när ett nytt konto skapas; äldre konton utan uppgift visas som Okänd. Samma konto räknas en gång. Datumfilter och roller behålls och admin-/demokonton ingår i denna lista. Integritetstexten beskriver kontouppgiften. Ingen bakåtfyllning eller publicering."],
   },

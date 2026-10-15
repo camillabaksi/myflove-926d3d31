@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
@@ -154,14 +154,8 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Include every account in the platform totals, also beyond the first API page.
-    const users = new Map<string, User>();
-    for (let page = 1; ; page++) {
-      const { data: batch, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
-      if (error) throw new Error(error.message);
-      for (const user of batch.users) users.set(user.id, user);
-      if (batch.users.length < 200) break;
-    }
+    const { readAdminAccounts } = await import("@/lib/admin-accounts.server");
+    const accounts = await readAdminAccounts(supabaseAdmin);
 
     const { data: roles, error: rErr } = await supabaseAdmin
       .from("user_roles")
@@ -187,16 +181,15 @@ export const listUsersWithRolesFn = createServerFn({ method: "GET" })
       return true;
     };
 
-    const rows = [...users.values()].map((u) => {
+    const rows = accounts.map(({ user: u, lastActiveAt }) => {
       return {
         user_id: u.id,
         name: displayName((u.user_metadata ?? {}) as Record<string, unknown>, u.email ?? null),
         email: u.email ?? null,
         created_at: u.created_at ?? null,
         last_sign_in_at: u.last_sign_in_at ?? null,
-        // Senast aktiv: kontot uppdateras när sessionen förnyas, dvs. när
-        // användaren faktiskt öppnar appen – även utan ny inloggning.
-        last_visit_at: u.updated_at ?? null,
+        // Only observed use/sign-in counts, never profile or account metadata edits.
+        last_visit_at: lastActiveAt,
         visits: 0,
         roles: rolesByUser.get(u.id) ?? [],
         registration_platform: registrationPlatform(u.user_metadata),
