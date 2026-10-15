@@ -450,3 +450,9 @@
 
 - [x] Enhetlig identitet etapp 1 (ytor, kort, rubriker, dialoger samt QA-rättning för 200 % text och Flow-isolering) – ej publicerad
 - [ ] Etapp 2: sidspecifika gradienter och hårdkodade färger (inväntar godkännande)
+
+## Paceable – förfina uppladdad 3D-film (2026-10-15)
+- [x] Godkänd inriktning: återskapa vid behov men efterlikna originalet; ingen appändring eller publicering.
+- [ ] Granska original och samla referensbilder; invänta användarens referensgodkännande.
+- [ ] Godkänd scenplan, därefter godkända startbilder före klippgenerering.
+- [ ] Producera och granska film med rätt etiketter, färgmatchning, inåtriktad rök och bubbelfritt avslut.
