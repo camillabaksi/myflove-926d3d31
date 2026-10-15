@@ -7,6 +7,8 @@ import { flowDone } from "@/lib/flow-signal";
 import { haptic } from "@/lib/haptics";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/day";
+import { isActiveOwner } from "@/lib/account-scope";
+import { applyDayReplanChanges, type ReplanChange } from "@/lib/day-replan";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
   MEDICATIONS_KEY,
@@ -613,8 +615,18 @@ export function useTasks() {
     if (copies.length) setTasks((prev) => [...copies, ...prev]);
   };
 
+  /** Apply only a reviewed, account-owned snapshot through the normal shared/synced store. */
+  const applyDayReplan = (expected: Task[], changes: ReplanChange[], date: string, ownerId: string) => {
+    if (!isActiveOwner(ownerId) || todayISO() !== date) throw new Error("Kontot eller dagen har ändrats. Öppna planeringen igen.");
+    setTasks((current) => {
+      if (!isActiveOwner(ownerId)) throw new Error("Kontot har ändrats. Öppna planeringen igen.");
+      return applyDayReplanChanges(current, expected, changes, date);
+    });
+  };
+
   return {
     tasks,
+    applyDayReplan,
     addTaskCopies,
     activeTasks,
     completedTasks,

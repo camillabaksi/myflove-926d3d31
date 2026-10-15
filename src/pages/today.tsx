@@ -9,6 +9,7 @@ import { GreetingNameMenu } from "@/components/day/greeting-name-menu";
 import { DayGreeting } from "@/components/day/day-greeting";
 import { TodayCapacity } from "@/components/day/today-capacity";
 import { TodayPace } from "@/components/day/today-pace";
+import { DayReplanButton } from "@/components/day/day-replan";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,7 @@ export function TodayContent() {
 
   const today = todayISO();
   const dates = useMemo(() => [today], [today]);
-  const { days } = useVisualCalendar(dates);
+  const { days, planningReady, planningError } = useVisualCalendar(dates);
   const [familyPreferences] = useCloudSyncedStorage<FamilyLayerPreferences>("myflove-calendar-family-layer", DEFAULT_FAMILY_LAYER);
   const capacityOf = useDayCapacity();
   const dayCapacity = capacityOf(today);
@@ -85,6 +86,7 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-2">
+            <DayReplanButton date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} />
             <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} />} />
             <div className="mt-1 flex justify-end">
               <Button asChild size="sm" variant="ghost" className="min-h-10 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">

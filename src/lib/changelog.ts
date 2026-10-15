@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Få ihop dagen på Idag",
+    items: ["En lugn knapp under Din dag öppnar valbara förslag som kan lösa tidskrockar mellan egna uppgifter när längder och luckor är kända. Den senaste loggade kapaciteten från Idag kan frivilligt ge förslag om ett mindre första steg vid låg ork; den blir aldrig en minutbudget eller en prognos. Planering fungerar utan incheckning. Byte till imorgon kräver ett eget val, visas utan bestämd tid och ändrar inget innan godkännande. Påminnelser, bokningar, barnens schema och kända deadlines skyddas. Registrerad förberedelse/restid och beroenden bevaras. Ändringar görs i befintliga kontobundna uppgifter; gammalt underlag och kontobyten stoppas. Inga nya aktiviteter, AI-anrop eller ändringar av kapacitet skapas av planeringen."],
+  },
+  {
     title: "2026-10-15 – Konkret pilotstatistik",
     items: ["Admin och Appstatistik visar aktiva externa konton, ursprung per plattform, konkreta kärnhandlingar och återkommande användning med tydliga perioder och nämnare. Sidvisningar räknas inte som kärnanvändning och app-/webbläsar-ID skiljs från konton. Märkta interna ID undantas; okänd status och mätluckor förklaras. Upplevd avlastning och appens egen belastning följer testprotokollets frågor och visas som saknat underlag tills enkätsvar ansluts. Historik, granskning och export finns som fördjupning, med en kort aggregerad översikt att kopiera. Inga privata appinnehåll läses och ingen ny spårning eller enkätinsamling införs."],
   },
