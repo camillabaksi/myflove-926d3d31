@@ -29,6 +29,8 @@ import {
 import ChangelogExport from "@/components/changelog-export";
 import UserAnalytics from "@/components/admin/user-analytics";
 import InvestorDocs from "@/components/admin/investor-docs";
+import RegistrationPlatformSummary from "@/components/admin/registration-platform-summary";
+import { REGISTRATION_PLATFORM_LABELS, type RegistrationPlatform } from "@/lib/registration-platform";
 
 import type { AdminUserRow } from "@/lib/admin.functions";
 
@@ -294,13 +296,14 @@ function fmtDateTime(iso: string | null, locale: string): string {
 type SortKey = "name" | "last_visit" | "last_login" | "created" | "roles";
 type SortDir = "asc" | "desc";
 
-function UsersSection() {
+export function UsersSection() {
   const { t, locale } = useLang();
   const qc = useQueryClient();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("last_login");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [platform, setPlatform] = useState<RegistrationPlatform | "all">("all");
   const filter = { ...(from ? { from } : {}), ...(to ? { to } : {}) };
   const hasFilter = Boolean(from || to);
 
@@ -328,7 +331,7 @@ function UsersSection() {
     }
   };
 
-  const sorted = data ? [...data].sort(sortUsers(sortKey, sortDir)) : [];
+  const sorted = data ? data.filter(user => platform === "all" || (user.registration_platform ?? "unknown") === platform).sort(sortUsers(sortKey, sortDir)) : [];
 
   const filterBar = (
     <div className="pace-card-surface flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-4">
@@ -384,7 +387,7 @@ function UsersSection() {
         </p>
       </div>
     );
-  if (!data || data.length === 0)
+  if (!data)
     return (
       <div className="space-y-3">
         {filterBar}
@@ -395,9 +398,11 @@ function UsersSection() {
   return (
     <div className="space-y-3">
       {filterBar}
-      <p className="text-sm text-muted-foreground">
-        {data.length} {t("användare")}
+      <RegistrationPlatformSummary users={data} value={platform} onChange={setPlatform} />
+      <p className="text-sm text-muted-foreground" aria-live="polite">
+        {sorted.length} {t("användare")}{platform !== "all" && ` · ${t(REGISTRATION_PLATFORM_LABELS[platform])}`}
       </p>
+      {sorted.length === 0 && <p className="text-sm text-muted-foreground">{t("Inga användare med valda filter.")}</p>}
       <div className="space-y-3 md:hidden">
         <div className="grid items-end gap-2 sm:flex sm:flex-wrap">
           <label className="min-w-0 flex-1 text-xs text-muted-foreground">
@@ -441,6 +446,7 @@ function UsersSection() {
             </div>
             <dl className="grid min-w-0 gap-3 sm:grid-cols-2">
               {[
+                [t("Konto skapat via"), t(REGISTRATION_PLATFORM_LABELS[u.registration_platform ?? "unknown"])],
                 [t("Senast aktiv"), fmtDateTime(u.last_visit_at, locale)],
                 [t("Senaste inloggning"), fmtDateTime(u.last_sign_in_at, locale)],
                 [
@@ -515,6 +521,7 @@ function UsersSection() {
                   <td className="p-3">
                     <div className="font-medium">{u.name ?? u.email ?? "—"}</div>
                     <div className="text-xs text-muted-foreground">{u.email ?? "—"}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">{t("Konto skapat via")}: {t(REGISTRATION_PLATFORM_LABELS[u.registration_platform ?? "unknown"])}</div>
                   </td>
                   <td className="p-3 text-xs text-muted-foreground">
                     {fmtDateTime(u.last_visit_at, locale)}

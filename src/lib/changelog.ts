@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-15";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-15 – Konton per registreringsplattform",
+    items: ["Användare & roller visar antal för iOS-appen, Androidappen, Webben och Okänd. Tryck på en plattform för att filtrera användarlistan. Plattformen sparas när ett nytt konto skapas; äldre konton utan uppgift visas som Okänd. Samma konto räknas en gång. Datumfilter och roller behålls och admin-/demokonton ingår i denna lista. Integritetstexten beskriver kontouppgiften. Ingen bakåtfyllning eller publicering."],
+  },
+  {
     title: "2026-10-15 – Dubbletter i barnens dag",
     items: ["Identiska tidsatta hållpunkter visas en gång per barn, med rätt Nu/Nästa. Originalposter, privata anteckningar och familjekopplingar bevaras. En uttrycklig tids- eller kopplingsändring gäller alla versioner av samma visade aktivitet. Kopiering och dagsmallar hoppar över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering."],
   },

@@ -1,3 +1,6 @@
+## 2026-10-15 – Konton per registreringsplattform
+- Användare & roller visar iOS-appen, Androidappen, Webben och Okänd med antal och klickbara filter. Registreringsplattform sparas för nya konton; äldre konton utan uppgiften lämnas som Okänd. Samma konto räknas en gång och alla API-sidor hämtas. Datumfilter, roller och åtkomstskydd behålls; admin-/demokonton ingår som i den befintliga användarlistan. Integritetstexten beskriver den nya kontouppgiften. Ingen bakåtfyllning, koppling till anonyma händelser eller publicering.
+
 ## 2026-10-15 – Dubbletter i barnens dag
 - Identiska tidsatta hållpunkter visas en gång per barn i Idag och Family Flow, med gemensam Nu/Nästa-markering. Originalposter, privata anteckningar och familjekopplingar bevaras; uttryckliga tids-/kopplingsändringar gäller alla versioner i samma visade aktivitet. Separata tider, sluttider, barn, skolscheman och föräldrauppgifter behålls. Kopiering och dagsmallar hoppar även över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering.
 

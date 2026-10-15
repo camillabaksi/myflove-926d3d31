@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { withBackendRecovery, isBackendAsleepError } from "@/lib/backend-wake";
 import { BrandLogo } from "@/components/paceable/brand-logo";
 import PwaInstallButton from "@/components/pwa-install-button";
+import { nativePlatform } from "@/lib/native-caps";
 
 export const Route = createFileRoute("/sign-up")({
   ssr: false,
@@ -72,7 +73,7 @@ function SignUpPage() {
         supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: redirectUrl },
+          options: { emailRedirectTo: redirectUrl, data: { registration_platform: nativePlatform() } },
         }),
       (status) => setWaking(status === "waking"),
     );

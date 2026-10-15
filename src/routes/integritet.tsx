@@ -33,7 +33,7 @@ export const Route = createFileRoute("/integritet")({
 
 function PrivacyPage() {
   return (
-    <LegalShell title="Integritetspolicy" updated="28 augusti 2026">
+    <LegalShell title="Integritetspolicy" updated="15 oktober 2026">
       <p>
         Paceable är byggd för att minska mental belastning – och det gäller även dina
         personuppgifter. Vi samlar in så lite som möjligt, förklarar varför, och du bestämmer alltid
@@ -52,6 +52,8 @@ function PrivacyPage() {
         <li>
           <strong>Kontouppgifter:</strong> e-postadress och krypterat lösenord när du skapar konto.
           Loggar du in med Google får vi din e-postadress och ditt namn från Google.
+          Vi sparar också om kontot skapades i iOS-appen, Androidappen eller webbappen,
+          för att kunna följa antalet registrerade konton per plattform.
         </li>
         <li>
           <strong>Innehåll du skapar:</strong> uppgifter, rutiner, kalenderposter, anteckningar,
