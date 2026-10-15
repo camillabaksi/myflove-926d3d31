@@ -148,6 +148,13 @@
       "when": 1791177164028,
       "tag": "0020_family_share_audience",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1792071265214,
+      "tag": "0021_lock_admin_activity_functions",
+      "breakpoints": true
     }
   ]
 }
