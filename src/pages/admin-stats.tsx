@@ -166,7 +166,7 @@ export default function AdminStats() {
   const maxViews = Math.max(1, ...viewsBySection.map((row) => row.events));
   const maxPageViews = Math.max(1, ...pageViews.map((row) => row.events));
   const maxDaily = Math.max(1, ...(data?.dailyActiveSessions ?? []).map((d) => d.sessions));
-  const maxSignups = Math.max(1, ...(data?.dailySignups ?? []).map((d) => d.users));
+  const maxSignups = Math.max(1, ...(data?.activeDailySignups ?? []).map((d) => d.users));
 
   const kpis = data
     ? [
@@ -475,6 +475,7 @@ export default function AdminStats() {
               <h2 className="text-lg font-semibold mb-3">{t("Aktiva användare")}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
+                  { label: t("Aktiva konton senaste 30 dagarna"), value: data.activeUsers30d ?? "—" },
                   { label: t("Inloggade senaste 7 dagarna"), value: data.accountActivity?.active7d ?? 0 },
                   { label: t("Inloggade senaste 30 dagarna"), value: data.accountActivity?.active30d ?? 0 },
                   { label: t("Har inte bekräftat e-post"), value: data.accountActivity?.unconfirmed ?? 0 },
@@ -489,6 +490,7 @@ export default function AdminStats() {
                 ))}
               </div>
               <p className="mt-3 text-xs text-muted-foreground">
+                {t("Aktiva konton har använt appen eller loggat in de senaste 30 dagarna. Demokonton räknas bort. Inaktiva konton ingår inte i antalet.")} {" "}
                 {t("Inloggningar räknas på senaste inloggning. \"Använt appen\" räknas på senaste aktivitet i inloggat läge (bara tidpunkt, inget innehåll) och mäts från och med nu.")}
               </p>
             </section>
@@ -504,8 +506,8 @@ export default function AdminStats() {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
                   {[
-                    { label: t("Registrerade konton (alla)"), value: `${data.totalUsers ?? 0}` },
-                    { label: t("Nya konton senaste 7 dagarna"), value: `${data.newUsers7d ?? 0}` },
+                    { label: t("Aktiva konton senaste 30 dagarna"), value: `${data.activeUsers30d ?? "—"}` },
+                    { label: t("Aktiva konton skapade senaste 7 dagarna"), value: `${data.activeNewUsers7d ?? "—"}` },
                     { label: t("Aktiva enheter (30 d)"), value: `${data.totalSessions}` },
                     { label: t("Händelser (30 d)"), value: `${data.totalEvents ?? 0}` },
                     { label: t("Dagligt bruk (DAU/MAU)"), value: `${data.stickiness ?? 0}%` },
@@ -579,10 +581,11 @@ export default function AdminStats() {
 
                 <div>
                   <h3 className="text-sm font-semibold mb-2">
-                    {t("Nya registreringar (senaste 14 dagarna)")}
+                    {t("Registreringsdag för aktiva konton (senaste 14 dagarna)")}
                   </h3>
+                  {data.activeDailySignups == null && <p className="text-sm text-muted-foreground">{t("Aktivitetsuppgifterna kunde inte hämtas.")}</p>}
                   <div className="flex items-end gap-1.5 h-28">
-                    {(data.dailySignups ?? []).map((day) => (
+                    {(data.activeDailySignups ?? []).map((day) => (
                       <div
                         key={day.date}
                         className="flex-1 flex flex-col items-center justify-end gap-1"

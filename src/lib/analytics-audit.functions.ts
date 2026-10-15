@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
+import { countActiveAccounts } from "@/lib/account-activity";
 
 /**
  * Granskningsvy per webbläsar-id ("besökare").
@@ -39,6 +40,8 @@ export type UserAnalytics = {
     unknownSessions: number;
   };
   registeredUsers: number;
+  activeRegisteredUsers: number | null;
+  activityDays: number;
   sessions: SessionRow[];
 };
 
@@ -56,7 +59,7 @@ async function assertAdmin(context: { supabase: SupabaseClient<Database>; userId
 
 const AuditInput = z.object({
   /** Antal dagar bakåt att granska. */
-  days: z.number().int().min(1).max(400).default(400),
+  days: z.number().int().min(1).max(400).default(30),
 });
 
 export const getUserAnalyticsFn = createServerFn({ method: "GET" })
@@ -191,7 +194,14 @@ export const getUserAnalyticsFn = createServerFn({ method: "GET" })
       /* statistik om konton är inte kritisk här */
     }
 
-    return { totals, registeredUsers, sessions };
+    let activeRegisteredUsers: number | null = null;
+    try {
+      const { readAdminAccounts } = await import("@/lib/admin-accounts.server");
+      activeRegisteredUsers = countActiveAccounts(await readAdminAccounts(supabaseAdmin), data.days);
+    } catch (error) {
+      console.warn("[analytics] active accounts unavailable:", error);
+    }
+    return { totals, registeredUsers, activeRegisteredUsers, activityDays: data.days, sessions };
   });
 
 /** Kopplar den inloggade användarens webbläsar-id till kontot (första gången). */

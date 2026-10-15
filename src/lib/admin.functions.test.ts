@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { listUsersWithRolesFn, type AdminUserRow } from "./admin.functions";
 
-const mock = vi.hoisted(() => ({ listUsers: vi.fn(), roles: vi.fn(), admin: true }));
+const mock = vi.hoisted(() => ({ listUsers: vi.fn(), roles: vi.fn(), usage: vi.fn(), admin: true }));
 vi.mock("@tanstack/react-start", () => ({
   createServerFn: () => {
     let validate = (data: unknown): unknown => data;
@@ -15,7 +15,8 @@ vi.mock("@tanstack/react-start", () => ({
 }));
 vi.mock("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
 vi.mock("@/integrations/supabase/client.server", () => ({ supabaseAdmin: {
-  auth: { admin: { listUsers: mock.listUsers } }, from: () => ({ select: mock.roles }),
+  auth: { admin: { listUsers: mock.listUsers } }, from: (table: string) => table === "user_last_active"
+    ? { select: () => ({ order: () => ({ range: mock.usage }) }) } : { select: mock.roles },
 } }));
 const context = {
   userId: "owner",
@@ -27,7 +28,7 @@ const context = {
 const call = listUsersWithRolesFn as unknown as (args: { data?: { from?: string; to?: string }; context: typeof context }) => Promise<AdminUserRow[]>;
 const account = (id: string, platform?: string) => ({ id, email: `${id}@example.test`, created_at: "2026-10-01T12:00:00Z", updated_at: "2026-10-01T12:00:00Z", user_metadata: platform ? { registration_platform: platform } : {} });
 
-beforeEach(() => { vi.clearAllMocks(); mock.admin = true; mock.roles.mockResolvedValue({ data: [{ user_id: "ios", role: "admin" }], error: null }); });
+beforeEach(() => { vi.clearAllMocks(); mock.admin = true; mock.roles.mockResolvedValue({ data: [{ user_id: "ios", role: "admin" }], error: null }); mock.usage.mockResolvedValue({ data: [], error: null }); });
 describe("Admin account platform list", () => {
   it("normalizes signup origins, keeps historic accounts unknown and preserves existing roles", async () => {
     mock.listUsers.mockResolvedValue({ data: { users: [account("ios", "ios"), account("older"), account("invalid", "TestFlight")] }, error: null });
@@ -58,5 +59,23 @@ describe("Admin account platform list", () => {
     mock.listUsers.mockResolvedValueOnce({ data: { users: Array.from({ length: 200 }, (_, i) => account(`u${i}`)) }, error: null })
       .mockResolvedValueOnce({ data: null, error: { message: "network" } });
     await expect(call({ context })).rejects.toThrow("network");
+  });
+  it("uses real activity/sign-in and ignores account metadata updates", async () => {
+    const now = new Date(Date.now() - 1000).toISOString();
+    mock.listUsers.mockResolvedValue({ data: { users: [
+      { ...account("edited"), updated_at: now },
+      { ...account("signed-in"), last_sign_in_at: now },
+      account("used"),
+    ] }, error: null });
+    mock.usage.mockResolvedValue({ data: [{ user_id: "used", last_active_at: now }], error: null });
+    const rows = await call({ context });
+    expect(rows.find(row => row.user_id === "edited")?.last_visit_at).toBeNull();
+    expect(rows.find(row => row.user_id === "signed-in")?.last_visit_at).toBe(now);
+    expect(rows.find(row => row.user_id === "used")?.last_visit_at).toBe(now);
+  });
+  it("fails visibly when activity cannot be read, instead of declaring everyone inactive", async () => {
+    mock.listUsers.mockResolvedValue({ data: { users: [account("one")] }, error: null });
+    mock.usage.mockResolvedValue({ data: null, error: { message: "activity unavailable" } });
+    await expect(call({ context })).rejects.toThrow("activity unavailable");
   });
 });

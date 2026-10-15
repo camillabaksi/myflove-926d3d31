@@ -1,3 +1,6 @@
+## 2026-10-15 – Aktiva konton i adminstatistiken
+- Kontolistan och plattformsfördelningen visar aktiva de senaste 30 dagarna som standard. Visa även inaktiva tar fram alla konton utan radering. Senast aktiv använder registrerad användning eller faktisk inloggning, inte kontots ändringsdatum. Kontosiffror och registreringsdiagram på statistiksidan gäller samma aktiva grupp; demo räknas bort där. Analysvyn visar senaste 30 dagarnas aktivitet, med separat val för äldre historik. CSV/PDF märker kontosiffran med den valda perioden. Saknade aktivitetsuppgifter visas som okända i stället för noll. Ingen ny koppling mellan anonyma händelser och konton.
+
 ## 2026-10-15 – Konton per registreringsplattform
 - Användare & roller visar iOS-appen, Androidappen, Webben och Okänd med antal och klickbara filter. Registreringsplattform sparas för nya konton; äldre konton utan uppgiften lämnas som Okänd. Samma konto räknas en gång och alla API-sidor hämtas. Datumfilter, roller och åtkomstskydd behålls; admin-/demokonton ingår som i den befintliga användarlistan. Integritetstexten beskriver den nya kontouppgiften. Ingen bakåtfyllning, koppling till anonyma händelser eller publicering.
 

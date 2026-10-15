@@ -26,7 +26,7 @@ export default function RegistrationPlatformSummary({ users, value, onChange }: 
         ))}
       </div>
       <p className="text-xs text-muted-foreground">{t("Visar var kontot skapades. Äldre konton utan sparad plattform visas som Okänd. Samma konto räknas en gång, även om det används på flera enheter.")}</p>
-      <p className="text-xs text-muted-foreground">{t("Antalen följer datumfiltret och inkluderar även admin- och demokonton. Plattformen visar inte om appen installerades via ett testprogram.")}</p>
+      <p className="text-xs text-muted-foreground">{t("Antalen följer datum- och aktivitetsfiltren och inkluderar även admin- och demokonton. Plattformen visar inte om appen installerades via ett testprogram.")}</p>
     </fieldset>
   );
 }
