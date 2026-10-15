@@ -3,7 +3,7 @@
 - [x] Skapat och granskat tydligt märkt konceptbild utifrån användarens referens före godkännande; ingen appändring eller publicering.
 - [x] Användaren godkände designförslaget och genomförandet 2026-10-15.
 - [x] Lokal papperspresentation med handskrivet ämne, mjuka spaltrubriker och tillgänglig punktmeny; befintliga sparanrop bevarade.
-- [ ] Verifiera presentationstester, före-/efterbilder och skärm-/textmatris; ingen publicering.
+- [x] 21 riktade tester godkända; skrivning, stjärna, spaltflytt och Escape-fokus kontrollerade i isolerad inloggad session. 16 kombinationer av 320/390/430/1280 px, ljust/mörkt och 100/200 % rottext utan dokumentoverflow; desktop vid stor text får läsbar enkolumnsyta. Före-/efterbilder tagna med syntetiskt innehåll och spärrade kontoskrivningar. Verklig molnsynk och fysisk mobilkontroll är inte verifierade i denna presentationsetapp. Ingen publicering.
 ## Tankar – personlig reflektionsbok (2026-10-15)
 - [x] Ta emot godkänt koncept och granska befintliga funktioner, navigation, datakällor och integritetsgränser.
 - [x] Användaren ber att få se förslaget; visa den färdiga etappplanen direkt, utan appändringar.

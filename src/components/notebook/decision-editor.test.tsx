@@ -56,7 +56,7 @@ describe("Beslut – papperspresentation", () => {
   });
   it("preserves explicit column moves and deletion", async () => {
     setup(); await openMenu();
-    await userEvent.click(screen.getByRole("menuitem", { name: "Flytta till Nackdelar", exact: true }));
+    await userEvent.click(screen.getByRole("menuitem", { name: /^Flytta till Nackdelar$/ }));
     expect(calls.update).toHaveBeenCalledWith({ column: "cons", order: expect.any(Number) });
     expect(calls.flush).toHaveBeenCalled();
     await openMenu();
