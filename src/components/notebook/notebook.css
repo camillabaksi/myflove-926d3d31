@@ -345,119 +345,185 @@
   }
 }
 
-/* Beslut som ett riktigt papper med egen handstil */
+/* Beslut: local paper presentation; other notebook editors stay unchanged. */
+.book-decision {
+  container-type: inline-size;
+}
+.book-decision-title,
+.book-sheet .book-hand,
+.book-sheet .book-column h2,
+.book-sheet .book-add-line {
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  color: var(--book-ink);
+}
+.book-decision-title {
+  display: block;
+  width: 100%;
+  min-height: 3.5rem;
+  field-sizing: content;
+  resize: vertical;
+  border: 0;
+  background: transparent;
+  font-size: 2.3rem !important;
+  line-height: 1.35;
+  padding: 0.5rem 0;
+}
+.book-decision-title::placeholder,
+.book-hand::placeholder {
+  color: var(--book-muted);
+  opacity: 1;
+}
+.book-decision-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--book-muted);
+}
+.book-decision-options button,
+.book-decision-focus {
+  white-space: normal;
+  height: auto;
+  min-height: 44px;
+  max-width: 100%;
+  font-size: 0.9rem;
+}
+.book-decision-focus {
+  background: var(--book-paper);
+  color: var(--book-muted);
+  border: 0;
+  padding: 0.5rem;
+  min-width: 0;
+}
 .book-sheet {
-  position: relative;
+  --book-rule: color-mix(in srgb, var(--book-line) 45%, transparent);
   gap: 0;
-  padding: 1.25rem 0 1.5rem;
+  padding: 0.75rem 0 1.5rem;
   background-color: var(--book-paper);
   background-image: repeating-linear-gradient(
     transparent 0,
     transparent calc(2.6rem - 1px),
-    var(--book-line) calc(2.6rem - 1px),
-    var(--book-line) 2.6rem
+    var(--book-rule) calc(2.6rem - 1px),
+    var(--book-rule) 2.6rem
   );
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 0 var(--book-line), 0 10px 24px -18px var(--book-ink);
 }
 .book-sheet .book-column,
 .book-sheet .book-column[data-column="cons"],
 .book-sheet .book-column[data-column="uncertain"] {
   background: transparent;
-  border-top: 0;
-  padding: 0 1rem;
+  border: 0;
+  padding: 0 0.75rem;
 }
 .book-sheet .book-column[data-column="cons"] {
-  border-left: 2px solid var(--book-ink);
+  border-left: 1px solid var(--book-line);
 }
 .book-sheet .book-column[data-column="uncertain"] {
-  border-top: 2px dashed var(--book-line);
-  margin-top: 1rem;
-  padding-top: 0.5rem;
+  border-top: 1px solid var(--book-line);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
 }
 .book-sheet .book-column h2 {
-  font-family: "Caveat", "Segoe Print", cursive;
-  font-size: 2rem;
-  line-height: 2.6rem;
-  text-align: center;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+  font-size: 1.9rem !important;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0 0.6rem;
+  margin: 0 auto 1rem;
+  background: var(--book-sage);
+  border-radius: 48% 8% 40% 6% / 10% 50% 12% 55%;
 }
+.book-sheet .book-column[data-column="cons"] h2 { background: var(--book-apricot); }
+.book-sheet .book-column[data-column="uncertain"] h2 { background: var(--book-lavender); }
 .book-sheet .book-point {
-  position: relative;
-  border-bottom: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: start;
+  border: 0;
+  padding: 0.25rem 0;
 }
-.book-hand {
-  flex: 1 1 100%;
+.book-sheet .book-hand {
   width: 100%;
+  min-width: 0;
   min-height: 2.6rem;
   field-sizing: content;
-  resize: none;
+  resize: vertical;
   border: 0;
-  outline-offset: 0;
   background: transparent;
-  color: var(--book-ink);
-  font-family: "Caveat", "Segoe Print", cursive;
-  font-size: 1.65rem;
+  font-size: 1.65rem !important;
   line-height: 2.6rem;
-  padding: 0 0 0 1.1rem;
-  position: relative;
-}
-.book-sheet .book-point::before {
-  content: "–";
-  position: absolute;
-  font-family: "Caveat", cursive;
-  font-size: 1.65rem;
-  line-height: 2.6rem;
-}
-.book-hand::placeholder {
-  color: var(--book-muted);
-  opacity: 0.6;
+  padding: 0;
 }
 .book-sheet .book-point[data-important="true"] .book-hand {
   font-weight: 700;
-  text-decoration: underline wavy var(--book-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--book-muted);
+  text-underline-offset: 0.2em;
 }
-.book-sheet .book-point[data-crossed="true"] .book-hand {
-  text-decoration: line-through;
-  text-decoration-thickness: 2px;
-  opacity: 0.6;
+.book-sheet .book-point[data-crossed="true"] .book-hand { text-decoration: line-through; }
+.book-point-menu {
+  grid-column: 2;
+  grid-row: 1;
+  width: 44px;
+  height: 44px;
+  color: var(--book-muted);
 }
-.book-sheet .book-small-tools {
-  margin: 0;
-  gap: 0;
-  opacity: 0.45;
-  transition: opacity 0.2s;
+.book-point-marks {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--book-ink);
 }
-.book-sheet .book-point:focus-within .book-small-tools,
-.book-sheet .book-point:hover .book-small-tools {
-  opacity: 1;
-}
-.book-move-select {
+.book-point-marks:empty { display: none; }
+.book-point-marks svg { width: 1rem; height: 1rem; }
+.book-sheet .book-source,
+.book-sheet .book-conflict { grid-column: 1 / -1; }
+.book-sheet .book-add-line {
   min-height: 44px;
-  border: 0;
-  background: transparent;
+  height: auto;
+  max-width: 100%;
+  white-space: normal;
+  font-size: 1.4rem !important;
   color: var(--book-muted);
-  font-size: 0.85rem;
-}
-.book-add-line {
-  font-family: "Caveat", "Segoe Print", cursive;
-  font-size: 1.4rem;
-  color: var(--book-muted);
-  height: 2.6rem;
   padding-left: 0;
 }
-@media (max-width: 520px) {
-  .book-sheet .book-column {
-    padding: 0 0.5rem;
-  }
-  .book-hand {
-    font-size: 1.45rem;
+.book-decision-help {
+  min-height: 44px;
+  height: auto;
+  max-width: 100%;
+  white-space: normal;
+  border-color: var(--book-line);
+}
+.book-decision-history button { min-height: 44px; }
+.notebook.book-decision-menu {
+  width: 17rem;
+  max-width: calc(100vw - 24px);
+  margin: 0;
+  padding: 0.35rem;
+  border: 1px solid var(--book-line);
+  border-radius: 0.75rem;
+  box-shadow: var(--book-shadow);
+  font-size: 1rem;
+}
+.book-decision-menu [role^="menuitem"] {
+  min-height: 44px;
+  white-space: normal;
+  font-size: 1rem;
+}
+.book-decision-menu [role^="menuitem"]:focus {
+  background: var(--book-lavender);
+  color: var(--book-ink);
+}
+.book-decision-menu [role="separator"] { background: var(--book-line); }
+.book-sheet[data-focused="true"] { grid-template-columns: minmax(0, 1fr); }
+.book-sheet[data-focused="true"] .book-column { border-left: 0; }
+@container (max-width: 30rem) {
+  .book-sheet { grid-template-columns: minmax(0, 1fr); }
+  .book-sheet .book-column[data-column="cons"] {
+    border-left: 0;
+    border-top: 1px solid var(--book-line);
+    padding-top: 1rem;
+    margin-top: 1.5rem;
   }
 }
