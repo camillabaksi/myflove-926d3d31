@@ -344,3 +344,119 @@
     transition: none !important;
   }
 }
+
+/* Beslut som ett riktigt papper med egen handstil */
+.book-sheet {
+  position: relative;
+  gap: 0;
+  padding: 1.25rem 0 1.5rem;
+  background-color: var(--book-paper);
+  background-image: repeating-linear-gradient(
+    transparent 0,
+    transparent calc(2.6rem - 1px),
+    var(--book-line) calc(2.6rem - 1px),
+    var(--book-line) 2.6rem
+  );
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 0 var(--book-line), 0 10px 24px -18px var(--book-ink);
+}
+.book-sheet .book-column,
+.book-sheet .book-column[data-column="cons"],
+.book-sheet .book-column[data-column="uncertain"] {
+  background: transparent;
+  border-top: 0;
+  padding: 0 1rem;
+}
+.book-sheet .book-column[data-column="cons"] {
+  border-left: 2px solid var(--book-ink);
+}
+.book-sheet .book-column[data-column="uncertain"] {
+  border-top: 2px dashed var(--book-line);
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+}
+.book-sheet .book-column h2 {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 2rem;
+  line-height: 2.6rem;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  margin: 0;
+}
+.book-sheet .book-point {
+  border-bottom: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.book-hand {
+  flex: 1 1 100%;
+  width: 100%;
+  min-height: 2.6rem;
+  field-sizing: content;
+  resize: none;
+  border: 0;
+  outline-offset: 0;
+  background: transparent;
+  color: var(--book-ink);
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.65rem;
+  line-height: 2.6rem;
+  padding: 0 0 0 1.1rem;
+  position: relative;
+}
+.book-sheet .book-point::before {
+  content: "–";
+  position: absolute;
+  font-family: "Caveat", cursive;
+  font-size: 1.65rem;
+  line-height: 2.6rem;
+}
+.book-hand::placeholder {
+  color: var(--book-muted);
+  opacity: 0.6;
+}
+.book-sheet .book-point[data-important="true"] .book-hand {
+  font-weight: 700;
+  text-decoration: underline wavy var(--book-muted);
+}
+.book-sheet .book-point[data-crossed="true"] .book-hand {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  opacity: 0.6;
+}
+.book-sheet .book-small-tools {
+  margin: 0;
+  gap: 0;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+}
+.book-sheet .book-point:focus-within .book-small-tools,
+.book-sheet .book-point:hover .book-small-tools {
+  opacity: 1;
+}
+.book-move-select {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--book-muted);
+  font-size: 0.85rem;
+}
+.book-add-line {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.4rem;
+  color: var(--book-muted);
+  height: 2.6rem;
+  padding-left: 0;
+}
+@media (max-width: 520px) {
+  .book-sheet .book-column {
+    padding: 0 0.5rem;
+  }
+  .book-hand {
+    font-size: 1.45rem;
+  }
+}
