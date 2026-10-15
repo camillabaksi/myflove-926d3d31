@@ -454,6 +454,7 @@
 ## Paceable – förfina uppladdad 3D-film (2026-10-15)
 - [x] Godkänd inriktning: återskapa vid behov men efterlikna originalet; ingen appändring eller publicering.
 - [x] Originalreferenser och scenplan framtagna; startbilder och första genererade MP4-utkast levererade.
-- [ ] Nytt krav 2026-10-15: kontrollera redigerbar källa; fasta textlager, korrekt Calendar/My Space-bana, individuell uppgiftsvisning och sluttext till sista bildrutan.
-- [ ] Godkänd avgränsad plan för lagerbaserad separat förhandsvisning före kodändring.
+- [x] Nytt krav 2026-10-15 inventerat: ingen redigerbar källa till denna MP4; exakta text- och rörelsekrav dokumenterade.
+- [x] Avgränsad lagerplan godkänd; rent underlag samt öppnings-/slutbild med fasta textobjekt framtagna och visuellt granskade.
+- [ ] Utseendegodkännande av granskningsbilderna före animation: skärminnehållet är ombyggt, originalbubblorna beskurna och liten retuschskarv finns vid telefonens överkant.
 - [ ] Producera och granska korrigerad animation; redovisa vad som är webbförhandsvisning respektive exporterad MP4. Inget byte av publicerat intro.
