@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import { useBookDraft, type NotebookStore } from "@/hooks/use-notebook";
 import { localBookDate, type BookEntity } from "@/lib/notebook";
 import { BookHistory, SourceLink } from "./book-editor";
 import { MapSketchBubble, MapSketchIcon } from "./map-sketch";
+import { createMapStarter } from "./map-starter";
 function MapNode({
   entity,
   store,
@@ -17,6 +18,7 @@ function MapNode({
   list,
   number,
   bounds,
+  onOpen,
 }: {
   entity: BookEntity;
   store: NotebookStore;
@@ -24,6 +26,7 @@ function MapNode({
   list: boolean;
   number: number;
   bounds: { x: number; y: number };
+  onOpen: (id: string) => void;
 }) {
   const { draft, update, flush } = useBookDraft(entity, store);
   const drag = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
@@ -37,98 +40,125 @@ function MapNode({
       className={list ? "book-question" : "book-bubble"}
       style={list ? undefined : { left: draft.x ?? 80, top: draft.y ?? 80 }}
       data-node-id={entity.id}
+      data-overview={!list && zoom < 0.75}
+      data-start={draft.title === "Börja här"}
     >
       {!list && <MapSketchBubble />}
-      <div className="book-node-tools">
-        {!list && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="book-drag"
-            title="Dra för att flytta"
-            aria-label={`Flytta tanke ${number}`}
-            onPointerDown={(e) => {
-              e.currentTarget.setPointerCapture(e.pointerId);
-              drag.current = {
-                x: e.clientX,
-                y: e.clientY,
-                left: draft.x ?? 80,
-                top: draft.y ?? 80,
-              };
-            }}
-            onPointerMove={(e) => {
-              const d = drag.current;
-              if (d)
-                update({
-                  x: Math.max(0, Math.min(bounds.x, d.left + (e.clientX - d.x) / zoom)),
-                  y: Math.max(0, Math.min(bounds.y, d.top + (e.clientY - d.y) / zoom)),
-                });
-            }}
-            onPointerUp={() => {
-              drag.current = null;
-              flush();
-            }}
-            onPointerCancel={() => {
-              drag.current = null;
-              flush();
-            }}
-            onLostPointerCapture={() => {
-              drag.current = null;
-              flush();
-            }}
-          >
-            <MapSketchIcon name="move" />
-          </Button>
-        )}
-        <label className="book-label" htmlFor={`node-${entity.id}`}>
-          Tanke {number}
-        </label>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label={`Alternativ för tanke ${number}`}>
-              <MapSketchIcon name="more" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="notebook book-map-menu" align="end" collisionPadding={12}>
-            {[
-              { icon: "left" as const, dx: -30, dy: 0, label: "Flytta vänster" },
-              { icon: "right" as const, dx: 30, dy: 0, label: "Flytta höger" },
-              { icon: "up" as const, dx: 0, dy: -30, label: "Flytta uppåt" },
-              { icon: "down" as const, dx: 0, dy: 30, label: "Flytta nedåt" },
-            ].map((d) => (
-              <DropdownMenuItem
-                key={d.label}
-                onSelect={() => {
-                  move(d.dx, d.dy);
+      {!list && zoom < 0.75 ? (
+        <button
+          type="button"
+          className="book-map-open"
+          aria-label={`Öppna ${draft.title || `tanke ${number}`}${entity.heads.length > 1 ? ", två versioner" : ""}`}
+          onClick={() => onOpen(entity.id)}
+        >
+          <span>
+            {entity.heads.length > 1
+              ? "Två versioner"
+              : draft.text || draft.title || `Tanke ${number}`}
+          </span>
+        </button>
+      ) : (
+        <>
+          <div className="book-node-tools">
+            {!list && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="book-drag"
+                title="Dra för att flytta"
+                aria-label={`Flytta ${draft.title || `tanke ${number}`}`}
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  drag.current = {
+                    x: e.clientX,
+                    y: e.clientY,
+                    left: draft.x ?? 80,
+                    top: draft.y ?? 80,
+                  };
+                }}
+                onPointerMove={(e) => {
+                  const d = drag.current;
+                  if (d)
+                    update({
+                      x: Math.max(0, Math.min(bounds.x, d.left + (e.clientX - d.x) / zoom)),
+                      y: Math.max(0, Math.min(bounds.y, d.top + (e.clientY - d.y) / zoom)),
+                    });
+                }}
+                onPointerUp={() => {
+                  drag.current = null;
+                  flush();
+                }}
+                onPointerCancel={() => {
+                  drag.current = null;
+                  flush();
+                }}
+                onLostPointerCapture={() => {
+                  drag.current = null;
                   flush();
                 }}
               >
-                <MapSketchIcon name={d.icon} />
-                {d.label}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuItem
-              onSelect={() => {
-                update({ deleted: true });
-                flush();
-              }}
-            >
-              <MapSketchIcon name="trash" />
-              Ta bort tanke
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <textarea
-        id={`node-${entity.id}`}
-        className="book-field"
-        value={draft.text}
-        placeholder="En tanke…"
-        onChange={(e) => update({ text: e.target.value })}
-        onBlur={flush}
-      />
-      <SourceLink entity={entity} store={store} />
-      {entity.heads.length > 1 && <BookHistory entity={entity} store={store} />}
+                <MapSketchIcon name="move" />
+              </Button>
+            )}
+            <label className="book-label" htmlFor={`node-${entity.id}`}>
+              {draft.title || `Tanke ${number}`}
+            </label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`Alternativ för ${draft.title || `tanke ${number}`}`}
+                >
+                  <MapSketchIcon name="more" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="notebook book-map-menu"
+                align="end"
+                collisionPadding={12}
+              >
+                {[
+                  { icon: "left" as const, dx: -30, dy: 0, label: "Flytta vänster" },
+                  { icon: "right" as const, dx: 30, dy: 0, label: "Flytta höger" },
+                  { icon: "up" as const, dx: 0, dy: -30, label: "Flytta uppåt" },
+                  { icon: "down" as const, dx: 0, dy: 30, label: "Flytta nedåt" },
+                ].map((d) => (
+                  <DropdownMenuItem
+                    key={d.label}
+                    onSelect={() => {
+                      move(d.dx, d.dy);
+                      flush();
+                    }}
+                  >
+                    <MapSketchIcon name={d.icon} />
+                    {d.label}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuItem
+                  onSelect={() => {
+                    update({ deleted: true });
+                    flush();
+                  }}
+                >
+                  <MapSketchIcon name="trash" />
+                  Ta bort tanke
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <textarea
+            id={`node-${entity.id}`}
+            className="book-field"
+            value={draft.text}
+            placeholder="En tanke…"
+            onChange={(e) => update({ text: e.target.value })}
+            onBlur={flush}
+          />
+          <SourceLink entity={entity} store={store} />
+          {entity.heads.length > 1 && <BookHistory entity={entity} store={store} />}
+        </>
+      )}
     </article>
   );
 }
@@ -140,7 +170,38 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
   const [to, setTo] = useState("");
   const [newNode, setNewNode] = useState<string | null>(null);
   const [nodeWidth, setNodeWidth] = useState(240);
+  const [frameRequested, setFrameRequested] = useState(true);
   const viewport = useRef<HTMLDivElement>(null);
+  const fitMap = useCallback(() => {
+    const element = viewport.current;
+    if (!element) return;
+    const bubbles = [...element.querySelectorAll<HTMLElement>("[data-node-id]")];
+    if (!bubbles.length || element.clientWidth <= 32 || element.clientHeight <= 32) {
+      setZoom(1);
+      element.scrollTo({ left: 0, top: 0 });
+      return;
+    }
+    const left = Math.min(...bubbles.map((bubble) => bubble.offsetLeft));
+    const top = Math.min(...bubbles.map((bubble) => bubble.offsetTop));
+    const right = Math.max(...bubbles.map((bubble) => bubble.offsetLeft + bubble.offsetWidth));
+    const bottom = Math.max(...bubbles.map((bubble) => bubble.offsetTop + bubble.offsetHeight));
+    const next = Math.max(
+      0.3,
+      Math.min(
+        1,
+        (element.clientWidth - 32) / (right - left),
+        (element.clientHeight - 32) / (bottom - top),
+      ),
+    );
+    setZoom(next);
+    requestAnimationFrame(() => {
+      if (viewport.current === element)
+        element.scrollTo({
+          left: Math.max(0, left * next - 16),
+          top: Math.max(0, top * next - 16),
+        });
+    });
+  }, []);
   useEffect(() => {
     const observer = new ResizeObserver(() => {
       if (parseFloat(getComputedStyle(document.documentElement).fontSize) >= 24) setList(true);
@@ -161,8 +222,11 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
     .filter((e) => e.kind === "node" && e.content.bookId === entity.id && !e.content.deleted)
     .sort(
       (a, b) =>
+        (a.content.order ?? Number.MAX_SAFE_INTEGER) -
+          (b.content.order ?? Number.MAX_SAFE_INTEGER) ||
         Math.min(...a.revisions.map((r) => r.createdAt)) -
-          Math.min(...b.revisions.map((r) => r.createdAt)) || a.id.localeCompare(b.id),
+          Math.min(...b.revisions.map((r) => r.createdAt)) ||
+        a.id.localeCompare(b.id),
     );
   const mapHeight = Math.max(
     800,
@@ -178,6 +242,19 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
       nodes.some((n) => n.id === e.content.from) &&
       nodes.some((n) => n.id === e.content.to),
   );
+  useEffect(() => {
+    if (!frameRequested || list) return;
+    const frame = requestAnimationFrame(() => {
+      fitMap();
+      setFrameRequested(false);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [frameRequested, list, nodeWidth, nodes.length, fitMap]);
+  const openNode = (id: string) => {
+    setFrameRequested(false);
+    setZoom(1);
+    setNewNode(id);
+  };
   useEffect(() => {
     if (!newNode) return;
     const node = document.getElementById(`node-${newNode}`);
@@ -212,7 +289,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
       bookId: entity.id,
       ...position,
     });
-    if (id) setNewNode(id);
+    if (id) openNode(id);
   };
   const connect = () => {
     if (
@@ -240,7 +317,12 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
   return (
     <div
       className="book-map-editor"
-      style={{ "--book-node-width": `${nodeWidth}px` } as CSSProperties}
+      style={
+        {
+          "--book-node-width": `${nodeWidth}px`,
+          "--book-overview-type": `${1 / zoom}rem`,
+        } as CSSProperties
+      }
     >
       <label className="book-label" htmlFor="map-title">
         Kartans rubrik
@@ -263,8 +345,26 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
         </Button>
       </div>
       {nodes.length === 0 && (
+        <div className="book-map-hint">
+          <p>
+            Vill du ha något att börja med? En mittpunkt och tre tomma bubblor kan hjälpa tankarna i
+            gång.
+          </p>
+          <Button
+            variant="outline"
+            className="mt-3"
+            onClick={() => {
+              createMapStarter(store, entity.id, draft.date);
+              setFrameRequested(true);
+            }}
+          >
+            Använd startmallen
+          </Button>
+        </div>
+      )}
+      {!list && nodes.length > 0 && zoom < 0.75 && (
         <p className="book-map-hint">
-          Börja med en tanke. Lägg sedan till fler och koppla ihop dem.
+          Tryck på en bubbla för att skriva. Alla bubblor går att flytta eller ta bort.
         </p>
       )}
       {list ? (
@@ -278,6 +378,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
               list
               number={i + 1}
               bounds={bounds}
+              onOpen={openNode}
             />
           ))}
         </div>
@@ -289,6 +390,8 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
             tabIndex={0}
             role="region"
             aria-label="Tankekarta, rullningsbar"
+            onPointerDownCapture={() => setFrameRequested(false)}
+            onKeyDownCapture={() => setFrameRequested(false)}
           >
             <div style={{ width: 1100 * zoom, height: mapHeight * zoom }}>
               <div
@@ -324,6 +427,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
                     list={false}
                     number={i + 1}
                     bounds={bounds}
+                    onOpen={openNode}
                   />
                 ))}
               </div>
@@ -354,12 +458,9 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
             <Button
               variant="outline"
               size="icon"
-              aria-label="Till början av kartan"
-              title="Till början av kartan"
-              onClick={() => {
-                setZoom(1);
-                viewport.current?.scrollTo({ left: 0, top: 0 });
-              }}
+              aria-label="Visa översikt"
+              title="Visa översikt"
+              onClick={fitMap}
             >
               <MapSketchIcon name="reset" />
             </Button>
@@ -383,7 +484,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
           <option value="">Välj tanke</option>
           {nodes.map((n, i) => (
             <option key={n.id} value={n.id}>
-              {n.content.text || `Tanke ${i + 1}`}
+              {n.content.text || n.content.title || `Tanke ${i + 1}`}
             </option>
           ))}
         </select>
@@ -401,7 +502,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
             .filter((n) => n.id !== from)
             .map((n) => (
               <option key={n.id} value={n.id}>
-                {n.content.text || `Tanke ${nodes.indexOf(n) + 1}`}
+                {n.content.text || n.content.title || `Tanke ${nodes.indexOf(n) + 1}`}
               </option>
             ))}
         </select>
@@ -411,8 +512,13 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
         {edges.map((e) => (
           <div className="book-tools mt-3" key={e.id}>
             <p className="min-w-0 flex-1">
-              {nodes.find((n) => n.id === e.content.from)?.content.text || "Tanke"} ↔{" "}
-              {nodes.find((n) => n.id === e.content.to)?.content.text || "Tanke"}
+              {nodes.find((n) => n.id === e.content.from)?.content.text ||
+                nodes.find((n) => n.id === e.content.from)?.content.title ||
+                "Tanke"}{" "}
+              ↔{" "}
+              {nodes.find((n) => n.id === e.content.to)?.content.text ||
+                nodes.find((n) => n.id === e.content.to)?.content.title ||
+                "Tanke"}
             </p>
             <Button
               variant="ghost"

@@ -659,7 +659,7 @@
   vector-effect: non-scaling-stroke;
 }
 .book-bubble-outline .book-bubble-fill {
-  fill: var(--book-lavender);
+  fill: var(--book-bubble-tint, var(--book-lavender));
   stroke: none;
 }
 .book-bubble-outline .book-bubble-pen {
@@ -680,6 +680,35 @@
 .book-map-menu .book-sketch-icon {
   width: 1.25rem;
   height: 1.25rem;
+}
+.book-bubble[data-start="true"] {
+  --book-bubble-tint: var(--book-sage);
+}
+.book-bubble .book-map-open {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--book-ink);
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: var(--book-overview-type) !important;
+  line-height: 1.3 !important;
+  cursor: pointer;
+}
+.book-map-open span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.book-bubble .book-map-open:focus-visible {
+  outline-width: calc(var(--book-overview-type) / 8);
+  outline-offset: calc(var(--book-overview-type) * 0.1875);
 }
 .book-bubble .book-field {
   border: 0;

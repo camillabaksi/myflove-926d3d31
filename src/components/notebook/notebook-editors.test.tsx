@@ -81,10 +81,32 @@ beforeEach(() => {
   );
   Element.prototype.scrollIntoView = vi.fn();
   Element.prototype.scrollTo = vi.fn();
+  vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) =>
+    window.setTimeout(() => callback(performance.now()), 0),
+  );
+  vi.stubGlobal("cancelAnimationFrame", (id: number) => clearTimeout(id));
 });
 afterEach(() => vi.unstubAllGlobals());
 
 describe("Tankekarta med riktiga bokutkast", () => {
+  it("adds a starter only after a choice and preserves writing when switching views", async () => {
+    const saved = setup("map");
+    expect(saved.entities().filter((entry) => entry.kind === "node")).toHaveLength(0);
+    await userEvent.click(screen.getByRole("button", { name: "Använd startmallen" }));
+    expect(saved.entities().filter((entry) => entry.kind === "node")).toHaveLength(4);
+    expect(saved.entities().filter((entry) => entry.kind === "edge")).toHaveLength(3);
+    fireEvent.change(screen.getByLabelText("Börja här"), { target: { value: "Min lediga dag" } });
+    fireEvent.blur(screen.getByLabelText("Börja här"));
+    await userEvent.click(screen.getByRole("button", { name: "Listvy" }));
+    expect(screen.getByLabelText("Börja här")).toHaveValue("Min lediga dag");
+    await userEvent.click(screen.getByRole("button", { name: "Kartvy" }));
+    expect(screen.getByLabelText("Börja här")).toHaveValue("Min lediga dag");
+    expect(saved.entities().filter((entry) => entry.kind === "node")).toHaveLength(4);
+    expect(
+      saved.entities().find((entry) => entry.content.title === "Börja här")?.heads,
+    ).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: "Använd startmallen" })).toBeNull();
+  });
   it("places new thoughts in free spaces after deletion and beyond the first nine", async () => {
     const saved = setup("map");
     for (let i = 0; i < 10; i++)
@@ -147,7 +169,7 @@ describe("Tankekarta med riktiga bokutkast", () => {
       await userEvent.click(screen.getByRole("button", { name: "Zooma ut" }));
     expect(screen.getByRole("button", { name: "Zooma ut" })).toBeDisabled();
     expect(screen.getByLabelText("Zoomnivå")).toHaveTextContent("50 %");
-    await userEvent.click(screen.getByRole("button", { name: "Till början av kartan" }));
+    await userEvent.click(screen.getByRole("button", { name: "Visa översikt" }));
     expect(screen.getByLabelText("Zoomnivå")).toHaveTextContent("100 %");
   });
 });
