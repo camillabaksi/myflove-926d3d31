@@ -634,14 +634,26 @@
 }
 .book-bubble {
   width: var(--book-node-width, 240px);
-  padding: 0.5rem 0.75rem 0.75rem;
-  border-radius: 1.25rem;
+  min-height: 10rem;
+  padding: 1.1rem 1.65rem 1.2rem;
+  border-radius: 50%;
 }
 .book-bubble .book-field {
   border: 0;
   background: transparent;
   padding: 0.25rem;
-  resize: vertical;
+  min-height: 3.5rem;
+  field-sizing: content;
+  resize: none;
+  text-align: center;
+}
+.book-map-editor [data-node-id] .book-field {
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: 1.5rem !important;
+  line-height: 1.45 !important;
+}
+.book-bubble .book-node-tools .book-label {
+  font-size: 0.8rem;
 }
 .book-node-tools {
   display: flex;
@@ -650,6 +662,7 @@
 }
 .book-node-tools .book-label {
   flex: 1;
+  min-width: 0;
   margin: 0;
   color: var(--book-muted);
 }
