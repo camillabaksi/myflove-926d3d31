@@ -331,7 +331,7 @@
   .notebook {
     padding: 1rem;
   }
-  .book-columns {
+  .book-columns:not(.book-sheet) {
     grid-template-columns: minmax(0, 1fr);
   }
   .book-column[data-hidden="true"] {
@@ -350,7 +350,9 @@
   display: flex;
   flex-wrap: wrap;
 }
-.notebook:has(.book-decision) .book-list { flex: 1 1 11rem; }
+.notebook:has(.book-decision) .book-list {
+  flex: 1 1 11rem;
+}
 .notebook:has(.book-decision) .book-page {
   flex: 3 1 30rem;
   max-width: 100%;
@@ -437,6 +439,7 @@
 .book-sheet .book-column h2 {
   width: fit-content;
   max-width: 100%;
+  overflow-wrap: anywhere;
   font-size: 1.9rem !important;
   font-weight: 500;
   line-height: 1.4;
@@ -445,8 +448,12 @@
   background: var(--book-sage);
   border-radius: 48% 8% 40% 6% / 10% 50% 12% 55%;
 }
-.book-sheet .book-column[data-column="cons"] h2 { background: var(--book-apricot); }
-.book-sheet .book-column[data-column="uncertain"] h2 { background: var(--book-lavender); }
+.book-sheet .book-column[data-column="cons"] h2 {
+  background: var(--book-apricot);
+}
+.book-sheet .book-column[data-column="uncertain"] h2 {
+  background: var(--book-lavender);
+}
 .book-sheet .book-point {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 44px;
@@ -472,7 +479,9 @@
   text-decoration-color: var(--book-muted);
   text-underline-offset: 0.2em;
 }
-.book-sheet .book-point[data-crossed="true"] .book-hand { text-decoration: line-through; }
+.book-sheet .book-point[data-crossed="true"] .book-hand {
+  text-decoration: line-through;
+}
 .book-point-menu {
   grid-column: 2;
   grid-row: 1;
@@ -486,10 +495,17 @@
   gap: 0.5rem;
   color: var(--book-ink);
 }
-.book-point-marks:empty { display: none; }
-.book-point-marks svg { width: 1rem; height: 1rem; }
+.book-point-marks:empty {
+  display: none;
+}
+.book-point-marks svg {
+  width: 1rem;
+  height: 1rem;
+}
 .book-sheet .book-source,
-.book-sheet .book-conflict { grid-column: 1 / -1; }
+.book-sheet .book-conflict {
+  grid-column: 1 / -1;
+}
 .book-sheet .book-add-line {
   min-height: 44px;
   height: auto;
@@ -506,8 +522,13 @@
   white-space: normal;
   border-color: var(--book-line);
 }
-.book-decision-history button { min-height: 44px; }
-.notebook.book-decision-menu {
+.book-decision-history button {
+  min-height: 44px;
+  max-width: 100%;
+  height: auto;
+}
+.notebook.book-decision-menu,
+.notebook.book-map-menu {
   width: 17rem;
   max-width: calc(100vw - 24px);
   margin: 0;
@@ -517,24 +538,196 @@
   box-shadow: var(--book-shadow);
   font-size: 1rem;
 }
-.book-decision-menu [role^="menuitem"] {
+.book-decision-menu [role^="menuitem"],
+.book-map-menu [role^="menuitem"] {
   min-height: 44px;
   white-space: normal;
   font-size: 1rem;
 }
-.book-decision-menu [role^="menuitem"]:focus {
+.book-decision-menu [role^="menuitem"]:focus,
+.book-map-menu [role^="menuitem"]:focus {
   background: var(--book-lavender);
   color: var(--book-ink);
 }
-.book-decision-menu [role="separator"] { background: var(--book-line); }
-.book-sheet[data-focused="true"] { grid-template-columns: minmax(0, 1fr); }
-.book-sheet[data-focused="true"] .book-column { border-left: 0; }
+.book-decision-menu [role="separator"] {
+  background: var(--book-line);
+}
+.book-sheet[data-focused="true"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.book-sheet[data-focused="true"] .book-column {
+  border-left: 0;
+}
+/* The comparison stays side by side on phones. Focus mode is an explicit choice. */
 @container (max-width: 30rem) {
-  .book-sheet { grid-template-columns: minmax(0, 1fr); }
-  .book-sheet .book-column[data-column="cons"] {
-    border-left: 0;
-    border-top: 1px solid var(--book-line);
-    padding-top: 1rem;
-    margin-top: 1.5rem;
+  .book-sheet .book-column,
+  .book-sheet .book-column[data-column="cons"],
+  .book-sheet .book-column[data-column="uncertain"] {
+    padding-inline: 0.4rem;
   }
+  .book-sheet .book-column h2 {
+    font-size: 1.5rem !important;
+    padding-inline: 0.2rem;
+  }
+  .book-sheet .book-point {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .book-sheet .book-point-menu {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: end;
+  }
+  .book-sheet .book-hand {
+    font-size: 1.4rem !important;
+  }
+  .book-sheet .book-add-line {
+    font-size: 1.2rem !important;
+    gap: 0.25rem;
+    padding-right: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Notebook-specific tools keep their touch area without dominating the page. */
+.book-map-editor :is(button, input, select),
+.book-diary-tools button {
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 44px;
+}
+.book-map-tools {
+  margin-top: 0.75rem;
+}
+.book-map-picker {
+  display: none;
+}
+@media (max-width: 60rem) {
+  .notebook[data-book-kind="map"] .book-list > button {
+    display: none;
+  }
+  .book-map-picker {
+    display: block;
+    width: 100%;
+    color: var(--book-muted);
+  }
+  .book-map-picker select {
+    margin-top: 0.35rem;
+    color: var(--book-ink);
+  }
+}
+.book-map-hint {
+  color: var(--book-muted);
+  margin-top: 0.75rem;
+}
+.book-map-viewport {
+  height: clamp(18rem, 50svh, 30rem);
+  margin-block: 0.75rem;
+  scroll-padding: 8px;
+}
+.book-map {
+  background-image: radial-gradient(var(--book-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.book-map > svg {
+  height: 100%;
+}
+.book-bubble {
+  width: var(--book-node-width, 240px);
+  padding: 0.5rem 0.75rem 0.75rem;
+  border-radius: 1.25rem;
+}
+.book-bubble .book-field {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem;
+  resize: vertical;
+}
+.book-node-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.book-node-tools .book-label {
+  flex: 1;
+  margin: 0;
+  color: var(--book-muted);
+}
+.book-node-tools button {
+  flex-shrink: 0;
+}
+.book-map-zoom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.book-map-zoom output {
+  color: var(--book-muted);
+  min-width: 3.5em;
+  text-align: center;
+}
+.book-map-links summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 0.5rem;
+}
+.book-map-links summary:focus-visible {
+  outline: 2px solid var(--book-ink);
+  outline-offset: 3px;
+}
+
+/* Diary: date, title and words share one quiet paper surface. */
+.book-diary-tools {
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+.book-diary-tools button {
+  box-shadow: none;
+  padding-inline: 0.5rem;
+  color: var(--book-muted);
+}
+.book-diary-sheet {
+  padding: 1.25rem clamp(0.75rem, 3vw, 1.75rem) 1rem;
+  background-color: var(--book-paper);
+  border: 1px solid var(--book-line);
+  border-radius: 0.2rem 0.6rem 0.6rem 0.2rem;
+  box-shadow:
+    3px 3px 0 var(--book-paper),
+    4px 4px 0 var(--book-line),
+    var(--book-shadow);
+}
+.book-diary-sheet .book-field {
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  padding-inline: 0;
+}
+.book-diary-sheet .book-diary-date {
+  width: min(100%, 13rem);
+  color: var(--book-muted);
+  padding-block: 0.25rem;
+}
+.book-diary-sheet .book-diary-title {
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: 2.1rem !important;
+  line-height: 1.4;
+  margin-block: 0.5rem 0.75rem;
+}
+.book-diary-sheet .book-diary-title.book-print {
+  font-family: inherit !important;
+  font-size: 1.4rem !important;
+}
+.book-diary-sheet .book-writing {
+  min-height: 22rem;
+  line-height: 2.4rem !important;
+  padding-block: 0.25rem;
+  background-image: repeating-linear-gradient(
+    transparent 0,
+    transparent calc(2.4rem - 1px),
+    color-mix(in srgb, var(--book-line) 60%, transparent) calc(2.4rem - 1px),
+    color-mix(in srgb, var(--book-line) 60%, transparent) 2.4rem
+  );
+  background-position-y: 0.25rem;
 }

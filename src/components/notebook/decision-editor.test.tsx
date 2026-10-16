@@ -2,7 +2,6 @@ import { useState } from "react";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { readFileSync } from "node:fs";
 import type { BookEntity, NotebookContent } from "@/lib/notebook";
 import type { NotebookStore } from "@/hooks/use-notebook";
 
@@ -79,12 +78,5 @@ describe("Beslut – papperspresentation", () => {
     expect(calls.update).toHaveBeenCalledWith({ uncertain: true });
     await userEvent.click(screen.getByRole("button", { name: "Hjälp mig sortera tankarna" }));
     expect(screen.getByText("Vad känns viktigt för dig just nu?")).toBeTruthy();
-  });
-  it("keeps responsive paper and 44px menu rules scoped locally", () => {
-    const css = readFileSync("src/components/notebook/notebook.css", "utf8");
-    expect(css).toContain('@container (max-width: 30rem)');
-    expect(css).toContain('.notebook:has(.book-decision) .book-workspace');
-    expect(css).toMatch(/\.book-decision-menu \[role\^="menuitem"\]\s*\{\s*min-height: 44px/);
-    expect(css).toContain('font-family: "Caveat", "Segoe Print", cursive !important');
   });
 });

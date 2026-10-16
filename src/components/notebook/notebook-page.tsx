@@ -54,7 +54,7 @@ function OwnedNotebook({
     }
   };
   return (
-    <section className="notebook" aria-labelledby="notebook-title">
+    <section className="notebook" data-book-kind={kind} aria-labelledby="notebook-title">
       <BookNavigation kind={kind} />
       <header className="book-header">
         <div>
@@ -116,6 +116,23 @@ function OwnedNotebook({
       </div>
       <div className="book-workspace">
         <aside className="book-list" aria-label="Sparade sidor">
+          {kind === "map" && entries.length > 0 && (
+            <label className="book-map-picker">
+              Sparade kartor
+              <select
+                className="book-field"
+                value={selected ?? ""}
+                onChange={(e) => setSelected(e.target.value || null)}
+              >
+                <option value="">Välj en karta</option>
+                {entries.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.content.title || "Utan rubrik"} · {e.content.date}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           {entries.length === 0 ? (
             <p className="book-muted">{trash ? "Papperskorgen är tom." : "Inga sidor ännu."}</p>
           ) : (
