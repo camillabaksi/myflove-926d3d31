@@ -24,6 +24,7 @@ import { dateHeadingLabel } from "@/lib/date-presentation";
 import { useTextLayout } from "@/hooks/use-text-layout";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import WeeklyPulse from "@/components/weekly-pulse";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
@@ -101,6 +102,9 @@ export function TodayContent() {
 
       <MyFloveWide className="pace-today-pace pt-4">
         <TodayPace pace={pace} />
+      </MyFloveWide>
+      <MyFloveWide className="pt-4">
+        <WeeklyPulse />
       </MyFloveWide>
     </MyFlovePageGrid>
   );

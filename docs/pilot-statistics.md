@@ -13,7 +13,7 @@ Mål: följa om deltagare kommer igång, återkommer och upplever konkret vardag
 | Återkommer kärnanvändningen? | ID med kärnhandlingar på minst två svenska kalenderdagar / ID med minst en kärnhandling under 30 dygn | Beskrivande upprepning inom fönstret, inte D7-/D30-retention eller kontobaserad återkomst. Nya ID har kortare observationsmöjlighet. |
 | Vilket stöd används? | Unika ID per handlingstyp / samtliga ID med kärnhandling | Fånga/planera, genomföra, energiincheckning, startad paus, valt nästa steg. Överlapp tillåts; aldrig summera kategorier till personer. Definitionerna finns i PILOT_FEATURES. |
 | Finns friktion vid incheckning? | ID med start följd av slutförd energiincheckning inom 30 minuter / ID med registrerad start | Rätt tidsordning; ett ID en gång trots flera försök. Bara händelser inom perioden. Ingångar utan start ingår inte i nämnaren. Inte en försöksbaserad konvertering eller säker avbrottsgrad. |
-| Blir vardagen lättare? | Inget siffervärde ännu: enkätsvar saknar koppling till denna vy | Visa den frivilliga veckopulsens tre exakta frågor om överblick, mental belastning och extra arbete, skala 1–5. Klick och återkomst ersätter inte dessa svar. |
+| Blir vardagen lättare? | Frivillig veckopuls: svar av startade formulär, svarsfördelning och median per fråga | Tre fasta frågor om överblick, upplevd mental belastning och appen som extra arbete, skala 1–5. Egen period: pågående svensk kalendervecka och sju tidigare. Start betyder valt Svara, inte visad inbjudan. Ingen sammanslagen nyttopoäng eller effektinferens. |
 
 ## Avgränsning och integritet
 
@@ -22,12 +22,12 @@ Mål: följa om deltagare kommer igång, återkommer och upplever konkret vardag
 - ID märkta is_internal=true undantas i pilotens användningsmått. Okänd intern/extern status redovisas öppet och räknas inte som verifierade externa deltagare. Ingen ny koppling till konton eller identitetsuppslag görs.
 - Delade reserv-ID `unknown` och `server` kan inte identifiera installationer och undantas; antal undantagna händelser anges separat.
 - Alla privilegierade läsningar sker efter adminprövning. Konton, aktivitetsobservationer, roller, händelser och internmärkningar pagineras. Misslyckade läsningar visar fel, inte falska nollor. Om händelseläsningen når skyddsgränsen om 500 000 rader med ytterligare data visas inget partiellt resultat som komplett.
-- Vyn läser inga privata planer, hälsovärden, meddelanden eller fritextsvar och ändrar inte spårning, opt-out eller appdata.
+- Vyn läser inga privata planer, hälsologgar, meddelanden eller fritextsvar. Veckopulsen är separat frivillig insamling, kopplad till kontot för deduplicering och ändring men bara aggregerad i admin. Den kopplas aldrig till anonyma användnings-ID. Se docs/weekly-pulse.md.
 - Perioden är senaste 30 * 24 timmar fram till beräkningstidpunkten; dagliga grupper använder Europe/Stockholm, även vid sommartidsbyte. Dagstabellen visar 14 kalenderdagar inklusive den pågående dagen.
 - Rågranskning och råexport har egna periodval och inkluderingsregler. Kopiera översikt att dela använder bara aggregat från pilotöversikten, med enheter och begränsningar.
 
 ## Nästa underlag från piloten
 
-Enkätsvar behöver en separat, tydligt informerad och frivillig insamling. När den ansluts: visa antal svar av antal inbjudna, bortfall och fördelning per fråga. Jämför varje av de fem identiska T0-/T1-frågorna inom samma deltagare och redovisa antal matchade par. Lägre svar innebär förbättring på de fyra belastningsfrågorna, högre på frågan om energimönster. Uteblivet svar är inte negativt svar. Före/efter utan jämförelsegrupp visar inte att appen orsakat en förändring.
+Veckopulsen är en separat, tydligt informerad och frivillig insamling. För en senare formell pilot behövs också antal inbjudna och bortfall. Jämför varje av de fem identiska T0-/T1-frågorna inom samma deltagare och redovisa antal matchade par. Lägre svar innebär förbättring på de fyra belastningsfrågorna, högre på frågan om energimönster. Uteblivet svar är inte negativt svar. Före/efter utan jämförelsegrupp visar inte att appen orsakat en förändring.
 
-Den här ändringen lägger inte till ett nytt enkätflöde, diagnosinsamling, resultatdata eller nya målgränser. Bestäm mätperiod, urval och beslutströsklar före nästa datainsamling.
+Veckopuls v1 ansluter endast de tre veckofrågorna, med uttrycklig inskickning och utan diagnoser eller fritext. Den samlar inte T0-/T1-frågorna eller verifierar pilotdeltagande. Veckomedianer kan avse olika personer och är inte en matchad före-/efteranalys. Antal som bara sett inbjudan mäts inte; svar av startade formulär får inte beskrivas som svarsfrekvens bland alla inbjudna. Bestäm urval och beslutströsklar separat inför en formell validering.

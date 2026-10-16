@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { BarChart3, Copy, Lock } from "lucide-react";
 import Layout from "@/components/layout";
@@ -9,6 +9,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { AccountStatistics, usePilotAccounts } from "@/components/admin/user-funnel";
 import UserAnalytics from "@/components/admin/user-analytics";
 import AnalyticsExport from "@/components/admin/analytics-export";
+import WeeklyPulseStats from "@/components/admin/weekly-pulse-stats";
 import { Button } from "@/components/ui/button";
 import { getPilotUsageFn } from "@/lib/pilot-statistics.functions";
 import { PILOT_FEATURES, pilotDate, type PilotUsage, type PilotAccounts } from "@/lib/pilot-statistics";
@@ -24,7 +25,7 @@ export function pilotSnapshot(accounts: PilotAccounts, usage: PilotUsage): strin
     `Registrerad kärnanvändning: ${usage.meaningfulBrowsers} anonyma app-/webbläsar-ID.`,
     `Återkommande kärnanvändning på minst två svenska kalenderdagar: ${usage.repeatedBrowsers} av ${usage.meaningfulBrowsers} (${rate(usage.repeatRate)}).`,
     `Märkta interna ID är borträknade (${usage.internalBrowsersExcluded}). ${usage.unknownBrowsers} ID har okänd intern/extern status. ID är inte personer och kan omfatta flera enheter eller återställd lagring.`,
-    "Upplevd avlastning och appens egen belastning: enkätsvar är ännu inte anslutna till denna vy. Användningsdata visar inte effekt.",
+    "Upplevd avlastning och appens egen belastning redovisas separat i den frivilliga veckopulsen, med egna veckoperioder och svarsfördelningar. Användningsdata visar inte effekt.",
   ].join("\n");
 }
 
@@ -41,6 +42,7 @@ export default function AdminStats() {
 
 export function PilotDashboard() {
   const { t } = useLang();
+  const queryClient = useQueryClient();
   const accounts = usePilotAccounts();
   const usage = useQuery({ queryKey: ["pilot-usage"], queryFn: () => getPilotUsageFn() as Promise<PilotUsage>, retry: false });
   const [copyStatus, setCopyStatus] = useState("");
@@ -58,7 +60,7 @@ export function PilotDashboard() {
       <p className="text-sm">{t("Senaste 30 dagarna, löpande. Dagindelning: svensk tid.")}{data && ` ${pilotDate(data.from)}–${pilotDate(data.to)}.`}</p>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={copySnapshot} disabled={!accounts.data || !data || accounts.isError || usage.isError}><Copy size={16} className="mr-2" />{t("Kopiera översikt att dela")}</Button>
-        <Button variant="outline" onClick={() => { void accounts.refetch(); void usage.refetch(); }} disabled={accounts.isFetching || usage.isFetching}>{t("Uppdatera")}</Button>
+        <Button variant="outline" onClick={() => { void accounts.refetch(); void usage.refetch(); void queryClient.invalidateQueries({ queryKey: ["weekly-pulse-stats"] }); }} disabled={accounts.isFetching || usage.isFetching}>{t("Uppdatera")}</Button>
       </div>
       <p role="status" className="text-sm text-muted-foreground">{copyStatus}</p>
     </header>
@@ -112,24 +114,13 @@ export function PilotDashboard() {
       </>}
     </section>
 
-    <section className={card} aria-label={t("Upplevd nytta")}>
-      <div><h2 className="text-lg font-semibold">{t("Blir vardagen lättare?")}</h2><p className="text-sm text-muted-foreground mt-1">{t("Detta behöver vi fråga testarna om. Enkätsvar är ännu inte anslutna till denna vy.")}</p></div>
-      <p className="w-full min-w-0 rounded-2xl bg-secondary px-3 py-2 text-xs font-medium">{t("Upplevd nytta · underlag saknas här")}</p>
-      <p className="text-sm">{t("Veckopuls enligt testprotokollet, frivilligt och med samma skala 1–5:")}</p>
-      <ul className="list-disc pl-5 space-y-2 text-sm">
-        <li>{t("Paceable hjälpte mig att få överblick denna vecka.")}</li>
-        <li>{t("Paceable minskade min upplevda mentala belastning.")}</li>
-        <li>{t("Att använda Paceable kändes som ytterligare en uppgift.")}</li>
-      </ul>
-      <p className="text-sm text-muted-foreground">{t("Redovisa varje fråga separat med antal svar av antal inbjudna och svarens fördelning. Jämför de fem identiska före-/efterfrågorna inom samma deltagare när T0 och T1 finns. Uteblivna svar är inte negativa svar.")}</p>
-      <p className="text-sm text-muted-foreground">{t("Användning och återkomst är beteendesignaler. De visar inte minskad belastning eller att appen orsakat en förbättring. Målvärden behöver bestämmas före nästa mätperiod.")}</p>
-    </section>
+    <WeeklyPulseStats />
 
     <CollapsibleSection title={t("Granskning och export")} defaultCollapsed className={card}
       description={t("Detaljer för felsökning, internmärkning och historik. Exporterna nedan har egna periodval och ska inte blandas med pilotöversiktens 30 dagar.")}>
       <UserAnalytics />
       <AnalyticsExport />
     </CollapsibleSection>
-    <p className="text-xs text-muted-foreground">{t("Underlag: kontons registrerings- och aktivitetsuppgifter samt anonyma händelsetyper. Översikten läser inga privata planer, energivärden, meddelanden eller fritextsvar. Ingen ny spårning eller kontokoppling införs.")}</p>
+    <p className="text-xs text-muted-foreground">{t("Underlag: kontons registrerings- och aktivitetsuppgifter, anonyma händelsetyper och separat inskickade veckopulssvar. Veckopulsen kopplas till kontot för ett svar per vecka men visas bara sammanställd här. Översikten läser inga privata planer, energivärden, meddelanden eller fritextsvar. Ingen koppling görs mellan veckopulsen och anonyma användnings-ID.")}</p>
   </div>;
 }

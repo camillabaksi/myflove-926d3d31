@@ -155,6 +155,13 @@
       "when": 1792071265214,
       "tag": "0021_lock_admin_activity_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1792155441589,
+      "tag": "0022_pilot_weekly_pulse",
+      "breakpoints": true
     }
   ]
 }
