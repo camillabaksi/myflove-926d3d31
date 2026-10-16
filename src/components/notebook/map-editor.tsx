@@ -1,19 +1,4 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import {
-  Move,
-  Plus,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  ArrowDown,
-  Trash2,
-  ZoomIn,
-  ZoomOut,
-  Scan,
-  List,
-  Network,
-  MoreHorizontal,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,6 +9,7 @@ import {
 import { useBookDraft, type NotebookStore } from "@/hooks/use-notebook";
 import { localBookDate, type BookEntity } from "@/lib/notebook";
 import { BookHistory, SourceLink } from "./book-editor";
+import { MapSketchBubble, MapSketchIcon } from "./map-sketch";
 function MapNode({
   entity,
   store,
@@ -52,6 +38,7 @@ function MapNode({
       style={list ? undefined : { left: draft.x ?? 80, top: draft.y ?? 80 }}
       data-node-id={entity.id}
     >
+      {!list && <MapSketchBubble />}
       <div className="book-node-tools">
         {!list && (
           <Button
@@ -90,7 +77,7 @@ function MapNode({
               flush();
             }}
           >
-            <Move aria-hidden />
+            <MapSketchIcon name="move" />
           </Button>
         )}
         <label className="book-label" htmlFor={`node-${entity.id}`}>
@@ -99,15 +86,15 @@ function MapNode({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" aria-label={`Alternativ för tanke ${number}`}>
-              <MoreHorizontal aria-hidden />
+              <MapSketchIcon name="more" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="notebook book-map-menu" align="end" collisionPadding={12}>
             {[
-              { icon: ArrowLeft, dx: -30, dy: 0, label: "Flytta vänster" },
-              { icon: ArrowRight, dx: 30, dy: 0, label: "Flytta höger" },
-              { icon: ArrowUp, dx: 0, dy: -30, label: "Flytta uppåt" },
-              { icon: ArrowDown, dx: 0, dy: 30, label: "Flytta nedåt" },
+              { icon: "left" as const, dx: -30, dy: 0, label: "Flytta vänster" },
+              { icon: "right" as const, dx: 30, dy: 0, label: "Flytta höger" },
+              { icon: "up" as const, dx: 0, dy: -30, label: "Flytta uppåt" },
+              { icon: "down" as const, dx: 0, dy: 30, label: "Flytta nedåt" },
             ].map((d) => (
               <DropdownMenuItem
                 key={d.label}
@@ -116,7 +103,7 @@ function MapNode({
                   flush();
                 }}
               >
-                <d.icon aria-hidden />
+                <MapSketchIcon name={d.icon} />
                 {d.label}
               </DropdownMenuItem>
             ))}
@@ -126,7 +113,7 @@ function MapNode({
                 flush();
               }}
             >
-              <Trash2 aria-hidden />
+              <MapSketchIcon name="trash" />
               Ta bort tanke
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -267,11 +254,11 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
       />
       <div className="book-tools book-map-tools">
         <Button onClick={addNode}>
-          <Plus aria-hidden />
+          <MapSketchIcon name="plus" />
           Ny tanke
         </Button>
         <Button variant="outline" aria-pressed={list} onClick={() => setList((v) => !v)}>
-          {list ? <Network aria-hidden /> : <List aria-hidden />}
+          {list ? <MapSketchIcon name="network" /> : <MapSketchIcon name="list" />}
           {list ? "Kartvy" : "Listvy"}
         </Button>
       </div>
@@ -351,7 +338,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
               disabled={zoom <= 0.5}
               onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
             >
-              <ZoomOut aria-hidden />
+              <MapSketchIcon name="zoom-out" />
             </Button>
             <output aria-label="Zoomnivå">{Math.round(zoom * 100)} %</output>
             <Button
@@ -362,7 +349,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
               disabled={zoom >= 1.5}
               onClick={() => setZoom((z) => Math.min(1.5, z + 0.25))}
             >
-              <ZoomIn aria-hidden />
+              <MapSketchIcon name="zoom-in" />
             </Button>
             <Button
               variant="outline"
@@ -374,7 +361,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
                 viewport.current?.scrollTo({ left: 0, top: 0 });
               }}
             >
-              <Scan aria-hidden />
+              <MapSketchIcon name="reset" />
             </Button>
           </div>
         </>
@@ -441,7 +428,7 @@ export function MapEditor({ entity, store }: { entity: BookEntity; store: Notebo
                 )
               }
             >
-              <Trash2 aria-hidden />
+              <MapSketchIcon name="trash" />
             </Button>
           </div>
         ))}
