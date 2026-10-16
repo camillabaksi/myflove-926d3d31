@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-15";
+export const CHANGELOG_UPDATED = "2026-10-16";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-16 – Fristående filmutkast v5",
+    items: ["Filmförfining (2026-10-16): separat 20-sekunders MP4 med svävande tankebubblor, kantvis förångning till färgmatchad rök, text efter absorption och lätt rörliga luftpartiklar. Redigerbar v5-källa sparad; v4 och det publicerade introt bevaras. Bildsekvenser och full avkodning kontrollerade; realtidsuppspelning och lyssning återstår. Röken är mjukare/molnigare än referensen, några inbakade partiklar är statiska och färdbanornas tidigare svävningsbidrag har justerats cirka 1–3 px. Granskningsutkast, ingen publicering eller funktionell appändring."],
+  },
   {
     title: "2026-10-15 – Beslut som personlig papperssida",
     items: ["Handskrivet redigerbart ämne, diskreta salvia-/aprikosrubriker och mjuka papperslinjer. Punktåtgärder samlas i Fler alternativ; viktighet och stjärna syns intill texten. Spalter anpassas efter läsbart utrymme och textstorlek. Sparanrop, versioner, kontogränser och övriga bokdelar bevaras. Ingen publicering."],
