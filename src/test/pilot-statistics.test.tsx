@@ -14,6 +14,7 @@ vi.mock("@/components/layout", () => ({ default: ({ children }: { children: Reac
 vi.mock("@tanstack/react-router", () => ({ Link: ({ children }: { children: ReactNode }) => <a>{children}</a> }));
 vi.mock("@/components/admin/user-analytics", () => ({ default: () => <p>Raw audit</p> }));
 vi.mock("@/components/admin/analytics-export", () => ({ default: () => null }));
+vi.mock("@/components/admin/weekly-pulse-stats", () => ({ default: () => <section aria-label="Upplevd nytta">Veckopuls visas separat</section> }));
 vi.mock("@/components/collapsible-section", () => ({ default: ({ title, defaultCollapsed, children }: { title: string; defaultCollapsed?: boolean; children: ReactNode }) => <details open={!defaultCollapsed}><summary>{title}</summary>{children}</details> }));
 const now = Date.parse("2026-10-15T12:00:00Z");
 const accounts = { ...summarizePilotAccounts([], new Set(), now), active30d: 12, active7d: 8, newActive7d: 2 };
@@ -39,7 +40,7 @@ describe("Concrete pilot overview", () => {
     expect(within(screen.getByRole("region", { name: "Aktiva konton" })).getByText("12")).toBeInTheDocument();
     const core = screen.getByRole("region", { name: "Kärnanvändning" });
     expect(within(core).getByText(/1 av 2 ID har gjort kärnhandlingar/)).toBeInTheDocument();
-    expect(screen.getByText("Upplevd nytta · underlag saknas här")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Upplevd nytta" })).toBeInTheDocument();
     expect(screen.getByText("Visa kontohistorik och avgränsning").closest("details")).not.toHaveAttribute("open");
     expect(screen.getByText("Granskning och export").closest("details")).not.toHaveAttribute("open");
     fireEvent.click(screen.getByRole("button", { name: "Kopiera översikt att dela" }));
@@ -56,7 +57,7 @@ describe("Concrete pilot overview", () => {
     show();
     await screen.findByText(/Inga kärnhandlingar har registrerats/);
     expect(screen.queryByText("0 %")).not.toBeInTheDocument();
-    expect(screen.getByText("Upplevd nytta · underlag saknas här")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Upplevd nytta" })).toBeInTheDocument();
   });
   it("keeps failed accounts independent of usable telemetry and disables sharing an incomplete report", async () => {
     mock.accounts.mockRejectedValue(new Error("unavailable"));

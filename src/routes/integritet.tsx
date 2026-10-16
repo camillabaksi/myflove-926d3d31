@@ -33,7 +33,7 @@ export const Route = createFileRoute("/integritet")({
 
 function PrivacyPage() {
   return (
-    <LegalShell title="Integritetspolicy" updated="15 oktober 2026">
+    <LegalShell title="Integritetspolicy" updated="16 oktober 2026">
       <p>
         Paceable är byggd för att minska mental belastning – och det gäller även dina
         personuppgifter. Vi samlar in så lite som möjligt, förklarar varför, och du bestämmer alltid
@@ -107,6 +107,26 @@ function PrivacyPage() {
         </li>
       </ul>
 
+      <h2>Frivillig veckopuls</h2>
+      <p>
+        Den frivilliga veckopulsen har tre frågor om hur Paceable känns att använda. När du väljer
+        Svara sparar vi att veckopulsen har startats för ditt konto och aktuell vecka. Inte nu
+        sparar ett val att pausa frågan resten av veckan. Dina tre svar på skalan 1–5 sparas först
+        när du väljer Skicka mina svar. Påbörjade svar skickas inte.
+      </p>
+      <p>
+        Inskickade svar, vecka, tidpunkt och versionen av informationen du godkände kopplas till
+        ditt konto, så att du kan ändra svaren och räknas en gång per vecka. Syftet är att förbättra
+        Paceable. Grundarens adminvy visar endast sammanställda antal, svarsfördelningar och
+        medianer utan namn. Veckopulsen kopplas inte till anonyma användnings-ID, privata planer,
+        energiloggar eller AI-samtal. Det är frivilligt att svara och påverkar inte din tillgång
+        till appen. Du kan ändra eller ta bort den aktuella veckans svar i veckopulsen.
+      </p>
+      <p>
+        Veckopulsens uppgifter sparas så länge kontot finns eller tills du ber oss radera dem.
+        För tillgång till eller borttagning av äldre veckopulssvar kan du kontakta oss på adressen
+        ovan. Vid radering av hela kontot tas även veckopulsens uppgifter bort.
+      </p>
       <h2>Var dina uppgifter lagras</h2>
       <p>
         Uppgifterna lagras hos vår molnleverantör inom EU (Supabase / AWS Europe). AI-svar genereras

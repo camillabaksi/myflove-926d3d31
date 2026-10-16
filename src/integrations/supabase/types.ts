@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      pilot_weekly_pulses: {
+        Row: {
+          user_id: string
+          week_start: string
+          opened_at: string | null
+          dismissed_at: string | null
+          submitted_at: string | null
+          updated_at: string
+          revision: number
+          overview: number | null
+          relief: number | null
+          burden: number | null
+          consent_version: number | null
+        }
+        Insert: {
+          user_id: string
+          week_start: string
+          opened_at?: string | null
+          dismissed_at?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          revision?: number
+          overview?: number | null
+          relief?: number | null
+          burden?: number | null
+          consent_version?: number | null
+        }
+        Update: {
+          user_id?: string
+          week_start?: string
+          opened_at?: string | null
+          dismissed_at?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          revision?: number
+          overview?: number | null
+          relief?: number | null
+          burden?: number | null
+          consent_version?: number | null
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           action: string
@@ -980,6 +1022,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      update_my_weekly_pulse: {
+        Args: {
+          p_week: string
+          p_action: string
+          p_revision?: number | null
+          p_consent?: boolean
+          p_overview?: number | null
+          p_relief?: number | null
+          p_burden?: number | null
+        }
+        Returns: undefined
+      }
+      get_weekly_pulse_stats: {
+        Args: never
+        Returns: {
+          week_start: string
+          opened: number
+          answered: number
+          overview_counts: number[]
+          relief_counts: number[]
+          burden_counts: number[]
+        }[]
+      }
       admin_account_activity: {
         Args: never
         Returns: {

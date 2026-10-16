@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-16";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-16 – Frivillig veckopuls i appen",
+    items: ["Tre fasta frågor på Idag, skala 1–5 utan förvalda svar. Inte nu pausar frågan för veckan. Svaren sparas först efter Skicka mina svar och kan ändras eller tas bort under aktuell vecka. Separat adminöversikt visar antal svar av startade veckopulser, fördelningar och medianer över åtta svenska kalenderveckor; admin/demo undantas och inga namn visas. Åtkomst och skrivningar är kontobundna, samtidiga ändringar skyddas och ingen koppling görs till anonym användningsstatistik. Databasmigration krävs före aktivering; ingen publicering eller produktionsinsamling ingår i utkastet."],
+  },
+  {
     title: "2026-10-16 – Fristående filmutkast v5",
     items: ["Filmförfining (2026-10-16): separat 20-sekunders MP4 med svävande tankebubblor, kantvis förångning till färgmatchad rök, text efter absorption och lätt rörliga luftpartiklar. Redigerbar v5-källa sparad; v4 och det publicerade introt bevaras. Bildsekvenser och full avkodning kontrollerade; realtidsuppspelning och lyssning återstår. Röken är mjukare/molnigare än referensen, några inbakade partiklar är statiska och färdbanornas tidigare svävningsbidrag har justerats cirka 1–3 px. Granskningsutkast, ingen publicering eller funktionell appändring."],
   },
