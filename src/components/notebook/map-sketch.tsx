@@ -78,9 +78,14 @@ export function MapSketchBubble() {
         d="M121 4C181 1 233 32 235 76C241 119 187 155 123 157C60 160 6 132 4 84C1 38 52 5 121 4Z"
       />
       <path
-        className="book-bubble-retrace"
-        d="M118 6C62 3 4 40 6 85C5 127 60 158 124 155C184 158 238 119 233 75C234 35 181 0 124 5"
+        className="book-bubble-pen"
+        d="M115 5C76 0 30 17 12 48C-1 68 6 114 29 131C60 158 93 156 127 155C166 158 210 139 228 111C246 80 231 47 212 29C187 9 151 0 126 5"
       />
+      <path
+        className="book-bubble-retrace"
+        d="M149 6C96-2 48 8 20 34C-2 59 0 98 22 126C45 151 83 162 124 157C168 158 204 143 225 118C242 92 241 64 221 40C204 21 181 10 159 8"
+      />
+      <path className="book-bubble-trace" d="M24 34C1 58 3 103 28 130C55 156 93 160 128 157" />
     </svg>
   );
 }

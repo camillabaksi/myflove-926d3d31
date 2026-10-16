@@ -259,7 +259,8 @@
 }
 .book-map line {
   stroke: var(--book-muted);
-  stroke-width: 2;
+  stroke-width: 1.25;
+  stroke-linecap: round;
 }
 .book-bubble {
   position: absolute;
@@ -626,8 +627,7 @@
   scroll-padding: 8px;
 }
 .book-map {
-  background-image: radial-gradient(var(--book-line) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: none;
 }
 .book-map > svg {
   height: 100%;
@@ -658,12 +658,22 @@
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
-.book-bubble-fill {
+.book-bubble-outline .book-bubble-fill {
   fill: var(--book-lavender);
-  stroke-opacity: 0.55;
+  stroke: none;
 }
-.book-bubble-retrace {
+.book-bubble-outline .book-bubble-pen {
   fill: none;
+  stroke-opacity: 0.75;
+}
+.book-bubble-outline .book-bubble-retrace {
+  fill: none;
+  stroke-width: 1px;
+  stroke-opacity: 0.4;
+}
+.book-bubble-outline .book-bubble-trace {
+  fill: none;
+  stroke-width: 0.8px;
   stroke-opacity: 0.25;
 }
 .book-map-editor .book-sketch-icon,
