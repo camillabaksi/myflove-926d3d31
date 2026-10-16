@@ -457,9 +457,9 @@
 - [ ] Etapp 2: sidspecifika gradienter och hårdkodade färger (inväntar godkännande)
 
 ## Paceable – förfina uppladdad 3D-film (2026-10-15)
-- [ ] Förfining 2026-10-16, nästa version: identifiera puffrökens kod, skärmmask och överkantens lagerkälla; visa plan före ändring. Därefter endast deterministiska insugna rökslingor och riktad kanträttning, med v5:s banor/timing/text låsta. Separat MP4 och faktisk rörelsegranskning; app/intro orörda.
+- [x] Förfining 2026-10-16, v6: godkänd plan genomförd i befintlig v5-källa. Puff/halo ersatt med sju deterministiska, inåtriktade rökslingor per bubbla; överkantens hårda bakgrundsskarv reparerad lokalt. MP4 och självständigt redigerbart underlag sparade. Alla fyra absorptioner och överkantens början/övergångar/slut bildgranskade; hela 20 s spelade till slut i separat WebM-kopia, 480 visade bilder och 0 tappade. MP4 fullständigt avkodad utan fel; låsta rörelser/timing/text/mask oförändrade. Begränsningar: tunna slingor kan se stjärnformade ut, uppladdningen 1000123213.mp4 saknas för direkt jämförelse, ljudet kopierat men inte lyssnat på. App/intro orörda, ingen publicering.
 - [x] Förfining 2026-10-16: v5 MP4 exporterad (20 s, 1344×756, 24 fps) och redigerbar källa sparad; svävning, färgmatchad förångning, lätt rörliga partiklar och text efter absorption. Alla fyra övergångar och slutruta bildgranskade; full avkodning utan fel. Utkast: mjuk/molnig rök snarare än referensens skarpare slingor, vissa inbakade partiklar statiska, färdbanans gamla svävningsbidrag justerat 1–3 px. Ingen funktionell appändring/publicering.
-- [ ] V5 realtidsuppspelning och lyssning behöver fungerande spelare; bildsekvenser och ljudmätning ersätter inte denna kontroll.
+- [x] V5 realtidsuppspelning verifierad i separat WebM-kopia. V6 är aktuell leverans; dess oförändrade ljud är avkodat och checksummekontrollerat men lyssning återstår för användargranskning.
 - [x] Godkänd inriktning: återskapa vid behov men efterlikna originalet; ingen appändring eller publicering.
 - [x] Originalreferenser och scenplan framtagna; startbilder och första genererade MP4-utkast levererade.
 - [x] Nytt krav 2026-10-15 inventerat: ingen redigerbar källa till denna MP4; exakta text- och rörelsekrav dokumenterade.
