@@ -114,7 +114,7 @@ export function PilotDashboard() {
 
     <section className={card} aria-label={t("Upplevd nytta")}>
       <div><h2 className="text-lg font-semibold">{t("Blir vardagen lättare?")}</h2><p className="text-sm text-muted-foreground mt-1">{t("Detta behöver vi fråga testarna om. Enkätsvar är ännu inte anslutna till denna vy.")}</p></div>
-      <p className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-medium">{t("Upplevd nytta · underlag saknas här")}</p>
+      <p className="w-full min-w-0 rounded-2xl bg-secondary px-3 py-2 text-xs font-medium">{t("Upplevd nytta · underlag saknas här")}</p>
       <p className="text-sm">{t("Veckopuls enligt testprotokollet, frivilligt och med samma skala 1–5:")}</p>
       <ul className="list-disc pl-5 space-y-2 text-sm">
         <li>{t("Paceable hjälpte mig att få överblick denna vecka.")}</li>
