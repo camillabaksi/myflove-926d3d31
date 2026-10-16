@@ -11,6 +11,7 @@ import { BookNavigation } from "./book-navigation";
 import { BookTextEditor } from "./book-editor";
 import { DecisionEditor } from "./decision-editor";
 import { MapEditor } from "./map-editor";
+import { createMapStarter } from "./map-starter";
 const questions = [
   "Vad tar plats i dina tankar just nu?",
   "Vad skulle du vilja ge lite mer utrymme?",
@@ -42,19 +43,21 @@ function OwnedNotebook({
   );
   const current = entries.find((e) => e.id === selected);
   const create = (question?: string) => {
+    const date = localBookDate();
     const id = store.create(kind as BookKind, {
       title: "",
       text: "",
-      date: localBookDate(),
+      date,
       ...(question ? { question } : {}),
     });
     if (id) {
+      if (kind === "map") createMapStarter(store, id, date);
       setSelected(id);
       setTrash(false);
     }
   };
   return (
-    <section className="notebook" aria-labelledby="notebook-title">
+    <section className="notebook" data-book-kind={kind} aria-labelledby="notebook-title">
       <BookNavigation kind={kind} />
       <header className="book-header">
         <div>
@@ -116,6 +119,23 @@ function OwnedNotebook({
       </div>
       <div className="book-workspace">
         <aside className="book-list" aria-label="Sparade sidor">
+          {kind === "map" && entries.length > 0 && (
+            <label className="book-map-picker">
+              Sparade kartor
+              <select
+                className="book-field"
+                value={selected ?? ""}
+                onChange={(e) => setSelected(e.target.value || null)}
+              >
+                <option value="">Välj en karta</option>
+                {entries.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.content.title || "Utan rubrik"} · {e.content.date}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           {entries.length === 0 ? (
             <p className="book-muted">{trash ? "Papperskorgen är tom." : "Inga sidor ännu."}</p>
           ) : (

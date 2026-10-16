@@ -191,15 +191,19 @@ export function BookTextEditor({
     if (el) setSelection(el.value.slice(el.selectionStart, el.selectionEnd));
   };
   return (
-    <>
-      <div className="book-tools">
-        <Button variant="outline" aria-pressed={print} onClick={() => setPrint((v) => !v)}>
+    <div className={diary ? "book-diary" : undefined}>
+      <div className={`book-tools ${diary ? "book-diary-tools" : ""}`}>
+        <Button
+          variant={diary ? "ghost" : "outline"}
+          aria-pressed={print}
+          onClick={() => setPrint((v) => !v)}
+        >
           <BookOpen aria-hidden />
           {print ? "Handskriftsstil" : "Vanlig lässtil"}
         </Button>
         {diary && (
           <Button
-            variant="outline"
+            variant="ghost"
             disabled={!selection.trim()}
             onClick={() => {
               flush();
@@ -214,6 +218,7 @@ export function BookTextEditor({
         )}
         <Button
           variant="ghost"
+          size="icon"
           aria-label="Lägg inlägget i papperskorgen"
           onClick={() => setDeleteOpen(true)}
         >
@@ -238,41 +243,43 @@ export function BookTextEditor({
           </div>
         </div>
       )}
-      <label className="book-label" htmlFor="book-date">
-        Datum
-      </label>
-      <input
-        id="book-date"
-        type="date"
-        className="book-field"
-        value={draft.date}
-        onChange={(e) => update({ date: e.target.value })}
-      />
-      <label className="book-label" htmlFor="book-title">
-        Rubrik, om du vill
-      </label>
-      <input
-        id="book-title"
-        className="book-field"
-        placeholder="Ge tankarna en rubrik…"
-        value={draft.title}
-        onChange={(e) => update({ title: e.target.value })}
-      />
-      {draft.question && <p className="book-question">{draft.question}</p>}
-      <label className="book-label" htmlFor="book-text">
-        {diary ? "Dina ord" : "Din reflektion"}
-      </label>
-      <textarea
-        ref={textRef}
-        id="book-text"
-        className={`book-field book-writing ${print ? "book-print" : ""}`}
-        placeholder="Här får tankarna ta plats…"
-        value={draft.text}
-        onChange={(e) => update({ text: e.target.value })}
-        onSelect={readSelection}
-        onKeyUp={readSelection}
-        onPointerUp={readSelection}
-      />
+      <div className={diary ? "book-diary-sheet" : undefined}>
+        <label className={diary ? "sr-only" : "book-label"} htmlFor="book-date">
+          Datum
+        </label>
+        <input
+          id="book-date"
+          type="date"
+          className={`book-field ${diary ? "book-diary-date" : ""}`}
+          value={draft.date}
+          onChange={(e) => update({ date: e.target.value })}
+        />
+        <label className={diary ? "sr-only" : "book-label"} htmlFor="book-title">
+          Rubrik, om du vill
+        </label>
+        <input
+          id="book-title"
+          className={`book-field ${diary ? "book-diary-title" : ""} ${print ? "book-print" : ""}`}
+          placeholder="Ge tankarna en rubrik…"
+          value={draft.title}
+          onChange={(e) => update({ title: e.target.value })}
+        />
+        {draft.question && <p className="book-question">{draft.question}</p>}
+        <label className={diary ? "sr-only" : "book-label"} htmlFor="book-text">
+          {diary ? "Dina ord" : "Din reflektion"}
+        </label>
+        <textarea
+          ref={textRef}
+          id="book-text"
+          className={`book-field book-writing ${print ? "book-print" : ""}`}
+          placeholder="Här får tankarna ta plats…"
+          value={draft.text}
+          onChange={(e) => update({ text: e.target.value })}
+          onSelect={readSelection}
+          onKeyUp={readSelection}
+          onPointerUp={readSelection}
+        />
+      </div>
       <p className="book-status" role="status">
         {store.status}
       </p>
@@ -344,6 +351,6 @@ export function BookTextEditor({
         </p>
       )}
       <BookHistory entity={entity} store={store} onRestore={reset} />
-    </>
+    </div>
   );
 }
