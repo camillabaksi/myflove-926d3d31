@@ -457,6 +457,7 @@
 - [ ] Etapp 2: sidspecifika gradienter och hårdkodade färger (inväntar godkännande)
 
 ## Paceable – förfina uppladdad 3D-film (2026-10-15)
+- [ ] Förfining 2026-10-16, nästa version: identifiera puffrökens kod, skärmmask och överkantens lagerkälla; visa plan före ändring. Därefter endast deterministiska insugna rökslingor och riktad kanträttning, med v5:s banor/timing/text låsta. Separat MP4 och faktisk rörelsegranskning; app/intro orörda.
 - [x] Förfining 2026-10-16: v5 MP4 exporterad (20 s, 1344×756, 24 fps) och redigerbar källa sparad; svävning, färgmatchad förångning, lätt rörliga partiklar och text efter absorption. Alla fyra övergångar och slutruta bildgranskade; full avkodning utan fel. Utkast: mjuk/molnig rök snarare än referensens skarpare slingor, vissa inbakade partiklar statiska, färdbanans gamla svävningsbidrag justerat 1–3 px. Ingen funktionell appändring/publicering.
 - [ ] V5 realtidsuppspelning och lyssning behöver fungerande spelare; bildsekvenser och ljudmätning ersätter inte denna kontroll.
 - [x] Godkänd inriktning: återskapa vid behov men efterlikna originalet; ingen appändring eller publicering.
