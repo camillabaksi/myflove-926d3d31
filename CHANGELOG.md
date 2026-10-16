@@ -1,3 +1,6 @@
+## 2026-10-16 – Fristående filmutkast v5
+- **Filmförfining** (2026-10-16): separat 20-sekunders MP4 med svävande tankebubblor, kantvis förångning till färgmatchad rök, text efter absorption och lätt rörliga luftpartiklar. Redigerbar v5-källa sparad; v4 och det publicerade introt bevaras. Bildsekvenser och full avkodning kontrollerade; realtidsuppspelning och lyssning återstår. Röken är mjukare/molnigare än referensen, några inbakade partiklar är statiska och färdbanornas tidigare svävningsbidrag har justerats cirka 1–3 px. Granskningsutkast, ingen publicering eller funktionell appändring.
+
 ## 2026-10-15 – Beslut som personlig papperssida
 - Beslut har handskrivet redigerbart ämne, diskreta salvia-/aprikosrubriker och mjuka papperslinjer. Punktåtgärder finns i menyn Fler alternativ; viktighet och stjärna syns intill texten. Spalter anpassas efter läsbart utrymme och textstorlek. Befintliga sparanrop, versioner, kontogränser och övriga bokdelar bevaras. Ingen publicering.
 

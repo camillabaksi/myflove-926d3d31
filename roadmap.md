@@ -457,7 +457,8 @@
 - [ ] Etapp 2: sidspecifika gradienter och hårdkodade färger (inväntar godkännande)
 
 ## Paceable – förfina uppladdad 3D-film (2026-10-15)
-- [ ] Förfining 2026-10-16: plan för rökreferens från v2, svävande tankebubblor, lätt rörliga luftpartiklar och text först efter absorption. V4-källan återfunnen; inväntar plangodkännande, ingen appändring/publicering.
+- [x] Förfining 2026-10-16: v5 MP4 exporterad (20 s, 1344×756, 24 fps) och redigerbar källa sparad; svävning, färgmatchad förångning, lätt rörliga partiklar och text efter absorption. Alla fyra övergångar och slutruta bildgranskade; full avkodning utan fel. Utkast: mjuk/molnig rök snarare än referensens skarpare slingor, vissa inbakade partiklar statiska, färdbanans gamla svävningsbidrag justerat 1–3 px. Ingen funktionell appändring/publicering.
+- [ ] V5 realtidsuppspelning och lyssning behöver fungerande spelare; bildsekvenser och ljudmätning ersätter inte denna kontroll.
 - [x] Godkänd inriktning: återskapa vid behov men efterlikna originalet; ingen appändring eller publicering.
 - [x] Originalreferenser och scenplan framtagna; startbilder och första genererade MP4-utkast levererade.
 - [x] Nytt krav 2026-10-15 inventerat: ingen redigerbar källa till denna MP4; exakta text- och rörelsekrav dokumenterade.
