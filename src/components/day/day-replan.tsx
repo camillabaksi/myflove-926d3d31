@@ -109,6 +109,14 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
           </span>
         </label>)}
       </fieldset> : <p className="text-sm text-muted-foreground">{t("Inga säkra tidsändringar att föreslå just nu. Det betyder inte att dagen säkert är lagom; längder eller andra uppgifter kan saknas.")}</p>}
+      <details className="rounded-2xl border border-border/70 bg-mint/20 p-4">
+        <summary className="min-h-11 cursor-pointer text-sm font-medium">{t("Ge plats för återhämtning")}</summary>
+        <div className="space-y-2 pt-2 text-sm text-muted-foreground">
+          <p>{t("Återhämtning är också en del av din dag. Fundera på om något som brukar ge dig energi kan få plats, utan att det blir ännu ett måste.")}</p>
+          {preview.gentle ? <p>{t("När kapaciteten är låg kan en liten paus eller en välbekant återhämtande aktivitet vara ett alternativ till att lägga till fler uppgifter.")}</p> : <p>{t("Utgå från det som faktiskt hjälper dig, till exempel en kort stund i lugn och ro, musik eller frisk luft.")}</p>}
+          <p className="text-xs">{t("Detta är förslag att fundera på, inte bokade tider. Inget läggs till eller flyttas automatiskt.")}</p>
+        </div>
+      </details>
       {preview.unknownDurations > 0 && <p className="text-xs text-muted-foreground">{preview.unknownDurations} {t("tidsatta aktiviteter saknar en användbar sluttid. Lägg till längden där aktiviteten är planerad för att kunna få säkrare tidsförslag.")}</p>}
       {deferrable.length > 0 && <details className="rounded-2xl border border-border p-4">
         <summary className="min-h-11 cursor-pointer text-sm font-medium">{t("Vad kan få vänta till imorgon?")}</summary>
