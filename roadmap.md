@@ -1,4 +1,10 @@
 # Roadmap
+## Kalendern – etapp 2: lugnare månadsvy (2026-10-17)
+- [x] Godkänd avgränsad plan: månadssammanfattning, antal per ruta och kompakt dagslista under månadsrätten; övrig kalender orörd.
+- [x] Genomförd i `src/components/calendar/calendar-planner.tsx` med nya presentationstester; 12 kalendertester och typkontroll godkända.
+- [x] Webbläsarkontroll inloggad: 390/1280 px utan dokumentoverflow, sammanfattning och dagslista verifierade med verkligt konto; förstorad text (rot 32 px) utan horisontell overflow. Emulerad textstorlek är inte en äkta 200 %-inställning; fysisk enhet och skärmläsare är inte kontrollerade.
+- [x] Ändringsloggarna och roadmap uppdaterade. Ingen publicering.
+
 ## Paceable – endast visuell filmfinish (2026-10-15)
 - [x] Registrerat avgränsningen: endast rökslingor/partiklar, korrekta statusikoner och skärmperspektiv/glasreflex; bevara kod, timing, banor, texter, kamera och publicerat intro.
 - [x] Eftersökt exakt redigerbar v3-källa: den tidigare tillfälliga animationsmappen saknas, och ingen beständig kopia hittades i projektet eller Files. MP4, stillbilder och stillbildsskript finns, inte animationens exakta källkod.
