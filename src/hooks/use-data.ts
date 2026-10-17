@@ -73,6 +73,9 @@ export interface Task {
   /** När den faktiska energin loggades. */
   actualEnergyAt?: number;
 
+  /** Inbyggd återhämtningsövning kopplad till aktiviteten. */
+  recoveryAction?: "ljusboost";
+
   /** Koppling till QuickFlows gemensamma uppgiftspost. */
   quickflowId?: string;
   quickflowBucket?: "nu" | "sedan" | "om-du-orkar" | "kan-vanta";
@@ -211,6 +214,7 @@ export function useTasks() {
       deadlineLeadDays?: number[];
       deadlineReminderTime?: string;
       energyImpact?: Task["energyImpact"];
+      recoveryAction?: Task["recoveryAction"];
       friction?: Task["friction"];
     },
   ) => {
@@ -264,6 +268,7 @@ export function useTasks() {
           deadlineLeadDays: opts?.deadlineLeadDays,
           deadlineReminderTime: opts?.deadlineReminderTime,
           energyImpact: opts?.energyImpact,
+        recoveryAction: opts?.recoveryAction,
           friction: opts?.friction,
           steps: (opts?.steps ?? []).map((step) => ({
             id: generateId(),
