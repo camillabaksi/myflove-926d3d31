@@ -74,7 +74,7 @@ export interface Task {
   actualEnergyAt?: number;
 
   /** Inbyggd återhämtningsövning kopplad till aktiviteten. */
-  recoveryAction?: "ljusboost";
+  recoveryAction?: "ljusboost" | "paus" | "stopp";
 
   /** Koppling till QuickFlows gemensamma uppgiftspost. */
   quickflowId?: string;
