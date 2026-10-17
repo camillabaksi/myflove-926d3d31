@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-16";
+export const CHANGELOG_UPDATED = "2026-10-17";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-17 – UX-förbättring etapp 1",
+    items: ["Idag: kompakt planeringsrad med Idag/Imorgon/Veckan och Få ihop dagen; Barnens schema kvar som separat ingång. Dagens lista har frivilligt visningsfilter Alla/Viktigast/Med tid som bara påverkar visningen, aldrig data eller avbockning. Kalender → Vecka visar diskret sammanfattning per dag med antal aktiviteter och befintlig belastningsetikett; okänd belastning visas ärligt som Inte uppskattad. Kapacitet, Din dag, Pace, familjeperspektiv, WeeklyPulse, synk och barnens integritet bevaras. Ingen databasändring, ingen publicering."],
+  },
   {
     title: "2026-10-16 – Frivillig veckopuls i appen",
     items: ["Tre fasta frågor på Idag, skala 1–5 utan förvalda svar. Inte nu pausar frågan för veckan. Svaren sparas först efter Skicka mina svar och kan ändras eller tas bort under aktuell vecka. Separat adminöversikt visar antal svar av startade veckopulser, fördelningar och medianer över åtta svenska kalenderveckor; admin/demo undantas och inga namn visas. Åtkomst och skrivningar är kontobundna, samtidiga ändringar skyddas och ingen koppling görs till anonym användningsstatistik. Databasmigration krävs före aktivering; ingen publicering eller produktionsinsamling ingår i utkastet."],
