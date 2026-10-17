@@ -40,9 +40,12 @@ export const PLANNING_PERIODS = [
 
 export function PlanningEntry({
   childrenOnly = false,
+  compact = false,
   children,
 }: {
   childrenOnly?: boolean;
+  /** Kompakt rad på Idag: rubrik och periodval på samma rad, utan tom yta. */
+  compact?: boolean;
   children?: ReactNode;
 }) {
   const { t } = useLang();
@@ -62,6 +65,35 @@ export function PlanningEntry({
         </span>
         <ChevronRight size={18} className="shrink-0" aria-hidden />
       </Link>
+    );
+  if (compact)
+    return (
+      <section
+        className="rounded-2xl border border-border/60 bg-mint/30 px-4 py-3"
+        aria-label={t("Planera i din takt")}
+      >
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h3 className="flex items-center gap-2 font-display text-base font-medium">
+            <NotebookPen size={18} className="shrink-0 text-primary" aria-hidden />
+            {t("Planera i din takt")}
+          </h3>
+          <nav className="flex flex-wrap gap-1.5" aria-label={t("Välj planeringsperiod")}>
+            {PLANNING_PERIODS.map(([period, label]) => (
+              <Button
+                key={period}
+                asChild
+                variant="outline"
+                className="min-h-11 rounded-full bg-card/70 px-3 text-sm"
+              >
+                <Link to="/planera" search={{ audience: "me", period }}>
+                  {t(label)}
+                </Link>
+              </Button>
+            ))}
+          </nav>
+        </div>
+        {children}
+      </section>
     );
   return (
     <section

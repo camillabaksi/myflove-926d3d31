@@ -123,4 +123,32 @@ describe("Compact day activity presentation", () => {
     expect(screen.queryByText(rows[2].title)).not.toBeInTheDocument();
     expect(screen.getByText(rows[1].title)).toBeInTheDocument();
   });
+
+  it("filters the visible rows only, without changing data or completion", () => {
+    render(<DailyFlowList presentation="integrated" showFilter includeChildSchedules={false} />);
+    const group = screen.getByRole("group", { name: "Filtrera dagens aktiviteter" });
+    expect(group).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Alla" })).toHaveAttribute("aria-pressed", "true");
+
+    fireEvent.click(screen.getByRole("button", { name: "Med tid" }));
+    expect(screen.getByRole("button", { name: "Med tid" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText(rows[0].title)).toBeInTheDocument();
+    expect(screen.getByText(rows[1].title)).toBeInTheDocument();
+    expect(screen.queryByText(rows[3].title)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Viktigast" }));
+    expect(screen.queryByText(rows[1].title)).not.toBeInTheDocument();
+    expect(screen.getByText("Inget är markerat som viktigast just nu.")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Alla" }));
+    expect(screen.getByText(rows[3].title)).toBeInTheDocument();
+    // Avbockning fungerar fortfarande efter filtrering.
+    fireEvent.click(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` }));
+    expect(screen.getByText(rows[1].title)).toHaveClass("line-through");
+  });
+
+  it("hides the filter unless showFilter is requested", () => {
+    render(<DailyFlowList presentation="integrated" includeChildSchedules={false} />);
+    expect(screen.queryByRole("group", { name: "Filtrera dagens aktiviteter" })).not.toBeInTheDocument();
+  });
 });

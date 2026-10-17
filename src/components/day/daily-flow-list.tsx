@@ -32,6 +32,8 @@ function sortAsDay(items: FlowItem[]) {
     .map(({ item }) => item);
 }
 
+export type DailyFlowFilter = "alla" | "viktigast" | "tid";
+
 export function DailyFlowList({
   date,
   extraItems = [],
@@ -42,6 +44,7 @@ export function DailyFlowList({
   showPictograms = false,
   pictogramLibrary = "lucide",
   includeChildSchedules = true,
+  showFilter = false,
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -57,10 +60,13 @@ export function DailyFlowList({
   pictogramLibrary?: "lucide" | "mulberry";
   /** Min dag visar egna aktiviteter; barnens schema finns i barn- och familjevyer. */
   includeChildSchedules?: boolean;
+  /** Kompakt visningsfilter (Alla/Viktigast/Med tid) – filtrerar bara visningen, aldrig data. */
+  showFilter?: boolean;
 }) {
   const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
   const [expanded, setExpanded] = useState(false);
+  const [filter, setFilter] = useState<DailyFlowFilter>("alla");
 
   /**
    * "Hur kändes det?" hör ihop med själva avbockningen och bor därför här –
@@ -157,6 +163,13 @@ export function DailyFlowList({
     return idx;
   }, [items, isToday, nowMinutes]);
 
+  /** Visningsfiltret ändrar bara vilka rader som syns – aldrig ordning, data eller avbockning. */
+  const filteredItems = useMemo(() => {
+    if (filter === "viktigast") return items.filter((item) => item.priority === "nu" && !item.done);
+    if (filter === "tid") return items.filter((item) => !!item.time);
+    return items;
+  }, [items, filter]);
+
   if (items.length === 0) {
     return (
       <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">
@@ -166,13 +179,45 @@ export function DailyFlowList({
   }
 
   const hiddenCount =
-    previewCount && !expanded ? Math.max(0, items.length - previewCount) : 0;
-  const shownItems = hiddenCount > 0 ? items.slice(0, previewCount) : items;
-  const firstTimedIndex = items.findIndex((item) => !!item.time);
-  const firstUntimedIndex = items.findIndex((item) => !item.time);
+    previewCount && !expanded ? Math.max(0, filteredItems.length - previewCount) : 0;
+  const shownItems = hiddenCount > 0 ? filteredItems.slice(0, previewCount) : filteredItems;
+  const firstTimedIndex = filteredItems.findIndex((item) => !!item.time);
+  const firstUntimedIndex = filteredItems.findIndex((item) => !item.time);
+  const reorderDisabled = filter !== "alla";
 
   return (
     <>
+      {showFilter && items.length > 1 && (
+        <div role="group" aria-label="Filtrera dagens aktiviteter" className="mb-2 flex flex-wrap gap-1.5">
+          {(
+            [
+              ["alla", "Alla"],
+              ["viktigast", "Viktigast"],
+              ["tid", "Med tid"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={filter === value}
+              onClick={() => setFilter(value)}
+              className={cn(
+                "min-h-11 rounded-full border px-4 text-sm font-medium transition-colors",
+                filter === value
+                  ? "border-primary bg-lavender/60 text-ink"
+                  : "border-border/60 bg-card/70 text-muted-foreground hover:text-ink",
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+      {filteredItems.length === 0 && (
+        <p className="rounded-2xl bg-secondary/30 px-4 py-4 text-sm text-muted-foreground">
+          {filter === "viktigast" ? "Inget är markerat som viktigast just nu." : "Inget med klockslag den här dagen."}
+        </p>
+      )}
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
@@ -207,10 +252,10 @@ export function DailyFlowList({
                       compact
                       className={cn("text-muted-foreground", integrated ? "h-11 w-11" : "h-9 w-9")}
                     >
-                      <DropdownMenuItem onSelect={() => move(index, -1)} disabled={index === 0}>
+                      <DropdownMenuItem onSelect={() => move(items.indexOf(item), -1)} disabled={reorderDisabled || items.indexOf(item) === 0}>
                         <ArrowUp /> Flytta upp
                       </DropdownMenuItem>
-                      <DropdownMenuItem onSelect={() => move(index, 1)} disabled={index === items.length - 1}>
+                      <DropdownMenuItem onSelect={() => move(items.indexOf(item), 1)} disabled={reorderDisabled || items.indexOf(item) === items.length - 1}>
                         <ArrowDown /> Flytta ner
                       </DropdownMenuItem>
                       {item.href && (
@@ -228,14 +273,14 @@ export function DailyFlowList({
           );
         })}
       </ul>
-      {previewCount != null && items.length > previewCount && (
+      {previewCount != null && filteredItems.length > previewCount && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
           className="mt-1 inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-4 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
-          {expanded ? "Visa färre" : `Visa alla (${items.length - previewCount} till)`}
+          {expanded ? "Visa färre" : `Visa alla (${filteredItems.length - previewCount} till)`}
           <ChevronDown className={cn("h-4 w-4 transition-transform", expanded && "rotate-180")} aria-hidden />
         </button>
       )}
