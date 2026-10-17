@@ -29,7 +29,7 @@ export default function PausePage() {
   const { t } = useLang();
   const [minutes, setMinutes] = useCloudSyncedStorage<number>("myflove-pause-minutes", 10);
   const [custom, setCustom] = useState("");
-  const [running, setRunning] = useState(false);
+  const [running, setRunning] = useState(() => new URLSearchParams(window.location.search).get("start") === "paus");
   const [check, setCheck] = useState<{ title: string; source: string } | null>(null);
   const [lightBoost, setLightBoost] = useState(() => new URLSearchParams(window.location.search).get("start") === "ljusboost");
 
