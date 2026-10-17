@@ -96,6 +96,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
         </>}
       </div>
       {preview.gentle && <p className="text-sm text-muted-foreground">{t("Din kapacitet är låg just nu. Du kan välja ett litet första steg eller låta något valfritt vänta.")}</p>}
+      {capacity !== null && useCapacity && <p role="note" className="text-xs text-muted-foreground">{t("Planeringshjälpen tar hänsyn till din loggade kapacitet och kända tider. Pauser och återhämtning är viktiga, men föreslås inte som säkra tidsluckor när aktiviteternas längd är okänd.")}</p>}
       {!calendarReady && <p role="status" className="text-sm text-muted-foreground">{t(calendarError ? "Kalenderunderlaget kunde inte hämtas helt. Inga nya tider föreslås förrän underlaget är tillgängligt." : "Kalenderunderlaget laddas. Inga nya tider föreslås ännu.")}</p>}
       {(changed || timedOut) && <div role="status" className="rounded-2xl border border-border p-3 text-sm"><p>{t("Dagen eller din incheckning har ändrats. Ta fram ett nytt förslag innan du fortsätter.")}</p><Button variant="outline" className="mt-2 min-h-11 rounded-full" onClick={() => refresh()}>{t("Uppdatera förslaget")}</Button></div>}
       {preview.changes.length > 0 ? <fieldset className="space-y-3" disabled={changed || saving}>
