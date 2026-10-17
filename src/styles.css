@@ -1687,7 +1687,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 :root {
   --calendar-vardag: 150 45% 42%;
   --calendar-privat: 327 62% 62%;
-  --calendar-studier: 265 60% 60%;
+  --calendar-studier: 186 55% 34%;
   --calendar-barn: 20 70% 58%;
   --calendar-jobb: 212 72% 52%;
   --calendar-halsa: 28 85% 55%;
@@ -1699,7 +1699,7 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .dark {
   --calendar-vardag: 150 45% 65%;
   --calendar-privat: 327 62% 75%;
-  --calendar-studier: 265 60% 75%;
+  --calendar-studier: 186 45% 65%;
   --calendar-barn: 20 70% 72%;
   --calendar-jobb: 212 72% 70%;
   --calendar-halsa: 28 85% 72%;
