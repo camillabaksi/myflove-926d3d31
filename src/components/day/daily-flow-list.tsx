@@ -273,14 +273,14 @@ export function DailyFlowList({
           );
         })}
       </ul>
-      {previewCount != null && items.length > previewCount && (
+      {previewCount != null && filteredItems.length > previewCount && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
           className="mt-1 inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-full border border-border/60 bg-card/70 px-4 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
-          {expanded ? "Visa färre" : `Visa alla (${items.length - previewCount} till)`}
+          {expanded ? "Visa färre" : `Visa alla (${filteredItems.length - previewCount} till)`}
           <ChevronDown className={cn("h-4 w-4 transition-transform", expanded && "rotate-180")} aria-hidden />
         </button>
       )}
