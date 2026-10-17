@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { CalendarContent } from "@/pages/calendar";
-import { TodayContent } from "@/pages/today";
+import WeeklyPulse from "@/components/weekly-pulse";
 import AddToDay from "@/components/day/add-to-day";
 import OwnChildCalendar from "@/components/family/own-child-calendar";
 import { track } from "@/lib/analytics";
@@ -59,7 +59,7 @@ export function DayHub({ tab, initialView }: { tab: DayTab; initialView?: Calend
         })}
       </nav>}
 
-      {tab === "idag" && <><CalendarContent initialView="dag" /><details className="mx-auto mt-4 max-w-3xl rounded-2xl border border-border/60 bg-card px-4 py-3"><summary className="min-h-11 cursor-pointer py-2 font-medium">{t("Fler personliga funktioner")}</summary><div className="mt-3"><TodayContent /></div></details></>}
+      {tab === "idag" && <><CalendarContent initialView="dag" /><details className="mx-auto mt-4 max-w-3xl rounded-2xl border border-border/60 bg-card px-4 py-3"><summary className="min-h-11 cursor-pointer py-2 font-medium">{t("Veckans reflektion")}</summary><div className="mt-3"><WeeklyPulse /></div></details></>}
       {tab === "kalender" && <><CalendarContent initialView={initialView ?? "dag"} /><div className="mt-6"><OwnChildCalendar /></div></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
