@@ -32,6 +32,8 @@ function sortAsDay(items: FlowItem[]) {
     .map(({ item }) => item);
 }
 
+export type DailyFlowFilter = "alla" | "viktigast" | "tid";
+
 export function DailyFlowList({
   date,
   extraItems = [],
@@ -42,6 +44,7 @@ export function DailyFlowList({
   showPictograms = false,
   pictogramLibrary = "lucide",
   includeChildSchedules = true,
+  showFilter = false,
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -57,6 +60,8 @@ export function DailyFlowList({
   pictogramLibrary?: "lucide" | "mulberry";
   /** Min dag visar egna aktiviteter; barnens schema finns i barn- och familjevyer. */
   includeChildSchedules?: boolean;
+  /** Kompakt visningsfilter (Alla/Viktigast/Med tid) – filtrerar bara visningen, aldrig data. */
+  showFilter?: boolean;
 }) {
   const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
