@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useChildren } from "@/hooks/use-children";
-import { useTasks } from "@/hooks/use-data";
+import { useTasks, useReminders } from "@/hooks/use-data";
 import { useVisualCalendar } from "@/hooks/use-visual-calendar";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { useLang } from "@/hooks/use-language";
@@ -149,6 +149,7 @@ export function PlanningWorkspace({
   const childStore = useChildren();
   const children = childStore.children.filter((child) => child.owner_id === owner);
   const { addPlannedTasks } = useTasks();
+  const { addReminder } = useReminders();
   const { activeArea } = useActiveArea();
   const today = todayISO();
   const [period, setPeriod] = useState<PlanningPeriod>(requestedPeriod ?? "today");
@@ -239,11 +240,16 @@ export function PlanningWorkspace({
         await childStore.addPlannedActivities(pending.current, owner);
         childrenWritten.current = true;
       }
-      if (forMe)
+      if (forMe) {
         addPlannedTasks(
           planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea),
           owner,
         );
+        // Persist period reminders last: ordinary tasks and child writes are idempotent.
+        for (const row of pending.current.filter(row => row.endDate))
+          addReminder(row.title.trim(), row.date, undefined, "none", undefined, undefined,
+            row.location.trim() || "Sammanhängande period", undefined, row.endDate, "unknown");
+      }
       if (!mounted.current || !isActiveOwner(owner)) return;
       toast.success(
         `${batch.length} ${t(batch.length === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}`,
@@ -494,7 +500,7 @@ export function PlanningWorkspace({
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
-              {t("Byt dag om du vill. Klockslag är frivilligt.")}
+              Välj en dag eller markera flera dagar för exempelvis en kurs eller semester.
             </p>
             <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
@@ -526,18 +532,19 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
+                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: row.date, time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
-                      {t("Dag")}
+                      {row.endDate ? "Från" : t("Dag")}
                       <Input
                         type="date"
                         required
                         value={row.date}
-                        onChange={(event) => patchRow(row.id, { date: event.target.value })}
+                        onChange={(event) => patchRow(row.id, { date: event.target.value, ...(row.endDate && event.target.value > row.endDate ? { endDate: event.target.value } : {}) })}
                         className="mt-1 min-h-11 min-w-0 bg-card text-base"
                       />
                     </label>
-                    <label className="min-w-0 text-sm">
+                    {row.endDate ? <label className="min-w-0 text-sm">Till och med<Input type="date" min={row.date} required value={row.endDate} onChange={(event) => patchRow(row.id, { endDate: event.target.value })} className="mt-1 min-h-11 min-w-0 bg-card text-base" /></label> : <>                    <label className="min-w-0 text-sm">
                       {t("Start · frivilligt")}
                       <Input
                         type="time"
@@ -555,6 +562,7 @@ export function PlanningWorkspace({
                         className="mt-1 min-h-11 min-w-0 bg-card text-base"
                       />
                     </label>
+</>}
                   </div>
                   <details className="mt-2">
                     <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">
