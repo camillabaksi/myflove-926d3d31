@@ -39,11 +39,11 @@ export const updateMyWeeklyPulseFn = createServerFn({ method: "POST" })
     const { error } = await context.supabase.rpc("update_my_weekly_pulse", {
       p_week: data.weekStart,
       p_action: data.action,
-      p_revision: data.action === "submit" || data.action === "withdraw" ? data.revision : null,
+      p_revision: data.action === "submit" || data.action === "withdraw" ? data.revision : undefined,
       p_consent: data.action === "submit" && data.consent,
-      p_overview: data.action === "submit" ? data.overview : null,
-      p_relief: data.action === "submit" ? data.relief : null,
-      p_burden: data.action === "submit" ? data.burden : null,
+      p_overview: data.action === "submit" ? data.overview : undefined,
+      p_relief: data.action === "submit" ? data.relief : undefined,
+      p_burden: data.action === "submit" ? data.burden : undefined,
     });
     if (error?.code === "40001")
       throw new Error(
