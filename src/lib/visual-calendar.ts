@@ -181,6 +181,16 @@ export function layoutCalendar(items: CalendarEntry[]): Array<{ item: CalendarEn
   flush(); return sorted;
 }
 
+/** Presentation window only: retain the linear minute scale, never imply free time. */
+export function calendarTimelineRange(blocks: Array<{ start: number; end: number }>, fullDay = false): { first: number; last: number } | null {
+  if (fullDay) return { first: 0, last: 1440 };
+  if (!blocks.length) return null;
+  return {
+    first: Math.max(0, Math.floor(Math.min(...blocks.map(block => block.start)) / 60) * 60 - 60),
+    last: Math.min(1440, Math.ceil(Math.max(...blocks.map(block => block.end)) / 60) * 60 + 60),
+  };
+}
+
 /** Connected overlap groups retain every item, including transitive overlaps. */
 export function calendarClusters(blocks: ReturnType<typeof layoutCalendar>) {
   const groups: Array<{ start: number; end: number; blocks: typeof blocks }> = [];

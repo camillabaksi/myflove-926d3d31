@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calendarClusters, calendarGaps, calendarLoad, layoutCalendar, minuteOf, periodDates, projectCalendar, type CalendarEntry, type CalendarSources } from "./visual-calendar";
+import { calendarClusters, calendarGaps, calendarLoad, calendarTimelineRange, layoutCalendar, minuteOf, periodDates, projectCalendar, type CalendarEntry, type CalendarSources } from "./visual-calendar";
 
 const entry = (id: string, time: string, endTime?: string): CalendarEntry => ({ id, sourceId: id, source: "task", date: "2026-10-07", title: id, time, endTime, done: false, editable: true });
 const empty: CalendarSources = { tasks: [], reminders: [], lectures: [], routines: [], quickflow: [], priority: [] };
@@ -48,6 +48,20 @@ describe("visual calendar", () => {
     expect(groups).toHaveLength(1);
     expect(groups[0]?.blocks).toHaveLength(3);
     expect(groups[0]?.end).toBe(660);
+  });
+  it("leaves empty days compact and can explicitly show every hour", () => {
+    expect(calendarTimelineRange([])).toBeNull();
+    expect(calendarTimelineRange([], true)).toEqual({ first: 0, last: 1440 });
+    expect(calendarTimelineRange(layoutCalendar([entry("a", "09:00", "09:30")]))).toEqual({ first: 480, last: 660 });
+  });
+  it("keeps early and late activities in range without inferring their duration or free time", () => {
+    const early = entry("early", "00:05"), late = entry("late", "23:59");
+    const original = JSON.stringify([early, late]);
+    expect(calendarTimelineRange(layoutCalendar([early]))).toEqual({ first: 0, last: 120 });
+    expect(calendarTimelineRange(layoutCalendar([late]))).toEqual({ first: 1320, last: 1440 });
+    expect(calendarTimelineRange(layoutCalendar([early, late]))).toEqual({ first: 0, last: 1440 });
+    expect(calendarGaps([early, late])).toEqual([]);
+    expect(JSON.stringify([early, late])).toBe(original);
   });
   it("keeps overdue tasks unscheduled today and generated study tasks read-only", () => {
     const tasks = [{ id: "overdue", title: "Ärende", completed: false, createdAt: 0, dueDate: "2026-10-06", time: "09:00" }, { id: "study", title: "Lektion", completed: false, createdAt: 0, dueDate: "2026-10-07", syncKey: "studyflow:lecture:x:2026-10-07" }];

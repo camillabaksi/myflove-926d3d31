@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { createEvent, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CalendarPlanner from "./calendar-planner";
 import { todayISO } from "@/lib/day";
@@ -7,18 +7,20 @@ import type { Child } from "@/hooks/use-children";
 import type { ChildScheduleInput } from "@/lib/add-child-schedule";
 import { decodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { CalendarEntry } from "@/lib/visual-calendar";
+import { periodDates } from "@/lib/visual-calendar";
 
 const fixture: CalendarEntry = { id: "task-a", sourceId: "a", source: "task", date: todayISO(), title: "Fika med Sara", time: "09:00", endTime: "09:30", done: false, editable: true };
+const model = { entries: [fixture], ready: true, error: false };
 const write = vi.fn();
 const addChild = vi.fn(async (_input: ChildScheduleInput) => "created");
 const children: Child[] = ["Bella", "Bianca", "Foreign"].map((name, i) => ({ id: name, name, owner_id: i === 2 ? "other" : "owner", birthdate: null, color: "", note: null, helps: [], avatar: null }));
-beforeEach(() => { addChild.mockReset(); addChild.mockResolvedValue("created"); });
+beforeEach(() => { addChild.mockReset(); addChild.mockResolvedValue("created"); write.mockClear(); model.entries = [fixture]; model.ready = true; model.error = false; });
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: "owner" } }) }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, locale: "sv-SE" }) }));
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: useRef(null), enlarged: false }) }));
 vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: (_key: string, initial: unknown) => useState(initial), getSyncUser: async () => ({ id: "owner" }) }));
-vi.mock("@/hooks/use-visual-calendar", () => ({ useVisualCalendar: (dates: string[]) => ({ days: Object.fromEntries(dates.map(date => [date, date === fixture.date ? [fixture] : []])), familyMembers: [], externalError: null }) }));
-vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: [], addTask: write, updateTask: write }), useReminders: () => ({ reminders: [], addReminder: write, updateReminder: write }) }));
+vi.mock("@/hooks/use-visual-calendar", () => ({ useVisualCalendar: (dates: string[]) => ({ days: Object.fromEntries(dates.map(date => [date, model.entries.filter(entry => entry.date === date)])), familyMembers: [], externalError: null, planningReady: model.ready, planningError: model.error }) }));
+vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: model.entries.filter(entry => entry.source === "task").map(entry => ({ id: entry.sourceId, dueDate: entry.date, title: entry.title, time: entry.time, endTime: entry.endTime })), addTask: write, updateTask: write }), useReminders: () => ({ reminders: [], addReminder: write, updateReminder: write }) }));
 vi.mock("@/lib/account-scope", () => ({ isActiveOwner: () => true }));
 vi.mock("@/hooks/use-children", () => ({ useChildren: () => ({ children, items: [], updateItem: write, addItem: addChild }) }));
 vi.mock("@/hooks/use-flow-items", () => ({ useFlowItems: () => ({ today: [], toggleItem: write }) }));
@@ -34,6 +36,83 @@ function Harness() {
 }
 
 describe("Calendar entry view", () => {
+  it("keeps empty weeks short and explicitly opens or collapses all 24 hours without saving anything", () => {
+    model.entries = [];
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(container.querySelectorAll(".pace-calendar-timeline")).toHaveLength(0);
+    expect(container.querySelectorAll("[data-calendar-empty-day]")).toHaveLength(7);
+    const before = write.mock.calls.length;
+    fireEvent.click(screen.getByRole("button", { name: "Visa hela dygnet (00–24)" }));
+    const timelines = container.querySelectorAll(".pace-calendar-timeline");
+    expect(timelines).toHaveLength(7);
+    for (const timeline of timelines) {
+      expect(timeline).toHaveAttribute("data-calendar-timeline-start", "0");
+      expect(timeline).toHaveAttribute("data-calendar-timeline-end", "1440");
+      expect(within(timeline as HTMLElement).getByText("24:00")).toBeInTheDocument();
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Visa kompakt" }));
+    expect(container.querySelectorAll(".pace-calendar-timeline")).toHaveLength(0);
+    expect(write).toHaveBeenCalledTimes(before);
+    expect(addChild).not.toHaveBeenCalled();
+  });
+  it("only draws timed days in a sparse week and fits the occupied time", () => {
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(container.querySelectorAll(".pace-calendar-timeline")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-calendar-empty-day]")).toHaveLength(6);
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+    expect(parseFloat(timeline.style.height)).toBeLessThan(500);
+    expect(screen.getByText(fixture.title)).toBeInTheDocument();
+  });
+  it("retains untimed activities and never presents a failed or loading read as an empty plan", () => {
+    model.entries = [{ ...fixture, time: undefined, endTime: undefined }];
+    const page = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(page.container.querySelectorAll(".pace-calendar-timeline")).toHaveLength(0);
+    expect(screen.getByText(fixture.title)).toBeInTheDocument();
+    model.entries = [];
+    model.ready = false;
+    page.rerender(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(screen.queryByText("Inget planerat.")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Laddar kalendern...")).toHaveLength(7);
+    model.error = true;
+    page.rerender(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(screen.getAllByText("Kalenderunderlaget kunde inte hämtas helt.")).toHaveLength(7);
+  });
+  it("shows a late child activity fully, including its touch target after the 24:00 line", () => {
+    model.entries = [{ ...fixture, id: "child-night", source: "child", sourceId: "night", time: "23:59", endTime: undefined, title: "Kvällsrutin", editable: false, familyMembers: [{ id: "Bella", name: "Bella" }] }];
+    const { container } = render(<CalendarPlanner initialView="dag" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+    expect(timeline).toHaveAttribute("data-calendar-timeline-end", "1440");
+    expect(screen.getByText("24:00")).toBeInTheDocument();
+    const card = screen.getByRole("button", { name: /Kvällsrutin, 23:59/ }).closest<HTMLElement>(".absolute")!;
+    expect(parseFloat(card.style.top) + parseFloat(card.style.height)).toBeLessThanOrEqual(parseFloat(timeline.style.height));
+  });
+  it("shares one range across occupied week columns, including early family context", () => {
+    const week = periodDates(fixture.date, "vecka");
+    model.entries = [fixture, { ...fixture, id: "early", sourceId: "early", source: "child", title: "Tidig avfärd", date: week[0]!, time: "05:00", endTime: "05:30", editable: false, familyMembers: [{ id: "Bella", name: "Bella" }] }];
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const timelines = container.querySelectorAll(".pace-calendar-timeline");
+    expect(timelines.length).toBeGreaterThan(0);
+    for (const timeline of timelines) {
+      expect(timeline).toHaveAttribute("data-calendar-timeline-start", "240");
+      expect(timeline).toHaveAttribute("data-calendar-timeline-end", "660");
+    }
+  });
+  it("uses the displayed time origin when dragging in compact and full-day views", () => {
+    const { container } = render(<CalendarPlanner initialView="dag" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const dragTo = (minute: number) => {
+      const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+      const first = Number(timeline.dataset.calendarTimelineStart);
+      vi.spyOn(timeline, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
+      const event = createEvent.drop(timeline, { dataTransfer: { getData: () => fixture.id } });
+      Object.defineProperty(event, "clientY", { value: 100 + (minute - first) * 1.7 });
+      fireEvent(timeline, event);
+    };
+    dragTo(10 * 60);
+    expect(write).toHaveBeenLastCalledWith("a", expect.objectContaining({ time: "10:00", endTime: "10:30" }));
+    fireEvent.click(screen.getByRole("button", { name: "Visa hela dygnet (00–24)" }));
+    dragTo(22 * 60 + 15);
+    expect(write).toHaveBeenLastCalledWith("a", expect.objectContaining({ time: "22:15", endTime: "22:45" }));
+  });
   it("opens the requested week and still lets the user choose another view", () => {
     render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     expect(screen.getByRole("button", { name: "Vecka" })).toHaveAttribute("aria-pressed", "true");
