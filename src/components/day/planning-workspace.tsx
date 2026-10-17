@@ -143,8 +143,9 @@ export function PlanningWorkspace({
 }) {
   const { t, locale } = useLang();
   const navigate = useNavigate();
-  const [target, setTarget] = useState<"me" | "children">(audience);
-  const forChildren = target === "children";
+  const [target, setTarget] = useState<"me" | "children" | "both">(audience);
+  const forChildren = target !== "me";
+  const forMe = target !== "children";
   const childStore = useChildren();
   const children = childStore.children.filter((child) => child.owner_id === owner);
   const { addPlannedTasks } = useTasks();
@@ -162,6 +163,8 @@ export function PlanningWorkspace({
   const [locked, setLocked] = useState(false);
   const pending = useRef<PlanningDraft[] | null>(null);
   const busy = useRef(false);
+  // A completed child write must not be repeated if the own-task write needs retrying.
+  const childrenWritten = useRef(false);
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -232,8 +235,11 @@ export function PlanningWorkspace({
       // Freeze an attempted batch until it is confirmed, so a network retry uses identical IDs/content.
       pending.current ??= structuredClone(batch);
       setLocked(true);
-      if (forChildren) await childStore.addPlannedActivities(pending.current, owner);
-      else
+      if (forChildren && !childrenWritten.current) {
+        await childStore.addPlannedActivities(pending.current, owner);
+        childrenWritten.current = true;
+      }
+      if (forMe)
         addPlannedTasks(
           planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea),
           owner,
@@ -243,6 +249,7 @@ export function PlanningWorkspace({
         `${batch.length} ${t(batch.length === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}`,
       );
       pending.current = null;
+      childrenWritten.current = false;
       setLocked(false);
       setRows([]);
       setText("");
@@ -279,6 +286,7 @@ export function PlanningWorkspace({
             <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("Välj mottagare")}>
               <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-full" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
               <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-full" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
+              <Button type="button" variant={target === "both" ? "default" : "outline"} aria-pressed={target === "both"} className="min-h-11 rounded-full" onClick={() => { setTarget("both"); setError(""); }}>{t("Jag och barnen")}</Button>
             </div>
           </fieldset>
         )}
