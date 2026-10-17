@@ -37,12 +37,7 @@ import {
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 type MenuItem = {
   label: string;
@@ -84,7 +79,11 @@ const MENU_GROUPS: MenuGroup[] = [
     icon: Sparkles,
     items: [
       { label: "Pace", hint: "Hjälp, planering och chatt på ett ställe", icon: Sparkles },
-      { label: "Prata med Pace", hint: "Chatta med din personliga följeslagare", icon: MessageCircle },
+      {
+        label: "Prata med Pace",
+        hint: "Chatta med din personliga följeslagare",
+        icon: MessageCircle,
+      },
       { label: "Planera", hint: "Planeringsläget – ordna dagens saker", icon: ListChecks },
       { label: "Fånga", hint: "Fånga något snabbt – sortera sedan", icon: Zap },
       { label: "Anteckningar", hint: "Din idébank – tankar utan krav", icon: NotebookPen },
@@ -121,7 +120,11 @@ const MENU_GROUPS: MenuGroup[] = [
     hint: "Schema, uppgifter, möten och deadlines",
     icon: BookOpen,
     items: [
-      { label: "Studier", hint: "Schema, studiehjälp och vad du ska plugga nu", icon: GraduationCap },
+      {
+        label: "Studier",
+        hint: "Schema, studiehjälp och vad du ska plugga nu",
+        icon: GraduationCap,
+      },
     ],
   },
   {
@@ -167,18 +170,29 @@ const MENU_GROUPS: MenuGroup[] = [
 export function MenuPreviewDialog({
   open,
   onClose,
+  returnFocus,
 }: {
   open: boolean;
   onClose: () => void;
+  returnFocus?: () => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={(next) => (!next ? onClose() : undefined)}>
-      <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto bg-landing-background p-5 sm:p-7">
+      <DialogContent
+        onCloseAutoFocus={(event) => {
+          if (returnFocus) {
+            event.preventDefault();
+            returnFocus();
+          }
+        }}
+        className="max-h-[85vh] max-w-2xl overflow-y-auto bg-landing-background p-5 sm:p-7"
+      >
         <DialogTitle className="font-display text-xl font-extrabold sm:text-2xl">
           Så ser menyn ut i Paceable
         </DialogTitle>
         <DialogDescription className="text-sm leading-6 text-muted-foreground">
-          Allt du kan göra i appen – grupperat så det är lätt att hitta. Skapa ett konto för att börja använda dem.
+          Allt du kan göra i appen – grupperat så det är lätt att hitta. Skapa ett konto för att
+          börja använda dem.
         </DialogDescription>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -199,10 +213,7 @@ export function MenuPreviewDialog({
               </header>
               <ul className="mt-3 space-y-1">
                 {group.items.map((item) => (
-                  <li
-                    key={item.label}
-                    className="flex items-start gap-2.5 rounded-2xl px-2 py-1.5"
-                  >
+                  <li key={item.label} className="flex items-start gap-2.5 rounded-2xl px-2 py-1.5">
                     <item.icon
                       aria-hidden="true"
                       className="mt-0.5 h-4 w-4 shrink-0 text-primary"

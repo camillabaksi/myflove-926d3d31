@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { BrandLogo } from "@/components/paceable/brand-logo";
+import { Menu, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LandingTranslateProvider } from "@/components/auto-translate-provider";
 
@@ -12,7 +13,7 @@ const MENU = [
 ] as const;
 
 /** One public shell. The language preference stays separate from account data. */
-export function PublicPage({ children }: { children: ReactNode }) {
+export function PublicPage({ children, quiet = false }: { children: ReactNode; quiet?: boolean }) {
   const path = useRouterState({ select: (state) => state.location.pathname });
   const [lang, setLang] = useState<"sv" | "en">("sv");
   useEffect(() => {
@@ -46,69 +47,119 @@ export function PublicPage({ children }: { children: ReactNode }) {
   });
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-landing-background text-foreground">
+    <div
+      className={`min-h-screen overflow-x-hidden bg-landing-background text-foreground ${quiet ? "welcome-site" : ""}`}
+    >
       <a
         href="#public-content"
         className="sr-only focus:not-sr-only focus:block focus:px-5 focus:py-3"
       >
         Till innehållet
       </a>
-      <header className="relative z-10 bg-landing-background">
-        <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-5 py-3 sm:px-8 lg:flex-nowrap lg:gap-5 lg:px-12">
-          <Link to="/" aria-label="Paceable, startsida" className="shrink-0">
-            <BrandLogo compact lightSurface className="w-28 sm:w-40 lg:hidden" />
-            <BrandLogo lightSurface className="hidden w-52 lg:block xl:w-64" />
-          </Link>
-          <nav aria-label="Huvudmeny" className="hidden items-center gap-5 lg:flex">
-            {menuLinks}
-          </nav>
-          <div className="flex min-w-0 flex-wrap items-center justify-end gap-1 sm:gap-3">
+      {quiet ? (
+        <header className="welcome-header">
+          <div className="welcome-wrap welcome-header-row">
+            <Link to="/" aria-label="Paceable, startsida" className="welcome-brand">
+              <BrandLogo compact lightSurface />
+            </Link>
+            <nav aria-label="Huvudmeny" className="welcome-desktop-nav">
+              {menuLinks}
+            </nav>
+            <Link to="/sign-in" className="welcome-login">
+              Logga in
+              <ChevronDown className="welcome-login-arrow" aria-hidden="true" />
+            </Link>
+            <details className="welcome-menu">
+              <summary aria-label="Öppna meny">
+                <Menu aria-hidden="true" />
+                <ChevronDown aria-hidden="true" />
+              </summary>
+              <nav aria-label="Mobil meny">{menuLinks}</nav>
+            </details>
             <div
+              className="welcome-language"
               role="group"
               aria-label="Language / Språk"
               data-no-translate
-              className="flex shrink-0 gap-0.5"
             >
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
+                type="button"
                 aria-label="Svenska"
                 aria-pressed={lang === "sv"}
                 onClick={() => chooseLang("sv")}
-                className={`min-h-11 px-2 text-xs ${lang === "sv" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}
               >
                 SV
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
+              </button>
+              <span aria-hidden="true">/</span>
+              <button
+                type="button"
                 aria-label="English"
                 aria-pressed={lang === "en"}
                 onClick={() => chooseLang("en")}
-                className={`min-h-11 px-2 text-xs ${lang === "en" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}
               >
                 EN
+              </button>
+            </div>
+          </div>
+        </header>
+      ) : (
+        <header className="relative z-10 bg-landing-background">
+          <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-3 gap-y-1 px-5 py-3 sm:px-8 lg:flex-nowrap lg:gap-5 lg:px-12">
+            <Link to="/" aria-label="Paceable, startsida" className="shrink-0">
+              <BrandLogo compact lightSurface className="w-28 sm:w-40 lg:hidden" />
+              <BrandLogo lightSurface className="hidden w-52 lg:block xl:w-64" />
+            </Link>
+            <nav aria-label="Huvudmeny" className="hidden items-center gap-5 lg:flex">
+              {menuLinks}
+            </nav>
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-1 sm:gap-3">
+              <div
+                role="group"
+                aria-label="Language / Språk"
+                data-no-translate
+                className="flex shrink-0 gap-0.5"
+              >
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Svenska"
+                  aria-pressed={lang === "sv"}
+                  onClick={() => chooseLang("sv")}
+                  className={`min-h-11 px-2 text-xs ${lang === "sv" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}
+                >
+                  SV
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="English"
+                  aria-pressed={lang === "en"}
+                  onClick={() => chooseLang("en")}
+                  className={`min-h-11 px-2 text-xs ${lang === "en" ? "font-bold text-primary underline underline-offset-4" : "text-muted-foreground"}`}
+                >
+                  EN
+                </Button>
+              </div>
+              <Button
+                asChild
+                variant="ghost"
+                className="min-h-11 px-2 text-xs font-semibold sm:px-4 sm:text-sm"
+              >
+                <Link to="/sign-in">Logga in</Link>
+              </Button>
+              <Button asChild className="min-h-11 rounded-full px-3 shadow-soft sm:px-6">
+                <Link to="/sign-up">Kom igång</Link>
               </Button>
             </div>
-            <Button
-              asChild
-              variant="ghost"
-              className="min-h-11 px-2 text-xs font-semibold sm:px-4 sm:text-sm"
-            >
-              <Link to="/sign-in">Logga in</Link>
-            </Button>
-            <Button asChild className="min-h-11 rounded-full px-3 shadow-soft sm:px-6">
-              <Link to="/sign-up">Kom igång</Link>
-            </Button>
           </div>
-        </div>
-        <nav
-          aria-label="Mobil meny"
-          className="flex flex-wrap justify-center gap-x-5 gap-y-1 border-t border-border/50 px-4 lg:hidden"
-        >
-          {menuLinks}
-        </nav>
-      </header>
+          <nav
+            aria-label="Mobil meny"
+            className="flex flex-wrap justify-center gap-x-5 gap-y-1 border-t border-border/50 px-4 lg:hidden"
+          >
+            {menuLinks}
+          </nav>
+        </header>
+      )}
       <main id="public-content" tabIndex={-1}>
         {children}
       </main>
@@ -135,6 +186,12 @@ export function PublicPage({ children }: { children: ReactNode }) {
           <Link to="/cookies" className="inline-flex min-h-11 items-center hover:text-primary">
             Cookies
           </Link>
+          <a
+            href="mailto:kontakt@paceable.se"
+            className="inline-flex min-h-11 items-center hover:text-primary"
+          >
+            Kontakt
+          </a>
         </nav>
         <p className="mt-5">© {new Date().getFullYear()} Paceable</p>
       </footer>
