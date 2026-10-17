@@ -269,13 +269,13 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)] lg:gap-6">
       <section
-        className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
+        className="min-w-0 rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t("Lägg till aktiviteter")}
       >
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
-          {t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
+          {t("Lägg till aktiviteter")}
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           {t("Skriv en eller flera aktiviteter och granska innan du sparar.")}
@@ -635,7 +635,7 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
+      <section className="min-w-0 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4 lg:sticky lg:top-6" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
         </h2>
