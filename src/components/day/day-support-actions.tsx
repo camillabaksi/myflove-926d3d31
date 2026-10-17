@@ -9,7 +9,7 @@ import { DayReplanButton } from "@/components/day/day-replan";
 import { Link } from "wouter";
 
 type Mode = "prioritera" | "dela" | "planera" | "aterhamtning";
-type Props = { date: string; entries: CalendarEntry[]; calendarReady: boolean; calendarError?: boolean; initialTaskId?: string };
+type Props = { date: string; entries: CalendarEntry[]; calendarReady: boolean; calendarError?: boolean; initialTaskId?: string; initialMode?: "prioritera" | "dela" | "planera" | "aterhamtning" };
 const labels: { id: Mode; label: string }[] = [
   { id: "prioritera", label: "Prioritera" }, { id: "dela", label: "Dela upp" },
   { id: "planera", label: "Planera om" }, { id: "aterhamtning", label: "Återhämtning" },
@@ -17,10 +17,10 @@ const labels: { id: Mode; label: string }[] = [
 function clock(minutes: number) { return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`; }
 
 /** A single, consent-based entry point for help with today's own tasks. */
-export default function DaySupportActions({ date, entries, calendarReady, calendarError, initialTaskId }: Props) {
+export default function DaySupportActions({ date, entries, calendarReady, calendarError, initialTaskId, initialMode = "prioritera" }: Props) {
   const { tasks, updateTask, addTaskSteps, addTask } = useTasks();
   const capacity = useDayCapacity()(date);
-  const [mode, setMode] = useState<Mode>("prioritera");
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [selected, setSelected] = useState<string[]>(initialTaskId ? [initialTaskId] : []);
   const [preview, setPreview] = useState(false);
   const [duration, setDuration] = useState(10);
