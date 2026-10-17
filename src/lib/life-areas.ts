@@ -55,7 +55,7 @@ export const AREA_META: Record<LifeArea, AreaMeta> = {
     label: "Studier",
     emoji: "🎓",
     blurb: "Kurser, inlämningar, deadlines och dokument",
-    hue: "265 60% 60%", // lila
+    hue: "186 55% 34%", // turkos – samma ton som kalenderprickar och aktivitetskort
   },
   barn: {
     id: "barn",
