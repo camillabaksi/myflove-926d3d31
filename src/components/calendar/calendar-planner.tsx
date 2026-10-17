@@ -367,26 +367,18 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
           {areas.length > 0 && <span className="mt-auto flex h-3 items-center justify-center gap-1"><span className="text-[9px] tabular-nums text-muted-foreground" aria-hidden>{areaEntries.length}</span><span className="flex h-3 items-center justify-center gap-0.5" aria-hidden>{areas.slice(0, 4).map(area => <span key={area} data-calendar-area={area} className="h-1.5 w-1.5 shrink-0 rounded-full calendar-area-dot" />)}{areas.length > 4 && <span className="text-[9px] text-muted-foreground">+{areas.length - 4}</span>}</span></span>}
         </Button>;
       })}</div><section className="border-t border-border/60 py-4"><div className="flex items-center justify-between gap-2"><h2 className="font-display text-sm font-bold capitalize">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</h2><Button size="icon" variant="ghost" className="min-h-11 min-w-11 text-primary" aria-label={t("Öppna dagen")} onClick={() => setView("dag")}><ArrowRight size={18} /></Button></div><h3 className="mt-3 text-xs font-semibold">{t("Min dag")}</h3><ul className="mt-2 space-y-2">{selectedDayList.map(entry => <li key={entry.id}>{blockButton(entry)}</li>)}</ul>{!myEntries.length && <p className="py-4 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}{familyEntries.length > 0 && <div className="mt-4 border-t border-border/60 pt-3"><h3 className="text-xs font-semibold text-muted-foreground">{t("Familjen")}</h3><p data-calendar-area="privat" className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><span className="h-2 w-2 rounded-full calendar-area-dot" aria-hidden />{t("Familj")} · {familyEntries.length}</p>{showPictograms && <ul className="mt-2 space-y-2">{familyEntries.map(entry => <li key={entry.id}>{blockButton(entry)}</li>)}</ul>}</div>}</section></>}
-    {view === "vecka" && <ul aria-label={t("Veckans sammanfattning")} className="grid grid-cols-7 gap-1 text-center text-[10px] leading-tight text-muted-foreground">{dates.map(d => {
-      const dayEntries = planningDays[d] ?? [];
-      const dayLoad = calendarLoad(dayEntries);
-      return <li key={d} aria-label={`${dateHeading(d)}: ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}, ${t("belastning")}: ${t(dayLoad.label)}`} className="flex min-w-0 flex-col items-center gap-1 rounded-xl bg-secondary/40 px-0.5 py-1.5">
-        <span className="text-xs font-semibold text-ink" aria-hidden>{dayEntries.length}</span>
-        {dayLoad.segments > 0 ? <Segments entries={dayEntries} /> : <span aria-hidden>–</span>}
-      </li>;
-    })}</ul>}
-    {view === "vecka" && <section className="space-y-3 rounded-3xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm" aria-label={t("Veckans dagar")}>
-      <h2 className="font-display text-lg font-medium text-[#512654]">{t("Veckan i korthet")}</h2>
+    {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
+      <h2 className="px-2 font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")}</h2>
       <div className="divide-y divide-[#EDE5E9]">{dates.map(d => {
         const dayEntries = (days[d] ?? []).filter(e => !isFamilyEntry(e));
         const ordered = [...dayEntries].sort((x,y) => (minuteOf(x.time) ?? 1440) - (minuteOf(y.time) ?? 1440));
         return <section key={d} className={cn("flex gap-2 rounded-xl px-2 py-2", d === date && "bg-[#F4EDF5]")}>
-          <button type="button" onClick={() => { setDate(d); setView("dag"); }} className="flex min-h-11 w-16 shrink-0 flex-col items-center justify-center rounded-lg text-[#512654] hover:bg-[#EEE3F1]" aria-label={`Öppna ${dateHeading(d)}`}>
+          <button type="button" onClick={() => { setDate(d); setView("dag"); }} className="flex min-h-10 w-12 shrink-0 flex-col items-center justify-center rounded-lg text-[#512654] hover:bg-[#EEE3F1]" aria-label={`Öppna ${dateHeading(d)}`}>
             <span className="text-xs capitalize">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
             <span className="font-display text-lg font-medium">{new Date(`${d}T12:00:00`).getDate()}</span>
           </button>
           <div className="min-w-0 flex-1">
-            {ordered.length ? <ul className="space-y-1">{ordered.map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left hover:bg-[#EEE8F0]"><span className="w-12 shrink-0 text-xs tabular-nums text-muted-foreground">{e.time ?? "—"}</span><span className="min-w-0 flex-1 truncate text-sm">{e.title}</span><ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden /></button></li>)}</ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
+            <p className="sr-only">{dayEntries.length} {t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}</p>{ordered.length ? <ul className="space-y-0">{ordered.map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-9 w-full items-center gap-1.5 rounded-md px-1.5 text-left hover:bg-[#EEE8F0]"><span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{e.time ?? "—"}</span><span className="min-w-0 flex-1 truncate text-sm">{e.title}</span><ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden /></button></li>)}</ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
           </div>
         </section>;
       })}</div>
