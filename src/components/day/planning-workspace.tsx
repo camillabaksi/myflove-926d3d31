@@ -261,9 +261,9 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <section
-        className="rounded-3xl border border-border/60 bg-mint/25 p-4 sm:p-6"
+        className="rounded-3xl border border-border/60 bg-mint/25 p-3 sm:p-5"
         aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
       >
         <h2 className="font-display text-xl font-medium">
@@ -400,7 +400,7 @@ export function PlanningWorkspace({
             </div>
           </div>
         )}
-        <h3 className="mt-5 font-display text-lg">{dateLabel(date)}</h3>
+        <h3 className="mt-4 font-display text-lg">{dateLabel(date)}</h3>
         {!forChildren && date !== today && (
           <p className="mt-1 text-sm text-muted-foreground">
             {t("En förhandsplan. Orken får du känna efter den dagen.")}
@@ -408,7 +408,7 @@ export function PlanningWorkspace({
         )}
         {stage === "write" ? (
           <form
-            className="mt-5 space-y-3"
+            className="mt-4 space-y-3"
             onSubmit={(event) => {
               event.preventDefault();
               review();
@@ -425,14 +425,14 @@ export function PlanningWorkspace({
               aria-describedby={`help-${audience}`}
               value={text}
               onChange={(event) => setText(event.target.value)}
-              rows={4}
+              rows={3}
               maxLength={12500}
               placeholder={t(
                 forChildren
                   ? "Frukost\nUtelek\nLugn stund"
                   : "Handla middag\nTvätta\nEn liten promenad",
               )}
-              className="resize-y rounded-2xl bg-card text-base leading-8"
+              className="resize-y rounded-2xl bg-card text-base leading-7"
             />
             <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
               <span aria-live="polite">
@@ -455,7 +455,7 @@ export function PlanningWorkspace({
           </form>
         ) : (
           <form
-            className="mt-5 space-y-4"
+            className="mt-4 space-y-3"
             onSubmit={(event) => {
               event.preventDefault();
               void save();
@@ -483,7 +483,7 @@ export function PlanningWorkspace({
             <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
-                <div key={row.id} className="min-w-0 border-t border-border/60 pt-4">
+                <div key={row.id} className="min-w-0 border-t border-border/60 pt-3">
                   <div className="flex items-center gap-2">
                     <label className="min-w-0 flex-1">
                       <span className="sr-only">
@@ -510,7 +510,7 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
-                  <div className="mt-3 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-3">
+                  <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {t("Dag")}
                       <Input
@@ -619,7 +619,7 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
+      <section className="rounded-2xl border border-border/60 bg-card/70 p-3 sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
         <h2 className="font-display text-xl font-medium">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
         </h2>
@@ -642,7 +642,7 @@ export function PlanningWorkspace({
             {[...shown]
               .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
               .map((entry) => (
-                <li key={entry.id} className="grid grid-cols-[5rem_minmax(0,1fr)] gap-3 py-4">
+                <li key={entry.id} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-2 py-2.5">
                   <span className="text-sm text-muted-foreground">
                     {entry.time || t("Utan tid")}
                     {entry.endTime && <span className="block">–{entry.endTime}</span>}
