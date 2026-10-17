@@ -1,7 +1,7 @@
 import { PUBLIC_BASE_URL } from "@/lib/public-url";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowRight, Heart, Leaf, ListChecks, Play, Sparkles, Zap, BatteryMedium } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Heart, Play, NotebookPen, Footprints, BatteryMedium } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
@@ -10,17 +10,19 @@ import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feat
 import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { PublicPage } from "@/components/landing/public-page";
+import "@/components/landing/welcome.css";
 import previewVideo from "@/assets/paceable-intro-sv-2026-10-13.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Paceable – Vardagen ska kräva mindre av hjärnan" },
+      { title: "Paceable – Ditt liv, i din takt" },
       {
         name: "description",
-        content: "Paceable hjälper dig fånga tankar, planera efter din energi och ta ett steg i taget. Ett mjukare sätt att få vardagen att gå ihop.",
+        content:
+          "Samla tankarna, få överblick över dagen och planera efter din ork. Paceable hjälper dig att hitta ditt nästa lilla steg.",
       },
-      { property: "og:title", content: "Paceable – Vardagen ska kräva mindre av hjärnan" },
+      { property: "og:title", content: "Paceable – Ditt liv, i din takt" },
       {
         property: "og:description",
         content: "Fånga tankar, planera efter din dagsform och fokusera på nästa rimliga steg.",
@@ -33,32 +35,10 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
 });
 
-const FEATURES = [
-  {
-    id: "quickflow",
-    icon: Zap,
-    title: "Fånga",
-    text: "Få ner tankar, uppgifter och idéer innan de försvinner. Pace hjälper dig att sortera resten.",
-    accent: "bg-lavender text-primary",
-  },
-  {
-    id: "energi",
-    icon: BatteryMedium,
-    title: "Planering utifrån energi",
-    text: "Planera smartare, inte hårdare. Anpassa dagen efter din energi och ditt mående.",
-    accent: "bg-lavender text-primary",
-  },
-  {
-    id: "steg",
-    icon: Heart,
-    title: "Ett steg i taget",
-    text: "Stora mål blir enklare med små steg. Paceable hjälper dig att fira framsteg – varje dag.",
-    accent: "bg-lavender text-primary",
-  },
-] as const;
-
 function LandingPage() {
   const navigate = useNavigate();
+  const openerRef = useRef<HTMLButtonElement>(null);
+  const returnFocus = () => openerRef.current?.focus();
   const [videoOpen, setVideoOpen] = useState(false);
   const [openDemo, setOpenDemo] = useState<FeatureDemoId | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,98 +54,165 @@ function LandingPage() {
   }, []);
 
   return (
-    <PublicPage>
-
-      <section className="relative overflow-hidden bg-landing-background">
-        <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 pt-10 pb-10 sm:px-8 lg:min-h-[525px] lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-7 lg:px-12 lg:pt-8 lg:pb-5">
-          <div className="relative z-10 max-w-2xl">
-            <p className="mb-7 text-[11px] font-bold text-primary" data-no-translate>Ditt liv, i din takt.</p>
-            <h1 className="font-display text-[2.4rem] leading-[1.15] font-extrabold sm:text-5xl lg:text-[3.2rem] xl:text-[3.65rem]">
-              Vardagen ska kräva <span className="text-primary">mindre</span> av hjärnan
-            </h1>
-            <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              Paceable är en vardagsplanerare för dig med en full hjärna. Vi hjälper dig att planera med omtanke, få struktur utan stress och fokusera på det som faktiskt känns bra.
+    <PublicPage quiet>
+      <section className="welcome-hero" aria-labelledby="welcome-title">
+        <div className="welcome-wrap welcome-hero-grid">
+          <div className="welcome-intro">
+            <p className="welcome-eyebrow" data-no-translate>
+              Ditt liv, i din takt.
             </p>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="min-h-12 rounded-full px-7 text-base shadow-soft">
-                <Link to="/sign-up">Prova Paceable <ArrowRight aria-hidden="true" /></Link>
+            <h1 id="welcome-title">
+              Du behöver inte hålla <em>allt</em> i huvudet.
+            </h1>
+            <p className="welcome-lead">
+              Samla tankarna, få överblick över dagen och planera efter din ork. Paceable hjälper
+              dig att hitta ditt nästa lilla steg.
+            </p>
+            <div className="welcome-actions">
+              <Button asChild size="lg" className="welcome-primary">
+                <Link to="/sign-up">
+                  Prova Paceable <ArrowRight aria-hidden="true" />
+                </Link>
               </Button>
-              <Button variant="ghost" size="lg" className="min-h-12 rounded-full px-2 text-foreground hover:text-primary" onClick={() => setVideoOpen(true)}>
-                <span className="grid size-10 shrink-0 place-items-center rounded-full border border-primary text-primary"><Play className="size-4 fill-current" aria-hidden="true" /></span>
-                 <span className="text-left leading-tight">Se hur det fungerar <span className="block text-xs font-normal text-muted-foreground">ca 54 sek</span></span>
-              </Button>
+              <button
+                type="button"
+                className="welcome-film"
+                onClick={(event) => {
+                  openerRef.current = event.currentTarget;
+                  setVideoOpen(true);
+                }}
+              >
+                <span className="welcome-play">
+                  <Play aria-hidden="true" />
+                </span>
+                <span>
+                  Ta en liten titt<span className="welcome-film-length">Se filmen · ca 54 sek</span>
+                </span>
+              </button>
             </div>
-            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-sm text-muted-foreground">
-              <span className="inline-flex items-center gap-2"><Leaf aria-hidden="true" className="h-4 w-4 text-primary" /> Mindre stress</span>
-              <span className="inline-flex items-center gap-2"><Heart aria-hidden="true" className="h-4 w-4 text-primary" /> Mer balans</span>
-              <span className="inline-flex items-center gap-2"><Sparkles aria-hidden="true" className="h-4 w-4 text-primary" /> En snällare vardag</span>
-            </div>
+            <p className="welcome-permission">Du kan börja med en enda sak.</p>
           </div>
-
-          <div className="relative min-w-0 lg:pl-3">
-            <div className="relative lg:ml-6"><DayWindow /></div>
-            <div className="hidden lg:absolute lg:-bottom-4 lg:-left-16 lg:block lg:rotate-[-7deg] lg:text-center lg:font-handwritten lg:text-2xl lg:leading-none lg:text-primary">
-              <span aria-hidden="true" className="block rotate-[-16deg] text-5xl">↗</span>
-              Små steg.<br />Stora förändringar. <span aria-hidden="true">♥</span>
-            </div>
+          <div className="welcome-glimpse">
+            <DayWindow />
+            <p className="welcome-handnote">Lite mer utrymme. Lite mindre brus.</p>
           </div>
         </div>
       </section>
 
-      <section id="funktioner" aria-label="Paceables funktioner" className="scroll-mt-8 bg-landing-background pb-16 pt-4 sm:pt-8">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-          <div className="grid gap-4 md:grid-cols-3 lg:gap-5">
-            {FEATURES.map((feature) => (
-              <article key={feature.title} className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-3 rounded-3xl border border-border/60 bg-landing-surface p-5 shadow-soft sm:p-6">
-                <span className={`col-span-2 grid h-13 w-13 place-items-center rounded-full ${feature.accent}`}>
-                  <feature.icon aria-hidden="true" className="h-6 w-6" strokeWidth={1.8} />
+      <section id="funktioner" className="welcome-support" aria-labelledby="support-title">
+        <div className="welcome-wrap">
+          <div className="welcome-section-heading">
+            <p className="welcome-eyebrow">En mjukare start</p>
+            <h2 id="support-title">Vad behöver du just nu?</h2>
+            <p>Du väljer var du vill börja. Resten får vänta.</p>
+          </div>
+          <div className="welcome-support-grid">
+            {[
+              {
+                id: "quickflow",
+                icon: NotebookPen,
+                title: "Få ner det som snurrar",
+                text: "En tanke, en idé eller något du behöver komma ihåg. Ge det en plats utanför huvudet.",
+                action: "Prova Fånga",
+                tone: "lavender",
+              },
+              {
+                id: "energi",
+                icon: BatteryMedium,
+                title: "Utgå från din ork",
+                text: "Checka in med dig själv och planera med utrymme för både det som behövs och återhämtning.",
+                action: "Utforska energiplanering",
+                tone: "sage",
+              },
+              {
+                id: "steg",
+                icon: Footprints,
+                title: "Ta ett litet steg",
+                text: "När något känns stort kan ett mindre steg vara en början. Du behöver inte göra allt på en gång.",
+                action: "Prova små steg",
+                tone: "apricot",
+              },
+            ].map((feature) => (
+              <article key={feature.id} className="welcome-support-item" data-tone={feature.tone}>
+                <span className="welcome-feature-icon">
+                  <feature.icon aria-hidden="true" strokeWidth={1.5} />
                 </span>
-                <div className="min-w-0">
-                  <h3 className="font-display text-base font-bold sm:text-lg">{feature.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{feature.text}</p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  title={`Prova ${feature.title}`}
-                  aria-label={`Prova ${feature.title} direkt på sidan`}
-                  onClick={() => {
+                <h3>{feature.title}</h3>
+                <p>{feature.text}</p>
+                <button
+                  type="button"
+                  className="welcome-text-link"
+                  onClick={(event) => {
+                    openerRef.current = event.currentTarget;
                     track("landing_demo_opened", { source: feature.id });
-                    setOpenDemo(feature.id);
+                    setOpenDemo(feature.id as FeatureDemoId);
                   }}
-                  className="self-end rounded-full bg-landing-sand text-primary"
                 >
+                  {feature.action}
                   <ArrowRight aria-hidden="true" />
-                </Button>
+                </button>
               </article>
             ))}
           </div>
-
-          <div className="mt-5 flex justify-center">
-            <button
-              type="button"
-              onClick={() => {
-                track("landing_demo_opened", { source: "meny" });
-                setMenuOpen(true);
-              }}
-              className="inline-flex min-h-12 items-center gap-3 rounded-full border border-border/60 bg-landing-surface px-6 text-sm font-semibold shadow-soft transition-colors hover:text-primary"
-            >
-              <ListChecks aria-hidden="true" className="h-5 w-5 text-primary" strokeWidth={1.8} />
-              Se allt som finns i appen
-              <ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </button>
-          </div>
+          <button
+            type="button"
+            className="welcome-explore"
+            onClick={(event) => {
+              openerRef.current = event.currentTarget;
+              track("landing_demo_opened", { source: "meny" });
+              setMenuOpen(true);
+            }}
+          >
+            Se mer av Paceable
+            <ArrowRight aria-hidden="true" />
+          </button>
         </div>
       </section>
 
+      <section className="welcome-invitation" aria-labelledby="invitation-title">
+        <div className="welcome-wrap">
+          <Heart aria-hidden="true" strokeWidth={1.3} />
+          <h2 id="invitation-title">Här får du börja där du är.</h2>
+          <p>För dagar med mycket energi. Och för dagar när en sak är lagom.</p>
+          <Button asChild size="lg" className="welcome-primary">
+            <Link to="/sign-up">
+              Hitta din takt med Paceable
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+      </section>
 
-      <FeatureDemoDialog demo={openDemo} onClose={() => setOpenDemo(null)} />
-      <MenuPreviewDialog open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <FeatureDemoDialog
+        returnFocus={returnFocus}
+        demo={openDemo}
+        onClose={() => setOpenDemo(null)}
+      />
+      <MenuPreviewDialog
+        returnFocus={returnFocus}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+      />
       <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
-        <DialogContent className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6">
+        <DialogContent
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            returnFocus();
+          }}
+          className="max-w-4xl bg-landing-background p-4 sm:max-w-4xl sm:p-6"
+        >
           <DialogTitle>Se hur Paceable fungerar</DialogTitle>
           <DialogDescription>En kort introduktion till dagens Paceable.</DialogDescription>
-           {videoOpen && <video controls autoPlay playsInline className="aspect-video w-full rounded-xl bg-foreground" aria-label="Paceable introduktionsfilm"><source src={previewVideo.url} type="video/mp4" /></video>}
+          {videoOpen && (
+            <video
+              controls
+              playsInline
+              className="aspect-video w-full rounded-xl bg-foreground"
+              aria-label="Paceable introduktionsfilm"
+            >
+              <source src={previewVideo.url} type="video/mp4" />
+            </video>
+          )}
         </DialogContent>
       </Dialog>
     </PublicPage>
