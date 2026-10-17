@@ -55,7 +55,7 @@ function entryStyle(start: number, end: number, lane: number, lanes: number, fir
   return { top: `${(start - first) * 1.7}px`, height: `${Math.max(44, (end - start) * 1.7 - 4)}px`, left: `${lane / lanes * 100}%`, width: `${100 / lanes}%` };
 }
 
-export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "manad", showPictograms = false, onPictogramsChange }: {
+export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "dag", showPictograms = false, onPictogramsChange }: {
   initialView?: CalendarView;
   showPictograms?: boolean;
   onPictogramsChange?: (enabled: boolean) => void;
@@ -312,7 +312,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
     <div className="pace-calendar-heading">
     <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
-    <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
+    <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["dag", "Idag"], ["vecka", "Vecka"], ["manad", "Månad"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
     <details className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-2" aria-label={t("Planeringsverktyg")}>
       <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-[#512654]"><NotebookPen size={17} aria-hidden />{t("Planera och lägg till flera aktiviteter")}<ChevronRight size={16} aria-hidden className="ml-auto" /></summary>
