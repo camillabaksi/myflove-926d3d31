@@ -22,5 +22,5 @@ export const Route = createFileRoute("/_app/kalender")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <DayHub tab="kalender" />,
+  component: () => <DayHub tab="kalender" initialView={Route.useSearch().view} />,
 });

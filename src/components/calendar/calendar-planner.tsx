@@ -55,7 +55,7 @@ function entryStyle(start: number, end: number, lane: number, lanes: number, fir
   return { top: `${(start - first) * 1.7}px`, height: `${Math.max(44, (end - start) * 1.7 - 4)}px`, left: `${lane / lanes * 100}%`, width: `${100 / lanes}%` };
 }
 
-export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "manad", showPictograms = false, onPictogramsChange }: {
+export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "dag", showPictograms = false, onPictogramsChange }: {
   initialView?: CalendarView;
   showPictograms?: boolean;
   onPictogramsChange?: (enabled: boolean) => void;
@@ -311,8 +311,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   return <div className={cn("pace-next-page pace-calendar-desktop mx-auto max-w-6xl space-y-4", textLayout.enlarged && "pace-text-enlarged")} data-testid="visual-calendar">
     <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
     <div className="pace-calendar-heading">
-    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
-    <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
+    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Min kalender")}</h1><Button asChild className="pace-compact-control pace-compact-primary shrink-0"><PlanningLink to="/planera" search={{ audience: "me", period: view === "vecka" ? "week" : "today" }}><Plus size={16} aria-hidden />{t("Lägg till")}</PlanningLink></Button></header>
+    <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["dag", "Idag"], ["vecka", "Vecka"], ["manad", "Månad"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
     <details className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-2" aria-label={t("Planeringsverktyg")}>
       <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-[#512654]"><NotebookPen size={17} aria-hidden />{t("Planera och lägg till flera aktiviteter")}<ChevronRight size={16} aria-hidden className="ml-auto" /></summary>
@@ -327,17 +327,25 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     {view !== "dag" && (todayCap.percent === null ? <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"><p className="font-display text-sm font-bold">{t("Hur börjar du dagen?")}</p><p className="mt-1 text-xs text-muted-foreground">{t("Checka in när du vill för att se dagens kapacitet.")}</p></section> : <button type="button" onClick={() => setCapInfo(today)} className="flex w-full items-center gap-4 rounded-3xl border border-border/60 bg-card p-4 text-left shadow-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${t("Din kapacitet idag")}: ${todayCap.percent} %. ${t("Visa vad den bygger på")}`}><span className="min-w-0 flex-1"><span className="flex items-center gap-1 font-display text-sm font-bold">{t("Din kapacitet idag")}<CircleHelp size={14} className="text-muted-foreground" aria-hidden /></span><CapacityBattery percent={todayCap.percent} size="lg" className="mt-2 w-full" /><span className="mt-2 block text-xs text-muted-foreground">{t("Utifrån din egen incheckning idag.")}</span></span><ChevronRight size={18} className="shrink-0 text-muted-foreground" aria-hidden /></button>)}
     </div>
     <div className="pace-calendar-period grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Föregående period")} onClick={() => step(-1)}><ChevronLeft size={18} /></Button><div className="min-w-0 text-center"><p className="break-words font-display text-sm font-bold capitalize">{view === "vecka" ? `${dateHeading(dates[0] ?? date)} – ${dateHeading(dates[6] ?? date)}` : period}</p><Button variant="ghost" size="sm" onClick={() => setDate(today)} className="min-h-11 text-xs text-primary">{t("Idag")}</Button></div><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Nästa period")} onClick={() => step(1)}><ChevronRight size={18} /></Button></div>
-    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 border-y border-border/50 py-1" aria-label={t("Visningsval")}>
-      <Button variant="ghost" className="pace-compact-control px-2 text-xs font-medium text-ink" onClick={() => setFamilySettings(true)}><Users size={16} className="text-primary" />{t("Familj")}</Button>
-      {ownedChildren.length > 0 && <Button variant="ghost" className="pace-compact-control px-2 text-xs text-muted-foreground" onClick={() => openAdd(true)}><Plus size={14} aria-hidden />{t("Lägg till för barn")}</Button>}
+    <div className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-2" role="group" aria-label={t("Visa för")}>
+      <div className="flex flex-wrap items-center gap-2"><span className="mr-1 text-xs text-muted-foreground">{t("Visa för")}</span>
+        <Button size="sm" variant={familyPreferences.mode === "mine" ? "default" : "outline"} aria-pressed={familyPreferences.mode === "mine"} className="min-h-11 rounded-full" onClick={() => setFamilyPreferences(previous => ({ ...previous, mode: previous.mode === "mine" ? "context" : "mine" }))}>{t("Bara jag")}</Button>
+        {familyMembers.map(member => { const active = familyPreferences.mode !== "mine" && (familyPreferences.children === null || familyPreferences.children.includes(member.id)); return <Button key={member.id} size="sm" variant={active ? "secondary" : "outline"} aria-pressed={active} className="min-h-11 rounded-full" onClick={() => setFamilyPreferences(previous => { const current = previous.children === null ? familyMembers.map(m => m.id) : previous.children; const children = active ? current.filter(id => id !== member.id) : [...current, member.id]; return { ...previous, mode: "context", children }; })}>{member.name}</Button>; })}
+        <Button size="sm" variant="ghost" className="min-h-11 rounded-full text-muted-foreground" onClick={() => setFamilySettings(true)} aria-label={t("Fler familjeinställningar")}><SlidersHorizontal size={16} aria-hidden /></Button>
+      </div>
+    </div>
+    <details className="rounded-2xl border border-border/50 bg-card px-3 py-1" aria-label={t("Fler visningsval")}><summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground"><SlidersHorizontal size={16} aria-hidden />{t("Visning och bildstöd")}</summary><div className="flex flex-wrap items-center gap-x-1 gap-y-1 py-2">
+      
+
       {onPictogramsChange && <Button variant="ghost" className="pace-compact-control px-2 text-xs" aria-pressed={showPictograms} onClick={() => onPictogramsChange(!showPictograms)}><Images size={16} aria-hidden />{t("Bildstöd")}{showPictograms && <Check size={12} aria-hidden />}</Button>}
       {view !== "manad" && <Button variant="ghost" className="pace-compact-control px-2 text-xs" aria-pressed={fullDay} onClick={() => setFullDay(value => !value)}><Clock size={16} aria-hidden />{t(fullDay ? "Visa kompakt" : "Visa hela dygnet (00–24)")}</Button>}
-      <span className="h-4 w-px bg-border" aria-hidden />
+
       <details className={cn("min-w-0 flex-1 px-2", ownedChildren.length > 0 && "basis-full sm:basis-auto")}>
         <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-medium"><SlidersHorizontal size={16} className="text-primary" aria-hidden />{t("Visa i kalendern")}<span className="ml-auto text-muted-foreground">{visible.filter(v => ["privat", "jobb", "studier"].includes(v)).length}/3</span></summary>
         <div className="flex flex-wrap gap-2 pb-3" role="group" aria-label={t("Visa kategorier")}>{[["privat", "Privat"], ["jobb", "Jobb"], ["studier", "Studier"]].map(([id, label]) => <Button key={id} size="sm" variant="outline" className={cn("pace-compact-control", visible.includes(id ?? "") && "pace-compact-selected")} aria-pressed={visible.includes(id ?? "")} onClick={() => setVisible(prev => prev.includes(id ?? "") ? prev.filter(x => x !== id) : [...prev, id ?? "privat"])}>{t(label ?? "")}</Button>)}</div>
       </details>
     </div>
+    </details>
     {desktopLayout && !textLayout.enlarged && calendarTools}
     <ul aria-label={t("Områdesfärger")} className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">{(view === "manad" ? calendarMonthAreas(Object.values(days).flat()) : [...new Set(Object.values(days).flat().map(calendarArea))]).map(area => <li key={area} data-calendar-area={area} className="flex items-center gap-1.5"><span className="h-2 w-2 shrink-0 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(area))}</li>)}</ul>
     {!desktopLayout && view !== "dag" && date === today && checkin}

@@ -11,7 +11,7 @@ import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { Link } from "wouter";
-import { useSearch } from "@tanstack/react-router";
+import type { CalendarView } from "@/lib/visual-calendar";
 import {
   CheckSquare,
   Target,
@@ -149,8 +149,7 @@ function useFamilyEventsByDate() {
   return { eventsForDate, hasHousehold: !!household?.id, isSignedIn: !!isSignedIn };
 }
 
-export function CalendarContent() {
-  const { view: initialView } = useSearch({ from: "/_app/kalender" });
+export function CalendarContent({ initialView = "dag" }: { initialView?: CalendarView }) {
   // Page-lifetime only: keep the same unfinished registration across planner view remounts.
   const [impactDraft, setImpactDraft] = useState<CalendarImpactDraft | null>(null);
   const { t, locale } = useLang();

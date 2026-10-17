@@ -143,7 +143,9 @@ export function PlanningWorkspace({
 }) {
   const { t, locale } = useLang();
   const navigate = useNavigate();
-  const forChildren = audience === "children";
+  const [target, setTarget] = useState<"me" | "children" | "both">(audience);
+  const forChildren = target !== "me";
+  const forMe = target !== "children";
   const childStore = useChildren();
   const children = childStore.children.filter((child) => child.owner_id === owner);
   const { addPlannedTasks } = useTasks();
@@ -161,6 +163,8 @@ export function PlanningWorkspace({
   const [locked, setLocked] = useState(false);
   const pending = useRef<PlanningDraft[] | null>(null);
   const busy = useRef(false);
+  // A completed child write must not be repeated if the own-task write needs retrying.
+  const childrenWritten = useRef(false);
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -231,8 +235,11 @@ export function PlanningWorkspace({
       // Freeze an attempted batch until it is confirmed, so a network retry uses identical IDs/content.
       pending.current ??= structuredClone(batch);
       setLocked(true);
-      if (forChildren) await childStore.addPlannedActivities(pending.current, owner);
-      else
+      if (forChildren && !childrenWritten.current) {
+        await childStore.addPlannedActivities(pending.current, owner);
+        childrenWritten.current = true;
+      }
+      if (forMe)
         addPlannedTasks(
           planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea),
           owner,
@@ -242,6 +249,7 @@ export function PlanningWorkspace({
         `${batch.length} ${t(batch.length === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}`,
       );
       pending.current = null;
+      childrenWritten.current = false;
       setLocked(false);
       setRows([]);
       setText("");
@@ -261,21 +269,27 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)] lg:gap-6">
       <section
-        className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
-        aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
+        className="min-w-0 rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
+        aria-label={t("Lägg till aktiviteter")}
       >
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
-          {t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
+          {t("Lägg till aktiviteter")}
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          {t(
-            forChildren
-              ? "Flera aktiviteter. För ett eller flera barn."
-              : "En dag eller en vecka. Lite i taget.",
-          )}
+          {t("Skriv en eller flera aktiviteter och granska innan du sparar.")}
         </p>
+        {stage === "write" && children.length > 0 && (
+          <fieldset className="mt-4">
+            <legend className="text-sm font-medium">{t("Vem gäller aktiviteterna?")}</legend>
+            <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("Välj mottagare")}>
+              <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-full" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
+              <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-full" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
+              <Button type="button" variant={target === "both" ? "default" : "outline"} aria-pressed={target === "both"} className="min-h-11 rounded-full" onClick={() => { setTarget("both"); setError(""); }}>{t("Jag och barnen")}</Button>
+            </div>
+          </fieldset>
+        )}
         {forChildren && (
           <>
             {childStore.error && (
@@ -621,7 +635,7 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
+      <section className="min-w-0 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4 lg:sticky lg:top-6" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
         </h2>
