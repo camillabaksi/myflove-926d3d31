@@ -16,6 +16,8 @@ export interface CalendarEntry {
   title: string;
   time?: string;
   endTime?: string;
+  /** Inclusive end date for a continuous context period, not booked time. */
+  periodEnd?: string;
   location?: string;
   energyImpact?: Task["energyImpact"];
   friction?: Task["friction"];
@@ -99,6 +101,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       const middle = !!r.endDate && r.date !== date;
       out.push({ id: `rem-${r.id}`, sourceId: r.id, source: "reminder", date, title: r.title,
         time: middle ? undefined : r.time, endTime: middle ? undefined : r.endTime,
+        periodEnd: r.endDate && !r.time ? r.endDate : undefined,
         energyImpact: r.energyImpact, area: r.area, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
         recurring: (r.repeat ?? "none") !== "none" || !!r.endDate });
     }
