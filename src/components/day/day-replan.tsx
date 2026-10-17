@@ -28,7 +28,7 @@ export function DayReplanButton({ compact = false, ...props }: DayReplanProps & 
       setOpenedFor(user.id); track("planning_viewed", { source: "idag" });
     }} className={compact ? "mt-3 flex min-h-11 w-full items-center gap-3 rounded-full px-2 py-2 text-left text-ink hover:bg-mint/40" : "mb-4 flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/70 bg-mint/40 px-4 py-3 text-left text-ink transition-colors hover:bg-mint/60"}>
       <WandSparkles size={20} className="shrink-0 text-primary" aria-hidden />
-      <span className="min-w-0 flex-1"><span className={compact ? "block text-sm font-medium" : "block text-base font-medium"}>{t("Få ihop dagen")}</span>{!compact && <span className="block text-sm text-muted-foreground">{t("Hjälp att prioritera och fördela")}</span>}</span>
+      <span className="min-w-0 flex-1"><span className={compact ? "block text-sm font-medium" : "block text-base font-medium"}>{t("Få ihop dagen")}</span>{!compact && <span className="block text-sm text-muted-foreground">{t("Prioritera, fördela och hitta återhämtning")}</span>}</span>
       <ChevronRight size={18} className="shrink-0 text-muted-foreground" aria-hidden />
     </button>
     {openedFor && openedFor === user?.id && isActiveOwner(openedFor) && <DayReplanDialog key={`${openedFor}:${props.date}`} {...props} ownerId={openedFor} onRestoreFocus={() => trigger.current?.focus()} onClose={() => setOpenedFor(null)} />}
@@ -86,7 +86,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
     <DialogContent onCloseAutoFocus={event => { if (onRestoreFocus) { event.preventDefault(); onRestoreFocus(); } }} className="grid max-h-[85dvh] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden rounded-3xl bg-card p-0 pb-0 sm:max-w-lg sm:p-0 sm:pb-0">
       <DialogHeader className="border-b border-border px-5 pb-4 pr-14 pt-5 text-left">
         <DialogTitle className="font-display text-xl font-medium text-ink">{t("Få ihop dagen")}</DialogTitle>
-        <DialogDescription>{t("Ett förslag. Du väljer vad som passar.")}</DialogDescription>
+        <DialogDescription>{t("Prioritera, fördela och hitta återhämtning. Du väljer vad som passar.")}</DialogDescription>
       </DialogHeader>
     <div className="min-h-0 min-w-0 space-y-5 overflow-y-auto px-5 py-4">
       <div className="rounded-2xl bg-mint/40 p-4 text-sm">
@@ -110,7 +110,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
         </label>)}
       </fieldset> : <p className="text-sm text-muted-foreground">{t("Inga säkra tidsändringar att föreslå just nu. Det betyder inte att dagen säkert är lagom; längder eller andra uppgifter kan saknas.")}</p>}
       <details className="rounded-2xl border border-border/70 bg-mint/20 p-4">
-        <summary className="min-h-11 cursor-pointer text-sm font-medium">{t("Ge plats för återhämtning")}</summary>
+        <summary className="min-h-11 cursor-pointer text-sm font-medium">{t("Återhämta · ge plats för det som hjälper")}</summary>
         <div className="space-y-2 pt-2 text-sm text-muted-foreground">
           <p>{t("Återhämtning är också en del av din dag. Fundera på om något som brukar ge dig energi kan få plats, utan att det blir ännu ett måste.")}</p>
           {preview.gentle ? <p>{t("När kapaciteten är låg kan en liten paus eller en välbekant återhämtande aktivitet vara ett alternativ till att lägga till fler uppgifter.")}</p> : <p>{t("Utgå från det som faktiskt hjälper dig, till exempel en kort stund i lugn och ro, musik eller frisk luft.")}</p>}
