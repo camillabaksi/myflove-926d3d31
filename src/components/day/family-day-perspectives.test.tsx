@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChildItem } from "@/hooks/use-children";
 import { decodeVisualNotes, encodeVisualNotes } from "@/lib/child-visual-schedule";
 import FamilyDayPerspectives from "./family-day-perspectives";
+import { FAMILY_ID } from "./person-switcher";
 
 const fixture = vi.hoisted(() => ({ items: [] as ChildItem[], updateItem: vi.fn(), toggleTask: vi.fn() }));
 vi.mock("@/hooks/use-children", () => ({ useChildren: () => ({
@@ -40,6 +41,18 @@ beforeEach(() => {
 });
 
 describe("Barnets dag med dubbla sparade poster", () => {
+  it("shows a shared activity once, with both names, and filters the names with the selected children", () => {
+    const { container } = render(<FamilyDayPerspectives defaultPerspective={FAMILY_ID} myDay={null} />);
+    expect(screen.getAllByText("Frukost")).toHaveLength(1);
+    const shared = screen.getByText("Frukost").closest("li")!;
+    expect(shared).toHaveTextContent("Bianca · Bella");
+    expect(shared).not.toHaveTextContent("Privat anteckning");
+    expect(container.querySelectorAll("ol")).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: /Bella$/ }));
+    expect(screen.getAllByText("Frukost")).toHaveLength(1);
+    expect(screen.getByText("Frukost").closest("li")).not.toHaveTextContent("Bianca · Bella");
+    expect(screen.queryByRole("button", { name: /Markera som klar/ })).not.toBeInTheDocument();
+  });
   it("visar varje hållpunkt en gång, med Nu/Nästa och kopplingar kvar", () => {
     render(<FamilyDayPerspectives defaultPerspective="bianca" myDay={<p>Egna dagen</p>} />);
     for (const title of ["Vakna", "Frukost", "Klä på sig"]) expect(screen.getAllByText(title)).toHaveLength(1);

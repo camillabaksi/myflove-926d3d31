@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { ArrowRight, Bell, CalendarDays, Plus } from "lucide-react";
+import { Bell, CalendarDays, Plus } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -11,6 +11,7 @@ import { DayGreeting } from "@/components/day/day-greeting";
 import { TodayCapacity } from "@/components/day/today-capacity";
 import { TodayPace } from "@/components/day/today-pace";
 import { DayReplanButton } from "@/components/day/day-replan";
+import { PlanningEntry } from "@/components/day/planning-workspace";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import { Button } from "@/components/ui/button";
@@ -93,15 +94,8 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-2">
-            <DayReplanButton date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} />
+            <div className="mb-4 space-y-3"><PlanningEntry><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
             <FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} />} />
-            <div className="mt-1 flex justify-end">
-              <Button asChild size="sm" variant="ghost" className="min-h-10 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
-                <Link href="/flowplan?day=tomorrow">
-                  {t("Planera morgondagen")} <ArrowRight size={16} aria-hidden />
-                </Link>
-              </Button>
-            </div>
           </div>
         </section>
       </MyFloveWide>

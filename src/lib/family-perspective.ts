@@ -14,6 +14,7 @@ export interface TimelineEntry {
   personId: string;
   time: string;
   endTime?: string;
+  location?: string;
   title: string;
   linkGroup?: string;
   /** Förälderns uppgift som barnaktiviteten är kopplad till. */
@@ -57,7 +58,7 @@ export function uniqueChildEntries(entries: TimelineEntry[]): TimelineEntry[] {
     // Untimed activities can be separate instructions; owned parent tasks stay independent.
     const key = entry.personId === ME_ID || !entry.time
       ? JSON.stringify(["id", entry.key])
-      : JSON.stringify([entry.personId, entry.itemId ? "activity" : "school", entry.time.slice(0, 5), entry.endTime ?? "", normalizeTitle(entry.title)]);
+      : JSON.stringify([entry.personId, entry.itemId ? "activity" : "school", entry.time.slice(0, 5), entry.endTime ?? "", normalizeTitle(entry.title), normalizeTitle(entry.location ?? "")]);
     const group = groups.get(key) ?? [];
     if (!group.some(source => source.key === entry.key)) group.push(entry);
     groups.set(key, group);
@@ -104,6 +105,7 @@ export function entriesFromChildEvents(events: ChildEvent[]): TimelineEntry[] {
     personId: e.childId,
     time: e.time,
     ...(e.endTime ? { endTime: e.endTime } : {}),
+    ...(e.place ? { location: e.place } : {}),
     title: e.title,
     ...(e.linkGroup ? { linkGroup: e.linkGroup } : {}),
     ...(e.parentTaskId ? { parentTaskId: e.parentTaskId } : {}),
@@ -132,11 +134,12 @@ export function buildParallelTimeline(entries: TimelineEntry[], personIds: strin
   for (const [time, list] of [...byTime].sort((a, b) => a[0].localeCompare(b[0]))) {
     const cells: TimelineCell[] = [];
     for (const entry of list) {
-      const match = cells.find((cell) =>
+      const match = cells.find((cell) => !cell.personIds.includes(entry.personId) &&
         cell.entries.some(
           (other) =>
-            areLinked(entry, other) ||
-            normalizeTitle(other.title) === normalizeTitle(entry.title),
+            (other.endTime ?? "") === (entry.endTime ?? "") &&
+            normalizeTitle(other.location ?? "") === normalizeTitle(entry.location ?? "") &&
+            (areLinked(entry, other) || !!entry.time && normalizeTitle(other.title) === normalizeTitle(entry.title)),
         ),
       );
       if (match) {

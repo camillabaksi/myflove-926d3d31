@@ -229,7 +229,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const setPresence = async (entry: CalendarEntry) => {
     if (!owner || !isActiveOwner(owner)) return;
     const value = !entry.requiresParent;
-    const matches = (allDays[entry.date] ?? []).filter(e => isFamilyEntry(e) && (e.id === entry.id || e.source === entry.source && e.title === entry.title && e.time === entry.time && e.endTime === entry.endTime && e.familyMembers?.some(m => entry.familyMembers?.some(n => n.id === m.id))));
+    const matches = (allDays[entry.date] ?? []).filter(e => isFamilyEntry(e) && (e.id === entry.id || e.source === entry.source && e.title === entry.title && e.time === entry.time && e.endTime === entry.endTime && e.location === entry.location && e.familyMembers?.some(m => entry.familyMembers?.some(n => n.id === m.id))));
     try {
       for (const e of matches) {
         const original = e.source === "child" ? originalChildItems.find(i => i.id === e.sourceId && i.owner_id === owner) : undefined;

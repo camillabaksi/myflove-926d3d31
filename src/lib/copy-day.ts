@@ -38,6 +38,7 @@ export function buildTaskCopies(existing: Task[], source: Task[], targetDates: s
         dueDate: date,
         time: t.time,
         endTime: t.endTime,
+        location: t.location,
         reminderMinutesBefore: t.reminderMinutesBefore,
         kind: t.kind,
         note: t.note,

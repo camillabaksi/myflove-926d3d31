@@ -88,6 +88,19 @@ describe("Min dag", () => {
 });
 
 describe("Parallell familjevy", () => {
+  it("keeps different end times and places separate, retaining all source IDs", () => {
+    const entries = entriesFromChildEvents([
+      ev({ childId: "b1", itemId: "a", time: "15:00", endTime: "16:00", title: "Simskola", place: "Simhallen" }),
+      ev({ childId: "b2", itemId: "b", time: "15:00", endTime: "16:00", title: "Simskola", place: "simhallen" }),
+      ev({ childId: "b2", itemId: "c", time: "15:00", endTime: "17:00", title: "Simskola", place: "Simhallen" }),
+      ev({ childId: "b2", itemId: "d", time: "15:00", endTime: "16:00", title: "Simskola", place: "Annan hall" }),
+    ]);
+    const cells = buildParallelTimeline(entries, [ME_ID, "b1", "b2"])[0]!.cells;
+    expect(cells).toHaveLength(3);
+    expect(cells[0]!.personIds).toEqual(["b1", "b2"]);
+    expect(cells.flatMap(cell => cell.entries).map(entry => entry.itemId)).toEqual(["a", "b", "c", "d"]);
+    expect(buildParallelTimeline(entries, ["b1"])[0]!.cells[0]!.personIds).toEqual(["b1"]);
+  });
   it("en förälder + ett barn", () => {
     const rows = buildParallelTimeline([me("09:00", "Jobb", "t"), ...entriesFromChildEvents([ev({ childId: "b1", time: "08:00", title: "Klä på sig" })])], [ME_ID, "b1"]);
     expect(rows.map((r) => r.time)).toEqual(["08:00", "09:00"]);

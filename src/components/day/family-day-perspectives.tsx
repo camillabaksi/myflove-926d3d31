@@ -64,7 +64,7 @@ export default function FamilyDayPerspectives({
   const { children, items: childItems, updateItem } = useChildren();
   const childEvents = useChildEvents(dayISO);
   const { today: myItems } = useFlowItems(dayISO);
-  const { updateTask, toggleTask } = useTasks();
+  const { tasks = [], updateTask, toggleTask } = useTasks();
 
   const [perspective, setPerspective] = useState<Perspective>(defaultPerspective);
   const [selected, setSelected] = useState<string[] | null>(null);
@@ -88,14 +88,19 @@ export default function FamilyDayPerspectives({
           personId: ME_ID,
           time: i.time!,
           title: i.title,
+          endTime: tasks.find(task => i.id === `task-${task.id}`)?.endTime,
+          location: tasks.find(task => i.id === `task-${task.id}`)?.location,
           ...(i.id.startsWith("task-") ? { taskId: i.id.slice(5) } : {}),
           ...(i.done ? { completed: true } : {}),
         })),
-    [myItems],
+    [myItems, tasks],
   );
   const childEntries = useMemo<TimelineEntry[]>(() => uniqueChildEntries([
     ...entriesFromChildEvents(childEvents),
-    ...childItems.filter(i => i.kind === "activity" && !i.time && activityOccursOn(i, dayISO)).map(i => ({ key: `childitem-${i.id}`, personId: i.child_id, time: "", title: i.title, itemId: i.id })),
+    ...childItems.filter(i => i.kind === "activity" && !i.time && activityOccursOn(i, dayISO)).map(i => {
+      const { meta } = decodeVisualNotes(i.notes);
+      return { key: `childitem-${i.id}`, personId: i.child_id, time: "", title: i.title, itemId: i.id, linkGroup: meta.linkGroup, parentTaskId: meta.parentTaskId, location: meta.location, endTime: meta.endTime };
+    }),
   ]), [childEvents, childItems, dayISO]);
   const allEntries = useMemo(() => [...myEntries, ...childEntries], [myEntries, childEntries]);
   const myItemByKey = useMemo(() => new Map(myItems.map((i) => [i.id, i])), [myItems]);
@@ -248,10 +253,12 @@ export default function FamilyDayPerspectives({
             <Check size={15} strokeWidth={3} />
           </Button>
         )}
-        {!compact && <span className="w-10 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time || "Idag"}</span>}
+        {!compact && <span className="w-14 shrink-0 text-center text-xs font-semibold tabular-nums text-muted-foreground">{entry.time || "Utan tid"}{entry.endTime && <span className="block">–{entry.endTime}</span>}</span>}
         <ActivityPictogram id={visual.pictogram} tone={visual.tone} className={compact ? "h-8 w-8 rounded-lg" : "h-10 w-10 rounded-xl"} iconClassName={compact ? "h-4 w-4" : "h-5 w-5"} style={color ? { color } : undefined} />
         <div className="min-w-0 flex-1">
           <p className={cn("break-words text-sm font-semibold leading-snug text-ink", entry.personId === ME_ID && entry.completed && "line-through")}>{entry.title}</p>
+          {avatars?.length ? <p className="mt-1 break-words text-sm text-muted-foreground">{avatars.map(id => personById.get(id)?.name).filter(Boolean).join(" · ")}</p> : null}
+          {entry.location && <p className="mt-1 break-words text-xs text-muted-foreground">{entry.location}</p>}
           <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
             <span>{visual.label}</span>
             {status && <span className="rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">{status}</span>}
@@ -318,8 +325,8 @@ export default function FamilyDayPerspectives({
 
         {rows.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget med klockslag den här dagen.</p>}
 
-        {/* Mobil: staplad parallell vy – en rad per tid, gemensamt visas en gång. */}
-        <ol className="space-y-2 md:hidden">
+        {/* One shared row on every screen; visible names follow the current person filter. */}
+        <ol className="space-y-2">
           {rows.map((row) => (
             <li key={row.time} className="space-y-1.5">
               {row.cells.map((cell) => (
@@ -329,45 +336,6 @@ export default function FamilyDayPerspectives({
           ))}
         </ol>
 
-        {/* Desktop: riktiga kolumner Tid | Du | Bella | Bianca. */}
-        {rows.length > 0 && (
-          <div className="hidden md:block">
-            <div className="grid gap-2 border-b border-border/60 pb-2 text-xs font-semibold text-muted-foreground"
-              style={{ gridTemplateColumns: `3.5rem repeat(${order.length}, minmax(0, 1fr))` }}>
-              <span>Tid</span>
-              {order.map((id) => {
-                const p = personById.get(id)!;
-                return <span key={id} className="flex items-center gap-1.5"><PersonAvatar person={p} className="h-5 w-5 text-[9px]" />{p.name}</span>;
-              })}
-            </div>
-            {rows.map((row) => (
-              <div key={row.time} className="flex items-start gap-2 border-b border-border/40 py-2">
-                <span className="w-14 shrink-0 pt-3 text-xs font-semibold tabular-nums text-muted-foreground">{row.time}</span>
-                <div className="grid min-w-0 flex-1 items-start gap-2" style={{ gridTemplateColumns: `repeat(${order.length}, minmax(0, 1fr))` }}>
-                {row.cells.flatMap((cell) => {
-                  const idx = cell.personIds.map((id) => order.indexOf(id)).sort((a, b) => a - b);
-                  const contiguous = idx.every((v, i) => i === 0 || v === idx[i - 1]! + 1);
-                  if (contiguous) {
-                    return [
-                      <div key={cell.key} style={{ gridColumn: `${idx[0]! + 1} / span ${idx.length}` }}>
-                        {EntryRow({ entry: cellEntry(cell), avatars: idx.length > 1 ? cell.personIds : undefined, compact: true })}
-                      </div>,
-                    ];
-                  }
-                  return cell.personIds.map((pid) => {
-                    const e = cell.entries.find((x) => x.personId === pid) ?? cellEntry(cell);
-                    return (
-                      <div key={`${cell.key}-${pid}`} style={{ gridColumn: order.indexOf(pid) + 1 }}>
-                        {EntryRow({ entry: e, compact: true })}
-                      </div>
-                    );
-                  });
-                })}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   };

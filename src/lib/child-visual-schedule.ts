@@ -14,6 +14,7 @@ export interface VisualActivityMeta {
   tone: VisualActivityTone;
   /** Optional end time kept in the existing visual metadata envelope. */
   endTime?: string;
+  location?: string;
   /** Sista dag en återkommande aktivitet gäller (YYYY-MM-DD). */
   repeatUntil?: string;
   /** Optional label inside the existing Family area; never a top-level area. */
@@ -178,10 +179,12 @@ export function encodeVisualNotes(meta: VisualActivityMeta, note = ""): string {
     ...(safeMinutes(meta.travelMinutes, TRAVEL_MINUTE_CHOICES) ? { travelMinutes: meta.travelMinutes } : {}),
     ...(meta.recoveryAfter ? { recoveryAfter: true } : {}),
     ...(typeof meta.order === "number" && Number.isFinite(meta.order) ? { order: Math.round(meta.order) } : {}),
+    ...(meta.location?.trim() ? { location: meta.location.trim().slice(0, 160) } : {}),
     ...(safeLinkId(meta.linkGroup) ? { linkGroup: meta.linkGroup } : {}),
     ...(safeLinkId(meta.parentTaskId) ? { parentTaskId: meta.parentTaskId } : {}),
   };
-  return `${META_PREFIX}${JSON.stringify(safeMeta)}]\n${note.trim()}`;
+  // Keep a free-text closing bracket inside JSON, rather than ending the envelope.
+  return `${META_PREFIX}${JSON.stringify(safeMeta).replaceAll("]", "\\u005d")}]\n${note.trim()}`;
 }
 
 export function decodeVisualNotes(notes?: string | null): { meta: VisualActivityMeta; note: string } {
@@ -209,6 +212,7 @@ export function decodeVisualNotes(notes?: string | null): { meta: VisualActivity
         category,
         tone,
         ...(endTime ? { endTime } : {}),
+        ...(typeof candidate.location === "string" && candidate.location.trim() ? { location: candidate.location.trim().slice(0, 160) } : {}),
         ...(typeof candidate.repeatUntil === "string" && /^\d{4}-\d{2}-\d{2}$/.test(candidate.repeatUntil) ? { repeatUntil: candidate.repeatUntil } : {}),
         ...(familyLabel ? { familyLabel } : {}),
         ...(typeof candidate.parentPresence === "boolean" ? { parentPresence: candidate.parentPresence } : {}),
