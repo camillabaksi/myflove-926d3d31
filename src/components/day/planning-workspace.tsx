@@ -143,7 +143,8 @@ export function PlanningWorkspace({
 }) {
   const { t, locale } = useLang();
   const navigate = useNavigate();
-  const forChildren = audience === "children";
+  const [target, setTarget] = useState<"me" | "children">(audience);
+  const forChildren = target === "children";
   const childStore = useChildren();
   const children = childStore.children.filter((child) => child.owner_id === owner);
   const { addPlannedTasks } = useTasks();
@@ -276,6 +277,15 @@ export function PlanningWorkspace({
               : "En dag eller en vecka. Lite i taget.",
           )}
         </p>
+        {stage === "write" && children.length > 0 && (
+          <fieldset className="mt-4">
+            <legend className="text-sm font-medium">{t("Vem gäller aktiviteterna?")}</legend>
+            <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("Välj mottagare")}>
+              <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-full" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
+              <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-full" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
+            </div>
+          </fieldset>
+        )}
         {forChildren && (
           <>
             {childStore.error && (
