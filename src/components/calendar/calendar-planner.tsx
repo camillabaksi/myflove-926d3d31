@@ -135,6 +135,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [title, setTitle] = useState("");
   const [kind, setKind] = useState("task");
   const [editDate, setEditDate] = useState(date);
+  const [periodEnd, setPeriodEnd] = useState("");
   const [time, setTime] = useState("");
   const [length, setLength] = useState("");
   const [impact, setImpact] = useState<Task["energyImpact"]>("unknown");
@@ -156,7 +157,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     if (view === "manad") { const d = new Date(`${date}T12:00:00`); d.setDate(1); d.setMonth(d.getMonth() + direction); setDate(calendarDate(d)); }
     else setDate(shiftDate(date, direction * (view === "vecka" ? 7 : 1)));
   };
-  const openAdd = (forChildren = false) => { setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(date); setTitle(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
+  const openAdd = (forChildren = false) => { setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(date); setPeriodEnd(""); setTitle(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
   const openDetails = (entry: CalendarEntry) => {
     setDetails(entry); setPlanning(false); setEditDate(entry.date); setTime(entry.time ?? "");
     const start = minuteOf(entry.time), end = minuteOf(entry.endTime);
@@ -221,13 +222,15 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
 
   const saveNew = (confirmed = false) => {
     if (!title.trim() || !editDate || !owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner) return;
+    if (kind === "period" && (!periodEnd || periodEnd < editDate)) { toast.error(t("Välj ett slutdatum som inte är före startdatumet.")); return; }
     const start = minuteOf(time), duration = Number(length);
     if (time && start === null || length && (!Number.isFinite(duration) || duration <= 0 || (start ?? 0) + duration > 1439)) { toast.error(t("Kontrollera tid och längd.")); return; }
     const end = start !== null && duration > 0 ? timeOf(start + duration) : undefined;
     if (kind === "child") { void saveForChildren(end); return; }
     if (!confirmed && time && confirmFamily(editDate, time, end, duration || 0, () => saveNew(true))) return;
     const energy = kind === "recovery" ? "gives" : impact;
-    if (kind === "task") addTask(title.trim(), editDate, { time: time || undefined, endTime: end, energyImpact: energy, reminderMinutesBefore: notify && time ? 0 : undefined });
+    if (kind === "period") addReminder(title.trim(), editDate, undefined, "none", undefined, undefined, "Sammanhängande period – ingen automatiskt upptagen tid.", undefined, periodEnd, "unknown");
+    else if (kind === "task") addTask(title.trim(), editDate, { time: time || undefined, endTime: end, energyImpact: energy, reminderMinutesBefore: notify && time ? 0 : undefined });
     else addReminder(title.trim(), editDate, time || undefined, "none", end, notify && time ? 0 : undefined, undefined, undefined, undefined, energy);
     setAdding(false); toast.success(t("Tillagt i kalendern"), { description: kind === "recovery" ? t("Återhämtning får också ta plats i kalendern.") : undefined });
   };
@@ -418,13 +421,13 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">
         <DialogHeader><DialogTitle>{t(kind === "child" ? "Lägg till i barnens schema" : "Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader>
         <fieldset disabled={savingChildren} className="min-w-0 space-y-4">
-          {kind !== "child" && <div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div>}
+          {kind !== "child" && <div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"], ["period", "Period"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div>}
           <label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => setTitle(e.target.value)} maxLength={240} autoFocus /></label>
           {kind === "child" && <ChildScheduleRecipients children={ownedChildren} selectedIds={childIds} onChange={setChildIds} disabled={savingChildren} />}
-          {scheduleFields}
+          {kind === "period" ? <div className="space-y-2"><div className="grid grid-cols-2 gap-2"><label className="min-w-0 text-sm">{t("Från")}<Input type="date" value={editDate} onChange={e => setEditDate(e.target.value)} className="mt-1 min-h-11" /></label><label className="min-w-0 text-sm">{t("Till och med")}<Input type="date" min={editDate} value={periodEnd} onChange={e => setPeriodEnd(e.target.value)} className="mt-1 min-h-11" /></label></div><p className="text-xs text-muted-foreground">Visas under hela perioden utan att blockera tid eller påverka batteriet. Lektioner och utflykter läggs till separat.</p></div> : scheduleFields}
           {kind === "child" ? (title.trim() && <div className="flex items-center gap-2 text-xs text-muted-foreground"><MulberryPictogram id={activityPresetForTitle(title)?.pictogram ?? "calendar"} className="h-8 w-8" />{t("Bildstödet kan ändras i barnets schema.")}</div>) : energyFields}
           {kind !== "child" && time && <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} />{t("Påminn mig vid start")}</label>}
-          <Button className="w-full min-h-11 rounded-2xl" disabled={savingChildren || !title.trim() || !editDate || kind === "child" && !childIds.length} onClick={() => saveNew()}><Plus size={16} />{savingChildren ? t("Sparar...") : kind === "child" ? `${t("Spara för")} ${childIds.length} ${t("barn")}` : t("Lägg till")}</Button>
+          <Button className="w-full min-h-11 rounded-2xl" disabled={savingChildren || !title.trim() || !editDate || kind === "child" && !childIds.length || kind === "period" && (!periodEnd || periodEnd < editDate)} onClick={() => saveNew()}><Plus size={16} />{savingChildren ? t("Sparar...") : kind === "child" ? `${t("Spara för")} ${childIds.length} ${t("barn")}` : t("Lägg till")}</Button>
         </fieldset>
       </DialogContent>
     </Dialog>
