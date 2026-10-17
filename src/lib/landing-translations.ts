@@ -30,6 +30,26 @@ export const LANDING_EN: Record<string, string> = currentCopyDictionary({
   "För dagar med mycket energi. Och för dagar när en sak är lagom.":
     "For days with plenty of energy. And days when one thing is enough.",
   "Hitta din takt med Paceable": "Find your pace with Paceable",
+  "Börja på ditt sätt": "Start your way",
+  "Välj hur du vill prova Paceable.": "Choose how you’d like to try Paceable.",
+  "På din mobil eller direkt i webbläsaren.": "On your phone or directly in your browser.",
+  "iPhone och iPad": "iPhone and iPad",
+  "Testversion via TestFlight": "Beta via TestFlight",
+  "Installera TestFlight och öppna sedan testinbjudan.":
+    "Install TestFlight, then open the test invitation.",
+  "I TestFlight kan appen fortfarande heta": "In TestFlight, the app may still be named",
+  "Öppna TestFlight": "Open TestFlight",
+  "Google Play · slutet test": "Google Play · closed test",
+  "Be om en inbjudan med mejladressen du använder i Google Play.":
+    "Request an invitation using the email address you use in Google Play.",
+  "Be om testinbjudan": "Request a test invitation",
+  "Jag är redan inbjuden": "I already have an invitation",
+  Webbappen: "Web app",
+  "Ingen installation": "No installation",
+  "Prova direkt i webbläsaren på mobil, surfplatta eller dator.":
+    "Try it in your browser on your phone, tablet or computer.",
+  "Prova webbappen": "Try the web app",
+  "Har du redan konto? Logga in": "Already have an account? Log in",
   "En glimt av din dag": "A glimpse of your day",
   "Hej, du.": "Hello, you.",
   "Vi tar en sak i taget.": "Let’s take one thing at a time.",

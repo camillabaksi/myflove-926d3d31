@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_URL } from "@/lib/public-url";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Heart, Play, NotebookPen, Footprints, BatteryMedium } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,7 @@ import { FeatureDemoDialog, type FeatureDemoId } from "@/components/landing/feat
 import { MenuPreviewDialog } from "@/components/landing/menu-preview";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { PublicPage } from "@/components/landing/public-page";
+import { PlatformChoices } from "@/components/landing/platform-choices";
 import "@/components/landing/welcome.css";
 import previewVideo from "@/assets/paceable-intro-sv-2026-10-13.mp4.asset.json";
 
@@ -70,9 +71,9 @@ function LandingPage() {
             </p>
             <div className="welcome-actions">
               <Button asChild size="lg" className="welcome-primary">
-                <Link to="/sign-up">
+                <a href="#prova">
                   Prova Paceable <ArrowRight aria-hidden="true" />
-                </Link>
+                </a>
               </Button>
               <button
                 type="button"
@@ -169,16 +170,18 @@ function LandingPage() {
         </div>
       </section>
 
+      <PlatformChoices />
+
       <section className="welcome-invitation" aria-labelledby="invitation-title">
         <div className="welcome-wrap">
           <Heart aria-hidden="true" strokeWidth={1.3} />
           <h2 id="invitation-title">Här får du börja där du är.</h2>
           <p>För dagar med mycket energi. Och för dagar när en sak är lagom.</p>
           <Button asChild size="lg" className="welcome-primary">
-            <Link to="/sign-up">
+            <a href="#prova">
               Hitta din takt med Paceable
               <ArrowRight aria-hidden="true" />
-            </Link>
+            </a>
           </Button>
         </div>
       </section>
