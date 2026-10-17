@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import DayHub from "@/pages/day-hub";
+import type { CalendarView } from "@/lib/visual-calendar";
 
 export const Route = createFileRoute("/_app/kalender")({
+  validateSearch: (search: Record<string, unknown>): { view?: CalendarView } => ({
+    view: search.view === "manad" || search.view === "vecka" || search.view === "dag"
+      ? search.view
+      : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Kalender – Paceable" },

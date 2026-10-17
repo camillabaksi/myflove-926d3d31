@@ -107,6 +107,8 @@ export const EN_CALENDAR: Record<string, string> = {
   "Egen tid": "Own time",
 
   // today.tsx
+  "Visa veckan": "View week",
+  "Visa veckan i kalendern": "View week in the calendar",
   "Vad som händer idag": "What's happening today",
   "Allt som hör till idag – på ett ställe. Vill du ändra ordningen gör du det i Planera.":
     "Everything belonging to today – in one place. Change the order in Plan.",

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Bell, Plus } from "lucide-react";
+import { Link as RouterLink } from "@tanstack/react-router";
+import { ArrowRight, Bell, CalendarDays, Plus } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -69,8 +70,13 @@ export function TodayContent() {
       <MyFloveWide>
         <section className="pt-4" aria-labelledby="your-day-title">
           <header className="flex flex-wrap items-end justify-between gap-3 pb-2">
-            <div>
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
               <h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2>
+              <Button asChild size="sm" variant="ghost" className="min-h-11 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
+                <RouterLink to="/kalender" search={{ view: "vecka" }} aria-label={t("Visa veckan i kalendern")}>
+                  <CalendarDays size={16} aria-hidden /> {t("Visa veckan")}
+                </RouterLink>
+              </Button>
             </div>
             <div className="pace-today-actions flex flex-wrap items-center gap-x-1.5 gap-y-1">
               <Button asChild size="sm" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">

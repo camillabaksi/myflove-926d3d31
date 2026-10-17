@@ -54,7 +54,8 @@ function entryStyle(start: number, end: number, lane: number, lanes: number, fir
   return { top: `${(start - first) * 1.7}px`, height: `${Math.max(44, (end - start) * 1.7 - 4)}px`, left: `${lane / lanes * 100}%`, width: `${100 / lanes}%` };
 }
 
-export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, showPictograms = false, onPictogramsChange }: {
+export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "manad", showPictograms = false, onPictogramsChange }: {
+  initialView?: CalendarView;
   showPictograms?: boolean;
   onPictogramsChange?: (enabled: boolean) => void;
   tools: ReactNode;
@@ -78,7 +79,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   }, []);
   const today = calendarDate(new Date());
   const [date, setDate] = useState(today);
-  const [view, setView] = useState<CalendarView>("manad");
+  const [view, setView] = useState<CalendarView>(initialView);
+  useEffect(() => { setView(initialView); }, [initialView]);
   useEffect(() => { onDateChange(date); }, [date, onDateChange]);
   const dates = useMemo(() => periodDates(date, view), [date, view]);
   const { days: allDays, familyMembers, externalError } = useVisualCalendar(dates);

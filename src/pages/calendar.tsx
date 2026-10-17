@@ -11,6 +11,7 @@ import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useFocus, useTasks, useReminders } from "@/hooks/use-data";
 import { useChildren } from "@/hooks/use-children";
 import { Link } from "wouter";
+import { useSearch } from "@tanstack/react-router";
 import {
   CheckSquare,
   Target,
@@ -149,6 +150,7 @@ function useFamilyEventsByDate() {
 }
 
 export function CalendarContent() {
+  const { view: initialView } = useSearch({ from: "/_app/kalender" });
   // Page-lifetime only: keep the same unfinished registration across planner view remounts.
   const [impactDraft, setImpactDraft] = useState<CalendarImpactDraft | null>(null);
   const { t, locale } = useLang();
@@ -482,6 +484,7 @@ export function CalendarContent() {
 
   return (
     <CalendarPlanner
+      initialView={initialView}
       showPictograms={pictoMode}
       onPictogramsChange={setPictoMode}
       onDateChange={setSelectedDateStr}
