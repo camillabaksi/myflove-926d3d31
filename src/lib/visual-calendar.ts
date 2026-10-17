@@ -16,6 +16,7 @@ export interface CalendarEntry {
   title: string;
   time?: string;
   endTime?: string;
+  location?: string;
   energyImpact?: Task["energyImpact"];
   friction?: Task["friction"];
   done: boolean;
@@ -27,6 +28,7 @@ export interface CalendarEntry {
   familyMembers?: Array<{ id: string; name: string }>;
   requiresParent?: boolean;
   pictogram?: PictogramId;
+  linkGroup?: string;
   parentTaskId?: string;
   prepMinutes?: number;
   travelMinutes?: number;
@@ -85,6 +87,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
       out.push({ id: `task-${task.id}`, sourceId: task.id, source: "task", date, title: task.title,
         time: task.dueDate && task.dueDate < date ? undefined : task.time,
         endTime: task.dueDate && task.dueDate < date ? undefined : task.endTime,
+        location: task.location,
         energyImpact: task.energyImpact, friction: task.friction, area: task.area, done: task.completed, editable: !task.syncKey,
         href: task.syncKey ? "/studyflow" : undefined,
         label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "Fånga" : undefined });

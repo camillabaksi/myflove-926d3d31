@@ -9,6 +9,7 @@ import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/day";
 import { isActiveOwner } from "@/lib/account-scope";
 import { applyDayReplanChanges, type ReplanChange } from "@/lib/day-replan";
+import { appendPlanningTasks } from "@/lib/planning";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
   MEDICATIONS_KEY,
@@ -55,6 +56,7 @@ export interface Task {
   dueDate?: string; // ISO date string YYYY-MM-DD
   time?: string; // HH:MM (t.ex. "11:00" för ett möte)
   endTime?: string; // HH:MM, valfri sluttid
+  location?: string;
   reminderMinutesBefore?: number; // valfri påminnelse: minuter före `time`
   snoozedUntil?: string; // ISO date string YYYY-MM-DD; hidden from view until this date has passed
   kind?: TaskKind; // default "uppgift"
@@ -615,6 +617,14 @@ export function useTasks() {
     if (copies.length) setTasks((prev) => [...copies, ...prev]);
   };
 
+  const addPlannedTasks = (rows: Task[], ownerId: string) => {
+    if (!isActiveOwner(ownerId)) throw new Error("Kontot har ändrats. Öppna planeringen igen.");
+    setTasks(current => {
+      if (!isActiveOwner(ownerId)) throw new Error("Kontot har ändrats. Öppna planeringen igen.");
+      return appendPlanningTasks(current, rows);
+    });
+  };
+
   /** Apply only a reviewed, account-owned snapshot through the normal shared/synced store. */
   const applyDayReplan = (expected: Task[], changes: ReplanChange[], date: string, ownerId: string) => {
     if (!isActiveOwner(ownerId) || todayISO() !== date) throw new Error("Kontot eller dagen har ändrats. Öppna planeringen igen.");
@@ -628,6 +638,7 @@ export function useTasks() {
     tasks,
     applyDayReplan,
     addTaskCopies,
+    addPlannedTasks,
     activeTasks,
     completedTasks,
     snoozedTasks,

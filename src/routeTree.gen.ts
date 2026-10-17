@@ -69,6 +69,7 @@ import { Route as AppOversiktRouteImport } from './routes/_app.oversikt'
 import { Route as AppPaminnelserRouteImport } from './routes/_app.paminnelser'
 import { Route as AppPausRouteImport } from './routes/_app.paus'
 import { Route as AppPitchRouteImport } from './routes/_app.pitch'
+import { Route as AppPlaneraRouteImport } from './routes/_app.planera'
 import { Route as AppPomodoroRouteImport } from './routes/_app.pomodoro'
 import { Route as AppProfilRouteImport } from './routes/_app.profil'
 import { Route as AppQuickflowRouteImport } from './routes/_app.quickflow'
@@ -403,6 +404,11 @@ const AppPitchRoute = AppPitchRouteImport.update({
   path: '/pitch',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPlaneraRoute = AppPlaneraRouteImport.update({
+  id: '/planera',
+  path: '/planera',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPomodoroRoute = AppPomodoroRouteImport.update({
   id: '/pomodoro',
   path: '/pomodoro',
@@ -627,6 +633,7 @@ export interface FileRoutesByFullPath {
   '/paminnelser': typeof AppPaminnelserRoute
   '/paus': typeof AppPausRoute
   '/pitch': typeof AppPitchRoute
+  '/planera': typeof AppPlaneraRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/profil': typeof AppProfilRoute
   '/quickflow': typeof AppQuickflowRoute
@@ -720,6 +727,7 @@ export interface FileRoutesByTo {
   '/paminnelser': typeof AppPaminnelserRoute
   '/paus': typeof AppPausRoute
   '/pitch': typeof AppPitchRoute
+  '/planera': typeof AppPlaneraRoute
   '/pomodoro': typeof AppPomodoroRoute
   '/profil': typeof AppProfilRoute
   '/quickflow': typeof AppQuickflowRoute
@@ -815,6 +823,7 @@ export interface FileRoutesById {
   '/_app/paminnelser': typeof AppPaminnelserRoute
   '/_app/paus': typeof AppPausRoute
   '/_app/pitch': typeof AppPitchRoute
+  '/_app/planera': typeof AppPlaneraRoute
   '/_app/pomodoro': typeof AppPomodoroRoute
   '/_app/profil': typeof AppProfilRoute
   '/_app/quickflow': typeof AppQuickflowRoute
@@ -910,6 +919,7 @@ export interface FileRouteTypes {
     | '/paminnelser'
     | '/paus'
     | '/pitch'
+    | '/planera'
     | '/pomodoro'
     | '/profil'
     | '/quickflow'
@@ -1003,6 +1013,7 @@ export interface FileRouteTypes {
     | '/paminnelser'
     | '/paus'
     | '/pitch'
+    | '/planera'
     | '/pomodoro'
     | '/profil'
     | '/quickflow'
@@ -1097,6 +1108,7 @@ export interface FileRouteTypes {
     | '/_app/paminnelser'
     | '/_app/paus'
     | '/_app/pitch'
+    | '/_app/planera'
     | '/_app/pomodoro'
     | '/_app/profil'
     | '/_app/quickflow'
@@ -1581,6 +1593,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPitchRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/planera': {
+      id: '/_app/planera'
+      path: '/planera'
+      fullPath: '/planera'
+      preLoaderRoute: typeof AppPlaneraRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/pomodoro': {
       id: '/_app/pomodoro'
       path: '/pomodoro'
@@ -1853,6 +1872,7 @@ interface AppRouteChildren {
   AppPaminnelserRoute: typeof AppPaminnelserRoute
   AppPausRoute: typeof AppPausRoute
   AppPitchRoute: typeof AppPitchRoute
+  AppPlaneraRoute: typeof AppPlaneraRoute
   AppPomodoroRoute: typeof AppPomodoroRoute
   AppProfilRoute: typeof AppProfilRoute
   AppQuickflowRoute: typeof AppQuickflowRoute
@@ -1923,6 +1943,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPaminnelserRoute: AppPaminnelserRoute,
   AppPausRoute: AppPausRoute,
   AppPitchRoute: AppPitchRoute,
+  AppPlaneraRoute: AppPlaneraRoute,
   AppPomodoroRoute: AppPomodoroRoute,
   AppProfilRoute: AppProfilRoute,
   AppQuickflowRoute: AppQuickflowRoute,

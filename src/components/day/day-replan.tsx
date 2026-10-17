@@ -16,7 +16,7 @@ import type { CalendarEntry } from "@/lib/visual-calendar";
 type DayReplanProps = { date: string; entries: CalendarEntry[]; capacity: number | null; calendarReady: boolean; calendarError?: boolean };
 const currentMinutes = () => new Date().getHours() * 60 + new Date().getMinutes();
 
-export function DayReplanButton(props: DayReplanProps) {
+export function DayReplanButton({ compact = false, ...props }: DayReplanProps & { compact?: boolean }) {
   const { t } = useLang();
   const { user } = useUser();
   const trigger = useRef<HTMLButtonElement>(null);
@@ -26,9 +26,9 @@ export function DayReplanButton(props: DayReplanProps) {
     <button ref={trigger} type="button" onClick={() => {
       if (!user?.id || !isActiveOwner(user.id)) { toast.error(t("Vänta tills ditt konto har laddats och försök igen.")); return; }
       setOpenedFor(user.id); track("planning_viewed", { source: "idag" });
-    }} className="mb-4 flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/70 bg-mint/40 px-4 py-3 text-left text-ink transition-colors hover:bg-mint/60">
+    }} className={compact ? "mt-3 flex min-h-11 w-full items-center gap-3 rounded-full px-2 py-2 text-left text-ink hover:bg-mint/40" : "mb-4 flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/70 bg-mint/40 px-4 py-3 text-left text-ink transition-colors hover:bg-mint/60"}>
       <WandSparkles size={20} className="shrink-0 text-primary" aria-hidden />
-      <span className="min-w-0 flex-1"><span className="block text-base font-medium">{t("Få ihop dagen")}</span><span className="block text-sm text-muted-foreground">{t("Hjälp att prioritera och fördela")}</span></span>
+      <span className="min-w-0 flex-1"><span className={compact ? "block text-sm font-medium" : "block text-base font-medium"}>{t("Få ihop dagen")}</span>{!compact && <span className="block text-sm text-muted-foreground">{t("Hjälp att prioritera och fördela")}</span>}</span>
       <ChevronRight size={18} className="shrink-0 text-muted-foreground" aria-hidden />
     </button>
     {openedFor && openedFor === user?.id && isActiveOwner(openedFor) && <DayReplanDialog key={`${openedFor}:${props.date}`} {...props} ownerId={openedFor} onRestoreFocus={() => trigger.current?.focus()} onClose={() => setOpenedFor(null)} />}

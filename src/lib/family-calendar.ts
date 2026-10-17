@@ -22,7 +22,7 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
     const mine = item.owner_id === owner;
     const member = members.get(item.child_id) ?? { id: item.child_id, name: "Delad barnaktivitet" };
     out.push({ id: `c-${item.id}`, sourceId: item.id, source: "child", date, title: item.title,
-      time: item.time?.slice(0, 5) || undefined, endTime: meta.endTime, done: false, editable: false,
+      time: item.time?.slice(0, 5) || undefined, endTime: meta.endTime, location: meta.location, linkGroup: meta.linkGroup, done: false, editable: false,
       familyMembers: [member], label: member.name, href: "/barn", pictogram: pictogramForActivity(item.title, meta.pictogram),
       requiresParent: mine && meta.parentPresence === true,
       ...(mine ? { parentTaskId: meta.parentTaskId, prepMinutes: meta.prepMinutes, travelMinutes: meta.travelMinutes } : {}) });
@@ -33,9 +33,9 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
     if (child.owner_id !== owner) continue;
     for (const item of schedules[child.id] ?? []) {
       if (item.weekday !== weekday) continue;
-      if (out.some(e => e.familyMembers?.some(m => m.id === child.id) && e.title.trim().toLocaleLowerCase("sv") === item.title.trim().toLocaleLowerCase("sv") && e.time === item.start && e.endTime === item.end)) continue;
+      if (out.some(e => e.familyMembers?.some(m => m.id === child.id) && e.title.trim().toLocaleLowerCase("sv") === item.title.trim().toLocaleLowerCase("sv") && e.time === item.start && e.endTime === item.end && (e.location ?? "").trim().toLocaleLowerCase("sv") === (item.location ?? "").trim().toLocaleLowerCase("sv"))) continue;
       out.push({ id: `school-${child.id}-${item.id}`, sourceId: `school-${child.id}-${item.id}`, source: "child", date,
-        title: item.title, time: item.start, endTime: item.end, done: false, editable: false,
+        title: item.title, time: item.start, endTime: item.end, location: item.location, done: false, editable: false,
         familyMembers: [{ id: child.id, name: child.name }], label: child.name, requiresParent: false, href: "/barn", pictogram: "school" });
     }
   }
@@ -57,6 +57,8 @@ export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerP
     const match = out.find(o => o.source === "child" && e.source === "child" &&
       o.title.trim().toLocaleLowerCase("sv") === e.title.trim().toLocaleLowerCase("sv") &&
       o.date === e.date && o.time === e.time && o.endTime === e.endTime &&
+      (!!e.time || !!e.linkGroup && e.linkGroup === o.linkGroup) &&
+      (o.location ?? "").trim().toLocaleLowerCase("sv") === (e.location ?? "").trim().toLocaleLowerCase("sv") &&
       o.requiresParent === e.requiresParent && o.parentTaskId === e.parentTaskId &&
       o.prepMinutes === e.prepMinutes && o.travelMinutes === e.travelMinutes && o.pictogram === e.pictogram &&
       !o.familyMembers?.some(m => members?.some(n => n.id === m.id)));

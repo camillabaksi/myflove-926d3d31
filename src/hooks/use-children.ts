@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PERSON_COLOR_VALUES } from "@/lib/palette";
+import { getSyncUser } from "@/lib/cloud-storage";
+import { isActiveOwner } from "@/lib/account-scope";
+import { childPlanningRows, type PlanningDraft } from "@/lib/planning";
 
 // Barn-delen: allt är privat för den som lagt in det, men varje sak kan
 // delas med en eller flera familjemedlemmar.
@@ -347,6 +350,28 @@ export function useChildren() {
 
   const load = useCallback(() => loadAll(), []);
 
+  /** One private insert batch, stable IDs and read-back confirmation make retries safe. */
+  const addPlannedActivities = async (drafts: PlanningDraft[], ownerId: string) => {
+    const assertOwner = async () => {
+      const user = await getSyncUser();
+      if (state.userId !== ownerId || !isActiveOwner(ownerId) || user?.id !== ownerId) throw Error("Kontot har ändrats. Öppna planeringen igen.");
+    };
+    await assertOwner();
+    const rows = childPlanningRows(drafts, ownerId, state.children.filter(child => child.owner_id === ownerId).map(child => child.id));
+    await assertOwner();
+    // ON CONFLICT DO NOTHING: an ambiguous network response can never overwrite or duplicate a row.
+    const { error } = await supabase.from("child_items").upsert(rows, { onConflict: "id", ignoreDuplicates: true });
+    if (error) throw error;
+    await assertOwner();
+    const { data, error: readError } = await supabase.from("child_items").select("id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family").eq("owner_id", ownerId).in("id", rows.map(row => row.id));
+    if (readError) throw readError;
+    await assertOwner();
+    if (rows.some(row => !data?.some(saved => saved.id === row.id && saved.child_id === row.child_id && saved.title === row.title && saved.date === row.date && (saved.time?.slice(0, 5) || null) === row.time && saved.notes === row.notes))) throw Error("Sparandet kunde inte bekräftas. Dina aktiviteter ligger kvar, försök igen.");
+    await loadAll();
+    await assertOwner();
+    if (state.error) throw Error("Sparandet kunde inte bekräftas. Dina aktiviteter ligger kvar, försök igen.");
+  };
+
   const addChild = async (
     name: string,
     color: string,
@@ -608,6 +633,7 @@ export function useChildren() {
     deleteItem,
     setItemShares,
     setItemShareFamily,
+    addPlannedActivities,
     setItemShareNotify,
     uploadDoc,
     copyDoc,

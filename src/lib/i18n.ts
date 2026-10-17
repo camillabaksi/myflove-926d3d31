@@ -9,6 +9,7 @@
 
 import { EN_QUICKFLOW } from "@/lib/i18n-dicts/quickflow";
 import { EN_CALENDAR } from "@/lib/i18n-dicts/calendar";
+import { EN_PLANNING } from "@/lib/i18n-dicts/planning";
 import { EN_BATTERY } from "@/lib/i18n-dicts/battery";
 import { EN_HISTORY } from "@/lib/i18n-dicts/history";
 import { EN_NOTES } from "@/lib/i18n-dicts/notes";
@@ -383,6 +384,7 @@ export const EN: Record<string, string> = {
 const DICT: Record<string, string> = currentCopyDictionary({
   ...EN_QUICKFLOW,
   ...EN_CALENDAR,
+  ...EN_PLANNING,
   ...EN_BATTERY,
   ...EN_HISTORY,
   ...EN_NOTES,

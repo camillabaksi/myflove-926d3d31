@@ -65,6 +65,7 @@ export function useChildEvents(dateISO?: string): ChildEvent[] {
         time: i.time.slice(0, 5),
         ...(meta.endTime ? { endTime: meta.endTime } : {}),
         title: i.title,
+        ...(meta.location ? { place: meta.location } : {}),
         childName,
         childId: i.child_id,
         itemId: i.id,

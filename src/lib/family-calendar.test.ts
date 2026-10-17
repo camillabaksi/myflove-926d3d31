@@ -32,6 +32,16 @@ describe("family calendar layer", () => {
     expect(familyLayerEntries([...entries, task], { ...DEFAULT_FAMILY_LAYER, mode: "mine" })).toEqual([task]);
     expect(familyLayerEntries(entries, { ...DEFAULT_FAMILY_LAYER, children: [] })).toEqual([]);
   });
+  it("keeps different places apart and groups untimed rows only through an explicit link", () => {
+    const entries = projectFamilyCalendar("2026-10-07", [child("bella"), child("bianca")], [item("a", "bella"), item("b", "bianca")], {}, "parent");
+    const atPool = entries.map(entry => ({ ...entry, location: "Simhallen" }));
+    expect(familyLayerEntries(atPool, DEFAULT_FAMILY_LAYER)).toHaveLength(1);
+    expect(familyLayerEntries(atPool.map((entry, index) => ({ ...entry, location: index ? "Annan plats" : entry.location })), DEFAULT_FAMILY_LAYER)).toHaveLength(2);
+    const untimed = atPool.map(entry => ({ ...entry, time: undefined, endTime: undefined }));
+    expect(familyLayerEntries(untimed, DEFAULT_FAMILY_LAYER)).toHaveLength(2);
+    expect(familyLayerEntries(untimed.map(entry => ({ ...entry, linkGroup: "shared-plan-row" })), DEFAULT_FAMILY_LAYER)).toHaveLength(1);
+    expect(familyLayerEntries(atPool, { ...DEFAULT_FAMILY_LAYER, children: ["bianca"] })[0]?.label).toBe("bianca");
+  });
   it("context neither consumes parental load nor removes free time; explicit presence does", () => {
     const [school] = projectFamilyCalendar("2026-10-07", [child("bella")], [item("a", "bella")], {}, "parent");
     if (!school) throw Error("Missing fixture");

@@ -33,6 +33,18 @@ function Harness() {
   return <CalendarPlanner tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} showPictograms={show} onPictogramsChange={setShow} />;
 }
 
+describe("Calendar entry view", () => {
+  it("opens the requested week and still lets the user choose another view", () => {
+    render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(screen.getByRole("button", { name: "Vecka" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByRole("group", { name: "Månadskalender" })).not.toBeInTheDocument();
+    expect(screen.getAllByText("Fika med Sara").length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: "Månad" }));
+    expect(screen.getByRole("button", { name: "Månad" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("group", { name: "Månadskalender" })).toBeInTheDocument();
+  });
+});
+
 describe("Calendar picture support", () => {
   it("toggles compact original symbols in summaries/day/week without filling month cells", () => {
     const { container } = render(<Harness />);
