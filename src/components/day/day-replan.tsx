@@ -40,9 +40,11 @@ export function DayReplanButton({ compact = false, ...props }: DayReplanProps & 
 export function DayReplanDialog({ date, entries, capacity, calendarReady, calendarError, ownerId, onClose, onRestoreFocus }: DayReplanProps & { ownerId: string; onClose: () => void; onRestoreFocus?: () => void }) {
   const { t } = useLang();
   const { user } = useUser();
-  const { tasks, applyDayReplan } = useTasks();
+  const { tasks, addTask, applyDayReplan } = useTasks();
   const { entries: energyEntries, loading: energyLoading, signedIn: energySignedIn } = useEnergyFlow();
   const recoverySuggestions = useMemo(() => personalRecoverySuggestions(energySignedIn ? energyEntries : []), [energyEntries, energySignedIn]);
+  const [recoveryChoice, setRecoveryChoice] = useState<string | null>(null);
+  const [recoveryTime, setRecoveryTime] = useState("");
   const [useCapacity, setUseCapacity] = useState(true);
   const [deferIds, setDeferIds] = useState<string[]>([]);
   const input = (use = useCapacity, defer = deferIds): ReplanInput => ({ tasks, entries, date, nowMinutes: currentMinutes(), capacity, useCapacity: use, deferIds: defer, calendarReady });
@@ -71,6 +73,17 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
     setDeferIds(next); refresh(useCapacity, next);
     // The date change is explicitly chosen here, still requires the final apply action.
     setSelected(next.map(taskId => `${taskId}:tomorrow`));
+  }
+  function chooseRecovery(title: string, timed: boolean) {
+    if (user?.id !== ownerId || !isActiveOwner(ownerId) || date !== todayISO()) {
+      toast.error(t("Uppdatera dagen innan du lägger till något.")); return;
+    }
+    if (timed && !/^([01]\\d|2[0-3]):[0-5]\\d$/.test(recoveryTime)) {
+      toast.error(t("Välj en giltig tid.")); return;
+    }
+    addTask(title, date, { ...(timed ? { time: recoveryTime } : {}), energyImpact: "gives" });
+    toast.success(t(timed ? "Tillagt i din dag. Du kan ändra eller ta bort det i kalendern." : "Tillagt i din dag utan bestämd tid."));
+    setRecoveryChoice(null); setRecoveryTime("");
   }
   function apply() {
     if (saving || !chosen.length) return;
@@ -121,8 +134,20 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
           {!energyLoading && recoverySuggestions.length > 0 && <div className="space-y-2 rounded-xl bg-card/80 p-3">
             <p className="font-medium text-ink">{t("Från dina egna energiloggar")}</p>
             <ul className="space-y-2">{recoverySuggestions.map(item => <li key={item.title} className="rounded-lg border border-border/70 px-3 py-2">
-              <span className="block break-words font-medium text-ink">{item.title}</span>
-              <span className="block text-xs">{item.repeated ? t("Du har flera gånger loggat att detta gav energi.") : t("Du har en gång loggat att detta gav energi.")}</span>
+              <button type="button" aria-expanded={recoveryChoice === item.title} onClick={() => { setRecoveryChoice(previous => previous === item.title ? null : item.title); setRecoveryTime(""); }} className="flex min-h-11 w-full items-center justify-between gap-2 text-left">
+                <span className="min-w-0"><span className="block break-words font-medium text-ink">{item.title}</span>
+                  <span className="block text-xs">{item.repeated ? t("Du har flera gånger loggat att detta gav energi.") : t("Du har en gång loggat att detta gav energi.")}</span></span>
+                <ChevronRight size={16} className="shrink-0" aria-hidden />
+              </button>
+              {recoveryChoice === item.title && <div className="space-y-2 border-t border-border/70 pt-3">
+                <p className="text-xs">{t("Vad skulle passa dig? Det är frivilligt och påverkar inte ditt batteri automatiskt.")}</p>
+                <Button variant="outline" className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, false)}>{t("Gör nu · lägg till utan tid")}</Button>
+                <label className="block text-xs">{t("Tid om du vill planera in det")}
+                  <input type="time" value={recoveryTime} onChange={event => setRecoveryTime(event.target.value)} className="mt-1 min-h-11 w-full rounded-xl border border-border bg-card px-3 text-ink" />
+                </label>
+                <Button variant="outline" disabled={!recoveryTime} className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, true)}>{t("Lägg till i min dag")}</Button>
+                <Button variant="ghost" className="min-h-11 w-full rounded-full" onClick={() => setRecoveryChoice(null)}>{t("Inte idag")}</Button>
+              </div>}
             </li>)}</ul>
             <p className="text-xs">{t("Tidigare upplevelser är ingen garanti för hur det känns idag. Välj bara något som passar din situation.")}</p>
           </div>}
