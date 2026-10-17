@@ -851,6 +851,22 @@ export function useReminders() {
     track("reminder_created", { source: "app" });
   };
 
+  /** Idempotent batch for reviewed planning periods: stable draft IDs survive retries. */
+  const addPlannedPeriods = (periods: Reminder[]) => {
+    if (!periods.length) return;
+    setReminders(prev => {
+      const byId = new Map(prev.map(reminder => [reminder.id, reminder]));
+      for (const period of periods) {
+        const old = byId.get(period.id);
+        if (old) {
+          if (old.title !== period.title || old.date !== period.date || old.endDate !== period.endDate)
+            throw Error("En period har ändrats. Öppna planeringen igen.");
+        } else byId.set(period.id, period);
+      }
+      return [...byId.values()];
+    });
+  };
+
   const toggleReminder = (id: string) => {
     const before = reminders.find((r) => r.id === id);
     setReminders(reminders.map((r) => (r.id === id ? { ...r, completed: !r.completed } : r)));
@@ -923,6 +939,7 @@ export function useReminders() {
   return {
     reminders,
     addReminderCopies,
+    addPlannedPeriods,
     activeReminders,
     addReminder,
     toggleReminder,
