@@ -536,7 +536,7 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
-                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: row.date, time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
+                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {row.endDate ? "Från" : t("Dag")}
@@ -544,7 +544,7 @@ export function PlanningWorkspace({
                         type="date"
                         required
                         value={row.date}
-                        onChange={(event) => patchRow(row.id, { date: event.target.value, ...(row.endDate && event.target.value > row.endDate ? { endDate: event.target.value } : {}) })}
+                        onChange={(event) => patchRow(row.id, { date: event.target.value, ...(row.endDate && event.target.value > row.endDate ? { endDate: addDaysISO(event.target.value, 1) } : {}) })}
                         className="mt-1 min-h-11 min-w-0 bg-card text-base"
                       />
                     </label>
