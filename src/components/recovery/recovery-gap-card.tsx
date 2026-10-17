@@ -52,7 +52,9 @@ export default function RecoveryGapCard({
     if (gapCount > 0) track("recovery_gap_shown", { count: gapCount });
   }, [gapCount]);
 
-  if (dismissed || gapCount === 0 || !current) return null;
+  if (dismissed) return null;
+
+  if (gapCount === 0 || !current) return <section className={cn("rounded-xl bg-card p-3", className)} aria-label={t("Hitta en lugnare väg")}><p className="text-sm text-muted-foreground">Just nu finns ingen säker ledig lucka att föreslå. Du kan ändå välja en kort paus själv eller prova en återhämtningsövning.</p><div className="mt-3 flex flex-wrap gap-2"><Link href="/aterhamtning?start=paus" className="inline-flex min-h-10 items-center rounded-xl bg-primary px-3 text-sm text-primary-foreground">Starta en paus</Link><Link href="/stop-paus" className="inline-flex min-h-10 items-center rounded-xl border px-3 text-sm">Stopp-knappen</Link></div></section>;
 
   const alternatives: { gap: RecoveryGap; option: RecoveryOption }[] = result.gaps.flatMap((gap) => [
     { gap, option: gap.option },
