@@ -311,7 +311,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   return <div className={cn("pace-next-page pace-calendar-desktop mx-auto max-w-6xl space-y-4", textLayout.enlarged && "pace-text-enlarged")} data-testid="visual-calendar">
     <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
     <div className="pace-calendar-heading">
-    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
+    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Min kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
     <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["dag", "Idag"], ["vecka", "Vecka"], ["manad", "Månad"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
     <details className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-2" aria-label={t("Planeringsverktyg")}>
@@ -334,17 +334,18 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <Button size="sm" variant="ghost" className="min-h-11 rounded-full text-muted-foreground" onClick={() => setFamilySettings(true)} aria-label={t("Fler familjeinställningar")}><SlidersHorizontal size={16} aria-hidden /></Button>
       </div>
     </div>
-    <div className="flex flex-wrap items-center gap-x-1 gap-y-1 border-y border-border/50 py-1" aria-label={t("Visningsval")}>
+    <details className="rounded-2xl border border-border/50 bg-card px-3 py-1" aria-label={t("Fler visningsval")}><summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground"><SlidersHorizontal size={16} aria-hidden />{t("Visning och bildstöd")}</summary><div className="flex flex-wrap items-center gap-x-1 gap-y-1 py-2">
       
-      {ownedChildren.length > 0 && <Button variant="ghost" className="pace-compact-control px-2 text-xs text-muted-foreground" onClick={() => openAdd(true)}><Plus size={14} aria-hidden />{t("Lägg till för barn")}</Button>}
+
       {onPictogramsChange && <Button variant="ghost" className="pace-compact-control px-2 text-xs" aria-pressed={showPictograms} onClick={() => onPictogramsChange(!showPictograms)}><Images size={16} aria-hidden />{t("Bildstöd")}{showPictograms && <Check size={12} aria-hidden />}</Button>}
       {view !== "manad" && <Button variant="ghost" className="pace-compact-control px-2 text-xs" aria-pressed={fullDay} onClick={() => setFullDay(value => !value)}><Clock size={16} aria-hidden />{t(fullDay ? "Visa kompakt" : "Visa hela dygnet (00–24)")}</Button>}
-      <span className="h-4 w-px bg-border" aria-hidden />
+
       <details className={cn("min-w-0 flex-1 px-2", ownedChildren.length > 0 && "basis-full sm:basis-auto")}>
         <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-xs font-medium"><SlidersHorizontal size={16} className="text-primary" aria-hidden />{t("Visa i kalendern")}<span className="ml-auto text-muted-foreground">{visible.filter(v => ["privat", "jobb", "studier"].includes(v)).length}/3</span></summary>
         <div className="flex flex-wrap gap-2 pb-3" role="group" aria-label={t("Visa kategorier")}>{[["privat", "Privat"], ["jobb", "Jobb"], ["studier", "Studier"]].map(([id, label]) => <Button key={id} size="sm" variant="outline" className={cn("pace-compact-control", visible.includes(id ?? "") && "pace-compact-selected")} aria-pressed={visible.includes(id ?? "")} onClick={() => setVisible(prev => prev.includes(id ?? "") ? prev.filter(x => x !== id) : [...prev, id ?? "privat"])}>{t(label ?? "")}</Button>)}</div>
       </details>
     </div>
+    </details>
     {desktopLayout && !textLayout.enlarged && calendarTools}
     <ul aria-label={t("Områdesfärger")} className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">{(view === "manad" ? calendarMonthAreas(Object.values(days).flat()) : [...new Set(Object.values(days).flat().map(calendarArea))]).map(area => <li key={area} data-calendar-area={area} className="flex items-center gap-1.5"><span className="h-2 w-2 shrink-0 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(area))}</li>)}</ul>
     {!desktopLayout && view !== "dag" && date === today && checkin}
