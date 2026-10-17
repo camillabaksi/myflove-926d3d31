@@ -9,6 +9,8 @@ export interface PlanningDraft {
   date: string;
   time: string;
   endTime: string;
+  /** Inclusive end date for an untimed continuous period. */
+  endDate?: string;
   location: string;
   childIds: string[];
   childItemIds: Record<string, string>;
@@ -32,6 +34,7 @@ export function validatePlanningDrafts(rows: PlanningDraft[]) {
       !validPlanDate(row.date) ||
       !validTime(row.time) ||
       !validTime(row.endTime) ||
+      (row.endDate !== undefined && (!validPlanDate(row.endDate) || row.endDate < row.date || !!row.time || !!row.endTime)) ||
       row.location.length > 160
     )
       throw Error("Kontrollera aktivitet, datum, tid och plats.");
@@ -66,6 +69,7 @@ export function draftPlanningLines(
       date,
       time: "",
       endTime: "",
+      endDate: undefined,
       location: "",
       childIds: [...childIds],
       childItemIds: Object.fromEntries(childIds.map((id) => [id, uuid()])),
@@ -78,7 +82,7 @@ export function planningTasks(
   now = Date.now(),
 ): Task[] {
   validatePlanningDrafts(rows);
-  return rows.map((row) => ({
+  return rows.filter(row => !row.endDate).map((row) => ({
     id: row.id,
     title: row.title.trim(),
     dueDate: row.date,
@@ -132,6 +136,7 @@ export function childPlanningRows(rows: PlanningDraft[], owner: string, allowedC
       tone: preset?.tone ?? "lavender",
       linkGroup: row.id,
       ...(row.endTime ? { endTime: row.endTime } : {}),
+      ...(row.endDate ? { repeatUntil: row.endDate } : {}),
       ...(row.location.trim() ? { location: row.location.trim() } : {}),
     });
     return [...new Set(row.childIds)].map((childId) => ({
@@ -143,7 +148,7 @@ export function childPlanningRows(rows: PlanningDraft[], owner: string, allowedC
       date: row.date,
       time: row.time || null,
       notes,
-      repeat: "none" as const,
+      repeat: row.endDate ? "daily" as const : "none" as const,
       completed: false,
       remind: false,
       share_family: false,
