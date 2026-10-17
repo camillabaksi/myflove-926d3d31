@@ -261,7 +261,7 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-3xl space-y-4">
       <section
         className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
@@ -328,7 +328,7 @@ export function PlanningWorkspace({
           </>
         )}
         <div
-          className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-1 rounded-3xl border border-border/60 bg-[#F7F1F5] p-1"
+          className="mt-4 grid grid-cols-3 gap-1 rounded-2xl border border-border/60 bg-[#F7F1F5] p-1"
           role="group"
           aria-label={t("Välj planeringsperiod")}
         >
@@ -402,7 +402,7 @@ export function PlanningWorkspace({
             </div>
           </div>
         )}
-        <h3 className="mt-4 font-display text-lg">{dateLabel(date)}</h3>
+        <h3 className="mt-5 border-t border-[#EDE5E9] pt-4 font-display text-lg">{dateLabel(date)}</h3>
         {!forChildren && date !== today && (
           <p className="mt-1 text-sm text-muted-foreground">
             {t("En förhandsplan. Orken får du känna efter den dagen.")}
