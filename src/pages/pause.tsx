@@ -31,7 +31,7 @@ export default function PausePage() {
   const [custom, setCustom] = useState("");
   const [running, setRunning] = useState(false);
   const [check, setCheck] = useState<{ title: string; source: string } | null>(null);
-  const [lightBoost, setLightBoost] = useState(false);
+  const [lightBoost, setLightBoost] = useState(() => new URLSearchParams(window.location.search).get("start") === "ljusboost");
 
   useEffect(() => {
     track("recovery_viewed");
