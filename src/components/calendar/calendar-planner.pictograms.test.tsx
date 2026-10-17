@@ -142,6 +142,25 @@ describe("Calendar picture support", () => {
   });
 });
 
+describe("Calendar month summary", () => {
+  it("summarises the displayed month honestly and puts the activity count in each day cell", () => {
+    model.entries = [fixture];
+    const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(screen.getByRole("note", { hidden: false, name: "Månadens sammanfattning" })).toBeUndefined;
+    expect(screen.getByText(/1 aktivitet · 1 dag med innehåll · \d+ dagar utan planering/)).toBeInTheDocument();
+    const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`)!;
+    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet, 1 område har planerat innehåll/));
+    expect(todayCell.textContent).toContain("1");
+  });
+  it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
+    model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", title: "Ring banken", time: undefined, endTime: undefined }, { ...fixture, id: "task-c", sourceId: "c", title: "Morgonpromenad", time: "07:00", endTime: "07:15" }];
+    render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const list = screen.getByText("Min dag").closest("h3")!.nextElementSibling as HTMLElement;
+    const titles = Array.from(list.querySelectorAll("button")).map(b => b.textContent ?? "");
+    expect(titles).toEqual([expect.stringContaining("Morgonpromenad"), expect.stringContaining("Fika med Sara"), expect.stringContaining("Ring banken")]);
+  });
+});
+
 
 describe("Calendar child quick-add", () => {
   it("opens the single existing form and saves an activity to two explicitly selected children", async () => {
