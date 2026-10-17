@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useTasks } from "@/hooks/use-data";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { calendarGaps, shiftDate, type CalendarEntry } from "@/lib/visual-calendar";
@@ -31,9 +30,9 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
   const chosen = own.filter(task => selected.includes(task.id));
   const gaps = useMemo(() => calendarGaps(entries).filter(gap => gap.minutes >= duration), [entries, duration]);
   const today = date === todayISO();
-  const validGaps = gaps.filter(gap => !today || gap.end > new Date().getHours() * 60 + new Date().getMinutes());
+  const validGaps = gaps.filter(gap => !today || gap.end - duration >= new Date().getHours() * 60 + new Date().getMinutes());
   const chosenGap = validGaps.find(gap => clock(Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start)) === slot);
-  const canSave = mode === "aterhamtning" ? Boolean(chosenGap && slot) : chosen.length > 0;
+  const canSave = mode === "aterhamtning" ? Boolean(chosenGap && slot) : mode === "planera" ? chosen.some(task => !task.time && !task.dueDate) : chosen.length > 0;
   const reset = (next: Mode) => { setMode(next); setSelected([]); setPreview(false); setDrafts({}); setSlot(""); };
   const apply = () => {
     if (!preview || !canSave) return;
@@ -46,7 +45,7 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
         if (steps.length) addTaskSteps(task.id, steps.map(title => ({ title })));
       });
     } else if (mode === "planera") {
-      chosen.filter(task => !task.time && (!task.dueDate || task.dueDate > date)).forEach(task => updateTask(task.id, { dueDate: shiftDate(date, 1) }));
+      chosen.filter(task => !task.time && !task.dueDate).forEach(task => updateTask(task.id, { dueDate: shiftDate(date, 1) }));
     } else {
       chosen.forEach((task, index) => updateTask(task.id, { quickflowBucket: "nu", quickflowOrder: index }));
     }
@@ -59,7 +58,7 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
     {mode === "aterhamtning" ? <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm">Välj hur lång paus du vill få plats med.</p>
       <div className="flex flex-wrap gap-2">{[5, 10, 20].map(n => <Button type="button" key={n} size="sm" variant={duration === n ? "default" : "outline"} onClick={() => { setDuration(n); setSlot(""); setPreview(false); }}>{n} min</Button>)}</div>
-      {validGaps.length ? <div className="space-y-2">{validGaps.map(gap => { const start = Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start); const value = clock(start); return <label key={value} className="flex min-h-11 items-center gap-2 rounded-lg bg-muted/40 p-2 text-sm"><input type="radio" name="recovery-gap" checked={slot === value} onChange={() => { setSlot(value); setPreview(false); }} />{value}–{clock(gap.end)} · ledig lucka</label>; })}</div> : <p className="text-sm text-muted-foreground">Inga säkra lediga luckor kunde hittas. Aktiviteter utan sluttid räknas inte som ledig tid.</p>}
+      {validGaps.length ? <div className="space-y-2">{validGaps.map(gap => { const start = Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start); const value = clock(start); if (start + duration > gap.end) return null; return <label key={value} className="flex min-h-11 items-center gap-2 rounded-lg bg-muted/40 p-2 text-sm"><input type="radio" name="recovery-gap" checked={slot === value} onChange={() => { setSlot(value); setPreview(false); }} />{value}–{clock(gap.end)} · ledig lucka</label>; })}</div> : <p className="text-sm text-muted-foreground">Inga säkra lediga luckor kunde hittas. Aktiviteter utan sluttid räknas inte som ledig tid.</p>}
       <Link href="/aterhamtning" className="inline-block text-sm font-medium text-primary underline">Öppna återhämtning</Link>
     </div> : <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm text-muted-foreground">{mode === "prioritera" ? "Välj vilka uppgifter som är viktigast." : mode === "dela" ? "Välj uppgifter att dela upp i små steg." : "Välj uppgifter att flytta till imorgon. Fasta tider och deadlines skyddas."}</p>
