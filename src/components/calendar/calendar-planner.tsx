@@ -340,9 +340,9 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     {view === "vecka" && <ul aria-label={t("Veckans sammanfattning")} className="grid grid-cols-7 gap-1 text-center text-[10px] leading-tight text-muted-foreground">{dates.map(d => {
       const dayEntries = planningDays[d] ?? [];
       const dayLoad = calendarLoad(dayEntries);
-      return <li key={d} aria-label={`${dateHeading(d)}: ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}, ${t(dayLoad.label)}`} className="min-w-0 rounded-xl bg-secondary/40 px-0.5 py-1.5">
-        <span className="block text-xs font-semibold text-ink" aria-hidden>{dayEntries.length}</span>
-        <span className="block break-words" aria-hidden>{t(dayLoad.label)}</span>
+      return <li key={d} aria-label={`${dateHeading(d)}: ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}, ${t("belastning")}: ${t(dayLoad.label)}`} className="flex min-w-0 flex-col items-center gap-1 rounded-xl bg-secondary/40 px-0.5 py-1.5">
+        <span className="text-xs font-semibold text-ink" aria-hidden>{dayEntries.length}</span>
+        {dayLoad.segments > 0 ? <Segments entries={dayEntries} /> : <span aria-hidden>–</span>}
       </li>;
     })}</ul>}
     {view === "vecka" && <div className="snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-3xl border border-border/60 bg-card p-2 shadow-soft motion-reduce:snap-none" role="group" aria-label={t("Veckovy, svep för fler dagar")} tabIndex={0}><div className="flex items-start gap-2">{dates.map(d => <div key={d} className="w-[calc(100%-1rem)] min-w-0 shrink-0 snap-start min-[420px]:w-[calc(50%-0.25rem)] min-[640px]:w-[calc(33.333%-0.35rem)] lg:w-[272px]"><Button variant="ghost" onDragOver={event => event.preventDefault()} onDrop={event => drop(event, d)} onClick={() => { setDate(d); setView("dag"); }} className={cn("sticky top-0 z-20 mb-2 h-auto min-h-16 w-full flex-col rounded-xl bg-card", d === today && "border border-primary", d === date && "bg-lavender")}><span className="text-xs">{dateHeading(d)}</span>{d <= today && capacityOf(d).percent !== null && <CapacityBattery percent={capacityOf(d).percent} size="sm" />}{(days[d] ?? []).length > 0 && <Segments entries={days[d] ?? []} />}</Button>{timeline(d, days[d] ?? [], true)}{(days[d] ?? []).filter(e => !e.time).map(e => <div className="mt-2" key={e.id}>{blockButton(e, true)}</div>)}</div>)}</div></div>}
