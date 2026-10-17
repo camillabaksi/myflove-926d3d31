@@ -82,7 +82,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
     if (timed && (!recoveryHour || !recoveryMinute)) {
       toast.error(t("Välj en giltig tid.")); return;
     }
-    addTask(title, date, { ...(timed ? { time: `${recoveryHour}:${recoveryMinute}` } : {}), energyImpact: "gives" });
+    addTask(title, date, { ...(timed ? { time: `${recoveryHour}:${recoveryMinute}` } : {}), energyImpact: "gives", ...(title.trim().toLocaleLowerCase("sv-SE") === "ljusboost" ? { recoveryAction: "ljusboost" as const } : {}) });
     toast.success(t(timed ? "Tillagt i din dag. Du kan ändra eller ta bort det i kalendern." : "Tillagt i din dag utan bestämd tid."));
     setRecoveryChoice(null); setRecoveryHour(""); setRecoveryMinute("");
   }
