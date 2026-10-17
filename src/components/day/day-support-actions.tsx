@@ -26,7 +26,9 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
   const [duration, setDuration] = useState(10);
   const [slot, setSlot] = useState("");
   const [drafts, setDrafts] = useState<Record<string, string>>({});
-  const own = useMemo(() => tasks.filter(task => !task.completed && (task.dueDate === date || (!task.dueDate && date === todayISO()))), [tasks, date]);
+  const ownEntries = useMemo(() => entries.filter(entry => !entry.done && entry.source !== "child" && entry.source !== "family" && !entry.parentTaskId), [entries]);
+  const own = useMemo(() => { const ids = new Set(ownEntries.filter(entry => entry.source === "task").map(entry => entry.sourceId)); return tasks.filter(task => !task.completed && (ids.has(task.id) || task.dueDate === date || (!task.dueDate && date === todayISO()))); }, [tasks, ownEntries, date]);
+  const otherEntries = ownEntries.filter(entry => entry.source !== "task");
   const chosen = own.filter(task => selected.includes(task.id));
   const gaps = useMemo(() => calendarGaps(entries).filter(gap => gap.minutes >= duration), [entries, duration]);
   const today = date === todayISO();
@@ -62,6 +64,7 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
       <Link href="/aterhamtning" className="inline-block text-sm font-medium text-primary underline">Öppna återhämtning</Link>
     </div> : <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm text-muted-foreground">{mode === "prioritera" ? "Välj vilka uppgifter som är viktigast." : mode === "dela" ? "Välj uppgifter att dela upp i små steg." : "Välj uppgifter att flytta till imorgon. Fasta tider och deadlines skyddas."}</p>
+      {otherEntries.length > 0 && <p className="text-xs text-muted-foreground">Andra aktiviteter i kalendern visas nedan för överblick. De kan öppnas i kalendern, men ändras inte som uppgifter.</p>}{otherEntries.map(entry => <div key={entry.id} className="rounded-lg bg-muted/20 px-3 py-2 text-sm text-muted-foreground">{entry.title}{entry.time ? ` · ${entry.time}` : ""} · Kalenderaktivitet</div>)}
       {own.length ? own.map(task => <label key={task.id} className="flex min-h-11 items-center gap-3 rounded-lg bg-muted/30 px-3 py-2 text-sm"><input type="checkbox" checked={selected.includes(task.id)} onChange={() => { setSelected(old => old.includes(task.id) ? old.filter(id => id !== task.id) : [...old, task.id]); setPreview(false); }} /><span className="min-w-0 break-words">{task.title}{task.time ? ` · ${task.time}` : ""}</span></label>) : <p className="text-sm text-muted-foreground">Inga egna uppgifter att välja för dagen.</p>}
       {mode === "planera" && <DayReplanButton compact date={date} entries={entries} capacity={capacity.percent} calendarReady={calendarReady} calendarError={calendarError} />}
     </div>}
