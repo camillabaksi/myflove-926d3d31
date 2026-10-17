@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useChildren } from "@/hooks/use-children";
-import { useTasks, useReminders } from "@/hooks/use-data";
+import { useTasks, useReminders, type Reminder } from "@/hooks/use-data";
 import { useVisualCalendar } from "@/hooks/use-visual-calendar";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { useLang } from "@/hooks/use-language";
@@ -149,7 +149,7 @@ export function PlanningWorkspace({
   const childStore = useChildren();
   const children = childStore.children.filter((child) => child.owner_id === owner);
   const { addPlannedTasks } = useTasks();
-  const { addReminder } = useReminders();
+  const { addPlannedPeriods } = useReminders();
   const { activeArea } = useActiveArea();
   const today = todayISO();
   const [period, setPeriod] = useState<PlanningPeriod>(requestedPeriod ?? "today");
@@ -245,10 +245,14 @@ export function PlanningWorkspace({
           planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea),
           owner,
         );
-        // Persist period reminders last: ordinary tasks and child writes are idempotent.
-        for (const row of pending.current.filter(row => row.endDate))
-          addReminder(row.title.trim(), row.date, undefined, "none", undefined, undefined,
-            row.location.trim() || "Sammanhängande period", undefined, row.endDate, "unknown");
+        // Stable draft IDs make retries safe, including after partial child writes.
+        const periods: Reminder[] = pending.current.filter(row => row.endDate).map(row => ({
+          id: row.id, title: row.title.trim(), date: row.date, endDate: row.endDate,
+          repeat: "none", completed: false, createdAt: Date.now(),
+          note: row.location.trim() || "Sammanhängande period",
+          energyImpact: "unknown",
+        }));
+        addPlannedPeriods(periods);
       }
       if (!mounted.current || !isActiveOwner(owner)) return;
       toast.success(
