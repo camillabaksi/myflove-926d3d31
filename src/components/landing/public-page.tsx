@@ -186,6 +186,12 @@ export function PublicPage({ children, quiet = false }: { children: ReactNode; q
           <Link to="/cookies" className="inline-flex min-h-11 items-center hover:text-primary">
             Cookies
           </Link>
+          <a
+            href="mailto:kontakt@paceable.se"
+            className="inline-flex min-h-11 items-center hover:text-primary"
+          >
+            Kontakt
+          </a>
         </nav>
         <p className="mt-5">© {new Date().getFullYear()} Paceable</p>
       </footer>

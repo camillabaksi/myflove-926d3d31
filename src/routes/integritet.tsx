@@ -44,7 +44,7 @@ function PrivacyPage() {
       <h2>Personuppgiftsansvarig</h2>
       <p>
         Paceable ansvarar för behandlingen av dina personuppgifter. Kontakt:{" "}
-        <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
+        <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
       </p>
 
       <h2>Vilka uppgifter vi behandlar</h2>
@@ -142,7 +142,7 @@ function PrivacyPage() {
         helst radera enskilda poster, enskilda Pace-samtal eller hela ditt konto med all data direkt
         i appen under Inställningar → Avsluta konto. Vid utloggning rensas dessutom den lokala
         kopian på enheten och den lokala krypteringsnyckeln raderas. Behöver du hjälp når du oss på{" "}
-        <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
+        <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
       </p>
 
       <h2>Dina rättigheter enligt GDPR</h2>

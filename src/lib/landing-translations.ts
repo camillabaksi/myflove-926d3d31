@@ -77,6 +77,7 @@ export const LANDING_EN: Record<string, string> = currentCopyDictionary({
   "Mer om Paceable": "More about Paceable",
   "ADHD-planerare för vuxna": "ADHD planner for adults",
   Integritet: "Privacy",
+  Kontakt: "Contact",
   Villkor: "Terms",
   "Se hur Paceable fungerar": "See how Paceable works",
   "En kort introduktion till dagens Paceable.": "A short introduction to Paceable today.",

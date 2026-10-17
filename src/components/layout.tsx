@@ -935,7 +935,7 @@ export default function Layout({ children }: LayoutProps) {
               </Link>
               <span aria-hidden>·</span>
               <a
-                href="mailto:camillabaksi@hotmail.com"
+                href="mailto:kontakt@paceable.se"
                 className="hover:text-primary underline-offset-2 hover:underline"
               >
                 Kontakt

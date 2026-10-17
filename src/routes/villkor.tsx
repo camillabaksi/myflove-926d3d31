@@ -113,7 +113,7 @@ function TermsPage() {
 
       <h2>Kontakt</h2>
       <p>
-        Frågor? Skriv till <a href="mailto:camillabaksi@hotmail.com">camillabaksi@hotmail.com</a>.
+        Frågor? Skriv till <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
       </p>
     </LegalShell>
   );
