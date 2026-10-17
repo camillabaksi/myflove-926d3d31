@@ -263,13 +263,13 @@ export function PlanningWorkspace({
   return (
     <div className="space-y-4">
       <section
-        className="rounded-3xl border border-border/60 bg-mint/25 p-3 sm:p-5"
+        className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
       >
-        <h2 className="font-display text-xl font-medium">
+        <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           {t(
             forChildren
               ? "Flera aktiviteter. För ett eller flera barn."
@@ -328,7 +328,7 @@ export function PlanningWorkspace({
           </>
         )}
         <div
-          className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-1 rounded-3xl border border-border/60 bg-card p-1"
+          className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-1 rounded-3xl border border-border/60 bg-[#F7F1F5] p-1"
           role="group"
           aria-label={t("Välj planeringsperiod")}
         >
@@ -432,7 +432,7 @@ export function PlanningWorkspace({
                   ? "Frukost\nUtelek\nLugn stund"
                   : "Handla middag\nTvätta\nEn liten promenad",
               )}
-              className="resize-y rounded-2xl bg-card text-base leading-7"
+              className="resize-y rounded-2xl border-[#E8DDE6] bg-[#FAF9F6] text-base leading-7 focus-visible:ring-[#9C80A3]"
             />
             <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
               <span aria-live="polite">
@@ -448,7 +448,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!lineCount || !ready || (forChildren && !selected.length)}
-              className="min-h-12 w-full whitespace-normal rounded-full"
+              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
             >
               {t("Granska aktiviteter")} ({lineCount})<ArrowRight size={16} aria-hidden />
             </Button>
@@ -596,7 +596,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!rows.length || !ready || saving}
-              className="min-h-12 w-full whitespace-normal rounded-full"
+              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
             >
               {saving
                 ? t("Sparar...")
@@ -619,8 +619,8 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section className="rounded-2xl border border-border/60 bg-card/70 p-3 sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
-        <h2 className="font-display text-xl font-medium">
+      <section className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
+        <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{dateLabel(date)}</p>
@@ -638,11 +638,11 @@ export function PlanningWorkspace({
             {t("Välj barn för att se deras schema.")}
           </p>
         ) : shown.length ? (
-          <ul className="mt-3 divide-y divide-border/60">
+          <ul className="mt-3 divide-y divide-[#EFE9EB]">
             {[...shown]
               .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
               .map((entry) => (
-                <li key={entry.id} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-2 py-2.5">
+                <li key={entry.id} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1]">
                   <span className="text-sm text-muted-foreground">
                     {entry.time || t("Utan tid")}
                     {entry.endTime && <span className="block">–{entry.endTime}</span>}
