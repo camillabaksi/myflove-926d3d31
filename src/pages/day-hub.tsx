@@ -9,6 +9,7 @@ import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { CalendarDays, Plus } from "lucide-react";
 import { TodayHorizonIcon } from "@/components/paceable/navigation-icons";
+import type { CalendarView } from "@/lib/visual-calendar";
 
 export type DayTab = "idag" | "kalender" | "lagg-till";
 
@@ -28,7 +29,7 @@ const TABS: { id: DayTab; href: string; label: string; icon: React.ComponentType
  *
  * Varje flik har en egen adress, så länkar, bakåtknapp och delning fungerar.
  */
-export function DayHub({ tab }: { tab: DayTab }) {
+export function DayHub({ tab, initialView }: { tab: DayTab; initialView?: CalendarView }) {
   const { t } = useLang();
   useEffect(() => {
     track("day_hub_viewed", { source: tab });
@@ -58,8 +59,8 @@ export function DayHub({ tab }: { tab: DayTab }) {
         })}
       </nav>}
 
-      {tab === "idag" && <TodayContent />}
-      {tab === "kalender" && <><CalendarContent /><div className="mt-6"><OwnChildCalendar /></div></>}
+      {tab === "idag" && <><CalendarContent initialView="dag" /><details className="mx-auto mt-4 max-w-3xl rounded-2xl border border-border/60 bg-card px-4 py-3"><summary className="min-h-11 cursor-pointer py-2 font-medium">{t("Mitt personliga stöd och energi")}</summary><div className="mt-3"><TodayContent /></div></details></>}
+      {tab === "kalender" && <><CalendarContent initialView={initialView ?? "dag"} /><div className="mt-6"><OwnChildCalendar /></div></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
   );
