@@ -378,25 +378,27 @@ export function PlanningWorkspace({
                 <ChevronRight size={18} />
               </Button>
             </div>
-            <div
-              className="grid grid-cols-4 gap-1 sm:grid-cols-7"
-              role="group"
-              aria-label={t("Veckans dagar")}
-            >
-              {week.map((day) => (
-                <Button
-                  key={day}
-                  variant={date === day ? "secondary" : "ghost"}
-                  aria-pressed={date === day}
-                  className="h-auto min-h-14 min-w-0 flex-col rounded-xl px-1 py-2 text-sm"
-                  onClick={() => setDate(day)}
-                >
-                  <span>
-                    {new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}
-                  </span>
-                  <span>{Number(day.slice(-2))}</span>
-                </Button>
-              ))}
+            <div className="space-y-1" role="group" aria-label={t("Veckans dagar")}>
+              {week.map((day) => {
+                const dayEntries = days[day] ?? [];
+                const count = forChildren
+                  ? dayEntries.filter((entry) => entry.source === "child" && (!selected.length || selected.some((id) => entry.childId === id))).length
+                  : dayEntries.filter((entry) => !isFamilyEntry(entry)).length;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    aria-pressed={date === day}
+                    onClick={() => setDate(day)}
+                    className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
+                  >
+                    <span className="w-10 shrink-0 text-sm font-medium capitalize">{new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
+                    <span className="w-8 shrink-0 text-sm tabular-nums">{Number(day.slice(-2))}</span>
+                    <span className="min-w-0 flex-1 text-sm text-muted-foreground">{count ? `${count} ${t(count === 1 ? "aktivitet" : "aktiviteter")}` : t("Inget planerat")}</span>
+                    <ChevronRight size={17} aria-hidden="true" className="shrink-0 opacity-60" />
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
