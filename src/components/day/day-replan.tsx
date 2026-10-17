@@ -78,7 +78,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
     if (user?.id !== ownerId || !isActiveOwner(ownerId) || date !== todayISO()) {
       toast.error(t("Uppdatera dagen innan du lägger till något.")); return;
     }
-    if (timed && !/^([01]\\d|2[0-3]):[0-5]\\d$/.test(recoveryTime)) {
+    if (timed && !/^([01]\d|2[0-3]):[0-5]\d$/.test(recoveryTime)) {
       toast.error(t("Välj en giltig tid.")); return;
     }
     addTask(title, date, { ...(timed ? { time: recoveryTime } : {}), energyImpact: "gives" });
