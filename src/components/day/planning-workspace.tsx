@@ -261,15 +261,15 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <section
-        className="rounded-3xl border border-border/60 bg-mint/25 p-4 sm:p-6"
+        className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
       >
-        <h2 className="font-display text-xl font-medium">
+        <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
         </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
           {t(
             forChildren
               ? "Flera aktiviteter. För ett eller flera barn."
@@ -328,7 +328,7 @@ export function PlanningWorkspace({
           </>
         )}
         <div
-          className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-1 rounded-3xl border border-border/60 bg-card p-1"
+          className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-1 rounded-3xl border border-border/60 bg-[#F7F1F5] p-1"
           role="group"
           aria-label={t("Välj planeringsperiod")}
         >
@@ -378,29 +378,31 @@ export function PlanningWorkspace({
                 <ChevronRight size={18} />
               </Button>
             </div>
-            <div
-              className="grid grid-cols-4 gap-1 sm:grid-cols-7"
-              role="group"
-              aria-label={t("Veckans dagar")}
-            >
-              {week.map((day) => (
-                <Button
-                  key={day}
-                  variant={date === day ? "secondary" : "ghost"}
-                  aria-pressed={date === day}
-                  className="h-auto min-h-14 min-w-0 flex-col rounded-xl px-1 py-2 text-sm"
-                  onClick={() => setDate(day)}
-                >
-                  <span>
-                    {new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}
-                  </span>
-                  <span>{Number(day.slice(-2))}</span>
-                </Button>
-              ))}
+            <div className="space-y-1" role="group" aria-label={t("Veckans dagar")}>
+              {week.map((day) => {
+                const dayEntries = days[day] ?? [];
+                const count = forChildren
+                  ? familyLayerEntries(dayEntries.filter((entry) => entry.source === "child"), { ...DEFAULT_FAMILY_LAYER, children: selected }).length
+                  : dayEntries.filter((entry) => !isFamilyEntry(entry)).length;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    aria-pressed={date === day}
+                    onClick={() => setDate(day)}
+                    className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
+                  >
+                    <span className="w-10 shrink-0 text-sm font-medium capitalize">{new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
+                    <span className="w-8 shrink-0 text-sm tabular-nums">{Number(day.slice(-2))}</span>
+                    <span className="min-w-0 flex-1 text-sm text-muted-foreground">{count ? `${count} ${t(count === 1 ? "aktivitet" : "aktiviteter")}` : t("Inget planerat")}</span>
+                    <ChevronRight size={17} aria-hidden="true" className="shrink-0 opacity-60" />
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
-        <h3 className="mt-5 font-display text-lg">{dateLabel(date)}</h3>
+        <h3 className="mt-4 font-display text-lg">{dateLabel(date)}</h3>
         {!forChildren && date !== today && (
           <p className="mt-1 text-sm text-muted-foreground">
             {t("En förhandsplan. Orken får du känna efter den dagen.")}
@@ -408,7 +410,7 @@ export function PlanningWorkspace({
         )}
         {stage === "write" ? (
           <form
-            className="mt-5 space-y-3"
+            className="mt-4 space-y-3"
             onSubmit={(event) => {
               event.preventDefault();
               review();
@@ -425,14 +427,14 @@ export function PlanningWorkspace({
               aria-describedby={`help-${audience}`}
               value={text}
               onChange={(event) => setText(event.target.value)}
-              rows={4}
+              rows={3}
               maxLength={12500}
               placeholder={t(
                 forChildren
                   ? "Frukost\nUtelek\nLugn stund"
                   : "Handla middag\nTvätta\nEn liten promenad",
               )}
-              className="resize-y rounded-2xl bg-card text-base leading-8"
+              className="resize-y rounded-2xl border-[#E8DDE6] bg-[#FAF9F6] text-base leading-7 focus-visible:ring-[#9C80A3]"
             />
             <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
               <span aria-live="polite">
@@ -448,14 +450,14 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!lineCount || !ready || (forChildren && !selected.length)}
-              className="min-h-12 w-full whitespace-normal rounded-full"
+              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
             >
               {t("Granska aktiviteter")} ({lineCount})<ArrowRight size={16} aria-hidden />
             </Button>
           </form>
         ) : (
           <form
-            className="mt-5 space-y-4"
+            className="mt-4 space-y-3"
             onSubmit={(event) => {
               event.preventDefault();
               void save();
@@ -483,7 +485,7 @@ export function PlanningWorkspace({
             <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
-                <div key={row.id} className="min-w-0 border-t border-border/60 pt-4">
+                <div key={row.id} className="min-w-0 border-t border-border/60 pt-3">
                   <div className="flex items-center gap-2">
                     <label className="min-w-0 flex-1">
                       <span className="sr-only">
@@ -510,7 +512,7 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
-                  <div className="mt-3 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-3">
+                  <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {t("Dag")}
                       <Input
@@ -596,7 +598,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!rows.length || !ready || saving}
-              className="min-h-12 w-full whitespace-normal rounded-full"
+              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
             >
               {saving
                 ? t("Sparar...")
@@ -619,8 +621,8 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
-        <h2 className="font-display text-xl font-medium">
+      <section className="rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
+        <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{dateLabel(date)}</p>
@@ -638,11 +640,11 @@ export function PlanningWorkspace({
             {t("Välj barn för att se deras schema.")}
           </p>
         ) : shown.length ? (
-          <ul className="mt-3 divide-y divide-border/60">
+          <ul className="mt-3 divide-y divide-[#EFE9EB]">
             {[...shown]
               .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
               .map((entry) => (
-                <li key={entry.id} className="grid grid-cols-[5rem_minmax(0,1fr)] gap-3 py-4">
+                <li key={entry.id} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1]">
                   <span className="text-sm text-muted-foreground">
                     {entry.time || t("Utan tid")}
                     {entry.endTime && <span className="block">–{entry.endTime}</span>}

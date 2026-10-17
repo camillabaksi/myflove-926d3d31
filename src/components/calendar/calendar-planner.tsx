@@ -311,13 +311,13 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   return <div className={cn("pace-next-page pace-calendar-desktop mx-auto max-w-6xl space-y-4", textLayout.enlarged && "pace-text-enlarged")} data-testid="visual-calendar">
     <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
     <div className="pace-calendar-heading">
-    <nav aria-label={t("Snabbplanering")} className="flex flex-wrap gap-2">
-      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full"><PlanningLink to="/planera" search={{ audience: "me", period: "today" }}>{t("Planera idag")}</PlanningLink></Button>
-      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full"><PlanningLink to="/planera" search={{ audience: "me", period: "tomorrow" }}>{t("Imorgon")}</PlanningLink></Button>
-      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full"><PlanningLink to="/planera" search={{ audience: "me", period: "week" }}>{t("Veckan")}</PlanningLink></Button>
-      {ownedChildren.length > 0 && <Button asChild variant="ghost" size="sm" className="min-h-11 rounded-full"><PlanningLink to="/planera" search={{ audience: "children", period: view === "vecka" ? "week" : "today" }}><Users size={15} aria-hidden />{t("Barnens planering")}</PlanningLink></Button>}
+    <nav aria-label={t("Snabbplanering")} className="flex flex-wrap gap-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm">
+      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "today" }}>{t("Planera idag")}</PlanningLink></Button>
+      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "tomorrow" }}>{t("Imorgon")}</PlanningLink></Button>
+      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-full border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "week" }}>{t("Veckan")}</PlanningLink></Button>
+      {ownedChildren.length > 0 && <Button asChild variant="ghost" size="sm" className="min-h-11 rounded-full border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "children", period: view === "vecka" ? "week" : "today" }}><Users size={15} aria-hidden />{t("Barnens planering")}</PlanningLink></Button>}
     </nav>
-    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-sans text-2xl font-semibold text-ink">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
+    <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Kalender")}</h1><Button onClick={() => openAdd()} className="pace-compact-control pace-compact-primary shrink-0"><Plus size={16} />{t("Lägg till")}</Button></header>
     <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["manad", "Månad"], ["vecka", "Vecka"], ["dag", "Dag"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
     <div className="pace-calendar-capacity">
