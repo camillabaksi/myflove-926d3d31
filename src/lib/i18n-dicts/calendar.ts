@@ -4,6 +4,10 @@ export const EN_CALENDAR: Record<string, string> = {
   Kalender: "Calendar",
   "Översikt över dina dagar. Inga stressiga detaljer.":
     "An overview of your days. No stressful details.",
+  "Visa hela dygnet (00–24)": "Show the full day (00–24)",
+  "Visa kompakt": "Show compact view",
+  "Inga inbokade klockslag.": "No scheduled times.",
+  "Inget planerat.": "Nothing planned.",
   "Välj minst ett barn – annars tar du bort händelsen.":
     "Choose at least one child – otherwise you'll delete the event.",
   "Uppdaterat vilka barn som ingår.": "Updated which children are included.",
