@@ -265,17 +265,13 @@ export function PlanningWorkspace({
     <div className="mx-auto max-w-3xl space-y-4">
       <section
         className="rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
-        aria-label={t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
+        aria-label={t("Lägg till aktiviteter")}
       >
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "Planera barnens dagar" : "Planera i din takt")}
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          {t(
-            forChildren
-              ? "Flera aktiviteter. För ett eller flera barn."
-              : "En dag eller en vecka. Lite i taget.",
-          )}
+          {t("Skriv en eller flera aktiviteter och granska innan du sparar.")}
         </p>
         {stage === "write" && children.length > 0 && (
           <fieldset className="mt-4">
