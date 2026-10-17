@@ -16,7 +16,7 @@ export function personalRecoverySuggestions(
   const groups = new Map<string, { title: string; positiveCount: number; latestAt: string; latestMs: number; negativeCount: number }>();
   for (const entry of entries) {
     const title = entry.title.trim();
-    const key = title.toLocaleLowerCase("sv-SE").replace(/\\s+/g, " ");
+    const key = title.toLocaleLowerCase("sv-SE").replace(/\s+/g, " ");
     const timestamp = Date.parse(entry.occurredAt);
     if (!title || !Number.isFinite(timestamp) || timestamp > now || timestamp < now - 60 * 86400000) continue;
     if (entry.direction !== "gives" && entry.direction !== "drains" && entry.direction !== "both") continue;
