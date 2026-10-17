@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-17";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-17 – UX-förbättring etapp 2: lugnare månadsvy",
+    items: ["Kalender → Månad: diskret månadssammanfattning med antal planerade aktiviteter, dagar med innehåll och dagar utan planering – ärligt, utan prognoser. Varje månadsruta visar antal aktiviteter som liten siffra bredvid områdesprickarna och i skärmläsartexten. Den valda dagens sektion under månadsrätten är en kompakt kronologisk lista enligt Idags princip, med klara poster dämpade. Kapacitet, områdesprickar, bildstöd, familjeraden, drag-och-släpp och övriga kontroller orörda. Ingen data-, lagrings- eller routsändring, ingen publicering."],
+  },
+  {
     title: "2026-10-17 – UX-förbättring etapp 1",
     items: ["Idag: kompakt planeringsrad med Idag/Imorgon/Veckan och Få ihop dagen; Barnens schema kvar som separat ingång. Dagens lista har frivilligt visningsfilter Alla/Viktigast/Med tid som bara påverkar visningen, aldrig data eller avbockning. Kalender → Vecka visar diskret sammanfattning per dag med antal aktiviteter och befintlig belastningsetikett; okänd belastning visas ärligt som Inte uppskattad. Kapacitet, Din dag, Pace, familjeperspektiv, WeeklyPulse, synk och barnens integritet bevaras. Ingen databasändring, ingen publicering."],
   },
