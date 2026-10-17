@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useTasks } from "@/hooks/use-data";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { personalRecoverySuggestions } from "@/lib/personal-recovery";
 import { useLang } from "@/hooks/use-language";
 import { isActiveOwner } from "@/lib/account-scope";
 import { todayISO } from "@/lib/day";
@@ -39,6 +41,8 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
   const { t } = useLang();
   const { user } = useUser();
   const { tasks, applyDayReplan } = useTasks();
+  const { entries: energyEntries, loading: energyLoading, signedIn: energySignedIn } = useEnergyFlow();
+  const recoverySuggestions = useMemo(() => personalRecoverySuggestions(energySignedIn ? energyEntries : []), [energyEntries, energySignedIn]);
   const [useCapacity, setUseCapacity] = useState(true);
   const [deferIds, setDeferIds] = useState<string[]>([]);
   const input = (use = useCapacity, defer = deferIds): ReplanInput => ({ tasks, entries, date, nowMinutes: currentMinutes(), capacity, useCapacity: use, deferIds: defer, calendarReady });
@@ -114,7 +118,15 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
         <div className="space-y-2 pt-2 text-sm text-muted-foreground">
           <p>{t("Återhämtning är också en del av din dag. Fundera på om något som brukar ge dig energi kan få plats, utan att det blir ännu ett måste.")}</p>
           {preview.gentle ? <p>{t("När kapaciteten är låg kan en liten paus eller en välbekant återhämtande aktivitet vara ett alternativ till att lägga till fler uppgifter.")}</p> : <p>{t("Utgå från det som faktiskt hjälper dig, till exempel en kort stund i lugn och ro, musik eller frisk luft.")}</p>}
-          <p className="text-xs">{t("Detta är förslag att fundera på, inte bokade tider. Inget läggs till eller flyttas automatiskt.")}</p>
+          {!energyLoading && recoverySuggestions.length > 0 && <div className="space-y-2 rounded-xl bg-card/80 p-3">
+            <p className="font-medium text-ink">{t("Från dina egna energiloggar")}</p>
+            <ul className="space-y-2">{recoverySuggestions.map(item => <li key={item.title} className="rounded-lg border border-border/70 px-3 py-2">
+              <span className="block break-words font-medium text-ink">{item.title}</span>
+              <span className="block text-xs">{item.repeated ? t("Du har flera gånger loggat att detta gav energi.") : t("Du har en gång loggat att detta gav energi.")}</span>
+            </li>)}</ul>
+            <p className="text-xs">{t("Tidigare upplevelser är ingen garanti för hur det känns idag. Välj bara något som passar din situation.")}</p>
+          </div>}
+                    <p className="text-xs">{t("Detta är förslag att fundera på, inte bokade tider. Inget läggs till eller flyttas automatiskt.")}</p>
         </div>
       </details>
       {preview.unknownDurations > 0 && <p className="text-xs text-muted-foreground">{preview.unknownDurations} {t("tidsatta aktiviteter saknar en användbar sluttid. Lägg till längden där aktiviteten är planerad för att kunna få säkrare tidsförslag.")}</p>}
