@@ -34,7 +34,7 @@ export function validatePlanningDrafts(rows: PlanningDraft[]) {
       !validPlanDate(row.date) ||
       !validTime(row.time) ||
       !validTime(row.endTime) ||
-      (row.endDate !== undefined && (!validPlanDate(row.endDate) || row.endDate < row.date || !!row.time || !!row.endTime)) ||
+      (row.endDate !== undefined && (!validPlanDate(row.endDate) || row.endDate <= row.date || !!row.time || !!row.endTime)) ||
       row.location.length > 160
     )
       throw Error("Kontrollera aktivitet, datum, tid och plats.");
