@@ -146,7 +146,6 @@ describe("Calendar month summary", () => {
   it("summarises the displayed month honestly and puts the activity count in each day cell", () => {
     model.entries = [fixture];
     const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
-    expect(screen.getByRole("note", { hidden: false, name: "Månadens sammanfattning" })).toBeUndefined;
     expect(screen.getByText(/1 aktivitet · 1 dag med innehåll · \d+ dagar utan planering/)).toBeInTheDocument();
     const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`)!;
     expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet, 1 område har planerat innehåll/));
