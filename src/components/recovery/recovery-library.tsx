@@ -106,7 +106,7 @@ function SavedList({ list, emptyText, showExamples }: { list: SavedExercise[]; e
         return (
           <li key={ex.id} className="rounded-2xl border border-border/60 bg-background/60 p-3" data-testid="saved-exercise">
             <div className="flex items-center gap-3">
-              <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{ex.icon}</span>
+              <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-secondary text-lg">{ex.icon}</span>
               <button type="button" onClick={() => setPlaying(ex.id)} className="min-w-0 flex-1 text-left">
                 <span className="block break-words text-sm font-semibold text-ink">{ex.title}</span>
                 <span className="block text-xs text-muted-foreground">{[durationLabel(ex.minutes), ownerLine(ex, childName)].filter(Boolean).join(" · ")}</span>
@@ -235,13 +235,13 @@ export default function RecoveryLibrary({ initialCategory, childId }: { initialC
     id === "sparade" ? exercises.length : id === "barn" ? exercises.filter((e) => e.category === "barn").length : null;
 
   return (
-    <section className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Återhämtningsbibliotek")} data-testid="recovery-library">
+    <section className="min-w-0 rounded-xl bg-card p-1" aria-label={t("Återhämtningsbibliotek")} data-testid="recovery-library">
       <div className="flex items-start gap-3">
         <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-secondary text-primary">
           <BookOpen className="h-5 w-5" />
         </span>
         <div className="min-w-0">
-          <h2 className="text-base font-semibold text-ink">{t("Återhämtningsbibliotek")}</h2>
+          <h2 className="text-sm font-semibold text-ink">{t("Välj en övning")}</h2>
           <p className="text-xs text-muted-foreground">{t("Välj det som passar dig just nu. Allt är frivilligt.")}</p>
         </div>
       </div>
@@ -252,7 +252,7 @@ export default function RecoveryLibrary({ initialCategory, childId }: { initialC
             const n = count(c.id);
             return (
               <button key={c.id} type="button" onClick={() => setCat(c.id)} data-testid={`library-cat-${c.id}`}
-                className="flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/60 bg-background/60 px-3 text-left transition-colors hover:bg-secondary/60">
+                className="flex min-h-11 w-full items-center gap-2 rounded-xl border border-border/60 bg-background/60 px-2 py-1.5 text-left transition-colors hover:bg-secondary/60">
                 <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{c.emoji}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-semibold text-ink">{t(c.label)}{n ? ` · ${n}` : ""}</span>

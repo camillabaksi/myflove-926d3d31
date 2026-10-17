@@ -27,6 +27,7 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
   const [selectedCalendar, setSelectedCalendar] = useState<string[]>([]);
   const [duration, setDuration] = useState(10);
   const [slot, setSlot] = useState("");
+  const [manualSlot, setManualSlot] = useState("");
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const ownEntries = useMemo(() => entries.filter(entry => entry.source !== "child" && entry.source !== "family"), [entries]);
   const own = useMemo(() => { const ids = new Set(ownEntries.filter(entry => entry.source === "task").map(entry => entry.sourceId)); return tasks.filter(task => !task.completed && (ids.has(task.id) || task.dueDate === date || (!task.dueDate && date === todayISO()))); }, [tasks, ownEntries, date]);
@@ -41,13 +42,15 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
   const today = date === todayISO();
   const validGaps = gaps.filter(gap => !today || gap.end - duration >= new Date().getHours() * 60 + new Date().getMinutes());
   const chosenGap = validGaps.find(gap => clock(Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start)) === slot);
-  const canSave = mode === "aterhamtning" ? Boolean(chosenGap && slot) : mode === "planera" ? movableCount > 0 : selectionCount > 0;
-  const reset = (next: Mode) => { setMode(next); setSelected([]); setSelectedCalendar([]); setPreview(false); setDrafts({}); setSlot(""); };
+  const manualTimeValid = /^([01]\\d|2[0-3]):[0-5]\\d$/.test(manualSlot) && Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) + duration <= 1440 && (!today || Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) >= new Date().getHours() * 60 + new Date().getMinutes());
+  const recoveryTime = chosenGap ? slot : manualTimeValid ? manualSlot : "";
+  const canSave = mode === "aterhamtning" ? Boolean((chosenGap && slot) || manualTimeValid) : mode === "planera" ? movableCount > 0 : selectionCount > 0;
+  const reset = (next: Mode) => { setMode(next); setSelected([]); setSelectedCalendar([]); setPreview(false); setDrafts({}); setSlot(""); setManualSlot(""); };
   const apply = () => {
     if (!preview || !canSave) return;
     if (mode === "aterhamtning") {
-      if (!chosenGap || !slot || date !== todayISO()) return;
-      addTask(`Paus ${duration} min`, date, { time: slot, endTime: clock(Number(slot.slice(0, 2)) * 60 + Number(slot.slice(3)) + duration), energyImpact: "gives", recoveryAction: "paus" });
+      if (!recoveryTime || date !== todayISO()) return;
+      addTask(`Paus ${duration} min`, date, { time: recoveryTime, endTime: clock(Number(recoveryTime.slice(0, 2)) * 60 + Number(recoveryTime.slice(3)) + duration), energyImpact: "gives", recoveryAction: "paus" });
     } else if (mode === "dela") {
       chosen.forEach(task => {
         const steps = (drafts[task.id] ?? "").split("\n").map(step => step.trim()).filter(Boolean);
@@ -68,7 +71,8 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
     {mode === "aterhamtning" ? <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm">Välj hur lång paus du vill få plats med.</p>
       <div className="flex flex-wrap gap-2">{[5, 10, 20].map(n => <Button type="button" key={n} size="sm" variant={duration === n ? "default" : "outline"} onClick={() => { setDuration(n); setSlot(""); setPreview(false); }}>{n} min</Button>)}</div>
-      {validGaps.length ? <div className="space-y-2">{validGaps.map(gap => { const start = Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start); const value = clock(start); if (start + duration > gap.end) return null; return <label key={value} className="flex min-h-11 items-center gap-2 rounded-lg bg-muted/40 p-2 text-sm"><input type="radio" name="recovery-gap" checked={slot === value} onChange={() => { setSlot(value); setPreview(false); }} />{value}–{clock(gap.end)} · ledig lucka</label>; })}</div> : <p className="text-sm text-muted-foreground">Inga säkra lediga luckor kunde hittas. Aktiviteter utan sluttid räknas inte som ledig tid.</p>}
+      {validGaps.length ? <div className="space-y-2">{validGaps.map(gap => { const start = Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start); const value = clock(start); if (start + duration > gap.end) return null; return <label key={value} className="flex min-h-11 items-center gap-2 rounded-lg bg-muted/40 p-2 text-sm"><input type="radio" name="recovery-gap" checked={slot === value} onChange={() => { setSlot(value); setPreview(false); }} />{value}–{clock(gap.end)} · ledig lucka</label>; })}</div> : <p className="text-sm text-muted-foreground">Inga säkra luckor hittades automatiskt. Du kan välja en tid själv nedan.</p>}
+      <label className="block text-sm">Välj en tid själv (kontrollera att den passar)<input type="time" value={manualSlot} onChange={event => { setManualSlot(event.target.value); setSlot(""); setPreview(false); }} className="mt-1 block min-h-10 rounded-lg border bg-card px-2" /></label>
       <Link href="/aterhamtning" className="inline-block text-sm font-medium text-primary underline">Öppna återhämtning</Link>
     </div> : <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm text-muted-foreground">{mode === "prioritera" ? "Välj vilka uppgifter som är viktigast." : mode === "dela" ? "Välj uppgifter att dela upp i små steg." : "Välj uppgifter att flytta till imorgon. Fasta tider och deadlines skyddas."}</p>
@@ -77,10 +81,10 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
       {own.length ? own.map(task => <label key={task.id} className="flex min-h-11 items-center gap-3 rounded-lg bg-muted/30 px-3 py-2 text-sm"><input type="checkbox" checked={selected.includes(task.id)} onChange={() => { setSelected(old => old.includes(task.id) ? old.filter(id => id !== task.id) : [...old, task.id]); setPreview(false); }} /><span className="min-w-0 break-words">{task.title}{task.time ? ` · ${task.time}` : ""}</span></label>) : <p className="text-sm text-muted-foreground">Inga egna uppgifter att välja för dagen.</p>}
       {mode === "planera" && <DayReplanButton compact date={date} entries={entries} capacity={capacity.percent} calendarReady={calendarReady} calendarError={calendarError} />}
     </div>}
-    {!preview ? <Button type="button" className="min-h-11 w-full" disabled={!canSave && !chosenCalendar.length} onClick={() => { if (mode === "dela") { const next: Record<string,string> = {}; chosen.forEach(task => { next[task.id] = `Förbered ${task.title.toLowerCase()}\nBörja med en liten del\nAvsluta när du är redo`; }); setDrafts(next); } setPreview(true); }}>Visa förslag ({mode === "aterhamtning" ? (slot ? 1 : 0) : selectionCount})</Button> : <div className="space-y-3 rounded-xl bg-[#EAF1EC] p-3">
+    {!preview ? <Button type="button" className="min-h-11 w-full" disabled={!canSave && !chosenCalendar.length} onClick={() => { if (mode === "dela") { const next: Record<string,string> = {}; chosen.forEach(task => { next[task.id] = `Förbered ${task.title.toLowerCase()}\nBörja med en liten del\nAvsluta när du är redo`; }); setDrafts(next); } setPreview(true); }}>Visa förslag ({mode === "aterhamtning" ? (recoveryTime ? 1 : 0) : selectionCount})</Button> : <div className="space-y-3 rounded-xl bg-[#EAF1EC] p-3">
       <p className="text-sm font-medium">Granska innan du sparar</p>
       {chosenCalendar.length > 0 && <p className="rounded-lg border p-2 text-sm">Markerade kalenderaktiviteter (endast överblick): {chosenCalendar.map(entry => entry.title).join(", ")}. De finns med i underlaget men ändras bara om åtgärden stöds av källan.</p>}
-      {mode === "dela" ? chosen.map(task => <label key={task.id} className="block space-y-1 text-sm"><span>{task.title}</span><textarea className="min-h-24 w-full rounded-lg border bg-card p-2" aria-label={`Delsteg för ${task.title}`} value={drafts[task.id] ?? ""} onChange={event => setDrafts(old => ({ ...old, [task.id]: event.target.value }))} /></label>) : <p className="text-sm">{mode === "aterhamtning" ? `Lägg till en paus på ${duration} minuter kl. ${slot}.` : mode === "prioritera" ? `Markera ${chosen.length} uppgifter som prioriterade.` : `Flytta ${movableCount} flyttbara uppgifter eller enstaka påminnelser utan fast tid till imorgon. Övriga lämnas orörda.`}</p>}
+      {mode === "dela" ? chosen.map(task => <label key={task.id} className="block space-y-1 text-sm"><span>{task.title}</span><textarea className="min-h-24 w-full rounded-lg border bg-card p-2" aria-label={`Delsteg för ${task.title}`} value={drafts[task.id] ?? ""} onChange={event => setDrafts(old => ({ ...old, [task.id]: event.target.value }))} /></label>) : <p className="text-sm">{mode === "aterhamtning" ? `Lägg till en paus på ${duration} minuter kl. ${recoveryTime}. Kontrollera själv att tiden är ledig.` : mode === "prioritera" ? `Markera ${chosen.length} uppgifter som prioriterade.` : `Flytta ${movableCount} flyttbara uppgifter eller enstaka påminnelser utan fast tid till imorgon. Övriga lämnas orörda.`}</p>}
       <div className="flex flex-wrap gap-2"><Button type="button" onClick={apply} disabled={mode === "dela" ? !chosen.some(task => (drafts[task.id] ?? "").trim()) : !canSave}>Godkänn och spara</Button><Button type="button" variant="outline" onClick={() => setPreview(false)}>Tillbaka</Button></div>
     </div>}
   </section>;
