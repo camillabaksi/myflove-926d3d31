@@ -117,7 +117,7 @@ export function useFlowItems(dateISO?: string): {
         order: t.quickflowOrder,
         done: t.completed,
         completable: true,
-        href: t.recoveryAction === "ljusboost" || (!t.recoveryAction && t.title.trim().toLocaleLowerCase("sv-SE") === "ljusboost" && t.energyImpact === "gives") ? "/aterhamtning?start=ljusboost" : getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/jobb" : "/tasks",
+        href: t.recoveryAction === "stopp" ? "/stop-paus" : t.recoveryAction === "paus" ? "/aterhamtning?start=paus" : t.recoveryAction === "ljusboost" || (!t.recoveryAction && t.title.trim().toLocaleLowerCase("sv-SE") === "ljusboost" && t.energyImpact === "gives") ? "/aterhamtning?start=ljusboost" : getArea(t) === "studier" ? "/studyflow" : getArea(t) === "jobb" ? "/jobb" : "/tasks",
         meetingUrl: meetingUrlFrom(t.note),
       });
     }

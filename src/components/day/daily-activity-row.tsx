@@ -102,7 +102,7 @@ export function DailyActivityRow({
                 integrated && item.done && "font-normal text-muted-foreground",
               )}
             >
-              {item.href?.startsWith("/aterhamtning?start=") ? <Link href={item.href} className="rounded-sm underline decoration-primary/40 underline-offset-4 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={`Öppna ${item.title}`}>{item.title}</Link> : item.title}
+              {(item.href?.startsWith("/aterhamtning?start=") || item.href === "/stop-paus") ? <Link href={item.href} className="rounded-sm underline decoration-primary/40 underline-offset-4 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={`Öppna ${item.title}`}>{item.title}</Link> : item.title}
             </p>
           </div>
           <div

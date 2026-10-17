@@ -90,7 +90,7 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
         endTime: task.dueDate && task.dueDate < date ? undefined : task.endTime,
         location: task.location,
         energyImpact: task.energyImpact, friction: task.friction, area: task.area, done: task.completed, editable: !task.syncKey,
-        recoveryAction: task.recoveryAction ?? (task.title.trim().toLocaleLowerCase("sv-SE") === "ljusboost" && task.energyImpact === "gives" ? "ljusboost" : undefined),
+        recoveryAction: task.recoveryAction ?? (task.energyImpact === "gives" && task.title.trim().toLocaleLowerCase("sv-SE") === "ljusboost" ? "ljusboost" : undefined),
         href: task.syncKey ? "/studyflow" : undefined,
         label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "Fånga" : undefined });
     }
