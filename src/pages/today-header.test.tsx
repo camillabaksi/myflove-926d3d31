@@ -24,6 +24,6 @@ describe("Approved Today-only header boundary", () => {
   it("uses the shared greeting without changing capacity or person selection", () => {
     expect(today).toContain("<DayGreeting");
     expect(today).toContain("<TodayCapacity percent={dayCapacity.percent} />");
-    expect(today).toContain('<FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} />} />');
+    expect(today).toContain('<FamilyDayPerspectives defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter />} />');
   });
 });
