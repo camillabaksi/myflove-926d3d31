@@ -59,7 +59,7 @@ export function DayHub({ tab, initialView }: { tab: DayTab; initialView?: Calend
         })}
       </nav>}
 
-      {tab === "idag" && <><CalendarContent initialView="dag" /><details className="mx-auto mt-4 max-w-3xl rounded-2xl border border-border/60 bg-card px-4 py-3"><summary className="min-h-11 cursor-pointer py-2 font-medium">{t("Mitt personliga stöd och energi")}</summary><div className="mt-3"><TodayContent /></div></details></>}
+      {tab === "idag" && <><CalendarContent initialView="dag" /><details className="mx-auto mt-4 max-w-3xl rounded-2xl border border-border/60 bg-card px-4 py-3"><summary className="min-h-11 cursor-pointer py-2 font-medium">{t("Fler personliga funktioner")}</summary><div className="mt-3"><TodayContent /></div></details></>}
       {tab === "kalender" && <><CalendarContent initialView={initialView ?? "dag"} /><div className="mt-6"><OwnChildCalendar /></div></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
