@@ -148,7 +148,7 @@ describe("Calendar month summary", () => {
     const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     expect(screen.getByText(/1 aktivitet · 1 dag med innehåll · \d+ dagar utan planering/)).toBeInTheDocument();
     const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`)!;
-    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet, 1 område har planerat innehåll/));
+    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet, 1 områden har planerat innehåll/));
     expect(todayCell.textContent).toContain("1");
   });
   it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
