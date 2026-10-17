@@ -382,7 +382,7 @@ export function PlanningWorkspace({
               {week.map((day) => {
                 const dayEntries = days[day] ?? [];
                 const count = forChildren
-                  ? dayEntries.filter((entry) => entry.source === "child" && (!selected.length || selected.some((id) => entry.familyMembers?.some((member) => member.id === id)))).length
+                  ? familyLayerEntries(dayEntries.filter((entry) => entry.source === "child"), { ...DEFAULT_FAMILY_LAYER, children: selected }).length
                   : dayEntries.filter((entry) => !isFamilyEntry(entry)).length;
                 return (
                   <button
