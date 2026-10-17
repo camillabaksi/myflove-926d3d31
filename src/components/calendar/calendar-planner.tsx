@@ -377,17 +377,17 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     })}</ul>}
     {view === "vecka" && <section className="space-y-3 rounded-3xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm" aria-label={t("Veckans dagar")}>
       <h2 className="font-display text-lg font-medium text-[#512654]">{t("Veckan i korthet")}</h2>
-      <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">{dates.map(d => {
+      <div className="divide-y divide-[#EDE5E9]">{dates.map(d => {
         const dayEntries = (days[d] ?? []).filter(e => !isFamilyEntry(e));
         const ordered = [...dayEntries].sort((x,y) => (minuteOf(x.time) ?? 1440) - (minuteOf(y.time) ?? 1440));
-        return <section key={d} className={cn("min-w-0 rounded-2xl border p-3", d === date ? "border-[#D9C6DE] bg-[#F8F2F8]" : "border-[#EEE8EC] bg-[#FAF9F6]")}>
-          <button type="button" onClick={() => { setDate(d); setView("dag"); }} className="flex min-h-11 w-full items-center justify-between gap-2 text-left" aria-label={`${dateHeading(d)}: ${dayEntries.length} aktiviteter, öppna dagen`}>
-            <span className="font-display text-sm font-medium capitalize text-[#512654]">{dateHeading(d)}</span>
-            <span className="text-xs text-muted-foreground">{dayEntries.length} {t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}</span><ChevronRight size={16} aria-hidden />
+        return <section key={d} className={cn("flex gap-2 rounded-xl px-2 py-2", d === date && "bg-[#F4EDF5]")}>
+          <button type="button" onClick={() => { setDate(d); setView("dag"); }} className="flex min-h-11 w-16 shrink-0 flex-col items-center justify-center rounded-lg text-[#512654] hover:bg-[#EEE3F1]" aria-label={`Öppna ${dateHeading(d)}`}>
+            <span className="text-xs capitalize">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
+            <span className="font-display text-lg font-medium">{new Date(`${d}T12:00:00`).getDate()}</span>
           </button>
-          <ul className="space-y-1">{ordered.slice(0, 3).map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-xs hover:bg-[#EFE5F0]"><span className="w-11 shrink-0 tabular-nums text-muted-foreground">{e.time ?? "—"}</span><span className="min-w-0 flex-1 truncate">{e.title}</span></button></li>)}</ul>
-          {ordered.length > 3 && <button type="button" className="mt-1 min-h-9 text-xs text-primary underline" onClick={() => { setDate(d); setView("dag"); }}>+{ordered.length - 3} {t("aktiviteter")}</button>}
-          {!ordered.length && <p className="py-1 text-xs text-muted-foreground">{t("Inget planerat")}</p>}
+          <div className="min-w-0 flex-1">
+            {ordered.length ? <ul className="space-y-1">{ordered.map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-left hover:bg-[#EEE8F0]"><span className="w-12 shrink-0 text-xs tabular-nums text-muted-foreground">{e.time ?? "—"}</span><span className="min-w-0 flex-1 truncate text-sm">{e.title}</span><ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden /></button></li>)}</ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
+          </div>
         </section>;
       })}</div>
       <details className="border-t border-[#EDE5E9] pt-2"><summary className="min-h-11 cursor-pointer py-3 text-sm text-[#512654]">{t("Visa veckans tidslinje")}</summary><div className="snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-2xl bg-[#FAF9F6] p-2" role="group" aria-label={t("Veckovy, svep för fler dagar")} tabIndex={0}><div className="flex items-start gap-2">{dates.map(d => <div key={d} className="w-[calc(100%-1rem)] min-w-0 shrink-0 snap-start min-[420px]:w-[calc(50%-0.25rem)] min-[640px]:w-[calc(33.333%-0.35rem)] lg:w-[272px]"><Button variant="ghost" onClick={() => { setDate(d); setView("dag"); }} className="mb-2 min-h-12 w-full rounded-xl bg-card">{dateHeading(d)}</Button>{timeline(d, days[d] ?? [], true)}</div>)}</div></div></details>
