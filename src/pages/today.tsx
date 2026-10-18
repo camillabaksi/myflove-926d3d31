@@ -27,6 +27,7 @@ import { useTextLayout } from "@/hooks/use-text-layout";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
+import ImpactCheckin from "@/components/impact-checkin";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
@@ -65,6 +66,7 @@ export function TodayContent() {
           action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
         />
         <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
+        <div className="mt-2"><ImpactCheckin /></div>
       </MyFloveWide>
 
       <MyFloveWide>
