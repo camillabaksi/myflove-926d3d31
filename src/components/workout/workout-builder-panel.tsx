@@ -113,6 +113,8 @@ export default function WorkoutBuilderPanel({
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [autoMode, setAutoMode] = useState(true);
+  const [breakEvery, setBreakEvery] = useState(0);
+  const [breakSeconds, setBreakSeconds] = useState(30);
   const [usedTemplate, setUsedTemplate] = useState(false);
   const { saved, logs, saveWorkout, removeWorkout, logWorkout } = useWorkouts();
   const { percent: capacityPercent } = useCapacityMode();
@@ -482,8 +484,25 @@ export default function WorkoutBuilderPanel({
 
         {showBuilder && step === "kor" && workout && (
           <>
+            <div className="surface-card mb-3 flex min-w-0 flex-wrap items-end gap-3 p-3">
+              <label className="flex min-w-0 flex-1 flex-col gap-1 text-sm text-ink">Extra paus
+                <select aria-label="Hur ofta extra paus" value={breakEvery} onChange={e => setBreakEvery(Number(e.target.value))} className="min-h-11 rounded-xl border border-border bg-card px-2">
+                  <option value={0}>Endast vanliga setpauser</option>
+                  <option value={1}>Efter varje arbetsmoment</option>
+                  <option value={2}>Efter vartannat arbetsmoment</option>
+                  <option value={3}>Efter vart tredje arbetsmoment</option>
+                </select>
+              </label>
+              {breakEvery > 0 && <label className="flex flex-col gap-1 text-sm text-ink">Pauslängd
+                <select aria-label="Pauslängd" value={breakSeconds} onChange={e => setBreakSeconds(Number(e.target.value))} className="min-h-11 rounded-xl border border-border bg-card px-2">
+                  <option value={15}>15 sek</option><option value={30}>30 sek</option><option value={60}>60 sek</option><option value={90}>90 sek</option>
+                </select>
+              </label>}
+            </div>
             {autoMode ? (
               <WorkoutAutoRunner
+                breakEvery={breakEvery}
+                breakSeconds={breakSeconds}
                 workout={workout}
                 onFinish={finish}
                 onClose={() => setStep("resultat")}
