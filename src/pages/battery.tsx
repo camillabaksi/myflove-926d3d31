@@ -82,7 +82,7 @@ export default function BatteryPage() {
                 <Battery size={14} className="mr-1" /> {t("Energi")}
               </TabsTrigger>
               <TabsTrigger value="flow" className="rounded-xl text-xs">
-                <Zap size={14} className="mr-1" /> {t("Energimönster")}
+                <Zap size={14} className="mr-1" /> {t("Mönster")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="mood" className="mt-6">
