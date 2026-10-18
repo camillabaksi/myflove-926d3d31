@@ -10,17 +10,15 @@ import SimpleCheckin from "@/components/simple-checkin";
 import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
-import ImpactCheckin from "@/components/impact-checkin";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
 
 import DayEdgesCheckin from "@/components/day-edges-checkin";
-import DayEnergyFlow from "@/components/day-energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
-import { EnergyFlowContent } from "@/pages/energy-flow";
+import { EnergyFlowInsights } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
@@ -66,11 +64,11 @@ export default function BatteryPage() {
 
         {/* Samma egenregistrerade värde som i Idag och Kalender. */}
         <MyFloveWide>
-          <section className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft" data-testid="capacity-summary">
-            <h2 className="font-display text-lg font-bold text-ink">{t("Din kapacitet idag")}</h2>
+          <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" data-testid="capacity-summary">
+            <h2 className="font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet idag")}</h2>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Hur börjar du dagen?" : "Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}</p>
             <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
-            <Button type="button" variant="outline" className="mt-4 min-h-11 w-full rounded-2xl" onClick={openCheckin}>
+            <Button type="button" variant="outline" className="mt-4 min-h-11 w-full rounded-2xl bg-[#F5EDF7] text-ink shadow-sm hover:bg-[#EFE5F2]" onClick={openCheckin}>
               <Heart size={16} aria-hidden />{t(capacity.percent === null ? "Checka in" : "Logga energi & mående")}
             </Button>
           </section>
@@ -79,7 +77,7 @@ export default function BatteryPage() {
         <MyFloveWide>
           <Link
             href="/assistant"
-            className="pace-card-surface flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+            className="pace-surface flex items-center gap-3 rounded-3xl p-3.5 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
           >
             <MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden />
             <span className="min-w-0 flex-1 text-sm font-semibold text-ink">
@@ -100,7 +98,7 @@ export default function BatteryPage() {
               id="battery-log-energy-mood"
               title={t("Logga energi & mående")}
               defaultCollapsed
-              className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
+              className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
               headingClassName="text-base font-semibold text-ink"
             >
               <SimpleCheckin source="mitt-batteri" />
@@ -117,19 +115,15 @@ export default function BatteryPage() {
           <CollapsibleSection
             id="battery-more-details"
             defaultCollapsed
-            title={t("Historik & mönster")}
-            description={t("Dina loggningar och en separat beräknad energikurva.")}
-            className="pace-card-surface rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+            title={t("Historik & insikter")}
+            description={t("Tidigare registreringar och mönster, utan nya formulär.")}
+            className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
               <PatternsCard />
               <CycleCard />
               
-              <ImpactCheckin />
-              <div className="lg:col-span-2">
-                <DayEnergyFlow />
-              </div>
             </div>
           <div className="mt-5 border-t border-border/50 pt-4">
             <h3 className="mb-3 text-sm font-semibold text-ink">{t("Tidigare mående och energi")}</h3>
@@ -152,15 +146,10 @@ export default function BatteryPage() {
               <EnergyContent showHeader={false} />
             </TabsContent>
             <TabsContent value="flow" className="mt-6">
-              <EnergyFlowContent showHeader={false} showDayFlow={false} />
+              <EnergyFlowInsights />
             </TabsContent>
           </Tabs>
-          <Link
-            href="/energifloede"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            {t("Mer om vad som ger och tar energi")} <ArrowRight size={14} />
-          </Link>
+
           </div>
           </CollapsibleSection>
         </MyFloveWide>
