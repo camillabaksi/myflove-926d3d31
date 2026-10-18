@@ -21,6 +21,7 @@ const InputSchema = z.object({
   focus: z.string().max(1500).optional(),
   cardCount: z.number().int().min(0).max(30).default(12),
   quizCount: z.number().int().min(0).max(20).default(10),
+  followPoints: z.boolean().default(false),
 });
 
 const OutputSchema = z.object({
@@ -80,6 +81,7 @@ export const generateStudySet = createServerFn({ method: "POST" })
         : data.cardCount > 0
           ? `Skapa ${data.cardCount} flashcards utifrån materialet. Skapa INGA quizfrågor – returnera quiz som en tom lista.`
           : `Skapa ${data.quizCount} flervalsfrågor utifrån materialet. Skapa INGA flashcards – returnera cards som en tom lista.`,
+      data.followPoints ? "Prioritera användarens egna numrerade punkter och punktlistor: skapa i första hand en relevant fråga per distinkt punkt, i samma ordning. Vid flera viktiga delmoment får en punkt ge fler frågor, men undvik utfyllnad och upprepningar. Antalet quizfrågor är ett tak, inte ett krav; lämna aldrig viktiga punkter utan täckning om det finns plats. Om materialet saknar tydliga punkter, följ normalt angivet antal." : null,
       data.focus?.trim() ? `Anpassning efter användarens stödbehov: ${data.focus.trim()}` : null,
       "Returnera JSON: { summary, topics: [string], cards: [{ front, back, topic }], quiz: [{ question, options: [4 st], correctIndex, explanation, topic }] }.",
 
