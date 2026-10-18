@@ -59,12 +59,12 @@ export default function WorkoutRunner({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+    <div className="min-w-0 space-y-3">
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-medium text-muted-foreground">
           Övning {index + 1} av {total}
         </p>
-        <Button variant="ghost" size="sm" className="rounded-full" onClick={onClose}>
+        <Button variant="ghost" size="sm" className="min-w-0 rounded-full" onClick={onClose}>
           <X size={16} className="mr-1" aria-hidden /> Avsluta
         </Button>
       </div>
@@ -79,14 +79,14 @@ export default function WorkoutRunner({
         <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
       </div>
 
-      <section className="surface-card p-4 text-center">
+      <section className="surface-card min-w-0 p-3 text-center sm:p-5">
         <ExerciseVisual
           visual={ex.visual}
           name={ex.name}
           eager
           className="mx-auto aspect-square w-full max-w-[360px] rounded-3xl border border-border/50 object-cover"
         />
-        <h2 className="pace-type-activity mt-3 text-xl font-semibold text-ink">{ex.name}</h2>
+        <h2 className="pace-type-activity mt-3 break-words text-xl font-semibold leading-snug text-ink">{ex.name}</h2>
         <p className="mt-1 text-base font-medium text-primary">{dose}</p>
         <ul className="mx-auto mt-3 max-w-sm space-y-1 text-left text-sm text-muted-foreground">
           {ex.cues.map((cue) => (
@@ -118,14 +118,14 @@ export default function WorkoutRunner({
         )}
 
         <div className="mt-4 grid gap-2">
-          <Button size="lg" className="h-14 rounded-2xl text-base" onClick={markDone}>
+          <Button size="lg" className="h-auto min-h-14 whitespace-normal rounded-2xl px-3 py-3 text-base" onClick={markDone}>
             <Check size={18} className="mr-2" aria-hidden />
             {index + 1 >= total ? "Klar med passet" : "Klar – nästa övning"}
           </Button>
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="h-12 flex-1 rounded-2xl"
+              className="h-auto min-h-12 min-w-0 flex-1 whitespace-normal rounded-2xl px-2 py-3 text-sm"
               disabled={index === 0}
               onClick={() => {
                 setRest(null);

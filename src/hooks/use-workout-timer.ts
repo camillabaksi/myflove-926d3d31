@@ -61,7 +61,7 @@ export function useWorkoutTimer(
       endsAtRef.current = null;
       setRemaining(null);
     } else {
-      endsAtRef.current = Date.now() + step.seconds * 1000;
+      endsAtRef.current = running ? Date.now() + step.seconds * 1000 : null;
       setRemaining(step.seconds);
     }
     onStepStartRef.current?.(step);

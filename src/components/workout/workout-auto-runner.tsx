@@ -36,13 +36,17 @@ export default function WorkoutAutoRunner({
   onFinish,
   onClose,
   onManual,
+  breakEvery = 0,
+  breakSeconds = 30,
 }: {
   workout: Workout;
   onFinish: (doneCount: number) => void;
   onClose: () => void;
   onManual: () => void;
+  breakEvery?: number;
+  breakSeconds?: number;
 }) {
-  const steps = useMemo(() => buildWorkoutTimeline(workout), [workout]);
+  const steps = useMemo(() => buildWorkoutTimeline(workout, { breakEvery, breakSeconds }), [workout, breakEvery, breakSeconds]);
   const [soundOn, setSoundOn] = useState(() => isWorkoutSoundEnabled());
   const [finished, setFinished] = useState(false);
   const doneBlocks = useRef<Set<number>>(new Set());
@@ -113,7 +117,7 @@ export default function WorkoutAutoRunner({
         <div className="mt-5 grid gap-2">
           <Button
             size="lg"
-            className="h-14 rounded-2xl text-base"
+            className="h-auto min-h-14 whitespace-normal rounded-2xl px-3 py-3 text-base"
             onClick={() => onFinish(doneBlocks.current.size)}
           >
             <Check size={18} className="mr-2" aria-hidden /> Spara och logga passet
@@ -133,12 +137,12 @@ export default function WorkoutAutoRunner({
   const isReps = step.seconds == null;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+    <div className="min-w-0 space-y-3">
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-medium text-muted-foreground">
           Övning {Math.min(timer.exerciseNumber, workout.blocks.length)} av {workout.blocks.length}
         </p>
-        <div className="flex items-center gap-1">
+        <div className="flex min-w-0 flex-wrap items-center gap-1">
           <Button
             variant="ghost"
             size="sm"
@@ -149,7 +153,7 @@ export default function WorkoutAutoRunner({
             {soundOn ? <Volume2 size={16} aria-hidden /> : <VolumeX size={16} aria-hidden />}
             <span className="ml-1">Ljud {soundOn ? "på" : "av"}</span>
           </Button>
-          <Button variant="ghost" size="sm" className="rounded-full" onClick={onClose}>
+          <Button variant="ghost" size="sm" className="min-w-0 rounded-full" onClick={onClose}>
             <X size={16} className="mr-1" aria-hidden /> Avsluta
           </Button>
         </div>
@@ -170,7 +174,7 @@ export default function WorkoutAutoRunner({
 
       <section
         className={cn(
-          "surface-card p-5 text-center",
+          "surface-card min-w-0 p-3 text-center sm:p-5",
           isRest && "bg-muted/40",
           isPrep && "bg-primary/5",
         )}
@@ -179,15 +183,15 @@ export default function WorkoutAutoRunner({
         <p className="text-sm font-medium uppercase tracking-wide text-primary">
           {isRest ? "Vila" : isPrep ? "Gör dig redo" : step.side ? `${step.side} sida` : "Kör"}
         </p>
-        <h2 className="pace-type-activity mt-1 text-2xl font-semibold text-ink">{step.title}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{step.detail}</p>
+        <h2 className="pace-type-activity mt-1 break-words text-xl font-semibold leading-snug text-ink sm:text-2xl">{step.title}</h2>
+        <p className="mt-1 break-words text-sm text-muted-foreground">{step.detail}</p>
 
         {isReps ? (
-          <p className="mt-4 text-6xl font-bold tabular-nums text-ink">{step.reps}</p>
+          <p className="mt-4 text-5xl font-bold tabular-nums text-ink sm:text-6xl">{step.reps}</p>
         ) : (
           <p
             className={cn(
-              "mt-4 text-7xl font-bold tabular-nums text-ink",
+              "mt-4 text-5xl font-bold tabular-nums text-ink sm:text-7xl",
               !running && "opacity-60",
             )}
           >
@@ -219,7 +223,7 @@ export default function WorkoutAutoRunner({
 
         <div className="mt-5 grid gap-2">
           {isReps ? (
-            <Button size="lg" className="h-16 rounded-2xl text-lg" onClick={timer.next}>
+            <Button size="lg" className="h-auto min-h-14 whitespace-normal rounded-2xl px-3 py-3 text-base" onClick={timer.next}>
               <Check size={20} className="mr-2" aria-hidden /> Klar
             </Button>
           ) : (
@@ -243,7 +247,7 @@ export default function WorkoutAutoRunner({
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="h-14 flex-1 rounded-2xl"
+              className="h-auto min-h-12 min-w-0 flex-1 whitespace-normal rounded-2xl px-2 py-3 text-sm"
               onClick={timer.previous}
               disabled={timer.stepIndex === 0}
             >
