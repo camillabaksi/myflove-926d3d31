@@ -21,6 +21,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
   const [journeyOpen, setJourneyOpen] = useState(true);
   const [details, setDetails] = useState(false);
   const [settings, setSettings] = useState(false);
+  const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
 
   useEffect(() => {
     if (todayEdges.morning != null) setMorningValue(todayEdges.morning);
@@ -43,7 +44,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
       : 16;
     const yFor = (v: number) => 132 - (v - 1) * 11;
     let estimate = todayEdges.morning;
-    const points = [{ x: 16, y: yFor(estimate), value: estimate, label: t("Morgon"), direction: "neutral" }];
+    const points = [{ x: 16, y: yFor(estimate), value: estimate, label: t("Morgon"), direction: "neutral", occurredAt: "" }];
     for (const activity of activities) {
       const time = new Date(activity.occurredAt);
       const minutes = time.getHours() * 60 + time.getMinutes();
@@ -51,13 +52,13 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
       const delta = activity.direction === "gives" ? 1 : activity.direction === "drains" ? -1 : 0;
       // Direction-only visual cue. Strength is NOT converted to battery percent.
       estimate = Math.max(1, Math.min(10, estimate + delta * 0.65));
-      points.push({ x: xFor(minutes), y: yFor(estimate), value: estimate, label: activity.title, direction: activity.direction });
+      points.push({ x: xFor(minutes), y: yFor(estimate), value: estimate, label: activity.title, direction: activity.direction, occurredAt: activity.occurredAt });
     }
     if (todayEdges.evening != null) points.push({
       x: 324, y: yFor(todayEdges.evening), value: todayEdges.evening,
-      label: t("Kväll"), direction: "neutral",
+      label: t("Kväll"), direction: "neutral", occurredAt: "",
     });
-    else points.push({ x: 324, y: yFor(estimate), value: estimate, label: t("Uppskattning"), direction: "neutral" });
+    else points.push({ x: 324, y: yFor(estimate), value: estimate, label: t("Uppskattning"), direction: "neutral", occurredAt: "" });
     const line = points.map((p, i) => {
       if (i === 0) return `M ${p.x} ${p.y}`;
       const prev = points[i - 1];
@@ -90,10 +91,20 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
             {[33, 77, 121].map(y => <line key={y} x1="16" x2="324" y1={y} y2={y} stroke="#E7DFEA" strokeDasharray="3 5"/>)}
             <path d={graph.line + " L 324 145 L 16 145 Z"} fill="url(#journey-fill)" />
             <path d={graph.line} stroke="#9775AD" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            {graph.points.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={4} fill={p.direction === "gives" ? "#A1B6A5" : p.direction === "drains" ? "#D6A58E" : "#9775AD"} stroke="#FAF9F6" strokeWidth="2" />)}
+            {graph.points.map((p, i) => <g key={i}>
+              <circle cx={p.x} cy={p.y} r={4} fill={p.direction === "gives" ? "#A1B6A5" : p.direction === "drains" ? "#D6A58E" : "#9775AD"} stroke="#FAF9F6" strokeWidth="2" pointerEvents="none" />
+              <circle cx={p.x} cy={p.y} r={11} fill="transparent" role="button" tabIndex={0} aria-label={`${p.label}, ${p.direction === "gives" ? t("Gav energi") : p.direction === "drains" ? t("Tog energi") : p.direction === "both" ? t("Både gav och tog") : t("Uppskattning")}`} onClick={() => setSelectedPoint(i)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedPoint(i); } }} className="cursor-pointer focus:outline-none focus:stroke-[#512654] focus:stroke-2" />
+            </g>)}
             <text x="16" y="161" fill="#756B77" fontSize="11">{win.start}</text>
             <text x="324" y="161" textAnchor="end" fill="#756B77" fontSize="11">{win.end}</text>
           </svg>
+          {selectedPoint !== null && graph.points[selectedPoint] && <div role="status" className="mt-2 flex items-start justify-between gap-2 rounded-xl bg-white/75 p-3 text-sm text-ink shadow-sm">
+            <div className="min-w-0">
+              <p className="font-semibold">{graph.points[selectedPoint].label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{graph.points[selectedPoint].occurredAt ? new Date(graph.points[selectedPoint].occurredAt).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" }) + " · " : ""}{t(graph.points[selectedPoint].direction === "gives" ? "Gav energi" : graph.points[selectedPoint].direction === "drains" ? "Tog energi" : graph.points[selectedPoint].direction === "both" ? "Både gav och tog" : "Egen registrering eller uppskattning")}</p>
+            </div>
+            <button type="button" aria-label={t("Stäng")} onClick={() => setSelectedPoint(null)} className="shrink-0 rounded-lg px-2 py-1 text-muted-foreground">×</button>
+          </div>}
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
             <span><span className="text-[#829C87]">●</span> {t("Gav energi")}</span>
             <span><span className="text-[#C58C70]">●</span> {t("Tog energi")}</span>
