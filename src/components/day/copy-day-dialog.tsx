@@ -14,20 +14,21 @@ import {
 } from "@/lib/copy-day";
 
 /** Knapp + panel: kopiera en egen dag till en eller flera andra dagar. */
-export function CopyDayButton({ date, className }: { date: string; className?: string }) {
+export function CopyDayButton({ date, className, shortLabel = false }: { date: string; className?: string; shortLabel?: boolean }) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   return (
     <>
       <button
         type="button"
+        aria-label={t("Kopiera dagen")}
         onClick={() => setOpen(true)}
         className={
           className ??
           "flex items-center gap-1.5 rounded-2xl border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary/40 hover:bg-secondary/50"
         }
       >
-        <Copy size={16} className="text-primary" aria-hidden /> {t("Kopiera dagen")}
+        <Copy size={16} className="text-primary" aria-hidden /> {shortLabel ? t("Kopiera") : t("Kopiera dagen")}
       </button>
       {open && <CopyDayDialog date={date} open={open} onOpenChange={setOpen} />}
     </>

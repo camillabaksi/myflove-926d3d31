@@ -13,7 +13,7 @@ export function DayGreeting({
   tagline: string;
   greeting: string;
   name: string;
-  date: string;
+  date?: string;
   action?: ReactNode;
 }) {
   return (
@@ -36,7 +36,7 @@ export function DayGreeting({
             </>
           )}
         </p>
-        <p className="pace-type-help mt-1 text-muted-foreground">{date}</p>
+        {date && <p className="pace-type-help mt-1 text-muted-foreground">{date}</p>}
       </div>
       <div className="shrink-0">{action}</div>
     </div>

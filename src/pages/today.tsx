@@ -62,35 +62,23 @@ export function TodayContent() {
           tagline={t("Din dag, i din takt")}
           greeting={t("Hej")}
           name={name}
-          date={dateHeadingLabel(dateLabel, locale)}
           action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
         />
         <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="pt-4" aria-labelledby="your-day-title">
-          <header className="flex flex-wrap items-end justify-between gap-3 pb-2">
-            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-              <h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2>
-              <Button asChild size="sm" variant="ghost" className="min-h-11 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
-                <RouterLink to="/kalender" search={{ view: "vecka" }} aria-label={t("Visa veckan i kalendern")}>
-                  <CalendarDays size={16} aria-hidden /> {t("Visa veckan")}
-                </RouterLink>
+        <section className="min-w-0 rounded-[2rem] border border-border/70 bg-card px-3 py-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:px-5 sm:py-5" aria-labelledby="your-day-title">
+          <header className="mb-3 space-y-3">
+            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2><p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2" aria-label={t("Snabbval för din dag")}>
+              <Button asChild size="sm" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
+                <Link href="/lagg-till"><Plus size={15} className="shrink-0" aria-hidden />{t("Lägg till")}</Link>
               </Button>
-            </div>
-            <div className="pace-today-actions flex flex-wrap items-center gap-x-1.5 gap-y-1">
-              <Button asChild size="sm" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
-                <Link href="/lagg-till">
-                  <Plus size={16} aria-hidden /> {t("Lägg till")}
-                </Link>
+              <Button asChild size="sm" variant="outline" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
+                <Link href="/paminnelser" aria-label={t("Påminnelse")}><Bell size={15} className="shrink-0" aria-hidden />{t("Påminn")}</Link>
               </Button>
-              <Button asChild size="sm" variant="ghost" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
-                <Link href="/paminnelser">
-                  <Bell size={16} aria-hidden /> {t("Påminnelse")}
-                </Link>
-              </Button>
-              <CopyDayButton date={today} className="pace-today-action relative inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']" />
+              <CopyDayButton date={today} shortLabel className="flex h-10 min-w-0 items-center justify-center gap-1 rounded-xl border border-border bg-card px-1 text-[11px] font-medium text-ink hover:bg-secondary/50 sm:text-sm" />
             </div>
           </header>
           <div className="pt-2">
