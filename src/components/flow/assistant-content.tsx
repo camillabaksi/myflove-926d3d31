@@ -810,7 +810,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       <Dialog open={memoryCandidate !== null} onOpenChange={open => { if (!open) setMemoryCandidate(null); }}>
         <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Pace?</DialogTitle><DialogDescription>Pace använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
       </Dialog>
+      <QuickAddSheet open={quickAddOpen} onOpenChange={setQuickAddOpen} />
     </>
-    <QuickAddSheet open={quickAddOpen} onOpenChange={setQuickAddOpen} />
   );
 }
