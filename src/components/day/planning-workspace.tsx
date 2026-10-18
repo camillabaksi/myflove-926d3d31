@@ -292,14 +292,20 @@ export function PlanningWorkspace({
           {t("Skriv en eller flera aktiviteter och granska innan du sparar.")}
         </p>
         {stage === "write" && children.length > 0 && (
-          <fieldset className="mt-4">
-            <legend className="text-sm font-medium">{t("Vem gäller aktiviteterna?")}</legend>
-            <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("Välj mottagare")}>
-              <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-xl" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
-              <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-xl" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
-              <Button type="button" variant={target === "both" ? "default" : "outline"} aria-pressed={target === "both"} className="min-h-11 rounded-xl" onClick={() => { setTarget("both"); setError(""); }}>{t("Jag och barnen")}</Button>
-            </div>
-          </fieldset>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+            <span className="font-medium text-[#512654]">
+              {t(target === "both" ? "Planera för mig och barnen" : audience === "children" ? "Planera för barnen" : "Planera för mig")}
+            </span>
+            {target === "both" ? (
+              <Button type="button" variant="ghost" className="min-h-11 rounded-xl text-sm" onClick={() => { setTarget(audience); setError(""); }}>
+                {t("Ångra gemensam planering")}
+              </Button>
+            ) : (
+              <Button type="button" variant="outline" className="min-h-11 rounded-xl text-sm" onClick={() => { setTarget("both"); setError(""); }}>
+                {t("Planera för mig och barnen")}
+              </Button>
+            )}
+          </div>
         )}
         {forChildren && (
           <>
