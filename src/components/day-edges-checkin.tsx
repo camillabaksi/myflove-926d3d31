@@ -18,6 +18,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
   const { entries } = useEnergyFlow();
   const [morning, setMorningValue] = useState(todayEdges.morning ?? 5);
   const [evening, setEveningValue] = useState(todayEdges.evening ?? 5);
+  const [journeyOpen, setJourneyOpen] = useState(true);
   const [details, setDetails] = useState(false);
   const [settings, setSettings] = useState(false);
 
@@ -74,10 +75,14 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
   return (
     <section aria-label={t("Din energiresa")} className={cn("pace-surface space-y-3 rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5", className)}>
-      <div>
-        <h2 className="font-sans text-base font-semibold text-ink">{t("Din energiresa")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("Vad som gav och tog energi under dagen")}</p>
-      </div>
+      <button type="button" onClick={() => setJourneyOpen(v => !v)} aria-expanded={journeyOpen} aria-controls="daily-energy-journey-content" className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl text-left">
+        <span className="min-w-0">
+          <span className="block font-sans text-base font-semibold text-ink">{t("Din energiresa")}</span>
+          <span className="mt-1 block text-sm text-muted-foreground">{t("Vad som gav och tog energi under dagen")}</span>
+        </span>
+        <ChevronDown size={18} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform duration-200", journeyOpen && "rotate-180")} />
+      </button>
+      {journeyOpen && <div id="daily-energy-journey-content" className="space-y-3">
       {graph ? (
         <div data-testid="daily-energy-journey" className="rounded-2xl bg-[#F5EDF7]/45 p-3">
           <svg viewBox="0 0 340 167" role="img" aria-label={t("Illustrativ energikurva utifrån morgonregistrering och aktiviteter")} className="w-full">
@@ -99,8 +104,8 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
       ) : (
         <div data-testid="daily-energy-journey" className="rounded-2xl bg-[#F5EDF7]/45 p-3 text-sm text-muted-foreground">{t("Registrera morgonenergi för att se dagens kurva. Vi gissar inte din startnivå.")}</div>
       )}
-      <button type="button" onClick={() => setDetails(v => !v)} aria-expanded={details} className="flex min-h-10 w-full items-center justify-between rounded-xl px-2 text-left text-sm font-medium text-ink">
-        {t("Dagens aktiviteter")} ({activities.length}) <ChevronDown size={16} className={cn("transition-transform", details && "rotate-180")} />
+      <button type="button" onClick={() => setDetails(v => !v)} aria-expanded={details} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-2 text-left text-base font-medium text-ink">
+        {t("Dagens aktiviteter")} ({activities.length}) <ChevronDown size={18} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform duration-200", details && "rotate-180")} />
       </button>
       {details && <ol className="space-y-2 rounded-2xl bg-[#F5EDF7]/30 p-3">
         {activities.length === 0 && <li className="text-sm text-muted-foreground">{t("Inga aktiviteter registrerade idag.")}</li>}
@@ -109,8 +114,8 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
           <span className="min-w-0 flex-1">{a.title}<span className="block text-xs text-muted-foreground">{new Date(a.occurredAt).toLocaleTimeString("sv-SE", {hour:"2-digit",minute:"2-digit"})} · {t(a.direction === "gives" ? "Gav energi" : a.direction === "drains" ? "Tog energi" : a.direction === "both" ? "Både gav och tog" : "Ingen tydlig påverkan")}</span></span>
         </li>)}
       </ol>}
-      <button type="button" onClick={() => setSettings(v => !v)} aria-expanded={settings} className="flex min-h-10 w-full items-center justify-between rounded-xl px-2 text-left text-sm text-muted-foreground">
-        {t("Morgon, kväll & tider")} <ChevronDown size={16} className={cn("transition-transform", settings && "rotate-180")}/>
+      <button type="button" onClick={() => setSettings(v => !v)} aria-expanded={settings} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-xl px-2 text-left text-base font-medium text-ink">
+        {t("Morgon, kväll & tider")} <ChevronDown size={18} aria-hidden="true" className={cn("shrink-0 text-muted-foreground transition-transform duration-200", settings && "rotate-180")}/>
       </button>
       {settings && <div className="space-y-3 rounded-2xl bg-[#F5EDF7]/35 p-3">
         <div className="grid grid-cols-2 gap-3">
@@ -120,6 +125,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
         <EdgeSlider icon={<Sunrise size={16}/>} label={t("Energi vid morgonstart")} value={morning} onChange={setMorningValue} onSave={() => save("morning")} saved={todayEdges.morning != null}/>
         <EdgeSlider icon={<Moon size={16}/>} label={t("Energi vid dagens slut")} value={evening} onChange={setEveningValue} onSave={() => save("evening")} saved={todayEdges.evening != null}/>
         <p className="text-xs text-muted-foreground">{t("Morgonvärdet kan påverka batteriet. Kvällsvärdet sparas som reflektion.")}</p>
+      </div>}
       </div>}
     </section>
   );
