@@ -16,6 +16,7 @@ import type { FlowItem } from "@/lib/flow-items";
  */
 export default function GlobalActivityEnergyPrompt() {
   const [items, setItems] = useState<FlowItem[]>([]);
+  const [anchorTop, setAnchorTop] = useState<number | null>(null);
 
   const owner = useRef(getDataOwner());
   useEffect(() => {
@@ -23,12 +24,18 @@ export default function GlobalActivityEnergyPrompt() {
       if (owner.current !== getDataOwner()) {
         owner.current = getDataOwner();
         setItems([]);
+        setAnchorTop(null);
       }
     };
     const onDone = (event: Event) => {
       const detail = (event as CustomEvent<ActivityDoneDetail>).detail;
       if (!detail?.title) return;
       const item = detailToFlowItem(detail);
+      const active = document.activeElement;
+      if (active instanceof HTMLElement) {
+        const rect = active.getBoundingClientRect();
+        setAnchorTop(Math.max(12, Math.min(rect.bottom + 8, window.innerHeight - 390)));
+      } else setAnchorTop(null);
       setItems((prev) =>
         prev.some((queued) => queued.id === item.id && queued.dueDate === item.dueDate)
           ? prev
@@ -51,6 +58,7 @@ export default function GlobalActivityEnergyPrompt() {
     <ActivityEnergyPrompt
       key={item ? `${item.id}|${item.dueDate ?? ""}` : "empty"}
       item={item}
+      anchorTop={anchorTop}
       onClose={() => setItems((prev) => prev.slice(1))}
     />
   );
