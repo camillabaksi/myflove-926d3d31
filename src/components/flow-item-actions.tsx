@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useMemo, useRef, useState } from "react";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -83,6 +83,8 @@ export function FlowItemActions({
   children?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const touchScrolling = useRef(false);
   const { kind } = kindFromId(itemId);
   const home = externalHome(itemId);
 
@@ -98,6 +100,10 @@ export function FlowItemActions({
               size="icon"
               className={className ?? "h-9 w-9 text-muted-foreground"}
               aria-label="Fler val"
+              onTouchStart={(event) => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; touchScrolling.current = false; }}
+              onTouchMove={(event) => { if (touchStart.current && (Math.abs(event.touches[0].clientY - touchStart.current.y) > 8 || Math.abs(event.touches[0].clientX - touchStart.current.x) > 8)) touchScrolling.current = true; }}
+              onPointerUpCapture={(event) => { if (event.pointerType === "touch" && touchScrolling.current) { event.preventDefault(); event.stopPropagation(); } }}
+              onClickCapture={(event) => { if (touchScrolling.current) { event.preventDefault(); event.stopPropagation(); touchScrolling.current = false; } }}
             >
               <MoreHorizontal size={size + 2} />
             </Button>

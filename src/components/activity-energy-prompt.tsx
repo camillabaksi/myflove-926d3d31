@@ -41,9 +41,11 @@ const CHOICES: {
  */
 export function ActivityEnergyPrompt({
   item,
+  anchorTop,
   onClose,
 }: {
   item: FlowItem | null;
+  anchorTop?: number | null;
   onClose: () => void;
 }) {
   const { addFactor, entries } = useEnergyFlow();
@@ -132,7 +134,8 @@ export function ActivityEnergyPrompt({
     <section
       role="region"
       aria-label="Hur kändes det?"
-      className="fixed inset-x-2 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-40 mx-auto max-h-[70dvh] max-w-sm space-y-3 overflow-y-auto rounded-3xl border border-border bg-card p-4 shadow-lg"
+      style={anchorTop != null ? { top: anchorTop } : undefined}
+      className={cn("fixed inset-x-2 z-40 mx-auto max-h-[min(70dvh,24rem)] max-w-sm space-y-3 overflow-y-auto rounded-3xl border border-border bg-card p-4 shadow-lg", anchorTop == null ? "top-1/2 -translate-y-1/2" : "")}
     >
       <h2 className="text-base font-semibold">Hur kändes det?</h2>
       <p className="text-sm">{item.title}</p>
