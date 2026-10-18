@@ -63,6 +63,8 @@ export interface ExpandableBlockProps {
   /** Körs när länkkortet trycks (t.ex. spårning). */
   onNavigate?: () => void;
   className?: string;
+  /** Kompakt, enhetlig historikrad i Mitt batteri. */
+  historyStyle?: boolean;
   "data-testid"?: string;
   /** Hela innehållet – visas när kortet är expanderat. */
   children?: React.ReactNode;
@@ -84,6 +86,7 @@ export function ExpandableBlock({
   href,
   onNavigate,
   className,
+  historyStyle = false,
   "data-testid": dataTestId,
   children,
 }: ExpandableBlockProps) {
@@ -151,7 +154,16 @@ export function ExpandableBlock({
    * läggs ikon, text och status på EN horisontell rad i stället för ett
    * högt "torn". Ren presentation – ingen logik ändras.
    */
-  const compact = (
+  const compact = historyStyle ? (
+    <>
+      <span className="min-w-0 flex-1">
+        <span className="block font-sans text-base font-semibold text-ink">{title}</span>
+        {subtitle && <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">{subtitle}</span>}
+        {summary != null && <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{summary}</span>}
+      </span>
+      <ChevronDown size={18} aria-hidden="true" className="shrink-0 text-muted-foreground" />
+    </>
+  ) : (
     <>
       <span aria-hidden="true" className="grid shrink-0 place-items-center">
         {visual ??
@@ -244,8 +256,8 @@ export function ExpandableBlock({
       className={cn(
         "@container flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow",
         area && "area-border",
-        open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem] @min-[20rem]:min-h-0",
-        surface ? SURFACE[surface] : "bg-card",
+        historyStyle ? "w-full border-0 bg-[#F5EDF7]/30 shadow-none" : open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem] @min-[20rem]:min-h-0",
+        !historyStyle && (surface ? SURFACE[surface] : "bg-card"),
         className,
       )}
     >
@@ -257,7 +269,7 @@ export function ExpandableBlock({
         aria-label={open ? `Minimera ${ariaLabel}` : `Öppna ${ariaLabel}`}
         className={cn(
           "press relative flex w-full min-w-0 flex-col gap-2 rounded-3xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-          widget && !open
+          historyStyle ? "min-h-11 flex-row items-center justify-between gap-3 rounded-2xl px-3 py-3" : widget && !open
             ? "items-center justify-center gap-1.5 px-3 py-6 text-center @min-[20rem]:flex-row @min-[20rem]:justify-start @min-[20rem]:gap-3 @min-[20rem]:px-4 @min-[20rem]:py-4 @min-[20rem]:text-left"
             : !open
               ? compactLayout
@@ -294,6 +306,11 @@ export function ExpandableBlock({
           </>
         ) : !open ? (
           compact
+        ) : historyStyle ? (
+          <span className="flex w-full items-center justify-between gap-3">
+            <span className="font-sans text-base font-semibold text-ink">{title}</span>
+            <ChevronDown size={18} aria-hidden="true" className="shrink-0 rotate-180 text-muted-foreground" />
+          </span>
         ) : (
           <>
             <div className="flex min-w-0 items-start gap-2.5">
@@ -321,7 +338,7 @@ export function ExpandableBlock({
       </button>
 
       {open && (
-        <div className="min-w-0 w-full space-y-4 border-t border-border/50 p-3 animate-fade-in motion-reduce:animate-none sm:p-5">
+        <div className={cn("min-w-0 w-full space-y-4 p-3 animate-fade-in motion-reduce:animate-none", !historyStyle && "border-t border-border/50 sm:p-5")}>
           {widget && (
             <div className="space-y-0.5">
               <h2 className="font-display text-base font-bold leading-tight text-ink">{title}</h2>
