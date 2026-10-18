@@ -36,13 +36,17 @@ export default function WorkoutAutoRunner({
   onFinish,
   onClose,
   onManual,
+  breakEvery = 0,
+  breakSeconds = 30,
 }: {
   workout: Workout;
   onFinish: (doneCount: number) => void;
   onClose: () => void;
   onManual: () => void;
+  breakEvery?: number;
+  breakSeconds?: number;
 }) {
-  const steps = useMemo(() => buildWorkoutTimeline(workout), [workout]);
+  const steps = useMemo(() => buildWorkoutTimeline(workout, { breakEvery, breakSeconds }), [workout, breakEvery, breakSeconds]);
   const [soundOn, setSoundOn] = useState(() => isWorkoutSoundEnabled());
   const [finished, setFinished] = useState(false);
   const doneBlocks = useRef<Set<number>>(new Set());
