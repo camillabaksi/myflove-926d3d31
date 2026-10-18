@@ -340,8 +340,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <Button size="sm" variant={familyPreferences.mode === "mine" ? "default" : "outline"} aria-pressed={familyPreferences.mode === "mine"} className="min-h-11 rounded-xl" onClick={() => setFamilyPreferences(previous => ({ ...previous, mode: previous.mode === "mine" ? "context" : "mine" }))}>{t("Bara jag")}</Button>
         {familyMembers.map(member => { const active = familyPreferences.mode !== "mine" && (familyPreferences.children === null || familyPreferences.children.includes(member.id)); return <Button key={member.id} size="sm" variant={active ? "secondary" : "outline"} aria-pressed={active} className="min-h-11 rounded-xl" onClick={() => setFamilyPreferences(previous => { const current = previous.children === null ? familyMembers.map(m => m.id) : previous.children; const children = active ? current.filter(id => id !== member.id) : [...current, member.id]; return { ...previous, mode: "context", children }; })}>{member.name}</Button>; })}
         <Button size="sm" variant="ghost" className="min-h-11 rounded-xl text-muted-foreground" onClick={() => setFamilySettings(true)} aria-label={t("Fler familjeinställningar")}><SlidersHorizontal size={16} aria-hidden /></Button>
-      </details>
-    </div>
+      </div>
+    </details>
     <details className="rounded-2xl border border-border/50 bg-card px-3 py-1" aria-label={t("Fler visningsval")}><summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground"><SlidersHorizontal size={16} aria-hidden />{t("Visning och bildstöd")}</summary><div className="flex flex-wrap items-center gap-x-1 gap-y-1 py-2">
       
 
