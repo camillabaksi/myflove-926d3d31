@@ -20,7 +20,6 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
   const [evening, setEveningValue] = useState(todayEdges.evening ?? 5);
   const [details, setDetails] = useState(false);
   const [settings, setSettings] = useState(false);
-  const [selected, setSelected] = useState<number | null>(null);
 
   useEffect(() => {
     if (todayEdges.morning != null) setMorningValue(todayEdges.morning);
@@ -58,7 +57,12 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
       label: t("Kväll"), direction: "neutral",
     });
     else points.push({ x: 324, y: yFor(estimate), value: estimate, label: t("Uppskattning"), direction: "neutral" });
-    const line = points.map((p, i) => i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`).join(" ");
+    const line = points.map((p, i) => {
+      if (i === 0) return `M ${p.x} ${p.y}`;
+      const prev = points[i - 1];
+      const midX = (prev.x + p.x) / 2;
+      return `C ${midX} ${prev.y}, ${midX} ${p.y}, ${p.x} ${p.y}`;
+    }).join(" ");
     return { points, line };
   }, [activities, todayEdges.morning, todayEdges.evening, win.start, win.end, t]);
 
@@ -81,7 +85,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
             {[33, 77, 121].map(y => <line key={y} x1="16" x2="324" y1={y} y2={y} stroke="#E7DFEA" strokeDasharray="3 5"/>)}
             <path d={graph.line + " L 324 145 L 16 145 Z"} fill="url(#journey-fill)" />
             <path d={graph.line} stroke="#9775AD" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            {graph.points.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={selected === i ? 6 : 4} fill={p.direction === "gives" ? "#A1B6A5" : p.direction === "drains" ? "#D6A58E" : "#9775AD"} stroke="#FAF9F6" strokeWidth="2" />)}
+            {graph.points.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={4} fill={p.direction === "gives" ? "#A1B6A5" : p.direction === "drains" ? "#D6A58E" : "#9775AD"} stroke="#FAF9F6" strokeWidth="2" />)}
             <text x="16" y="161" fill="#756B77" fontSize="11">{win.start}</text>
             <text x="324" y="161" textAnchor="end" fill="#756B77" fontSize="11">{win.end}</text>
           </svg>
