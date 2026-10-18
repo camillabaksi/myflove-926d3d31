@@ -360,10 +360,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       {dates.slice(0, 7).map(d => <span key={`heading-${d}`} className="py-1 text-center text-[11px] text-muted-foreground">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>)}
       {dates.map(d => {
         const areaEntries = days[d] ?? [];
-        const areas = calendarMonthAreas(areaEntries);
-        const recordedCapacity = calendarMonthCapacity(d, today, capacityOf(d).percent);
         const adjacent = d.slice(0, 7) !== date.slice(0, 7);
-        const areaDescription = `${areas.length} ${t("områden har planerat innehåll denna dag")}${areas.length ? `: ${areas.map(a => t(calendarAreaLabel(a))).join(", ")}` : ""}`;
         const visibleEntries = areaEntries.filter(e => !isFamilyEntry(e) || familyPreferences.mode !== "mine");
         return <button type="button" key={d} data-month-date={d} onClick={() => setDate(d)} onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)} aria-current={d === today ? "date" : undefined} aria-pressed={d === date} aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${visibleEntries.length} aktiviteter`} className={cn("flex min-h-24 min-w-0 flex-col items-stretch gap-1 overflow-hidden border-r border-b border-[#EDE5E9] bg-[#FFFEFC] p-1 text-left text-[10px] transition-colors hover:bg-[#F6F0F6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:min-h-28 sm:p-2", adjacent && "opacity-45", d === today && "bg-[#F6F0F6]", d === date && "ring-2 ring-inset ring-[#512654]")}>
           <span className={cn("text-xs font-semibold text-[#512654]", d === today && "underline decoration-[#512654] underline-offset-4")}>{Number(d.slice(-2))}</span>
