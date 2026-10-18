@@ -73,7 +73,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           >
             {t("Här ser du dina tidigare loggar. Vill du logga nytt gör du det under")}{" "}
             <span className="font-medium text-ink">
-              {t("Mitt batteri → Logga energi & mående")}
+              {t("Idag → Logga energi & mående")}
             </span>
             .
           </div>
