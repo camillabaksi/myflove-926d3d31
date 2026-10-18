@@ -62,17 +62,17 @@ export default function CollapsibleSection({
           type="button"
           onClick={toggle}
           aria-expanded={!collapsed}
-          className="pace-collapse-trigger flex flex-1 items-center gap-2 text-left group"
+          className="pace-collapse-trigger flex min-h-9 flex-1 items-center justify-between gap-2 text-left group"
         >
+          <span className={cn("pace-collapse-title min-w-0 text-xl font-medium", headingClassName)}>{title}</span>
           <ChevronDown
-            size={16}
+            size={18}
             aria-hidden="true"
             className={cn(
-              "shrink-0 text-muted-foreground transition-transform group-hover:text-foreground",
-              collapsed && "-rotate-90",
+              "ml-auto shrink-0 text-muted-foreground transition-transform duration-200 group-hover:text-foreground",
+              !collapsed && "rotate-180",
             )}
           />
-          <span className={cn("pace-collapse-title text-xl font-medium", headingClassName)}>{title}</span>
         </button>
         {help && <HelpHint label={typeof title === "string" ? title : undefined}>{help}</HelpHint>}
         {actions}
