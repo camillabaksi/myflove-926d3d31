@@ -78,7 +78,7 @@ export function TodayContent() {
               <Button asChild size="sm" variant="outline" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
                 <Link href="/paminnelser" aria-label={t("Påminnelse")}><Bell size={15} className="shrink-0" aria-hidden />{t("Påminn")}</Link>
               </Button>
-              <CopyDayButton date={today} shortLabel className="flex h-10 min-w-0 items-center justify-center gap-1 rounded-xl border border-border bg-card px-1 text-[11px] font-medium text-ink hover:bg-secondary/50 sm:text-sm" />
+              <CopyDayButton date={today} shortLabel className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm" />
             </div>
           </header>
           <div className="pt-2">
