@@ -37,7 +37,7 @@ export function DailyActivityRow({
     <div
       className={cn(
         integrated
-          ? "pace-activity-row relative min-w-0 rounded-xl px-2 py-2"
+          ? "pace-activity-row relative min-w-0 rounded-xl px-2 py-1.5"
           : "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
         !integrated && item.done && "bg-muted/35 opacity-70",
       )}

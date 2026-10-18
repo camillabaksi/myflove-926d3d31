@@ -55,14 +55,11 @@ export function PlanningEntry({
       <Link
         to="/planera"
         search={{ audience: "children", period: "today" }}
-        className="flex min-h-16 items-center gap-3 rounded-2xl border border-border/60 bg-lavender/40 px-4 py-3 text-ink hover:bg-lavender/60"
+        className="flex min-h-11 items-center gap-2 rounded-xl border border-border/60 bg-lavender/25 px-3 py-2 text-ink hover:bg-lavender/40"
       >
         <Users size={20} className="shrink-0 text-primary" aria-hidden />
         <span className="min-w-0 flex-1">
-          <span className="block text-base font-medium">{t("Barnens schema")}</span>
-          <span className="block text-sm text-muted-foreground">
-            {t("Se och planera deras dagar")}
-          </span>
+          <span className="block text-sm font-medium">{t("Barnens schema")}</span>
         </span>
         <ChevronRight size={18} className="shrink-0" aria-hidden />
       </Link>
@@ -70,10 +67,10 @@ export function PlanningEntry({
   if (compact)
     return (
       <section
-        className="rounded-2xl border border-border/60 bg-mint/30 px-4 py-3"
+        className="rounded-xl border border-border/60 bg-mint/20 px-3 py-2"
         aria-label={t("Planera i din takt")}
       >
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
           <h3 className="flex items-center gap-2 font-display text-base font-medium">
             <NotebookPen size={18} className="shrink-0 text-primary" aria-hidden />
             {t("Planera i din takt")}
@@ -84,7 +81,7 @@ export function PlanningEntry({
                 key={period}
                 asChild
                 variant="outline"
-                className="min-h-11 rounded-xl bg-card/70 px-3 text-sm shadow-none"
+                className="min-h-9 rounded-xl bg-card/70 px-2.5 text-xs shadow-none"
               >
                 <Link to="/planera" search={{ audience: "me", period }}>
                   {t(label)}
