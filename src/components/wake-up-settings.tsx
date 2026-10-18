@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ export function WakeUpSettings() {
   const saveFn = useServerFn(savePushPreferences);
   const [wake, setWake] = useState<Wake | null>(null);
   const [notifOk, setNotifOk] = useState(true);
+  const saveQueue = useRef(Promise.resolve());
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -60,18 +61,13 @@ export function WakeUpSettings() {
     const next = { ...(wake ?? DEFAULTS), ...patch };
     setWake(next);
     if (!isTime(next.wake_time)) return;
-    try {
-      await saveFn({
-        data: {
-          wake_enabled: next.wake_enabled,
-          wake_time: next.wake_time.slice(0, 5),
-          wake_interval_min: next.wake_interval_min,
-          wake_max_followups: next.wake_max_followups,
-        },
-      });
-    } catch {
-      toast({ title: "Kunde inte spara", description: "Försök igen om en stund." });
-    }
+    saveQueue.current = saveQueue.current.catch(() => undefined).then(async () => {
+      try {
+        await saveFn({ data: next });
+      } catch {
+        toast({ title: "Kunde inte spara", description: "Försök igen om en stund." });
+      }
+    });
   };
 
   if (!wake) return null;
@@ -124,7 +120,7 @@ export function WakeUpSettings() {
           min={3}
           max={30}
           value={wake.wake_interval_min}
-          onChange={(e) => update({ wake_interval_min: Number(e.target.value) || 8 })}
+          onChange={(e) => { if (e.target.value !== "") update({ wake_interval_min: Number(e.target.value) }); }}
           className="h-9 w-24"
           disabled={!wake.wake_enabled}
         />
@@ -140,7 +136,7 @@ export function WakeUpSettings() {
           min={1}
           max={6}
           value={wake.wake_max_followups}
-          onChange={(e) => update({ wake_max_followups: Number(e.target.value) || 4 })}
+          onChange={(e) => { if (e.target.value !== "") update({ wake_max_followups: Number(e.target.value) }); }}
           className="h-9 w-24"
           disabled={!wake.wake_enabled}
         />
