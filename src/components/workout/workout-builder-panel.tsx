@@ -208,11 +208,11 @@ export default function WorkoutBuilderPanel({
     addTask(`Träningspass: ${workout.title}`, new Date().toISOString().slice(0, 10), {
       completed: true,
       note: `${workout.minutes} min · ca ${workout.kcalLow}–${workout.kcalHigh} kcal`,
-      energyImpact: "gives",
+      energyImpact: "unknown",
     });
     track("workout_completed", { source: workout.intent });
     emitActivityDone({
-      id: `workout-${workout.id}`,
+      id: `workout-${workout.id}-${Date.now()}`,
       title: `Träningspass: ${workout.title}`,
       dueDate: new Date().toISOString().slice(0, 10),
     });
@@ -432,10 +432,10 @@ export default function WorkoutBuilderPanel({
                     setStep("kor");
                   }}
                 >
-                  <Play size={18} className="mr-2" aria-hidden /> Starta passet (automatiskt)
+                  <Play size={18} className="mr-2" aria-hidden /> Starta guidad träning
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                  Timern räknar ner, säger till vid byt sida och startar nästa övning åt dig.
+                  Stillbilder visar övningarna. Timern guidar tidsstyrda moment; repetitioner markerar du klara själv.
                 </p>
                 <Button
                   variant="outline"
