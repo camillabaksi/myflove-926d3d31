@@ -11,7 +11,7 @@ export interface EnergySavedDetail {
   direction: EnergyDirection;
   date: string | null;
   /** Completed activities already adjust the canonical capacity automatically. */
-  automaticallyApplied: boolean;
+  automaticallyApplied?: boolean;
 }
 
 /** Confirmed observations only. This UI signal never writes capacity or a second factor. */
