@@ -1,13 +1,13 @@
 import { Link } from "wouter";
 
 /** Calm, tactile energy display. Rings and segments share one self-reported percentage. */
-export function SoftEnergyBattery({ percent }: { percent: number | null }) {
+export function SoftEnergyBattery({ percent, linked = true }: { percent: number | null; linked?: boolean }) {
   const known = percent !== null && Number.isFinite(percent);
   const value = known ? Math.max(0, Math.min(100, percent)) : 0;
   const activeTicks = known ? Math.round(value / 100 * 48) : 0;
   const activeSegments = known ? Math.round(value / 20) : 0;
-  return (
-    <Link href="/mitt-batteri" aria-label={known ? `Öppna Mitt batteri, ${value} procent registrerad kapacitet` : "Öppna Mitt batteri, ingen kapacitet registrerad"} className="group inline-flex min-h-11 shrink-0 flex-col items-center justify-center rounded-2xl px-1 py-1 text-center outline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+  const visual = (
+    <div aria-label={known ? `${value} procent registrerad kapacitet` : "Ingen kapacitet registrerad"} className="group inline-flex min-h-11 shrink-0 flex-col items-center justify-center rounded-2xl px-1 py-1 text-center">
       <svg viewBox="0 0 144 144" width="128" height="128" role="img" aria-hidden="true" className="max-w-full transition-transform duration-200 group-hover:scale-[1.03] motion-reduce:transition-none">
         <defs>
           <linearGradient id="softBatteryFrame" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#B8A2C2"/><stop offset="1" stopColor="#65456D"/></linearGradient>
@@ -27,7 +27,8 @@ export function SoftEnergyBattery({ percent }: { percent: number | null }) {
         </g>
       </svg>
       <span className="mt-[-3px] text-sm font-semibold tabular-nums text-ink">{known ? `${value} %` : "– %"}</span>
-      <span className="text-[11px] font-medium text-muted-foreground">Mitt batteri ↗</span>
-    </Link>
+      {linked && <span className="text-[11px] font-medium text-muted-foreground">Mitt batteri ↗</span>}
+    </div>
   );
+  return linked ? <Link href="/mitt-batteri" aria-label={known ? `Öppna Mitt batteri, ${value} procent registrerad kapacitet` : "Öppna Mitt batteri, ingen kapacitet registrerad"}>{visual}</Link> : visual;
 }
