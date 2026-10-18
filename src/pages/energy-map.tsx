@@ -50,9 +50,10 @@ function formatHour(h: number) {
 
 interface EnergyContentProps {
   showHeader?: boolean;
+  readOnly?: boolean;
 }
 
-export function EnergyContent({ showHeader = true }: EnergyContentProps) {
+export function EnergyContent({ showHeader = true, readOnly = false }: EnergyContentProps) {
   const { t, lang, locale } = useLang();
   const levelLabels = lang === "en" ? LEVEL_LABELS_EN : LEVEL_LABELS;
   const { energyEntries, logEnergy } = useQuickCheckin();
@@ -170,7 +171,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
         </MyFloveWide>
       )}
 
-      {userId && (
+      {userId && !readOnly && (
         <MyFloveWide>
           <CollapsibleSection
             title={t("Hur känns det just nu?")}
@@ -179,7 +180,7 @@ export function EnergyContent({ showHeader = true }: EnergyContentProps) {
             )}
             headingClassName="font-medium"
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
-            className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
+            className={readOnly ? "space-y-3 rounded-2xl bg-[#F5EDF7]/30 p-3" : "pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"}
           >
             <div className="grid grid-cols-5 gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
