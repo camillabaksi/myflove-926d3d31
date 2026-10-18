@@ -127,6 +127,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [quickSupport, setQuickSupport] = useState<{ taskId: string; mode: "prioritera" | "dela" | "planera" } | null>(null);
   const [cluster, setCluster] = useState<CalendarEntry[]>([]);
   const [adding, setAdding] = useState(false);
+  const [dayEditorOpen, setDayEditorOpen] = useState(false);
   const [childIds, setChildIds] = useState<string[]>([]);
   const [savingChildren, setSavingChildren] = useState(false);
   const savingChildrenRef = useRef(false);
@@ -135,6 +136,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const mounted = useRef(true);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [title, setTitle] = useState("");
+  const [note, setNote] = useState("");
   const [chosenArea, setChosenArea] = useState<LifeArea | null>(null);
   const proposedArea = suggestActivityArea(title);
   const newArea = chosenArea ?? proposedArea ?? "vardag";
@@ -147,6 +149,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [impact, setImpact] = useState<Task["energyImpact"]>("unknown");
   const [notify, setNotify] = useState(false);
   const [planning, setPlanning] = useState(false);
+  const [editingMeta, setEditingMeta] = useState(false);
   const [dismissed, setDismissed] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState(false);
   const [now, setNow] = useState<number | null>(null);
@@ -163,12 +166,30 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     if (view === "manad") { const d = new Date(`${date}T12:00:00`); d.setDate(1); d.setMonth(d.getMonth() + direction); setDate(calendarDate(d)); }
     else setDate(shiftDate(date, direction * (view === "vecka" ? 7 : 1)));
   };
-  const openAdd = (forChildren = false) => { setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(date); setPeriodEnd(""); setChildPeriod(false); setTitle(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
+  const openAdd = (forChildren = false, targetDate = date) => { setDayEditorOpen(false); setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(targetDate); setPeriodEnd(""); setChildPeriod(false); setTitle(""); setNote(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
   const openDetails = (entry: CalendarEntry) => {
-    setDetails(entry); setPlanning(false); setEditDate(entry.date); setTime(entry.time ?? "");
+    setDetails(entry); setPlanning(false); setEditingMeta(false); setEditDate(entry.date); setTime(entry.time ?? "");
+    const task = tasks.find(item => item.id === entry.sourceId);
+    const reminder = reminders.find(item => item.id === entry.sourceId);
+    setNote(task?.note ?? reminder?.note ?? ""); setPeriodEnd(reminder?.endDate ?? "");
     const start = minuteOf(entry.time), end = minuteOf(entry.endTime);
     setLength(start !== null && end !== null && end > start ? String(end - start) : "");
     setImpact(entry.energyImpact ?? "unknown");
+  };
+  const saveMetadata = (entry: CalendarEntry) => {
+    if (!owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner || !entry.editable || entry.recurring) return;
+    const cleanNote = note.trim();
+    if (entry.source === "task") {
+      const task = tasks.find(item => item.id === entry.sourceId);
+      if (!task || task.syncKey) return;
+      updateTask(entry.sourceId, { note: cleanNote });
+    } else if (entry.source === "reminder") {
+      const reminder = reminders.find(item => item.id === entry.sourceId);
+      if (!reminder || reminder.repeat && reminder.repeat !== "none") return;
+      if (periodEnd && periodEnd < reminder.date) { toast.error(t("Slutdatum får inte vara före startdatum.")); return; }
+      updateReminder(entry.sourceId, { note: cleanNote, endDate: periodEnd || undefined });
+    } else return;
+    setEditingMeta(false); setDetails(null); toast.success(t("Ändringarna sparades"));
   };
   const confirmFamily = (day: string, start: string, end: string | undefined, duration: number, action: () => void): boolean => {
     const related = familyPlanningContext(planningDays[day] ?? [], start, end);
@@ -212,7 +233,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     setSavingChildren(true);
     try {
       const preset = activityPresetForTitle(title);
-      const notes = encodeVisualNotes({ pictogram: preset?.pictogram ?? "calendar", category: preset?.category ?? "familj", tone: preset?.tone ?? "lavender", familyLabel: "child", ...(endTime ? { endTime } : {}), ...(childPeriod ? { repeatUntil: periodEnd } : {}), linkGroup: crypto.randomUUID() });
+      const notes = encodeVisualNotes({ pictogram: preset?.pictogram ?? "calendar", category: preset?.category ?? "familj", tone: preset?.tone ?? "lavender", familyLabel: "child", ...(endTime ? { endTime } : {}), ...(childPeriod ? { repeatUntil: periodEnd } : {}), linkGroup: crypto.randomUUID() }, note.trim());
       const result = await addToChildSchedules({ owner, children: ownedChildren, selectedIds: childIds, items: originalChildItems, input: { title, date: editDate, time: childPeriod ? undefined : time || undefined, notes, ...(childPeriod ? { repeat: "daily" as const } : {}) }, addItem: addChildItem, canContinue });
       if (!await canContinue()) return;
       if (result.failed.length) {
@@ -235,9 +256,9 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     if (kind === "child") { void saveForChildren(end); return; }
     if (!confirmed && time && confirmFamily(editDate, time, end, duration || 0, () => saveNew(true))) return;
     const energy = kind === "recovery" ? "gives" : impact;
-    if (kind === "period") addReminder(title.trim(), editDate, undefined, "none", undefined, undefined, "Sammanhängande period – ingen automatiskt upptagen tid.", newArea, periodEnd, "unknown");
-    else if (kind === "task") addTask(title.trim(), editDate, { time: time || undefined, endTime: end, energyImpact: energy, reminderMinutesBefore: notify && time ? 0 : undefined, area: newArea });
-    else addReminder(title.trim(), editDate, time || undefined, "none", end, notify && time ? 0 : undefined, undefined, newArea, undefined, energy);
+    if (kind === "period") addReminder(title.trim(), editDate, undefined, "none", undefined, undefined, [note.trim(), "Sammanhängande period – ingen automatiskt upptagen tid."].filter(Boolean).join("\n\n"), newArea, periodEnd, "unknown");
+    else if (kind === "task") addTask(title.trim(), editDate, { time: time || undefined, endTime: end, energyImpact: energy, reminderMinutesBefore: notify && time ? 0 : undefined, note: note.trim() || undefined, area: newArea });
+    else addReminder(title.trim(), editDate, time || undefined, "none", end, notify && time ? 0 : undefined, note.trim() || undefined, newArea, undefined, energy);
     setAdding(false); setChosenArea(null); toast.success(t("Tillagt i kalendern"), { description: kind === "recovery" ? t("Återhämtning får också ta plats i kalendern.") : undefined });
   };
   const drop = (event: DragEvent, nextDate: string, nextMinute?: number) => {
@@ -364,7 +385,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         const recordedCapacity = calendarMonthCapacity(d, today, capacityOf(d).percent);
         const adjacent = d.slice(0, 7) !== date.slice(0, 7);
         const areaDescription = `${areas.length} ${t("områden har planerat innehåll denna dag")}${areas.length ? `: ${areas.map(a => t(calendarAreaLabel(a))).join(", ")}` : ""}`;
-        return <Button key={d} data-month-date={d} variant="ghost" onClick={() => setDate(d)} onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)} aria-current={d === today ? "date" : undefined} aria-pressed={d === date} aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${areaEntries.length} ${t(areaEntries.length === 1 ? "aktivitet" : "aktiviteter")}, ${areaDescription}${recordedCapacity !== null ? `, ${t("Kapacitet")} ${recordedCapacity} %` : ""}`} title={areaDescription} className={cn("relative flex h-24 min-w-0 flex-col justify-start gap-2 rounded-xl border border-border/50 bg-card/60 px-0.5 py-2 text-xs sm:h-28 sm:px-2", adjacent && "opacity-50", d === today && "border-ink border-2", d === date && "pace-selected-day")}>
+        return <Button key={d} data-month-date={d} variant="ghost" onClick={() => setDate(d); setDayEditorOpen(true); }} onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)} aria-current={d === today ? "date" : undefined} aria-pressed={d === date} aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${areaEntries.length} ${t(areaEntries.length === 1 ? "aktivitet" : "aktiviteter")}, ${areaDescription}${recordedCapacity !== null ? `, ${t("Kapacitet")} ${recordedCapacity} %` : ""}`} title={areaDescription} className={cn("relative flex h-24 min-w-0 flex-col justify-start gap-2 rounded-xl border border-border/50 bg-card/60 px-0.5 py-2 text-xs sm:h-28 sm:px-2", adjacent && "opacity-50", d === today && "border-ink border-2", d === date && "pace-selected-day")}>
           <span className="font-semibold">{Number(d.slice(-2))}</span>
           {recordedCapacity !== null && <span data-month-capacity className={cn("flex items-center gap-0.5 whitespace-nowrap text-[9px] tabular-nums sm:text-[10px]", d === today ? "font-semibold text-primary" : "text-muted-foreground")}><Battery size={12} aria-hidden /><span>{recordedCapacity}%</span></span>}
           {areas.length > 0 && <span className="mt-auto flex h-3 items-center justify-center gap-1"><span className="text-[9px] tabular-nums text-muted-foreground" aria-hidden>{areaEntries.length}</span><span className="flex h-3 items-center justify-center gap-0.5" aria-hidden>{areas.slice(0, 4).map(area => <span key={area} data-calendar-area={area} className="h-1.5 w-1.5 shrink-0 rounded-full calendar-area-dot" />)}{areas.length > 4 && <span className="text-[9px] text-muted-foreground">+{areas.length - 4}</span>}</span></span>}
@@ -377,7 +398,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         const dayEntries = (days[d] ?? []).filter(e => !isFamilyEntry(e) && !e.periodEnd);
         const ordered = [...dayEntries].sort((x,y) => (minuteOf(x.time) ?? 1440) - (minuteOf(y.time) ?? 1440));
         return <section key={d} className={cn("flex gap-2 rounded-xl px-2 py-2", d === date && "bg-[#F4EDF5]")}>
-          <button type="button" onClick={() => { setDate(d); setView("dag"); }} className="flex min-h-10 w-12 shrink-0 flex-col items-center justify-center rounded-lg text-[#512654] hover:bg-[#EEE3F1]" aria-label={`Öppna ${dateHeading(d)}`}>
+          <button type="button" onClick={() => { setDate(d); setDayEditorOpen(true); }} className="flex min-h-10 w-12 shrink-0 flex-col items-center justify-center rounded-lg text-[#512654] hover:bg-[#EEE3F1]" aria-label={`Öppna ${dateHeading(d)}`}>
             <span className="text-xs capitalize">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
             <span className="font-display text-lg font-medium">{new Date(`${d}T12:00:00`).getDate()}</span>
           </button>
@@ -429,12 +450,14 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       </DialogContent>
     </Dialog>
     <Dialog open={cluster.length > 0} onOpenChange={open => { if (!open) setCluster([]); }}><DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Aktiviteter vid samma tid")}</DialogTitle><DialogDescription>{date}</DialogDescription></DialogHeader><ul className="space-y-2">{cluster.map(e => <li key={e.id} onClick={() => setCluster([])}>{blockButton(e)}</li>)}</ul></DialogContent></Dialog>
+    <Dialog open={dayEditorOpen} onOpenChange={setDayEditorOpen}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</DialogTitle><DialogDescription>{t("Visa, redigera eller lägg till aktiviteter för dagen.")}</DialogDescription></DialogHeader><div className="space-y-2">{(days[date] ?? []).map(entry => <button key={entry.id} type="button" className="flex min-h-11 w-full items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-left" onClick={() => { setDayEditorOpen(false); openDetails(entry); }}><span className="min-w-0 flex-1 truncate">{entry.time ? `${entry.time} · ` : ""}{entry.title}</span><ChevronRight size={16} aria-hidden /></button>)}{!(days[date] ?? []).length && <p className="text-sm text-muted-foreground">{t("Inget planerat")}</p>}</div><Button className="min-h-11 w-full rounded-xl" onClick={() => openAdd(false, date)}><Plus size={16} aria-hidden />{t("Lägg till aktivitet eller period")}</Button>{ownedChildren.length > 0 && <Button variant="outline" className="min-h-11 w-full rounded-xl" onClick={() => openAdd(true, date)}><Users size={16} aria-hidden />{t("Lägg till i barnens schema")}</Button>}</DialogContent></Dialog>
     <Dialog open={adding} onOpenChange={open => { if (!savingChildrenRef.current) setAdding(open); }}>
       <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">
         <DialogHeader><DialogTitle>{t(kind === "child" ? "Lägg till i barnens schema" : "Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader>
         <fieldset disabled={savingChildren} className="min-w-0 space-y-4">
           {kind !== "child" && <div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"], ["period", "Period"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div>}
           <label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => { setTitle(e.target.value); setChosenArea(null); }} maxLength={240} autoFocus /></label>
+          <label className="block text-sm">{t("Anteckningar (valfritt)")}<textarea value={note} onChange={e => setNote(e.target.value)} maxLength={4000} rows={3} placeholder={t("Detaljer, saker att komma ihåg…")} className="mt-1 min-h-20 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" /></label>
           {kind !== "child" && <label className="block text-sm">{t("Område")}{proposedArea && chosenArea === null && <span className="ml-2 text-xs text-muted-foreground">{t("Föreslaget")}</span>}<select aria-label={t("Område")} className="mt-1 min-h-11 w-full rounded-xl border border-border bg-card px-3" value={newArea} onChange={e => setChosenArea(e.target.value as LifeArea)}>{ALL_AREAS.map(id => <option key={id} value={id}>{AREA_META[id].label}</option>)}</select></label>}
           {kind === "child" && <ChildScheduleRecipients children={ownedChildren} selectedIds={childIds} onChange={setChildIds} disabled={savingChildren} />}
           {kind === "child" && <label className="flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={childPeriod} onChange={e => { setChildPeriod(e.target.checked); if (e.target.checked) { setTime(""); setLength(""); } }} />Flera dagar / semester / lov</label>}
@@ -446,7 +469,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         </fieldset>
       </DialogContent>
     </Dialog>
-    <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="max-h-[88dvh] w-[calc(100vw-2rem)] max-w-lg overflow-x-hidden overflow-y-auto rounded-3xl px-4 sm:px-6"><DialogHeader><DialogTitle className="break-words pr-5 text-xl leading-snug sm:text-2xl">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4"><p data-calendar-area={calendarArea(details)} className="flex items-center gap-2 text-sm"><span className="h-2.5 w-2.5 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(calendarArea(details)))}</p>{isFamilyEntry(details) && <div className="space-y-2 rounded-2xl bg-secondary/35 p-3"><p className="text-xs text-muted-foreground">{t("Familjekontext, inte en egen uppgift.")}</p><Button variant="outline" aria-pressed={details.requiresParent === true} className="min-h-11 w-full" onClick={() => void setPresence(details)}><UserRound size={16} />{t(details.requiresParent ? "Behöver mig" : "Markera: Behöver mig")}</Button></div>}{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && !details.recurring && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Planera tid")}</Button>}{details.editable && !details.recurring && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{details.editable && (details.source === "task" || details.source === "reminder") && <div className="space-y-3">
+    <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="max-h-[88dvh] w-[calc(100vw-2rem)] max-w-lg overflow-x-hidden overflow-y-auto rounded-3xl px-4 sm:px-6"><DialogHeader><DialogTitle className="break-words pr-5 text-xl leading-snug sm:text-2xl">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4"><p data-calendar-area={calendarArea(details)} className="flex items-center gap-2 text-sm"><span className="h-2.5 w-2.5 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(calendarArea(details)))}</p>{isFamilyEntry(details) && <div className="space-y-2 rounded-2xl bg-secondary/35 p-3"><p className="text-xs text-muted-foreground">{t("Familjekontext, inte en egen uppgift.")}</p><Button variant="outline" aria-pressed={details.requiresParent === true} className="min-h-11 w-full" onClick={() => void setPresence(details)}><UserRound size={16} />{t(details.requiresParent ? "Behöver mig" : "Markera: Behöver mig")}</Button></div>}{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && !details.recurring && (details.source === "task" || details.source === "reminder") && (editingMeta ? <div className="space-y-3 rounded-xl border border-border/60 p-3"><label className="block text-sm">{t("Anteckningar (valfritt)")}<textarea value={note} onChange={e => setNote(e.target.value)} rows={3} maxLength={4000} className="mt-1 w-full rounded-xl border border-border bg-card p-2 text-sm" /></label>{details.source === "reminder" && <label className="block text-sm">{t("Slutdatum för period (valfritt)")}<Input type="date" min={details.date} value={periodEnd} onChange={e => setPeriodEnd(e.target.value)} className="mt-1" /></label>}<Button className="w-full" onClick={() => saveMetadata(details)}>{t("Spara ändringar")}</Button><Button variant="ghost" className="w-full" onClick={() => setEditingMeta(false)}>{t("Avbryt")}</Button></div> : <Button variant="outline" className="min-h-11 w-full" onClick={() => setEditingMeta(true)}><NotebookPen size={16} />{t("Redigera anteckningar och period")}</Button>)} {details.editable && !details.recurring && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Planera tid")}</Button>}{details.editable && !details.recurring && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{details.editable && (details.source === "task" || details.source === "reminder") && <div className="space-y-3">
   <div className="flex min-w-0 flex-wrap items-center gap-2">
     {(() => { const match = flowItems.find(i => i.id === details.id); return match?.completable ? <Button variant="outline" className="min-h-11 min-w-0 flex-1 whitespace-normal px-3 text-sm sm:flex-none" onClick={() => { toggleItem(match); setDetails(null); }}><Check size={16} className="shrink-0" />{t(match.done ? "Ångra klart" : "Markera klar")}</Button> : null; })()}
     <FlowItemActions itemId={details.id} className="flex shrink-0 items-center gap-1 [&_button]:flex [&_button]:min-h-11 [&_button]:min-w-11 [&_button]:items-center [&_button]:justify-center" />
