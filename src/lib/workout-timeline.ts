@@ -36,6 +36,10 @@ export interface TimelineStep {
 export interface TimelineOptions {
   /** Nedräkning innan varje ny övning. */
   transitionSeconds?: number;
+  /** Vila efter varje valt antal arbetsmoment, 0 = endast ordinarie setvila. */
+  breakEvery?: number;
+  /** Längd på extra vila i sekunder. */
+  breakSeconds?: number;
 }
 
 const DEFAULT_TRANSITION = 5;
@@ -158,7 +162,20 @@ export function buildWorkoutTimeline(workout: Workout, options?: TimelineOptions
     }
   });
 
-  return steps;
+  const every = Math.max(0, Math.floor(options?.breakEvery ?? 0));
+  const breakSeconds = Math.max(0, Math.floor(options?.breakSeconds ?? 0));
+  if (every === 0 || breakSeconds === 0) return steps;
+  const withBreaks: TimelineStep[] = [];
+  const workTotal = steps.filter(step => step.kind === "arbete").length;
+  let workSeen = 0;
+  for (const step of steps) {
+    if (step.kind === "arbete") workSeen += 1;
+    withBreaks.push(step);
+    if (step.kind === "arbete" && workSeen < workTotal && workSeen % every === 0) {
+      withBreaks.push({ ...step, id: `extra-break-${workSeen}`, kind: "vila", seconds: breakSeconds, title: "Extra paus", detail: `${breakSeconds} sekunders återhämtning`, announce: "Ta en paus" });
+    }
+  }
+  return withBreaks;
 }
 
 /** Ungefärlig total tid för tidslinjen i sekunder (repmoment räknas som 4 sek/rep). */
