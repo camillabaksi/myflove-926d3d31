@@ -73,6 +73,7 @@ export function StudyBuddyContent() {
   const [addingId, setAddingId] = useState<string | null>(null);
   const [emphasis, setEmphasis] = useState<StudyEmphasis | null>(null);
   const [output, setOutput] = useState<"both" | "cards" | "quiz">("both");
+  const [followPoints, setFollowPoints] = useState(true);
   const wantCards = output !== "quiz";
   const wantQuiz = output !== "cards";
 
@@ -114,7 +115,8 @@ export function StudyBuddyContent() {
           profileContext: lifeProfileContext(lifeProfile) || undefined,
           focus: plan.focus || undefined,
           cardCount: wantCards ? plan.cardCount : 0,
-          quizCount: wantQuiz ? plan.quizCount : 0,
+          quizCount: wantQuiz ? (followPoints ? 20 : plan.quizCount) : 0,
+          followPoints,
         },
       });
 
@@ -251,6 +253,10 @@ export function StudyBuddyContent() {
               placeholder="Klistra in anteckningar, lärarens frågor eller en text."
               className="w-full rounded-xl border border-border bg-background p-3 text-sm"
             />
+            <label className="flex items-start gap-3 rounded-xl border border-border bg-secondary/30 p-3 text-sm text-ink">
+              <input type="checkbox" checked={followPoints} onChange={e => setFollowPoints(e.target.checked)} className="mt-1 h-4 w-4 accent-primary" />
+              <span><strong>Utgå från mina punkter</strong><span className="block text-xs text-muted-foreground">Pace försöker skapa en fråga per punkt i texten eller filen (högst 20 frågor), utan onödiga utfyllnadsfrågor.</span></span>
+            </label>
             <div className="rounded-xl border border-border bg-secondary/30 p-3 space-y-2">
               <p className="text-xs font-medium">Pace anpassar efter din livsprofil</p>
               {basePlan.chips.length > 0 ? (
@@ -289,7 +295,7 @@ export function StudyBuddyContent() {
                 Blir ungefär{" "}
                 {[
                   wantCards ? `${plan.cardCount} flashcards` : null,
-                  wantQuiz ? `${plan.quizCount} quizfrågor` : null,
+                  wantQuiz ? (followPoints ? "frågor utifrån dina punkter (högst 20)" : `${plan.quizCount} quizfrågor`) : null,
                 ]
                   .filter(Boolean)
                   .join(" och ")}
