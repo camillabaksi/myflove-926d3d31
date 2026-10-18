@@ -9,7 +9,9 @@ import { CapacityBattery } from "@/components/calendar/capacity-battery";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { todayISO } from "@/lib/day";
 import SimpleCheckin from "@/components/simple-checkin";
-import OrkSummary from "@/components/home/ork-summary";
+import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
+import { Button } from "@/components/ui/button";
+import { Heart } from "lucide-react";
 import ImpactCheckin from "@/components/impact-checkin";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
@@ -66,7 +68,14 @@ export default function BatteryPage() {
 
         {/* Samma egenregistrerade värde som i Idag och Kalender. */}
         <MyFloveWide>
-          <OrkSummary onCheckin={openCheckin} />
+          <section className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft" data-testid="capacity-summary">
+            <h2 className="font-display text-lg font-bold text-ink">{t("Din kapacitet idag")}</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Hur börjar du dagen?" : "Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}</p>
+            <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
+            <Button type="button" variant="outline" className="mt-4 min-h-11 w-full rounded-2xl" onClick={openCheckin}>
+              <Heart size={16} aria-hidden />{t(capacity.percent === null ? "Checka in" : "Logga energi & mående")}
+            </Button>
+          </section>
         </MyFloveWide>
 
         <MyFloveWide>
