@@ -106,7 +106,6 @@ export function WakeUpSettings() {
           value={wake.wake_time}
           onChange={(e) => update({ wake_time: e.target.value })}
           className="h-9 w-28"
-          disabled={!wake.wake_enabled}
         />
       </div>
 
@@ -122,7 +121,6 @@ export function WakeUpSettings() {
           value={wake.wake_interval_min}
           onChange={(e) => { if (e.target.value !== "") update({ wake_interval_min: Number(e.target.value) }); }}
           className="h-9 w-24"
-          disabled={!wake.wake_enabled}
         />
       </div>
 
@@ -138,7 +136,6 @@ export function WakeUpSettings() {
           value={wake.wake_max_followups}
           onChange={(e) => { if (e.target.value !== "") update({ wake_max_followups: Number(e.target.value) }); }}
           className="h-9 w-24"
-          disabled={!wake.wake_enabled}
         />
       </div>
     </div>
