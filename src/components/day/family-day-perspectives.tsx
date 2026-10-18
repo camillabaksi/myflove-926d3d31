@@ -127,7 +127,7 @@ export default function FamilyDayPerspectives({
     return visual;
   };
 
-  if (children.length === 0) return <>{myDay}</>;
+  if (children.length === 0) return <div className="relative pt-12">{myDay}</div>;
 
   const current = perspective === FAMILY_ID ? null : personById.get(perspective);
   const heading =
