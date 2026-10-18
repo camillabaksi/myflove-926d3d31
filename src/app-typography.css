@@ -3,10 +3,10 @@
    Rem units keep browser/system text enlargement and the existing NPF setting. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"] {
   --pace-type-family:
-    "Lora", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Nunito", "Segoe UI", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-type-heading-family:
-    "Fraunces", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Bricolage Grotesque", "Nunito", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-brand-width: 16rem;
   --pace-type-welcome: 1.75rem;
@@ -203,7 +203,7 @@ html[data-paceable-typography="true"] body,
    Only the family changes: sizes, tabular digits and timer geometry stay put. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is(time, .tabular-nums, .font-mono, .pace-type-time, input[type="time"]) {
-  font-family: var(--pace-type-heading-family);
+  font-family: var(--pace-type-family);
   font-variation-settings: normal;
 }
 
