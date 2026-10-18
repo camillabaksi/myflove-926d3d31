@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Link, useLocation } from "wouter";
-import { ArrowRight, Smile, Battery, Zap, MessageCircle } from "lucide-react";
+import { useLocation } from "wouter";
+import { Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -72,19 +72,6 @@ export default function BatteryPage() {
               <Heart size={16} aria-hidden />{t(capacity.percent === null ? "Checka in" : "Logga energi & mående")}
             </Button>
           </section>
-        </MyFloveWide>
-
-        <MyFloveWide>
-          <Link
-            href="/assistant"
-            className="pace-surface flex items-center gap-3 rounded-3xl p-3.5 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
-          >
-            <MessageCircle className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-            <span className="min-w-0 flex-1 text-sm font-semibold text-ink">
-              Prata med Pace om dagens nästa steg
-            </span>
-            <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-          </Link>
         </MyFloveWide>
 
         <MyFloveWide>
