@@ -41,7 +41,7 @@ export function TodayContent() {
     window.addEventListener("focus", updateHour);
     return () => { window.clearInterval(interval); window.removeEventListener("focus", updateHour); };
   }, []);
-  const greeting = hour >= 5 && hour < 10 ? "God morgon!" : hour >= 10 && hour < 17 ? "Hej igen!" : hour >= 17 && hour < 22 ? "God kväll!" : "Fortfarande vaken?";
+  const greeting = hour >= 5 && hour < 10 ? "God morgon" : hour >= 10 && hour < 17 ? "Hej igen" : hour >= 17 && hour < 22 ? "God kväll" : "Fortfarande vaken?";
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
@@ -69,7 +69,7 @@ export function TodayContent() {
           name={hasChosenName ? name : ""}
           action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
         />
-        <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
+        <div className="pace-today-capacity mt-3"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
       <MyFloveWide>
