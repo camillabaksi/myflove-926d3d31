@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Heart } from "lucide-react";
 import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
 import { Button } from "@/components/ui/button";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { useLang } from "@/hooks/use-language";
@@ -57,7 +58,7 @@ export default function CapacitySelector({
         )
       ) : (
         <>
-          <CapacityBattery percent={capacity.percent} size="lg" className="mt-4 w-full" />
+          {onCheckin ? <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} /></div> : <CapacityBattery percent={capacity.percent} size="lg" className="mt-4 w-full" />}
           {onCheckin && (
             <Button
               type="button"
