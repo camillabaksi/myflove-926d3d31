@@ -31,8 +31,9 @@ export interface CalendarImpactDraft {
   dirty: boolean;
 }
 
-export default function ImpactCheckin({ calendarMobile = false, draft, onDraftChange }: {
+export default function ImpactCheckin({ calendarMobile = false, compact = false, draft, onDraftChange }: {
   calendarMobile?: boolean;
+  compact?: boolean;
   draft?: CalendarImpactDraft | null;
   onDraftChange?: (draft: CalendarImpactDraft) => void;
 } = {}) {
@@ -236,6 +237,27 @@ export default function ImpactCheckin({ calendarMobile = false, draft, onDraftCh
         </p>
       </div>
   );
+
+  if (compact) {
+    return (
+      <section data-testid="impact-checkin" data-expanded={open} className="min-w-0 border-t border-[#EDE5E9] pt-1">
+        <button type="button" aria-expanded={open} aria-controls={contentId}
+          onClick={() => setOpen(!open)}
+          className="flex min-h-11 w-full items-center gap-2 rounded-xl px-1 py-2 text-left text-sm text-[#512654] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#512654]">
+          <CloudRain size={17} aria-hidden className="shrink-0 text-[#87668B]" />
+          <span className="min-w-0 flex-1">
+            <span className="block font-medium">{t("Vad påverkar mig idag?")}</span>
+            {!open && <span className="block text-xs text-muted-foreground">{summary || t("Frivilligt · Tryck för att lägga till")}</span>}
+          </span>
+          <ChevronDown size={17} aria-hidden className={cn("shrink-0 text-[#512654] transition-transform", open && "rotate-180")} />
+        </button>
+        <div id={contentId} hidden={!open} className="min-w-0 px-1 pb-3 pt-2">
+          <p className="mb-3 text-xs text-muted-foreground">{t("Frivilligt – hjälper Paceable att förstå vad som påverkar din dag.")}</p>
+          {form}
+        </div>
+      </section>
+    );
+  }
 
   if (calendarMobile && mobile) {
     return (
