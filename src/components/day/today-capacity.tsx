@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Battery, Heart } from "lucide-react";
-import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { Heart } from "lucide-react";
+import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,7 +26,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   return (
     <>
       <section className="pace-surface rounded-3xl p-5" aria-labelledby="today-capacity-title">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0 flex-1">
             <p
               id="today-capacity-title"
@@ -47,7 +47,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
               </>
             ) : (
               <>
-                <CapacityBattery percent={percent} size="lg" className="mt-2 w-full max-w-md" />
+                <p className="mt-2 text-sm font-semibold text-ink">{t("Din registrerade kapacitet")}: {percent} %</p>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {t("Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}
                 </p>
@@ -55,14 +55,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
               </>
             )}
           </div>
-          {percent === null && (
-            <span
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary"
-              aria-hidden
-            >
-              <Battery size={20} />
-            </span>
-          )}
+          <SoftEnergyBattery percent={percent} />
         </div>
         <Button
           variant="outline"
