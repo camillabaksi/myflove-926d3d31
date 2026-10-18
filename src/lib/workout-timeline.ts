@@ -24,6 +24,7 @@ export interface TimelineStep {
   /** Sekunder momentet varar. `null` = väntar på att användaren markerar klart. */
   seconds: number | null;
   reps?: number;
+  estimated?: boolean;
   side?: ExerciseSide;
   /** Rubrik på skärmen. */
   title: string;
@@ -36,6 +37,8 @@ export interface TimelineStep {
 export interface TimelineOptions {
   /** Nedräkning innan varje ny övning. */
   transitionSeconds?: number;
+  /** Spelarens repmoment får en tydligt märkt uppskattad nedräkning. */
+  timeReps?: boolean;
 }
 
 const DEFAULT_TRANSITION = 5;
@@ -83,9 +86,12 @@ export function buildWorkoutTimeline(workout: Workout, options?: TimelineOptions
     for (let set = 1; set <= sets; set += 1) {
       const setLabel = sets > 1 ? `Set ${set} av ${sets}` : "Ett set";
 
-      if (block.seconds != null) {
+      const estimated = block.seconds == null && options?.timeReps === true;
+      const workSeconds =
+        block.seconds ?? (estimated ? (block.reps ?? 10) * 4 * (split ? 2 : 1) : undefined);
+      if (workSeconds != null) {
         if (split) {
-          const half = Math.max(5, Math.round(block.seconds / 2));
+          const half = Math.max(5, Math.round(workSeconds / 2));
           (["höger", "vänster"] as const).forEach((side, i) => {
             steps.push({
               id: `w-${blockIndex}-${set}-${side}`,
@@ -96,6 +102,7 @@ export function buildWorkoutTimeline(workout: Workout, options?: TimelineOptions
               setNumber: set,
               totalSets: sets,
               seconds: half,
+              ...(estimated ? { estimated: true, reps: block.reps ?? 10 } : {}),
               side,
               title: name,
               detail: `${setLabel} · ${side} sida · ${half} sek`,
@@ -111,9 +118,10 @@ export function buildWorkoutTimeline(workout: Workout, options?: TimelineOptions
             exerciseName: name,
             setNumber: set,
             totalSets: sets,
-            seconds: block.seconds,
+            seconds: workSeconds,
+            ...(estimated ? { estimated: true, reps: block.reps ?? 10 } : {}),
             title: name,
-            detail: `${setLabel} · ${block.seconds} sek`,
+            detail: `${setLabel} · ${estimated ? "ca " : ""}${workSeconds} sek`,
             announce: set === 1 ? name : `${name}, set ${set}`,
           });
         }

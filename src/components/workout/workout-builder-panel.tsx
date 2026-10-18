@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import {
   Activity,
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import ExerciseCard from "@/components/workout/exercise-card";
 import WorkoutRunner from "@/components/workout/workout-runner";
 import WorkoutAutoRunner from "@/components/workout/workout-auto-runner";
@@ -25,7 +26,8 @@ import { track } from "@/lib/analytics";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { cn } from "@/lib/utils";
 import { orkWord } from "@/lib/ork-word";
-import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus } from "@/lib/exercise-library";
+import { BODY_AREAS, EQUIPMENT_LABEL, type BodyArea, type Equipment, type ExerciseFocus ,
+} from "@/lib/exercise-library";
 import {
   DEFAULT_REQUEST,
   buildWorkoutFromPlan,
@@ -46,12 +48,13 @@ type Step = "intent" | "beskriv" | "tanker" | "resultat" | "kor" | "klar";
 const INTENTS: { id: WorkoutIntent; label: string; desc: string; icon: typeof Dumbbell }[] = [
   { id: "styrka", label: "Styrka", desc: "Bygg lite kraft med lugna övningar.", icon: Dumbbell },
   { id: "rörlighet", label: "Rörlighet", desc: "Mjuka upp kroppen.", icon: Activity },
-  { id: "återhämtning", label: "Återhämtning", desc: "Väldigt lugnt, nästan ingen ansträngning.", icon: HeartPulse },
+  { id: "återhämtning", label: "Återhämtning", desc: "Väldigt lugnt, nästan ingen ansträngning.", icon: HeartPulse ,
+  },
   { id: "eget", label: "Eget upplägg", desc: "Beskriv själv vad du vill göra.", icon: Sparkles },
 ];
 
 const ENERGIES: EnergyLevel[] = ["låg", "normal", "mycket"];
-const TIMES = [10, 20, 30, 45, 60];
+const TIMES = [5, 10, 15, 20, 30, 45, 60];
 const PLACES: Place[] = ["hemma", "gym", "ute"];
 const EQUIPMENTS: Equipment[] = ["kroppsvikt", "hantlar", "kettlebell", "medicinboll", "miniband"];
 const FOCUSES: ExerciseFocus[] = ["helkropp", "överkropp", "underkropp", "bål", "rörlighet"];
@@ -114,6 +117,10 @@ export default function WorkoutBuilderPanel({
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [autoMode, setAutoMode] = useState(true);
   const [usedTemplate, setUsedTemplate] = useState(false);
+  const playerRef = useRef<HTMLDivElement>(null);
+  const [maxMinutesInput, setMaxMinutesInput] = useState("30");
+  const maxMinutes = Number(maxMinutesInput);
+  const validMaxMinutes = Number.isInteger(maxMinutes) && maxMinutes >= 5 && maxMinutes <= 180;
   const { saved, logs, saveWorkout, removeWorkout, logWorkout } = useWorkouts();
   const { percent: capacityPercent } = useCapacityMode();
   const { addTask } = useTasks();
@@ -129,10 +136,25 @@ export default function WorkoutBuilderPanel({
   useEffect(() => {
     if (!programWorkout) return;
     setWorkout(programWorkout);
+    setReq({
+      ...DEFAULT_REQUEST,
+      ...programWorkout,
+      minutes: programWorkout.maxMinutes ?? programWorkout.minutes,
+    });
     setDoneIds([]);
     setUsedTemplate(false);
     setStep("resultat");
   }, [programWorkout]);
+
+  useEffect(() => {
+    if (workout) setMaxMinutesInput(String(workout.maxMinutes ?? Math.max(5, workout.minutes)));
+  }, [workout]);
+
+  useEffect(() => {
+    if (!showBuilder || (step !== "resultat" && step !== "kor")) return;
+    playerRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    playerRef.current?.focus({ preventScroll: true });
+  }, [showBuilder, step, programWorkout]);
 
   useEffect(() => {
     setReq((r) => ({ ...r, energy: suggestedEnergy }));
@@ -193,33 +215,41 @@ export default function WorkoutBuilderPanel({
       result = null;
     }
 
-    setWorkout(result ?? generateWorkout(parsed));
+    setWorkout({ ...(result ?? generateWorkout(parsed)), maxMinutes: parsed.minutes });
     setUsedTemplate(!result);
     setDoneIds([]);
     setStep("resultat");
   };
 
-  const finish = (doneCount: number) => {
+  const finish = (doneCount: number, elapsedSeconds?: number) => {
     if (!workout) return;
-    logWorkout(workout, doneCount);
+    const loggedWorkout =
+      elapsedSeconds == null ? workout : { ...workout, minutes: Math.ceil(elapsedSeconds / 60) };
+    logWorkout(loggedWorkout, doneCount);
     saveWorkout(workout);
-    addTask(`Träningspass: ${workout.title}`, new Date().toISOString().slice(0, 10), {
+    if (doneCount > 0)
+      addTask(`${doneCount === workout.blocks.length ? "Träningspass" : "Del av träningspass"}: ${workout.title}`, new Date().toISOString().slice(0, 10), {
       completed: true,
-      note: `${workout.minutes} min · ca ${workout.kcalLow}–${workout.kcalHigh} kcal`,
-      energyImpact: "gives",
-    });
+      note: `${loggedWorkout.minutes} min · ${doneCount}/${workout.blocks.length} övningar`,
+    },
+      );
     track("workout_completed", { source: workout.intent });
-    emitActivityDone({
+    if (doneCount > 0)
+      emitActivityDone({
       id: `workout-${workout.id}`,
       title: `Träningspass: ${workout.title}`,
       dueDate: new Date().toISOString().slice(0, 10),
     });
-    if (doneCount > 0) onWorkoutFinished?.(workout);
+    if (doneCount === workout.blocks.length && doneCount > 0) onWorkoutFinished?.(workout);
     setStep("klar");
   };
 
   return (
-    <div className="space-y-5">
+    <div ref={playerRef}
+      tabIndex={-1}
+      aria-label="Träningsspelaren"
+      className="space-y-5 scroll-mt-6"
+    >
         {showBuilder && (
           <header className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Träning</p>
@@ -274,8 +304,7 @@ export default function WorkoutBuilderPanel({
                   Beskriv vad du behöver
                 </label>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Skriv fritt, t.ex. "hemma i 30 minuter, hantlar, ont i knäna, fokus rumpa och
-                  mage". Du kan också bara välja nedan.
+                  Skriv fritt, t.ex. "hemma i 30 minuter, hantlar, ont i knäna, fokus rumpa och mage". Du kan också bara välja nedan.
                 </p>
                 <Textarea
                   id="workout-text"
@@ -301,7 +330,20 @@ export default function WorkoutBuilderPanel({
                       {m} min
                     </Chip>
                   ))}
-                </ChipGroup>
+                <label className="block w-full text-sm text-ink" htmlFor="workout-minutes">
+                  Egen tid (5–90 minuter)
+                  <Input
+                    id="workout-minutes"
+                    type="number"
+                    min={5}
+                    max={90}
+                    step={1}
+                    value={req.minutes || ""}
+                    className="mt-1 max-w-48"
+                    onChange={(event) => setReq({ ...req, minutes: Number(event.target.value) })}
+                  />
+                </label>
+              </ChipGroup>
                 <ChipGroup label="Plats">
                   {PLACES.map((p) => (
                     <Chip key={p} active={req.place === p} onClick={() => setReq({ ...req, place: p })}>
@@ -345,7 +387,8 @@ export default function WorkoutBuilderPanel({
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button size="lg" className="h-14 flex-1 rounded-2xl text-base" onClick={create}>
+                <Button size="lg" className="h-14 flex-1 rounded-2xl text-base" onClick={create}disabled={!Number.isInteger(req.minutes) || req.minutes < 5 || req.minutes > 90}
+              >
                   <Sparkles size={18} className="mr-2" aria-hidden /> Skapa mitt pass
                 </Button>
                 <Button
@@ -376,7 +419,8 @@ export default function WorkoutBuilderPanel({
               <div className="surface-card p-4">
                 <h2 className="text-xl font-semibold text-ink">{workout.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{workout.note}</p>
-                {usedTemplate && <p role="status" className="mt-2 text-sm text-muted-foreground">Pace kunde inte svara just nu. Här är ett pass från bildbiblioteket utifrån dina val.</p>}
+                {usedTemplate && (
+                <p role="status" className="mt-2 text-sm text-muted-foreground">Pace kunde inte svara just nu. Här är ett pass från bildbiblioteket utifrån dina val.</p>)}
                 <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
                   <Badge>{workout.minutes} min</Badge>
                   <Badge>Energi: {workout.energy}</Badge>
@@ -392,6 +436,70 @@ export default function WorkoutBuilderPanel({
                   intensitet.
                 </p>
               </div>
+
+            <section className="surface-card space-y-3 p-4" aria-label="Starta ditt pass">
+              <label
+                htmlFor="workout-max-minutes"
+                className="block text-base font-semibold text-ink"
+              >
+                Hur länge vill du träna?
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {TIMES.map((minutes) => (
+                  <Chip
+                    key={minutes}
+                    active={maxMinutes === minutes}
+                    onClick={() => setMaxMinutesInput(String(minutes))}
+                  >
+                    {minutes} min
+                  </Chip>
+                ))}
+              </div>
+              <label htmlFor="workout-max-minutes" className="block text-sm text-muted-foreground">
+                Maxtid i minuter (5–180)
+              </label>
+              <Input
+                id="workout-max-minutes"
+                type="number"
+                min={5}
+                max={180}
+                step={1}
+                value={maxMinutesInput}
+                onChange={(event) => setMaxMinutesInput(event.target.value)}
+                className="max-w-48"
+                aria-invalid={!validMaxMinutes}
+              />
+              <p className="text-sm text-muted-foreground">
+                I automatiskt läge stannar passet vid maxtiden eller när övningarna är klara. Pauser
+                räknas inte. Dina övningar och doser behålls.
+              </p>
+              <Button
+                size="lg"
+                disabled={!validMaxMinutes}
+                className="min-h-14 h-auto w-full whitespace-normal rounded-2xl text-base"
+                onClick={() => {
+                  setWorkout({ ...workout, maxMinutes });
+                  setAutoMode(true);
+                  setStep("kor");
+                }}
+              >
+                <Play size={18} className="mr-2 shrink-0" aria-hidden /> Starta med nedräkning
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Övningsbilder, byt sida och nästa övning visas automatiskt. Tiden för repetitioner
+                är uppskattad.
+              </p>
+              <Button
+                variant="outline"
+                className="min-h-12 h-auto w-full whitespace-normal rounded-2xl"
+                onClick={() => {
+                  setAutoMode(false);
+                  setStep("kor");
+                }}
+              >
+                Kör manuellt i egen takt
+              </Button>
+            </section>
 
               {(["uppvärmning", "huvuddel", "nedvarvning"] as const).map((section) => {
                 const items = workout.blocks
@@ -422,35 +530,16 @@ export default function WorkoutBuilderPanel({
               </p>
 
               <div className="grid gap-2">
-                <Button
-                  size="lg"
-                  className="h-14 rounded-2xl text-base"
-                  onClick={() => {
-                    setAutoMode(true);
-                    setStep("kor");
-                  }}
-                >
-                  <Play size={18} className="mr-2" aria-hidden /> Starta passet (automatiskt)
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  Timern räknar ner, säger till vid byt sida och startar nästa övning åt dig.
-                </p>
-                <Button
-                  variant="outline"
-                  className="h-12 rounded-2xl"
-                  onClick={() => {
-                    setAutoMode(false);
-                    setStep("kor");
-                  }}
-                >
-                  Kör manuellt i egen takt
-                </Button>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant="outline"
                     className="h-12 flex-1 rounded-2xl"
-                    onClick={() => {
-                      saveWorkout(workout);
+                    disabled={!validMaxMinutes}
+                  onClick={() => {
+                      if (!validMaxMinutes) return;
+                    const selected = { ...workout, maxMinutes };
+                    setWorkout(selected);
+                    saveWorkout(selected);
                       toast({ title: "Sparat i Mina pass" });
                     }}
                   >
@@ -459,8 +548,8 @@ export default function WorkoutBuilderPanel({
                   <Button
                     variant="outline"
                     className="h-12 flex-1 rounded-2xl"
-                    onClick={() => onAddToProgram(workout)}
-                    disabled={programWorkout?.id === workout.id}
+                    onClick={() => validMaxMinutes && onAddToProgram({ ...workout, maxMinutes })}
+                    disabled={!validMaxMinutes || programWorkout?.id === workout.id}
                   >
                     <Dumbbell size={16} className="mr-1" aria-hidden /> Lägg i mitt program
                   </Button>
@@ -565,7 +654,8 @@ export default function WorkoutBuilderPanel({
                       className="rounded-full"
                       onClick={() => {
                         setWorkout(w);
-                        setDoneIds([]);
+                        setReq({ ...DEFAULT_REQUEST, ...w, minutes: w.maxMinutes ?? w.minutes });
+                      setDoneIds([]);
                         setStep("resultat");
                         onOpenBuilder();
                       }}

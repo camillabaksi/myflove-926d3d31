@@ -91,9 +91,11 @@ describe("integrated training programs", () => {
       target: { value: "sit-to-stand" },
     });
     fireEvent.change(within(dialog).getByLabelText(/Set för/), { target: { value: "2" } });
+    fireEvent.change(within(dialog).getByLabelText("Maxtid (minuter)"), { target: { value: "15" } });
     fireEvent.click(within(dialog).getByRole("button", { name: "Spara" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
     expect(screen.getAllByText("Mitt mjuka pass")).toHaveLength(2);
+    expect(screen.getAllByText(/15 min/)).toHaveLength(2);
     expect(screen.getAllByRole("button", { name: "Öppna bildpasset" })).toHaveLength(2);
     expect(fixture.generate).not.toHaveBeenCalled();
     fireEvent.click(screen.getAllByRole("button", { name: "Öppna bildpasset" })[1]!);
