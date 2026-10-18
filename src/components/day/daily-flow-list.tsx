@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "wouter";
-import { ArrowDown, ArrowRight, ArrowUp, ChevronDown } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ChevronDown, SlidersHorizontal } from "lucide-react";
 import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { DailyActivityRow } from "./daily-activity-row";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
@@ -67,6 +67,7 @@ export function DailyFlowList({
   const { today, toggleItem } = useFlowItems(date);
   const [expanded, setExpanded] = useState(false);
   const [filter, setFilter] = useState<DailyFlowFilter>("alla");
+  const [filterOpen, setFilterOpen] = useState(false);
 
   /**
    * "Hur kändes det?" hör ihop med själva avbockningen och bor därför här –
@@ -187,8 +188,9 @@ export function DailyFlowList({
 
   return (
     <>
-      {showFilter && items.length > 1 && (
-        <div role="group" aria-label="Filtrera dagens aktiviteter" className="mb-2 flex flex-wrap gap-1.5">
+      {showFilter && items.length > 1 && <div className="mb-2 flex justify-end"><button type="button" aria-expanded={filterOpen} aria-controls="today-activity-filters" onClick={() => setFilterOpen(v => !v)} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 text-xs text-muted-foreground hover:bg-secondary/50"><SlidersHorizontal size={16} aria-hidden />Filtrera{filter !== "alla" ? " · Aktivt" : ""}</button></div>}
+      {showFilter && items.length > 1 && filterOpen && (
+        <div id="today-activity-filters" role="group" aria-label="Filtrera dagens aktiviteter" className="mb-2 flex flex-wrap gap-1.5">
           {(
             [
               ["alla", "Alla"],
