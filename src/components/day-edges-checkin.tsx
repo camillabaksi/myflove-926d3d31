@@ -10,8 +10,8 @@ import { useLang } from "@/hooks/use-language";
 
 /**
  * Morgon och kväll – du fyller själv i när morgonen startar, när dagen
- * slutar och hur batteriet känns vid de två tidpunkterna. Kurvan i
- * Mitt batteri™ utgår sedan från dina egna siffror.
+ * slutar och hur energin upplevs vid två tidpunkter. Morgonvärdet kan
+ * vara batteriets baslinje; kvällsvärdet är en separat reflektion.
  */
 export default function DayEdgesCheckin({ className }: { className?: string }) {
   const { t } = useLang();
@@ -86,12 +86,13 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
         <EdgeSlider
           icon={<Moon size={16} className="text-primary" aria-hidden="true" />}
-          label={`${t("Batteri när dagen slutar")} (${win.end})`}
+          label={`${t("Hur kändes energin vid dagens slut?")} (${win.end})`}
           value={evening}
           onChange={setEveningValue}
           onSave={() => save("evening")}
           saved={todayEdges.evening != null}
         />
+        <p className="text-xs text-muted-foreground">{t("Morgonvärdet kan påverka dagens batteri. Kvällsvärdet sparas i historiken och ändrar inte batteriprocenten.")}</p>
         <div className="space-y-3 rounded-2xl border border-border/60 bg-secondary/20 p-4" data-testid="daily-energy-journey">
           <h3 className="text-base font-semibold text-ink">{t("Dagens energiresa")}</h3>
           <p className="text-xs leading-relaxed text-muted-foreground">{t("Registreringar och aktiviteter i tidsordning. Energiupplevelser är inte exakta procentförändringar.")}</p>
