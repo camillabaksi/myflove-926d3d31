@@ -209,7 +209,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => { setTitle(e.target.value); setChosenArea(null); }}
                 placeholder="T.ex. Borsta tänderna"
                 className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
@@ -220,6 +220,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                 className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
             </div>
+            <label className="block text-sm text-muted-foreground">Område {proposedArea && chosenArea === null && <span className="text-xs">· Föreslaget</span>}<select aria-label="Område" className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base" value={newArea} onChange={e => setChosenArea(e.target.value as LifeArea)}>{ALL_AREAS.map(id => <option key={id} value={id}>{AREA_META[id].label}</option>)}</select></label>
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
               <div className="flex flex-wrap gap-2">
