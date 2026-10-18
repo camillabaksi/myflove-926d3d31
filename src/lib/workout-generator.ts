@@ -112,8 +112,7 @@ export function parseWorkoutText(text: string, base: WorkoutRequest): WorkoutReq
   const time = t.match(/(\d{1,3})\s*(min|minuter)/);
   if (time) {
     const m = Number(time[1]);
-    const allowed = [10, 20, 30, 45, 60];
-    next.minutes = allowed.reduce((a, b) => (Math.abs(b - m) < Math.abs(a - m) ? b : a), 30);
+    next.minutes = Math.max(5, Math.min(90, m));
   }
 
   if (/(hemma|hemmet)/.test(t)) next.place = "hemma";

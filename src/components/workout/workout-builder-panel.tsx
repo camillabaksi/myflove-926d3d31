@@ -51,7 +51,7 @@ const INTENTS: { id: WorkoutIntent; label: string; desc: string; icon: typeof Du
 ];
 
 const ENERGIES: EnergyLevel[] = ["låg", "normal", "mycket"];
-const TIMES = [5, 10, 15, 20, 30, 45, 60];
+const TIMES = [5, 10, 15, 20, 30, 45, 60, 90];
 const PLACES: Place[] = ["hemma", "gym", "ute"];
 const EQUIPMENTS: Equipment[] = ["kroppsvikt", "hantlar", "kettlebell", "medicinboll", "miniband"];
 const FOCUSES: ExerciseFocus[] = ["helkropp", "överkropp", "underkropp", "bål", "rörlighet"];
@@ -113,6 +113,7 @@ export default function WorkoutBuilderPanel({
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [doneIds, setDoneIds] = useState<string[]>([]);
   const [autoMode, setAutoMode] = useState(true);
+  const [minuteDraft, setMinuteDraft] = useState<string | null>(null);
   const [breakEvery, setBreakEvery] = useState(0);
   const [breakSeconds, setBreakSeconds] = useState(30);
   const [usedTemplate, setUsedTemplate] = useState(false);
@@ -299,11 +300,29 @@ export default function WorkoutBuilderPanel({
                 </ChipGroup>
                 <ChipGroup label="Tid">
                   {TIMES.map((m) => (
-                    <Chip key={m} active={req.minutes === m} onClick={() => setReq({ ...req, minutes: m })}>
+                    <Chip key={m} active={req.minutes === m} onClick={() => { setMinuteDraft(null); setReq({ ...req, minutes: m }); }}>
                       {m} min
                     </Chip>
                   ))}
                 </ChipGroup>
+                <label className="flex flex-wrap items-center gap-2 text-sm text-ink">
+                  Egen passlängd (5–90 minuter)
+                  <input type="number" inputMode="numeric" min={5} max={90} step={1} value={minuteDraft ?? String(req.minutes)}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setMinuteDraft(value);
+                      const number = Number(value);
+                      if (value !== "" && Number.isInteger(number) && number >= 5 && number <= 90) setReq(previous => ({ ...previous, minutes: number }));
+                    }}
+                    onBlur={() => {
+                      const number = Number(minuteDraft ?? req.minutes);
+                      setReq(previous => ({ ...previous, minutes: Number.isFinite(number) ? Math.max(5, Math.min(90, Math.round(number))) : previous.minutes }));
+                      setMinuteDraft(null);
+                    }}
+                    className="h-11 w-24 rounded-xl border border-border bg-card px-3 text-base text-ink"
+                    aria-label="Minuter per pass" />
+                  <span className="text-xs text-muted-foreground">minuter</span>
+                </label>
                 <ChipGroup label="Plats">
                   {PLACES.map((p) => (
                     <Chip key={p} active={req.place === p} onClick={() => setReq({ ...req, place: p })}>
