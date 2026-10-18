@@ -31,7 +31,7 @@ import {
   type RepeatMode,
   type Routine,
 } from "@/lib/recurrence";
-import ImpactCheckin, { type CalendarImpactDraft } from "@/components/impact-checkin";
+
 import { useUser } from "@clerk/react";
 import {
   useGetMyHousehold,
@@ -488,7 +488,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
       onPictogramsChange={setPictoMode}
       onDateChange={setSelectedDateStr}
       weekGoals={<WeekGoals />}
-      checkin={<ImpactCheckin calendarMobile draft={impactDraft} onDraftChange={setImpactDraft} />}
+      checkin={null}
       connection={selectedDateStr ? <CalendarAccount date={selectedDateStr} itemsToPush={pushItems} /> : null}
       tools={<>
             {selectedDateStr && (
