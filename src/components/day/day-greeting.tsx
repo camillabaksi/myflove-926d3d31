@@ -19,7 +19,7 @@ export function DayGreeting({
   return (
     <div className="pace-greeting-layout grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1">
       <h1 className="pace-editorial-greeting min-w-0 text-ink">
-        <span className="pace-greeting-prefix">{greeting}</span>
+        <span className="pace-greeting-prefix">{greeting}{name ? "," : ""}</span>
         {name && <>{" "}{greetingNameParts(name).map((part, index) => <span key={index} className="pace-greeting-name-part">{part}</span>)}</>}
       </h1>
       <div className="row-span-2 shrink-0">{action}</div>
