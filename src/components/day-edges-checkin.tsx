@@ -40,14 +40,14 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
     <section
       aria-label={t("Din energiresa")}
       className={cn(
-        "space-y-4 rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft",
+        "pace-surface space-y-3 rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5",
         className,
       )}
     >
       <CollapsibleSection
         id="morgon-och-kvall"
         title={t("Din energiresa")}
-        headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+        headingClassName="font-sans text-base font-semibold text-ink"
         className="space-y-3"
       >
         <p className="text-sm text-ink">
@@ -93,8 +93,8 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
           saved={todayEdges.evening != null}
         />
         <p className="text-xs text-muted-foreground">{t("Morgonvärdet kan påverka dagens batteri. Kvällsvärdet sparas i historiken och ändrar inte batteriprocenten.")}</p>
-        <div className="space-y-3 rounded-2xl border border-border/60 bg-secondary/20 p-4" data-testid="daily-energy-journey">
-          <h3 className="text-base font-semibold text-ink">{t("Dagens energiresa")}</h3>
+        <div className="space-y-3 rounded-2xl bg-[#F5EDF7]/60 p-3" data-testid="daily-energy-journey">
+          <h3 className="font-sans text-sm font-semibold text-ink">{t("Dagens energiresa")}</h3>
           <p className="text-xs leading-relaxed text-muted-foreground">{t("Registreringar och aktiviteter i tidsordning. Energiupplevelser är inte exakta procentförändringar.")}</p>
           <ol className="ml-2 space-y-3 border-l-2 border-primary/20 pl-5">
             <li>
@@ -143,7 +143,7 @@ function EdgeSlider({
 }) {
   const { t } = useLang();
   return (
-    <div className="space-y-2 rounded-2xl bg-secondary/40 p-3">
+    <div className="space-y-2 rounded-2xl bg-[#F5EDF7]/60 p-3">
       <div className="flex items-center gap-2 text-sm text-ink">
         {icon}
         <span className="flex-1">{label}</span>
@@ -162,7 +162,7 @@ function EdgeSlider({
       <button
         type="button"
         onClick={onSave}
-        className="rounded-pill bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground"
+        className="min-h-9 rounded-xl bg-[#F5EDF7] px-4 py-2 text-sm font-medium text-ink shadow-sm hover:bg-[#EFE5F2]"
       >
         {saved ? t("Uppdatera") : t("Spara")}
       </button>
