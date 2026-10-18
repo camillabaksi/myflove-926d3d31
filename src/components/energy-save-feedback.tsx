@@ -46,7 +46,8 @@ export default function EnergySaveFeedback() {
       owner.current = detail.owner;
       const canUpdate =
         detail.date === todayISO() &&
-        (detail.direction === "gives" || detail.direction === "drains");
+        (detail.direction === "gives" || detail.direction === "drains") &&
+        !detail.automaticallyApplied;
       lastToast.current?.dismiss();
       const offer = Symbol();
       activeOffer.current = offer;
@@ -73,7 +74,7 @@ export default function EnergySaveFeedback() {
             }}
           />
         ) : (
-          t("Sparat i din energihistorik.")
+          t(detail.automaticallyApplied ? "Aktivitetens påverkan ingår redan i batteriet. Du kan alltid göra en ny incheckning." : "Sparat i din energihistorik.")
         ),
         duration: canUpdate ? Infinity : 5_000,
         className: "flex-col items-stretch gap-3 space-x-0 rounded-2xl p-4 pr-8 [&>div]:min-w-0",
