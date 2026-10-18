@@ -151,9 +151,10 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           <CollapsibleSection
             title={t("Tidigare incheckningar")}
             help={t("Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag.")}
-            headingClassName="font-sans text-base font-semibold text-ink"\n            className="rounded-2xl bg-[#F5EDF7]/30 p-3"
+            headingClassName="font-sans text-base font-semibold text-ink"
+            className="rounded-2xl bg-[#F5EDF7]/30 p-3"
           >
-            <div className="space-y-3">
+            <div className="space-y-2">
               {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
                 const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
                 return (
