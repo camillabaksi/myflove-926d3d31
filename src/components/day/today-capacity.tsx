@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Battery, Heart } from "lucide-react";
-import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { Heart } from "lucide-react";
+import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,8 +25,8 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <section className="pace-surface rounded-3xl p-5" aria-labelledby="today-capacity-title">
-        <div className="flex items-start justify-between gap-4">
+      <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" aria-labelledby="today-capacity-title">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0 flex-1">
             <p
               id="today-capacity-title"
@@ -47,7 +47,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
               </>
             ) : (
               <>
-                <CapacityBattery percent={percent} size="lg" className="mt-2 w-full max-w-md" />
+                <h2 className="mt-1 font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet just nu")}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {t("Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}
                 </p>
@@ -55,18 +55,11 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
               </>
             )}
           </div>
-          {percent === null && (
-            <span
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary"
-              aria-hidden
-            >
-              <Battery size={20} />
-            </span>
-          )}
+          <SoftEnergyBattery percent={percent} />
         </div>
         <Button
           variant="outline"
-          className="mt-4 h-auto min-h-11 w-full whitespace-normal rounded-2xl sm:w-auto"
+          className="mt-4 h-auto min-h-11 w-full whitespace-normal rounded-2xl bg-[#F5EDF7] text-ink shadow-sm hover:bg-[#EFE5F2]"
           onClick={() => setOpen(true)}
         >
           <Heart size={16} aria-hidden />
