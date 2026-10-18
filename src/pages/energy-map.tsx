@@ -270,13 +270,14 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
 
           <MyFloveWide span="wide">
             <CollapsibleSection
-              title={t("Din vecka i snitt")}\n              defaultCollapsed
+              title={t("Din vecka i snitt")}
+              defaultCollapsed
               help={t(
                 "Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka.",
               )}
-              headingClassName="font-medium"
+              headingClassName="font-sans text-base font-semibold text-ink"
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
-              className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
+              className="rounded-2xl bg-[#F5EDF7]/30 p-3"
             >
               {hourAverages.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
@@ -284,7 +285,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                 </p>
               ) : (
                 <>
-                  <div className="h-48">
+                  <div className="h-40">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={hourAverages}
