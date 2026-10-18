@@ -1,15 +1,11 @@
-import { useEffect, useRef } from "react";
-import { useLocation } from "wouter";
+import { useEffect } from "react";
 import { Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { todayISO } from "@/lib/day";
-import SimpleCheckin from "@/components/simple-checkin";
 import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
-import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
 
@@ -22,12 +18,10 @@ import { EnergyFlowInsights } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
-import { setCollapsed } from "@/lib/collapse-store";
 
 /**
- * Mitt batteri – den enda platsen för energi och mående.
- * Hierarki: 1) Snabb incheckning, 2) Nuvarande batteri/översikt,
- * 3) Dagens energiflöde, 4) Historik som sekundär funktion längst ner.
+ * Mitt batteri – lugn översikt över registrerad energi och mående.
+ * Registrering sker på Idag; här visas kapacitet, energiresa och historik.
  * Samma data som tidigare, bara tydligare ordning.
  * Stop-paus har flyttat till Mer → Stop-paus.
  */
@@ -35,15 +29,6 @@ export default function BatteryPage() {
   const { name } = useUserProfile();
   const capacity = useDayCapacity()(todayISO());
   const { t, lang } = useLang();
-  const [path] = useLocation();
-  const checkinRef = useRef<HTMLDivElement>(null);
-  const openCheckin = () => {
-    setCollapsed(`${path}::battery-log-energy-mood`, false, true);
-    window.requestAnimationFrame(() => {
-      checkinRef.current?.scrollIntoView({ block: "start" });
-      checkinRef.current?.focus({ preventScroll: true });
-    });
-  };
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -66,31 +51,9 @@ export default function BatteryPage() {
         <MyFloveWide>
           <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" data-testid="capacity-summary">
             <h2 className="font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet idag")}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Hur börjar du dagen?" : "Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Ingen energi registrerad ännu. Logga energi & mående på Idag." : "Utifrån din egen registrering idag. Du kan uppdatera den på Idag.")}</p>
             <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
-            <Button type="button" variant="outline" className="mt-4 min-h-11 w-full rounded-2xl bg-[#F5EDF7] text-ink shadow-sm hover:bg-[#EFE5F2]" onClick={openCheckin}>
-              <Heart size={16} aria-hidden />{t(capacity.percent === null ? "Checka in" : "Logga energi & mående")}
-            </Button>
           </section>
-        </MyFloveWide>
-
-        <MyFloveWide>
-          <div
-            ref={checkinRef}
-            tabIndex={-1}
-            aria-label={t("Logga energi & mående")}
-            className="scroll-mt-24"
-          >
-            <CollapsibleSection
-              id="battery-log-energy-mood"
-              title={t("Logga energi & mående")}
-              defaultCollapsed
-              className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
-              headingClassName="text-base font-semibold text-ink"
-            >
-              <SimpleCheckin source="mitt-batteri" />
-            </CollapsibleSection>
-          </div>
         </MyFloveWide>
 
         <MyFloveWide>
