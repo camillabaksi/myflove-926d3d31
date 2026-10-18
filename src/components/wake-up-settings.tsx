@@ -60,7 +60,7 @@ export function WakeUpSettings() {
   const update = async (patch: Partial<Wake>) => {
     const next = { ...(wake ?? DEFAULTS), ...patch };
     setWake(next);
-    if (!isTime(next.wake_time)) return;
+    if (!isTime(next.wake_time) || !Number.isInteger(next.wake_interval_min) || next.wake_interval_min < 3 || next.wake_interval_min > 30 || !Number.isInteger(next.wake_max_followups) || next.wake_max_followups < 1 || next.wake_max_followups > 6) return;
     saveQueue.current = saveQueue.current.catch(() => undefined).then(async () => {
       try {
         await saveFn({ data: next });
