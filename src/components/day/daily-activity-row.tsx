@@ -29,15 +29,19 @@ export function DailyActivityRow({
   const visual = dailyActivityVisual(item);
   const visualColor = visual.colorArea ? areaColor(visual.colorArea) : undefined;
   const visualChip = visual.colorArea ? areaChipStyle(visual.colorArea) : undefined;
+  const areaSurface = visualColor ? {
+    backgroundColor: `color-mix(in srgb, ${visualColor} 12%, hsl(var(--card)))`,
+    borderLeft: `3px solid ${visualColor}`,
+  } : undefined;
   return (
     <div
       className={cn(
         integrated
-          ? "pace-activity-row relative min-w-0 py-2"
+          ? "pace-activity-row relative min-w-0 rounded-xl px-2 py-2"
           : "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
         !integrated && item.done && "bg-muted/35 opacity-70",
       )}
-      style={!integrated && visualColor ? { borderLeft: `4px solid ${visualColor}` } : undefined}
+      style={areaSurface}
     >
       <div
         className={cn(
