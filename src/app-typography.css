@@ -385,3 +385,13 @@ html[data-paceable-typography="true"] body,
     scroll-behavior: auto;
   }
 }
+
+/* Calendar + child schedule: visual-only, deliberately no layout/position changes. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-calendar-entry {
+  border-radius: .9rem;
+  box-shadow: 0 4px 12px -11px rgba(81, 38, 84, .25);
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-child-schedule {
+  border-radius: 1.5rem;
+  border-color: hsl(var(--border) / .7);
+}
