@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { Bell, CalendarDays, Copy, MoreHorizontal, Plus, ChevronRight } from "lucide-react";
+import { Bell, CalendarDays, MoreHorizontal, Plus, ChevronRight } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -71,15 +71,38 @@ export function TodayContent() {
 
       <MyFloveWide>
         <section className="min-w-0 rounded-[2rem] border border-border/70 bg-card px-3 py-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:px-5 sm:py-5" aria-labelledby="your-day-title">
-Name="" /></div>
-          </header>
-          <div className="pt-2">
-            <div className="mb-3">
-              <div className="rounded-2xl border border-border/60 bg-mint/30 px-3 py-2">
-                <button type="button" aria-expanded={planningExpanded} aria-controls="today-planning-options" onClick={() => setPlanningExpanded(v => !v)} className="flex min-h-11 w-full items-center justify-between gap-2 text-left">
-                  <span className="font-medium text-ink">{t("Planera i din takt")}<span className="block text-xs font-normal text-muted-foreground">{t("Idag, imorgon eller veckan")}</span></span>
-                  <ChevronRight size={18} className={planningExpanded ? "rotate-90 transition-transform" : "transition-transform"} aria-hidden />
-                </button>
-                {planningExpanded && <div id="today-planning-options" className="pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><div className="mt-2"><PlanningEntry childrenOnly /></div></div>}
+          <header className="mb-3 space-y-3">
+            <div className="flex items-start justify-between gap-2">
+              <div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2><p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div>
+              <div className="flex shrink-0 items-center gap-1">
+                <Button size="sm" className="min-h-11 rounded-full px-3 text-xs" onClick={() => setAddOpen(true)}><Plus size={16} aria-hidden />{t("Lägg till")}</Button>
+                <DropdownMenu><DropdownMenuTrigger asChild><Button variant="outline" size="icon" className="h-11 w-11 rounded-full" aria-label="Fler alternativ"><MoreHorizontal size={20} /></Button></DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild><Link href="/paminnelser"><Bell size={16} className="mr-2" />Påminnelse</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><RouterLink to="/kalender" search={{ view: "vecka" }}><CalendarDays size={16} className="mr-2" />Visa veckan</RouterLink></DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => document.querySelector<HTMLButtonElement>("#copy-day-hidden button")?.click()}>Kopiera dagen</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
+            <div id="copy-day-hidden" className="sr-only"><CopyDayButton date={today} /></div>
+          </header>
+          <div className="pt-2">
+            <div className="mb-3 rounded-2xl border border-border/60 bg-mint/30 px-3 py-2">
+              <button type="button" aria-expanded={planningExpanded} onClick={() => setPlanningExpanded(!planningExpanded)} className="flex min-h-11 w-full items-center justify-between text-left"><span className="font-medium">Planera i din takt<span className="block text-xs font-normal text-muted-foreground">Idag, imorgon eller veckan</span></span><ChevronRight size={18} className={planningExpanded ? "rotate-90" : ""} /></button>
+              {planningExpanded && <div className="pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><div className="mt-2"><PlanningEntry childrenOnly /></div></div>}
+            </div>
+            <FamilyDayPerspectives compactSelector defaultPerspective="me" myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter />} />
+          </div>
+        </section>
+      </MyFloveWide>
+
+      <MyFloveWide className="pace-today-pace pt-4">
+        <TodayPace pace={pace} />
+      </MyFloveWide>
+      <MyFloveWide className="pt-4">
+        <WeeklyPulse />
+      </MyFloveWide>
+    </MyFlovePageGrid>
+  );
+}
