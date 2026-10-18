@@ -5,8 +5,6 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { supabase } from "@/integrations/supabase/client";
 import { Battery, Loader2, Sparkles } from "lucide-react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   Tooltip,
