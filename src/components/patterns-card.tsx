@@ -22,6 +22,7 @@ export default function PatternsCard() {
 
   return (
     <ExpandableBlock
+      historyStyle
       title={t("Insikter")}
       titleText={t("Insikter")}
       subtitle={t("Observationer ur din egen data – titta bara när du vill.")}

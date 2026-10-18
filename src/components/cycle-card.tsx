@@ -67,6 +67,7 @@ export default function CycleCard() {
 
   return (
     <ExpandableBlock
+      historyStyle
       title={t("Menscykel")}
       titleText={t("Menscykel")}
       subtitle={t("Frivilligt – bara för dig som vill följa din cykel.")}
