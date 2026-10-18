@@ -350,3 +350,23 @@ html[data-paceable-typography="true"] body,
   .pace-calendar-day-tools .pace-activity-row-grid .pace-activity-row-text { grid-column: 1; grid-row: 2; }
   .pace-calendar-day-tools .pace-activity-row-grid > button:last-child { grid-column: 2; grid-row: 2; }
 }
+
+/* Paceable Journal: a quiet notebook rhythm across app surfaces. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] {
+  --pace-journal-plum: #512654;
+  --pace-journal-paper: #FFFEFC;
+  --pace-journal-canvas: #FAF9F6;
+  --pace-journal-line: #E8E0E8;
+  --pace-journal-sage: #E1EAE1;
+  --pace-journal-lavender: #E9E1EF;
+  --pace-journal-apricot: #F5DED0;
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-ds-card,
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-form-surface {
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 22px -16px rgba(81, 38, 84, .18);
+}
+/* Battery is deliberately excluded from the journal typography refresh. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-today-capacity a > span.tabular-nums {
+  font-family: "Fraunces", Georgia, serif;
+}
