@@ -69,28 +69,22 @@ export function TodayContent() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="pt-4" aria-labelledby="your-day-title">
-          <header className="flex flex-wrap items-end justify-between gap-3 pb-2">
-            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-              <h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2>
-              <Button asChild size="sm" variant="ghost" className="min-h-11 gap-1.5 rounded-full px-3 text-sm text-muted-foreground hover:text-ink">
+        <section className="min-w-0 rounded-[2rem] border border-border/70 bg-card px-3 py-4 shadow-sm sm:px-5 sm:py-5" aria-labelledby="your-day-title">
+          <header className="mb-3 space-y-3">
+            <h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2>
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-2" aria-label={t("Snabbval för din dag")}>
+              <Button asChild size="sm" variant="outline" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
                 <RouterLink to="/kalender" search={{ view: "vecka" }} aria-label={t("Visa veckan i kalendern")}>
-                  <CalendarDays size={16} aria-hidden /> {t("Visa veckan")}
+                  <CalendarDays size={15} className="shrink-0" aria-hidden /><span>{t("Veckan")}</span>
                 </RouterLink>
               </Button>
-            </div>
-            <div className="pace-today-actions flex flex-wrap items-center gap-x-1.5 gap-y-1">
-              <Button asChild size="sm" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
-                <Link href="/lagg-till">
-                  <Plus size={16} aria-hidden /> {t("Lägg till")}
-                </Link>
+              <Button asChild size="sm" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
+                <Link href="/lagg-till"><Plus size={15} className="shrink-0" aria-hidden />{t("Lägg till")}</Link>
               </Button>
-              <Button asChild size="sm" variant="ghost" className="pace-today-action relative h-auto min-h-9 gap-1.5 rounded-full px-3 py-1.5 text-sm text-muted-foreground hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']">
-                <Link href="/paminnelser">
-                  <Bell size={16} aria-hidden /> {t("Påminnelse")}
-                </Link>
+              <Button asChild size="sm" variant="outline" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
+                <Link href="/paminnelser" aria-label={t("Påminnelse")}><Bell size={15} className="shrink-0" aria-hidden />{t("Påminn")}</Link>
               </Button>
-              <CopyDayButton date={today} className="pace-today-action relative inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-ink after:absolute after:inset-x-0 after:-inset-y-1 after:content-['']" />
+              <CopyDayButton date={today} shortLabel className="flex h-10 min-w-0 items-center justify-center gap-1 rounded-xl border border-border bg-card px-1 text-[11px] font-medium text-ink hover:bg-secondary/50 sm:text-sm" />
             </div>
           </header>
           <div className="pt-2">
