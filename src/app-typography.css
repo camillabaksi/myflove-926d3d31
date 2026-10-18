@@ -370,3 +370,18 @@ html[data-paceable-typography="true"] body,
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-today-capacity a > span.tabular-nums {
   font-family: "Fraunces", Georgia, serif;
 }
+
+/* Shared cards: apply only to explicitly marked blocks, never the battery. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-card {
+  border-radius: 1.5rem;
+  border-color: hsl(var(--border) / .7);
+  box-shadow: 0 6px 22px -16px rgba(81, 38, 84, .18);
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-stat {
+  border-radius: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-card {
+    scroll-behavior: auto;
+  }
+}
