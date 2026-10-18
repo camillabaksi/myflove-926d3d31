@@ -34,6 +34,14 @@ export function TodayContent() {
   const { t, locale } = useLang();
   const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
+  const [hour, setHour] = useState(() => new Date().getHours());
+  useEffect(() => {
+    const updateHour = () => setHour(new Date().getHours());
+    const interval = window.setInterval(updateHour, 60_000);
+    window.addEventListener("focus", updateHour);
+    return () => { window.clearInterval(interval); window.removeEventListener("focus", updateHour); };
+  }, []);
+  const greeting = hour >= 5 && hour < 10 ? "God morgon!" : hour >= 10 && hour < 17 ? "Hej igen!" : hour >= 17 && hour < 22 ? "God kväll!" : "Fortfarande vaken?";
   useEffect(() => {
     track("today_viewed", { source: "sida" });
   }, []);
@@ -46,11 +54,8 @@ export function TodayContent() {
   const dayCapacity = capacityOf(today);
   const calendarEntries = applyFamilyPresence(days[today] ?? [], familyPreferences);
   const pace = deriveDayPace({ date: today, today, capacity: dayCapacity.percent, entries: calendarEntries });
-  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString(locale, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+
+  const dateLabel = new Date(`${today}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <MyFlovePageGrid area="idag" className={`pace-today-desktop${textLayout.enlarged ? " pace-text-enlarged" : ""}`}>
@@ -59,9 +64,9 @@ export function TodayContent() {
       <IntroTour />
       <MyFloveWide>
         <DayGreeting
-          tagline={t("Din dag, i din takt")}
-          greeting={t("Hej")}
-          name={name}
+          tagline={t("Vi tar dagen i din takt.")}
+          greeting={t(greeting)}
+          name={hasChosenName ? name : ""}
           action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
         />
         <div className="pace-today-capacity mt-5"><TodayCapacity percent={dayCapacity.percent} /></div>
