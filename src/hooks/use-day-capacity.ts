@@ -6,7 +6,7 @@ import { capacityWithActivityFeedback } from "@/lib/capacity-activity-feedback";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 
-/** Enda källan för kalenderns kapacitet per dag (se dayCapacity). */
+/** Gemensam kapacitet för Idag, Kalender och Mitt batteri.\n * Kvällsregistrering och separat prognoskurva påverkar inte detta värde.\n * Endast genomförda, uttryckligen energimärkta aktiviteter efter senaste\n * manuella incheckning får justera batteriet.\n */
 export function useDayCapacity() {
   const [edges] = useCloudSyncedStorage<DayEdges>("myflove-day-edges", {});
   const { energyEntries: logs } = useQuickCheckin();
@@ -14,7 +14,7 @@ export function useDayCapacity() {
   return useCallback((date: string) => {
     const baseline = dayCapacity(date, edges, logs);
     const morningTime = Date.parse(edges?.[date]?.morningLoggedAt ?? "");
-    const latestLogTime = Math.max(...logs.filter(log => {
+    const latestLogTime = Math.max(...logs.filter(log => Number.isFinite(log.level)).filter(log => {
       const d = new Date(log.logged_at);
       return !Number.isNaN(d.getTime()) && [d.getFullYear(), String(d.getMonth() + 1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-") === date;
     }).map(log => Date.parse(log.logged_at)), -Infinity);
