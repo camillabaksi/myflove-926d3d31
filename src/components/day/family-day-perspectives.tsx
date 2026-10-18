@@ -345,11 +345,11 @@ export default function FamilyDayPerspectives({
   return (
     <div className="space-y-3">
       <PersonSwitcher people={people} value={perspective} onChange={setPerspective} compact={compactSelector} />
-      <p className="flex items-center gap-2 text-sm font-semibold text-ink" aria-live="polite">
+      <div className="relative pt-1">\n      <p className="flex min-h-11 items-center gap-2 pr-28 text-sm font-semibold text-ink" aria-live="polite">
         {current ? <PersonAvatar person={current} /> : null}
         {heading}
       </p>
-      {perspective === ME_ID ? myDay : perspective === FAMILY_ID ? FamilyView() : PersonDay({ personId: perspective })}
+      {perspective === ME_ID ? myDay : perspective === FAMILY_ID ? FamilyView() : PersonDay({ personId: perspective })}\n      </div>
 
       <TimeDialog
         entry={dialog?.kind === "time" ? dialog.entry : null}
