@@ -714,7 +714,7 @@ function QuizRunner({
   }) => void;
   onClose: () => void;
 }) {
-  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 10));
+  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 50));
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
