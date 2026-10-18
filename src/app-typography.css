@@ -3,10 +3,10 @@
    Rem units keep browser/system text enlargement and the existing NPF setting. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"] {
   --pace-type-family:
-    "Lora", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Nunito", "Segoe UI", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-type-heading-family:
-    "Fraunces", Georgia, Cambria, "Times New Roman", serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Bricolage Grotesque", "Nunito", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-brand-width: 16rem;
   --pace-type-welcome: 1.75rem;
@@ -203,7 +203,7 @@ html[data-paceable-typography="true"] body,
    Only the family changes: sizes, tabular digits and timer geometry stay put. */
 :is(html, .pace-type-scope)[data-paceable-typography="true"]
   :is(time, .tabular-nums, .font-mono, .pace-type-time, input[type="time"]) {
-  font-family: var(--pace-type-heading-family);
+  font-family: var(--pace-type-family);
   font-variation-settings: normal;
 }
 
@@ -349,4 +349,49 @@ html[data-paceable-typography="true"] body,
   .pace-calendar-day-tools .pace-activity-row-grid > span:nth-child(2) { grid-column: 2; grid-row: 1; justify-self: center; }
   .pace-calendar-day-tools .pace-activity-row-grid .pace-activity-row-text { grid-column: 1; grid-row: 2; }
   .pace-calendar-day-tools .pace-activity-row-grid > button:last-child { grid-column: 2; grid-row: 2; }
+}
+
+/* Paceable Journal: a quiet notebook rhythm across app surfaces. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] {
+  --pace-journal-plum: #512654;
+  --pace-journal-paper: #FFFEFC;
+  --pace-journal-canvas: #FAF9F6;
+  --pace-journal-line: #E8E0E8;
+  --pace-journal-sage: #E1EAE1;
+  --pace-journal-lavender: #E9E1EF;
+  --pace-journal-apricot: #F5DED0;
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-ds-card,
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-form-surface {
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 22px -16px rgba(81, 38, 84, .18);
+}
+/* Battery is deliberately excluded from the journal typography refresh. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-today-capacity a > span.tabular-nums {
+  font-family: "Fraunces", Georgia, serif;
+}
+
+/* Shared cards: apply only to explicitly marked blocks, never the battery. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-card {
+  border-radius: 1.5rem;
+  border-color: hsl(var(--border) / .7);
+  box-shadow: 0 6px 22px -16px rgba(81, 38, 84, .18);
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-stat {
+  border-radius: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-card {
+    scroll-behavior: auto;
+  }
+}
+
+/* Calendar + child schedule: visual-only, deliberately no layout/position changes. */
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-calendar-entry {
+  border-radius: .9rem;
+  box-shadow: 0 4px 12px -11px rgba(81, 38, 84, .25);
+}
+:is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-child-schedule {
+  border-radius: 1.5rem;
+  border-color: hsl(var(--border) / .7);
 }

@@ -14,7 +14,6 @@ import {
   Library,
   Move,
   Search,
-  Heart,
   Pencil,
   Plus,
   Sparkles,
@@ -476,7 +475,7 @@ export default function VisualChildSchedule({
   const weekLabel = `v. ${isoWeekNumberFromString(dates[0]!)} · ${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[0]!))}–${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[6]!))}`;
 
   return (
-    <section className="mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
+    <section className="pace-journal-child-schedule mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
       <header className="flex items-center gap-3 border-b border-border/70 pb-4">
         <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
         <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-primary" aria-hidden>{child.avatar ? <span className="text-2xl">{child.avatar}</span> : <UserRound size={24} />}</span>
@@ -492,7 +491,7 @@ export default function VisualChildSchedule({
         <Switch id={`child-picture-support-${child.id}`} checked={showPictograms} onCheckedChange={(enabled) => setPicturePreferences(current => ({ ...current, [child.id]: enabled }))} />
       </div>
 
-      {mode === "today" && <p className="flex items-center justify-center gap-2 rounded-xl bg-lavender/70 px-4 py-2 text-center text-sm font-medium text-primary"><Heart size={15} fill="currentColor" /> {t("En sak i taget, i din takt.")} <Heart size={15} fill="currentColor" /></p>}
+      {mode === "today" && <p className="rounded-xl border border-primary/10 bg-lavender/50 px-4 py-2 text-center text-sm font-medium text-primary">{t("En sak i taget, i din takt.")}</p>}
 
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted/70 p-1" role="tablist" aria-label={t("Välj schemavy") }>
         <Button type="button" variant={mode === "week" ? "default" : "ghost"} onClick={() => setMode("week")} className="h-10 rounded-lg shadow-none" role="tab" aria-selected={mode === "week"}>{t("Vecka")}</Button>

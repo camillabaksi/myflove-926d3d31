@@ -133,7 +133,7 @@ export function MyFloveBlock({
       {...areaProps(area)}
       data-expanded={!collapsed}
       className={cn(
-        "flex min-w-0 h-auto flex-col gap-3 rounded-3xl border border-border p-4 shadow-soft data-[expanded='false']:min-h-[10rem] data-[expanded='false']:max-h-[12rem] data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
+        "pace-journal-card flex min-w-0 h-auto flex-col gap-3 rounded-3xl border border-border p-4 shadow-soft data-[expanded='false']:min-h-[10rem] data-[expanded='false']:max-h-[12rem] data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         !area && (!surface || surface === "plain") && "pace-app-card",
@@ -270,7 +270,7 @@ export function MyFloveStat({
   return (
     <div
       className={cn(
-        "pace-stat-card flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
+        "pace-journal-stat pace-stat-card flex min-w-0 flex-1 flex-col gap-1.5 rounded-2xl border border-border/50 p-3 sm:p-4",
         SURFACE[tone],
         className,
       )}

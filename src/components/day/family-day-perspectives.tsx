@@ -53,10 +53,12 @@ export default function FamilyDayPerspectives({
   date,
   myDay,
   defaultPerspective = ME_ID,
+  compactSelector = false,
 }: {
   date?: string;
   myDay: ReactNode;
   defaultPerspective?: Perspective;
+  compactSelector?: boolean;
 }) {
   const dayISO = date ?? todayISO();
   const isToday = dayISO === todayISO();
@@ -342,7 +344,7 @@ export default function FamilyDayPerspectives({
 
   return (
     <div className="space-y-3">
-      <PersonSwitcher people={people} value={perspective} onChange={setPerspective} />
+      <PersonSwitcher people={people} value={perspective} onChange={setPerspective} compact={compactSelector} />
       <p className="flex items-center gap-2 text-sm font-semibold text-ink" aria-live="polite">
         {current ? <PersonAvatar person={current} /> : null}
         {heading}

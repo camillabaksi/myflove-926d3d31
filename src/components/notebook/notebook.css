@@ -1,11 +1,11 @@
 .notebook {
-  --book-paper: #faf9f6;
-  --book-ink: #512654;
+  --book-paper: var(--pace-journal-canvas, #faf9f6);
+  --book-ink: var(--pace-journal-plum, #512654);
   --book-muted: #716274;
-  --book-line: #dcd5df;
-  --book-lavender: #eee7f4;
-  --book-sage: #e8efe5;
-  --book-apricot: #f8e7db;
+  --book-line: var(--pace-journal-line, #dcd5df);
+  --book-lavender: var(--pace-journal-lavender, #eee7f4);
+  --book-sage: var(--pace-journal-sage, #e8efe5);
+  --book-apricot: var(--pace-journal-apricot, #f8e7db);
   --book-shadow: 0 6px 24px #5126540d;
   --background: 45 29% 97%;
   --foreground: 296 38% 24%;
