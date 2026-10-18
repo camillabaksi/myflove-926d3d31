@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
-import { useActiveArea } from "@/lib/life-areas";
+import { AREA_META, ALL_AREAS, useActiveArea, type LifeArea } from "@/lib/life-areas";
+import { suggestActivityArea } from "@/lib/smart-area-suggestions";
 import { useCapacityMode } from "@/hooks/use-capacity-mode";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import { isDayFull, planForCapacity } from "@/lib/priority-engine";
@@ -43,6 +44,7 @@ export default function QuickAddSheet({
   const { activeArea } = useActiveArea();
 
   const [text, setText] = useState("");
+  const [chosenArea, setChosenArea] = useState<LifeArea | null>(null);
   const [kind, setKind] = useState<Kind>("aktivitet");
   const [date, setDate] = useState(todayISO());
   const [time, setTime] = useState("");
@@ -57,11 +59,13 @@ export default function QuickAddSheet({
     todayISO(),
   ).planned.length;
 
-  const area = activeArea === "alla" ? "vardag" : activeArea;
+  const suggestion = suggestActivityArea(text);
+  const area: LifeArea = chosenArea ?? suggestion ?? (activeArea === "alla" ? "vardag" : activeArea);
   const needsWhen = kind !== "tanke";
 
   const reset = () => {
     setText("");
+    setChosenArea(null);
     setTime("");
     setEndTime("");
     setDate(todayISO());
@@ -175,6 +179,15 @@ export default function QuickAddSheet({
               );
             })}
           </div>
+
+          {needsWhen && (
+            <label className="block text-xs text-muted-foreground">
+              {t("Område")} {suggestion && chosenArea === null && <span className="ml-1 text-primary">· {t("Föreslaget utifrån texten")}</span>}
+              <select value={area} onChange={(event) => setChosenArea(event.target.value as LifeArea)} className="mt-1 min-h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-ink" aria-label={t("Område")}>
+                {ALL_AREAS.map((id) => <option key={id} value={id}>{AREA_META[id].label}</option>)}
+              </select>
+            </label>
+          )}
 
           {needsWhen && (
             <div className="grid grid-cols-2 gap-2">
