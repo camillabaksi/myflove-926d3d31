@@ -1,4 +1,14 @@
 # Roadmap
+## Samlad kalender-, barn- och Pace-planering (2026-10-18)
+- [x] Registrera kraven och granska befintliga kalender-, planerings-, familje- och chattflöden; återanvändning och skyddsgränser kartlagda.
+- [ ] Visa konkret återanvändnings- och genomförandeplan; invänta godkännande före appkodändringar.
+- [ ] Gemensamt snabbflöde för flera aktiviteter från Idag, kalender, barnschema och Pace med datum/tid/person förifyllt.
+- [ ] Kompakt månad/vecka, direkt redigering och hela dygnet med tillgängliga tidsval.
+- [ ] Flera barn, gemensam visningsrad med namn, Min dag-filter och barnschema utan avbockning.
+- [ ] Strukturerade svenska Pace-förslag för skapa/ändra/flytta, konflikt-/ägarkontroll och explicit godkännande.
+- [ ] Planering med registrerad kapacitet/sammanhang utan batteriändring; bevara privata utkast och synk.
+- [ ] Testa sparning/återläsning, redigering/flytt/avbryt, återkomst, tidszon, kontobyte/behörighet och mobil; dokumentera begränsningar och uppdatera båda ändringsloggarna. Ingen publicering.
+
 ## Kalendern – etapp 2: lugnare månadsvy (2026-10-17)
 - [x] Godkänd avgränsad plan: månadssammanfattning, antal per ruta och kompakt dagslista under månadsrätten; övrig kalender orörd.
 - [x] Genomförd i `src/components/calendar/calendar-planner.tsx` med nya presentationstester; 12 kalendertester och typkontroll godkända.
