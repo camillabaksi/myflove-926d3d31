@@ -255,7 +255,7 @@ export function ExpandableBlock({
       {...areaProps(area)}
       className={cn(
         "@container flex min-w-0 flex-col rounded-3xl border border-border/60 shadow-soft transition-shadow",
-        area && "area-border",
+        !historyStyle && area && "area-border",
         historyStyle ? "w-full border-0 bg-[#F5EDF7]/30 shadow-none" : open ? "col-span-full w-full shadow-lifted" : "min-h-[9rem] @min-[20rem]:min-h-0",
         !historyStyle && (surface ? SURFACE[surface] : "bg-card"),
         className,
