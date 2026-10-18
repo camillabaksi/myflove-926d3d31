@@ -1,9 +1,9 @@
 import type { LifeArea } from "@/lib/life-areas";
 
 const RULES: ReadonlyArray<{ area: LifeArea; terms: string[] }> = [
-  { area: "barn", terms: ["förskola", "fritids", "barnen", "barnens", "hämta barn", "lämna barn", "föräldramöte", "bvc"] },
-  { area: "ekonomi", terms: ["räkning", "faktura", "budget", "deklaration", "elräkning"] },
-  { area: "halsa", terms: ["läkare", "tandläkare", "vårdcentral", "medicin", "träning", "vaccin"] },
+  { area: "barn", terms: ["förskola", "förskolan", "fritids", "barnen", "barnens", "hämta barn", "lämna barn", "föräldramöte", "bvc"] },
+  { area: "ekonomi", terms: ["räkning", "räkningen", "faktura", "budget", "deklaration", "elräkning", "elräkningen"] },
+  { area: "halsa", terms: ["läkare", "läkaren", "tandläkare", "tandläkaren", "vårdcentral", "medicin", "träning", "vaccin"] },
   { area: "studier", terms: ["tentamen", "föreläsning", "kursansökan", "inlämning", "studera", "seminarium"] },
   { area: "jobb", terms: ["jobbmöte", "arbetsmöte", "kollegor", "arbetspass", "lönesamtal"] },
   { area: "egentid", terms: ["egentid", "meditera", "lugn promenad", "återhämtning"] },
