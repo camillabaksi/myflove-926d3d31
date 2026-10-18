@@ -517,6 +517,7 @@ export function StudyBuddyContent() {
               )}
               {isOpen && mode === "quiz" && openSet && (
                 <QuizRunner
+                  key={`${openSet.id}-${openSet.quiz.length}`}
                   set={openSet}
                   onGrade={(qid, ok) => gradeQuestion(set.id, qid, ok)}
                   onFinish={(attempt) => recordAttempt(set.id, attempt)}
@@ -714,7 +715,8 @@ function QuizRunner({
   }) => void;
   onClose: () => void;
 }) {
-  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 50));
+  // The queue is derived from the current saved set; never retain a stale 10-question queue.
+  const queue = useMemo(() => adaptiveOrder(set.quiz).slice(0, 50), [set.quiz]);
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
