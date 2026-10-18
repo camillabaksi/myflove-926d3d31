@@ -1721,24 +1721,24 @@ html[data-npf-less="true"] [data-npf="optional"] {
 @utility calendar-area-text { color: hsl(var(--calendar-area)); }
 @utility calendar-area-dot { background-color: hsl(var(--calendar-area)); }
 @utility calendar-area-surface {
-  background-color: color-mix(in srgb, hsl(var(--calendar-area)) 12%, hsl(var(--card)));
+  background-color: color-mix(in srgb, hsl(var(--calendar-area)) 14%, hsl(var(--card)));
   border-color: hsl(var(--calendar-area) / 0.3);
   border-left-color: hsl(var(--calendar-area));
-  &:hover { background-color: color-mix(in srgb, hsl(var(--calendar-area)) 20%, hsl(var(--card))); }
+  &:hover { background-color: color-mix(in srgb, hsl(var(--calendar-area)) 19%, hsl(var(--card))); }
 }
 
 /* Family context remains readable but visually secondary to the owner's blocks. */
 [data-family-entry] {
-  background-color: color-mix(in srgb, hsl(var(--lavender)) 14%, hsl(var(--card)));
+  background-color: color-mix(in srgb, hsl(var(--calendar-area)) 8%, hsl(var(--card)));
   border-color: hsl(var(--primary) / 0.12);
-  border-left-color: hsl(var(--primary) / 0.2);
+  border-left-color: hsl(var(--calendar-area) / 0.55);
   color: hsl(var(--muted-foreground));
 }
 [data-family-entry="presence"] {
-  background-color: color-mix(in srgb, hsl(var(--lavender)) 32%, hsl(var(--card)));
-  border-left-color: hsl(var(--primary) / 0.5);
+  background-color: color-mix(in srgb, hsl(var(--calendar-area)) 12%, hsl(var(--card)));
+  border-left-color: hsl(var(--calendar-area) / 0.8);
 }
-[data-family-entry]:hover { background-color: color-mix(in srgb, hsl(var(--lavender)) 28%, hsl(var(--card))); }
+[data-family-entry]:hover { background-color: color-mix(in srgb, hsl(var(--calendar-area)) 15%, hsl(var(--card))); }
 [data-family-entry] .calendar-area-text { color: hsl(var(--primary) / 0.7); }
 
 @utility area-hero {
