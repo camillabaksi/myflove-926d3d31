@@ -219,7 +219,7 @@ export function DailyFlowList({
         </p>
       )}
       {items.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget inplanerat den här dagen.</p>}
-      <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
+      <ul className={cn(integrated ? "space-y-2.5" : "divide-y divide-border/50")} aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
           return (
