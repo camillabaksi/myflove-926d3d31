@@ -67,8 +67,8 @@ export default function BatteryPage() {
             defaultCollapsed
             title={t("Historik & insikter")}
             description={t("Tidigare registreringar och mönster, utan nya formulär.")}
-            className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
-            headingClassName="text-base font-semibold text-ink"
+            className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5"
+            headingClassName="font-sans text-base font-semibold text-ink"
           >
 
           <div className="space-y-3">

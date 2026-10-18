@@ -62,7 +62,7 @@ export default function CollapsibleSection({
           type="button"
           onClick={toggle}
           aria-expanded={!collapsed}
-          className="pace-collapse-trigger flex min-h-9 flex-1 items-center justify-between gap-2 text-left group"
+          className="pace-collapse-trigger flex min-h-11 flex-1 items-center justify-between gap-3 rounded-xl text-left group"
         >
           <span className={cn("pace-collapse-title min-w-0 text-xl font-medium", headingClassName)}>{title}</span>
           <ChevronDown
