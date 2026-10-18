@@ -11,6 +11,7 @@ import { useVisualCalendar } from "@/hooks/use-visual-calendar";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { useLang } from "@/hooks/use-language";
 import { useActiveArea, AREA_META, type LifeArea } from "@/lib/life-areas";
+import { suggestActivityArea } from "@/lib/smart-area-suggestions";
 import { isActiveOwner } from "@/lib/account-scope";
 import { getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { addDaysISO, todayISO } from "@/lib/day";
@@ -243,7 +244,7 @@ export function PlanningWorkspace({
       }
       if (forMe) {
         addPlannedTasks(
-          planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea),
+          planningTasks(pending.current, activeArea === "alla" ? "vardag" : activeArea).map(task => ({ ...task, area: periodAreas[task.id] ?? suggestActivityArea(task.title) ?? task.area })),
           owner,
         );
         // Stable draft IDs make retries safe, including after partial child writes.
@@ -252,7 +253,7 @@ export function PlanningWorkspace({
           repeat: "none", completed: false, createdAt: Date.now(),
           note: row.location.trim() || "Sammanhängande period",
           energyImpact: "unknown",
-          area: periodAreas[row.id] ?? (activeArea === "alla" ? "vardag" : activeArea),
+          area: periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea),
         }));
         addPlannedPeriods(periods);
       }
@@ -540,7 +541,7 @@ export function PlanningWorkspace({
                     </Button>
                   </div>
                   <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
-                  {row.endDate && <label className="mt-2 block text-sm">Område<select value={periodAreas[row.id] ?? (activeArea === "alla" ? "vardag" : activeArea)} onChange={event => setPeriodAreas(prev => ({ ...prev, [row.id]: event.target.value as LifeArea }))} className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base">{Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}</select></label>}
+                  {forMe && <label className="mt-2 block text-sm">Område {suggestActivityArea(row.title) && !periodAreas[row.id] && <span className="text-xs text-muted-foreground">· Föreslaget</span>}<select value={periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)} onChange={event => setPeriodAreas(prev => ({ ...prev, [row.id]: event.target.value as LifeArea }))} className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base">{Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}</select></label>}
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {row.endDate ? "Från" : t("Dag")}

@@ -54,6 +54,7 @@ export function detectRepeat(text: string): RepeatMode {
 }
 
 export interface Routine {
+  area?: import("@/lib/life-areas").LifeArea;
   id: string;
   title: string;
   time: string; // HH:MM

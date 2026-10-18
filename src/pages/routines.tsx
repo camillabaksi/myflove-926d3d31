@@ -10,6 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Trash2, Repeat, Clock, Sparkles } from "lucide-react";
 import { REPEAT_LABELS, routineOccursOn, type RepeatMode, type Routine } from "@/lib/recurrence";
 import { paceFormSurface } from "@/components/paceable/design-system";
+import { AREA_META, ALL_AREAS, type LifeArea } from "@/lib/life-areas";
+import { suggestActivityArea } from "@/lib/smart-area-suggestions";
 
 const REPEAT_OPTIONS: Array<{ value: RepeatMode; label: string }> = [
   { value: "daily", label: "Varje dag" },
@@ -39,6 +41,9 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const { reminders, addReminder, deleteReminder } = useReminders();
   const { toast } = useToast();
   const [title, setTitle] = useState("");
+  const [chosenArea, setChosenArea] = useState<LifeArea | null>(null);
+  const proposedArea = suggestActivityArea(title);
+  const newArea = chosenArea ?? proposedArea ?? "vardag";
   const [time, setTime] = useState("");
   const [repeat, setRepeat] = useState<RepeatMode>("daily");
   const [startDate, setStartDate] = useState(() => todayIso());
@@ -60,7 +65,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
         (rem) => rem.date === today && rem.time === r.time && rem.title === r.title,
       );
       if (!exists) {
-        addReminder(r.title, today, r.time);
+        addReminder(r.title, today, r.time, "none", undefined, undefined, undefined, r.area ?? suggestActivityArea(r.title) ?? "vardag");
         created++;
       }
     }
@@ -82,6 +87,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
         {
           id: generateId(),
           title: title.trim(),
+          area: newArea,
           time,
           enabled: true,
           createdAt: Date.now(),
@@ -91,6 +97,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       ].sort((a, b) => a.time.localeCompare(b.time)),
     );
     setTitle("");
+    setChosenArea(null);
     setTime("");
     setRepeat("daily");
     toast({ description: "Rutin sparad – dyker upp i morgondagens dag också 🌱" });
@@ -105,6 +112,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
         {
           id: generateId(),
           title: s.title,
+          area: suggestActivityArea(s.title) ?? "vardag",
           time: s.time,
           enabled: true,
           createdAt: Date.now(),
@@ -130,7 +138,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
     );
     if (existing) {
       deleteReminder(existing.id);
-      addReminder(r.title, today, newTime);
+      addReminder(r.title, today, newTime, "none", undefined, undefined, undefined, r.area ?? suggestActivityArea(r.title) ?? "vardag");
     }
     toast({ description: `Tiden för "${r.title}" ändrad till ${newTime}` });
   };
@@ -159,7 +167,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
         (rem) => rem.date === today && rem.time === r.time && rem.title === r.title,
       );
       if (!exists) {
-        addReminder(r.title, today, r.time);
+        addReminder(r.title, today, r.time, "none", undefined, undefined, undefined, r.area ?? suggestActivityArea(r.title) ?? "vardag");
         created++;
       }
     }
@@ -201,7 +209,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
               <input
                 type="text"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => { setTitle(e.target.value); setChosenArea(null); }}
                 placeholder="T.ex. Borsta tänderna"
                 className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
@@ -212,6 +220,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
                 className="p-3 rounded-xl bg-card border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none text-base"
               />
             </div>
+            <label className="block text-sm text-muted-foreground">Område {proposedArea && chosenArea === null && <span className="text-xs">· Föreslaget</span>}<select aria-label="Område" className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base" value={newArea} onChange={e => setChosenArea(e.target.value as LifeArea)}>{ALL_AREAS.map(id => <option key={id} value={id}>{AREA_META[id].label}</option>)}</select></label>
             <div className="space-y-2">
               <p className="text-sm font-medium text-muted-foreground">Hur ofta?</p>
               <div className="flex flex-wrap gap-2">

@@ -16,6 +16,8 @@ import PushStatusCard from "@/components/push-status-card";
 import { paceFormSurface } from "@/components/paceable/design-system";
 import { useToast } from "@/hooks/use-toast";
 import { todayISO } from "@/lib/day";
+import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
+import { suggestActivityArea } from "@/lib/smart-area-suggestions";
 import { groupReminders, reminderStatus, type ReminderStatus } from "@/lib/reminder-status";
 import {
   ArrowRight,
@@ -303,6 +305,9 @@ export default function RemindersPage() {
   const [editor, setEditor] = useState<{ reminder: Reminder; planAgain: boolean } | null>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [chosenArea, setChosenArea] = useState<LifeArea | null>(null);
+  const suggestedArea = suggestActivityArea(title);
+  const newArea = chosenArea ?? suggestedArea ?? "vardag";
   const [date, setDate] = useState(() => todayISO());
   const [time, setTime] = useState("");
   const [note, setNote] = useState("");
@@ -336,8 +341,10 @@ export default function RemindersPage() {
       undefined,
       lead || undefined,
       note.trim() || undefined,
+      newArea,
     );
     setTitle("");
+    setChosenArea(null);
     setTime("");
     setNote("");
     toast({ description: "Påminnelsen är tillagd 🔔" });
@@ -407,9 +414,10 @@ export default function RemindersPage() {
                 aria-label="Vad ska du påminnas om?"
                 required
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => { setTitle(e.target.value); setChosenArea(null); }}
                 placeholder="Vad ska du påminnas om?"
               />
+              <label className="block text-sm text-muted-foreground">Område {suggestedArea && chosenArea === null && <span className="text-xs">· Föreslaget</span>}<select aria-label="Område" className={inputClass} value={newArea} onChange={e => setChosenArea(e.target.value as LifeArea)}>{ALL_AREAS.map(id => <option key={id} value={id}>{AREA_META[id].label}</option>)}</select></label>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
                 <input
                   className={inputClass}
