@@ -20,7 +20,7 @@ const InputSchema = z.object({
   /** Anpassning utifrån stödbehov och inlärningspreferenser. */
   focus: z.string().max(1500).optional(),
   cardCount: z.number().int().min(0).max(30).default(12),
-  quizCount: z.number().int().min(0).max(20).default(10),
+  quizCount: z.number().int().min(0).max(50).default(10),
   followPoints: z.boolean().default(false),
 });
 
@@ -137,6 +137,6 @@ export const generateStudySet = createServerFn({ method: "POST" })
         .filter(
           (q) => q.options.length >= 2 && q.correctIndex >= 0 && q.correctIndex < q.options.length,
         )
-        .slice(0, 20),
+        .slice(0, 50),
     };
   });
