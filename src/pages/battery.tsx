@@ -108,6 +108,10 @@ export default function BatteryPage() {
           </div>
         </MyFloveWide>
 
+        <MyFloveWide>
+          <DayEdgesCheckin />
+        </MyFloveWide>
+
         {/* All befintlig fördjupning finns kvar, men visas först efter klick. */}
         <MyFloveWide>
           <CollapsibleSection
@@ -121,7 +125,7 @@ export default function BatteryPage() {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
               <PatternsCard />
               <CycleCard />
-              <DayEdgesCheckin />
+              
               <ImpactCheckin />
               <div className="lg:col-span-2">
                 <DayEnergyFlow />

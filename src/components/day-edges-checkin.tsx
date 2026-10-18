@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Moon, Sunrise } from "lucide-react";
+import { Moon, Sunrise, ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { isSameDay } from "@/lib/energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useDayWindow } from "@/hooks/use-day-window";
 import { track } from "@/lib/analytics";
@@ -14,6 +16,8 @@ import { useLang } from "@/hooks/use-language";
 export default function DayEdgesCheckin({ className }: { className?: string }) {
   const { t } = useLang();
   const { window: win, setWindow, todayEdges, setMorning, setEvening } = useDayWindow();
+  const { entries } = useEnergyFlow();
+  const todayActivities = entries.filter(e => isSameDay(e.occurredAt)).sort((a,b) => Date.parse(a.occurredAt) - Date.parse(b.occurredAt));
   const [morning, setMorningValue] = useState<number>(todayEdges.morning ?? 5);
   const [evening, setEveningValue] = useState<number>(todayEdges.evening ?? 5);
 
@@ -34,7 +38,7 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
   return (
     <section
-      aria-label={t("Morgon och kväll")}
+      aria-label={t("Din energiresa")}
       className={cn(
         "space-y-4 rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft",
         className,
@@ -42,12 +46,12 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
     >
       <CollapsibleSection
         id="morgon-och-kvall"
-        title={t("Morgon och kväll")}
+        title={t("Din energiresa")}
         headingClassName="text-sm font-semibold uppercase tracking-wide text-muted-foreground"
         className="space-y-3"
       >
         <p className="text-sm text-ink">
-          {t("Fyll i när din morgon startar och när dagen slutar – och hur batteriet känns då.")}
+          {t("Följ din energi från morgon till kväll och se vad som gav eller tog energi.")}
         </p>
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3">
@@ -88,6 +92,34 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
           onSave={() => save("evening")}
           saved={todayEdges.evening != null}
         />
+        <div className="space-y-3 rounded-2xl border border-border/60 bg-secondary/20 p-4" data-testid="daily-energy-journey">
+          <h3 className="text-base font-semibold text-ink">{t("Dagens energiresa")}</h3>
+          <p className="text-xs leading-relaxed text-muted-foreground">{t("Registreringar och aktiviteter i tidsordning. Energiupplevelser är inte exakta procentförändringar.")}</p>
+          <ol className="ml-2 space-y-3 border-l-2 border-primary/20 pl-5">
+            <li>
+              <p className="text-sm font-semibold text-ink">{t("Morgon")} · {win.start}</p>
+              <p className="text-xs text-muted-foreground">{todayEdges.morning == null ? t("Ingen morgonregistrering ännu") : todayEdges.morning + "/10"}</p>
+            </li>
+            {todayActivities.map(entry => {
+              const gives = entry.direction === "gives";
+              const drains = entry.direction === "drains";
+              const time = new Date(entry.occurredAt);
+              return (
+                <li key={entry.id} className="flex items-start gap-2">
+                  {gives ? <ArrowUpRight size={16} className="shrink-0 text-emerald-700" aria-hidden /> : drains ? <ArrowDownRight size={16} className="shrink-0 text-orange-700" aria-hidden /> : <Minus size={16} className="shrink-0 text-muted-foreground" aria-hidden />}
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-ink">{entry.title}</p>
+                    <p className="text-xs text-muted-foreground">{Number.isNaN(time.getTime()) ? "" : time.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" })} · {t(gives ? "Gav energi" : drains ? "Tog energi" : entry.direction === "both" ? "Både gav och tog energi" : "Ingen tydlig energipåverkan")}</p>
+                  </div>
+                </li>
+              );
+            })}
+            <li>
+              <p className="text-sm font-semibold text-ink">{t("Kväll")} · {win.end}</p>
+              <p className="text-xs text-muted-foreground">{todayEdges.evening == null ? t("Ingen kvällsregistrering ännu") : todayEdges.evening + "/10"}</p>
+            </li>
+          </ol>
+        </div>
       </CollapsibleSection>
     </section>
   );
