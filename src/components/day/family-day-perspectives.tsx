@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { AlertCircle, Check, Clock, Link2, MoreHorizontal, Unlink } from "lucide-react";
+import { AlertCircle, Check, Clock, Link2, MoreHorizontal, Unlink, ChevronDown, Users } from "lucide-react";
 import { toast } from "sonner";
 
 import { ActivityPictogram } from "@/components/family/activity-pictogram";
@@ -53,10 +53,12 @@ export default function FamilyDayPerspectives({
   date,
   myDay,
   defaultPerspective = ME_ID,
+  compactSelector = false,
 }: {
   date?: string;
   myDay: ReactNode;
   defaultPerspective?: Perspective;
+  compactSelector?: boolean;
 }) {
   const dayISO = date ?? todayISO();
   const isToday = dayISO === todayISO();
@@ -342,8 +344,20 @@ export default function FamilyDayPerspectives({
 
   return (
     <div className="space-y-3">
-      <PersonSwitcher people={people} value={perspective} onChange={setPerspective} />
-      <p className="flex items-center gap-2 text-sm font-semibold text-ink" aria-live="polite">
+      {compactSelector ? (
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold text-ink">{heading}</span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button type="button" variant="outline" size="sm" className="min-h-11 max-w-[55%] gap-1 rounded-full px-3 text-xs"><Users size={15} aria-hidden /><span className="truncate">{perspective === ME_ID ? "Visa barnen" : heading}</span><ChevronDown size={14} aria-hidden /></Button></DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => setPerspective(ME_ID)}>Min dag</DropdownMenuItem>
+              {people.map(person => <DropdownMenuItem key={person.id} onSelect={() => setPerspective(person.id)}>{person.name}</DropdownMenuItem>)}
+              <DropdownMenuItem onSelect={() => setPerspective(FAMILY_ID)}>Familjens dag</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ) : <PersonSwitcher people={people} value={perspective} onChange={setPerspective} />}
+      <p className={cn("flex items-center gap-2 text-sm font-semibold text-ink", compactSelector && "sr-only")} aria-live="polite">
         {current ? <PersonAvatar person={current} /> : null}
         {heading}
       </p>
