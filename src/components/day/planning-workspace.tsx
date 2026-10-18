@@ -83,7 +83,7 @@ export function PlanningEntry({
                 key={period}
                 asChild
                 variant="outline"
-                className="min-h-11 rounded-full bg-card/70 px-3 text-sm"
+                className="min-h-11 rounded-xl bg-card/70 px-3 text-sm shadow-none"
               >
                 <Link to="/planera" search={{ audience: "me", period }}>
                   {t(label)}
@@ -118,7 +118,7 @@ export function PlanningEntry({
             key={period}
             asChild
             variant="outline"
-            className="min-h-11 rounded-full px-2 text-sm"
+            className="min-h-11 rounded-xl px-2 text-sm shadow-none"
           >
             <Link to="/planera" search={{ audience: "me", period }}>
               {t(label)}
@@ -297,9 +297,9 @@ export function PlanningWorkspace({
           <fieldset className="mt-4">
             <legend className="text-sm font-medium">{t("Vem gäller aktiviteterna?")}</legend>
             <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label={t("Välj mottagare")}>
-              <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-full" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
-              <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-full" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
-              <Button type="button" variant={target === "both" ? "default" : "outline"} aria-pressed={target === "both"} className="min-h-11 rounded-full" onClick={() => { setTarget("both"); setError(""); }}>{t("Jag och barnen")}</Button>
+              <Button type="button" variant={target === "me" ? "default" : "outline"} aria-pressed={target === "me"} className="min-h-11 rounded-xl" onClick={() => { setTarget("me"); setError(""); }}>{t("Jag")}</Button>
+              <Button type="button" variant={target === "children" ? "default" : "outline"} aria-pressed={target === "children"} className="min-h-11 rounded-xl" onClick={() => { setTarget("children"); setError(""); }}>{t("Barnen")}</Button>
+              <Button type="button" variant={target === "both" ? "default" : "outline"} aria-pressed={target === "both"} className="min-h-11 rounded-xl" onClick={() => { setTarget("both"); setError(""); }}>{t("Jag och barnen")}</Button>
             </div>
           </fieldset>
         )}
@@ -365,7 +365,7 @@ export function PlanningWorkspace({
               type="button"
               variant={period === value ? "default" : "ghost"}
               aria-pressed={period === value}
-              className="min-h-11 rounded-full px-2 text-sm"
+              className="min-h-11 rounded-xl px-2 text-sm shadow-none"
               onClick={() => void navigate({ to: "/planera", search: { audience, period: value } })}
             >
               {t(label)}
@@ -477,7 +477,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!lineCount || !ready || (forChildren && !selected.length)}
-              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
+              className="min-h-12 w-full whitespace-normal rounded-xl bg-[#512654] text-white shadow-[0_3px_8px_-5px_rgba(81,38,84,0.4)] hover:bg-[#633569]"
             >
               {t("Granska aktiviteter")} ({lineCount})<ArrowRight size={16} aria-hidden />
             </Button>
@@ -628,7 +628,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!rows.length || !ready || saving}
-              className="min-h-12 w-full whitespace-normal rounded-full bg-[#512654] text-white shadow-sm hover:bg-[#633569]"
+              className="min-h-12 w-full whitespace-normal rounded-xl bg-[#512654] text-white shadow-[0_3px_8px_-5px_rgba(81,38,84,0.4)] hover:bg-[#633569]"
             >
               {saving
                 ? t("Sparar...")
