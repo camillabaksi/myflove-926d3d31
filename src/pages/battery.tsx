@@ -1,11 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowRight, LineChart, Smile, Battery, Zap, MessageCircle } from "lucide-react";
+import { ArrowRight, Smile, Battery, Zap, MessageCircle } from "lucide-react";
 import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { ExpandableBlock } from "@/components/myflove/expandable-block";
-import { CapacityBattery } from "@/components/calendar/capacity-battery";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { todayISO } from "@/lib/day";
 import SimpleCheckin from "@/components/simple-checkin";
@@ -110,25 +108,6 @@ export default function BatteryPage() {
           </div>
         </MyFloveWide>
 
-        {/* Kort väg till den befintliga historiken – ingen ny vy, ingen ny data. */}
-        <MyFloveWide>
-          <Link
-            href="/energifloede"
-            data-testid="battery-patterns-link"
-            className="press flex items-center justify-between gap-3 rounded-3xl border-2 border-border/60 bg-card px-4 py-4 shadow-soft hover:border-primary sm:px-5"
-          >
-            <span className="min-w-0">
-              <span className="block font-display text-base font-bold text-ink">
-                {t("Vad ger dig energi?")}
-              </span>
-              <span className="mt-0.5 block text-sm text-muted-foreground">
-                {t("Se dina mönster – vad som gav och tog energi tidigare dagar.")}
-              </span>
-            </span>
-            <ArrowRight size={18} className="shrink-0 text-primary" />
-          </Link>
-        </MyFloveWide>
-
         {/* All befintlig fördjupning finns kvar, men visas först efter klick. */}
         <MyFloveWide>
           <CollapsibleSection
@@ -140,11 +119,6 @@ export default function BatteryPage() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-              <section className="rounded-2xl border border-border/60 bg-card p-4">
-                <h3 className="font-display text-base font-semibold text-foreground">{t("Din registrerade kapacitet")}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t("Utifrån din egen incheckning, inte planerade aktiviteter.")}</p>
-                <CapacityBattery percent={capacity.percent} size="lg" className="mt-3 w-full" />
-              </section>
               <PatternsCard />
               <CycleCard />
               <DayEdgesCheckin />
@@ -153,20 +127,8 @@ export default function BatteryPage() {
                 <DayEnergyFlow />
               </div>
             </div>
-          </CollapsibleSection>
-        </MyFloveWide>
-
-        {/* 4. Historik – sekundär, längst ner. Widget-komprimerad; expanderar i flödet. */}
-        <ExpandableBlock
-          title={t("Se min historik")}
-          titleText={t("Se min historik")}
-          subtitle={t("Tidigare mående, energi och energiflöde")}
-          icon={LineChart}
-          tone="lavender"
-          area="halsa"
-          widget
-          label={t("Historik")}
-        >
+          <div className="mt-5 border-t border-border/50 pt-4">
+            <h3 className="mb-3 text-sm font-semibold text-ink">{t("Tidigare mående och energi")}</h3>
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
               <TabsTrigger value="mood" className="rounded-xl text-xs">
@@ -195,7 +157,10 @@ export default function BatteryPage() {
           >
             {t("Mer om vad som ger och tar energi")} <ArrowRight size={14} />
           </Link>
-        </ExpandableBlock>
+          </div>
+          </CollapsibleSection>
+        </MyFloveWide>
+
       </MyFlovePageGrid>
     </Layout>
   );
