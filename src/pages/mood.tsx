@@ -68,7 +68,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       {readOnly ? (
         <MyFloveWide>
           <div
-            className="pace-card-surface rounded-3xl border-2 border-border/60 bg-card p-5 text-sm text-muted-foreground"
+            className="rounded-2xl bg-[#F5EDF7]/40 p-3 text-sm text-muted-foreground"
             data-testid="mood-history-readonly"
           >
             {t("Här ser du dina tidigare loggar. Vill du logga nytt gör du det under")}{" "}
@@ -133,7 +133,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
         </div>
       )}
 
-      <button
+      {!readOnly && <button
         type="button"
         onClick={() => setFlowInsightsOpen(true)}
         className="pace-card-surface press flex w-full flex-col items-center justify-center gap-1.5 rounded-3xl border-2 border-border/60 bg-lavender/60 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -144,7 +144,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
         <span className="font-display text-base font-bold leading-tight text-ink">
           {t("Hitta mitt flow")}
         </span>
-      </button>
+      </button>}
 
       {moods.length > 0 && (
         <MyFloveWide>
@@ -171,7 +171,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                 return (
                   <div
                     key={mood.id}
-                    className="pace-card-surface bg-card p-4 rounded-2xl border border-border shadow-sm flex items-start gap-4"
+                    className="flex items-start gap-3 rounded-2xl bg-[#F5EDF7]/35 p-3"
                   >
                     <div className="text-3xl shrink-0 pt-1">{emoji}</div>
                     <div className="flex-1">
@@ -188,9 +188,9 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
         </MyFloveWide>
       )}
 
-      <MyFloveWide>
+      {!readOnly && <MyFloveWide>
         <FlowInsightsModal open={flowInsightsOpen} onOpenChange={setFlowInsightsOpen} />
-      </MyFloveWide>
+      </MyFloveWide>}
     </MyFlovePageGrid>
   );
 }

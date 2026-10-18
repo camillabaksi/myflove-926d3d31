@@ -37,8 +37,8 @@ vi.mock("@/components/simple-checkin", () => ({
   ),
 }));
 vi.mock("@/pages/mood", () => ({ MoodContent: () => null }));
-vi.mock("@/pages/energy-map", () => ({ EnergyContent: () => null }));
-vi.mock("@/pages/energy-flow", () => ({ EnergyFlowContent: () => null }));
+vi.mock("@/pages/energy-map", () => ({ EnergyContent: ({ readOnly }: { readOnly?: boolean }) => <div data-testid="energy-history" data-readonly={String(!!readOnly)} /> }));
+vi.mock("@/pages/energy-flow", () => ({ EnergyFlowInsights: () => <div data-testid="energy-insights-readonly" /> }));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/hooks/use-user-profile", () => ({ useUserProfile: () => ({ name: "Cam" }) }));
 vi.mock("@/hooks/use-language", () => ({
@@ -93,10 +93,13 @@ describe("battery check-in entry", () => {
     expect(screen.getByTestId("capacity-summary")).toHaveTextContent("Din kapacitet idag");
     expect(screen.getByTestId("capacity-summary")).toHaveTextContent("25 %");
     expect(screen.queryByText(/Din uppskattade energi/)).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Historik & mönster" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "Historik & insikter" })).toHaveAttribute(
       "aria-expanded",
       "false",
     );
+    fireEvent.click(screen.getByRole("button", { name: "Historik & insikter" }));
+    fireEvent.click(screen.getByRole("tab", { name: /Energi/ }));
+    expect(screen.getByTestId("energy-history")).toHaveAttribute("data-readonly", "true");
     const buttons = screen.getAllByRole("button", { name: "Logga energi & mående" });
     fireEvent.click(buttons[0]);
     expect(screen.getByTestId("existing-checkin")).toBeVisible();

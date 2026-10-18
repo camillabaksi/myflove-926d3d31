@@ -96,6 +96,37 @@ function TrendRow({
   );
 }
 
+/** Read-only energy patterns for the battery history tab. No quick-add, forms or settings. */
+export function EnergyFlowInsights() {
+  const { entries, signedIn, loading } = useEnergyFlow();
+  const { t } = useLang();
+  const trends = useMemo(() => categoryTrends(entries, 14), [entries]);
+  if (loading || !signedIn) return null;
+  return (
+    <section className="space-y-3" aria-label={t("Energimönster")}>
+      <p className="text-sm text-muted-foreground">
+        {t("Mönster från dina registreringar de senaste 14 dagarna. Inga nya uppgifter behöver fyllas i här.")}
+      </p>
+      {trends.length === 0 ? (
+        <p className="rounded-2xl bg-lavender/15 p-3 text-sm text-muted-foreground">
+          {t("När du registrerat mer energi kan du se mönster här.")}
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {trends.map((row) => (
+            <TrendRow
+              key={row.key}
+              emoji={row.emoji}
+              label={t(row.label)}
+              value={`${row.net > 0 ? "+" : ""}${row.net} · ${row.count} ${t("gånger")}`}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Props) {
   const {
     entries,

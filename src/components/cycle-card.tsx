@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { Flower2, Trash2 } from "lucide-react";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
 import { useCycle } from "@/hooks/use-cycle";
-import { useImpactCheckin } from "@/hooks/use-impact-checkin";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
-import { cyclePatterns, energyByDay, impactPatterns } from "@/lib/capacity-patterns";
+import { cyclePatterns, energyByDay } from "@/lib/capacity-patterns";
 import {
   CYCLE_SYMPTOMS,
   PHASE_LABEL_SV,
@@ -46,7 +45,6 @@ export default function CycleCard() {
       setEnd(currentPeriod.end);
     }
   }, [currentPeriod?.start, currentPeriod?.end]);
-  const { impactHistory } = useImpactCheckin();
   const [energyLog] = useCloudSyncedStorage<EnergyLogEntry[]>("myflove-energy-log", []);
 
   if (!cycle.enabled) return null;
@@ -54,7 +52,7 @@ export default function CycleCard() {
   const today = dayKey();
   const isPeriodToday = cycle.periodDays.includes(today);
   const byDay = energyByDay(energyLog ?? []);
-  const patterns = [...cyclePatterns(cycle, byDay), ...impactPatterns(impactHistory, byDay)];
+  const patterns = cyclePatterns(cycle, byDay);
   const indicator = cycleIndicator(status);
   const registeredPeriods = periodStarts(cycle.periodDays)
     .slice(0, 3)
