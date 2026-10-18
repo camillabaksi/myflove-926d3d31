@@ -378,25 +378,29 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     {!desktopLayout && view !== "dag" && date === today && checkin}
     {externalError && <p role="status" className="text-sm text-muted-foreground">{t("Den externa kalendern kunde inte hämtas just nu. Dina egna poster finns kvar.")}</p>}
     {view === "manad" && <>
-      <div className="overflow-hidden rounded-2xl border border-border/60 bg-card" role="group" aria-label={t("Månadskalender")}>
-        <div className="grid grid-cols-7 border-b border-border/60 bg-secondary/20">
+      <div className="overflow-hidden rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC]" role="group" aria-label={t("Månadskalender")}>
+        <div className="grid grid-cols-7 border-b border-[#EDE5E9] bg-[#FAF9F6]">
           {dates.slice(0, 7).map(d => <span key={`heading-${d}`} className="py-2 text-center text-[11px] font-medium text-muted-foreground">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>)}
         </div>
         <div className="grid grid-cols-7">
           {dates.map((d, index) => {
             const dayEntries = days[d] ?? [];
             const adjacent = d.slice(0, 7) !== date.slice(0, 7);
-            const shown = dayEntries.slice(0, 2);
+            const prioritized = [...dayEntries].sort((a, b) => {
+              const routine = (e: CalendarEntry) => e.source === "routine" || /^(göra frukost|ta medicin|borsta tänder|lägga sig|vakna)$/i.test(e.title.trim());
+              return Number(routine(a)) - Number(routine(b)) || Number(isFamilyEntry(a)) - Number(isFamilyEntry(b)) || Number(Boolean(b.time)) - Number(Boolean(a.time));
+            });
+            const shown = prioritized.slice(0, 2);
             return <button key={d} type="button" data-month-date={d}
               onClick={() => { setDate(d); setDayEditorOpen(true); }}
               onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)}
               aria-current={d === today ? "date" : undefined}
               aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}. ${t("Öppna dagen")}`}
-              className={cn("relative flex h-[5.5rem] min-w-0 flex-col items-stretch gap-1 overflow-hidden border-b border-r border-border/40 px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-28 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
+              className={cn("relative flex h-[5.5rem] min-w-0 flex-col items-stretch gap-1 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-28 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
               <span className={cn("mx-auto flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold", d === today && "bg-primary text-primary-foreground")}>{Number(d.slice(-2))}</span>
               <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                {shown.map(entry => <span key={entry.id} data-calendar-area={calendarArea(entry)} className={cn("block w-full truncate rounded-[4px] border-l-[3px] bg-secondary/60 px-0.5 py-0.5 text-[9px] leading-tight calendar-area-text sm:px-1 sm:text-[10px]", isFamilyEntry(entry) && "opacity-75")} title={entry.title}>{entry.title}</span>)}
-                {dayEntries.length > 2 && <span className="px-0.5 text-[9px] text-muted-foreground">+${dayEntries.length - 2} {t("till")}</span>}
+                {shown.map(entry => <span key={entry.id} data-calendar-area={calendarArea(entry)} className={cn("block w-full truncate rounded-[4px] border-l-2 bg-[#F8F5F3] px-0.5 py-0.5 text-[9px] leading-tight calendar-area-text sm:px-1 sm:text-[10px]", isFamilyEntry(entry) && "opacity-75")} title={entry.title}>{entry.title}</span>)}
+                {dayEntries.length > 2 && <span className="px-0.5 text-[9px] text-muted-foreground">+{dayEntries.length - 2} {t("till")}</span>}
               </span>
             </button>;
           })}
@@ -461,7 +465,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       </DialogContent>
     </Dialog>
     <Dialog open={cluster.length > 0} onOpenChange={open => { if (!open) setCluster([]); }}><DialogContent className="max-h-[85dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{t("Aktiviteter vid samma tid")}</DialogTitle><DialogDescription>{date}</DialogDescription></DialogHeader><ul className="space-y-2">{cluster.map(e => <li key={e.id} onClick={() => setCluster([])}>{blockButton(e)}</li>)}</ul></DialogContent></Dialog>
-    <Dialog open={dayEditorOpen} onOpenChange={setDayEditorOpen}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl"><DialogHeader><DialogTitle>{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</DialogTitle><DialogDescription>{t("Visa, redigera eller lägg till aktiviteter för dagen.")}</DialogDescription></DialogHeader><div className="space-y-2">{(days[date] ?? []).map(entry => <button key={entry.id} type="button" className="flex min-h-11 w-full items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-left" onClick={() => { setDayEditorOpen(false); openDetails(entry); }}><span className="min-w-0 flex-1 truncate">{entry.time ? `${entry.time} · ` : ""}{entry.title}</span><ChevronRight size={16} aria-hidden /></button>)}{!(days[date] ?? []).length && <p className="text-sm text-muted-foreground">{t("Inget planerat")}</p>}</div><Button className="min-h-11 w-full rounded-xl" onClick={() => openAdd(false, date)}><Plus size={16} aria-hidden />{t("Lägg till aktivitet eller period")}</Button>{ownedChildren.length > 0 && <Button variant="outline" className="min-h-11 w-full rounded-xl" onClick={() => openAdd(true, date)}><Users size={16} aria-hidden />{t("Lägg till i barnens schema")}</Button>}</DialogContent></Dialog>
+    <Dialog open={dayEditorOpen} onOpenChange={setDayEditorOpen}><DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl bg-[#FFFEFC]"><DialogHeader><DialogTitle>{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</DialogTitle><DialogDescription>{t("Visa, redigera eller lägg till aktiviteter för dagen.")}</DialogDescription></DialogHeader><div className="space-y-2">{(days[date] ?? []).map(entry => <button key={entry.id} type="button" className="flex min-h-11 w-full items-center gap-2 rounded-xl border border-border/60 bg-card p-3 text-left" onClick={() => { setDayEditorOpen(false); openDetails(entry); }}><span className="min-w-0 flex-1 truncate">{entry.time ? `${entry.time} · ` : ""}{entry.title}</span><ChevronRight size={16} aria-hidden /></button>)}{!(days[date] ?? []).length && <p className="text-sm text-muted-foreground">{t("Inget planerat")}</p>}</div><Button className="min-h-11 w-full rounded-xl" onClick={() => openAdd(false, date)}><Plus size={16} aria-hidden />{t("Lägg till aktivitet eller period")}</Button>{ownedChildren.length > 0 && <Button variant="outline" className="min-h-11 w-full rounded-xl" onClick={() => openAdd(true, date)}><Users size={16} aria-hidden />{t("Lägg till i barnens schema")}</Button>}</DialogContent></Dialog>
     <Dialog open={adding} onOpenChange={open => { if (!savingChildrenRef.current) setAdding(open); }}>
       <DialogContent className="max-h-[88dvh] overflow-y-auto rounded-3xl">
         <DialogHeader><DialogTitle>{t(kind === "child" ? "Lägg till i barnens schema" : "Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader>
