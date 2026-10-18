@@ -73,13 +73,11 @@ export default function EnergyBattery({
   const content = (
     <>
       <p className="text-sm leading-relaxed text-muted-foreground">
-        {t(
-          "Appens uppskattning utifrån registreringar, mönster och planerade aktiviteter. Din egen registrering är huvudvärdet i Idag och Kalender.",
-        )}
+        {t("En planeringsprognos utifrån mönster och schemalagda aktiviteter, inte en mätning. Din egen registrering styr batteriet i Idag, Kalender och Mitt batteri.")}
       </p>
       <div>
         <MyFloveStat
-          label={t("Beräknad energi")}
+          label={t("Uppskattning för planering")}
           value={levelWord}
           hint={`${t("Ungefär")} ${shownLevel} % · ${trendWord}`}
           icon={BatteryCharging}
@@ -133,7 +131,7 @@ export default function EnergyBattery({
   const block = (
     <MyFloveBlock
       title={t("Beräknad energikurva")}
-      subtitle={t("En uppskattning, inte en mätning av din ork")}
+      subtitle={t("Planeringsprognos – inte din aktuella batterinivå")}
       icon={BatteryCharging}
       tone="sun"
       surface="sun"
