@@ -295,7 +295,7 @@ export function StudyBuddyContent() {
                 Blir ungefär{" "}
                 {[
                   wantCards ? `${plan.cardCount} flashcards` : null,
-                  wantQuiz ? (followPoints ? "frågor utifrån dina punkter (högst 20)" : `${plan.quizCount} quizfrågor`) : null,
+                  wantQuiz ? (followPoints ? "frågor utifrån dina punkter (högst 50)" : `${plan.quizCount} quizfrågor`) : null,
                 ]
                   .filter(Boolean)
                   .join(" och ")}
