@@ -170,7 +170,7 @@ export function DailyFlowList({
     return items;
   }, [items, filter]);
 
-  if (items.length === 0) {
+  if (items.length === 0 && !showFilter) {
     return (
       <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">
         Inget inplanerat den här dagen.
@@ -187,7 +187,7 @@ export function DailyFlowList({
 
   return (
     <>
-      {showFilter && items.length > 1 && (
+      {showFilter && (
         <div role="group" aria-label="Filtrera dagens aktiviteter" className="mb-2 flex flex-wrap gap-1.5">
           {(
             [
@@ -202,10 +202,10 @@ export function DailyFlowList({
               aria-pressed={filter === value}
               onClick={() => setFilter(value)}
               className={cn(
-                "min-h-11 rounded-full border px-4 text-sm font-medium transition-colors",
+                "min-h-11 rounded-xl border px-4 text-sm font-medium shadow-none transition-colors",
                 filter === value
-                  ? "border-primary bg-lavender/60 text-ink"
-                  : "border-border/60 bg-card/70 text-muted-foreground hover:text-ink",
+                  ? "border-primary/70 bg-lavender/60 text-ink"
+                  : "border-border/60 bg-card/70 text-muted-foreground hover:bg-muted/40 hover:text-ink",
               )}
             >
               {label}
@@ -213,11 +213,12 @@ export function DailyFlowList({
           ))}
         </div>
       )}
-      {filteredItems.length === 0 && (
+      {filteredItems.length === 0 && items.length > 0 && (
         <p className="rounded-2xl bg-secondary/30 px-4 py-4 text-sm text-muted-foreground">
           {filter === "viktigast" ? "Inget är markerat som viktigast just nu." : "Inget med klockslag den här dagen."}
         </p>
       )}
+      {items.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget inplanerat den här dagen.</p>}
       <ul className="divide-y divide-border/50" aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
