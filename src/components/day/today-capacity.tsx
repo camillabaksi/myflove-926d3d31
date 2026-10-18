@@ -29,15 +29,9 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
       <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" aria-labelledby="today-capacity-title">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           <div className="min-w-0 flex-1">
-            <p
-              id="today-capacity-title"
-              className="text-xs font-semibold uppercase text-muted-foreground"
-            >
-              {t("Din kapacitet idag")}
-            </p>
             {percent === null ? (
               <>
-                <h2 className="mt-1 font-sans text-[22px] font-semibold text-ink">
+                <h2 id="today-capacity-title" className="font-sans text-[22px] font-semibold text-ink">
                   {t("Hur börjar du dagen?")}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -48,10 +42,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
               </>
             ) : (
               <>
-                <h2 className="mt-1 font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet just nu")}</h2>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {t("Utifrån din egen registrering idag. Du kan checka in igen när det ändras.")}
-                </p>
+                <h2 className="mt-1 font-sans text-[22px] font-semibold text-ink">{t("Din energi just nu")}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{t(capacityCopy(percent))}</p>
               </>
             )}
