@@ -73,7 +73,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           >
             {t("Här ser du dina tidigare loggar. Vill du logga nytt gör du det under")}{" "}
             <span className="font-medium text-ink">
-              {t("Mitt batteri → Logga energi & mående")}
+              {t("Idag → Logga energi & mående")}
             </span>
             .
           </div>
@@ -151,31 +151,20 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           <CollapsibleSection
             title={t("Tidigare incheckningar")}
             help={t("Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag.")}
-            headingClassName="text-xl font-semibold"
-            actions={
-              moods.length > 3 && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllMoods((v) => !v)}
-                  aria-expanded={showAllMoods}
-                  className="text-sm font-medium text-primary hover:underline shrink-0"
-                >
-                  {showAllMoods ? t("Visa färre") : `${t("Visa alla")} (${moods.length})`}
-                </button>
-              )
-            }
+            headingClassName="font-sans text-base font-semibold text-ink"
+            className="rounded-2xl bg-[#F5EDF7]/30 p-3"
           >
-            <div className="space-y-3">
+            <div className="space-y-2">
               {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
                 const emoji = EMOJIS.find((e) => e.score === mood.score)?.emoji;
                 return (
                   <div
                     key={mood.id}
-                    className="flex items-start gap-3 rounded-2xl bg-[#F5EDF7]/35 p-3"
+                    className="flex items-center gap-3 rounded-xl bg-white/65 px-3 py-2"
                   >
-                    <div className="text-3xl shrink-0 pt-1">{emoji}</div>
+                    <div className="text-xl shrink-0">{emoji}</div>
                     <div className="flex-1">
-                      <p className="text-sm text-muted-foreground capitalize mb-1">
+                      <p className="text-xs text-muted-foreground capitalize">
                         {formatDate(mood.date)}
                       </p>
                       {mood.note && <p className="text-foreground leading-relaxed">{mood.note}</p>}
@@ -183,6 +172,11 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                   </div>
                 );
               })}
+              {moods.length > 3 && (
+                <button type="button" onClick={() => setShowAllMoods(v => !v)} aria-expanded={showAllMoods} className="min-h-11 w-full rounded-xl text-sm font-medium text-primary hover:bg-secondary/40">
+                  {showAllMoods ? t("Visa färre") : `${t("Visa alla")} (${moods.length})`}
+                </button>
+              )}
             </div>
           </CollapsibleSection>
         </MyFloveWide>

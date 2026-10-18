@@ -5,15 +5,14 @@ import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { supabase } from "@/integrations/supabase/client";
 import { Battery, Loader2, Sparkles } from "lucide-react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
-  CartesianGrid,
+  Area,
+  AreaChart,
 } from "recharts";
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
@@ -178,7 +177,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
             help={t(
               "Tryck på en nivå. Det tar två sekunder och styr hur mycket appen föreslår idag.",
             )}
-            headingClassName="font-medium"
+            headingClassName="font-sans text-base font-semibold text-ink"
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
             className={readOnly ? "space-y-3 rounded-2xl bg-[#F5EDF7]/30 p-3" : "pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"}
           >
@@ -251,28 +250,18 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                   ? t("Ingen loggning idag än – lägg en när det passar.")
                   : `${todayLogs.length} ${todayLogs.length === 1 ? t("loggning idag.") : t("loggningar idag.")}`
               }
-              className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
+              className="rounded-2xl bg-[#F5EDF7]/30 p-3"
             >
               {todayLogs.length > 0 && (
-                <div className="h-48">
+                <div className="h-40">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={todayLogs} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-                      <XAxis dataKey="time" tick={{ fontSize: 11 }} />
-                      <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
-                      <Tooltip
-                        formatter={(v: number) => [`${v} – ${levelLabels[v]}`, t("Energi")]}
-                        contentStyle={{ borderRadius: 12, fontSize: 12 }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="level"
-                        stroke="hsl(var(--primary))"
-                        strokeWidth={2.5}
-                        dot={{ r: 4, fill: "hsl(var(--primary))" }}
-                        activeDot={{ r: 6 }}
-                      />
-                    </LineChart>
+                    <AreaChart data={todayLogs} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
+                      <defs><linearGradient id="battery-history-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#A996C6" stopOpacity={0.25}/><stop offset="100%" stopColor="#A996C6" stopOpacity={0.02}/></linearGradient></defs>
+                      <XAxis dataKey="time" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <YAxis domain={[1, 5]} ticks={[1, 3, 5]} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <Tooltip formatter={(v: number) => [`${v} – ${levelLabels[v]}`, t("Energi")]} contentStyle={{ borderRadius: 14, fontSize: 12, borderColor: "#E8DFEC" }} />
+                      <Area type="monotone" dataKey="level" stroke="#9775AD" strokeWidth={2.5} fill="url(#battery-history-area)" dot={{ r: 4, fill: "#9775AD", stroke: "#FAF9F6", strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
               )}
@@ -282,12 +271,13 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
           <MyFloveWide span="wide">
             <CollapsibleSection
               title={t("Din vecka i snitt")}
+              defaultCollapsed
               help={t(
                 "Ser du ett mönster? Använd det för att lägga tunga saker när du brukar orka.",
               )}
-              headingClassName="font-medium"
+              headingClassName="font-sans text-base font-semibold text-ink"
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
-              className="pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"
+              className="rounded-2xl bg-[#F5EDF7]/30 p-3"
             >
               {hourAverages.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
@@ -295,24 +285,24 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                 </p>
               ) : (
                 <>
-                  <div className="h-48">
+                  <div className="h-40">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={hourAverages}
                         margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                        
                         <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
                         <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
                         <Tooltip
                           formatter={(v: number) => [v, t("Snitt")]}
                           contentStyle={{ borderRadius: 12, fontSize: 12 }}
                         />
-                        <Bar dataKey="avg" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="avg" fill="#A996C6" radius={[8, 8, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
-                  {peakHour && lowHour && peakHour.hour !== lowHour.hour && (
+                  {logs.length >= 7 && peakHour && lowHour && peakHour.hour !== lowHour.hour && (
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
                       <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
                       <p className="leading-snug">

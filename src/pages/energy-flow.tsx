@@ -100,29 +100,59 @@ function TrendRow({
 export function EnergyFlowInsights() {
   const { entries, signedIn, loading } = useEnergyFlow();
   const { t } = useLang();
-  const trends = useMemo(() => categoryTrends(entries, 14), [entries]);
+  const patterns = useMemo(() => {
+    const since = Date.now() - 14 * 86400000;
+    const rows = new Map<string, { title: string; gives: number; drains: number; count: number }>();
+    for (const entry of entries) {
+      const when = Date.parse(entry.occurredAt);
+      if (!Number.isFinite(when) || when < since || when > Date.now()) continue;
+      if (entry.direction !== "gives" && entry.direction !== "drains") continue;
+      const title = entry.title.trim();
+      if (!title) continue;
+      const key = title.toLocaleLowerCase("sv-SE");
+      const row = rows.get(key) ?? { title, gives: 0, drains: 0, count: 0 };
+      row[entry.direction] += 1;
+      row.count += 1;
+      rows.set(key, row);
+    }
+    return [...rows.values()]
+      .filter(row => row.count >= 2)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  }, [entries]);
   if (loading || !signedIn) return null;
   return (
     <section className="space-y-3" aria-label={t("Energimönster")}>
       <p className="text-sm text-muted-foreground">
-        {t("Mönster från dina registreringar de senaste 14 dagarna. Inga nya uppgifter behöver fyllas i här.")}
+        {t("Återkommande aktiviteter från dina egna registreringar de senaste 14 dagarna. Inga batteriprocent eller poängsummor.")}
       </p>
-      {trends.length === 0 ? (
+      {patterns.length === 0 ? (
         <p className="rounded-2xl bg-lavender/15 p-3 text-sm text-muted-foreground">
-          {t("När du registrerat mer energi kan du se mönster här.")}
+          {t("När samma aktivitet registrerats minst två gånger kan du se möjliga mönster här.")}
         </p>
       ) : (
         <div className="space-y-2">
-          {trends.map((row) => (
-            <TrendRow
-              key={row.key}
-              emoji={row.emoji}
-              label={t(row.label)}
-              value={`${row.net > 0 ? "+" : ""}${row.net} · ${row.count} ${t("gånger")}`}
-            />
-          ))}
+          {patterns.map(row => {
+            const label = row.gives > row.drains
+              ? t("Har oftare gett energi")
+              : row.drains > row.gives
+                ? t("Har oftare tagit energi")
+                : t("Har både gett och tagit energi");
+            return (
+              <div key={row.title.toLocaleLowerCase("sv-SE")} className="flex items-center justify-between gap-3 rounded-2xl bg-secondary/40 px-3 py-3">
+                <div className="min-w-0">
+                  <p className="break-words text-sm font-medium text-ink">{row.title}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{label}</p>
+                </div>
+                <span className="shrink-0 text-xs text-muted-foreground">{row.count} {t("gånger")}</span>
+              </div>
+            );
+          })}
         </div>
       )}
+      <p className="text-xs text-muted-foreground">
+        {t("Det här är observationer från dina registreringar, inte mätningar eller säkra slutsatser om din energi.")}
+      </p>
     </section>
   );
 }
