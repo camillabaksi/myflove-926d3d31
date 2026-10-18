@@ -5,13 +5,15 @@ import Layout from "@/components/layout";
 import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { ExpandableBlock } from "@/components/myflove/expandable-block";
-import EnergyBattery from "@/components/energy-battery";
+import { CapacityBattery } from "@/components/calendar/capacity-battery";
+import { useDayCapacity } from "@/hooks/use-day-capacity";
+import { todayISO } from "@/lib/day";
 import SimpleCheckin from "@/components/simple-checkin";
 import OrkSummary from "@/components/home/ork-summary";
 import ImpactCheckin from "@/components/impact-checkin";
 import PatternsCard from "@/components/patterns-card";
 import CycleCard from "@/components/cycle-card";
-import BatteryToday from "@/components/battery-today";
+
 import DayEdgesCheckin from "@/components/day-edges-checkin";
 import DayEnergyFlow from "@/components/day-energy-flow";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -33,6 +35,7 @@ import { setCollapsed } from "@/lib/collapse-store";
  */
 export default function BatteryPage() {
   const { name } = useUserProfile();
+  const capacity = useDayCapacity()(todayISO());
   const { t, lang } = useLang();
   const [path] = useLocation();
   const checkinRef = useRef<HTMLDivElement>(null);
@@ -128,8 +131,11 @@ export default function BatteryPage() {
             headingClassName="text-base font-semibold text-ink"
           >
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-              <EnergyBattery />
-              <BatteryToday />
+              <section className="rounded-2xl border border-border/60 bg-card p-4">
+                <h3 className="font-display text-base font-semibold text-foreground">{t("Din registrerade kapacitet")}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t("Utifrån din egen incheckning, inte planerade aktiviteter.")}</p>
+                <CapacityBattery percent={capacity.percent} size="lg" className="mt-3 w-full" />
+              </section>
               <PatternsCard />
               <CycleCard />
               <DayEdgesCheckin />
