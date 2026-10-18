@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import QuickAddSheet from "@/components/quick-add-sheet";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import { MyFloveBlock } from "@/components/myflove/block";
@@ -161,6 +162,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask, setTaskTime } =
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
 
   /** Uppgifterna Flow får referera till – bara titel och id, inget privat. */
   const taskListContext = activeTasks
@@ -529,6 +531,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
           <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
+            <Button type="button" variant="outline" className="rounded-2xl" onClick={() => setQuickAddOpen(true)}><Plus size={16} aria-hidden /> Lägg till i kalendern</Button>
 <Button asChild variant="outline" className="rounded-2xl"><Link to="/idag">
               <ArrowLeft size={16} />
               Idag
@@ -808,5 +811,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         <DialogContent className="rounded-3xl"><DialogTitle>Spara hos Pace?</DialogTitle><DialogDescription>Pace använder det i framtida samtal. Du kan ändra eller ta bort det när du vill.</DialogDescription><p className="break-words rounded-2xl bg-secondary p-3 text-sm">{memoryCandidate}</p><div className="flex justify-end gap-2"><Button variant="outline" onClick={() => setMemoryCandidate(null)}>Inte nu</Button><Button onClick={saveChosenMemory}>Ja, kom ihåg</Button></div></DialogContent>
       </Dialog>
     </>
+    <QuickAddSheet open={quickAddOpen} onOpenChange={setQuickAddOpen} />
   );
 }
