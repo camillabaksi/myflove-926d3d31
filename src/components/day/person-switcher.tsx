@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Users } from "lucide-react";
+import { ChevronDown, UserRound, UsersRound, Users } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ME_ID } from "@/lib/family-perspective";
 
@@ -55,10 +56,12 @@ export function PersonSwitcher({
   people,
   value,
   onChange,
+  compact = false,
 }: {
   people: Person[];
   value: Perspective;
   onChange: (value: Perspective) => void;
+  compact?: boolean;
 }) {
   const options: Array<{ id: string; label: string; person?: Person }> = [
     { id: ME_ID, label: "Min dag", person: { id: ME_ID, name: "Du" } },
@@ -80,6 +83,19 @@ export function PersonSwitcher({
       ro?.disconnect();
     };
   }, [options.length]);
+
+  if (compact) return (
+    <div className="grid grid-cols-2 gap-2" role="group" aria-label="Vems dag vill du se?">
+      <button type="button" onClick={() => onChange(ME_ID)} aria-pressed={value === ME_ID} className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-full border px-2 text-sm font-semibold", value === ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")}><UserRound size={18} aria-hidden /> Min dag</button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild><button type="button" className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-full border px-2 text-sm font-semibold", value !== ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")} aria-label="Visa barnen och familjens dag"><UsersRound size={18} aria-hidden /><span className="truncate">{value === ME_ID ? "Visa barnen" : value === FAMILY_ID ? "Familjens dag" : people.find(p => p.id === value)?.name ?? "Visa barnen"}</span><ChevronDown size={14} aria-hidden /></button></DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-44">
+          {people.map(p => <DropdownMenuItem key={p.id} onSelect={() => onChange(p.id)}>{p.name}</DropdownMenuItem>)}
+          <DropdownMenuItem onSelect={() => onChange(FAMILY_ID)}>Familjens dag</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
 
   return (
     <div className="relative min-w-0">
