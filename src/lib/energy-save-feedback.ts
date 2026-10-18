@@ -10,6 +10,8 @@ export interface EnergySavedDetail {
   factorId?: string;
   direction: EnergyDirection;
   date: string | null;
+  /** Completed activities already adjust the canonical capacity automatically. */
+  automaticallyApplied?: boolean;
 }
 
 /** Confirmed observations only. This UI signal never writes capacity or a second factor. */
@@ -24,6 +26,7 @@ export function announceSavedEnergy(entry: EnergyFactorEntry, activityDate?: str
         factorId: entry.id,
         direction: entry.direction,
         date: activityDate ?? dayOf(entry.occurredAt),
+        automaticallyApplied: entry.kind === "planerat" && entry.note === "Genomförd aktivitet" && (entry.direction === "gives" || entry.direction === "drains"),
       },
     }),
   );

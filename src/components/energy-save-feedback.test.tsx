@@ -91,6 +91,18 @@ describe("optional small battery update", () => {
     expect(mocks.addFactor).not.toHaveBeenCalled();
     expect(mocks.logMood).not.toHaveBeenCalled();
   });
+  it("does not offer a second change for a completed activity already applied to capacity", () => {
+    render(<Host />);
+    announce(entry({ note: "Genomförd aktivitet", kind: "planerat" }));
+    expect(screen.getByText(/Aktiviteten är sparad/)).toBeVisible();
+    expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
+    expect(mocks.logEnergyPercent).not.toHaveBeenCalled();
+  });
+  it("keeps explicit adjustment available for an ordinary energy observation", () => {
+    render(<Host />);
+    announce(entry({ kind: "vardag", note: null }));
+    expect(screen.getByRole("button", { name: "Uppdatera till 57 %" })).toBeVisible();
+  });
   it("retains an adjusted draft after a failed save and saves on retry", async () => {
     mocks.logEnergyPercent.mockRejectedValueOnce(new Error("Offline"));
     render(<Host />);
