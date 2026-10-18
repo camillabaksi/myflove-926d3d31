@@ -120,16 +120,12 @@ export default function BatteryPage() {
             className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)]"
             headingClassName="text-base font-semibold text-ink"
           >
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:items-start">
-              <PatternsCard />
-              <CycleCard />
-              
-            </div>
-          <div className="mt-5 border-t border-border/50 pt-4">
+
+          <div className="space-y-3">
             <h3 className="mb-3 text-sm font-semibold text-ink">{t("Tidigare mående och energi")}</h3>
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
-            <TabsList className="grid h-11 w-full grid-cols-3 rounded-2xl">
-              <TabsTrigger value="mood" className="rounded-xl text-xs">
+            <TabsList className="grid h-10 w-full grid-cols-3 rounded-2xl bg-[#F5EDF7]/60">
+              <TabsTrigger value="mood" className="rounded-xl text-xs font-medium">
                 <Smile size={14} className="mr-1" /> {t("Mående")}
               </TabsTrigger>
               <TabsTrigger value="energy" className="rounded-xl text-xs">
@@ -143,13 +139,14 @@ export default function BatteryPage() {
               <MoodContent showHeader={false} readOnly />
             </TabsContent>
             <TabsContent value="energy" className="mt-6">
-              <EnergyContent showHeader={false} />
+              <EnergyContent showHeader={false} readOnly />
             </TabsContent>
             <TabsContent value="flow" className="mt-6">
               <EnergyFlowInsights />
             </TabsContent>
           </Tabs>
-
+          <PatternsCard />
+          <CycleCard />
           </div>
           </CollapsibleSection>
         </MyFloveWide>
