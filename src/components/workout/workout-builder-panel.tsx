@@ -51,7 +51,7 @@ const INTENTS: { id: WorkoutIntent; label: string; desc: string; icon: typeof Du
 ];
 
 const ENERGIES: EnergyLevel[] = ["låg", "normal", "mycket"];
-const TIMES = [10, 20, 30, 45, 60];
+const TIMES = [5, 10, 15, 20, 30, 45, 60];
 const PLACES: Place[] = ["hemma", "gym", "ute"];
 const EQUIPMENTS: Equipment[] = ["kroppsvikt", "hantlar", "kettlebell", "medicinboll", "miniband"];
 const FOCUSES: ExerciseFocus[] = ["helkropp", "överkropp", "underkropp", "bål", "rörlighet"];
