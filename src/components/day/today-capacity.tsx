@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Heart } from "lucide-react";
+import ImpactCheckin from "@/components/impact-checkin";
 import { SoftEnergyBattery } from "@/components/day/soft-energy-battery";
 import SimpleCheckin from "@/components/simple-checkin";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
           <Heart size={16} aria-hidden />
           <span className="min-w-0">{t("Logga energi & mående")}</span>
         </Button>
+        <div className="mt-2"><ImpactCheckin compact /></div>
       </section>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1rem)] max-h-[42rem] w-[calc(100%-1rem)] max-w-md grid-rows-[minmax(0,1fr)] gap-0 overflow-hidden rounded-3xl border border-border/70 bg-card p-0 pb-0 sm:p-0 sm:pb-0 [&>button]:right-3 [&>button]:top-[calc(0.5rem+env(safe-area-inset-top))] [&>button]:z-10 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:rounded-xl">
