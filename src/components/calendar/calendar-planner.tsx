@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Link as PlanningLink } from "@tanstack/react-router";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
-import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, Leaf, MoreHorizontal, NotebookPen, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, House, Leaf, MoreHorizontal, NotebookPen, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { paceEveryday } from "@/components/paceable/design-system";
 import { Input } from "@/components/ui/input";
@@ -47,7 +47,7 @@ const IMPACTS = [
   { value: "unknown", label: "Vet inte", icon: CircleHelp },
 ] as const;
 function EntryIcon({ entry, size = 16 }: { entry: CalendarEntry; size?: number }) {
-  const Icon = entry.energyImpact === "gives" ? Leaf : /medicin|tablett/i.test(entry.title) ? Pill : entry.source === "study" ? BookOpen : entry.source === "family" || entry.source === "child" ? Users : entry.source === "routine" ? Repeat : entry.source === "task" ? CheckSquare : entry.source === "priority" || entry.source === "quickflow" ? Zap : CalendarDays;
+  const Icon = entry.energyImpact === "gives" ? Leaf : /medicin|tablett/i.test(entry.title) ? Pill : entry.source === "study" ? BookOpen : entry.source === "family" || entry.source === "child" ? Users : entry.source === "routine" ? Repeat : /(?:^|\s)hemma(?:\s|$)/i.test(entry.title) ? House : entry.source === "task" ? CheckSquare : entry.source === "priority" || entry.source === "quickflow" ? Zap : CalendarDays;
   return <Icon size={size} aria-hidden data-calendar-area={calendarArea(entry)} className="shrink-0 calendar-area-text" />;
 }
 function Segments({ entries }: { entries: CalendarEntry[] }) {
@@ -292,7 +292,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     if (!window.matchMedia("(pointer:fine)").matches) { event.preventDefault(); return; }
     event.dataTransfer.setData("application/myflove-calendar", entry.id); event.dataTransfer.effectAllowed = "move";
   }} onClick={() => openDetails(entry)} data-family-entry={isFamilyEntry(entry) ? (entry.requiresParent ? "presence" : "context") : undefined} data-calendar-area={calendarArea(entry)} className={cn("pace-journal-calendar-entry pace-calendar-entry h-full min-h-11 w-full items-start justify-start gap-1.5 overflow-hidden whitespace-normal rounded-xl border border-l-[3px] calendar-area-surface px-2 py-1.5 text-left font-normal text-foreground", isFamilyEntry(entry) && "text-muted-foreground shadow-none", entry.done && !isFamilyEntry(entry) && "opacity-65")} aria-label={`${entry.title}, ${entry.time ?? t("Ingen tid ännu")}${entry.endTime ? `–${entry.endTime}` : ""}${entry.label ? `, ${entry.label}` : ""}, ${t(calendarAreaLabel(calendarArea(entry)))}`}>
-    {showPictograms ? <MulberryPictogram id={entry.pictogram ?? mulberryForTitle(entry.title, entry.source === "study" ? "study" : "calendar")} className={compact ? "h-7 w-7" : "h-8 w-8"} /> : <EntryIcon entry={entry} size={compact ? 14 : 18} />}
+    {(entry.source === "child" || (entry.pictogram && entry.pictogram !== "calendar") || showPictograms) ? <MulberryPictogram id={(entry.pictogram && entry.pictogram !== "calendar") ? entry.pictogram : mulberryForTitle(entry.title, entry.source === "study" ? "study" : "calendar")} className={compact ? "h-7 w-7" : "h-8 w-8"} /> : <EntryIcon entry={entry} size={compact ? 14 : 18} />}
     <span className="min-w-0 flex-1"><span className={cn("pace-type-activity block text-xs font-semibold leading-snug", isFamilyEntry(entry) ? "line-clamp-2 break-words" : "truncate", !compact && "text-sm", entry.done && "line-through")}>{isFamilyEntry(entry) && entry.label ? `${entry.label} · ` : ""}{entry.title}</span>{entry.requiresParent && <span className="flex items-center gap-1 text-[10px] font-semibold text-primary"><UserRound size={11} />{t("Behöver mig")}</span>}<span className="pace-type-time block text-[11px] leading-snug text-muted-foreground">{entry.time}{entry.endTime && `–${entry.endTime}`}</span>{!compact && !entry.time && <span className="block truncate text-[11px] text-muted-foreground">{t(calendarAreaLabel(calendarArea(entry)))}{entry.label && ` · ${t(entry.label)}`}</span>}</span>
     {entry.done && !isFamilyEntry(entry) && <Check size={14} className="shrink-0" aria-hidden />}
   </Button>;
