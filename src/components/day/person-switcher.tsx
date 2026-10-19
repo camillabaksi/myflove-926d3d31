@@ -88,10 +88,10 @@ export function PersonSwitcher({
   }, [options.length]);
 
   if (compact) return (
-    <div className={cn("grid items-center gap-1.5", trailingControl ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_2.75rem]" : "grid-cols-2")} role="group" aria-label="Vems dag vill du se?">
-      <button type="button" onClick={() => onChange(ME_ID)} aria-pressed={value === ME_ID} className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl border px-2 text-sm font-semibold shadow-none", value === ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")}><UserRound size={18} aria-hidden /> Min dag</button>
+    <div className={cn("flex flex-wrap items-center gap-1.5")} role="group" aria-label="Vems dag vill du se?">
+      <button type="button" onClick={() => onChange(ME_ID)} aria-pressed={value === ME_ID} className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-3 text-xs sm:text-sm font-semibold shadow-none", value === ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")}><UserRound size={15} aria-hidden /> Min dag</button>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild><button type="button" className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl border px-2 text-sm font-semibold shadow-none", value !== ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")} aria-label="Visa barnen och familjens dag"><UsersRound size={18} aria-hidden /><span className="truncate">{value === ME_ID ? "Visa barnen" : value === FAMILY_ID ? "Familjens dag" : people.find(p => p.id === value)?.name ?? "Visa barnen"}</span><ChevronDown size={14} aria-hidden /></button></DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild><button type="button" className={cn("inline-flex min-h-11 min-w-0 items-center justify-center gap-1 rounded-xl border px-2.5 text-xs sm:text-sm font-semibold shadow-none", value !== ME_ID ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-ink")} aria-label="Visa barnen och familjens dag"><UsersRound size={15} aria-hidden /><span className="truncate">{value === ME_ID ? "Visa barnen" : value === FAMILY_ID ? "Familjens dag" : people.find(p => p.id === value)?.name ?? "Visa barnen"}</span><ChevronDown size={13} aria-hidden /></button></DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-44">
           {people.map(p => <DropdownMenuItem key={p.id} onSelect={() => onChange(p.id)}>{p.name}</DropdownMenuItem>)}
           <DropdownMenuItem onSelect={() => onChange(FAMILY_ID)}>Familjens dag</DropdownMenuItem>
