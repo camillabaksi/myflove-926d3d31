@@ -806,7 +806,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               <ArrowLeft size={22} />
             </button>
-          ) : null} actions={<ViewCollapseToggle />} />
+          ) : null} actions={<div className="flex items-center gap-1"><Link href="/assistant" aria-label="Prata med Pace" title="Prata med Pace" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link><ViewCollapseToggle /></div>} />
         </header>
 
 
