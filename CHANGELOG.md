@@ -3475,3 +3475,9 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 - Bakgrunden tonar ut mjukt mot sidans ivory nedåt; beskärningen är anpassad så stenarna syns tydligt på olika skärmstorlekar.
 - Dubbla tillbaka-knappar borttagna – appens vanliga tillbakaknapp gäller; chatt-knappen finns kvar.
 - Text, chatt, planering och tidigare samtal ligger kvar som fungerande komponenter ovanpå bakgrunden. Ej publicerat.
+
+## 2026-10-19 – Pace-sidans responsiva bakgrund finjusterad
+- Ny liggande desktopbakgrund på /assistant; bilden behåller sina proportioner, stenarna syns till höger och bakgrunden fortsätter bakom historik, förslag och chatt.
+- Mobilbakgrunden är kvar men ritas nu i naturlig proportion så alla tre stenar alltid syns utan beskärning, med diskret ljus toning bakom texten.
+- Bakgrunden tonar mjukt ut mot sidans varma ivory längst ned på både mobil och desktop; ingen synlig kant där bilden slutar.
+- Verifierat på 360/390/430 px, surfplatta (820 px) och desktop (1440 px), även med utfälld historik. Ingen ändring av data, chattlogik eller funktioner. Ej publicerat.
