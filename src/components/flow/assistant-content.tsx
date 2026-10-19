@@ -61,16 +61,13 @@ const tomorrowISO = (): string => {
 };
 
 
-const GREETING =
-  "Hej! Vad behöver du just nu?";
+
 
 const QUICK_PROMPTS = [
-  { label: "Få hjälp att planera", prompt: "Hjälp mig planera utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
-  { label: "Jag känner mig stressad", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
-  { label: "Jag behöver motivation", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
-  { label: "Jag vill ta en paus", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
-  { label: "Jag behöver en lugn stund", prompt: "Jag behöver en lugn stund. Hjälp mig varva ner med en kort övning." },
-  { label: "Något annat…", prompt: null },
+  { label: "Hjälp mig planera dagen", prompt: "Hjälp mig planera utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
+  { label: "Jag känner mig överväldigad just nu", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
+  { label: "Ge mig förslag på en lugn aktivitet", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
+  { label: "Hjälp mig sortera mina tankar", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
 ];
 
 /** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
@@ -442,7 +439,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   return (
     <>
-      <div className="pace-flow-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
+      <div className="pace-flow-chat pace-serene-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
           <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
@@ -474,7 +471,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </section>
           )}
 
-          <section className="rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
+          <section className="pace-serene-messages rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
             <div ref={scrollRef} className="max-h-[55vh] space-y-3 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -482,14 +479,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 </div>
               ) : (
                 <>
-                  {messages.length === 0 && (
-                    <div className="flex justify-start items-end gap-2">
-                      <FlowMascot alt="Pace – Paceables följeslagare" size="sm" mood="wave" bump className="shrink-0" />
-                      <div className="pace-flow-reply max-w-[80%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed bg-secondary text-foreground">
-                        {GREETING} <Heart aria-label="hjärta" className="inline size-4 fill-primary text-primary" />
-                      </div>
-                    </div>
-                  )}
                   {messages.map((m) => {
                     const ex = m.role === "assistant" ? parseExerciseBlocks(m.content) : null;
                     const parsed =
@@ -621,7 +610,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           {messages.length === 0 && (
             <div className="space-y-2">
               <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/70 px-3 py-2.5 text-left text-sm font-medium">
-                <span>Behöver du hjälp att komma igång?</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
+                <span>Förslag just nu</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
               </button>
               {suggestionsOpen && <div className="flex flex-wrap gap-2">
                 {QUICK_PROMPTS.map(({ label, prompt }) => (
@@ -631,7 +620,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <div className="bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
+          <div className="pace-serene-composer bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
             <textarea
               ref={inputRef}
               value={input}
