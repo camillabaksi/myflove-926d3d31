@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-19";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-19 – Rättat byggfel i snabbregistreringen",
-    items: ["Snabbregistrering (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet som blockerade bygget. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering."],
+    items: ["Snabbregistrering och kalender (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet och tagit bort en oanvänd kalenderdeklaration som refererade till en saknad typ. Automatisk byggkontroll godkänd. Befintliga tester för uppgifter/kalender/snabbregistrering har separata mock-/förväntningsfel och är inte godkända. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering."],
   },
   {
     title: "2026-10-17 – UX-förbättring etapp 2: lugnare månadsvy",
