@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { Bell, CalendarDays, Plus } from "lucide-react";
+import { CalendarDays, Plus, ChevronDown } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -76,14 +76,21 @@ export function TodayContent() {
         <section className="min-w-0 rounded-[2rem] border border-border/70 bg-card px-3 py-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:px-5 sm:py-5" aria-labelledby="your-day-title">
           <header className="mb-3 space-y-3">
             <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2><p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
-            <div className="grid grid-cols-3 gap-1.5 sm:gap-2" aria-label={t("Snabbval för din dag")}>
-              <Button asChild size="sm" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
-                <Link href="/lagg-till"><Plus size={15} className="shrink-0" aria-hidden />{t("Lägg till")}</Link>
+            <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
+              <Button type="button" size="sm" className="min-h-11 gap-1.5 rounded-xl px-4" onClick={() => setAddOpen(true)}>
+                <Plus size={16} aria-hidden />{t("Lägg till")}
               </Button>
-              <Button asChild size="sm" variant="outline" className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm">
-                <Link href="/paminnelser" aria-label={t("Påminnelse")}><Bell size={15} className="shrink-0" aria-hidden />{t("Påminn")}</Link>
-              </Button>
-              <CopyDayButton date={today} shortLabel className="h-10 min-w-0 gap-1 rounded-xl px-1 text-[11px] sm:text-sm" />
+              <details className="group min-w-0 flex-1 rounded-xl border border-border/60 bg-card/80 px-3">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm text-muted-foreground [&::-webkit-details-marker]:hidden">
+                  {t("Fler val")}<ChevronDown size={16} aria-hidden className="transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="flex flex-wrap gap-2 pb-3">
+                  <Button asChild size="sm" variant="outline" className="min-h-11 rounded-xl">
+                    <Link href="/paminnelser">{t("Påminnelse")}</Link>
+                  </Button>
+                  <CopyDayButton date={today} shortLabel className="min-h-11 rounded-xl" />
+                </div>
+              </details>
             </div>
           </header>
           <div className="pt-2">
