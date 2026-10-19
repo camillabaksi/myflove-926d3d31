@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { CalendarDays, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
+import { CalendarDays, Plus, ChevronDown, NotebookPen, Images, SlidersHorizontal } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
-import DailyFlowList from "@/components/day/daily-flow-list";
+import DailyFlowList, { type DailyFlowFilter } from "@/components/day/daily-flow-list";
 import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import { GreetingNameMenu } from "@/components/day/greeting-name-menu";
 import { DayGreeting } from "@/components/day/day-greeting";
@@ -35,6 +35,7 @@ export function TodayContent() {
   const { t, locale } = useLang();
   const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
+  const [dayFilter, setDayFilter] = useState<DailyFlowFilter>("alla");
   const [todayPictograms, setTodayPictograms] = useCloudSyncedStorage<boolean>("paceable-today-pictograms", false);
   const [hour, setHour] = useState(() => new Date().getHours());
   useEffect(() => {
@@ -82,20 +83,26 @@ export function TodayContent() {
               <div className="flex shrink-0 items-center gap-1">
                 <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-lavender/55 px-2 text-xs font-semibold text-ink hover:bg-lavender/75"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
                 <RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><CalendarDays size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Veckan")}</span><span className="sr-only min-[390px]:hidden">{t("Visa veckan")}</span></RouterLink>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild><button type="button" aria-label="Filtrera dagens aktiviteter" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><SlidersHorizontal size={15} aria-hidden /><span className="hidden min-[420px]:inline">Filtrera</span><span className="sr-only min-[420px]:hidden">Filtrera</span>{dayFilter !== "alla" && <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}</button></DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-44">
+                    {([["alla", "Alla"], ["viktigast", "Viktigast"], ["tid", "Med tid"]] as const).map(([value, label]) => <DropdownMenuItem key={value} onSelect={() => setDayFilter(value)}>{dayFilter === value ? "✓ " : ""}{label}</DropdownMenuItem>)}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </header>
           <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
-              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-0.5 rounded-xl px-1.5 text-[11px] sm:text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
+              <Button type="button" size="sm" className="min-h-11 w-[76px] shrink-0 gap-0.5 rounded-xl px-1 text-[11px] sm:text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-0.5 rounded-xl border border-border bg-card px-1.5 text-[11px] text-muted-foreground sm:text-xs">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 w-[76px] shrink-0 items-center justify-center gap-0.5 rounded-xl border border-border bg-card px-1 text-[11px] text-muted-foreground sm:text-xs">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="min-w-44">
                   <DropdownMenuItem asChild><Link href="/paminnelser">{t("Påminnelse")}</Link></DropdownMenuItem>
                   <div className="p-1"><CopyDayButton date={today} shortLabel className="min-h-11 w-full rounded-xl" /></div>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
+            </>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} selectedFilter={dayFilter} showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
