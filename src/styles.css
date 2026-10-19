@@ -2890,25 +2890,27 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
   .pace-scene .pace-welcome-copy::before { background: rgba(255,250,246,.88); border-radius: 1rem; }
 }
 
-/* A softly coloured canvas shared by the app shell and its actual scroll surface.
-   Slightly more visible than the previous treatment, while keeping cards neutral. */
+/* A clearly perceptible but restrained warm canvas on actual page surfaces.
+   Preserve white cards, legibility, dark mode and the Pace photo scene. */
 html:not(.dark) .app-shell-bg[data-paceable-app="true"] {
   --pace-ambient-background:
-    radial-gradient(ellipse 65% 36% at 97% 8%, rgba(245, 211, 198, .36), transparent 82%),
-    radial-gradient(ellipse 60% 34% at 0% 46%, rgba(221, 205, 238, .29), transparent 84%),
-    radial-gradient(ellipse 58% 34% at 100% 92%, rgba(225, 233, 213, .23), transparent 83%),
-    linear-gradient(135deg, #FCF9F6 0%, #FBF7F5 48%, #FAF8F5 100%);
+    radial-gradient(ellipse 110% 58% at 90% 12%, rgba(241, 204, 191, .43), transparent 76%),
+    radial-gradient(ellipse 105% 64% at 5% 56%, rgba(220, 204, 234, .36), transparent 79%),
+    radial-gradient(ellipse 95% 55% at 87% 96%, rgba(222, 233, 214, .27), transparent 78%),
+    linear-gradient(155deg, #FBF4F0 0%, #F9F4F4 50%, #FAF6F1 100%);
   background: var(--pace-ambient-background);
 }
 html:not(.dark) .app-shell-bg[data-paceable-app="true"] .pace-mobile-content-scroll:not(:has(.pace-scene)) {
   background: var(--pace-ambient-background);
   background-attachment: local;
 }
-/* The assistant's photographic scene and dark mode remain untouched. */
+/* Let the warm canvas appear between sections without recolouring cards. */
+html:not(.dark) .app-shell-bg[data-paceable-app="true"] .pace-mobile-content-scroll:not(:has(.pace-scene)) > main {
+  background-color: transparent;
+}
 html.dark .app-shell-bg[data-paceable-app="true"] {
   background-image: none;
 }
-
 
 /* Planera: one cohesive frosted-glass welcome panel, not a rectangle
    plus a second circular halo. Keep the photographic stones visible. */
