@@ -15,7 +15,7 @@ import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
-import { BookEntrances } from "@/components/notebook/book-navigation";
+import { BookNavigation } from "@/components/notebook/book-navigation";
 
 /**
  * QuickFlow = få ut saker ur huvudet → Flow delar upp → du granskar →
@@ -34,6 +34,7 @@ export default function Dump() {
         <MyFloveWide>
           <div className="space-y-5">
             <section className="pop-in space-y-4" aria-labelledby="thoughts-title">
+              <BookNavigation kind="quickflow" />
               <header className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <span className="mb-3 grid h-9 w-9 place-items-center rounded-2xl bg-lavender text-ink" aria-hidden><ThoughtsIcon size={20} /></span>
@@ -58,7 +59,7 @@ export default function Dump() {
               </div>
             </section>
 
-            <BookEntrances />
+
 
             {/* Allt som redan är ur huvudet ligger kvar – men ur vägen tills du vill se det. */}
             <CollapsibleSection
