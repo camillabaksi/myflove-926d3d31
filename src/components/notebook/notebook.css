@@ -824,3 +824,10 @@
 .book-entrance:nth-child(1) { background: var(--book-lavender); }
 .book-entrance:nth-child(2) { background: var(--book-sage); }
 @media (max-width: 360px) { .book-entrances { grid-template-columns: 1fr; } }
+
+/* Softer paper-like writing surfaces, with responsive decision columns. */
+.book-diary-sheet, .book-sheet { border-radius: 1.25rem; box-shadow: var(--book-shadow); }
+.book-diary-sheet { background: var(--book-paper); padding: clamp(0.85rem, 3vw, 1.5rem); border: 1px solid var(--book-line); }
+.book-decision .book-column { border-radius: 0.9rem; border-top-width: 2px; padding: clamp(0.5rem, 2vw, 0.85rem); }
+.book-decision .book-point textarea { width: 100%; min-width: 0; }
+@media (max-width: 600px) { .book-columns { gap: 0.55rem; } .book-column h2 { font-size: 1rem; } .book-workspace { grid-template-columns: minmax(0, 1fr); } .book-page { border-left: 0; padding-left: 0; border-top: 1px solid var(--book-line); padding-top: 1rem; } }
