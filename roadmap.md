@@ -1,4 +1,11 @@
 # Roadmap
+## Samlat Paceable-material och editorialbilder (2026-10-19)
+- [x] Omfattning vald: dokument, pitchfilmer, korta appfilmer och fristående reklamfilm; anonymiserat verkligt kontoinnehåll.
+- [ ] Inventera senaste källor och verifiera aktuell produkt; visa materialplan för godkännande.
+- [ ] Fånga svenska/engelska mobil- och desktopbilder med kontoskrivningar blockerade; anonymisera och granska före användning.
+- [ ] Uppdatera blueprint, pitchdeck, manus och relevanta stöddokument med nya versionsnamn på svenska/engelska.
+- [ ] Producera fyra pitchfilmer, sex korta appfilmer samt uppdaterad separat intro/reklamleverans från verifierade källor; bevara låsta reklamlager.
+- [ ] Granska alla dokument- och presentationssidor samt filmernas rörelse, text, format och integritet; samla i Files med begränsningar. Ingen appändring eller publicering.
 ## Byggfel i snabbregistreringen (2026-10-19)
 - [x] Rättat saknad avslutande JSX-klammer kring det valfria tidsfältet; inga funktions- eller dataändringar.
 - [x] Tagit bort oanvänd kalenderdeklaration med saknad typ; automatisk byggkontroll visar build OK och båda ändrade appmoduler laddas med HTTP 200. Befintliga riktade tester körda men har separata mock-/förväntningsfel; inga test- eller funktionsändringar ingår. Ingen publicering.
