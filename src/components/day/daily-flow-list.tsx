@@ -188,9 +188,9 @@ export function DailyFlowList({
 
   return (
     <>
-      {showFilter && items.length > 1 && <div className="absolute right-0 top-1 flex justify-end"><button type="button" aria-expanded={filterOpen} aria-controls="today-activity-filters" onClick={() => setFilterOpen(v => !v)} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 text-xs text-muted-foreground hover:bg-secondary/50"><SlidersHorizontal size={16} aria-hidden />Filtrera{filter !== "alla" ? " · Aktivt" : ""}</button></div>}
+      {showFilter && items.length > 1 && <div className="mb-1 flex justify-end"><button type="button" aria-expanded={filterOpen} aria-controls="today-activity-filters" onClick={() => setFilterOpen(v => !v)} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 text-xs text-muted-foreground hover:bg-secondary/50"><SlidersHorizontal size={16} aria-hidden />Filtrera{filter !== "alla" ? " · Aktivt" : ""}</button></div>}
       {showFilter && items.length > 1 && filterOpen && (
-        <div id="today-activity-filters" role="group" aria-label="Filtrera dagens aktiviteter" className="mb-2 flex flex-wrap gap-1.5">
+        <div id="today-activity-filters" role="group" aria-label="Filtrera dagens aktiviteter" className="mb-3 flex flex-wrap gap-1.5">
           {(
             [
               ["alla", "Alla"],
