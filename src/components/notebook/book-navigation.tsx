@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Scale, Network, Feather } from "lucide-react";
+import { BookOpen, Scale } from "lucide-react";
 import "./notebook.css";
 export const bookSections = [
   {
@@ -12,23 +12,9 @@ export const bookSections = [
   {
     path: "/tankar/beslut",
     kind: "decision",
-    label: "Beslut",
-    caption: "Fördelar, nackdelar och det öppna",
+    label: "För & emot",
+    caption: "Sortera tankar inför ett beslut",
     icon: Scale,
-  },
-  {
-    path: "/tankar/tankekarta",
-    kind: "map",
-    label: "Tankekarta",
-    caption: "Se hur tankarna hänger ihop",
-    icon: Network,
-  },
-  {
-    path: "/tankar/reflektioner",
-    kind: "reflection",
-    label: "Reflektioner",
-    caption: "Stanna en stund, om du vill",
-    icon: Feather,
   },
 ] as const;
 export function BookEntrances() {
@@ -36,8 +22,8 @@ export function BookEntrances() {
     <section className="notebook" aria-labelledby="book-entrances-title">
       <div className="book-header">
         <div>
-          <h2 id="book-entrances-title">Din reflektionsbok</h2>
-          <p className="book-muted">Det behöver inte bli färdigt idag.</p>
+          <h2 id="book-entrances-title">Mina tankar</h2>
+          <p className="book-muted">Skriv av dig eller sortera ett beslut. Du behöver inte bli klar idag.</p>
         </div>
       </div>
       <div className="book-entrances">

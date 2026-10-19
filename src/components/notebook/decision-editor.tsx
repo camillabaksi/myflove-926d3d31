@@ -102,6 +102,22 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
   const { draft, update, reset } = useBookDraft(entity, store);
   const [focus, setFocus] = useState<Column | "all">("all");
   const [help, setHelp] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [selectedDiaryIds, setSelectedDiaryIds] = useState<string[]>([]);
+  const [importColumn, setImportColumn] = useState<Column>("pros");
+  const diaryEntries = store.entities.filter((e) => e.kind === "diary" && !e.content.deleted && !!e.content.text?.trim());
+  const importDiary = () => {
+    for (const id of selectedDiaryIds) {
+      const source = diaryEntries.find((e) => e.id === id);
+      if (!source) continue;
+      store.create("point", {
+        title: "", text: source.content.text.trim(), date: localBookDate(),
+        bookId: entity.id, column: importColumn, order: Date.now(),
+      });
+    }
+    setSelectedDiaryIds([]);
+    setImportOpen(false);
+  };
   const points = store.entities.filter(
     (e) => e.kind === "point" && e.content.bookId === entity.id && !e.content.deleted,
   );
@@ -118,17 +134,17 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
         id="decision-title"
         className="book-decision-title"
         rows={1}
-        placeholder="Ett beslut, stort eller litet…"
+        placeholder="Vad funderar du på?"
         value={draft.title}
         onChange={(e) => update({ title: e.target.value })}
       />
       <div className="book-decision-options">
         <Button variant="ghost" aria-pressed={!!draft.uncertain} onClick={() => update({ uncertain: !draft.uncertain })}>
-          Osäkert än
+          {draft.uncertain ? "Dölj osäkra tankar" : "Lägg till osäkra tankar"}
         </Button>
         <label className="sr-only" htmlFor="decision-focus">Visa spalter</label>
         <select id="decision-focus" className="book-decision-focus" value={focus} onChange={(e) => setFocus(e.target.value as Column | "all")}>
-          <option value="all">Alla spalter</option>
+          <option value="all">Visa båda sidorna</option>
           {visibleColumns.map((c) => <option key={c.id} value={c.id}>{c.label} – fokusläge</option>)}
         </select>
       </div>
@@ -173,6 +189,33 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
               </section>
             );
           })}
+      </div>
+      <div className="book-decision-import">
+        <Button variant="outline" onClick={() => setImportOpen((open) => !open)} aria-expanded={importOpen} aria-controls="decision-diary-import">
+          Lägg till från dagboken
+        </Button>
+        {importOpen && (
+          <section id="decision-diary-import" className="book-import-panel" aria-label="Välj dagbokstankar">
+            <p className="book-muted">Välj en eller flera texter. Originalen ligger kvar i dagboken.</p>
+            {diaryEntries.length === 0 ? <p>Inga dagboksinlägg att välja ännu.</p> : (
+              <>
+                <div className="book-import-list">
+                  {diaryEntries.map((entry) => (
+                    <label className="book-import-choice" key={entry.id}>
+                      <input type="checkbox" checked={selectedDiaryIds.includes(entry.id)} onChange={(event) => setSelectedDiaryIds((ids) => event.target.checked ? [...ids, entry.id] : ids.filter((id) => id !== entry.id))} />
+                      <span><strong>{entry.content.title || "Dagbokstanke"}</strong><span className="book-import-preview">{entry.content.text}</span></span>
+                    </label>
+                  ))}
+                </div>
+                <label className="book-label" htmlFor="decision-import-column">Lägg till under</label>
+                <select id="decision-import-column" className="book-field" value={importColumn} onChange={(event) => setImportColumn(event.target.value as Column)}>
+                  <option value="pros">För</option><option value="cons">Emot</option><option value="uncertain">Osäkert / behöver tänka mer</option>
+                </select>
+                <Button disabled={selectedDiaryIds.length === 0} onClick={importDiary}>Lägg till valda texter</Button>
+              </>
+            )}
+          </section>
+        )}
       </div>
       <Button className="book-decision-help" variant="outline" aria-expanded={help} aria-controls="decision-perspectives" onClick={() => setHelp((v) => !v)}>
         Hjälp mig sortera tankarna

@@ -817,3 +817,50 @@
   );
   background-position-y: 0.25rem;
 }
+
+/* Calm, compact notebook entrances: two clear choices instead of a long tool menu. */
+.book-entrances { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.book-entrance { min-width: 0; min-height: 9rem; display: flex; align-items: flex-start; flex-direction: column; justify-content: center; gap: 0.65rem; border-radius: 1.25rem; }
+.book-entrance:nth-child(1) { background: var(--book-lavender); }
+.book-entrance:nth-child(2) { background: var(--book-sage); }
+@media (max-width: 360px) { .book-entrances { grid-template-columns: 1fr; } }
+
+/* Softer paper-like writing surfaces, with responsive decision columns. */
+.book-diary-sheet, .book-sheet { border-radius: 1.25rem; box-shadow: var(--book-shadow); }
+.book-diary-sheet { background: var(--book-paper); padding: clamp(0.85rem, 3vw, 1.5rem); border: 1px solid var(--book-line); }
+.book-decision .book-column { border-radius: 0.9rem; border-top-width: 2px; padding: clamp(0.5rem, 2vw, 0.85rem); }
+.book-decision .book-point textarea { width: 100%; min-width: 0; }
+@media (max-width: 600px) { .book-columns { gap: 0.55rem; } .book-column h2 { font-size: 1rem; } .book-workspace { grid-template-columns: minmax(0, 1fr); } .book-page { border-left: 0; padding-left: 0; border-top: 1px solid var(--book-line); padding-top: 1rem; } }
+
+/* Final journal visual language: handwritten content in both diary and pros/cons. */
+.book-diary-sheet .book-writing, .book-sheet .book-hand, .book-import-preview { font-family: "Caveat", "Segoe Print", cursive !important; font-weight: 400; }
+.book-sheet .book-column[data-column="pros"] { background: color-mix(in srgb, var(--book-sage) 70%, transparent); }
+.book-sheet .book-column[data-column="cons"] { background: color-mix(in srgb, var(--book-apricot) 70%, transparent); }
+.book-sheet .book-column[data-column="uncertain"] { background: color-mix(in srgb, var(--book-lavender) 65%, transparent); }
+.book-sheet .book-column { border-radius: 1rem; padding-block: 0.8rem; }
+.book-sheet { background-image: none; padding: 0.5rem; gap: 0.5rem; }
+.book-sheet .book-hand { font-size: clamp(1.35rem, 3.8vw, 1.7rem) !important; line-height: 1.45; overflow-wrap: anywhere; }
+.book-sheet .book-column[data-column="cons"] { border-left: 0; }
+.book-sheet .book-column[data-column="uncertain"] { border-top: 0; margin-top: 0; }
+.book-import-panel { margin-top: 0.75rem; padding: 1rem; border: 1px solid var(--book-line); border-radius: 1rem; background: var(--book-paper); }
+.book-import-list { display: grid; gap: 0.5rem; max-height: 19rem; overflow-y: auto; margin: 0.75rem 0; }
+.book-import-choice { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--book-line); border-radius: 0.75rem; cursor: pointer; }
+.book-import-choice input { margin-top: 0.35rem; min-width: 1rem; min-height: 1rem; }
+.book-import-choice > span { min-width: 0; }
+.book-import-choice strong { display: block; }
+.book-import-preview { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; font-size: 1.4rem; line-height: 1.35; }
+@media (max-width: 600px) { .book-sheet { padding: 0.3rem; gap: 0.35rem; } .book-sheet .book-column { padding: 0.45rem !important; } }
+
+/* Shared handwritten writing style; no leading +/- markers inside either column. */
+.notebook .book-diary-sheet textarea.book-writing,
+.notebook .book-decision .book-sheet textarea.book-hand {
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: clamp(1.55rem, 4vw, 1.85rem) !important;
+  font-weight: 400 !important;
+  font-style: normal;
+  line-height: 1.45;
+  letter-spacing: 0;
+  list-style: none;
+}
+.notebook .book-decision .book-sheet .book-point textarea::before { content: none; }
+.notebook .book-decision .book-sheet .book-column h2 { font-family: "Nunito", "Inter", sans-serif !important; font-size: 1rem !important; font-weight: 700; }
