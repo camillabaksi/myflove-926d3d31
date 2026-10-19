@@ -397,8 +397,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
                 <span className="flex flex-wrap items-center justify-center gap-1">
                   {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot opacity-55" />)}
                 </span>
-                {dayEntries.length > 3 && <span className="mt-auto pb-0.5 text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75" title={`${dayEntries.length} aktiviteter`}>•••</span>}
               </span>
+              {dayEntries.length > 3 && <span aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75 sm:bottom-1.5" title={`${dayEntries.length} aktiviteter`}>•••</span>}
             </button>;
           })}
         </div>
