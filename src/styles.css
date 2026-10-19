@@ -2889,3 +2889,20 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 @media (prefers-reduced-transparency: reduce) {
   .pace-scene .pace-welcome-copy::before { background: rgba(255,250,246,.88); border-radius: 1rem; }
 }
+
+/* Paceable's very light ambient canvas: colour belongs behind the content,
+   not inside every card. No images, animations or layout changes. */
+@media (prefers-color-scheme: light) {
+  html:not(.dark) .app-shell-bg[data-paceable-app="true"]:not(.pace-scene) {
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(ellipse 70% 32% at 95% 2%, rgb(244 219 212 / 0.18), transparent 78%),
+      radial-gradient(ellipse 64% 35% at 3% 54%, rgb(228 218 239 / 0.13), transparent 82%),
+      radial-gradient(ellipse 60% 28% at 98% 96%, rgb(231 237 224 / 0.11), transparent 80%);
+    background-attachment: scroll;
+  }
+}
+/* Explicit dark theme always retains its original untextured background. */
+html.dark .app-shell-bg[data-paceable-app="true"] {
+  background-image: none;
+}
