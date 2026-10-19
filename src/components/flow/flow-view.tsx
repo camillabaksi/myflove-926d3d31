@@ -35,7 +35,7 @@ export default function FlowView({
 
   return (
     <Layout>
-      <div className={!chatId ? "pace-scene" : undefined}>
+      <div className={!chatId ? `pace-scene${tab === "planera" ? " pace-scene-planera" : ""}` : undefined}>
       {!chatId && (
         <>
         <div className="pace-scene-actions"><span aria-hidden="true" />{tab !== "planera" && <button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button>}</div>
