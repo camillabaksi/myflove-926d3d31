@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Mic, Plus, Undo2 } from "lucide-react";
+import { ChevronDown, Mic, Plus, Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import HelpHint from "@/components/help-hint";
@@ -55,6 +55,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   const [selected, setSelected] = useState<DidSuggestion | null>(null);
   const [busy, setBusy] = useState(false);
   const [more, setMore] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [last, setLast] = useState<EnergyFactorEntry | null>(null);
   const saving = useRef(false);
@@ -67,6 +68,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
       owner.current = getDataOwner();
       setSelected(null);
       setText("");
+      setExpanded(false);
       setLast(null);
       setError(null);
       write.current = null;
@@ -122,18 +124,22 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   return (
     <section
       className={cn(
-        "rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft space-y-3",
+        "rounded-2xl border border-border/60 bg-card/70 px-4 py-2",
         className,
       )}
       aria-label="Lägg till det du gjorde"
     >
-      <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-foreground">Lägg till det du gjorde</h2>
+      <div className="flex min-h-11 items-center gap-2">
+        <button type="button" aria-expanded={expanded} aria-controls="did-this-quick-add-content" onClick={() => setExpanded(v => !v)} className="flex min-h-11 flex-1 items-center justify-between gap-3 text-left text-sm font-medium text-ink">
+          <span>Lägg till det du gjorde</span>
+          <ChevronDown size={18} aria-hidden className={cn("shrink-0 text-muted-foreground transition-transform", expanded && "rotate-180")} />
+        </button>
         <HelpHint label="lägg till det du gjorde">
           Välj vad du gjorde och hur det kändes. Det blir ingen uppgift eller kalenderhändelse. Du
           bestämmer vad som ger och tar energi.
         </HelpHint>
       </div>
+      {expanded && <div id="did-this-quick-add-content" className="space-y-3 border-t border-border/40 pt-3 pb-2">
       {selected ? (
         <div className="space-y-3">
           <p className="font-medium">{selected.title} · Hur kändes det?</p>
@@ -288,6 +294,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
           </button>
         </div>
       )}
+      </div>}
     </section>
   );
 }
