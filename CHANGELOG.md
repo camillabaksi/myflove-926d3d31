@@ -3467,3 +3467,11 @@ Initial baseline av MyFlove — ett svenskspråkigt "lugnt livsflöde"-dashboard
 
 - 2026-09-25: Språkval (svenska/engelska) finns nu även under Anpassa MyFlove, inte bara Inställningar.
 - 2026-10-01: Landningssidan fick en menyförhandsvisning – "Se allt som finns i appen" visar hela sidomenyn grupperad per område, utan konto.
+
+## 2026-10-19 – Pace-sidan: riktiga bakgrundsbilder
+
+- Pace-sidan (/assistant) har nu de godkända fotobakgrunderna: stående bild på mobil, liggande på desktop och bredare skärmar.
+- Den gamla CSS-bakgrunden och de separata stenarna är borta – stenarna finns i bilden, så inga dubbletter.
+- Bakgrunden tonar ut mjukt mot sidans ivory nedåt; beskärningen är anpassad så stenarna syns tydligt på olika skärmstorlekar.
+- Dubbla tillbaka-knappar borttagna – appens vanliga tillbakaknapp gäller; chatt-knappen finns kvar.
+- Text, chatt, planering och tidigare samtal ligger kvar som fungerande komponenter ovanpå bakgrunden. Ej publicerat.

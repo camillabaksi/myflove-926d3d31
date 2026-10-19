@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-19 – Pace-sidan: riktiga bakgrundsbilder",
+    items: ["Pace-sidan (/assistant) visar nu de godkänd a fotobakgrunderna – stående på mobil, liggande på desktop – i stället för CSS-bakgrunden och de separata stenarna. Bakgrunden tonar ut mjukt nedåt, stenarna syns tydligt på olika skärmstorlekar, och dubbla tillbaka-knappar är borttagna. Chatt, planering och tidigare samtal fungerar som förut ovanpå bakgrunden. Ej publicerat."],
+  },
+  {
     title: "2026-10-19 – Säkerhet: låsta hjälpfunktioner och säkrare byggpaket",
     items: ["Säkerhet (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterades till säkra versioner inom samma huvudversion; kvar är tolv mindre risker i mobilbyggets och dokumentexportens verktyg som kräver större uppgraderingar. Ingen data ändrad, ingen publicering."],
   },
