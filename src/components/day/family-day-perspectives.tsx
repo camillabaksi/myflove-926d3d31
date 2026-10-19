@@ -291,7 +291,7 @@ export default function FamilyDayPerspectives({
 
   const PersonDay = ({ personId }: { personId: string }) => {
     const own = allEntries.filter((e) => e.personId === personId).sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"));
-    if (own.length === 0) return <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget med klockslag den här dagen.</p>;
+    if (own.length === 0) return <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget planerat med tid idag.</p>;
     return (
       <ul className="space-y-2">
         {own.map((e) => <li key={e.key}>{EntryRow({ entry: e })}</li>)}
@@ -313,6 +313,7 @@ export default function FamilyDayPerspectives({
     return (
       <div className="space-y-3">
         <div className="flex flex-wrap gap-1.5" role="group" aria-label="Vilka vill du se?">
+          <button type="button" aria-pressed={familySelection.length === everyone.length} onClick={() => setSelected(null)} className={cn("press inline-flex min-h-9 items-center rounded-full border px-3 text-xs font-semibold", familySelection.length === everyone.length ? "border-primary/50 bg-primary/10 text-ink" : "border-border bg-card text-muted-foreground")}>Alla</button>
           {everyone.map((p) => {
             const on = familySelection.includes(p.id);
             return (
@@ -323,10 +324,6 @@ export default function FamilyDayPerspectives({
               </button>
             );
           })}
-          <button type="button" aria-pressed={familySelection.length === everyone.length} onClick={() => setSelected(null)}
-            className="press inline-flex min-h-9 items-center rounded-full border border-border bg-card px-2.5 text-xs font-semibold text-ink">
-            Alla
-          </button>
         </div>
 
         {rows.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget med klockslag den här dagen.</p>}
@@ -348,7 +345,7 @@ export default function FamilyDayPerspectives({
 
   return (
     <div className="space-y-1">
-      <PersonSwitcher people={people} value={perspective} onChange={setPerspective} compact={compactSelector} trailingControl={selectorTrailingControl} leadingControl={selectorLeadingControl} />
+      {!(defaultPerspective === FAMILY_ID && perspective === FAMILY_ID) && <PersonSwitcher people={people} value={perspective} onChange={setPerspective} compact={compactSelector} trailingControl={selectorTrailingControl} leadingControl={selectorLeadingControl} />}
       <div className="relative">
       <p className="sr-only" aria-live="polite">
         {current ? <PersonAvatar person={current} /> : null}
