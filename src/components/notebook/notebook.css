@@ -877,3 +877,17 @@
 }
 .notebook .book-decision .book-sheet .book-point textarea::before { content: none; }
 .notebook .book-decision .book-sheet .book-column h2 { font-family: "Nunito", "Inter", sans-serif !important; font-size: 1rem !important; font-weight: 700; }
+
+/* Shared, calm navigation also used outside the notebook on Fånga. */
+.pace-thoughts-tabs {
+  --book-line: #dcd5df;
+  --book-lavender: #eee7f4;
+  --book-muted: #716274;
+  color: #512654;
+}
+.dark .pace-thoughts-tabs {
+  --book-line: #514657;
+  --book-lavender: #3c3047;
+  --book-muted: #c2b4c5;
+  color: #f2e5f3;
+}
