@@ -715,8 +715,7 @@ function QuizRunner({
   }) => void;
   onClose: () => void;
 }) {
-  // The queue is derived from the current saved set; never retain a stale 10-question queue.
-  const queue = useMemo(() => adaptiveOrder(set.quiz).slice(0, 50), [set.quiz]);
+  // Freeze question order for this attempt. onGrade updates the saved set after every\n  // answer; recomputing adaptiveOrder from that update can switch the visible question.\n  // QuizRunner is keyed by set id and quiz length when a new attempt is opened.\n  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 50));
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);
