@@ -392,12 +392,12 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
               aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}. ${t("Visa dagens aktiviteter nedanför kalendern")}`}
               className={cn("relative flex h-[4.6rem] min-w-0 flex-col items-center gap-2 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-24 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
               <span className={cn("mx-auto flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold", d === today && "bg-primary text-primary-foreground")}>{Number(d.slice(-2))}</span>
-              <span className="flex w-full flex-col items-center gap-1" aria-hidden="true">
+              <span className="flex min-h-0 w-full flex-1 flex-col items-center gap-1" aria-hidden="true">
                 {periodHere && <span className="h-0.5 w-3/4 rounded-full bg-primary/20" />}
                 <span className="flex flex-wrap items-center justify-center gap-1">
                   {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot opacity-55" />)}
                 </span>
-                {dayEntries.length > 3 && <span className="text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75" title={`${dayEntries.length} aktiviteter`}>•••</span>}
+                {dayEntries.length > 3 && <span className="mt-auto pb-0.5 text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75" title={`${dayEntries.length} aktiviteter`}>•••</span>}
               </span>
             </button>;
           })}
