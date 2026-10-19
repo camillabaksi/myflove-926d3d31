@@ -150,8 +150,6 @@ function useFamilyEventsByDate() {
 }
 
 export function CalendarContent({ initialView = "dag" }: { initialView?: CalendarView }) {
-  // Page-lifetime only: keep the same unfinished registration across planner view remounts.
-  const [impactDraft, setImpactDraft] = useState<CalendarImpactDraft | null>(null);
   const { t, locale } = useLang();
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();

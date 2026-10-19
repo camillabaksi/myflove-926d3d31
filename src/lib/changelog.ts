@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-17";
+export const CHANGELOG_UPDATED = "2026-10-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-19 – Rättat byggfel i snabbregistreringen",
+    items: ["Snabbregistrering och kalender (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet och tagit bort en oanvänd kalenderdeklaration som refererade till en saknad typ. Automatisk byggkontroll godkänd. Befintliga tester för uppgifter/kalender/snabbregistrering har separata mock-/förväntningsfel och är inte godkända. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering."],
+  },
   {
     title: "2026-10-17 – UX-förbättring etapp 2: lugnare månadsvy",
     items: ["Kalender → Månad: diskret månadssammanfattning med antal planerade aktiviteter, dagar med innehåll och dagar utan planering – ärligt, utan prognoser. Varje månadsruta visar antal aktiviteter som liten siffra bredvid områdesprickarna och i skärmläsartexten. Den valda dagens sektion under månadsrätten är en kompakt kronologisk lista enligt Idags princip, med klara poster dämpade. Kapacitet, områdesprickar, bildstöd, familjeraden, drag-och-släpp och övriga kontroller orörda. Ingen data-, lagrings- eller routsändring, ingen publicering."],
