@@ -131,6 +131,7 @@ export default function FamilyAreaSharing() {
   const [editors, setEditors] = useState<Map<Area, string[] | null>>(new Map());
   const [viewers, setViewers] = useState<Map<Area, string[] | null>>(new Map());
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
+  const [expandedArea, setExpandedArea] = useState<Area | null>(null);
 
   const load = useCallback(async () => {
     const { data: u } = await supabase.auth.getUser();
@@ -222,14 +223,12 @@ export default function FamilyAreaSharing() {
   }, [shared]);
 
   return (
-    <section className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
+    <section className="bg-card border border-border rounded-2xl p-3 sm:p-5 space-y-3">
       <div className="space-y-1">
         <h2 className="font-display text-base text-ink">Vad familjen får se</h2>
-        <p className="text-sm text-muted-foreground">
-          Allt är privat tills du väljer. Inköp, städning, uppgifter, kalender och rutiner kan familjen få bocka av, och i anteckningar kan de skriva. Bara du kan ta bort saker.
-        </p>
+        <p className="text-xs text-muted-foreground">Privat som standard. Öppna en rad för att välja vem som får se eller ändra.</p>
       </div>
-      <ul className="space-y-2">
+      <ul className="divide-y divide-border/60">
         {AREAS.map(({ id, label: l, hint, icon: Icon }) => {
           const level = mine.get(id) ?? "off";
           const options: { v: Level; t: string }[] = [
@@ -238,31 +237,21 @@ export default function FamilyAreaSharing() {
             ...(EDITABLE.has(id) ? [{ v: "edit" as Level, t: "Kan ändra" }] : []),
           ];
           return (
-            <li key={id} className={`rounded-2xl border p-3 ${level !== "off" ? "border-primary bg-primary/10" : "border-border bg-secondary/30"}`}>
-              <div className="flex items-center gap-3">
-                <Icon size={18} className="shrink-0 text-primary" />
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-medium text-ink">{l}</span>
-                  <span className="block text-xs text-muted-foreground">{hint}</span>
-                </span>
+            <li key={id} className="py-2.5">
+              <div className="flex items-center gap-2.5">
+                <Icon size={17} className="shrink-0 text-primary/70" />
+                <button type="button" aria-expanded={expandedArea === id} onClick={() => setExpandedArea(expandedArea === id ? null : id)} className="flex min-w-0 flex-1 items-center gap-2 text-left">
+                  <span className="min-w-0 flex-1"><span className="block text-sm font-medium text-ink">{l}</span><span className="block truncate text-xs text-muted-foreground">{hint}</span></span>
+                  <span className="shrink-0 text-xs text-muted-foreground">{level === "off" ? "Privat" : level === "view" ? "Kan se" : "Kan ändra"}</span>
+                  <span className="shrink-0 text-muted-foreground">{expandedArea === id ? "⌄" : "›"}</span>
+                </button>
               </div>
-              <div role="radiogroup" aria-label={`Delning för ${l}`} className="mt-2 flex gap-1">
+              {expandedArea === id && <div role="radiogroup" aria-label={`Delning för ${l}`} className="mt-2 ml-6 flex flex-wrap gap-1.5">
                 {options.map((o) => (
-                  <button
-                    key={o.v}
-                    type="button"
-                    role="radio"
-                    aria-checked={level === o.v}
-                    onClick={() => setLevel(id, o.v)}
-                    className={`flex-1 rounded-full px-2 py-1.5 text-xs font-medium ${
-                      level === o.v ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground border border-border"
-                    }`}
-                  >
-                    {o.t}
-                  </button>
+                  <button key={o.v} type="button" role="radio" aria-checked={level === o.v} onClick={() => void setLevel(id, o.v)} className={`rounded-xl px-3 py-2 text-xs font-medium border ${level === o.v ? "border-primary/40 bg-primary/10 text-ink" : "border-border bg-card text-muted-foreground"}`}>{o.v === "off" ? "Privat" : o.t}</button>
                 ))}
-              </div>
-              {level !== "off" && members.length > 0 && (() => {
+              </div>}
+              {expandedArea === id && level !== "off" && members.length > 0 && (() => {
                 const list = viewers.get(id) ?? null;
                 const chip = (on: boolean) =>
                   `rounded-full px-2.5 py-1 text-xs border ${on ? "bg-primary/15 border-primary text-ink" : "border-border text-muted-foreground bg-card"}`;
@@ -296,7 +285,7 @@ export default function FamilyAreaSharing() {
                   </div>
                 );
               })()}
-              {level === "edit" && members.length > 0 && (() => {
+              {expandedArea === id && level === "edit" && members.length > 0 && (() => {
                 const list = editors.get(id) ?? null;
                 const chip = (on: boolean) =>
                   `rounded-full px-2.5 py-1 text-xs border ${on ? "bg-primary/15 border-primary text-ink" : "border-border text-muted-foreground bg-card"}`;
