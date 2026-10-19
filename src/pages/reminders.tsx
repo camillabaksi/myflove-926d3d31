@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { useReminders, type Reminder, type RepeatMode } from "@/hooks/use-data";
 import PushStatusCard from "@/components/push-status-card";
-import { paceFormSurface } from "@/components/paceable/design-system";
 import { useToast } from "@/hooks/use-toast";
 import { todayISO } from "@/lib/day";
 import { ALL_AREAS, AREA_META, type LifeArea } from "@/lib/life-areas";
@@ -85,7 +83,7 @@ function ReminderRow({
   const repeat = reminder.repeat ?? "none";
   return (
     <li
-      className={`pace-card-surface rounded-2xl border border-border bg-card p-4 shadow-soft ${canceled ? "opacity-70" : ""}`}
+      className={`pace-card-surface rounded-xl border border-border/60 bg-card px-3 py-2.5 ${canceled ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -114,7 +112,7 @@ function ReminderRow({
         </div>
         <StatusBadge status={status} />
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-1.5">
         <Button variant="secondary" size="sm" className="rounded-xl" onClick={onEdit}>
           <Pencil size={14} className="mr-1.5" aria-hidden /> Ändra
         </Button>
@@ -371,32 +369,15 @@ export default function RemindersPage() {
     <Layout>
       <MyFlovePageGrid area="idag" className="pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
-          <MyFloveHeader
-            title="Påminnelser"
-            emojiKey="reminder"
-            description="Lägg till, ändra eller avboka. Välj klockslag för att få en notis när det är dags."
-            why="Påminnelser ska avlasta minnet – inte skapa fler saker att hålla reda på."
-          />
-        </MyFloveWide>
-        <MyFloveBlock
-          title="Aviseringar"
-          subtitle="Notis när det är dags"
-          icon={BellRing}
-          surface="plain"
-          className={paceFormSurface}
-          area="idag"
-        >
-          <PushStatusCard />
-        </MyFloveBlock>
-        <MyFloveWide>
-          <Button
-            onClick={() => {
-              setAddOpen(true);
-            }}
-            className="h-12 w-full rounded-xl"
-          >
-            <Plus size={18} className="mr-2" aria-hidden /> Lägg till påminnelse
-          </Button>
+          <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/80 px-3 py-3 sm:px-4" aria-labelledby="reminders-title">
+            <div className="min-w-0">
+              <h1 id="reminders-title" className="font-display text-2xl font-semibold text-ink">Påminnelser</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">Håll koll på det du inte vill glömma.</p>
+            </div>
+            <Button onClick={() => setAddOpen(true)} className="min-h-11 shrink-0 rounded-xl px-3">
+              <Plus size={17} className="mr-1.5" aria-hidden /> Lägg till
+            </Button>
+          </section>
         </MyFloveWide>
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl">
@@ -496,11 +477,18 @@ export default function RemindersPage() {
             {active.length === 0 ? (
               <p className="text-sm text-muted-foreground">Inga aktiva påminnelser just nu.</p>
             ) : (
-              <ul className="space-y-3" aria-label="Aktiva påminnelser">
+              <ul className="space-y-1.5" aria-label="Aktiva påminnelser">
                 {active.map(renderRow)}
               </ul>
             )}
           </MyFloveBlock>
+          <details className="group rounded-2xl border border-border/60 bg-card/70 px-3 sm:px-4">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm font-medium text-ink [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center gap-2"><BellRing size={16} aria-hidden /> Aviseringar och inställningar</span>
+              <span className="text-xs text-muted-foreground">Visa</span>
+            </summary>
+            <div className="border-t border-border/50 pb-3 pt-2"><PushStatusCard /></div>
+          </details>
           <MyFloveBlock title="Medicinpåminnelser" icon={Pill} surface="mint">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
