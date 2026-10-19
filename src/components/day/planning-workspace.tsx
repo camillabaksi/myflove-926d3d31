@@ -553,10 +553,10 @@ export function PlanningWorkspace({
                         required
                         value={row.date}
                         onChange={(event) => patchRow(row.id, { date: event.target.value, ...(row.endDate && event.target.value > row.endDate ? { endDate: addDaysISO(event.target.value, 1) } : {}) })}
-                        className="mt-1 min-h-11 min-w-0 bg-card text-base"
+                        className="mt-1 min-h-11 w-full min-w-0 bg-card text-base"
                       />
                     </label>
-                    {row.endDate ? <label className="min-w-0 text-sm">Till och med<Input type="date" min={row.date} required value={row.endDate} onChange={(event) => patchRow(row.id, { endDate: event.target.value })} className="mt-1 min-h-11 min-w-0 bg-card text-base" /></label> : <>                    <label className="min-w-0 text-sm">
+                    {row.endDate ? <label className="min-w-0 text-sm">Till och med<Input type="date" min={row.date} required value={row.endDate} onChange={(event) => patchRow(row.id, { endDate: event.target.value })} className="mt-1 min-h-11 w-full min-w-0 bg-card text-base" /></label> : <>                    <label className="min-w-0 text-sm">
                       {t("Start · frivilligt")}
                       <Input
                         type="time"
