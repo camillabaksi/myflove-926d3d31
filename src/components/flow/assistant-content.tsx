@@ -612,9 +612,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/70 px-3 py-2.5 text-left text-sm font-medium">
                 <span>Förslag just nu</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
               </button>
-              {suggestionsOpen && <div className="flex flex-wrap gap-2">
+              {suggestionsOpen && <div className="pace-scene-suggestions">
                 {QUICK_PROMPTS.map(({ label, prompt }) => (
-                  <Button key={label} variant="outline" className="h-auto min-h-10 whitespace-normal rounded-xl bg-card px-3 py-2 text-left text-sm" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
+                  <Button key={label} variant="outline" className="pace-scene-suggestion h-auto min-h-10 whitespace-normal rounded-xl bg-card px-3 py-2 text-left text-sm" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
                 ))}
               </div>}
             </div>
@@ -623,6 +623,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           <div className="pace-serene-composer bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
             <textarea
               ref={inputRef}
+              id="pace-chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
