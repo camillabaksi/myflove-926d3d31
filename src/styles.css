@@ -2813,8 +2813,8 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 }
 
 /* Full-bleed Pace landscape: the welcome copy is part of the scene, never a card. */
-.pace-scene { position:relative; isolation:isolate; margin:-1rem; padding:1rem 1rem 2rem; min-height:calc(100vh - 9rem); background:radial-gradient(ellipse 90% 34% at 80% 11%,#f8d9c6 0%,transparent 85%),radial-gradient(ellipse 85% 55% at 8% 28%,#f8e3dd 0%,transparent 80%),linear-gradient(160deg,#fff6ef 0%,#fce8dd 48%,#faf2ee 100%); overflow:hidden; }
-.pace-scene::before { content:""; position:absolute; pointer-events:none; width:65%; height:440px; right:-18%; top:30px; opacity:.24; filter:blur(17px); background:radial-gradient(ellipse at 64% 22%,#a8a08a 0 6%,transparent 9%),radial-gradient(ellipse at 48% 37%,#9e9b84 0 8%,transparent 11%),radial-gradient(ellipse at 75% 52%,#afa78f 0 10%,transparent 13%),linear-gradient(115deg,transparent 47%,#aaa58e 49%,transparent 51%); transform:rotate(-14deg); }
+.pace-scene { position:relative; isolation:isolate; margin:-1rem; padding:1rem 1rem 2rem; min-height:calc(100vh - 9rem); background:#faf9f6 url("/__l5e/assets-v1/e5dcb942-7bbf-4df5-83f1-5f62a3bfcb85/pace-scene-portrait.png") center top / cover no-repeat; overflow:hidden; }
+.pace-scene::before { content:""; position:absolute; inset:0; z-index:0; pointer-events:none; background:linear-gradient(to bottom,transparent 55%,#faf9f6d9 82%,#faf9f6 97%); }
 .pace-scene-actions { position:relative; z-index:2; display:flex; justify-content:space-between; }
 .pace-scene-actions button { width:44px; height:44px; display:grid; place-items:center; border-radius:50%; background:#fffaf8d9; color:#38263d; box-shadow:0 2px 10px #4b334116; }
 .pace-scene .pace-welcome-hero { display:flex; align-items:flex-start; margin:0; padding:3rem .65rem 2rem; min-height:255px; border:0; border-radius:0; background:none; overflow:visible; }
@@ -2823,8 +2823,6 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 .pace-scene .pace-welcome-copy h1 { font-family:Georgia,serif; font-size:clamp(3.5rem,11vw,5.4rem); font-weight:400; }
 .pace-scene .pace-welcome-subtitle { margin-top:.2rem; font-size:clamp(.95rem,3vw,1.2rem); }
 .pace-scene .pace-welcome-description { margin-top:1.3rem; max-width:25rem; color:#5b4858; }
-.pace-scene-stones { position:absolute; width:37%; right:-1%; bottom:1rem; display:flex; justify-content:center; align-items:flex-end; }
-.pace-scene .pace-welcome-stones { position:static!important; width:100%!important; height:auto!important; filter:drop-shadow(0 12px 12px #7b63563b); }
 .pace-scene-body { position:relative; z-index:1; }
 .pace-scene .pace-flow-chat { margin-top:1rem; }
 .pace-scene .pace-flow-chat > div > section:first-child { background:#fffaf8bd; border-radius:2rem; }
@@ -2832,5 +2830,5 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 .pace-scene .pace-scene-suggestion { width:100%; justify-content:flex-start; text-align:left; border-radius:999px; min-height:3.2rem; padding:.8rem 1rem; background:#fffdfbe6; color:#38263d; box-shadow:0 2px 10px #5c40500b; }
 .pace-scene .pace-serene-composer { background:#fffdfbef; border:1px solid #dfd1d2; padding:.75rem; }
 .pace-scene .pace-serene-composer textarea { min-height:4.8rem; }
-@media(min-width:700px) { .pace-scene { padding:1.5rem 3rem 3rem; } .pace-scene .pace-welcome-hero { min-height:300px; } .pace-scene-stones { width:26%; right:5%; } }
-@media(max-width:390px) { .pace-scene .pace-welcome-hero { min-height:250px; padding:2rem .4rem 1.5rem; } .pace-scene .pace-welcome-copy { max-width:73%; } .pace-scene-stones { width:34%; right:-3%; } }
+@media(min-width:700px) { .pace-scene { padding:1.5rem 3rem 3rem; background-image:url("/__l5e/assets-v1/4d097112-77ea-4c79-8327-d120bb5d94a9/pace-scene-landscape.png"); background-position:center top; background-size:100% auto; } .pace-scene::before { background:linear-gradient(to bottom,transparent 0 34rem,#faf9f6d9 46rem,#faf9f6 52rem); } .pace-scene .pace-welcome-hero { min-height:300px; } }
+@media(max-width:390px) { .pace-scene .pace-welcome-hero { min-height:250px; padding:2rem .4rem 1.5rem; } .pace-scene .pace-welcome-copy { max-width:73%; } }
