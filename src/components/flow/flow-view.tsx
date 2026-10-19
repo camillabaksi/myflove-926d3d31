@@ -7,7 +7,6 @@ import { track } from "@/lib/analytics";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
-import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
 /** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
@@ -46,7 +45,6 @@ export default function FlowView({
             <p className="pace-welcome-subtitle">Din följeslagare i vardagen</p>
             <p className="pace-welcome-description">Här kan du få stöd, samla tankar, planera och hitta lite mer utrymme i vardagen.</p>
           </div>
-          <div className="pace-scene-stones"><PaceableStones tactile className="pace-welcome-stones" /></div>
         </section>
         </>
       )}
