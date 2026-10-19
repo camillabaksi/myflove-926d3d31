@@ -67,7 +67,7 @@ export default function Dump() {
               description={t(
                 "Förslagen är sorterade efter viktighet, brådska och din kapacitet. Du bestämmer alltid själv.",
               )}
-              className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+              className="rounded-2xl border border-border/60 bg-card/80 p-4"
               headingClassName="text-base font-semibold text-ink"
             >
               <div className="space-y-8 pt-2">

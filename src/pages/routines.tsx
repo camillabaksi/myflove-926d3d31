@@ -200,7 +200,7 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
       </MyFloveWide>
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className={`${paceFormSurface} max-h-[85vh] overflow-y-auto rounded-3xl`}>
+        <DialogContent className={`${paceFormSurface} max-h-[85vh] overflow-y-auto rounded-2xl`}>
           <DialogHeader>
             <DialogTitle>Ny rutin</DialogTitle>
           </DialogHeader>

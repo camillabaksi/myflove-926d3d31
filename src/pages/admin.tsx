@@ -97,7 +97,7 @@ export default function AdminPage() {
           </div>
         </header>
 
-        <UserFunnelCard className="rounded-3xl border border-border bg-card p-4 sm:p-6" />
+        <UserFunnelCard className="rounded-2xl border border-border/60 bg-card/80 p-4 sm:p-6" />
 
         <div className="flex min-w-0 max-w-full gap-2 overflow-x-auto border-b border-border">
           <TabBtn

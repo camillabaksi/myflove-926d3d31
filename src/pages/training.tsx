@@ -549,7 +549,7 @@ export default function TrainingPage() {
                 source="traning"
                 chips={["Jag vill träna", "Jag vill gå en promenad", "Jag vill röra på mig lite"]}
                 placeholder="Vad vill du göra idag?"
-                className="rounded-3xl border border-border/60 bg-card/70 p-4 shadow-soft"
+                className="rounded-2xl border border-border/60 bg-card/80 p-4"
               />
             )}
 

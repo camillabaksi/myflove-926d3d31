@@ -687,7 +687,7 @@ export default function InsightPage() {
             if (!o) setSeenIntro(true);
           }}
         >
-          <DialogContent className="max-w-md rounded-3xl">
+          <DialogContent className="max-w-md rounded-2xl">
             <DialogHeader>
               <DialogTitle className="text-xl flex items-center gap-2">
                 <Info size={18} className="text-primary" /> Detta är en prototyp
