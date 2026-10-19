@@ -5,6 +5,7 @@ import { useUser } from "@clerk/react";
 import { toast } from "sonner";
 import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, Leaf, MoreHorizontal, NotebookPen, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { paceEveryday } from "@/components/paceable/design-system";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FlowItemActions } from "@/components/flow-item-actions";
@@ -402,14 +403,14 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
           })}
         </div>
       </div>
-      <section className="mt-3 space-y-3 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 sm:p-4" aria-label="Vald dags aktiviteter">
+      <section className={cn("mt-3 space-y-3 p-3 sm:p-4", paceEveryday.surface)} aria-label="Vald dags aktiviteter">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}</h2>
           <Button type="button" variant="secondary" className="min-h-10 rounded-full bg-[#F0EAF2] px-4 text-[#512654] hover:bg-[#E9DFEC]" onClick={() => openAdd(false, date)}><Plus size={16} className="mr-1.5" />{t("Lägg till")}</Button>
         </div>
         {selectedDayList.length ? <ul className="space-y-1.5">
           {selectedDayList.slice(0, 3).map(entry => <li key={entry.id}>
-            <button type="button" onClick={() => openDetails(entry)} data-calendar-area={calendarArea(entry)} className="flex min-h-11 w-full items-center gap-2 rounded-xl bg-[#FAF9F6] px-3 text-left transition-colors hover:bg-[#F3EFF2]">
+            <button type="button" onClick={() => openDetails(entry)} data-calendar-area={calendarArea(entry)} className={cn("w-full text-left", paceEveryday.inset, paceEveryday.row)}>
               <span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{entry.time ?? "—"}</span>
               <span className="h-2.5 w-2.5 shrink-0 rounded-full calendar-area-dot opacity-55" aria-hidden />
               <span className="min-w-0 flex-1 truncate text-sm text-[#392B3D]">{entry.title}</span>
