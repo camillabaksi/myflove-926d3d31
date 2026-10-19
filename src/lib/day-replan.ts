@@ -80,6 +80,8 @@ function preservesDependencies(task: Task, start: number, end: number, entries: 
 /** Deterministic preview, separate from the existing "what now" plan. No writes or energy forecast. */
 export function buildDayReplan(input: ReplanInput): { changes: ReplanChange[]; unknownDurations: number; gentle: boolean } {
   const gentle = input.useCapacity && input.capacity !== null && Number.isFinite(input.capacity) && capacityTone(input.capacity) === "low";
+  // Capacity only changes how gently we suggest a first step; it never silently defers tasks.
+  // Unknown capacity must not be treated as low capacity.
   const changes: ReplanChange[] = [];
   const entries = planningEntries(input.entries);
   const reserved: CalendarEntry[] = [];
@@ -116,7 +118,7 @@ export function buildDayReplan(input: ReplanInput): { changes: ReplanChange[]; u
     if (gentle && !task.steps?.length && (task.friction === "large" || task.friction === "medium" || task.energyImpact === "drains")) {
       const step = simplifyTask(task.title, "mellan") ?? `Välj en liten del av ”${task.title}” att börja med.`;
       changes.push({ id: `${task.id}:small-step`, taskId: task.id, title: task.title, kind: "small-step", before: "Hela uppgiften", after: step,
-        reason: "Din loggade kapacitet är låg just nu. Ett litet första steg kan vara ett alternativ; tiden och uppgiften ligger kvar.",
+        reason: "Du har angett låg kapacitet. Därför föreslår Paceable ett mindre första steg, inte fler måsten. Uppgiften och tiden ligger kvar tills du väljer något annat.",
         patch: { steps: [{ id: `replan-${task.id}-${input.date}`, title: step, done: false }] } });
     }
   }
