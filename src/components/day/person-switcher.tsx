@@ -94,9 +94,9 @@ export function PersonSwitcher({
       {leadingControl}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-primary/30 bg-secondary/40 px-1.5 text-[11px] font-semibold text-ink sm:text-xs" aria-label="Välj vems dag som visas">
+          <button type="button" className="inline-flex min-h-11 min-w-0 shrink items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-primary/30 bg-secondary/40 px-2.5 text-xs font-semibold text-ink" aria-label="Välj vems dag som visas">
             <UserRound size={14} className="shrink-0" aria-hidden />
-            <span className="truncate">{value === ME_ID ? "Min dag" : value === FAMILY_ID ? "Familjen" : people.find(p => p.id === value)?.name ?? "Min dag"}</span>
+            <span className="max-w-[92px] truncate">{value === ME_ID ? "Min dag" : value === FAMILY_ID ? "Familjen" : people.find(p => p.id === value)?.name ?? "Min dag"}</span>
             <ChevronDown size={13} className="shrink-0" aria-hidden />
           </button>
         </DropdownMenuTrigger>
