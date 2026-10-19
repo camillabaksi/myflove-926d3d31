@@ -20,7 +20,7 @@ const questions = [
 ];
 const titles = {
   diary: "Dagbok",
-  decision: "Beslut",
+  decision: "För & emot",
   reflection: "Reflektioner",
   map: "Tankekarta",
 };
