@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { MyFloveBlock } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -10,7 +8,6 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import {
   Loader2,
   Send,
-  History,
   Plus,
   Trash2,
   X,
@@ -445,23 +442,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   return (
     <>
-      <MyFloveHeader
-        title="Chatta med Pace"
-        emojiKey="assistant"
-        description="Skriv eller fortsätt ett samtal"
-        action={
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 rounded-xl lg:hidden"
-            onClick={() => setHistoryOpen(true)}
-          >
-            <History size={16} className="mr-1" />
-            Historik
-          </Button>
-        }
-      >
-      </MyFloveHeader>
       <div className="pace-flow-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
@@ -471,7 +451,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
           {!conversationId && !loadingConversations && (
             <section className="rounded-2xl border border-border bg-card px-4 py-3 space-y-2" aria-label="Välj samtal med Pace">
-              <h2 className="text-base font-semibold">Vad vill du prata om?</h2>
+
               
               <Button variant="default" className="w-full min-h-10 rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
               {conversations.length > 0 && (
@@ -495,17 +475,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </section>
           )}
 
-          <MyFloveBlock
-            title={conversationId ? "Samtal" : "Skriv till Pace"}
-            subtitle={conversationId ? "Fortsätt där du slutade" : undefined}
-            icon={MessageCircle}
-            tone="lavender"
-            surface="plain"
-            className="p-3"
-            bodyClassName="space-y-4"
-            collapsible={false}
-          >
-            <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
+          <section className="rounded-2xl border border-border bg-card p-3 space-y-3" aria-label="Samtal med Pace">
+            <div ref={scrollRef} className="max-h-[55vh] space-y-3 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
@@ -645,7 +616,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 </div>
               )}
             </div>
-          </MyFloveBlock>
+          </section>
 
 
           {messages.length === 0 && (
