@@ -796,8 +796,8 @@ export default function Layout({ children }: LayoutProps) {
         <UnownedDataPrompt />
 
         {/* Mobile Header */}
-        <header className={cn("sticky top-0 z-10 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden", (location === "/assistant" || location.startsWith("/assistant/")) && "pace-assistant-mobile-header")}>
-          {!(location === "/assistant" || location.startsWith("/assistant/")) && <AppBrandHeader back={canGoBack ? (
+        <header className={cn("sticky top-0 z-10 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden", ["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && "pace-assistant-mobile-header")}>
+          {!["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && <AppBrandHeader back={canGoBack ? (
             <button
               type="button"
               onClick={handleBack}
@@ -807,7 +807,7 @@ export default function Layout({ children }: LayoutProps) {
               <ArrowLeft size={22} />
             </button>
           ) : null} actions={["/familj", "/familjeflow"].includes(location) ? null : <Link href="/assistant" aria-label="Öppna Pace-chatten" title="Öppna Pace-chatten" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link>} />}
-          {(location === "/assistant" || location.startsWith("/assistant/")) && <button type="button" onClick={handleBack} aria-label="Gå tillbaka" className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-foreground shadow-sm"><ArrowLeft size={22} /></button>}
+          {["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && <button type="button" onClick={handleBack} aria-label="Gå tillbaka" className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-foreground shadow-sm"><ArrowLeft size={22} /></button>}
         </header>
 
 
@@ -906,7 +906,7 @@ export default function Layout({ children }: LayoutProps) {
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className={cn("max-w-6xl mx-auto w-full p-4 md:p-6 page-enter", refreshDesign && "pace-ds pace-design-refresh")}>
-            {!FLOW_HIDDEN_PATHS.has(location) && location !== "/assistant" && !location.startsWith("/assistant/") && !["/familj", "/familjeflow", "/quickflow", "/tankar/dagbok", "/tankar/beslut"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
+            {!FLOW_HIDDEN_PATHS.has(location) && !["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && !["/familj", "/familjeflow", "/quickflow", "/tankar/dagbok", "/tankar/beslut"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
             <AutoTranslateProvider />
