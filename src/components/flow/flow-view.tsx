@@ -19,6 +19,7 @@ export default function FlowView({
 }) {
   const navigate = useNavigate();
   const tab = initialTab;
+  const showScene = !chatId && (tab === "chatt" || tab === "flow" || tab === "planera");
 
   useEffect(() => {
     track("flow_viewed", { source: tab });
@@ -38,7 +39,7 @@ export default function FlowView({
       <div className={!chatId ? "pace-scene" : undefined}>
       {!chatId && (
         <>
-        <div className="pace-scene-actions"><span aria-hidden="true" />{tab !== "planera" && <button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button>}</div>
+        <div className="pace-scene-actions"><span aria-hidden="true" />{tab !== "planera" && <button type="button" aria-label="Skriv till Pace" onClick={() => tab === "planera" ? void navigate({ to: "/assistant" }) : document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button>}</div>
         <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
           <div className="pace-welcome-copy">
             <h1>{tab === "planera" ? "Planera med Pace" : "Pace"}</h1>
