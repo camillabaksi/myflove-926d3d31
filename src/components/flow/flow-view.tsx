@@ -8,6 +8,7 @@ import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
 import { PaceableStones } from "@/components/paceable/paceable-stones";
+import { ArrowLeft, MessageCircle } from "lucide-react";
 
 /** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
 export default function FlowView({
@@ -35,16 +36,21 @@ export default function FlowView({
 
   return (
     <Layout>
+      <div className={(tab === "chatt" || tab === "flow") && !chatId ? "pace-scene" : undefined}>
       {(tab === "chatt" || tab === "flow") && !chatId && (
+        <>
+        <div className="pace-scene-actions"><button type="button" aria-label="Tillbaka till Idag" onClick={() => void navigate({ to: "/idag" })}><ArrowLeft size={22} /></button><button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button></div>
         <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
           <div className="pace-welcome-copy">
             <h1>Pace</h1>
             <p className="pace-welcome-subtitle">Din följeslagare i vardagen</p>
             <p className="pace-welcome-description">Här kan du få stöd, samla tankar, planera och hitta lite mer utrymme i vardagen.</p>
           </div>
-          <PaceableStones tactile className="pace-welcome-stones" />
+          <div className="pace-scene-stones"><PaceableStones tactile className="pace-welcome-stones" /></div>
         </section>
+        </>
       )}
+      <div className="pace-scene-body">
       <FlowTabs active={tab === "flow" ? "chatt" : tab} onChange={changeTab} />
       {tab === "flow" && (
         <MyFlovePageGrid area="flow">
@@ -56,6 +62,8 @@ export default function FlowView({
 
       {tab === "planera" && <FlowPlanContent />}
       {tab === "chatt" && <AssistantContent chatId={chatId} />}
+      </div>
+      </div>
     </Layout>
   );
 }
