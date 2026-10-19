@@ -95,7 +95,7 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-0.5">
-            <div className="mb-1 flex justify-end"><button type="button" aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-2.5 text-xs font-medium text-muted-foreground hover:bg-secondary/60"><Images size={16} aria-hidden />Bildstöd {todayPictograms ? "på" : "av"}</button></div>
+            <div className="mb-0.5 flex justify-end"><button type="button" aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className="inline-flex min-h-9 items-center gap-1 rounded-xl px-2 text-xs font-medium text-muted-foreground hover:bg-secondary/60"><Images size={16} aria-hidden />Bildstöd {todayPictograms ? "på" : "av"}</button></div>
             <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
