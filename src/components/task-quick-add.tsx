@@ -146,7 +146,7 @@ export function TaskQuickAdd({
           setDate(baseDate);
           setOpen(true);
         }}
-        className={cn("h-12 w-full rounded-2xl text-base shadow-soft", className)}
+        className={cn("min-h-12 w-full rounded-xl text-base", className)}
       >
         <span aria-hidden className="text-xl leading-none">
           +
@@ -164,7 +164,7 @@ export function TaskQuickAdd({
         <DialogContent className={paceEveryday.dialog}>
           <DialogHeader>
             <DialogTitle>
-              {mode ? "Vad vill du lägga till?" : "Vad vill du lägga till?"}
+              Vad vill du lägga till?
             </DialogTitle>
           </DialogHeader>
 
