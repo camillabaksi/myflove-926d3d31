@@ -73,7 +73,7 @@ export function TodayContent() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="min-w-0 rounded-[2rem] border border-border/70 bg-card px-3 py-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:px-5 sm:py-5" aria-labelledby="your-day-title">
+        <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-3 py-4 sm:px-5 sm:py-5" aria-labelledby="your-day-title">
           <header className="mb-3 space-y-3">
             <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2><p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
             <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
