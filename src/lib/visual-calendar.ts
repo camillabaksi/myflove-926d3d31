@@ -1,6 +1,7 @@
 import type { PictogramId } from "@/lib/child-visual-schedule";
 import type { Task, Reminder } from "@/hooks/use-data";
-import { occursOn, routineOccursOn, type Routine } from "@/lib/recurrence";
+import { occursOn, type Routine } from "@/lib/recurrence";
+import { routineOccurrencesForDay, type RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
 import type { Lecture } from "@/lib/study-calendar";
 import type { QuickflowItem } from "@/lib/quickflow";
 import type { PriorityTask } from "@/lib/quickflow-priority";
@@ -11,6 +12,7 @@ export type CalendarSource = "task" | "reminder" | "routine" | "study" | "quickf
 export interface CalendarEntry {
   id: string;
   sourceId: string;
+  occurrenceDate?: string;
   source: CalendarSource;
   date: string;
   title: string;
@@ -70,6 +72,7 @@ export interface CalendarSources {
   tasks: Task[];
   reminders: Reminder[];
   routines: Routine[];
+  routineExceptions?: RoutineOccurrenceException[];
   lectures: Lecture[];
   quickflow: QuickflowItem[];
   priority: PriorityTask[];
@@ -105,9 +108,9 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
         energyImpact: r.energyImpact, area: r.area, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
         recurring: (r.repeat ?? "none") !== "none" || !!r.endDate });
     }
-    for (const r of data.routines) if (r.enabled && routineOccursOn(r, date)) {
-      out.push({ id: `routine-${r.id}`, sourceId: r.id, source: "routine", date, title: r.title,
-        time: r.time || undefined, done: false, editable: false, href: "/daglig-rutin#Rutiner", label: "Rutin" });
+    for (const r of data.routines) for (const occurrence of routineOccurrencesForDay(r, date, data.routineExceptions ?? [])) {
+      out.push({ id: `routine-${r.id}${occurrence.occurrenceDate === date ? "" : `:${occurrence.occurrenceDate}`}`, sourceId: r.id, source: "routine", date, occurrenceDate: occurrence.occurrenceDate, title: r.title,
+        time: occurrence.time || undefined, done: false, editable: false, href: "/daglig-rutin#Rutiner", label: "Rutin" });
     }
     const weekday = (new Date(`${date}T12:00:00`).getDay() + 6) % 7;
     for (const l of data.lectures) {

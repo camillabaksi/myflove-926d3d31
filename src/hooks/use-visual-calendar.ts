@@ -7,6 +7,7 @@ import { usePriorityList } from "@/hooks/use-priority-list";
 import { useChildren } from "@/hooks/use-children";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { occursOn, type Routine } from "@/lib/recurrence";
+import type { RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
 import { projectFamilyCalendar } from "@/lib/family-calendar";
 import type { ChildScheduleEntry } from "@/components/child-schedule";
 import { useCalendarConnection, useExternalEvents } from "@/hooks/use-calendar-sync";
@@ -22,6 +23,7 @@ export function useVisualCalendar(dates: string[]) {
   const { items: priority } = usePriorityList();
   const { isInstanceDone } = useInstanceStatus();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const [routineExceptions] = useCloudSyncedStorage<RoutineOccurrenceException[]>("myflove-routine-occurrence-exceptions", []);
   const [doneLog] = useCloudSyncedStorage<Record<string, string[]>>("myflove-done-log", {});
   const { items: childItems, children, loading: childrenLoading, error: childrenError } = useChildren();
   const { isSignedIn, user } = useUser();
@@ -35,13 +37,14 @@ export function useVisualCalendar(dates: string[]) {
   const last = dates[dates.length - 1] ?? "";
   const external = useExternalEvents(first, last, !!isSignedIn && connection.anyConnected);
   const days = useMemo(() => {
-    const result = projectCalendar(dates, { tasks, reminders, lectures, quickflow, priority, routines });
+    const result = projectCalendar(dates, { tasks, reminders, lectures, quickflow, priority, routines, routineExceptions });
     for (const date of dates) {
       const out = result[date];
       if (!out) continue;
       for (const entry of out) {
         if (entry.source === "reminder" && entry.recurring) entry.done = isInstanceDone(`reminder-${entry.sourceId}`, date);
-        if (entry.source === "routine" || entry.source === "study") entry.done = (doneLog[date] ?? []).includes(entry.id);
+        if (entry.source === "routine") entry.done = (doneLog[entry.occurrenceDate ?? date] ?? []).includes(`routine-${entry.sourceId}`);
+        if (entry.source === "study") entry.done = (doneLog[date] ?? []).includes(entry.id);
       }
       for (const e of family) if (e.date === date) out.push({
         id: `f-${e.id}`, sourceId: String(e.id), source: "family", title: e.title,
@@ -58,7 +61,7 @@ export function useVisualCalendar(dates: string[]) {
       result[date] = [...unique.values()].sort((a, b) => (a.time ?? "99").localeCompare(b.time ?? "99"));
     }
     return result;
-  }, [dates, tasks, reminders, lectures, quickflow, priority, routines, doneLog, childItems, children, family, external.data, isInstanceDone, schedules, user?.id]);
+  }, [dates, tasks, reminders, lectures, quickflow, priority, routines, routineExceptions, doneLog, childItems, children, family, external.data, isInstanceDone, schedules, user?.id]);
   const familyMembers = useMemo(() => {
     const members = new Map(children.map(c => [c.id, { id: c.id, name: c.name }]));
     for (const item of childItems) if (item.kind === "activity" && !members.has(item.child_id)) members.set(item.child_id, { id: item.child_id, name: "Delad barnaktivitet" });
