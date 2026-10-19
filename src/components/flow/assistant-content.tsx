@@ -14,7 +14,6 @@ import {
   Plus,
   Trash2,
   X,
-  ArrowLeft,
   ChevronRight,
   MoreHorizontal,
   Pencil,
@@ -25,17 +24,13 @@ import { FlowMascot, type FlowStatus } from "@/components/flow-mascot";
 import { FlowMicButton } from "@/components/flow/flow-mic-button";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { FlowRichText, FlowActionIcon } from "@/components/flow/flow-rich-text";
-import { useTasks, useMoods, useFocus, useReminders } from "@/hooks/use-data";
+import { useTasks } from "@/hooks/use-data";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { flowPlanContext } from "@/lib/flow-plan";
 import { useFlowPersonalContext } from "@/hooks/use-flow-personal-context";
 import { useMyFlowMemories } from "@/hooks/use-my-flow";
-import { lastPlace, type FlowPlace } from "@/lib/flow-context";
-import { Link } from "@tanstack/react-router";
 
-import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { generateCoachMessage } from "@/lib/coach";
 import {
   createFlowConversation,
   saveFlowMessage,
@@ -133,11 +128,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const flowPlan = useFlowPlan();
   const { exercises: savedExercises } = useSavedExercises();
   const { children: childProfiles } = useChildren();
-  const [place, setPlace] = useState<FlowPlace | null>(null);
-  useEffect(() => {
-    setPlace(lastPlace());
-  }, []);
-
   const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask, setTaskTime } =
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
@@ -206,25 +196,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       setDoneActions((p) => ({ ...p, [key]: "Avbockad." }));
     }
   };
-  const { moods } = useMoods();
-  const { currentFocus } = useFocus();
-  const { activeReminders } = useReminders();
-  const [sessionLog] = useCloudSyncedStorage<{ date: string; count: number }>(
-    "myflow-pomodoro-sessions",
-    {
-      date: todayStr(),
-      count: 0,
-    },
-  );
-  const pomodoroTodaySessions = sessionLog.date === todayStr() ? sessionLog.count : 0;
-  const coachMessage = generateCoachMessage({
-    moods,
-    activeTasks,
-    currentFocus,
-    activeReminders,
-    pomodoroTodaySessions,
-  });
-
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isSending]);
@@ -490,12 +461,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </Button>
         }
       >
-        <p data-npf="optional" className="hidden text-xs text-muted-foreground">
-          Pace utgår från din profil och dina mönster i appen.{" "}
-          <Link to="/profil" className="underline underline-offset-2">
-            Justera din profil
-          </Link>
-        </p>
       </MyFloveHeader>
       <div className="pace-flow-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
         <aside className="hidden lg:block">
