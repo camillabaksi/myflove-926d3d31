@@ -9,6 +9,17 @@ import { Switch } from "@/components/ui/switch";
 import { DialogContent } from "@/components/ui/dialog";
 import { MyFloveBlock, type MyFloveBlockProps } from "@/components/myflove/block";
 
+/** Shared, low-contrast surfaces for the everyday Paceable flows.
+ * Keep battery visuals and legacy persistence untouched.
+ */
+export const paceEveryday = {
+  surface: "rounded-2xl border border-border/60 bg-card/80",
+  inset: "rounded-xl bg-secondary/30",
+  row: "flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 transition-colors hover:bg-secondary/40",
+  action: "min-h-11 rounded-xl",
+  dialog: "max-w-md rounded-2xl border-border/60 bg-card",
+} as const;
+
 /** Existing pilot presentation, deliberately unchanged. No state or persistence. */
 export const paceFormSurface = "pace-form pace-form-surface";
 
