@@ -1,5 +1,7 @@
 import { Link } from "wouter";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
+import { paceEveryday } from "@/components/paceable/design-system";
+import { cn } from "@/lib/utils";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import { useTasks, useReminders } from "@/hooks/use-data";
@@ -65,7 +67,7 @@ export function AddToDay() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="press group flex items-center gap-3 rounded-3xl border-2 border-border bg-card px-4 py-3 shadow-soft transition-colors hover:bg-secondary/50"
+                  className={cn("press group", paceEveryday.surface, paceEveryday.row)}
                 >
                   <Icon size={18} className="shrink-0 text-primary" />
                   <span className="min-w-0 flex-1">
