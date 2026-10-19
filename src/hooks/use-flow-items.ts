@@ -332,6 +332,7 @@ export function useFlowItems(dateISO?: string): {
     lectures,
     childEvents,
     routines,
+    routineExceptions,
     quickflowItems,
     priorityItems,
     suggestFor,
