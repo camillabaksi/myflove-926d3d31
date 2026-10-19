@@ -5,6 +5,7 @@ import AdaptiveActivityCard from "@/components/adaptive-activity-card";
 import { DailyActivityRow } from "./daily-activity-row";
 import { FlowItemActions, kindFromId } from "@/components/flow-item-actions";
 import { MyFloveTransition } from "@/components/myflove/motion";
+import { paceEveryday } from "@/components/paceable/design-system";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useFlowItems } from "@/hooks/use-flow-items";
@@ -289,7 +290,7 @@ export function DailyFlowList({
       )}
 
       <Dialog open={!!adaptItem} onOpenChange={(o) => !o && setAdaptItem(null)}>
-        <DialogContent className="max-w-sm rounded-3xl">
+        <DialogContent className={paceEveryday.dialog}>
           <DialogHeader>
             <DialogTitle>Anpassa efter idag</DialogTitle>
           </DialogHeader>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { paceEveryday } from "@/components/paceable/design-system";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -160,7 +161,7 @@ export function TaskQuickAdd({
           if (!nextOpen) reset();
         }}
       >
-        <DialogContent className="max-w-md rounded-3xl">
+        <DialogContent className={paceEveryday.dialog}>
           <DialogHeader>
             <DialogTitle>
               {mode ? "Vad vill du lägga till?" : "Vad vill du lägga till?"}
@@ -360,7 +361,7 @@ export function QuickAddInline({
 
   return (
     <div
-      className={cn("space-y-3 rounded-3xl border-2 border-primary/25 bg-primary/5 p-4", className)}
+      className={cn(paceEveryday.surface, "space-y-3 p-4", className)}
     >
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-ink">
