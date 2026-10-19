@@ -150,37 +150,34 @@ export function BookTextEditor({
   const [print, setPrint] = useState(false);
   const [selection, setSelection] = useState("");
   const [destination, setDestination] = useState("");
-  const [newKind, setNewKind] = useState<"decision" | "map">("decision");
+  const [newKind, setNewKind] = useState<"decision">("decision");
   const [newTitle, setNewTitle] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
   const [copied, setCopied] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const textRef = useRef<HTMLTextAreaElement>(null);
   const destinations = store.entities.filter(
-    (e) => (e.kind === "decision" || e.kind === "map") && !e.content.deleted,
+    (e) => e.kind === "decision" && !e.content.deleted,
   );
   const copy = () => {
     if (!selection.trim()) return;
     const existing = destinations.find((e) => e.id === destination);
-    const targetKind =
-      existing?.kind === "map" ? "map" : existing?.kind === "decision" ? "decision" : newKind;
+    const targetKind = "decision" as const;
     const targetId =
       existing?.id ??
       store.create(targetKind, {
         title:
           newTitle.trim() ||
-          (targetKind === "map" ? "Tankar från dagboken" : "Beslut från dagboken"),
+          "För & emot från dagboken",
         text: "",
         date: draft.date,
       });
     if (!targetId) return;
     const content = {
       ...linkedContent(selection, entity.id, targetId),
-      ...(targetKind === "decision"
-        ? { column: "pros" as const, order: Date.now() }
-        : { x: 80, y: 80 }),
+      column: "pros" as const, order: Date.now(),
     };
-    const child = store.create(targetKind === "map" ? "node" : "point", content);
+    const child = store.create("point", content);
     if (child) {
       setCopied(targetKind);
       setCopyOpen(false);
