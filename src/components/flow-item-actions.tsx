@@ -391,7 +391,7 @@ function FlowItemEditDialog({
                 </label>
                 {kind === "kalender" && <label className="space-y-1 text-sm sm:col-span-2">
                   <span className="text-muted-foreground">Slutdatum (valfritt – för en sammanhängande period)</span>
-                  <Input type="date" min={form.date || undefined} value={form.endDate} onChange={(e) => set({ endDate: e.target.value })} />
+                  <Input type="date" min={form.date || undefined} value={form.endDate} onChange={(e) => set({ endDate: e.target.value, ...(e.target.value ? { time: "", endTime: "" } : {}) })} />
                   <span className="block text-xs text-muted-foreground">En period visas på alla dagar mellan start och slut, utan att boka tid.</span>
                 </label>}
                 {!(kind === "kalender" && form.endDate) && <>
