@@ -382,21 +382,21 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
           {dates.map((d, index) => {
             const dayEntries = days[d] ?? [];
             const adjacent = d.slice(0, 7) !== date.slice(0, 7);
-            const prioritized = [...dayEntries].sort((a, b) => {
-              const routine = (e: CalendarEntry) => e.source === "routine" || /^(göra frukost|ta medicin|borsta tänder|lägga sig|vakna)$/i.test(e.title.trim());
-              return Number(routine(a)) - Number(routine(b)) || Number(isFamilyEntry(a)) - Number(isFamilyEntry(b)) || Number(Boolean(b.time)) - Number(Boolean(a.time));
-            });
-            const shown = prioritized.slice(0, 2);
+            const areaKeys = [...new Set(dayEntries.map(entry => calendarArea(entry)))].slice(0, 4);
+            const periodHere = dayEntries.some(entry => Boolean(entry.periodEnd));
             return <button key={d} type="button" data-month-date={d}
               onClick={() => { setDate(d); setDayEditorOpen(true); }}
               onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)}
               aria-current={d === today ? "date" : undefined}
               aria-label={`${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}. ${t("Öppna dagen")}`}
-              className={cn("relative flex h-[5.5rem] min-w-0 flex-col items-stretch gap-1 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-28 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
+              className={cn("relative flex h-[4.6rem] min-w-0 flex-col items-center gap-2 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-24 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
               <span className={cn("mx-auto flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold", d === today && "bg-primary text-primary-foreground")}>{Number(d.slice(-2))}</span>
-              <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                {shown.map(entry => <span key={entry.id} data-calendar-area={calendarArea(entry)} className={cn("block w-full truncate rounded-[4px] border-l-2 bg-[#F8F5F3] px-0.5 py-0.5 text-[9px] leading-tight calendar-area-text sm:px-1 sm:text-[10px]", isFamilyEntry(entry) && "opacity-75")} title={entry.title}>{entry.title}</span>)}
-                {dayEntries.length > 2 && <span className="px-0.5 text-[9px] text-muted-foreground">+{dayEntries.length - 2} {t("till")}</span>}
+              <span className="flex w-full flex-col items-center gap-1" aria-hidden="true">
+                {periodHere && <span className="h-0.5 w-3/4 rounded-full bg-primary/20" />}
+                <span className="flex flex-wrap items-center justify-center gap-1">
+                  {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot" />)}
+                </span>
+                {dayEntries.length > 4 && <span className="text-[10px] leading-none text-muted-foreground">+{dayEntries.length - 4}</span>}
               </span>
             </button>;
           })}
