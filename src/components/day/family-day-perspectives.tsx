@@ -127,7 +127,7 @@ export default function FamilyDayPerspectives({
     return visual;
   };
 
-  if (children.length === 0) return <div className="relative pt-12">{myDay}</div>;
+  if (children.length === 0) return <div className="relative">{myDay}</div>;
 
   const current = perspective === FAMILY_ID ? null : personById.get(perspective);
   const heading =
@@ -343,9 +343,9 @@ export default function FamilyDayPerspectives({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-1">
       <PersonSwitcher people={people} value={perspective} onChange={setPerspective} compact={compactSelector} />
-      <div className="relative pt-1">
+      <div className="relative">
       <p className="sr-only" aria-live="polite">
         {current ? <PersonAvatar person={current} /> : null}
         {heading}
