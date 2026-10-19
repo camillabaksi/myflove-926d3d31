@@ -46,6 +46,7 @@ export function DailyFlowList({
   pictogramLibrary = "lucide",
   includeChildSchedules = true,
   showFilter = false,
+  selectedFilter,
 }: {
   date?: string;
   extraItems?: FlowItem[];
@@ -63,12 +64,14 @@ export function DailyFlowList({
   includeChildSchedules?: boolean;
   /** Kompakt visningsfilter (Alla/Viktigast/Med tid) – filtrerar bara visningen, aldrig data. */
   showFilter?: boolean;
+  selectedFilter?: DailyFlowFilter;
 }) {
   const integrated = presentation === "integrated";
   const { today, toggleItem } = useFlowItems(date);
   const [expanded, setExpanded] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [filter, setFilter] = useState<DailyFlowFilter>("alla");
+  const [localFilter, setFilter] = useState<DailyFlowFilter>("alla");
+  const filter = selectedFilter ?? localFilter;
 
   /**
    * "Hur kändes det?" hör ihop med själva avbockningen och bor därför här –
