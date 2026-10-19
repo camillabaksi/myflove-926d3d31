@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
-import { MyFloveBlock } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -10,7 +8,6 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import {
   Loader2,
   Send,
-  History,
   Plus,
   Trash2,
   X,
@@ -445,23 +442,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   return (
     <>
-      <MyFloveHeader
-        title="Chatta med Pace"
-        emojiKey="assistant"
-        description="Skriv eller fortsätt ett samtal"
-        action={
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 rounded-xl lg:hidden"
-            onClick={() => setHistoryOpen(true)}
-          >
-            <History size={16} className="mr-1" />
-            Historik
-          </Button>
-        }
-      >
-      </MyFloveHeader>
       <div className="pace-flow-chat lg:grid lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-6">
         <aside className="hidden lg:block">
           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Historik</p>
@@ -469,20 +449,19 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         </aside>
 
         <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
-          {!conversationId && !loadingConversations && (
-            <section className="rounded-2xl border border-border bg-card px-4 py-3 space-y-2" aria-label="Välj samtal med Pace">
-              <h2 className="text-base font-semibold">Vad vill du prata om?</h2>
+          {!conversationId && !loadingConversations && conversations.length > 0 && (
+            <section className="rounded-2xl bg-card/60 px-3 py-3 space-y-2" aria-label="Välj samtal med Pace">
+
               
-              <Button variant="default" className="w-full min-h-10 rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
-                  <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2.5 text-left text-sm font-medium">
+                  <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-background/70 px-3 py-2.5 text-left text-sm font-medium text-muted-foreground">
                     <span>Tidigare samtal ({conversations.length})</span>
                     <ChevronRight size={17} className={recentOpen ? "rotate-90 transition-transform" : "transition-transform"} />
                   </button>
                   {recentOpen && <div className="space-y-1.5">
                     {conversations.slice(0, 5).map((c) => (
-                      <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-left hover:bg-muted/40">
+                      <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border/50 bg-background/70 px-3 py-2 text-left hover:bg-muted/40">
                         <MessageCircle size={15} className="shrink-0 text-primary" />
                         <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{c.title}</span><span className="text-xs text-muted-foreground">{relativeDayLabel(c.updated_at)}</span></span>
                         <ChevronRight size={15} className="shrink-0" />
@@ -495,17 +474,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </section>
           )}
 
-          <MyFloveBlock
-            title={conversationId ? "Samtal" : "Skriv till Pace"}
-            subtitle={conversationId ? "Fortsätt där du slutade" : undefined}
-            icon={MessageCircle}
-            tone="lavender"
-            surface="plain"
-            className="p-3"
-            bodyClassName="space-y-4"
-            collapsible={false}
-          >
-            <div ref={scrollRef} className="max-h-[55vh] space-y-4 overflow-y-auto">
+          <section className="rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
+            <div ref={scrollRef} className="max-h-[55vh] space-y-3 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Loader2 className="w-4 h-4 animate-spin" /> Hämtar samtalet…
@@ -645,12 +615,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 </div>
               )}
             </div>
-          </MyFloveBlock>
+          </section>
 
 
           {messages.length === 0 && (
             <div className="space-y-2">
-              <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-left text-sm font-medium">
+              <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/70 px-3 py-2.5 text-left text-sm font-medium">
                 <span>Behöver du hjälp att komma igång?</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
               </button>
               {suggestionsOpen && <div className="flex flex-wrap gap-2">
@@ -661,7 +631,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <div className="bg-card p-2 rounded-3xl shadow-sm border border-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+          <div className="bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
             <textarea
               ref={inputRef}
               value={input}
