@@ -24,7 +24,7 @@ export default function FlowTabs({
     <div
       role="tablist"
       aria-label="Pace"
-      className="mb-4 grid grid-cols-2 gap-1 rounded-3xl border-2 border-border bg-muted/50 p-1"
+      className="mb-3 grid grid-cols-2 gap-1 rounded-2xl border border-border bg-muted/30 p-1"
     >
       {TABS.map((tab) => {
         const Icon = tab.icon;
@@ -37,7 +37,7 @@ export default function FlowTabs({
             role="tab"
             aria-selected={isActive}
             onClick={() => onChange(tab.id)}
-            className={`h-auto min-w-0 justify-center gap-1.5 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors hover:bg-transparent hover:text-ink ${
+            className={`h-10 min-w-0 justify-center gap-1.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors hover:bg-transparent hover:text-ink ${
               isActive ? "bg-card text-ink shadow-soft hover:bg-card" : "text-muted-foreground"
             }`}
           >

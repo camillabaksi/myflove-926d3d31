@@ -468,12 +468,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           <div className="max-h-[70vh] overflow-y-auto pr-1">{historyList}</div>
         </aside>
 
-        <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
+        <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
           {!conversationId && !loadingConversations && (
-            <section className="rounded-2xl border border-border bg-card p-4 space-y-3" aria-label="Välj samtal med Pace">
-              <h2 className="text-lg font-semibold">Vad vill du prata om?</h2>
-              <p className="text-sm text-muted-foreground">Börja på nytt eller fortsätt ett tidigare samtal.</p>
-              <Button variant="default" className="w-full rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Skriv ett nytt meddelande nedan</Button>
+            <section className="rounded-2xl border border-border bg-card px-4 py-3 space-y-2" aria-label="Välj samtal med Pace">
+              <h2 className="text-base font-semibold">Vad vill du prata om?</h2>
+              
+              <Button variant="default" className="w-full min-h-10 rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
                   <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2.5 text-left text-sm font-medium">
@@ -496,12 +496,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           )}
 
           <MyFloveBlock
-            title="Samtal"
-            subtitle="Skriv när du vill – Pace lyssnar"
+            title={conversationId ? "Samtal" : "Skriv till Pace"}
+            subtitle={conversationId ? "Fortsätt där du slutade" : undefined}
             icon={MessageCircle}
             tone="lavender"
             surface="plain"
-            className="p-4"
+            className="p-3"
             bodyClassName="space-y-4"
             collapsible={false}
           >
