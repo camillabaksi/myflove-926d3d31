@@ -715,7 +715,9 @@ function QuizRunner({
   }) => void;
   onClose: () => void;
 }) {
-  // Freeze question order for this attempt. Grading updates the saved set,\n  // but must not reorder the visible question before Next is pressed.\n  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 50));
+  // Freeze question order for this attempt. Grading updates the saved set,
+  // but must not reorder the visible question before Next is pressed.
+  const [queue] = useState(() => adaptiveOrder(set.quiz).slice(0, 50));
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [correctCount, setCorrectCount] = useState(0);

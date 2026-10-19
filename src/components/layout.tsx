@@ -195,6 +195,7 @@ function isPaceableAppPath(path: string) {
   return !PACEABLE_PATHS.has(path);
 }
 
+import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import QuickflowFab from "@/components/quickflow-fab";
 import QuickflowCapture from "@/components/quickflow-capture";
 import { useSmartBack } from "@/hooks/use-smart-back";

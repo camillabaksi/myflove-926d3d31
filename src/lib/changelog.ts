@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-19 – Rättat krasch vid inloggning (Idag)",
+    items: ["App-layout (2026-10-19): återinfört saknad import av vykomponenten som fällde hela appen till felsidan direkt efter inloggning på publicerade sidan. Rättat även ett gammalt typfel i studiequizzen (kommenterad kodrad) som blockerade bygget. Verifierat inloggat i förhandsvisningen: Idag renderar utan fel. Ingen publicering."],
+  },
+  {
     title: "2026-10-19 – Rättat byggfel i snabbregistreringen",
     items: ["Snabbregistrering och kalender (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet och tagit bort en oanvänd kalenderdeklaration som refererade till en saknad typ. Automatisk byggkontroll godkänd. Befintliga tester för uppgifter/kalender/snabbregistrering har separata mock-/förväntningsfel och är inte godkända. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering."],
   },
