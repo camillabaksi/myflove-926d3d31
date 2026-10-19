@@ -382,7 +382,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
           {dates.map((d, index) => {
             const dayEntries = days[d] ?? [];
             const adjacent = d.slice(0, 7) !== date.slice(0, 7);
-            const areaKeys = [...new Set(dayEntries.map(entry => calendarArea(entry)))].slice(0, 4);
+            const areaKeys = [...new Set(dayEntries.map(entry => calendarArea(entry)))].slice(0, 3);
             const periodHere = dayEntries.some(entry => Boolean(entry.periodEnd));
             return <button key={d} type="button" data-month-date={d}
               onClick={() => { setDate(d); setDayEditorOpen(true); }}
@@ -394,14 +394,32 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
               <span className="flex w-full flex-col items-center gap-1" aria-hidden="true">
                 {periodHere && <span className="h-0.5 w-3/4 rounded-full bg-primary/20" />}
                 <span className="flex flex-wrap items-center justify-center gap-1">
-                  {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot" />)}
+                  {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot opacity-55" />)}
                 </span>
-                {dayEntries.length > 4 && <span className="text-[10px] leading-none text-muted-foreground">+{dayEntries.length - 4}</span>}
+                {dayEntries.length > 3 && <span className="text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75" title={`${dayEntries.length} aktiviteter`}>•••</span>}
               </span>
             </button>;
           })}
         </div>
-      </div><section className="border-t border-border/60 py-4"><div className="flex items-center justify-between gap-2"><h2 className="font-display text-sm font-bold capitalize">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</h2><Button size="icon" variant="ghost" className="min-h-11 min-w-11 text-primary" aria-label={t("Öppna dagen")} onClick={() => setView("dag")}><ArrowRight size={18} /></Button></div><h3 className="mt-3 text-xs font-semibold">{t("Min dag")}</h3><ul className="mt-2 space-y-2.5">{selectedDayList.map(entry => <li key={entry.id}>{blockButton(entry)}</li>)}</ul>{!myEntries.length && <p className="py-4 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}{familyEntries.length > 0 && <div className="mt-4 border-t border-border/60 pt-3"><h3 className="text-xs font-semibold text-muted-foreground">{t("Familjen")}</h3><p data-calendar-area="privat" className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><span className="h-2 w-2 rounded-full calendar-area-dot" aria-hidden />{t("Familj")} · {familyEntries.length}</p>{showPictograms && <ul className="mt-2 space-y-2.5">{familyEntries.map(entry => <li key={entry.id}>{blockButton(entry)}</li>)}</ul>}</div>}</section></>}
+      </div>
+      <section className="mt-3 space-y-3 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 sm:p-4" aria-label="Vald dags aktiviteter">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}</h2>
+          <Button type="button" variant="secondary" className="min-h-10 rounded-full bg-[#F0EAF2] px-4 text-[#512654] hover:bg-[#E9DFEC]" onClick={() => openAdd(false, date)}><Plus size={16} className="mr-1.5" />{t("Lägg till")}</Button>
+        </div>
+        {selectedDayList.length ? <ul className="space-y-1.5">
+          {selectedDayList.slice(0, 3).map(entry => <li key={entry.id}>
+            <button type="button" onClick={() => openDetails(entry)} data-calendar-area={calendarArea(entry)} className="flex min-h-11 w-full items-center gap-2 rounded-xl bg-[#FAF9F6] px-3 text-left transition-colors hover:bg-[#F3EFF2]">
+              <span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{entry.time ?? "—"}</span>
+              <span className="h-2.5 w-2.5 shrink-0 rounded-full calendar-area-dot opacity-55" aria-hidden />
+              <span className="min-w-0 flex-1 truncate text-sm text-[#392B3D]">{entry.title}</span>
+              <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
+            </button>
+          </li>)}
+        </ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
+        {familyEntries.length > 0 && <p className="text-xs text-muted-foreground">{t("Familj")} · {familyEntries.length}</p>}
+        <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
+      </section></>}
     {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
       <h2 className="px-2 font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")}</h2>
       {(() => { const active = dates.flatMap(d => days[d] ?? []).filter(e => e.periodEnd && (!isFamilyEntry(e) || familyPreferences.mode !== "mine")); const unique = [...new Map(active.map(e => [e.source === "child" ? `${e.title}:${e.periodEnd}:${e.linkGroup ?? e.sourceId}` : e.sourceId, e])).values()]; return unique.length ? <div className="space-y-1 rounded-xl bg-[#F2EDF5] p-2" aria-label="Perioder under veckan"><p className="text-xs font-medium text-[#512654]">Pågående perioder</p>{unique.map(e => <div key={e.id} className="flex min-h-9 items-center gap-2 rounded-lg bg-white/70 px-2 text-sm"><span className="min-w-0 flex-1 truncate">{e.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {e.periodEnd?.slice(5)}</span></div>)}</div> : null; })()}
