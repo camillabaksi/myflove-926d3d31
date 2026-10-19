@@ -7,7 +7,7 @@ import { track } from "@/lib/analytics";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
-import { ArrowLeft, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 /** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
 export default function FlowView({
