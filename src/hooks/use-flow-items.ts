@@ -13,7 +13,8 @@ import { useDoneLog } from "@/hooks/use-done-log";
 import { useInstanceStatus } from "@/hooks/use-instance-status";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
-import { routineOccursOn, type Routine } from "@/lib/recurrence";
+import type { Routine } from "@/lib/recurrence";
+import { routineOccurrencesForDay, type RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
 import { occursOn } from "@/lib/recurrence";
 
 import {
@@ -61,6 +62,7 @@ export function useFlowItems(dateISO?: string): {
   const { isDone, toggleDone } = useDoneLog(targetDay);
   const { isInstanceDone, setInstanceDone } = useInstanceStatus();
   const [routines] = useCloudSyncedStorage<Routine[]>("myflove-routines", []);
+  const [routineExceptions] = useCloudSyncedStorage<RoutineOccurrenceException[]>("myflove-routine-occurrence-exceptions", []);
 
   const items = useMemo<FlowItem[]>(() => {
     const today = targetDay;
@@ -207,7 +209,8 @@ export function useFlowItems(dateISO?: string): {
     }
 
     for (const r of routines ?? []) {
-      if (!r.enabled || !r.time || !routineOccursOn(r, targetDay)) continue;
+      if (!r.enabled || !r.time) continue;
+      for (const occurrence of routineOccurrencesForDay(r, targetDay, routineExceptions)) {
       const id = `routine-${r.id}`;
       out.push({
         id,
@@ -215,13 +218,14 @@ export function useFlowItems(dateISO?: string): {
         source: "rutin",
         area: "vardag",
         emoji: "🔁",
-        time: r.time,
+        time: occurrence.time,
         daysUntil: 0,
-        priority: priorityFor({ time: r.time, daysUntil: 0, fixed: true }),
+        priority: priorityFor({ time: occurrence.time, daysUntil: 0, fixed: true }),
         done: isDone(id),
         completable: true,
         href: "/daglig-rutin",
       });
+      }
     }
 
     for (const q of quickflowItems) {
