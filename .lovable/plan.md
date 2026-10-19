@@ -1,62 +1,42 @@
-# Paceable – gemensam kalenderregistrering och planering
+# Paceable – uppdaterat material och anonymiserade editorialbilder
 
-## Granskning av det befintliga
-- Planera stöder redan flera aktiviteter, **Jag / Barnen / Jag och barnen**, granskning före sparning och säkra återförsök. Det återanvänds, inte ersätts av en ny kalender.
-- Idag och kalendern har flera separata snabbformulär. Kalenderns formulär sparar en aktivitet åt gången; vald tid kan inte förifyllas från ett tryck i veckans tidslinje.
-- Familjevyerna har redan gruppering med barnens namn, Min dag-filter och barnschema utan avbockning. De behålls och testas även genom det nya snabbflödet.
-- Veckan har redan ett kompakt tidsfönster och möjlighet att visa hela dygnet. Förbättringen gäller åtkomst, kvällstider, tomma dagar och läsbarhet – inte en ny tidsmodell.
-- Pace-chatten visar godkännandeknappar för uppgiftsförslag, men saknar gemensam kalendergranskning för barn/påminnelser och säkra konfliktkontroller. Titelmatchning kan välja fel vid liknande namn; datumkontrollen behöver bli striktare.
+## Resultatet
+En ny samlad materialversion utifrån den senaste appen. Svenska och engelska versioner, med tidigare filer bevarade och utan publicering eller ändringar i appen.
 
-## Det som byggs
+### Dokument
+- Living Blueprint på svenska och engelska, som redigerbar Word och PDF.
+- Pitchdeck på svenska och engelska, som redigerbar PowerPoint och PDF, i den godkända harmoniska presentationsdesignen.
+- Uppdaterade pitchmanus och relevanta stöddokument från det senaste paketet. Inventeringen avgör vilka aktuella underlag som hör till paketet; gamla historiska versioner, byggpaket och tekniska rapporter skrivs inte om.
+- Gemensam innehållsförteckning, versionsöversikt och kontrollrapport.
 
-### 1. Ett gemensamt snabbflöde
-- Återanvänd planeringens befintliga flerradsutkast och sparning i ett kompakt formulär som kan öppnas från Idag, månad, vecka, barnschema och chattens förslag.
-- Förifyll vald dag, eventuell starttid, relevant område och valda barn. Varje aktivitet kan justeras separat före **Spara**; ingen sluttid eller påminnelse gissas.
-- Lägg till diskreta, namngivna plusknappar vid relevanta dagar och barnscheman. Veckans tomma tidsyta kan öppna samma formulär med vald tid; tangentbordsalternativ finns. Tom tidsyta betecknas inte automatiskt som ledig.
-- Behåll befintliga vägar för rutiner, medicin, Fånga, genomförda aktiviteter och andra specialformulär. Avbryt sparar ingenting; vybyte får inte radera påbörjat utkast. Kontobyte rensar utkast.
+### Nya editorialbilder
+- Verkliga appvyer från ditt konto, **anonymiserade**: namn, familjens identiteter, kontaktuppgifter, privata anteckningar, chattinnehåll och känsliga aktivitetsdetaljer tas bort ur leveransen.
+- Prioritera Idag, Kalenderns månad/vecka/dag, planering, Logga just nu, batteri, Insikter, Tankars fyra delar, Min plats, Pace och återhämtning.
+- Mobil och desktop med bredare, läsbara utsnitt. Ett urval får en sammanhållen editorialpresentation; de verkliga appvyerna byggs inte om till påhittade gränssnitt.
+- Svenska och engelska appbilder där appens språkstöd fungerar. Kvarvarande svenska texter redovisas, inte maskeras som fullständig engelsk funktionalitet.
+- Ingen privat information får följa med i bildtexter, dokumentmetadata eller ljud. Anonymisering innebär borttagning eller neutral ersättning i leveransen, inte en svag oskärpa som kan läsas tillbaka.
 
-### 2. Kompakt kalender och direkt redigering
-- Månad får en traditionell sjukolumnsgrid, lätt rundade datumrutor och en prick per faktiskt förekommande kategori. Behåll idag/vald dag, aktivitetsantal och en kompakt vald-dag-lista.
-- Vecka visar samma tidsskala för alla dagar, med mindre tomrum och lätt åtkomst till 00–24. Aktiviteter efter 19 och nära midnatt ska gå att se och välja.
-- Öppna aktivitetens detaljer och tillåten redigering direkt från månad/vecka. Egna uppgifter, kalenderposter och ägda barnaktiviteter ändras i sin ursprungliga källa; externa och endast delade poster behåller sina rättighetsgränser.
-- Återkommande poster visar tydligt vilken omfattning som kan ändras. Ingen förekomst flyttas som om den vore en engångspost, och inget undantag simuleras om källan saknar stöd.
+### Filmer
+- Fyra uppdaterade pitchfilmer: svenska/engelska i 16:9 och 9:16, omkring tre minuter och ljudlösa som tidigare.
+- Sex korta animerade produktfilmer, cirka 20–30 sekunder: dagen/loggande/batteriet, planering/omplanering och Min plats/Pace/återhämtning, var och en i båda bildformaten. Engelska texter som i den tidigare serien.
+- Separat ny version av den svenska introduktionsguiden, omkring 54 sekunder, med aktuella anonymiserade appbilder. Den publicerade introduktionsfilmen ersätts inte.
+- Den fristående cirka 20 sekunder långa reklamfilmen ingår. Inventera senaste v7 och dess redigerbara källa först; bevara miljö, original-logotyp, kategorier, exakta texter, ordning, banor och timing. Uppdatera endast sådant som kan ändras utan att bryta de godkända låsen. Om inget behöver ändras redovisas den som senaste granskade version, inte som en påstådd ny animation.
+- Tidigare kända problem med sen märkning av osparat batteriexempel och misslyckade Min plats-filmer tas med i rättnings- och kontrollarbetet. Ett misslyckat nytt klipp levereras inte som färdigt.
 
-### 3. Barn och egen dag
-- Samma inmatning stödjer ett eller flera ägda barn och vid behov förälderns egen aktivitet.
-- Gruppera samma barnhändelse till en visningsrad med alla valda namn. Behåll varje ursprunglig post och dess identifierare; olika sluttider eller platser får inte slås ihop av misstag.
-- Enbart **Min dag** utesluter barnschema. Egna föräldrauppgifter finns kvar, även när de gäller barn. Barnschema på Idag saknar alltid avbockning.
-- Återanvänd Mulberry-bildstöd och befintliga familjeval. Inga nya delningsrättigheter, privata profiluppgifter eller hälsodata används.
+## Innehåll och säkerhet
+- Visa den senaste förhandsvisningens verkliga design, inklusive den nya Pace-bakgrunden och reflektionsboken. Markera förändringar som ännu inte är bekräftat publicerade.
+- Beskriv bara verifierade funktioner. Skilj registrerad energi/kapacitet, kvalitativ planbelastning och deterministisk Pace; inga medicinska effekter, automatiska förändringar eller framtida energiprognoser.
+- Behåll källor och datum för äldre siffror. Priser, pilotupplägg och budgetscenarier förblir märkta hypoteser där de inte är fastställda.
+- Inga nya registreringar, planändringar, chattmeddelanden eller konto-/språkinställningar sparas. Omplanering och loggande får visas som tydligt märkta osparade steg, från första till sista bildrutan.
+- Saknas användbart verkligt innehåll redovisas det. Ingen privat text uppfinns och inga nya kontoresultat iscensätts.
 
-### 4. Pace-chatten med gemensam granskning
-- Utöka befintliga svenska förslag till skapa flera aktiviteter, välja person/område, datum/tid och uttryckligen vald påminnelse. Fråga bara när person, datum, målaktivitet eller annan väsentlig uppgift inte kan avgöras säkert.
-- Visa strukturerad förhandsgranskning med alla aktiviteter och eventuella konflikter före godkännande. Chatttext, inklusive ett vanligt ”ja”, skriver inte själv till kalendern.
-- Flytt/ändring visar före/efter. Matcha stabila källidentifierare; vid tvetydiga titlar väljer användaren rätt aktivitet. Kontrollera aktuellt konto, ägarskap, återkomst, senaste innehåll och konflikter igen vid godkännande.
-- Kända tidsöverlapp visas konkret; okända längder eller ofullständigt kalenderunderlag får inte innebära ”inga konflikter”. Barnens vanliga schema blir inte automatiskt förälderns upptagna tid.
-- Återanvänd samma sparning och synk som formuläret. Vid delvis lyckad sparning visas vad som faktiskt sparats och återförsök får inte skapa kopior.
+## Genomförande och tekniska skydd
+1. Inventera de senaste dokumenten, filmerna, originalassets och redigerbara källorna; jämför med aktuell app och tidigare kontrollrapporter.
+2. Fånga i isolerad inloggad session med verifierad skrivspärr. Språkval hålls sessionslokalt och får inte synkas. Om det inte kan göras säkert stoppas just det momentet.
+3. Anonymisera innan bilder eller material lämnas till dokument-/filmverktyg; privata original används inte som produktionsunderlag hos dessa verktyg.
+4. Granska bildurvalet och använd samma verifierade faktaunderlag i dokument och filmer. Återanvänd godkända logotyp- och stenoriginal.
+5. Producera produktfilmer med animationsverktyget utifrån godkänt manus, anonymiserade bilder och befintliga format. Reklamfilmens låsta källa behandlas separat; ingen ny generativ rekonstruktion utan särskilt godkännande.
+6. Granska varje dokument-/presentationssida, filmscen och övergång; kontrollera integritet, läsbarhet, proportioner, format, längd och uppspelning. Ljud eller full rörelsekontroll utlovas bara efter faktisk verifiering.
+7. Leverera daterade versioner, bild-ZIP och samlad Files-samling. Märk kvarstående kontrollbehov som granskningsutkast och redovisa blockerade delar.
 
-### 5. Planera idag, imorgon och veckan
-- Använd samma fleraktivitetsflöde i egen och barnens planering, med snabb schemaåtkomst från Idag.
-- Återanvänd redan loggad kapacitet och befintligt hemma/jobb/skola-sammanhang för varsamma förslag. Fasta aktiviteter försvinner inte vid sammanhangsval.
-- Ingen automatisk batteriändring, energiprognos för framtida dagar eller automatisk omplanering. Förslag kräver godkännande.
-
-## Design och skyddsgränser
-- Befintlig varm ivory, plum-text och subtil lavendel/salvia/aprikos med lokala semantiska färger. Mobil först, läsbar text och minst 44 × 44 px tryckytor; inga extra inställningsblock ovanför dagens innehåll.
-- Behåll befintlig typografi, logotyp, stenar, navigation, kontoavskiljning, kryptering, lagringsnycklar, synk, integrationer och iOS/Android.
-- Ingen ny databas, migration, behörighetsutvidgning, inloggningsändring eller nya paket planeras. Om någon önskad funktion kräver det redovisas behovet innan en sådan ändring görs.
-- **Ingenting publiceras.** Alla delar ingår i uppdraget och genomförs i denna ordning efter godkännande av planen; ingen ytterligare etappbeställning behövs.
-
-## Teknisk genomförandeplan
-- Utgå från `PlanningWorkspace`, `PlanningDraft`, `planningTasks`, `childPlanningRows` och befintliga kontoägda mutationshooks. Separera återanvändbart formulär/utkast från sidans navigation, utan ny persistent utkastlagring.
-- Anslut `calendar-planner.tsx`, Idags tillägg, barnschemats befintliga öppnare och `assistant-content.tsx`. Kalenderprojektionen i `visual-calendar.ts`/`use-visual-calendar.ts` förblir en läsvy.
-- Återanvänd `family-calendar`/`family-perspective` och källornas ursprungliga ID:n för gruppering och redigering. Ingen generell titelbaserad deduplicering av oberoende händelser.
-- Utöka `flow-actions.ts` med validerade kalenderförslag och använd befintlig autentiserad `flow-chat.functions.ts` för förslag, aldrig AI-styrda skrivningar. Behåll modell, sessionöverföring och befintliga integritetsgränser; skicka inte fler privata anteckningar eller profiler till AI.
-- Datum beräknas som kalenderdatum i befintlig tidszon, inte genom att lägga 24 timmar till en tidpunkt. Påminnelser och återkomst behåller respektive källas befintliga regler och opt-in; stöd som saknas visas som begränsning.
-- Dokumentera strukturella regler i `AGENTS.md`, uppdatera `CHANGELOG.md`, `src/lib/changelog.ts` och roadmap när implementationen genomförs.
-
-## Verifiering och redovisning
-- Riktade beteendetester: flera aktiviteter, skapa/redigera/flytta/avbryt, förifylld dag/tid, båda mottagartyperna, flera barn, gruppering utan dataförlust, Min dag, inga barncheckboxar, konflikt/okänd längd, tidszon/sommartidsbyte och återkomst.
-- Skyddstester: tvetydiga mål, skrivskyddade/delade källor, manipulerade person-ID:n, kontobyte, föråldrade förslag, dubbelklick, partiell sparning och säkra återförsök; oförändrat batteri.
-- Kör relevanta befintliga regressionstester och kontrollera automatiska byggresultat. Ingen manuell projektbuild eller typkontroll.
-- Kontrollera inloggad webbvy på 320, 360, 390, 430, 768 och 1280 px, båda teman, normal/stor text, tangentbord/fokus, horisontell veckorullning och vertikal scroll.
-- Verifiera verklig skapa → återläsning → redigera/flytta i ett isolerat testkonto. Camillas privata konto ska inte fyllas med testaktiviteter; om lämpligt konto saknas redovisas det som blockerad end-to-end-kontroll.
-- Slutrapporten skiljer faktiskt genomförda delar och tester från kvarstående begränsningar. Fysisk iOS/Android, systemtextförstoring och VoiceOver/TalkBack kräver riktiga enheter.
+Ingen appkod, global design, autentisering, databas, synk, familjedelning, native-version, domän eller publicerat intro ändras. Endast material och relevant materialdokumentation/ändringslogg uppdateras efter produktionen.
