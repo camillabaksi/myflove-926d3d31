@@ -34,7 +34,7 @@ export default function FlowView({
 
   return (
     <Layout>
-      <FlowTabs active={tab === "flow" ? "chatt" : tab} onChange={changeTab} />
+      {tab === "planera" && <FlowTabs active="planera" onChange={changeTab} />}
       {tab === "flow" && (
         <MyFlovePageGrid area="flow">
           <MyFloveWide>
