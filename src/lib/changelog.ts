@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-19 – Pace-sidan: finjusterad responsiv bakgrund",
+    items: ["Ny liggande desktopbakgrund med bibehållna proportioner; bilden fortsätter bakom historik, förslag och chatt och tonar mjukt ut mot sidans ivory utan synlig kant. På mobil ritas den stående bilden i naturlig proportion så alla tre stenar alltid syns med luft från högerkanten, med en diskret ljus toning bakom texten och gradvis lugnare kontrast nedåt. Verifierat på 360/390/430 px, surfplatta och desktop. Ingen ändring av data, chattlogik eller funktioner. Ej publicerat."],
+  },
+  {
     title: "2026-10-19 – Pace-sidan: riktiga bakgrundsbilder",
     items: ["Pace-sidan (/assistant) visar nu de godkända fotobakgrunderna – stående på mobil, liggande på desktop – i stället för CSS-bakgrunden och de separata stenarna. Bakgrunden tonar ut mjukt nedåt, stenarna syns tydligt på olika skärmstorlekar, och dubbla tillbaka-knappar är borttagna. Chatt, planering och tidigare samtal fungerar som förut ovanpå bakgrunden. Ej publicerat."],
   },
