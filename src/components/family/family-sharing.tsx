@@ -13,7 +13,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
   const { userId, children, items, loading, setItemShares, setItemShareFamily, setItemShareNotify } = useChildren();
   const { toast } = useToast();
   const [open, setOpen] = useState<string | null>(null);
-  const [onlyShared, setOnlyShared] = useState(false);
+  const [onlyShared, setOnlyShared] = useState(true);
 
   const mine = useMemo(
     () => items.filter((i) => i.owner_id && i.owner_id === userId),
@@ -68,12 +68,10 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
   };
 
   return (
-    <section className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
+    <section className="bg-card border border-border rounded-2xl p-3 sm:p-5 space-y-3">
       <div className="space-y-1">
         <h2 className="font-display text-base text-ink">Dela valda saker</h2>
-        <p className="text-sm text-muted-foreground">
-          Allt är privat tills du väljer annat. Välj sak för sak vem i familjen som ska se den.
-        </p>
+        <p className="text-xs text-muted-foreground">Visar delade saker först. Välj Alla för att dela fler.</p>
       </div>
 
       {others.length === 0 && (
@@ -119,7 +117,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
 
           <ul className="space-y-2">
             {visible.map((item) => (
-              <li key={item.id} className="rounded-2xl border border-border bg-secondary/30 p-3 space-y-2">
+              <li key={item.id} className="rounded-xl border border-border/70 bg-card px-3 py-2 space-y-1">
                 <div className="min-w-0">
                   <div className="truncate text-sm font-medium text-ink">{item.title}</div>
                   <div className="text-xs text-muted-foreground">
@@ -131,7 +129,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
                 <button
                   type="button"
                   onClick={() => setOpen(open === item.id ? null : item.id)}
-                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
                 >
                   {item.share_family ? (
                     <>
