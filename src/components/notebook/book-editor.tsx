@@ -150,7 +150,6 @@ export function BookTextEditor({
   const [print, setPrint] = useState(false);
   const [selection, setSelection] = useState("");
   const [destination, setDestination] = useState("");
-  const [newKind, setNewKind] = useState<"decision">("decision");
   const [newTitle, setNewTitle] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
   const [copied, setCopied] = useState("");
@@ -296,24 +295,12 @@ export function BookTextEditor({
             <option value="">Skapa ny</option>
             {destinations.map((e) => (
               <option key={e.id} value={e.id}>
-                {e.kind === "map" ? "Tankekarta" : "Beslut"}: {e.content.title || "Utan rubrik"}
+                För & emot: {e.content.title || "Utan rubrik"}
               </option>
             ))}
           </select>
           {!destination && (
             <>
-              <label className="book-label" htmlFor="copy-kind">
-                Bokdel
-              </label>
-              <select
-                id="copy-kind"
-                className="book-field"
-                value={newKind}
-                onChange={(e) => setNewKind(e.target.value === "map" ? "map" : "decision")}
-              >
-                <option value="decision">Beslut</option>
-                <option value="map">Tankekarta</option>
-              </select>
               <label className="book-label" htmlFor="copy-title">
                 Ny rubrik
               </label>
@@ -339,11 +326,7 @@ export function BookTextEditor({
       {copied && (
         <p role="status">
           Kopian finns i{" "}
-          {copied === "map" ? (
-            <Link to="/tankar/tankekarta">Tankekarta →</Link>
-          ) : (
-            <Link to="/tankar/beslut">Beslut →</Link>
-          )}
+          <Link to="/tankar/beslut">För & emot →</Link>
           . Originalet är oförändrat.
         </p>
       )}
