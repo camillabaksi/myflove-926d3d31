@@ -506,7 +506,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             <section className="rounded-2xl border border-border bg-card p-4 space-y-3" aria-label="Välj samtal med Pace">
               <h2 className="text-lg font-semibold">Vad vill du prata om?</h2>
               <p className="text-sm text-muted-foreground">Börja på nytt eller fortsätt ett tidigare samtal.</p>
-              <Button variant="default" className="w-full rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
+              <Button variant="default" className="w-full rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Skriv ett nytt meddelande nedan</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
                   <h3 className="text-sm font-medium">Tidigare samtal</h3>
