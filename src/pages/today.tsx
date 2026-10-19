@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
 import { CalendarDays, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -85,7 +86,16 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-0.5">
-            <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<><Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 rounded-xl px-2 text-xs" onClick={() => setAddOpen(true)}><Plus size={14} aria-hidden />{t("Lägg till")}</Button><details className="group relative shrink-0 rounded-xl border border-border/60 bg-card/80 px-2"><summary className="flex min-h-11 cursor-pointer list-none items-center gap-1 text-xs text-muted-foreground [&::-webkit-details-marker]:hidden">{t("Fler val")}<ChevronDown size={13} aria-hidden className="transition-transform group-open:rotate-180" /></summary><div className="absolute left-0 top-full z-30 mt-1 flex min-w-40 flex-col gap-1 rounded-xl border border-border bg-card p-2 shadow-lg"><Button asChild size="sm" variant="outline" className="min-h-11 rounded-xl"><Link href="/paminnelser">{t("Påminnelse")}</Link></Button><CopyDayButton date={today} shortLabel className="min-h-11 rounded-xl" /></div></details></>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`ml-auto inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
+            <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
+              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-0.5 rounded-xl px-1.5 text-[11px] sm:text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-0.5 rounded-xl border border-border bg-card px-1.5 text-[11px] text-muted-foreground sm:text-xs">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-44">
+                  <DropdownMenuItem asChild><Link href="/paminnelser">{t("Påminnelse")}</Link></DropdownMenuItem>
+                  <div className="p-1"><CopyDayButton date={today} shortLabel className="min-h-11 w-full rounded-xl" /></div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
