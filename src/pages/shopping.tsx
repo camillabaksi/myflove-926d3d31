@@ -260,7 +260,7 @@ export default function Shopping() {
         </MyFloveWide>
 
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
-          <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+          <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl">
             <DialogHeader>
               <DialogTitle>Lägg till vara</DialogTitle>
             </DialogHeader>
