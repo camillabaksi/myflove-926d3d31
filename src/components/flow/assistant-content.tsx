@@ -99,6 +99,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [recentOpen, setRecentOpen] = useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [menuFor, setMenuFor] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
@@ -475,7 +477,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       <MyFloveHeader
         title="Chatta med Pace"
         emojiKey="assistant"
-        description="Din andra hjärna – lugn, empatisk, aldrig dömande"
+        description="Skriv eller fortsätt ett samtal"
         action={
           <Button
             variant="outline"
@@ -488,7 +490,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           </Button>
         }
       >
-        <p data-npf="optional" className="text-xs text-muted-foreground">
+        <p data-npf="optional" className="hidden text-xs text-muted-foreground">
           Pace utgår från din profil och dina mönster i appen.{" "}
           <Link to="/profil" className="underline underline-offset-2">
             Justera din profil
@@ -509,77 +511,24 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               <Button variant="default" className="w-full rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Skriv ett nytt meddelande nedan</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-sm font-medium">Tidigare samtal</h3>
-                  {conversations.slice(0, 8).map((c) => (
-                    <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border px-3 py-3 text-left hover:bg-muted/40">
-                      <MessageCircle size={16} className="shrink-0 text-primary" />
-                      <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{c.title}</span><span className="text-xs text-muted-foreground">{relativeDayLabel(c.updated_at)}</span></span>
-                      <ChevronRight size={16} className="shrink-0" />
-                    </button>
-                  ))}
-                  {conversations.length > 8 && <Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>Visa alla samtal</Button>}
+                  <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2.5 text-left text-sm font-medium">
+                    <span>Tidigare samtal ({conversations.length})</span>
+                    <ChevronRight size={17} className={recentOpen ? "rotate-90 transition-transform" : "transition-transform"} />
+                  </button>
+                  {recentOpen && <div className="space-y-1.5">
+                    {conversations.slice(0, 5).map((c) => (
+                      <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-left hover:bg-muted/40">
+                        <MessageCircle size={15} className="shrink-0 text-primary" />
+                        <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{c.title}</span><span className="text-xs text-muted-foreground">{relativeDayLabel(c.updated_at)}</span></span>
+                        <ChevronRight size={15} className="shrink-0" />
+                      </button>
+                    ))}
+                    <Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>Visa alla samtal</Button>
+                  </div>}
                 </div>
               )}
             </section>
           )}
-          <div className="order-3 lg:contents">
-          <div className="flex flex-wrap items-center gap-2">
-<Button asChild variant="outline" className="rounded-2xl"><Link to="/idag">
-              <ArrowLeft size={16} />
-              Idag
-            </Link></Button>
-          </div>
-
-          <nav
-            aria-label="Brödsmulor"
-            className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground"
-          >
-            <Link to="/idag" className="hover:text-foreground">
-              Idag
-            </Link>
-            {place && place.path !== "/idag" && (
-              <>
-                <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
-                <Link to={place.path} className="hover:text-foreground">
-                  {place.label}
-                </Link>
-              </>
-            )}
-            <ChevronRight size={13} aria-hidden="true" className="opacity-60" />
-            <span className="font-medium text-foreground">Pace</span>
-          </nav>
-
-          <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/40 p-3">
-            <FlowMascot alt="Pace – Paceables följeslagare"
-              size="sm"
-              wave={flowStatus === "idle"}
-              glow
-              status={flowStatus}
-              bump
-              mood={
-                flowStatus === "thinking" ? "think" : flowStatus === "done" ? "cheer" : undefined
-              }
-              className="shrink-0"
-            />
-            <p className="text-sm text-muted-foreground">
-              {flowStatus === "thinking" ? "Pace tänker…" : "Pace lyssnar när du behöver det."}
-            </p>
-          </div>
-
-          <MyFloveBlock
-            title="Idag"
-            subtitle="En liten lägesbild från Pace"
-            icon={MessageCircle}
-            tone="lavender"
-            surface="lavender"
-            collapsible
-            collapseId="assistant::idag"
-            defaultCollapsed
-          >
-            <p className="text-sm leading-snug">{coachMessage.text}</p>
-          </MyFloveBlock>
-
-          </div>
 
           <MyFloveBlock
             title="Samtal"
@@ -733,12 +682,17 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           </MyFloveBlock>
 
-          <div className="flex flex-wrap gap-2"><Button asChild variant="outline" className="min-h-11 rounded-2xl"><a href="/idag?replan=1">Hjälp mig planera om dagen</a></Button></div>
+
           {messages.length === 0 && (
-            <div className="flex flex-wrap gap-2">
-              {QUICK_PROMPTS.map(({ label, prompt }) => (
-                <Button key={label} variant="outline" className="h-auto min-h-11 whitespace-normal rounded-2xl bg-card px-3 py-2 text-left" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
-              ))}
+            <div className="space-y-2">
+              <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-left text-sm font-medium">
+                <span>Behöver du hjälp att komma igång?</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
+              </button>
+              {suggestionsOpen && <div className="flex flex-wrap gap-2">
+                {QUICK_PROMPTS.map(({ label, prompt }) => (
+                  <Button key={label} variant="outline" className="h-auto min-h-10 whitespace-normal rounded-xl bg-card px-3 py-2 text-left text-sm" disabled={isSending} onClick={() => prompt ? void send(prompt) : inputRef.current?.focus()}>{label}</Button>
+                ))}
+              </div>}
             </div>
           )}
 
@@ -754,7 +708,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 }
               }}
               placeholder="Skriv till Pace…"
-              className="w-full h-24 p-3 bg-transparent border-none outline-none resize-none text-base"
+              className="w-full min-h-12 h-14 p-3 bg-transparent border-none outline-none resize-y text-base"
             />
             <div className="flex justify-end gap-2 px-2 pb-1">
               <FlowMicButton
