@@ -87,8 +87,8 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-2">
-            <div className="mb-2 space-y-1.5"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
             <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter />} />
+            <div className="mt-4 space-y-2 border-t border-border/50 pt-3"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
       </MyFloveWide>
