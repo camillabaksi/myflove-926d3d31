@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
 import { isoWeekNumber } from "@/lib/iso-week";
 import { Link, useLocation } from "wouter";
 import { Link as PlanningLink } from "@tanstack/react-router";
@@ -355,7 +355,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"><h1 className="pace-next-title min-w-0 font-display text-2xl font-medium tracking-tight text-[#512654]">{t("Min kalender")}</h1><Button type="button" className="pace-compact-control pace-compact-primary shrink-0" onClick={() => openAdd(false, date)}><Plus size={16} aria-hidden />{t("Lägg till")}</Button></header>
     <div role="group" aria-label={t("Kalendervy")} className="grid grid-cols-3 rounded-2xl border border-border/60 bg-secondary/60 p-1">{([ ["dag", "Idag"], ["vecka", "Vecka"], ["manad", "Månad"] ] as const).map(([id, label]) => <Button key={id} variant="ghost" onClick={() => setView(id)} aria-pressed={view === id} className={cn("pace-compact-control", view === id ? "pace-compact-selected font-semibold" : "text-muted-foreground")}>{t(label)}</Button>)}</div>
     </div>
-    <div className="pace-calendar-period grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Föregående period")} onClick={() => step(-1)}><ChevronLeft size={18} /></Button><div className="min-w-0 text-center"><p className="break-words font-display text-sm font-bold capitalize">{view === "vecka" ? `${dateHeading(dates[0] ?? date)} – ${dateHeading(dates[6] ?? date)}` : period}</p><Button variant="ghost" size="sm" onClick={() => setDate(today)} className="min-h-11 text-xs text-primary">{t("Idag")}</Button></div><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Nästa period")} onClick={() => step(1)}><ChevronRight size={18} /></Button></div>
+    <div className="pace-calendar-period grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2"><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Föregående period")} onClick={() => step(-1)}><ChevronLeft size={18} /></Button><div className="min-w-0 text-center"><p className="break-words font-display text-sm font-bold capitalize">{view === "vecka" ? `Vecka ${isoWeekNumber(new Date(`${date}T12:00:00`))} · ${dateHeading(dates[0] ?? date)} – ${dateHeading(dates[6] ?? date)}` : period}</p><Button variant="ghost" size="sm" onClick={() => setDate(today)} className="min-h-11 text-xs text-primary">{t("Idag")}</Button></div><Button size="icon" variant="ghost" className="min-h-11 min-w-11 rounded-full bg-card/60" aria-label={t("Nästa period")} onClick={() => step(1)}><ChevronRight size={18} /></Button></div>
     <details className="group rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-1" aria-label={t("Kalenderinställningar")}>
       <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         <span className="flex min-w-0 items-center gap-2"><Users size={16} className="shrink-0 text-primary" aria-hidden /><span className="truncate">{familyPreferences.mode === "mine" ? t("Bara jag") : familyPreferences.children === null ? t("Familjen") : familyPreferences.children.length === 0 ? t("Bara jag") : `${familyPreferences.children.length} ${t("barn")}`}</span></span>
@@ -385,22 +385,24 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     {externalError && <p role="status" className="text-sm text-muted-foreground">{t("Den externa kalendern kunde inte hämtas just nu. Dina egna poster finns kvar.")}</p>}
     {view === "manad" && <>
       <div className="overflow-hidden rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC]" role="group" aria-label={t("Månadskalender")}>
-        <div className="grid grid-cols-7 border-b border-[#EDE5E9] bg-[#FAF9F6]">
+        <div className="grid grid-cols-[2rem_repeat(7,minmax(0,1fr))] border-b border-[#EDE5E9] bg-[#FAF9F6]">
+          <span aria-hidden="true" />
           {dates.slice(0, 7).map(d => <span key={`heading-${d}`} className="py-2 text-center text-[11px] font-medium text-muted-foreground">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>)}
         </div>
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-[2rem_repeat(7,minmax(0,1fr))]">
           {dates.map((d, index) => {
             const dayEntries = days[d] ?? [];
             const adjacent = d.slice(0, 7) !== date.slice(0, 7);
             const areaKeys = [...new Set(dayEntries.map(entry => calendarArea(entry)))].slice(0, 3);
             const periodHere = dayEntries.some(entry => Boolean(entry.periodEnd));
-            return <button key={d} type="button" data-month-date={d}
+            return <Fragment key={d}>
+              {index % 7 === 0 && <span className="flex items-start justify-center border-b border-r border-[#EEE9E7] bg-[#FAF9F6]/70 pt-3 text-[10px] font-semibold text-[#806583]" aria-label={`Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}`}>v.{isoWeekNumber(new Date(`${d}T12:00:00`))}</span>}
+              <button type="button" data-month-date={d}
               onClick={() => setDate(d)}
               onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)}
               aria-current={d === today ? "date" : undefined}
               aria-label={`${index % 7 === 0 ? `Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}, ` : ""}${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}. ${t("Visa dagens aktiviteter nedanför kalendern")}`}
               className={cn("relative flex h-[4.6rem] min-w-0 flex-col items-center gap-2 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-24 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
-              {index % 7 === 0 && <span aria-hidden="true" className="pointer-events-none absolute left-0.5 top-1 rounded-md bg-[#F0EAF2]/80 px-1 text-[9px] font-semibold leading-4 text-[#512654] sm:left-1 sm:text-[10px]">v.{isoWeekNumber(new Date(`${d}T12:00:00`))}</span>}
               <span className={cn("mx-auto flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold", d === today && "bg-primary text-primary-foreground")}>{Number(d.slice(-2))}</span>
               <span className="flex min-h-0 w-full flex-1 flex-col items-center gap-1" aria-hidden="true">
                 {periodHere && <span className="h-0.5 w-3/4 rounded-full bg-primary/20" />}
@@ -409,7 +411,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
                 </span>
               </span>
               {dayEntries.length > 3 && <span aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75 sm:bottom-1.5" title={`${dayEntries.length} aktiviteter`}>•••</span>}
-            </button>;
+              </button>
+            </Fragment>;
           })}
         </div>
       </div>
@@ -432,7 +435,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
       </section></>}
     {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
-      <h2 className="px-2 font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")}</h2>
+      <h2 className="px-2 font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")} · v.{isoWeekNumber(new Date(`${date}T12:00:00`))}</h2>
       {(() => { const active = dates.flatMap(d => days[d] ?? []).filter(e => e.periodEnd && (!isFamilyEntry(e) || familyPreferences.mode !== "mine")); const unique = [...new Map(active.map(e => [e.source === "child" ? `${e.title}:${e.periodEnd}:${e.linkGroup ?? e.sourceId}` : e.sourceId, e])).values()]; return unique.length ? <div className="space-y-1 rounded-xl bg-[#F2EDF5] p-2" aria-label="Perioder under veckan"><p className="text-xs font-medium text-[#512654]">Pågående perioder</p>{unique.map(e => <div key={e.id} className="flex min-h-9 items-center gap-2 rounded-lg bg-white/70 px-2 text-sm"><span className="min-w-0 flex-1 truncate">{e.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {e.periodEnd?.slice(5)}</span></div>)}</div> : null; })()}
       <div className="divide-y divide-[#EDE5E9]">{dates.map(d => {
         const dayEntries = (days[d] ?? []).filter(e => !isFamilyEntry(e) && !e.periodEnd);
