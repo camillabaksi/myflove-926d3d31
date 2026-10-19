@@ -738,6 +738,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           </MyFloveBlock>
 
+          <div className="flex flex-wrap gap-2"><Button asChild variant="outline" className="min-h-11 rounded-2xl"><a href="/idag?replan=1">Hjälp mig planera om dagen</a></Button></div>
           {messages.length === 0 && (
             <div className="flex flex-wrap gap-2">
               {QUICK_PROMPTS.map(({ label, prompt }) => (

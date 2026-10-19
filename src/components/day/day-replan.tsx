@@ -24,6 +24,14 @@ export function DayReplanButton({ compact = false, ...props }: DayReplanProps & 
   const trigger = useRef<HTMLButtonElement>(null);
   const [openedFor, setOpenedFor] = useState<string | null>(null);
   useEffect(() => { setOpenedFor(null); }, [user?.id, props.date]);
+  useEffect(() => {
+    if (props.date !== todayISO() || !user?.id || !isActiveOwner(user.id) || typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("replan") !== "1") return;
+    url.searchParams.delete("replan");
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+    setOpenedFor(user.id);
+  }, [props.date, user?.id]);
   return <>
     <button ref={trigger} type="button" onClick={() => {
       if (!user?.id || !isActiveOwner(user.id)) { toast.error(t("Vänta tills ditt konto har laddats och försök igen.")); return; }
