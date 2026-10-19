@@ -345,7 +345,7 @@ export function StudiesSection() {
       </section>
 
       <Dialog open={assignmentDialogOpen} onOpenChange={setAssignmentDialogOpen}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-3xl">
+        <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>Ny skoluppgift</DialogTitle>
           </DialogHeader>
