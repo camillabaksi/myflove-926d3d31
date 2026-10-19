@@ -820,7 +820,7 @@
 
 /* Calm, compact notebook entrances: two clear choices instead of a long tool menu. */
 .book-entrances { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
-.book-entrance { min-width: 0; min-height: 9rem; align-items: flex-start; flex-direction: column; justify-content: center; border-radius: 1.25rem; }
+.book-entrance { min-width: 0; min-height: 9rem; display: flex; align-items: flex-start; flex-direction: column; justify-content: center; gap: 0.65rem; border-radius: 1.25rem; }
 .book-entrance:nth-child(1) { background: var(--book-lavender); }
 .book-entrance:nth-child(2) { background: var(--book-sage); }
 @media (max-width: 360px) { .book-entrances { grid-template-columns: 1fr; } }
