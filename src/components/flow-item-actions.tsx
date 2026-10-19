@@ -205,6 +205,7 @@ function FlowItemEditDialog({
         date: t.dueDate ?? "",
         time: t.time ?? "",
         endTime: t.endTime ?? "",
+        endDate: "",
         note: t.note ?? "",
         area: (t.area ?? "vardag") as LifeArea,
       };
@@ -216,6 +217,7 @@ function FlowItemEditDialog({
         date: r.date,
         time: r.time ?? "",
         endTime: r.endTime ?? "",
+        endDate: r.endDate ?? "",
         note: r.note ?? "",
         area: "vardag" as LifeArea,
       };
@@ -227,6 +229,7 @@ function FlowItemEditDialog({
         date: "",
         time: "",
         endTime: "",
+        endDate: "",
         note: "",
         area: "vardag" as LifeArea,
       };
@@ -254,7 +257,7 @@ function FlowItemEditDialog({
   }, [source, kind]);
 
   const [form, setForm] = useState(
-    initial ?? { title: "", date: "", time: "", endTime: "", note: "", area: "vardag" as LifeArea },
+    initial ?? { title: "", date: "", time: "", endTime: "", endDate: "", note: "", area: "vardag" as LifeArea },
   );
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -265,6 +268,10 @@ function FlowItemEditDialog({
   const save = () => {
     const title = form.title.trim();
     if (!title) return;
+    if (kind === "kalender" && form.endDate && form.endDate < form.date) {
+      toast.error("Slutdatum måste vara samma dag eller senare.");
+      return;
+    }
     if (kind === "uppgift") {
       updateTask(realId, {
         title,
@@ -278,8 +285,9 @@ function FlowItemEditDialog({
       updateReminder(realId, {
         title,
         date: form.date || undefined,
-        time: form.time || undefined,
-        endTime: form.endTime || undefined,
+        endDate: form.endDate || undefined,
+        time: form.endDate ? undefined : form.time || undefined,
+        endTime: form.endDate ? undefined : form.endTime || undefined,
         note: form.note,
       });
     } else if (kind === "quickflow") {
@@ -381,6 +389,12 @@ function FlowItemEditDialog({
                     onChange={(e) => set({ date: e.target.value })}
                   />
                 </label>
+                {kind === "kalender" && <label className="space-y-1 text-sm sm:col-span-2">
+                  <span className="text-muted-foreground">Slutdatum (valfritt – för en sammanhängande period)</span>
+                  <Input type="date" min={form.date || undefined} value={form.endDate} onChange={(e) => set({ endDate: e.target.value, ...(e.target.value ? { time: "", endTime: "" } : {}) })} />
+                  <span className="block text-xs text-muted-foreground">En period visas på alla dagar mellan start och slut, utan att boka tid.</span>
+                </label>}
+                {!(kind === "kalender" && form.endDate) && <>
                 <label className="space-y-1 text-sm">
                   <span className="text-muted-foreground">Tid (frivilligt)</span>
                   <Input
@@ -397,6 +411,7 @@ function FlowItemEditDialog({
                     onChange={(e) => set({ endTime: e.target.value })}
                   />
                 </label>
+                </>}
               </div>
             )}
 

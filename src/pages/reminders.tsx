@@ -179,7 +179,7 @@ function ReminderEditor({
       date,
       time: time || undefined,
       note: note.trim() || undefined,
-      ...(reminder.endDate ? { endDate: endDate || undefined } : {}),
+      endDate: endDate || undefined,
       ...(reminder.endTime ? { endTime: endTime || undefined } : {}),
       ...(planAgain ? { completed: false, canceled: false } : {}),
     };
@@ -242,9 +242,8 @@ function ReminderEditor({
               onChange={(e) => setTime(e.target.value)}
             />
           </div>
-          {(reminder.endDate || reminder.endTime) && (
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
-              {reminder.endDate && (
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
+              {(
                 <input
                   className={inputClass}
                   type="date"
@@ -263,7 +262,6 @@ function ReminderEditor({
                 />
               )}
             </div>
-          )}
           <input
             className={inputClass}
             aria-label="Anteckning (valfritt)"
