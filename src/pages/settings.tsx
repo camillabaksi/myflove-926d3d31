@@ -123,7 +123,7 @@ export default function SettingsPage() {
           <Show when="signed-in">
             <Button
               variant="outline"
-              className="w-full justify-start gap-3 rounded-2xl"
+              className="min-h-11 w-full justify-start gap-3 rounded-xl"
               onClick={() => {
                 track("logout");
                 void signOut();
@@ -148,7 +148,7 @@ export default function SettingsPage() {
                 key={l.value}
                 variant={lang === l.value ? "default" : "outline"}
                 aria-pressed={lang === l.value}
-                className="h-auto justify-start gap-2 rounded-2xl py-3"
+                className="min-h-11 justify-start gap-2 rounded-xl py-3"
                 onClick={() => {
                   if (l.value === lang) return;
                   if (l.value === "sv") clearTranslationCache();
