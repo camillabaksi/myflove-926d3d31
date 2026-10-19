@@ -136,7 +136,9 @@ export function useFlowItems(dateISO?: string): {
       // dag den inträffar har sin egen status – att bocka av idag får aldrig
       // ta bort morgondagens förekomst.
       const recurring = (r.repeat ?? "none") !== "none";
-      const doneToday = recurring ? isInstanceDone(`reminder-${r.id}`, today) : r.completed;
+      // Continuous periods describe context, not daily tasks to complete.
+      const isPeriod = !!r.endDate && !r.time;
+      const doneToday = isPeriod ? false : recurring ? isInstanceDone(`reminder-${r.id}`, today) : r.completed;
       out.push({
         id: `rem-${r.id}`,
         title: r.title,
@@ -150,7 +152,7 @@ export function useFlowItems(dateISO?: string): {
         done: doneToday,
         // En kalenderhändelse är oftast något man faktiskt genomför
         // (möte, läkarbesök, lämning) – därför går den att bocka av.
-        completable: true,
+        completable: !isPeriod,
         href: "/kalender",
         meetingUrl: meetingUrlFrom(r.note),
       });
