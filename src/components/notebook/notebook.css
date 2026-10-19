@@ -850,3 +850,17 @@
 .book-import-choice strong { display: block; }
 .book-import-preview { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; font-size: 1.4rem; line-height: 1.35; }
 @media (max-width: 600px) { .book-sheet { padding: 0.3rem; gap: 0.35rem; } .book-sheet .book-column { padding: 0.45rem !important; } }
+
+/* Shared handwritten writing style; no leading +/- markers inside either column. */
+.notebook .book-diary-sheet textarea.book-writing,
+.notebook .book-decision .book-sheet textarea.book-hand {
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: clamp(1.55rem, 4vw, 1.85rem) !important;
+  font-weight: 400 !important;
+  font-style: normal;
+  line-height: 1.45;
+  letter-spacing: 0;
+  list-style: none;
+}
+.notebook .book-decision .book-sheet .book-point textarea::before { content: none; }
+.notebook .book-decision .book-sheet .book-column h2 { font-family: "Nunito", "Inter", sans-serif !important; font-size: 1rem !important; font-weight: 700; }
