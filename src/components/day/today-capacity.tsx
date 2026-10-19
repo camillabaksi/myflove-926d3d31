@@ -26,15 +26,15 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <section className="pace-surface rounded-3xl px-3 py-3 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-4" aria-labelledby="today-capacity-title">
+      <section className="pace-surface rounded-2xl px-3 py-2.5 sm:p-3" aria-labelledby="today-capacity-title">
         <div className="flex items-center justify-between gap-1.5 sm:gap-3">
           <div className="min-w-0 flex-1">
             {percent === null ? (
               <>
-                <h2 id="today-capacity-title" className="font-sans text-[20px] font-semibold text-ink">
+                <h2 id="today-capacity-title" className="font-sans text-lg font-semibold text-ink">
                   {t("Hur börjar du dagen?")}
                 </h2>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   {t(
                     "Checka in när du vill för att se hur dagen passar det du har att röra dig med.",
                   )}
@@ -51,7 +51,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
         </div>
         <Button
           variant="outline"
-          className="mt-2 h-auto min-h-11 w-full whitespace-normal rounded-2xl bg-[#F5EDF7] text-ink shadow-sm hover:bg-[#EFE5F2]"
+          className="mt-1.5 h-auto min-h-11 w-full whitespace-normal rounded-2xl bg-[#F5EDF7] text-ink shadow-sm hover:bg-[#EFE5F2]"
           onClick={() => setOpen(true)}
         >
           <Heart size={16} aria-hidden />
