@@ -66,32 +66,21 @@ export function PlanningEntry({
     );
   if (compact)
     return (
-      <section
-        className="rounded-xl border border-border/60 bg-mint/20 px-3 py-2"
-        aria-label={t("Planera i din takt")}
-      >
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-          <h3 className="flex items-center gap-2 font-display text-base font-medium">
-            <NotebookPen size={18} className="shrink-0 text-primary" aria-hidden />
-            {t("Planera i din takt")}
-          </h3>
-          <nav className="flex flex-wrap gap-1.5" aria-label={t("Välj planeringsperiod")}>
-            {PLANNING_PERIODS.map(([period, label]) => (
-              <Button
-                key={period}
-                asChild
-                variant="outline"
-                className="min-h-9 rounded-xl bg-card/70 px-2.5 text-xs shadow-none"
-              >
-                <Link to="/planera" search={{ audience: "me", period }}>
-                  {t(label)}
-                </Link>
-              </Button>
-            ))}
-          </nav>
-        </div>
-        {children}
-      </section>
+      <details className="group rounded-xl border border-border/60 bg-mint/15 px-3 py-1" aria-label={t("Planera i din takt")}>
+        <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-medium text-ink [&::-webkit-details-marker]:hidden">
+          <NotebookPen size={17} className="shrink-0 text-primary" aria-hidden />
+          <span className="flex-1">{t("Planera i din takt")}</span>
+          <ChevronRight size={17} className="shrink-0 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
+        </summary>
+        <nav className="flex flex-wrap gap-2 border-t border-border/40 py-3" aria-label={t("Välj planeringsperiod")}>
+          {PLANNING_PERIODS.map(([period, label]) => (
+            <Button key={period} asChild variant="outline" className="min-h-10 rounded-xl bg-card/70 px-3 text-sm shadow-none">
+              <Link to="/planera" search={{ audience: "me", period }}>{t(label)}</Link>
+            </Button>
+          ))}
+        </nav>
+        {children && <div className="pb-2">{children}</div>}
+      </details>
     );
   return (
     <section
