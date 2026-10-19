@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { CalendarDays, Plus, ChevronDown } from "lucide-react";
+import { CalendarDays, Plus, ChevronDown, NotebookPen } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -75,7 +75,7 @@ export function TodayContent() {
       <MyFloveWide>
         <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-3 py-3 sm:px-4 sm:py-4" aria-labelledby="your-day-title">
           <header className="mb-2 space-y-2">
-            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
+            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5"><RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-lavender/55 px-3 text-sm font-semibold text-ink transition-colors hover:bg-lavender/75"><NotebookPen size={16} aria-hidden />{t("Planera")}</RouterLink><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div></div>
             <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
               <Button type="button" size="sm" className="min-h-11 gap-1.5 rounded-xl px-4" onClick={() => setAddOpen(true)}>
                 <Plus size={16} aria-hidden />{t("Lägg till")}
