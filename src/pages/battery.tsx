@@ -18,6 +18,9 @@ import { EnergyFlowInsights } from "@/pages/energy-flow";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { useEnergyPattern } from "@/hooks/use-energy-pattern";
+import { Switch } from "@/components/ui/switch";
 
 /**
  * Mitt batteri – lugn översikt över registrerad energi och mående.
@@ -29,6 +32,8 @@ export default function BatteryPage() {
   const { name } = useUserProfile();
   const capacity = useDayCapacity()(todayISO());
   const { t, lang } = useLang();
+  const [followRhythm, setFollowRhythm] = useCloudSyncedStorage<boolean>("paceable-follow-energy-rhythm", false);
+  const { pattern } = useEnergyPattern();
   useEffect(() => {
     track("battery_opened", { source: "sida" });
   }, []);
@@ -51,8 +56,17 @@ export default function BatteryPage() {
         <MyFloveWide>
           <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" data-testid="capacity-summary">
             <h2 className="font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet idag")}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Ingen energi registrerad ännu. Logga energi & mående på Idag." : "Utifrån din egen registrering idag. Du kan uppdatera den på Idag.")}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Ingen energi registrerad ännu. Logga energi & mående på Idag." : "Utifrån din registrering idag och eventuella valfria uppskattningar. Du kan uppdatera den på Idag.")}</p>
             <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
+            <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/80 p-3">
+              <div className="min-w-0">
+                <label htmlFor="follow-energy-rhythm" className="text-sm font-semibold text-ink">Följ min energirytm</label>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Frivillig, försiktig uppskattning utifrån dina egna energiloggar. Högst 6 procentenheters minskning sedan senaste incheckningen. Din registrering ändras aldrig.</p>
+                {!pattern.reliable && <p className="mt-1 text-xs text-muted-foreground">Behöver minst 8 energiloggar för att kunna användas.</p>}
+              </div>
+              <Switch id="follow-energy-rhythm" checked={followRhythm} onCheckedChange={setFollowRhythm} aria-label="Följ min energirytm" />
+            </div>
+            {followRhythm && <p className="mt-2 text-xs text-muted-foreground">Visad energi kan innehålla en liten uppskattad förändring över dagen. Det är inte en mätning. En ny incheckning väger alltid tyngst.</p>}
           </section>
         </MyFloveWide>
 
