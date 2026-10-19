@@ -45,7 +45,6 @@ export const HOME_SHORTCUT_CATALOG: HomeShortcut[] = [
   { href: "/anteckningar", label: "Anteckningar", hint: "Sådant du vill spara", icon: NotebookPen },
   { href: "/assistant", label: "Prata med Pace", hint: "Fråga eller tänk högt", icon: MessageCircle },
   { href: "/mitt-batteri", label: "Mitt batteri", hint: "Din energi just nu", icon: BatteryMedium },
-  { href: "/mitt-batteri", label: "Energi & mående", hint: "Hur är det just nu?", icon: Heart },
   { href: "/aterhamtning", label: "Återhämtning", hint: "Paus, lugn och ljusboost", icon: Wind },
   { href: "/daglig-rutin", label: "Rutiner & medicin", hint: "Dagens doser och rutiner", icon: Pill },
   { href: "/pomodoro", label: "Timer", hint: "Jobba en stund, ta paus", icon: Timer },
@@ -80,7 +79,8 @@ export function useHomeShortcuts() {
           const item = findShortcut(LEGACY_HREFS[href] ?? href);
           return item ? { ...item, storedHref: href } : null;
         })
-        .filter((item): item is HomeShortcut & { storedHref: string } => item != null),
+        .filter((item): item is HomeShortcut & { storedHref: string } => item != null)
+        .filter((item, index, all) => all.findIndex((other) => other.href === item.href) === index),
     [saved],
   );
 

@@ -53,6 +53,7 @@ export default function QuickAddSheet({
   const [isPeriod, setIsPeriod] = useState(false);
   const [endDate, setEndDate] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [fullWarn, setFullWarn] = useState(false);
   const { mode } = useCapacityMode();
   const { todayOpen } = useFlowItems();
@@ -74,6 +75,8 @@ export default function QuickAddSheet({
     setEndDate("");
     setIsPeriod(false);
     setDate(todayISO());
+    setShowDetails(false);
+    setKind("aktivitet");
   };
 
   const save = (confirmed = false) => {
@@ -126,9 +129,10 @@ export default function QuickAddSheet({
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") save();
+              if (e.key === "Enter" && !e.nativeEvent.isComposing) { e.preventDefault(); save(); }
             }}
             maxLength={240}
+            aria-label={t("Vad vill du lägga till?")}
             placeholder={t("Vad dök upp? T.ex. Ring tandläkaren")}
             className="min-h-12 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-ink"
           />
@@ -161,6 +165,11 @@ export default function QuickAddSheet({
             </div>
           )}
 
+          <button type="button" className="flex min-h-11 w-full items-center justify-between rounded-xl border border-border/60 bg-card/70 px-3 text-left text-sm font-medium text-ink" aria-expanded={showDetails} aria-controls="quick-add-details" onClick={() => setShowDetails((value) => !value)}>
+            <span>{t("Fler val")} · {t(KINDS.find((item) => item.id === kind)?.label ?? "Aktivitet")}</span>
+            <span aria-hidden>{showDetails ? "−" : "+"}</span>
+          </button>
+          <div id="quick-add-details" className={showDetails ? "space-y-3" : "hidden"}>
           <div className="grid grid-cols-2 gap-2">
             {KINDS.map((k) => {
               const on = kind === k.id;
@@ -240,6 +249,7 @@ export default function QuickAddSheet({
             </label>
           )}
 
+          </div>
           <button
             type="button"
             onClick={() => save()}
