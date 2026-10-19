@@ -118,17 +118,17 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
         id="decision-title"
         className="book-decision-title"
         rows={1}
-        placeholder="Ett beslut, stort eller litet…"
+        placeholder="Vad funderar du på?"
         value={draft.title}
         onChange={(e) => update({ title: e.target.value })}
       />
       <div className="book-decision-options">
         <Button variant="ghost" aria-pressed={!!draft.uncertain} onClick={() => update({ uncertain: !draft.uncertain })}>
-          Osäkert än
+          {draft.uncertain ? "Dölj osäkra tankar" : "Lägg till osäkra tankar"}
         </Button>
         <label className="sr-only" htmlFor="decision-focus">Visa spalter</label>
         <select id="decision-focus" className="book-decision-focus" value={focus} onChange={(e) => setFocus(e.target.value as Column | "all")}>
-          <option value="all">Alla spalter</option>
+          <option value="all">Visa båda sidorna</option>
           {visibleColumns.map((c) => <option key={c.id} value={c.id}>{c.label} – fokusläge</option>)}
         </select>
       </div>
