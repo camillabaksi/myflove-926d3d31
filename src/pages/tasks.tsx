@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
-import { useTasks, Task, TaskKind, TaskStatus } from "@/hooks/use-data";
+import { useTasks, useReminders, Task, TaskKind, TaskStatus } from "@/hooks/use-data";
 import { useFlowScore } from "@/hooks/use-flowscore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -134,7 +134,14 @@ export default function Tasks() {
     }
   };
 
+  const { addReminder: addPeriodReminder } = useReminders();
+
   const handleQuickAdd = (result: QuickAddResult) => {
+    if (result.endDate) {
+      addPeriodReminder(result.title, result.dueDate, undefined, "none", undefined, undefined, "Sammanhängande period – ingen automatiskt upptagen tid.", defaultAreaFor(activeArea), result.endDate, "unknown");
+      toast({ description: "Perioden är sparad och syns i kalendern." });
+      return;
+    }
     addTask(result.title, result.dueDate, {
       time: result.time,
       completed: result.completed,

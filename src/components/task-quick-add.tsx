@@ -11,6 +11,8 @@ import { todayISO, type TaskFriction, type EnergyImpact } from "@/lib/task-agend
 export interface QuickAddResult {
   title: string;
   dueDate: string;
+  /** A continuous calendar period, never a task duplicated across days. */
+  endDate?: string;
   time?: string;
   completed: boolean;
   completedAt?: number;
@@ -84,6 +86,7 @@ export function TaskQuickAdd({
     defaultDate && /^\d{4}-\d{2}-\d{2}$/.test(defaultDate) ? defaultDate : todayISO();
   const [date, setDate] = useState(baseDate);
   const [time, setTime] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [alsoShopping, setAlsoShopping] = useState(true);
   const { addItem: addShoppingItem } = useSharedShoppingList();
 
@@ -92,6 +95,7 @@ export function TaskQuickAdd({
     setTitle("");
     setDate(baseDate);
     setTime("");
+    setEndDate("");
     setAlsoShopping(true);
   };
 
@@ -99,12 +103,13 @@ export function TaskQuickAdd({
     setMode(nextMode);
     setDate(baseDate);
     setTime("");
+    setEndDate("");
   };
 
   const save = () => {
     const trimmed = title.trim();
     const safeDate = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : baseDate;
-    if (!trimmed || !mode) return;
+    if (!trimmed || !mode || (endDate && endDate < safeDate)) return;
     if (alsoShopping && looksLikeShopping(trimmed)) {
       addShoppingItem(shoppingTitleFrom(trimmed));
       toast.success("Tillagd i Inköpslistan också. 💙");
@@ -112,11 +117,12 @@ export function TaskQuickAdd({
     onAdd({
       title: trimmed.slice(0, 240),
       dueDate: safeDate,
-      time: time || undefined,
+      endDate: mode === "planned" ? endDate || undefined : undefined,
+      time: endDate ? undefined : time || undefined,
       completed: mode === "done",
       completedAt: mode === "done" ? Date.now() : undefined,
     });
-    if (time) {
+    if (time && !endDate) {
       const dayLabel =
         safeDate === todayISO()
           ? "idag"
@@ -247,14 +253,23 @@ export function TaskQuickAdd({
                   <Input
                     type="date"
                     value={date}
-                    onChange={(event) => setDate(event.target.value)}
+                    onChange={(event) => { setDate(event.target.value); if (endDate && endDate < event.target.value) setEndDate(event.target.value); }}
                     className="h-10 min-w-0 flex-1 rounded-xl bg-background text-sm"
                     aria-label="Datum"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
+              {mode === "planned" && <div className="space-y-2 rounded-2xl border border-border/60 bg-secondary/20 p-3">
+                <p className="text-xs font-medium text-muted-foreground">Gäller det en dag eller en period?</p>
+                <div className="grid grid-cols-2 gap-2" role="group" aria-label="Datumomfattning">
+                  <Button type="button" variant="outline" aria-pressed={!endDate} className={cn("min-h-10 rounded-xl text-sm", !endDate && "border-primary bg-primary/10 text-primary")} onClick={() => setEndDate("")}>En dag</Button>
+                  <Button type="button" variant="outline" aria-pressed={!!endDate} className={cn("min-h-10 rounded-xl text-sm", !!endDate && "border-primary bg-primary/10 text-primary")} onClick={() => { setEndDate(date); setTime(""); }}>Flera dagar</Button>
+                </div>
+                {!!endDate && <label className="block space-y-1 text-sm"><span className="text-muted-foreground">Slutdatum</span><Input type="date" min={date} value={endDate} onChange={event => setEndDate(event.target.value)} required className="h-10 rounded-xl bg-background" /><span className="block text-xs text-muted-foreground">Visas varje dag under perioden, utan att boka tid.</span></label>}
+              </div>}
+
+              {!endDate &&               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Tid? <span className="font-normal normal-case tracking-normal">(valfritt)</span>
                 </p>
@@ -278,7 +293,7 @@ export function TaskQuickAdd({
                 </div>
               </div>
 
-              <Button type="submit" disabled={!title.trim()} className="h-12 w-full rounded-2xl">
+              <Button type="submit" disabled={!title.trim() || (!!endDate && endDate < date)} className="h-12 w-full rounded-2xl">
                 Spara
               </Button>
             </form>
