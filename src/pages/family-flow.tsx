@@ -96,9 +96,9 @@ export default function FamilyFlowPage() {
     <Layout>
       <MyFlovePageGrid area="hem">
         <MyFloveWide>
-          <div className="space-y-6">
+          <div className="space-y-3">
             <header>
-              <h1 className="pace-app-title flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
+              <h1 className="pace-app-title flex items-center gap-2 font-display text-xl font-semibold text-ink sm:text-2xl">
                 <HeartPulse size={24} aria-hidden /> {t("Familj")}
               </h1>
               <p className="mt-1 text-muted-foreground">
@@ -106,9 +106,19 @@ export default function FamilyFlowPage() {
               </p>
             </header>
 
+            {children.length > 0 && (
+               <CollapsibleSection
+                id="Dagen för hela familjen"
+                title={t("Dagen för hela familjen")}
+                className="space-y-3 rounded-2xl border border-border/60 bg-card p-3 sm:p-4"
+              >
+                <FamilyDayPerspectives myDay={<DailyFlowList includeChildSchedules={false} />} defaultPerspective="familj" />
+              </CollapsibleSection>
+            )}
+
             {isChildAccount && <Link href="/kalender" className="pace-card-surface flex min-h-14 items-center justify-between rounded-2xl border border-border bg-card px-4 font-semibold text-ink shadow-soft"><span>{t("Min kalender")}</span><span aria-hidden>›</span></Link>}
             <section aria-label={t("Barnen")} className="space-y-3">
-              <h2 className="font-display text-lg font-bold text-ink">{t("Barnen")}</h2>
+              <h2 className="font-display text-base font-semibold text-ink">{t("Barnen")}</h2>
               {children.length === 0 && !loading && <p className="text-sm text-muted-foreground">{t("Inga barn tillagda än. Du kan använda Familj ändå.")}</p>}
               {loading ? <p className="text-sm text-muted-foreground">{t("Laddar...")}</p> : <ChildProfiles
                 childrenList={children}
@@ -122,7 +132,7 @@ export default function FamilyFlowPage() {
               />}
             </section>
 
-            <section className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" aria-label={t("Barnens nästa steg")}>
+            <section className="pace-card-surface rounded-2xl border border-border/60 bg-card p-3" aria-label={t("Barnens nästa steg")}>
               <h2 className="font-display text-base font-bold text-ink">{t("Vad händer nu och sen?")}</h2>
               {upcoming.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("Inga fler tider inlagda idag.")}</p> : (
                 <div className="mt-3 space-y-2">{upcoming.slice(0, 2).map((event, index) => (
@@ -135,13 +145,13 @@ export default function FamilyFlowPage() {
               <Button variant="link" className="mt-2 px-0" asChild><Link href="/barn">{t("Visa barnens dagar")}</Link></Button>
             </section>
 
-            <section className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5">
+            <section className="space-y-3 rounded-2xl border border-border/60 bg-card p-3 sm:p-4">
               <h2 className="text-base font-semibold text-ink">{t("Vad behöver fungera idag?")}</h2>
               <div className="flex flex-wrap gap-2">
                  <Button
                   type="button"
                   onClick={() => setShowSituation((v) => !v)}
-                  className="press min-h-11 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
+                  className="press min-h-10 rounded-2xl bg-primary/10 px-3 text-sm font-medium text-ink hover:bg-primary/15"
                 >
                   {t("Hjälp mig med en situation")}
                  </Button>
@@ -158,7 +168,7 @@ export default function FamilyFlowPage() {
               )}
             </section>
 
-            <CollapsibleSection id="family-situation-history" title={t("Tidigare situationer")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><SituationLogOverview
+            <CollapsibleSection id="family-situation-history" title={t("Tidigare situationer")} defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card p-3" headingClassName="text-base font-semibold text-ink"><SituationLogOverview
               entries={situationLog ?? []}
               onDelete={(id) =>
                 setSituationLog((prev) => (prev ?? []).filter((e) => e.id !== id))
@@ -166,23 +176,12 @@ export default function FamilyFlowPage() {
             /></CollapsibleSection>
 
 
-            {children.length > 0 && (
-               <CollapsibleSection
-                id="Dagen för hela familjen"
-                title={t("Dagen för hela familjen")}
-                 defaultCollapsed
-                className="space-y-3 rounded-3xl border border-border bg-card p-4 shadow-soft sm:p-5"
-              >
-                <FamilyDayPerspectives myDay={<DailyFlowList includeChildSchedules={false} />} defaultPerspective="familj" />
-              </CollapsibleSection>
-            )}
+             <CollapsibleSection id="family-load" title={t("Familjens belastning")} defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card p-3" headingClassName="text-base font-semibold text-ink"><FamilyLoadCard /></CollapsibleSection>
 
-             <CollapsibleSection id="family-load" title={t("Familjens belastning")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><FamilyLoadCard /></CollapsibleSection>
-
-             <CollapsibleSection id="family-recovery-gap" title={t("Hitta utrymme för vila")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} /></CollapsibleSection>
+             <CollapsibleSection id="family-recovery-gap" title={t("Hitta utrymme för vila")} defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card p-3" headingClassName="text-base font-semibold text-ink"><RecoveryGapCard title={t("Du kan inte ändra dagen. Men vi kan göra den lite snällare.")} /></CollapsibleSection>
 
             {children.length > 0 && (
-               <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} defaultCollapsed className="pace-card-surface rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="text-base font-semibold text-ink">
+               <CollapsibleSection id="Barnens återhämtning" title={t("Återhämtning · sparade övningar")} defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card p-3" headingClassName="text-base font-semibold text-ink">
                 <RecoveryLibrary initialCategory="barn" />
               </CollapsibleSection>
             )}

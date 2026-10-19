@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Bell, BellOff, Lock, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useChildren, type ChildItem, type FamilyMember } from "@/hooks/use-children";
@@ -14,6 +15,8 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
   const { toast } = useToast();
   const [open, setOpen] = useState<string | null>(null);
   const [onlyShared, setOnlyShared] = useState(true);
+  const [search, setSearch] = useState("");
+  const [includePast, setIncludePast] = useState(false);
 
   const mine = useMemo(
     () => items.filter((i) => i.owner_id && i.owner_id === userId),
@@ -24,7 +27,13 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
     [members, userId],
   );
   const isShared = (i: ChildItem) => i.share_family === true || i.sharedWith.length > 0;
-  const visible = onlyShared ? mine.filter(isShared) : mine;
+  const visible = useMemo(() => {
+    const today = new Date().toLocaleDateString("sv-SE");
+    return (onlyShared ? mine.filter(isShared) : mine)
+      .filter((item) => onlyShared || includePast || !item.date || item.date >= today)
+      .filter((item) => item.title.toLocaleLowerCase("sv-SE").includes(search.toLocaleLowerCase("sv-SE")))
+      .sort((a, b) => (a.date ?? "9999-12-31").localeCompare(b.date ?? "9999-12-31"));
+  }, [onlyShared, mine, includePast, search]);
   /** Familjemedlemmar som är kopplade som ett barns eget konto (till dina barnprofiler). */
   const childAccounts = useMemo(
     () => new Set(children.filter((c) => c.owner_id === userId && c.account_user_id).map((c) => c.account_user_id as string)),
@@ -71,7 +80,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
     <section className="bg-card border border-border rounded-2xl p-3 sm:p-5 space-y-3">
       <div className="space-y-1">
         <h2 className="font-display text-base text-ink">Dela valda saker</h2>
-        <p className="text-xs text-muted-foreground">Visar delade saker först. Välj Alla för att dela fler.</p>
+        <p className="text-xs text-muted-foreground">Bara det du väljer delas. Sök bland posterna för att dela fler.</p>
       </div>
 
       {others.length === 0 && (
@@ -101,7 +110,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
                 onlyShared ? "border-border text-muted-foreground" : "border-primary bg-primary/10 text-primary"
               }`}
             >
-              Allt ({mine.length})
+              Välj fler
             </button>
             <button
               type="button"
@@ -115,6 +124,8 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
             </button>
           </div>
 
+          {!onlyShared && <div className="space-y-2"><Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Sök aktivitet eller uppgift…" aria-label="Sök saker att dela" className="h-10 rounded-xl" /><label className="flex items-center gap-2 text-xs text-muted-foreground"><input type="checkbox" checked={includePast} onChange={(e) => setIncludePast(e.target.checked)} /> Visa även tidigare datum</label></div>}
+          {visible.length === 0 && <p className="text-sm text-muted-foreground">{onlyShared ? "Inget delas just nu." : "Inga matchande saker. Prova att söka eller visa tidigare datum."}</p>}
           <ul className="space-y-2">
             {visible.map((item) => (
               <li key={item.id} className="rounded-xl border border-border/70 bg-card px-3 py-2 space-y-1">

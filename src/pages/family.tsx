@@ -219,6 +219,7 @@ function HouseholdView({
 }) {
   const { toast } = useToast();
   const [pending, setPending] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
 
   const copyCode = () => {
     navigator.clipboard.writeText(household.invite_code).catch(() => {});
@@ -263,21 +264,24 @@ function HouseholdView({
   };
 
   return (
-    <div className="max-w-md mx-auto space-y-6">
-      <div className="bg-card border border-border rounded-3xl p-6 shadow-sm space-y-4">
+    <div className="max-w-xl mx-auto space-y-3">
+      <div className="bg-card border border-border/60 rounded-2xl p-4 space-y-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Users className="text-primary" size={24} />
           </div>
           <div>
-            <div className="text-xl font-bold">{household.name}</div>
+            <div className="text-lg font-semibold">{household.name}</div>
             <div className="text-sm text-muted-foreground">
               {household.members.length} medlem{household.members.length === 1 ? "" : "mar"}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between bg-secondary rounded-2xl p-4">
+        <button type="button" aria-expanded={inviteOpen} onClick={() => setInviteOpen((v) => !v)} className="flex w-full items-center justify-between rounded-xl border border-border/60 bg-secondary/30 px-3 py-2.5 text-sm font-medium">
+          <span className="inline-flex items-center gap-2"><Share2 size={16} /> Bjud in till familjen</span><span aria-hidden>{inviteOpen ? "⌄" : "›"}</span>
+        </button>
+        {inviteOpen && <div className="space-y-2">        <div className="flex items-center justify-between bg-secondary rounded-2xl p-4">
           <div>
             <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
               Inbjudningskod
@@ -305,11 +309,12 @@ function HouseholdView({
           Bjud in med länk
         </Button>
 
+</div>}
         <div className="flex flex-wrap gap-2">
           {household.members.map((m) => (
             <span
               key={m.user_id}
-              className="flex items-center gap-2 rounded-2xl border border-border bg-secondary/40 px-3 py-2 text-sm"
+              className="flex items-center gap-2 rounded-full border border-border/60 bg-secondary/30 px-2.5 py-1.5 text-xs"
             >
               <span
                 className="h-3 w-3 shrink-0 rounded-full"
@@ -324,8 +329,8 @@ function HouseholdView({
         </div>
       </div>
 
-      <section className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-3">
-        <h2 className="font-display text-base text-ink">Vad ni delar</h2>
+      <section className="bg-card border border-border/60 rounded-2xl p-3 space-y-2">
+        <h2 className="font-display text-base text-ink">Gemensamt i familjen</h2>
         <p className="text-sm text-muted-foreground">
           Kalender och listor är gemensamma för alla i familjen.
         </p>
@@ -334,7 +339,7 @@ function HouseholdView({
             <Link
               key={l.href}
               to={l.href}
-              className="rounded-2xl border border-border bg-secondary/40 px-3 py-2 text-sm text-ink hover:border-primary/50"
+              className="rounded-xl border border-border/60 bg-secondary/20 px-3 py-2 text-sm text-ink hover:border-primary/50"
             >
               {l.label}
             </Link>
@@ -342,7 +347,7 @@ function HouseholdView({
         </div>
       </section>
 
-      <CollapsibleSection id="family-sharing-settings" title="Välj vad familjen delar" defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card/80 p-4" headingClassName="text-base font-semibold text-ink">
+      <CollapsibleSection id="family-sharing-settings" title="Delning & medlemmar" defaultCollapsed className="pace-card-surface rounded-2xl border border-border/60 bg-card/80 p-4" headingClassName="text-base font-semibold text-ink">
         <FamilyAreaSharing />
         <FamilySharing members={household.members} />
       </CollapsibleSection>
@@ -352,7 +357,7 @@ function HouseholdView({
         id="familj-mer"
         defaultCollapsed
         headingClassName="font-display text-base text-ink"
-        className="pace-card-surface bg-card border border-border rounded-3xl p-5 shadow-sm"
+        className="pace-card-surface bg-card border border-border/60 rounded-2xl p-3"
       >
         <Button
           variant="outline"
@@ -405,14 +410,12 @@ export default function FamilyPage() {
     <Layout>
       <MyFlovePageGrid area="hem">
         <MyFloveWide>
-          <div className="space-y-8">
+          <div className="space-y-4">
             <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
+              <h1 className="font-display text-xl font-semibold text-ink sm:text-2xl mb-1 flex items-center gap-2">
                 <MyFloveHeart size={26} /> {APP_DESTINATIONS["/familj"].label}
               </h1>
-              <p className="text-muted-foreground">
-                Skapa eller gå med i en familj för att dela kalender och matlista.
-              </p>
+
             </div>
 
             <Show when="signed-out">
