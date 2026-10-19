@@ -45,8 +45,8 @@ export function BookEntrances() {
 }
 export function BookNavigation({ kind }: { kind: string }) {
   return (
-    <nav aria-label="Reflektionsboken" className="book-tabs">
-      <Link to="/quickflow" className="book-tab-home">Tankar & Fånga</Link>
+    <nav aria-label="Tankar och reflektioner" className="book-tabs pace-thoughts-tabs">
+      <Link to="/quickflow" className="book-tab-home" aria-current={kind === "quickflow" ? "page" : undefined}>Tankar & Fånga</Link>
       {bookSections.map((s) => (
         <Link key={s.kind} to={s.path} aria-current={kind === s.kind ? "page" : undefined}>
           <s.icon size={18} aria-hidden />
