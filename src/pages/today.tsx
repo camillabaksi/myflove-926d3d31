@@ -76,27 +76,23 @@ export function TodayContent() {
       <MyFloveWide>
         <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-2.5 py-2 sm:px-4 sm:py-3" aria-labelledby="your-day-title">
           <header className="mb-1.5 space-y-1.5">
-            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5"><RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-lavender/55 px-3 text-sm font-semibold text-ink transition-colors hover:bg-lavender/75"><NotebookPen size={16} aria-hidden />{t("Planera")}</RouterLink><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div></div>
-            <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
-              <Button type="button" size="sm" className="min-h-11 gap-1 rounded-xl px-3" onClick={() => setAddOpen(true)}>
-                <Plus size={16} aria-hidden />{t("Lägg till")}
-              </Button>
-              <details className="group min-w-0 flex-1 rounded-xl border border-border/60 bg-card/80 px-3">
-                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm text-muted-foreground [&::-webkit-details-marker]:hidden">
-                  {t("Fler val")}<ChevronDown size={16} aria-hidden className="transition-transform group-open:rotate-180" />
-                </summary>
-                <div className="flex flex-wrap gap-2 pb-3">
-                  <Button asChild size="sm" variant="outline" className="min-h-11 rounded-xl">
-                    <Link href="/paminnelser">{t("Påminnelse")}</Link>
-                  </Button>
-                  <CopyDayButton date={today} shortLabel className="min-h-11 rounded-xl" />
-                </div>
+            <div className="flex min-w-0 items-center justify-between gap-2">
+              <div className="min-w-0"><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div>
+              <div className="flex shrink-0 items-center gap-1">
+                <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-lavender/55 px-2.5 text-xs font-semibold text-ink hover:bg-lavender/75"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
+                <RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><CalendarDays size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Veckan")}</span><span className="sr-only min-[390px]:hidden">{t("Visa veckan")}</span></RouterLink>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5" aria-label={t("Snabbval för din dag")}>
+              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 rounded-xl px-3" onClick={() => setAddOpen(true)}><Plus size={16} aria-hidden />{t("Lägg till")}</Button>
+              <details className="group relative min-w-0 flex-1 rounded-xl border border-border/60 bg-card/80 px-2.5">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-xs text-muted-foreground [&::-webkit-details-marker]:hidden">{t("Fler val")}<ChevronDown size={15} aria-hidden className="transition-transform group-open:rotate-180" /></summary>
+                <div className="flex flex-wrap gap-2 pb-2"><Button asChild size="sm" variant="outline" className="min-h-11 rounded-xl"><Link href="/paminnelser">{t("Påminnelse")}</Link></Button><CopyDayButton date={today} shortLabel className="min-h-11 rounded-xl" /></div>
               </details>
             </div>
           </header>
           <div className="pt-0.5">
-            <div className="mb-1 flex justify-end"><button type="button" aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-2.5 text-xs font-medium text-muted-foreground hover:bg-secondary/60"><Images size={16} aria-hidden />Bildstöd {todayPictograms ? "på" : "av"}</button></div>
-            <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
+            <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
