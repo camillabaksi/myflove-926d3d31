@@ -31,13 +31,13 @@ export default function HealthPage() {
             area="halsa"
             emojiKey="wellness"
             description="Din plats för energi, återhämtning och det som påverkar dagen."
-            className="paceable-my-place-header shadow-soft"
+            className="paceable-my-place-header"
           />
         </MyFloveWide>
 
         <MyFloveWide className="space-y-2">
           <p className="pb-1 text-sm text-muted-foreground">{t("Checka in, se dina mönster eller hitta återhämtning.")}</p>
-          <Link href="/mitt-batteri" className="pace-place-entry press flex items-center gap-3 rounded-2xl border border-border/60 bg-card/80 p-4">
+          <Link href="/mitt-batteri" className="pace-place-entry press flex min-h-11 items-center gap-3 rounded-2xl border border-border/60 bg-card/80 p-3 sm:p-4">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary" aria-hidden><Battery className="h-5 w-5" /></span>
             <span className="min-w-0 flex-1"><span className="pace-place-entry-title block font-sans text-lg font-semibold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
