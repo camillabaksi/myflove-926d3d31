@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { paceEveryday } from "@/components/paceable/design-system";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -114,7 +115,7 @@ export default function QuickAddSheet({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md rounded-3xl">
+      <DialogContent className={paceEveryday.dialog}>
         <DialogHeader>
           <DialogTitle className="text-lg">{t("Lägg till")}</DialogTitle>
         </DialogHeader>
@@ -243,7 +244,7 @@ export default function QuickAddSheet({
             type="button"
             onClick={() => save()}
             disabled={!text.trim() || !date || (isPeriod && (!endDate || endDate < date))}
-            className="min-h-12 w-full rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="min-h-12 w-full rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {t("Spara")}
           </button>
