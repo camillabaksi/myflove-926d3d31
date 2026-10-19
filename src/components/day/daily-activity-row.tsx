@@ -37,7 +37,7 @@ export function DailyActivityRow({
     <div
       className={cn(
         integrated
-          ? "pace-activity-row relative min-w-0 rounded-xl px-2 py-1.5"
+          ? "pace-activity-row relative min-w-0 rounded-xl px-2 py-1"
           : "relative my-2 overflow-hidden rounded-2xl border border-border/60 bg-card px-2.5 py-3 shadow-sm sm:px-3",
         !integrated && item.done && "bg-muted/35 opacity-70",
       )}
@@ -49,9 +49,9 @@ export function DailyActivityRow({
           integrated
             ? showPictograms
               ? pictogramLibrary === "mulberry"
-                ? "pace-activity-row-pictograms grid-cols-[2.5rem_2rem_minmax(0,1fr)_2.75rem] gap-1.5"
-                : "pace-activity-row-pictograms grid-cols-[2.5rem_1.5rem_minmax(0,1fr)_2.75rem] gap-1.5"
-              : "grid-cols-[2.5rem_0.5rem_minmax(0,1fr)_2.75rem] gap-1.5 sm:gap-2"
+                ? "pace-activity-row-pictograms grid-cols-[2.25rem_2rem_minmax(0,1fr)_2.75rem] gap-1"
+                : "pace-activity-row-pictograms grid-cols-[2.25rem_1.5rem_minmax(0,1fr)_2.75rem] gap-1"
+              : "grid-cols-[2.25rem_0.5rem_minmax(0,1fr)_2.75rem] gap-1 sm:gap-1.5"
             : "grid-cols-[2.5rem_2.75rem_minmax(0,1fr)_auto] gap-2 sm:grid-cols-[3rem_3rem_minmax(0,1fr)_auto] sm:gap-3",
         )}
       >
@@ -65,7 +65,7 @@ export function DailyActivityRow({
             aria-hidden
           />
         ) : pictogramLibrary === "mulberry" ? (
-          <MulberryPictogram id={mulberryForTitle(item.title, visual.pictogram)} tone={visual.tone} className="h-8 w-8" />
+          <MulberryPictogram id={mulberryForTitle(item.title, visual.pictogram)} tone={visual.tone} className="h-7 w-7" />
         ) : (
           <ActivityPictogram
             id={visual.pictogram}
@@ -86,7 +86,7 @@ export function DailyActivityRow({
                 aria-label={item.done ? `Ångra ${item.title}` : `Klarmarkera ${item.title}`}
                 className={cn(
                   "-ml-1 shrink-0 rounded-full text-muted-foreground hover:text-primary",
-                  integrated ? "h-11 w-11" : "h-8 w-8",
+                  integrated ? "h-9 w-9" : "h-8 w-8",
                 )}
               >
                 {item.done ? (
@@ -112,8 +112,8 @@ export function DailyActivityRow({
           <div
             className={cn(
               "flex min-w-0 flex-wrap items-center gap-1.5",
-              integrated ? "mt-0.5" : "mt-1",
-              item.completable && (integrated ? "pl-11" : "sm:pl-7"),
+              integrated ? "mt-0" : "mt-1",
+              item.completable && (integrated ? "pl-9" : "sm:pl-7"),
             )}
           >
             <span

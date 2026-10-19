@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { CalendarDays, Plus, ChevronDown, NotebookPen } from "lucide-react";
+import { CalendarDays, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList from "@/components/day/daily-flow-list";
@@ -34,6 +34,7 @@ export function TodayContent() {
   const { t, locale } = useLang();
   const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
+  const [todayPictograms, setTodayPictograms] = useCloudSyncedStorage<boolean>("paceable-today-pictograms", false);
   const [hour, setHour] = useState(() => new Date().getHours());
   useEffect(() => {
     const updateHour = () => setHour(new Date().getHours());
@@ -73,11 +74,11 @@ export function TodayContent() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-3 py-3 sm:px-4 sm:py-4" aria-labelledby="your-day-title">
-          <header className="mb-2 space-y-2">
+        <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-2.5 py-2 sm:px-4 sm:py-3" aria-labelledby="your-day-title">
+          <header className="mb-1.5 space-y-1.5">
             <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5"><RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-lavender/55 px-3 text-sm font-semibold text-ink transition-colors hover:bg-lavender/75"><NotebookPen size={16} aria-hidden />{t("Planera")}</RouterLink><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div></div>
             <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
-              <Button type="button" size="sm" className="min-h-11 gap-1.5 rounded-xl px-4" onClick={() => setAddOpen(true)}>
+              <Button type="button" size="sm" className="min-h-11 gap-1 rounded-xl px-3" onClick={() => setAddOpen(true)}>
                 <Plus size={16} aria-hidden />{t("Lägg till")}
               </Button>
               <details className="group min-w-0 flex-1 rounded-xl border border-border/60 bg-card/80 px-3">
@@ -94,7 +95,8 @@ export function TodayContent() {
             </div>
           </header>
           <div className="pt-0.5">
-            <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter />} />
+            <div className="mb-1 flex justify-end"><button type="button" aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-2.5 text-xs font-medium text-muted-foreground hover:bg-secondary/60"><Images size={16} aria-hidden />Bildstöd {todayPictograms ? "på" : "av"}</button></div>
+            <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
