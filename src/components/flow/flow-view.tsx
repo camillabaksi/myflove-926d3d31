@@ -38,7 +38,7 @@ export default function FlowView({
       <div className={(tab === "chatt" || tab === "flow") && !chatId ? "pace-scene" : undefined}>
       {(tab === "chatt" || tab === "flow") && !chatId && (
         <>
-        <div className="pace-scene-actions"><button type="button" aria-label="Tillbaka till Idag" onClick={() => void navigate({ to: "/idag" })}><ArrowLeft size={22} /></button><button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button></div>
+        <div className="pace-scene-actions"><span aria-hidden="true" /><button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button></div>
         <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
           <div className="pace-welcome-copy">
             <h1>Pace</h1>
