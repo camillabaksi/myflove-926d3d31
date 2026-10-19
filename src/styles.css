@@ -2783,3 +2783,31 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][
 }
 html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][data-expanded="false"] > :is(a, button) > span:last-child { position: static; grid-column: 3; grid-row: 1; width: 24px; height: 24px; }
 html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][data-expanded="false"] > button > span:last-child { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+
+/* Pace welcome: warm, editorial and calm. No second brand logo on this route. */
+.pace-assistant-mobile-header { position: relative; border: 0; background: #fcf9f5; padding: 0.65rem 1rem; }
+.pace-welcome-hero {
+  position: relative; isolation: isolate; display: flex; align-items: center;
+  min-height: 220px; overflow: hidden; border-radius: 1.8rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem); margin-bottom: 0.85rem;
+  background: radial-gradient(ellipse at 84% 27%, #f1d8cb 0%, transparent 50%),
+              radial-gradient(ellipse at 22% 80%, #f8e8df 0%, transparent 65%), #fcf9f5;
+}
+.pace-welcome-hero::before { content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none; opacity: .25; background: linear-gradient(120deg, transparent 30%, #fff 58%, transparent 90%); }
+.pace-welcome-copy { position: relative; z-index: 1; max-width: 67%; }
+.pace-welcome-copy h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(3rem, 9vw, 5rem); line-height: 1; font-weight: 500; letter-spacing: -.035em; color: #38263d; }
+.pace-welcome-subtitle { font-size: clamp(.94rem, 2.8vw, 1.25rem); margin-top: .45rem; font-weight: 500; color: #38263d; }
+.pace-welcome-description { margin-top: 1rem; font-size: clamp(.85rem, 2.5vw, 1rem); line-height: 1.65; color: #55485a; }
+.pace-welcome-stones { position: absolute !important; width: 39% !important; height: auto !important; right: -1%; bottom: 6%; filter: drop-shadow(0 14px 14px #796a6040); }
+.pace-serene-chat { color: #38263d; }
+.pace-serene-chat > div { gap: .75rem; }
+.pace-serene-messages:has(> div > div:empty) { display: none; }
+.pace-serene-composer { border-radius: 1.8rem; background: #fffdfb; box-shadow: 0 5px 22px #55455a0d; }
+.pace-serene-composer textarea { min-height: 4rem; }
+.pace-serene-composer button { border-radius: 999px; }
+@media (max-width: 390px) {
+  .pace-welcome-hero { min-height: 205px; padding: 1rem; }
+  .pace-welcome-copy { max-width: 72%; }
+  .pace-welcome-stones { width: 37% !important; right: -3%; }
+  .pace-welcome-description { font-size: .82rem; }
+}

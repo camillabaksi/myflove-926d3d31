@@ -7,6 +7,7 @@ import { track } from "@/lib/analytics";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 
 /** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
 export default function FlowView({
@@ -34,6 +35,16 @@ export default function FlowView({
 
   return (
     <Layout>
+      {(tab === "chatt" || tab === "flow") && !chatId && (
+        <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
+          <div className="pace-welcome-copy">
+            <h1>Pace</h1>
+            <p className="pace-welcome-subtitle">Din följeslagare i vardagen</p>
+            <p className="pace-welcome-description">Här kan du få stöd, samla tankar, planera och hitta lite mer utrymme i vardagen.</p>
+          </div>
+          <PaceableStones tactile className="pace-welcome-stones" />
+        </section>
+      )}
       <FlowTabs active={tab === "flow" ? "chatt" : tab} onChange={changeTab} />
       {tab === "flow" && (
         <MyFlovePageGrid area="flow">
