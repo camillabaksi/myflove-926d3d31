@@ -94,9 +94,9 @@ export function TodayContent() {
           </header>
           <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
-              <Button type="button" size="sm" className="min-h-11 w-[76px] shrink-0 gap-0.5 rounded-xl px-1 text-[11px] sm:text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
+              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 whitespace-nowrap rounded-xl px-2.5 text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 w-[76px] shrink-0 items-center justify-center gap-0.5 rounded-xl border border-border bg-card px-1 text-[11px] text-muted-foreground sm:text-xs">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-border bg-card px-2.5 text-xs text-muted-foreground">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="min-w-44">
                   <DropdownMenuItem asChild><Link href="/paminnelser">{t("Påminnelse")}</Link></DropdownMenuItem>
                   <div className="p-1"><CopyDayButton date={today} shortLabel className="min-h-11 w-full rounded-xl" /></div>
