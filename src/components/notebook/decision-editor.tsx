@@ -112,7 +112,7 @@ export function DecisionEditor({ entity, store }: { entity: BookEntity; store: N
       if (!source) continue;
       store.create("point", {
         title: "", text: source.content.text.trim(), date: localBookDate(),
-        bookId: entity.id, column: importColumn, order: Date.now(), sourceId: source.id,
+        bookId: entity.id, column: importColumn, order: Date.now(),
       });
     }
     setSelectedDiaryIds([]);
