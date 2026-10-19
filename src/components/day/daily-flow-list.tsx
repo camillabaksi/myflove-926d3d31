@@ -222,13 +222,13 @@ export function DailyFlowList({
         </p>
       )}
       {items.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget inplanerat den här dagen.</p>}
-      <ul className={cn(integrated ? "space-y-1" : "divide-y divide-border/50")} aria-label="Dagens innehåll">
+      <ul className={cn(integrated ? "space-y-0.5" : "divide-y divide-border/50")} aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
           return (
             <li key={item.id}>
-              {dayHeadings && index === firstTimedIndex && <h2 className={cn("px-2 pb-0.5 pt-2 text-primary", integrated ? "font-sans text-base font-semibold leading-snug" : "font-display text-sm font-bold")}>Tider idag</h2>}
-              {dayHeadings && index === firstUntimedIndex && <h2 className={cn("px-2 pb-1 pt-3 text-primary", integrated ? "font-sans text-lg font-semibold leading-snug" : "font-display text-sm font-bold")}>Övrigt idag</h2>}
+              {dayHeadings && index === firstTimedIndex && <h2 className={cn("px-2 pb-0.5 pt-1 text-primary", integrated ? "font-sans text-base font-semibold leading-snug" : "font-display text-sm font-bold")}>Tider idag</h2>}
+              {dayHeadings && index === firstUntimedIndex && <h2 className={cn("px-2 pb-0.5 pt-2 text-primary", integrated ? "font-sans text-lg font-semibold leading-snug" : "font-display text-sm font-bold")}>Övrigt idag</h2>}
               {index === nowIndex && (
                 <div className="flex items-center gap-2 py-1" aria-label="Just nu">
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
