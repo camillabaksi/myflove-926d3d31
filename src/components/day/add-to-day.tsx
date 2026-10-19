@@ -7,7 +7,7 @@ import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
 import { useTasks, useReminders } from "@/hooks/use-data";
 import { useActiveArea } from "@/lib/life-areas";
 import { useLang } from "@/hooks/use-language";
-import { Bell, Pill, Repeat, Baby, ArrowRight, Plus } from "lucide-react";
+import { Bell, Pill, Repeat, Baby, ArrowRight, Plus, ChevronDown } from "lucide-react";
 
 /** De vägar som inte är vanliga aktiviteter – en rad var, utan dubbletter. */
 const MORE: { href: string; icon: typeof Bell; label: string; what: string }[] = [
@@ -60,7 +60,12 @@ export function AddToDay() {
       </MyFloveWide>
 
       <MyFloveWide>
-        <ul className="grid gap-2 sm:grid-cols-2">
+        <details className={cn(paceEveryday.surface, "group px-3 py-1")}>
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
+            {t("Fler sätt att lägga till")}
+            <ChevronDown size={17} className="text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
+          </summary>
+          <ul className="grid gap-2 pb-3 sm:grid-cols-2">
           {MORE.map((item) => {
             const Icon = item.icon;
             return (
@@ -82,7 +87,8 @@ export function AddToDay() {
               </li>
             );
           })}
-        </ul>
+          </ul>
+        </details>
       </MyFloveWide>
     </MyFlovePageGrid>
   );
