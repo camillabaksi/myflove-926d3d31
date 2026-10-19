@@ -450,19 +450,19 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
         <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
           {!conversationId && !loadingConversations && (
-            <section className="rounded-2xl border border-border bg-card px-4 py-3 space-y-2" aria-label="Välj samtal med Pace">
+            <section className="rounded-2xl bg-card/60 px-3 py-3 space-y-2" aria-label="Välj samtal med Pace">
 
               
-              <Button variant="default" className="w-full min-h-10 rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
+              <Button variant="default" className="w-full min-h-11 rounded-2xl bg-primary/10 text-foreground shadow-none hover:bg-primary/15" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
-                  <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border px-3 py-2.5 text-left text-sm font-medium">
+                  <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-background/70 px-3 py-2.5 text-left text-sm font-medium text-muted-foreground">
                     <span>Tidigare samtal ({conversations.length})</span>
                     <ChevronRight size={17} className={recentOpen ? "rotate-90 transition-transform" : "transition-transform"} />
                   </button>
                   {recentOpen && <div className="space-y-1.5">
                     {conversations.slice(0, 5).map((c) => (
-                      <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-left hover:bg-muted/40">
+                      <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border/50 bg-background/70 px-3 py-2 text-left hover:bg-muted/40">
                         <MessageCircle size={15} className="shrink-0 text-primary" />
                         <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{c.title}</span><span className="text-xs text-muted-foreground">{relativeDayLabel(c.updated_at)}</span></span>
                         <ChevronRight size={15} className="shrink-0" />
@@ -475,7 +475,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </section>
           )}
 
-          <section className="rounded-2xl border border-border bg-card p-3 space-y-3" aria-label="Samtal med Pace">
+          <section className="rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
             <div ref={scrollRef} className="max-h-[55vh] space-y-3 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -621,7 +621,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
           {messages.length === 0 && (
             <div className="space-y-2">
-              <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-left text-sm font-medium">
+              <button type="button" aria-expanded={suggestionsOpen} onClick={() => setSuggestionsOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/70 px-3 py-2.5 text-left text-sm font-medium">
                 <span>Behöver du hjälp att komma igång?</span><ChevronRight size={17} className={suggestionsOpen ? "rotate-90 transition-transform" : "transition-transform"} />
               </button>
               {suggestionsOpen && <div className="flex flex-wrap gap-2">
@@ -632,7 +632,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </div>
           )}
 
-          <div className="bg-card p-2 rounded-3xl shadow-sm border border-border focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+          <div className="bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
             <textarea
               ref={inputRef}
               value={input}
