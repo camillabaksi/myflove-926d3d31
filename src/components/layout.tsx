@@ -905,7 +905,7 @@ export default function Layout({ children }: LayoutProps) {
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className={cn("max-w-6xl mx-auto w-full p-4 md:p-6 page-enter", refreshDesign && "pace-ds pace-design-refresh")}>
-            {!FLOW_HIDDEN_PATHS.has(location) && location !== "/assistant" && !location.startsWith("/assistant/") && !["/familj", "/familjeflow"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
+            {!FLOW_HIDDEN_PATHS.has(location) && location !== "/assistant" && !location.startsWith("/assistant/") && !["/familj", "/familjeflow", "/quickflow", "/tankar/dagbok", "/tankar/beslut"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
             <AutoTranslateProvider />
