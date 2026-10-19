@@ -69,13 +69,13 @@ export function TodayContent() {
           name={hasChosenName ? name : ""}
           action={<GreetingNameMenu name={hasChosenName ? name : ""} onSave={saveName} />}
         />
-        <div className="pace-today-capacity mt-3"><TodayCapacity percent={dayCapacity.percent} /></div>
+        <div className="pace-today-capacity mt-1.5"><TodayCapacity percent={dayCapacity.percent} /></div>
       </MyFloveWide>
 
       <MyFloveWide>
-        <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-3 py-4 sm:px-5 sm:py-5" aria-labelledby="your-day-title">
-          <header className="mb-3 space-y-3">
-            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-2xl text-ink">{t("Din dag")}</h2><p className="mt-1 text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
+        <section className="min-w-0 rounded-2xl border border-border/60 bg-card/80 px-3 py-3 sm:px-4 sm:py-4" aria-labelledby="your-day-title">
+          <header className="mb-2 space-y-2">
+            <div className="flex items-center justify-between gap-2"><div><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div><RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 shrink-0 items-center gap-1 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"><CalendarDays size={15} aria-hidden />{t("Visa veckan")}</RouterLink></div>
             <div className="flex flex-wrap items-center gap-2" aria-label={t("Snabbval för din dag")}>
               <Button type="button" size="sm" className="min-h-11 gap-1.5 rounded-xl px-4" onClick={() => setAddOpen(true)}>
                 <Plus size={16} aria-hidden />{t("Lägg till")}
@@ -93,17 +93,17 @@ export function TodayContent() {
               </details>
             </div>
           </header>
-          <div className="pt-2">
+          <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} showFilter />} />
-            <div className="mt-4 space-y-2 border-t border-border/50 pt-3"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
+            <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
       </MyFloveWide>
 
-      <MyFloveWide className="pace-today-pace pt-4">
+      <MyFloveWide className="pace-today-pace pt-2">
         <TodayPace pace={pace} />
       </MyFloveWide>
-      <MyFloveWide className="pt-4">
+      <MyFloveWide className="pt-2">
         <WeeklyPulse />
       </MyFloveWide>
     </MyFlovePageGrid>
