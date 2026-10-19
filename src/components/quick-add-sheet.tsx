@@ -49,6 +49,8 @@ export default function QuickAddSheet({
   const [date, setDate] = useState(todayISO());
   const [time, setTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [isPeriod, setIsPeriod] = useState(false);
+  const [endDate, setEndDate] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
   const [fullWarn, setFullWarn] = useState(false);
   const { mode } = useCapacityMode();
@@ -68,12 +70,14 @@ export default function QuickAddSheet({
     setChosenArea(null);
     setTime("");
     setEndTime("");
+    setEndDate("");
+    setIsPeriod(false);
     setDate(todayISO());
   };
 
   const save = (confirmed = false) => {
     const title = text.trim();
-    if (!title) return;
+    if (!title || !date || (isPeriod && (!endDate || endDate < date))) return;
     // Stopp-principen: mjuk fråga, aldrig ett förbud.
     if (!confirmed && kind === "aktivitet" && date === todayISO() && isDayFull(plannedToday, mode)) {
       setFullWarn(true);
@@ -82,6 +86,8 @@ export default function QuickAddSheet({
     setFullWarn(false);
     if (kind === "tanke") {
       addThought({ text: title, level: "tanke" });
+    } else if (isPeriod) {
+      addReminder(title, date, undefined, "none", undefined, undefined, "Sammanhängande period – ingen automatiskt upptagen tid.", area, endDate, "unknown");
     } else if (kind === "aktivitet") {
       addTask(title, date, {
         time: time || undefined,
@@ -190,17 +196,26 @@ export default function QuickAddSheet({
           )}
 
           {needsWhen && (
-            <div className="grid grid-cols-2 gap-2">
+            <label className="flex min-h-11 items-center gap-2 text-sm text-ink">
+              <input type="checkbox" checked={isPeriod} onChange={(e) => { setIsPeriod(e.target.checked); setEndDate(e.target.checked ? date : ""); setTime(""); setEndTime(""); }} />
+              {t("Sammanhängande period (flera dagar)")}
+            </label>
+          )}
+          {needsWhen && (
+            <div className={cn("grid gap-2", isPeriod ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2")}>
               <label className="text-xs text-muted-foreground">
-                {t("Datum")}
+                {t(isPeriod ? "Startdatum" : "Datum")}
                 <input
                   type="date"
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(e) => { setDate(e.target.value); if (isPeriod && endDate < e.target.value) setEndDate(e.target.value); }}
                   className="mt-1 min-h-11 w-full rounded-2xl border border-border bg-background px-3 text-sm text-ink"
                 />
               </label>
-              <label className="text-xs text-muted-foreground">
+              {isPeriod ? <label className="text-xs text-muted-foreground">
+                {t("Slutdatum")}
+                <input type="date" min={date} value={endDate} onChange={(e) => setEndDate(e.target.value)} className="mt-1 min-h-11 w-full min-w-0 rounded-2xl border border-border bg-background px-3 text-base text-ink" />
+              </label> : <label className="text-xs text-muted-foreground">
                 {t("Tid (valfritt)")}
                 <input
                   type="time"
@@ -208,10 +223,10 @@ export default function QuickAddSheet({
                   onChange={(e) => setTime(e.target.value)}
                   className="mt-1 min-h-11 w-full rounded-2xl border border-border bg-background px-3 text-sm text-ink"
                 />
-              </label>
+              </label>}
             </div>
           )}
-          {needsWhen && time && (
+          {needsWhen && !isPeriod && time && (
             <label className="block text-xs text-muted-foreground">
               {t("Sluttid (valfritt)")}
               <input
@@ -227,7 +242,7 @@ export default function QuickAddSheet({
           <button
             type="button"
             onClick={() => save()}
-            disabled={!text.trim()}
+            disabled={!text.trim() || !date || (isPeriod && (!endDate || endDate < date))}
             className="min-h-12 w-full rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-soft transition-opacity hover:opacity-90 disabled:opacity-50"
           >
             {t("Spara")}
