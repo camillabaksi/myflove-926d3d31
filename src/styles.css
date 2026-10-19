@@ -2833,3 +2833,59 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 .pace-scene .pace-serene-composer textarea { min-height:4.8rem; }
 @media(min-width:700px) { .pace-scene { padding:1.5rem 3rem 3rem; } .pace-scene::before { height:calc(100vw * 0.5628); background-image:url("/__l5e/assets-v1/3a5965a3-ee37-48e3-92df-82b8901d4d7a/pace-scene-landscape-v2.png"); background-size:100% auto; } .pace-scene::after { background:linear-gradient(to bottom,transparent 0 40rem,#fffdfba6 52rem,#fffdfbe6 60rem,#fffdfb 68rem); } .pace-scene .pace-welcome-copy { background:none; backdrop-filter:none; padding:0; } .pace-scene .pace-welcome-hero { min-height:300px; } }
 @media(max-width:390px) { .pace-scene .pace-welcome-hero { min-height:250px; padding:2rem .4rem 1.5rem; } .pace-scene .pace-welcome-copy { max-width:73%; } }
+
+
+/* Pace scene polish: preserve the supplied photography, but remove the hard
+   rectangular copy blur and let the scene dissolve into the page below.
+   Scoped to /assistant welcome so other app pages are unaffected. */
+.pace-scene {
+  background: linear-gradient(180deg, #f9e5dc 0%, #faebe5 40%, #fff9f5 78%, #fffdfb 100%);
+}
+.pace-scene::before {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.35) 83%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.35) 83%, transparent 100%);
+}
+.pace-scene::after {
+  background: linear-gradient(to bottom, transparent 0%, #fff9f500 35%, #fff9f53d 55%, #fff9f5b0 77%, #fffdfb 100%);
+}
+.pace-scene .pace-welcome-copy {
+  isolation: isolate;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.pace-scene .pace-welcome-copy::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -1rem -1.5rem;
+  border-radius: 45%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 38% 50%, rgba(255,249,244,.78) 0%, rgba(255,249,244,.55) 46%, rgba(255,249,244,0) 78%);
+}
+@media (min-width: 700px) {
+  .pace-scene {
+    background: linear-gradient(180deg, #f7ded3 0%, #f9e7df 35rem, #fff7f1 58rem, #fffdfb 90rem);
+  }
+  .pace-scene::before {
+    height: clamp(620px, 68vw, 1050px);
+    background-size: 100% auto;
+    background-position: center top;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,.75) 72%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgba(0,0,0,.75) 72%, transparent 100%);
+  }
+  .pace-scene::after {
+    background: linear-gradient(to bottom, transparent 0%, transparent 27rem, rgba(255,248,242,.22) 43rem, rgba(255,249,245,.8) 66rem, #fffdfb 90rem);
+  }
+  .pace-scene .pace-welcome-copy {
+    position: relative;
+    max-width: min(34rem, 58%);
+  }
+  .pace-scene .pace-welcome-copy::before {
+    inset: -2rem -3rem;
+    background: radial-gradient(ellipse at 35% 50%, rgba(255,250,246,.76), rgba(255,250,246,.42) 50%, transparent 80%);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .pace-scene .pace-welcome-copy::before { background: rgba(255,250,246,.88); border-radius: 1rem; }
+}
