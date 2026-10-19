@@ -68,7 +68,6 @@ const tomorrowISO = (): string => {
   return todayISO(d);
 };
 
-const NEW_CHAT_FLAG = "myflove-flow-new-chat";
 
 const GREETING =
   "Hej! Vad behöver du just nu?";
@@ -106,27 +105,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  /**
-   * Fortsätt där du slutade: när du öppnar Flow utan att välja samtal
-   * hoppar vi tillbaka in i det senaste – om du inte aktivt bad om en ny chatt.
-   * "Nytt samtal" gäller bara den här vyn: flaggan konsumeras direkt så att
-   * nästa gång du öppnar Flow landar du i historiken igen.
-   */
-  const wantsNewChat = useRef(false);
-  if (typeof window !== "undefined" && !wantsNewChat.current) {
-    if (window.sessionStorage.getItem(NEW_CHAT_FLAG) === "1") {
-      wantsNewChat.current = true;
-      window.sessionStorage.removeItem(NEW_CHAT_FLAG);
-    }
-  }
-  useEffect(() => {
-    if (conversationId || loadingConversations || isSending) return;
-    if (wantsNewChat.current) return;
-    const latest = conversations[0];
-    if (!latest) return;
-    void navigate({ to: "/assistant/$chatId", params: { chatId: latest.id }, replace: true });
-  }, [conversationId, loadingConversations, conversations, isSending, navigate]);
 
   /**
    * Påbörjad text sparas per samtal så inget försvinner om du lämnar vyn.
@@ -313,7 +291,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
       if (created) {
-        if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
         void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
       }
     } catch (e) {
@@ -337,7 +314,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const openConversation = (id: string) => {
     setHistoryOpen(false);
     setMenuFor(null);
-    if (typeof window !== "undefined") window.sessionStorage.removeItem(NEW_CHAT_FLAG);
     track("flow_conversation_opened", { source: "assistant" });
     void navigate({ to: "/assistant/$chatId", params: { chatId: id } });
   };
@@ -349,7 +325,6 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         onClick={() => {
           setHistoryOpen(false);
           setMenuFor(null);
-          if (typeof window !== "undefined") window.sessionStorage.setItem(NEW_CHAT_FLAG, "1");
           void navigate({ to: "/assistant" });
         }}
         className="w-full flex items-center gap-2 rounded-2xl bg-primary/10 text-primary px-3 py-2.5 text-sm font-semibold hover:bg-primary/15 transition-colors"
@@ -527,6 +502,26 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         </aside>
 
         <div className="flex min-w-0 flex-col gap-4 lg:block lg:space-y-6">
+          {!conversationId && !loadingConversations && (
+            <section className="rounded-2xl border border-border bg-card p-4 space-y-3" aria-label="Välj samtal med Pace">
+              <h2 className="text-lg font-semibold">Vad vill du prata om?</h2>
+              <p className="text-sm text-muted-foreground">Börja på nytt eller fortsätt ett tidigare samtal.</p>
+              <Button variant="default" className="w-full rounded-xl" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
+              {conversations.length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">Tidigare samtal</h3>
+                  {conversations.slice(0, 8).map((c) => (
+                    <button key={c.id} type="button" onClick={() => openConversation(c.id)} className="w-full flex items-center gap-2 rounded-xl border border-border px-3 py-3 text-left hover:bg-muted/40">
+                      <MessageCircle size={16} className="shrink-0 text-primary" />
+                      <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium">{c.title}</span><span className="text-xs text-muted-foreground">{relativeDayLabel(c.updated_at)}</span></span>
+                      <ChevronRight size={16} className="shrink-0" />
+                    </button>
+                  ))}
+                  {conversations.length > 8 && <Button variant="ghost" size="sm" onClick={() => setHistoryOpen(true)}>Visa alla samtal</Button>}
+                </div>
+              )}
+            </section>
+          )}
           <div className="order-3 lg:contents">
           <div className="flex flex-wrap items-center gap-2">
 <Button asChild variant="outline" className="rounded-2xl"><Link to="/idag">
