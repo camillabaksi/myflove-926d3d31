@@ -449,11 +449,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         </aside>
 
         <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
-          {!conversationId && !loadingConversations && (
+          {!conversationId && !loadingConversations && conversations.length > 0 && (
             <section className="rounded-2xl bg-card/60 px-3 py-3 space-y-2" aria-label="Välj samtal med Pace">
 
               
-              <Button variant="default" className="w-full min-h-11 rounded-2xl bg-primary/10 text-foreground shadow-none hover:bg-primary/15" onClick={() => inputRef.current?.focus()}><Plus size={17} className="mr-2" /> Nytt samtal</Button>
               {conversations.length > 0 && (
                 <div className="space-y-2">
                   <button type="button" aria-expanded={recentOpen} onClick={() => setRecentOpen((open) => !open)} className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-background/70 px-3 py-2.5 text-left text-sm font-medium text-muted-foreground">
