@@ -140,9 +140,9 @@ function CreateOrJoin({ onReady }: { onReady: () => void }) {
     <div className="max-w-md mx-auto">
       <form
         onSubmit={handleSubmit}
-        className="space-y-4 bg-card border border-border rounded-3xl p-6 shadow-sm"
+        className="space-y-4 rounded-2xl border border-border/60 bg-card/80 p-4 sm:p-6"
       >
-        <div className="flex bg-secondary rounded-2xl p-1">
+        <div className="flex rounded-xl bg-secondary/60 p-1">
           <button
             type="button"
             onClick={() => setMode("create")}

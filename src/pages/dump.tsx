@@ -32,9 +32,8 @@ export default function Dump() {
     <Layout>
       <MyFlovePageGrid className="pace-next-page pace-next-capture">
         <MyFloveWide>
-          <div className="space-y-8">
-            <BookEntrances />
-            <section className="pop-in space-y-5" aria-labelledby="thoughts-title">
+          <div className="space-y-5">
+            <section className="pop-in space-y-4" aria-labelledby="thoughts-title">
               <header className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <span className="mb-3 grid h-9 w-9 place-items-center rounded-2xl bg-lavender text-ink" aria-hidden><ThoughtsIcon size={20} /></span>
@@ -44,7 +43,7 @@ export default function Dump() {
                 </div>
                 <PaceableStones compact tactile className="pace-stones-contained h-12 w-24 shrink-0 [&_.pace-stones-img]:absolute [&_.pace-stones-img]:right-0 [&_.pace-stones-img]:!w-[76px] [&_.pace-stones-img]:!max-w-none" />
               </header>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <QuickflowCapture appearance="paceable" />
                 <QuickflowImageImport
                   appearance="paceable"
@@ -58,6 +57,8 @@ export default function Dump() {
                 />
               </div>
             </section>
+
+            <BookEntrances />
 
             {/* Allt som redan är ur huvudet ligger kvar – men ur vägen tills du vill se det. */}
             <CollapsibleSection
