@@ -1,4 +1,8 @@
 # Roadmap
+## Byggfel i snabbregistreringen (2026-10-19)
+- [x] Rättat saknad avslutande JSX-klammer kring det valfria tidsfältet; inga funktions- eller dataändringar.
+- [ ] Verifiera relevant test och förhandsvisning; ingen publicering.
+
 ## Samlad kalender-, barn- och Pace-planering (2026-10-18)
 - [x] Registrera kraven och granska befintliga kalender-, planerings-, familje- och chattflöden; återanvändning och skyddsgränser kartlagda.
 - [ ] Visa konkret återanvändnings- och genomförandeplan; invänta godkännande före appkodändringar.

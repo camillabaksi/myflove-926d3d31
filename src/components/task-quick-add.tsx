@@ -269,7 +269,7 @@ export function TaskQuickAdd({
                 {!!endDate && <label className="block space-y-1 text-sm"><span className="text-muted-foreground">Slutdatum</span><Input type="date" min={date} value={endDate} onChange={event => setEndDate(event.target.value)} required className="h-10 rounded-xl bg-background" /><span className="block text-xs text-muted-foreground">Visas varje dag under perioden, utan att boka tid.</span></label>}
               </div>}
 
-              {!endDate &&               <div className="space-y-2">
+              {!endDate && <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Tid? <span className="font-normal normal-case tracking-normal">(valfritt)</span>
                 </p>
@@ -291,7 +291,7 @@ export function TaskQuickAdd({
                     Ingen tid
                   </Button>
                 </div>
-              </div>
+              </div>}
 
               <Button type="submit" disabled={!title.trim() || (!!endDate && endDate < date)} className="h-12 w-full rounded-2xl">
                 Spara

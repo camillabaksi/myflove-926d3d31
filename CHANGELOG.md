@@ -1,3 +1,6 @@
+## 2026-10-19 – Rättat byggfel i snabbregistreringen
+- **Snabbregistrering** (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet som blockerade bygget. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering.
+
 ## 2026-10-17 – UX-förbättring etapp 2: lugnare månadsvy
 - **Kalender → Månad** (2026-10-17): en diskret månadssammanfattning visar antal planerade aktiviteter, dagar med innehåll och dagar utan planering – ärligt, utan prognoser eller antagna lediga tider. Varje månadsruta visar antal aktiviteter som en liten siffra bredvid områdesprickarna (och i skärmläsartexten). Den valda dagens sektion under månadsrätten är nu en kompakt lista enligt samma princip som Idag: kronologisk ordning, tid bara där den finns, klara poster dämpade. Kapacitetssiffror, områdesprickar, bildstöd, familjeraden, drag-och-släpp och övriga kontroller är orörda. Ingen data-, lagrings- eller routsändring, ingen publicering.
 
