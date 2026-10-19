@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Mic, Plus, Undo2 } from "lucide-react";
+import { ChevronDown, Mic, Plus, Undo2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import HelpHint from "@/components/help-hint";
@@ -55,6 +55,8 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   const [selected, setSelected] = useState<DidSuggestion | null>(null);
   const [busy, setBusy] = useState(false);
   const [more, setMore] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [last, setLast] = useState<EnergyFactorEntry | null>(null);
   const saving = useRef(false);
@@ -67,6 +69,8 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
       owner.current = getDataOwner();
       setSelected(null);
       setText("");
+      setExpanded(false);
+      setShowAllSuggestions(false);
       setLast(null);
       setError(null);
       write.current = null;
@@ -122,18 +126,22 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
   return (
     <section
       className={cn(
-        "rounded-3xl border-2 border-border/60 bg-card p-5 shadow-soft space-y-3",
+        "rounded-2xl border border-border/60 bg-card/70 px-4 py-2",
         className,
       )}
       aria-label="Lägg till det du gjorde"
     >
-      <div className="flex items-center gap-2">
-        <h2 className="text-sm font-semibold text-foreground">Lägg till det du gjorde</h2>
+      <div className="flex min-h-11 items-center gap-2">
+        <button type="button" aria-expanded={expanded} aria-controls="did-this-quick-add-content" onClick={() => setExpanded(v => !v)} className="flex min-h-11 flex-1 items-center justify-between gap-3 text-left text-sm font-medium text-ink">
+          <span>Lägg till det du gjorde</span>
+          <ChevronDown size={18} aria-hidden className={cn("shrink-0 text-muted-foreground transition-transform", expanded && "rotate-180")} />
+        </button>
         <HelpHint label="lägg till det du gjorde">
           Välj vad du gjorde och hur det kändes. Det blir ingen uppgift eller kalenderhändelse. Du
           bestämmer vad som ger och tar energi.
         </HelpHint>
       </div>
+      {expanded && <div id="did-this-quick-add-content" className="space-y-3 border-t border-border/40 pt-3 pb-2">
       {selected ? (
         <div className="space-y-3">
           <p className="font-medium">{selected.title} · Hur kändes det?</p>
@@ -170,22 +178,25 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap gap-2">
-            {chips.map((s) => (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {(showAllSuggestions ? chips : chips.slice(0, 6)).map((s) => (
               <button
                 key={`${s.title}-${s.direction}`}
                 type="button"
                 disabled={busy}
                 onClick={() => choose(s)}
-                className="press min-h-11 rounded-2xl border border-border/60 bg-secondary/40 px-3 py-2 text-sm disabled:opacity-60"
+                className="press flex min-h-10 items-center gap-1.5 rounded-xl border border-border/60 bg-secondary/25 px-2.5 py-2 text-left text-[13px] leading-snug text-ink disabled:opacity-60"
               >
-                <span aria-hidden className="mr-1">
-                  {s.emoji}
-                </span>
-                {s.title}
+                <span aria-hidden className="shrink-0 text-sm">{s.emoji}</span>
+                <span className="min-w-0 break-words">{s.title}</span>
               </button>
             ))}
           </div>
+          {chips.length > 6 && (
+            <button type="button" className="min-h-10 text-sm font-medium text-primary underline-offset-2 hover:underline" aria-expanded={showAllSuggestions} onClick={() => setShowAllSuggestions(v => !v)}>
+              {showAllSuggestions ? "Visa färre förslag" : `Visa fler förslag (${chips.length - 6})`}
+            </button>
+          )}
           <form
             className="flex items-center gap-2"
             onSubmit={(e) => {
@@ -288,6 +299,7 @@ export function DidThisQuickAdd({ className }: { className?: string }) {
           </button>
         </div>
       )}
+      </div>}
     </section>
   );
 }
