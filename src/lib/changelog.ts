@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-19";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-19 – Säkerhet: låsta hjälpfunktioner och säkrare byggpaket",
+    items: ["Säkerhet (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterades till säkra versioner inom samma huvudversion; kvar är tolv mindre risker i mobilbyggets och dokumentexportens verktyg som kräver större uppgraderingar. Ingen data ändrad, ingen publicering."],
+  },
+  {
     title: "2026-10-19 – Rättat krasch vid inloggning (Idag)",
     items: ["App-layout (2026-10-19): återinfört saknad import av vykomponenten som fällde hela appen till felsidan direkt efter inloggning på publicerade sidan. Rättat även ett gammalt typfel i studiequizzen (kommenterad kodrad) som blockerade bygget. Verifierat inloggat i förhandsvisningen: Idag renderar utan fel. Ingen publicering."],
   },

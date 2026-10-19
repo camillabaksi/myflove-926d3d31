@@ -1,3 +1,6 @@
+## 2026-10-19 – Säkerhet: låsta hjälpfunktioner och säkrare byggpaket
+- **Säkerhet** (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterade till säkra versioner inom samma huvudversion; tolv mindre risker kvar i mobilbyggets/dokumentexportens verktyg. Ingen data ändrad, ingen publicering.
+
 ## 2026-10-19 – Rättat krasch vid inloggning (Idag)
 - **App-layout** (2026-10-19): återinfört saknad import av vykomponenten som fällde hela appen till felsidan direkt efter inloggning på publicerade sidan. Rättat även ett gammalt typfel i studiequizzen (kommenterad kodrad) som blockerade bygget. Verifierat inloggat i förhandsvisningen: Idag renderar utan fel. Ingen publicering.
 
