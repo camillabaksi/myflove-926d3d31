@@ -35,15 +35,15 @@ export default function FlowView({
 
   return (
     <Layout>
-      <div className={(tab === "chatt" || tab === "flow") && !chatId ? "pace-scene" : undefined}>
-      {(tab === "chatt" || tab === "flow") && !chatId && (
+      <div className={!chatId ? "pace-scene" : undefined}>
+      {!chatId && (
         <>
-        <div className="pace-scene-actions"><span aria-hidden="true" /><button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button></div>
+        <div className="pace-scene-actions"><span aria-hidden="true" />{tab !== "planera" && <button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button>}</div>
         <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
           <div className="pace-welcome-copy">
-            <h1>Pace</h1>
-            <p className="pace-welcome-subtitle">Din följeslagare i vardagen</p>
-            <p className="pace-welcome-description">Här kan du få stöd, samla tankar, planera och hitta lite mer utrymme i vardagen.</p>
+            <h1>{tab === "planera" ? "Planera med Pace" : "Pace"}</h1>
+            <p className="pace-welcome-subtitle">{tab === "planera" ? "Lite mer överblick, i din takt" : "Din följeslagare i vardagen"}</p>
+            <p className="pace-welcome-description">{tab === "planera" ? "Vi samlar det som behöver göras och hjälper dig att hitta en ordning som känns möjlig." : "Här kan du få stöd, samla tankar, planera och hitta lite mer utrymme i vardagen."}</p>
           </div>
         </section>
         </>
