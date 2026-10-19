@@ -86,6 +86,7 @@ const FLOW_HIDDEN_PATHS = new Set([
   "/kalender",
   "/quickflow",
   "/halsa",
+  "/paminnelser",
   "/flow",
   "/pitch",
   "/admin",
