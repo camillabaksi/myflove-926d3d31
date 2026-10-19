@@ -70,7 +70,6 @@ import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import ViewCollapseToggle from "@/components/view-collapse-toggle";
 import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
@@ -806,7 +805,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               <ArrowLeft size={22} />
             </button>
-          ) : null} actions={<div className="flex items-center gap-1"><Link href="/assistant" aria-label="Prata med Pace" title="Prata med Pace" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link><ViewCollapseToggle /></div>} />
+          ) : null} actions={["/familj", "/familjeflow"].includes(location) ? null : <Link href="/assistant" aria-label="Öppna Pace-chatten" title="Öppna Pace-chatten" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link>} />
         </header>
 
 
@@ -905,7 +904,7 @@ export default function Layout({ children }: LayoutProps) {
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className={cn("max-w-6xl mx-auto w-full p-4 md:p-6 page-enter", refreshDesign && "pace-ds pace-design-refresh")}>
-            {!FLOW_HIDDEN_PATHS.has(location) && location !== "/assistant" && !location.startsWith("/assistant/") && <FlowCompanion stage="mini" className="mb-4" />}
+            {!FLOW_HIDDEN_PATHS.has(location) && location !== "/assistant" && !location.startsWith("/assistant/") && !["/familj", "/familjeflow"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
             <AutoTranslateProvider />
