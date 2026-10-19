@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import DidThisQuickAdd from "@/components/did-this-quick-add";
 import TaskQuickAdd, { type QuickAddResult } from "@/components/task-quick-add";
-import { useTasks } from "@/hooks/use-data";
+import { useTasks, useReminders } from "@/hooks/use-data";
 import { useActiveArea } from "@/lib/life-areas";
 import { useLang } from "@/hooks/use-language";
 import { Bell, Pill, Repeat, Baby, ArrowRight, Plus } from "lucide-react";
@@ -21,10 +21,15 @@ const MORE: { href: string; icon: typeof Bell; label: string; what: string }[] =
  */
 export function AddToDay() {
   const { addTask } = useTasks();
+  const { addReminder: addPeriodReminder } = useReminders();
   const { activeArea } = useActiveArea();
   const { t } = useLang();
 
   const handleAdd = (result: QuickAddResult) => {
+    if (result.endDate) {
+      addPeriodReminder(result.title, result.dueDate, undefined, "none", undefined, undefined, "Sammanhängande period – ingen automatiskt upptagen tid.", activeArea === "alla" ? "vardag" : activeArea, result.endDate, "unknown");
+      return;
+    }
     addTask(result.title, result.dueDate, {
       time: result.time,
       completed: result.completed,
