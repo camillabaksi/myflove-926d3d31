@@ -66,8 +66,8 @@ const tomorrowISO = (): string => {
 const QUICK_PROMPTS = [
   { label: "Hjälp mig planera dagen", prompt: "Hjälp mig planera utifrån min kapacitet. Vad är ett rimligt nästa steg?" },
   { label: "Jag känner mig överväldigad just nu", prompt: "Jag känner mig stressad. Hjälp mig att hitta ett litet, lugnt steg." },
-  { label: "Ge mig förslag på en lugn aktivitet", prompt: "Jag behöver motivation. Hjälp mig hitta något rimligt, även om det är att vila eller be om hjälp." },
-  { label: "Hjälp mig sortera mina tankar", prompt: "Jag vill ta en paus. Vilken enkel återhämtningsövning kan passa?" },
+  { label: "Ge mig förslag på en lugn aktivitet", prompt: "Föreslå en lugn återhämtande aktivitet som passar mig just nu." },
+  { label: "Hjälp mig sortera mina tankar", prompt: "Hjälp mig sortera mina tankar, ett steg i taget." },
 ];
 
 /** Chatten utan sidram – används både som egen sida och som HJÄLP-läget i Flow. */
@@ -89,7 +89,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [error, setError] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(true);
   const [menuFor, setMenuFor] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
@@ -471,7 +471,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
             </section>
           )}
 
-          <section className="pace-serene-messages rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
+          {(messages.length > 0 || loadingMessages || isSending || error) && <section className="pace-serene-messages rounded-2xl bg-card/70 p-3 space-y-3" aria-label="Samtal med Pace">
             <div ref={scrollRef} className="max-h-[55vh] space-y-3 overflow-y-auto">
               {loadingMessages ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -604,7 +604,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                 </div>
               )}
             </div>
-          </section>
+          </section>}
 
 
           {messages.length === 0 && (
