@@ -37,17 +37,17 @@ export default function HealthPage() {
 
         <MyFloveWide className="space-y-2">
           <p className="pb-1 text-sm text-muted-foreground">{t("Checka in, se dina mönster eller hitta återhämtning.")}</p>
-          <Link href="/mitt-batteri" className="pace-place-entry press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+          <Link href="/mitt-batteri" className="pace-place-entry press flex items-center gap-3 rounded-2xl border border-border/60 bg-card/80 p-4">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sky text-primary" aria-hidden><Battery className="h-5 w-5" /></span>
             <span className="min-w-0 flex-1"><span className="pace-place-entry-title block font-sans text-lg font-semibold text-ink">Mitt batteri</span><span className="block text-sm text-muted-foreground">{t("Logga hur du mår eller se ditt energimönster.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
           </Link>
-          <Link href="/aterhamtning" className="pace-place-entry press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+          <Link href="/aterhamtning" className="pace-place-entry press flex items-center gap-3 rounded-2xl border border-border/60 bg-card/80 p-4">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sage text-primary" aria-hidden><Heart className="h-5 w-5" /></span>
             <span className="min-w-0 flex-1"><span className="pace-place-entry-title block font-sans text-lg font-semibold text-ink">{t("Återhämtning")}</span><span className="block text-sm text-muted-foreground">{t("Välj en paus som passar just nu.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
           </Link>
-          <Link href="/assistant" className="pace-place-entry press flex items-center gap-3 rounded-3xl border border-border/60 bg-card p-4 shadow-soft">
+          <Link href="/assistant" className="pace-place-entry press flex items-center gap-3 rounded-2xl border border-border/60 bg-card/80 p-4">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-sun text-primary" aria-hidden><MessageCircle className="h-5 w-5" /></span>
             <span className="min-w-0 flex-1"><span className="pace-place-entry-title block font-sans text-lg font-semibold text-ink">{t("Prata om din dag")}</span><span className="block text-sm text-muted-foreground">{t("Berätta vad du behöver göra och hitta ett nästa steg.")}</span></span>
             <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
@@ -55,7 +55,7 @@ export default function HealthPage() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <CollapsibleSection id="health-other" title="Mer inom hälsa" defaultCollapsed className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft" headingClassName="pace-place-section-title font-sans text-base font-semibold text-ink">
+          <CollapsibleSection id="health-other" title="Mer inom hälsa" defaultCollapsed className="rounded-2xl border border-border/60 bg-card/80 p-4" headingClassName="pace-place-section-title font-sans text-base font-semibold text-ink">
             <HealthToolLinks />
           </CollapsibleSection>
         </MyFloveWide>
