@@ -2890,17 +2890,21 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
   .pace-scene .pace-welcome-copy::before { background: rgba(255,250,246,.88); border-radius: 1rem; }
 }
 
-/* Paceable's very light ambient canvas: colour belongs behind the content,
-   not inside every card. No images, animations or layout changes. */
-html:not(.dark) .app-shell-bg[data-paceable-app="true"]:not(.pace-scene) {
-    background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(ellipse 70% 32% at 95% 2%, rgb(244 219 212 / 0.18), transparent 78%),
-      radial-gradient(ellipse 64% 35% at 3% 54%, rgb(228 218 239 / 0.13), transparent 82%),
-      radial-gradient(ellipse 60% 28% at 98% 96%, rgb(231 237 224 / 0.11), transparent 80%);
-    background-attachment: scroll;
+/* A softly coloured canvas shared by the app shell and its actual scroll surface.
+   Slightly more visible than the previous treatment, while keeping cards neutral. */
+html:not(.dark) .app-shell-bg[data-paceable-app="true"] {
+  --pace-ambient-background:
+    radial-gradient(ellipse 65% 36% at 97% 8%, rgba(245, 211, 198, .36), transparent 82%),
+    radial-gradient(ellipse 60% 34% at 0% 46%, rgba(221, 205, 238, .29), transparent 84%),
+    radial-gradient(ellipse 58% 34% at 100% 92%, rgba(225, 233, 213, .23), transparent 83%),
+    linear-gradient(135deg, #FCF9F6 0%, #FBF7F5 48%, #FAF8F5 100%);
+  background: var(--pace-ambient-background);
 }
-/* Explicit dark theme always retains its original untextured background. */
+html:not(.dark) .app-shell-bg[data-paceable-app="true"] .pace-mobile-content-scroll:not(:has(.pace-scene)) {
+  background: var(--pace-ambient-background);
+  background-attachment: local;
+}
+/* The assistant's photographic scene and dark mode remain untouched. */
 html.dark .app-shell-bg[data-paceable-app="true"] {
   background-image: none;
 }
