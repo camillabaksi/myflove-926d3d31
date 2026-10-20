@@ -3015,9 +3015,22 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 }
 .pace-mobile-content-scroll[data-page-area] > div,
 .pace-mobile-content-scroll[data-page-area] .pace-ds-page { background: transparent !important; }
-[data-page-area] h1 { position: relative; }
+[data-page-area] h1 { position: relative; margin-bottom: .6rem; }
 [data-page-area] h1::after {
-  content: ""; display: block; width: 2.25rem; height: 3px; margin-top: .45rem;
+  content: ""; position: absolute; left: 0; bottom: -.45rem; width: 2.25rem; height: 3px;
   border-radius: 999px; background: var(--page-tone); opacity: .85;
 }
 [data-page-area] h1 svg:first-child { color: var(--page-tone); }
+
+/* Kompakt mobilhuvud: tillbaka · logotyp · chatt på en rad. */
+@media (max-width: 767px) {
+  [data-paceable-typography="true"] .pace-compact-header .pace-shell-brand-header {
+    grid-template-columns: 2.75rem minmax(0,1fr) 2.75rem !important; row-gap: 0 !important;
+  }
+  [data-paceable-typography="true"] .pace-compact-header .pace-app-brand {
+    grid-column: 2 !important; grid-row: 1 !important; justify-self: center !important; width: 8.5rem !important;
+  }
+  [data-paceable-typography="true"] .pace-compact-header .pace-shell-brand-back { grid-column: 1 !important; grid-row: 1 !important; }
+  [data-paceable-typography="true"] .pace-compact-header .pace-shell-brand-actions { grid-column: 3 !important; grid-row: 1 !important; }
+  [data-paceable-typography="true"] .pace-compact-header :is(.pace-shell-brand-back, .pace-shell-brand-actions):empty { display: block !important; }
+}

@@ -7,6 +7,13 @@ import { UnownedDataPrompt } from "@/components/unowned-data-prompt";
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { pageAreaFor } from "@/lib/page-area";
+
+/** Pace's "Härnäst" card belongs to the day overview only; deeper pages start with their own heading. */
+const COMPANION_PATHS = new Set(["/idag", "/hem"]);
+/** Legal footer lives with settings, not on every app page. */
+const FOOTER_PATHS = new Set(["/installningar", "/oversikt"]);
+/** Single-column list/form pages use a reading width on desktop. */
+const READING_PATHS = new Set(["/installningar", "/aterhamtning", "/paus", "/paminnelser", "/profil", "/min-situation", "/mitt-batteri", "/halsa", "/anteckningar", "/shopping", "/flow-installningar", "/anpassa", "/anpassa-hem", "/min-livsprofil", "/rutiner", "/familj", "/barn", "/relationer"]);
 import { Link as RouterLink, useRouter } from "@tanstack/react-router";
 import {
   Home,
@@ -797,7 +804,7 @@ export default function Layout({ children }: LayoutProps) {
         <UnownedDataPrompt />
 
         {/* Mobile Header */}
-        <header className={cn("sticky top-0 z-10 border-b border-border/50 bg-background/80 p-3 backdrop-blur-md md:hidden", ["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && "pace-assistant-mobile-header")}>
+        <header className={cn("pace-compact-header sticky top-0 z-10 border-b border-border/50 bg-background/80 px-3 py-1.5 backdrop-blur-md md:hidden", ["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && "pace-assistant-mobile-header")}>
           {!["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && <AppBrandHeader back={canGoBack ? (
             <button
               type="button"
@@ -907,15 +914,15 @@ export default function Layout({ children }: LayoutProps) {
           className="pace-mobile-content-scroll flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
-          <div key={location} className={cn("max-w-6xl mx-auto w-full p-4 md:p-6 page-enter", refreshDesign && "pace-ds pace-design-refresh")}>
-            {!FLOW_HIDDEN_PATHS.has(location) && !["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && !["/familj", "/familjeflow", "/quickflow", "/tankar/dagbok", "/tankar/beslut"].includes(location) && <FlowCompanion stage="mini" className="mb-4" />}
+          <div key={location} className={cn("mx-auto w-full p-4 md:p-6 page-enter", READING_PATHS.has(location) ? "max-w-3xl" : "max-w-6xl", refreshDesign && "pace-ds pace-design-refresh")}>
+            {COMPANION_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
             <AutoTranslateProvider />
             {children}
           </div>
 
-          <footer className="max-w-6xl mx-auto w-full px-4 md:px-6 pt-4 pb-8 mt-8 border-t border-border/40">
+          {FOOTER_PATHS.has(location) && <footer className="max-w-6xl mx-auto w-full px-4 md:px-6 pt-4 pb-8 mt-8 border-t border-border/40">
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link
                 href="/integritet"
@@ -948,7 +955,7 @@ export default function Layout({ children }: LayoutProps) {
             <p className="mt-3 text-center text-[10px] text-muted-foreground/70">
               © {new Date().getFullYear()} Paceable
             </p>
-          </footer>
+          </footer>}
         </div>
       </main>
 
