@@ -932,6 +932,8 @@ export type Database = {
       }
       tester_applications: {
         Row: {
+          admin_notice_accepted_at: string | null
+          confirmation_accepted_at: string | null
           consent_version: number
           consented_at: string
           created_at: string
@@ -939,12 +941,15 @@ export type Database = {
           feedback_willing: boolean
           focus: string
           id: string
+          language: string
           participation: string
           platform: string
           status: string
           updated_at: string
         }
         Insert: {
+          admin_notice_accepted_at?: string | null
+          confirmation_accepted_at?: string | null
           consent_version?: number
           consented_at?: string
           created_at?: string
@@ -952,12 +957,15 @@ export type Database = {
           feedback_willing?: boolean
           focus: string
           id?: string
+          language?: string
           participation: string
           platform: string
           status?: string
           updated_at?: string
         }
         Update: {
+          admin_notice_accepted_at?: string | null
+          confirmation_accepted_at?: string | null
           consent_version?: number
           consented_at?: string
           created_at?: string
@@ -965,6 +973,7 @@ export type Database = {
           feedback_willing?: boolean
           focus?: string
           id?: string
+          language?: string
           participation?: string
           platform?: string
           status?: string
