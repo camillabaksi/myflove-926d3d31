@@ -2971,3 +2971,43 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   .pace-scene-actions button { display: none; }
   .pace-scene-actions { min-height: 44px; }
 }
+
+/* Områdesbakgrunder: dov ton per område, tonar mot ivory nedåt. */
+:root {
+  --page-bg-idag: #E6ECF5; --page-tone-idag: #4F6E9C;
+  --page-bg-kalender: #F1E8F4; --page-tone-kalender: #8A4E8F;
+  --page-bg-tankar: #ECE7F6; --page-tone-tankar: #6A57A3;
+  --page-bg-halsa: #E5EFE9; --page-tone-halsa: #4C7A62;
+  --page-bg-hem: #F6E6DA; --page-tone-hem: #A0603A;
+  --page-bg-aterhamtning: #F5EDD8; --page-tone-aterhamtning: #8C6E2A;
+  --page-bg-neutral: #FAF9F6; --page-tone-neutral: #512654;
+  --page-bg-base: #FAF9F6;
+}
+.dark {
+  --page-bg-idag: #1E2530; --page-tone-idag: #9DB5DA;
+  --page-bg-kalender: #2A1F2C; --page-tone-kalender: #D6A7D9;
+  --page-bg-tankar: #241F31; --page-tone-tankar: #B9A9E6;
+  --page-bg-halsa: #1C2822; --page-tone-halsa: #9BC9AF;
+  --page-bg-hem: #2D221B; --page-tone-hem: #E3AE8A;
+  --page-bg-aterhamtning: #2B2619; --page-tone-aterhamtning: #DCC27E;
+  --page-bg-neutral: #1F1B20; --page-tone-neutral: #D9B8DB;
+  --page-bg-base: #1A171B;
+}
+[data-page-area="idag"] { --page-bg: var(--page-bg-idag); --page-tone: var(--page-tone-idag); }
+[data-page-area="kalender"] { --page-bg: var(--page-bg-kalender); --page-tone: var(--page-tone-kalender); }
+[data-page-area="tankar"] { --page-bg: var(--page-bg-tankar); --page-tone: var(--page-tone-tankar); }
+[data-page-area="halsa"] { --page-bg: var(--page-bg-halsa); --page-tone: var(--page-tone-halsa); }
+[data-page-area="hem"] { --page-bg: var(--page-bg-hem); --page-tone: var(--page-tone-hem); }
+[data-page-area="aterhamtning"] { --page-bg: var(--page-bg-aterhamtning); --page-tone: var(--page-tone-aterhamtning); }
+[data-page-area="neutral"] { --page-bg: var(--page-bg-neutral); --page-tone: var(--page-tone-neutral); }
+.pace-mobile-content-scroll[data-page-area] {
+  background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg) 22rem, color-mix(in srgb, var(--page-bg) 45%, var(--page-bg-base)) 60rem) !important;
+}
+.pace-mobile-content-scroll[data-page-area] > div,
+.pace-mobile-content-scroll[data-page-area] .pace-ds-page { background: transparent !important; }
+[data-page-area] h1 { position: relative; }
+[data-page-area] h1::after {
+  content: ""; display: block; width: 2.25rem; height: 3px; margin-top: .45rem;
+  border-radius: 999px; background: var(--page-tone); opacity: .85;
+}
+[data-page-area] h1 svg:first-child { color: var(--page-tone); }
