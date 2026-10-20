@@ -47,7 +47,10 @@ function Harness() {
 function openChildForm() {
   fireEvent.click(screen.getByRole("button", { name: "Vecka" }));
   const days = screen.getByRole("region", { name: "Veckans dagar" });
-  fireEvent.click(within(days).getAllByRole("button", { name: /^Öppna / })[new Date(`${fixture.date}T12:00:00`).getDay() === 0 ? 6 : new Date(`${fixture.date}T12:00:00`).getDay() - 1] as HTMLElement);
+  const weekday = new Date(`${fixture.date}T12:00:00`).getDay();
+  const day = within(days).getAllByRole("button", { name: /^Öppna / })[weekday === 0 ? 6 : weekday - 1];
+  if (!day) throw new Error("Expected today's week entry");
+  fireEvent.click(day);
   fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till i barnens schema" }));
 }
 
@@ -160,7 +163,9 @@ describe("Calendar picture support", () => {
     expect(container.querySelector('[data-mulberry-symbol="coffee"]')).toHaveClass("h-7", "w-7");
     fireEvent.click(screen.getByRole("button", { name: "Bildstöd" }));
     expect(container.querySelector("[data-mulberry-symbol]")).toBeNull();
-    expect(within(screen.getByRole("region", { name: "Veckans dagar" })).getByText("Fika med Sara")).toBeInTheDocument();
+    const weekList = within(screen.getByRole("region", { name: "Veckans dagar" })).getAllByRole("list")[0];
+    if (!weekList) throw new Error("Expected the occupied day's activity list");
+    expect(within(weekList).getByText("Fika med Sara")).toBeInTheDocument();
   });
 });
 

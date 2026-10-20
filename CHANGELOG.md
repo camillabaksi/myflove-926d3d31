@@ -1,3 +1,6 @@
+## 2026-10-20 – Kalenderns äldre tester
+- **Kalenderkontroll** (2026-10-20): uppdaterat äldre testval för Idag, veckans tidslinje, vald dags lista och barnregistrering till befintliga kontroller. Tidsrättningen kontrolleras fortsatt med rutin 08:30 och självvald tiominuterspaus. Ingen ändring av appfunktioner, data eller publicering.
+
 ## 2026-10-20 – Rättat: egen tid gick inte att spara i kalendern
 - **Kalender och dagstöd** (2026-10-20): kontrollen av handinmatade tider var felaktig och godkände ingen tid alls. Därför var ”Spara bara idag” för en enstaka rutin alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till: en rutin som sparas med en inmatad tid och en paus som sparas på en självvald tid. Ingen ändring av data, lagring, rutten eller något annat flöde. Ingen publicering.
 
