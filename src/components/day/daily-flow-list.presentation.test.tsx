@@ -22,6 +22,7 @@ vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: (_key: string, in
 vi.mock("@/components/flow-item-actions", () => ({
   FlowItemActions: ({ className }: { className?: string }) => <button aria-label="Fler val" className={className} />,
   kindFromId: () => ({ kind: "uppgift", realId: "test" }),
+  useScrollSafeMenu: () => ({ menuOpen: false, setMenuOpen: vi.fn(), triggerProps: {} }),
 }));
 vi.mock("@/components/myflove/motion", () => ({ MyFloveTransition: ({ children }: { children: ReactNode }) => <div data-testid="legacy-transition">{children}</div> }));
 vi.mock("@/components/adaptive-activity-card", () => ({ default: () => null }));
@@ -43,7 +44,7 @@ describe("Compact day activity presentation", () => {
     expect(screen.getByText(rows[0].title)).toHaveClass("line-through");
     expect(screen.getByText(rows[1].title)).not.toHaveClass("line-through");
     expect(screen.getAllByRole("button", { name: "Fler val" })[0]).toHaveClass("h-11", "w-11");
-    expect(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` })).toHaveClass("h-11", "w-11");
+    expect(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` })).toHaveClass("h-9", "w-9");
     expect(screen.queryByRole("button", { name: /Klarmarkera Familjens schema/ })).not.toBeInTheDocument();
     expect(container.querySelectorAll(".shadow-sm")).toHaveLength(0);
     expect(container.querySelectorAll('[style*="border-left"]')).toHaveLength(0);
@@ -126,6 +127,7 @@ describe("Compact day activity presentation", () => {
 
   it("filters the visible rows only, without changing data or completion", () => {
     render(<DailyFlowList presentation="integrated" showFilter includeChildSchedules={false} />);
+    fireEvent.click(screen.getByRole("button", { name: "Filtrera" }));
     const group = screen.getByRole("group", { name: "Filtrera dagens aktiviteter" });
     expect(group).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Alla" })).toHaveAttribute("aria-pressed", "true");
