@@ -31,6 +31,7 @@ vi.mock("@/integrations/supabase/client", () => ({
       const query: any = {
         select: () => query,
         order: () => query,
+        range: () => query,
         eq: (key: string, value: string) => {
           if (key === "owner_id") owner = value;
           return query;
