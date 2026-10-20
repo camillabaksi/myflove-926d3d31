@@ -447,7 +447,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
         <div className="flex min-w-0 flex-col gap-3 lg:block lg:space-y-5">
           {!conversationId && !loadingConversations && conversations.length > 0 && (
-            <section className="rounded-2xl bg-card/60 px-3 py-3 space-y-2" aria-label="Välj samtal med Pace">
+            <section className="rounded-2xl bg-card/60 px-3 py-3 space-y-2 lg:hidden" aria-label="Välj samtal med Pace">
 
               
               {conversations.length > 0 && (
