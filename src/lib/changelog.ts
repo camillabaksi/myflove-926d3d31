@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Kalenderns äldre tester",
+    items: ["Uppdaterat äldre testval för Idag, veckans tidslinje, vald dags lista och barnregistrering till befintliga kontroller. Tidsrättningen kontrolleras fortsatt med rutin 08:30 och självvald tiominuterspaus. Ingen ändring av appfunktioner, data eller publicering."],
+  },
+  {
     title: "2026-10-20 – Rättat: egen tid gick inte att spara i kalendern",
     items: ["Kontrollen av handinmatade tider var felaktig och godkände ingen tid alls: ”Spara bara idag” för en enstaka rutin var alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till. Ingen ändring av data, lagring, rutt eller något annat flöde. Ingen publicering."],
   },

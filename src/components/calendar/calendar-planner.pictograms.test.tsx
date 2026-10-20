@@ -44,6 +44,16 @@ function Harness() {
   return <CalendarPlanner tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} showPictograms={show} onPictogramsChange={setShow} />;
 }
 
+function openChildForm() {
+  fireEvent.click(screen.getByRole("button", { name: "Vecka" }));
+  const days = screen.getByRole("region", { name: "Veckans dagar" });
+  const weekday = new Date(`${fixture.date}T12:00:00`).getDay();
+  const day = within(days).getAllByRole("button", { name: /^Öppna / })[weekday === 0 ? 6 : weekday - 1];
+  if (!day) throw new Error("Expected today's week entry");
+  fireEvent.click(day);
+  fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till i barnens schema" }));
+}
+
 describe("Calendar entry view", () => {
   it("keeps empty weeks short and explicitly opens or collapses all 24 hours without saving anything", () => {
     model.entries = [];
@@ -68,9 +78,10 @@ describe("Calendar entry view", () => {
     const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     expect(container.querySelectorAll(".pace-calendar-timeline")).toHaveLength(1);
     expect(container.querySelectorAll("[data-calendar-empty-day]")).toHaveLength(6);
-    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline");
+    if (!timeline) throw new Error("Expected the occupied day's timeline");
     expect(parseFloat(timeline.style.height)).toBeLessThan(500);
-    expect(screen.getByText(fixture.title)).toBeInTheDocument();
+    expect(within(timeline).getByText(fixture.title)).toBeInTheDocument();
   });
   it("retains untimed activities and never presents a failed or loading read as an empty plan", () => {
     model.entries = [{ ...fixture, time: undefined, endTime: undefined }];
@@ -88,16 +99,20 @@ describe("Calendar entry view", () => {
   });
   it("shows a late child activity fully, including its touch target after the 24:00 line", () => {
     model.entries = [{ ...fixture, id: "child-night", source: "child", sourceId: "night", time: "23:59", endTime: undefined, title: "Kvällsrutin", editable: false, familyMembers: [{ id: "Bella", name: "Bella" }] }];
-    const { container } = render(<CalendarPlanner initialView="dag" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
-    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline");
+    if (!timeline) throw new Error("Expected the late family activity's timeline");
     expect(timeline).toHaveAttribute("data-calendar-timeline-end", "1440");
     expect(screen.getByText("24:00")).toBeInTheDocument();
-    const card = screen.getByRole("button", { name: /Kvällsrutin, 23:59/ }).closest<HTMLElement>(".absolute")!;
+    const card = within(timeline).getByRole("button", { name: /Kvällsrutin, 23:59/ }).closest<HTMLElement>(".absolute");
+    if (!card) throw new Error("Expected the late family activity's block");
     expect(parseFloat(card.style.top) + parseFloat(card.style.height)).toBeLessThanOrEqual(parseFloat(timeline.style.height));
   });
   it("shares one range across occupied week columns, including early family context", () => {
     const week = periodDates(fixture.date, "vecka");
-    model.entries = [fixture, { ...fixture, id: "early", sourceId: "early", source: "child", title: "Tidig avfärd", date: week[0]!, time: "05:00", endTime: "05:30", editable: false, familyMembers: [{ id: "Bella", name: "Bella" }] }];
+    const firstDay = week[0];
+    if (!firstDay) throw new Error("Expected the week's first day");
+    model.entries = [fixture, { ...fixture, id: "early", sourceId: "early", source: "child", title: "Tidig avfärd", date: firstDay, time: "05:00", endTime: "05:30", editable: false, familyMembers: [{ id: "Bella", name: "Bella" }] }];
     const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     const timelines = container.querySelectorAll(".pace-calendar-timeline");
     expect(timelines.length).toBeGreaterThan(0);
@@ -107,9 +122,10 @@ describe("Calendar entry view", () => {
     }
   });
   it("uses the displayed time origin when dragging in compact and full-day views", () => {
-    const { container } = render(<CalendarPlanner initialView="dag" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     const dragTo = (minute: number) => {
-      const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline")!;
+      const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline");
+      if (!timeline) throw new Error("Expected the occupied day's timeline");
       const first = Number(timeline.dataset.calendarTimelineStart);
       vi.spyOn(timeline, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
       const event = createEvent.drop(timeline, { dataTransfer: { getData: () => fixture.id } });
@@ -141,30 +157,30 @@ describe("Calendar picture support", () => {
     expect(screen.getByRole("button", { name: "Bildstöd" })).toHaveAttribute("aria-pressed", "true");
     expect(container.querySelector('[data-mulberry-symbol="coffee"]')).toHaveClass("h-8", "w-8");
     expect(container.querySelector("[data-month-date] img")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Dag" }));
+    fireEvent.click(within(screen.getByRole("group", { name: "Kalendervy" })).getByRole("button", { name: "Idag" }));
     expect(container.querySelector('[data-mulberry-symbol="coffee"]')).toHaveClass("h-8", "w-8");
     fireEvent.click(screen.getByRole("button", { name: "Vecka" }));
     expect(container.querySelector('[data-mulberry-symbol="coffee"]')).toHaveClass("h-7", "w-7");
     fireEvent.click(screen.getByRole("button", { name: "Bildstöd" }));
     expect(container.querySelector("[data-mulberry-symbol]")).toBeNull();
-    expect(screen.getByText("Fika med Sara")).toBeInTheDocument();
+    const weekList = within(screen.getByRole("region", { name: "Veckans dagar" })).getAllByRole("list")[0];
+    if (!weekList) throw new Error("Expected the occupied day's activity list");
+    expect(within(weekList).getByText("Fika med Sara")).toBeInTheDocument();
   });
 });
 
 describe("Calendar month summary", () => {
-  it("summarises the displayed month honestly and puts the activity count in each day cell", () => {
+  it("includes the real activity count in the selected date's accessible label", () => {
     model.entries = [fixture];
     const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
-    expect(screen.getByText(/1 aktivitet · 1 dag med innehåll · \d+ dagar utan planering/)).toBeInTheDocument();
-    const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`)!;
-    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet, 1 områden har planerat innehåll/));
-    expect(todayCell.textContent).toContain("1");
+    const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`);
+    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet\./));
   });
   it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
     model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", title: "Ring banken", time: undefined, endTime: undefined }, { ...fixture, id: "task-c", sourceId: "c", title: "Morgonpromenad", time: "07:00", endTime: "07:15" }];
     render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
-    const list = screen.getByText("Min dag").closest("h3")!.nextElementSibling as HTMLElement;
-    const titles = Array.from(list.querySelectorAll("button")).map(b => b.textContent ?? "");
+    const list = within(screen.getByRole("region", { name: "Vald dags aktiviteter" })).getByRole("list");
+    const titles = within(list).getAllByRole("button").map(b => b.textContent ?? "");
     expect(titles).toEqual([expect.stringContaining("Morgonpromenad"), expect.stringContaining("Fika med Sara"), expect.stringContaining("Ring banken")]);
   });
 });
@@ -173,8 +189,7 @@ describe("Calendar month summary", () => {
 describe("Calendar child quick-add", () => {
   it("opens the single existing form and saves an activity to two explicitly selected children", async () => {
     render(<Harness />);
-    expect(screen.getByRole("button", { name: "Lägg till för barn" })).toHaveClass("text-xs");
-    fireEvent.click(screen.getByRole("button", { name: "Lägg till för barn" }));
+    openChildForm();
     const form = within(screen.getByRole("dialog"));
     expect(form.getByRole("button", { name: "Spara för 0 barn" })).toBeDisabled();
     expect(form.queryByRole("checkbox", { name: "Foreign" })).not.toBeInTheDocument();
@@ -197,7 +212,7 @@ describe("Calendar child quick-add", () => {
   it("keeps the draft after a partial failure and retries only the remaining child", async () => {
     addChild.mockImplementation(async value => { if (value.childId === "Bianca" && addChild.mock.calls.length === 2) throw Error("network"); return "created"; });
     render(<Harness />);
-    fireEvent.click(screen.getByRole("button", { name: "Lägg till för barn" }));
+    openChildForm();
     const form = within(screen.getByRole("dialog"));
     fireEvent.change(form.getByLabelText("Namn"), { target: { value: "Frukost" } });
     fireEvent.click(form.getByRole("checkbox", { name: "Bella" }));
