@@ -1,3 +1,6 @@
+## 2026-10-20 – Pace-blocket bort från toppen av Idag
+- **Idag** (2026-10-20): kortet "Jag är här om du behöver mig" med "Prata med Pace"-knappen tas bort från toppen av förstasidan, så hälsningen och "Din energi just nu" hamnar högst upp. Pace finns kvar som förut via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Inga adresser, registreringar, utkast, lagring eller andra funktioner ändras. Ingen publicering.
+
 ## 2026-10-20 – Sammanhängande Tankar och tydligare energiöverblick
 - Extra Fånga-stenar borttagna; reflektionsboken följer samma yttre sidlayout och bottenmenyn fyller bredden. Pappersdesign, privata utkast och originalbilder bevaras.
 - Mitt batteri samlar Just nu, Historik och Vad påverkar min energi med befintliga energiverktyg; duplicerad mönsterflik ersätts av samlad fördjupning. Min plats och Mer får tydligare beskrivningar, Stop-paus finns kvar i Återhämtning. Befintliga adresser, registreringar, beräkningar och lagring bevaras. Ingen publicering.
