@@ -236,6 +236,12 @@ export const listExternalEvents = createServerFn({ method: "GET" })
   .handler(async ({ data, context }) => {
     const events: ExternalEvent[] = [];
     let reconnectRequired: CalendarProvider | null = null;
+    /**
+     * Sant när en leverantör inte kunde läsas klart (fel eller fler sidor än
+     * taket). Planeringen får aldrig tolka en ofullständig läsning som
+     * ledig tid.
+     */
+    let incomplete = false;
 
     for (const provider of ["google", "outlook"] as CalendarProvider[]) {
       const { cfg, connectionAPIKey } = await keyFor(context.userId, provider);
@@ -243,72 +249,103 @@ export const listExternalEvents = createServerFn({ method: "GET" })
 
       const timeMin = `${data.from}T00:00:00Z`;
       const timeMax = `${data.to}T23:59:59Z`;
-      const path =
+      let path: string | null =
         provider === "google"
           ? `/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=250&timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}`
           : `/me/calendarview?$top=250&startDateTime=${encodeURIComponent(`${data.from}T00:00:00`)}&endDateTime=${encodeURIComponent(`${data.to}T23:59:59`)}`;
 
-      const res = await callAsAppUser({
-        gatewayBaseUrl: GATEWAY_BASE_URL,
-        connectionAPIKey,
-        connectorId: cfg.connectorId,
-        path,
-        requiredScopes: cfg.scopes,
-      });
+      // Följ leverantörens fortsättningssidor så att alla händelser i
+      // intervallet läses – inte bara de första 250.
+      const MAX_PROVIDER_PAGES = 10;
+      for (let page = 0; page < MAX_PROVIDER_PAGES && path; page++) {
+        const res = await callAsAppUser({
+          gatewayBaseUrl: GATEWAY_BASE_URL,
+          connectionAPIKey,
+          connectorId: cfg.connectorId,
+          path,
+          requiredScopes: cfg.scopes,
+        });
 
-      if (await appUserReconnectRequired(res)) {
-        reconnectRequired = provider;
-        continue;
-      }
-      if (!res.ok) {
-        console.error(`Kalenderläsning misslyckades (${provider}): ${res.status}`);
-        // 401/403 = åtkomsten räcker inte (t.ex. gamla scope). Be användaren
-        // koppla om i stället för att tyst visa en tom kalender.
-        if (res.status === 401 || res.status === 403) {
+        if (await appUserReconnectRequired(res)) {
           reconnectRequired = provider;
+          path = null;
+          break;
         }
-        continue;
-      }
-      const body = (await res.json()) as { items?: GoogleEvent[]; value?: GraphEvent[] };
+        if (!res.ok) {
+          console.error(`Kalenderläsning misslyckades (${provider}): ${res.status}`);
+          // 401/403 = åtkomsten räcker inte (t.ex. gamla scope). Be användaren
+          // koppla om i stället för att tyst visa en tom kalender.
+          if (res.status === 401 || res.status === 403) {
+            reconnectRequired = provider;
+          } else {
+            incomplete = true;
+          }
+          path = null;
+          break;
+        }
+        const body = (await res.json()) as {
+          items?: GoogleEvent[];
+          value?: GraphEvent[];
+          nextPageToken?: string;
+          "@odata.nextLink"?: string;
+        };
 
-      if (provider === "google") {
-        for (const item of body.items ?? []) {
-          if (!item.id) continue;
-          const startDateTime = item.start?.dateTime;
-          const allDay = !startDateTime;
-          const start = startDateTime ? splitIso(startDateTime) : { date: item.start?.date ?? "" };
-          if (!start.date) continue;
-          const end = item.end?.dateTime ? splitIso(item.end.dateTime) : undefined;
-          events.push({
-            id: item.id,
-            provider,
-            title: item.summary || "(utan titel)",
-            date: start.date,
-            time: start.time,
-            endTime: end?.time,
-            allDay,
-          });
-        }
-      } else {
-        for (const item of body.value ?? []) {
-          if (!item.id || !item.start?.dateTime) continue;
-          const start = splitIso(item.start.dateTime);
-          const end = item.end?.dateTime ? splitIso(item.end.dateTime) : undefined;
-          events.push({
-            id: item.id,
-            provider,
-            title: item.subject || "(utan titel)",
-            date: start.date,
-            time: item.isAllDay ? undefined : start.time,
-            endTime: item.isAllDay ? undefined : end?.time,
-            allDay: Boolean(item.isAllDay),
-          });
+        if (provider === "google") {
+          for (const item of body.items ?? []) {
+            if (!item.id) continue;
+            const startDateTime = item.start?.dateTime;
+            const allDay = !startDateTime;
+            const start = startDateTime ? splitIso(startDateTime) : { date: item.start?.date ?? "" };
+            if (!start.date) continue;
+            const end = item.end?.dateTime ? splitIso(item.end.dateTime) : undefined;
+            events.push({
+              id: item.id,
+              provider,
+              title: item.summary || "(utan titel)",
+              date: start.date,
+              time: start.time,
+              endTime: end?.time,
+              allDay,
+            });
+          }
+          path = body.nextPageToken
+            ? `/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=250&timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}&pageToken=${encodeURIComponent(body.nextPageToken)}`
+            : null;
+        } else {
+          for (const item of body.value ?? []) {
+            if (!item.id || !item.start?.dateTime) continue;
+            const start = splitIso(item.start.dateTime);
+            const end = item.end?.dateTime ? splitIso(item.end.dateTime) : undefined;
+            events.push({
+              id: item.id,
+              provider,
+              title: item.subject || "(utan titel)",
+              date: start.date,
+              time: item.isAllDay ? undefined : start.time,
+              endTime: item.isAllDay ? undefined : end?.time,
+              allDay: Boolean(item.isAllDay),
+            });
+          }
+          const nextLink = body["@odata.nextLink"];
+          if (nextLink) {
+            try {
+              const nextUrl = new URL(nextLink);
+              path = `${nextUrl.pathname}${nextUrl.search}`;
+            } catch {
+              path = null;
+              incomplete = true;
+            }
+          } else {
+            path = null;
+          }
         }
       }
+      // Fler sidor än taket → resultatet är ofullständigt.
+      if (path) incomplete = true;
     }
 
     events.sort((a, b) => `${a.date}${a.time ?? ""}`.localeCompare(`${b.date}${b.time ?? ""}`));
-    return { events, reconnectRequired };
+    return { events, reconnectRequired, incomplete };
   });
 
 export const pushEventToCalendar = createServerFn({ method: "POST" })
