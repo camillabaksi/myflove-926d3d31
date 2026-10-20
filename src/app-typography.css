@@ -493,5 +493,6 @@ html[data-paceable-typography="true"] .notebook :is(.book-header, .book-tools) {
 }
 /* The existing roomy preference remains an explicit accessibility choice. */
 html[data-paceable-typography="true"][data-npf-space="roomy"] [data-pace-command]:not(.pace-calendar-entry, .pace-calendar-timeline *, .book-point-menu) {
+  min-height: max(44px, 2.9rem);
   padding-block: 0.25rem;
 }
