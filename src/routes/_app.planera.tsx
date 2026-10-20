@@ -12,6 +12,11 @@ export const Route = createFileRoute("/_app/planera")({
   head: () => ({
     meta: [
       { title: "Planera din dag och vecka – Paceable" },
+      { name: "description", content: "Planera din egen dag eller barnens schema och granska aktiviteterna innan du sparar." },
+      { property: "og:title", content: "Planera din dag och vecka – Paceable" },
+      { property: "og:description", content: "Planera din egen dag eller barnens schema och granska aktiviteterna innan du sparar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
