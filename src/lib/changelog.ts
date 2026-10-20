@@ -19,135 +19,203 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   },
   {
     title: "2026-10-20 – Säkerhetsrättningar före bred spridning",
-    items: ["Dekrypterad data töms ur minnet när en session tar slut oväntat; familjemedlemskap kan bara skapas via inbjudningskod och inte flyttas; barnkonton får bara delade aktiviteter utan dokument; notisadresser begränsas till kända pushtjänster; testkontofunktionen kräver uttrycklig aktivering. Ingen publicering."],
+    items: [
+      "Dekrypterad data töms ur minnet när en session tar slut oväntat; familjemedlemskap kan bara skapas via inbjudningskod och inte flyttas; barnkonton får bara delade aktiviteter utan dokument; notisadresser begränsas till kända pushtjänster; testkontofunktionen kräver uttrycklig aktivering. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Pace-blocket bort från toppen av Idag",
-    items: ["Kortet \"Jag är här om du behöver mig\" med \"Prata med Pace\"-knappen tas bort från toppen av förstasidan, så hälsningen och \"Din energi just nu\" hamnar högst upp. Pace finns kvar via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Adresser, registreringar, utkast och lagring bevaras. Ingen publicering."],
+    items: [
+      'Kortet "Jag är här om du behöver mig" med "Prata med Pace"-knappen tas bort från toppen av förstasidan, så hälsningen och "Din energi just nu" hamnar högst upp. Pace finns kvar via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Adresser, registreringar, utkast och lagring bevaras. Ingen publicering.',
+    ],
   },
   {
     title: "2026-10-20 – Sammanhängande Tankar och tydligare energiöverblick",
-    items: ["Extra Fånga-stenar borttagna, gemensam yttre sidlayout för reflektionsboken och fullbred bottenmeny. Pappersdesign, privata utkast och originalbilder bevaras.", "Mitt batteri samlar Just nu, Historik och Vad påverkar min energi med befintliga verktyg. Min plats och Mer får tydligare beskrivningar; Stop-paus finns i Återhämtning. Adresser, registreringar, beräkningar och lagring bevaras. Ingen publicering."],
+    items: [
+      "Extra Fånga-stenar borttagna, gemensam yttre sidlayout för reflektionsboken och fullbred bottenmeny. Pappersdesign, privata utkast och originalbilder bevaras.",
+      "Mitt batteri samlar Just nu, Historik och Vad påverkar min energi med befintliga verktyg. Min plats och Mer får tydligare beskrivningar; Stop-paus finns i Återhämtning. Adresser, registreringar, beräkningar och lagring bevaras. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Enhetligare normalstorlekar i hela appen",
-    items: ["Gemensamma mindre rem-baserade textroller för sidor, undervyer och dialoger; aktivitetsnamn, knapptext och formulär följer samma skala. Befintlig Större text, läsbar anteckningshandstil, minst 44 px tryckytor, logotyper, data och tidsgeometri bevaras. Ingen publicering.", "Verifiering: 54 riktade tester och 3 216 adress/bredd/tema/textkontroller utan dokumentoverflow; detaljer och begränsningar i docs/app-type-scale-verification.md."],
+    items: [
+      "Gemensamma mindre rem-baserade textroller för sidor, undervyer och dialoger; aktivitetsnamn, knapptext och formulär följer samma skala. Befintlig Större text, läsbar anteckningshandstil, minst 44 px tryckytor, logotyper, data och tidsgeometri bevaras. Ingen publicering.",
+      "Verifiering: 54 riktade tester och 3 216 adress/bredd/tema/textkontroller utan dokumentoverflow; detaljer och begränsningar i docs/app-type-scale-verification.md.",
+    ],
   },
   {
     title: "2026-10-20 – Kompaktare mobilkontroller och tidsrader",
-    items: ["Mobilöverblick (2026-10-20): mindre synliga knappytor med minst 44 px tryckytor på optade kompakta sidor, Kalender, Planera och dagstöd. Tätare tidsval och dagslistor; veckans tidslinje använder samma samlade skala för aktiviteter, timlinjer, NU och drag/flytt. Korta aktiviteter och stor text får extra visuellt utrymme utan ändrade klockslag eller antagna längder. Datorns skala och funktioner, data och utkast bevaras. Ingen publicering."],
+    items: [
+      "Mobilöverblick (2026-10-20): mindre synliga knappytor med minst 44 px tryckytor på optade kompakta sidor, Kalender, Planera och dagstöd. Tätare tidsval och dagslistor; veckans tidslinje använder samma samlade skala för aktiviteter, timlinjer, NU och drag/flytt. Korta aktiviteter och stor text får extra visuellt utrymme utan ändrade klockslag eller antagna längder. Datorns skala och funktioner, data och utkast bevaras. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Kompakt layout på återstående appdelar",
-    items: ["36 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering."],
+    items: [
+      "36 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 3",
-    items: ["Sidval och avstånd (2026-10-20): Planera och Mitt batteri återanvänder samma tillgängliga valstil. Tätare sektionsavstånd på Planera, Mitt batteri, Historik och Återhämtning; Historiks veckonavigering och Återhämtnings eget tidsfält staplas vid liten bredd/stor text. Befintliga flikar, utkast, handlingar och data bevaras. Pace och Mer orörda. Ingen publicering."],
+    items: [
+      "Sidval och avstånd (2026-10-20): Planera och Mitt batteri återanvänder samma tillgängliga valstil. Tätare sektionsavstånd på Planera, Mitt batteri, Historik och Återhämtning; Historiks veckonavigering och Återhämtnings eget tidsfält staplas vid liten bredd/stor text. Befintliga flikar, utkast, handlingar och data bevaras. Pace och Mer orörda. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 2",
-    items: ["Sidrubriker (2026-10-20): Min plats, Inställningar, Anteckningar, Pace-inställningar, Mitt batteri, Återhämtning, Profil, Planera, Påminnelser och Historik delar ett öppet rubrikblock med liten ikon, rubriklinje och befintlig undertext/handling. Planera får utrymme för sina befintliga två spalter på dator. Pace, Mer, flikar, data och funktioner oförändrade. Ingen publicering."],
+    items: [
+      "Sidrubriker (2026-10-20): Min plats, Inställningar, Anteckningar, Pace-inställningar, Mitt batteri, Återhämtning, Profil, Planera, Påminnelser och Historik delar ett öppet rubrikblock med liten ikon, rubriklinje och befintlig undertext/handling. Planera får utrymme för sina befintliga två spalter på dator. Pace, Mer, flikar, data och funktioner oförändrade. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 1",
-    items: ["Mobilens sidhuvud på en rad, Pace-kortet Härnäst bara på Idag/Hem, sidfoten bara i Inställningar/Översikt, läsbredd på list- och formulärsidor på datorn och rubriklinjen ligger under rubriken. Inga funktioner eller data ändrade."],
+    items: [
+      "Mobilens sidhuvud på en rad, Pace-kortet Härnäst bara på Idag/Hem, sidfoten bara i Inställningar/Översikt, läsbredd på list- och formulärsidor på datorn och rubriklinjen ligger under rubriken. Inga funktioner eller data ändrade.",
+    ],
   },
   {
     title: "2026-10-20 – Områdesfärger som bakgrund",
-    items: ["Idag, Kalender, Fånga, Min plats, Hem och Återhämtning har nu en dov bakgrundston i sitt områdes färg och en liten färgad linje under rubriken, nu mycket dovt med mjuk ljusbåge och diskreta ljusstrimmor. Övriga sidor behåller varm ivory, Pace sin bild. Inga funktioner eller data ändrade."],
+    items: [
+      "Idag, Kalender, Fånga, Min plats, Hem och Återhämtning har nu en dov bakgrundston i sitt områdes färg och en liten färgad linje under rubriken, nu mycket dovt med mjuk ljusbåge och diskreta ljusstrimmor. Övriga sidor behåller varm ivory, Pace sin bild. Inga funktioner eller data ändrade.",
+    ],
   },
   {
     title: "2026-10-20 – Pace-sidan på desktop",
-    items: ["Varm bakgrund fyller hela ytan, bilden tonar ut mjukt utan skarv, dubbel samtalshistorik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade."],
+    items: [
+      "Varm bakgrund fyller hela ytan, bilden tonar ut mjukt utan skarv, dubbel samtalshistorik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade.",
+    ],
   },
   {
     title: "2026-10-20 – Förberett nya mobilversioner",
-    items: ["Android 6.6 (versionskod 27) och iOS 1.4 (byggnummer 16) förberedda. Appidentiteter, ikoner, webbhost, signering och användardata bevarade. Signerade paket återstår via befintlig byggtjänst; butikernas senaste byggnummer är inte verifierade. Ingen publicering eller uppladdning."],
+    items: [
+      "Android 6.6 (versionskod 27) och iOS 1.4 (byggnummer 16) förberedda. Appidentiteter, ikoner, webbhost, signering och användardata bevarade. Signerade paket återstår via befintlig byggtjänst; butikernas senaste byggnummer är inte verifierade. Ingen publicering eller uppladdning.",
+    ],
   },
   {
     title: "2026-10-20 – Kalenderns äldre tester",
-    items: ["Uppdaterat äldre testval för Idag, veckans tidslinje, vald dags lista och barnregistrering till befintliga kontroller. Tidsrättningen kontrolleras fortsatt med rutin 08:30 och självvald tiominuterspaus. Ingen ändring av appfunktioner, data eller publicering."],
+    items: [
+      "Uppdaterat äldre testval för Idag, veckans tidslinje, vald dags lista och barnregistrering till befintliga kontroller. Tidsrättningen kontrolleras fortsatt med rutin 08:30 och självvald tiominuterspaus. Ingen ändring av appfunktioner, data eller publicering.",
+    ],
   },
   {
     title: "2026-10-20 – Rättat: egen tid gick inte att spara i kalendern",
-    items: ["Kontrollen av handinmatade tider var felaktig och godkände ingen tid alls: ”Spara bara idag” för en enstaka rutin var alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till. Ingen ändring av data, lagring, rutt eller något annat flöde. Ingen publicering."],
+    items: [
+      "Kontrollen av handinmatade tider var felaktig och godkände ingen tid alls: ”Spara bara idag” för en enstaka rutin var alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till. Ingen ändring av data, lagring, rutt eller något annat flöde. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-19 – Pace-sidan: finjusterad responsiv bakgrund",
-    items: ["Ny liggande desktopbakgrund med bibehållna proportioner; bilden fortsätter bakom historik, förslag och chatt och tonar mjukt ut mot sidans ivory utan synlig kant. På mobil ritas den stående bilden i naturlig proportion så alla tre stenar alltid syns med luft från högerkanten, med en diskret ljus toning bakom texten och gradvis lugnare kontrast nedåt. Verifierat på 360/390/430 px, surfplatta och desktop. Ingen ändring av data, chattlogik eller funktioner. Ej publicerat."],
+    items: [
+      "Ny liggande desktopbakgrund med bibehållna proportioner; bilden fortsätter bakom historik, förslag och chatt och tonar mjukt ut mot sidans ivory utan synlig kant. På mobil ritas den stående bilden i naturlig proportion så alla tre stenar alltid syns med luft från högerkanten, med en diskret ljus toning bakom texten och gradvis lugnare kontrast nedåt. Verifierat på 360/390/430 px, surfplatta och desktop. Ingen ändring av data, chattlogik eller funktioner. Ej publicerat.",
+    ],
   },
   {
     title: "2026-10-19 – Pace-sidan: riktiga bakgrundsbilder",
-    items: ["Pace-sidan (/assistant) visar nu de godkända fotobakgrunderna – stående på mobil, liggande på desktop – i stället för CSS-bakgrunden och de separata stenarna. Bakgrunden tonar ut mjukt nedåt, stenarna syns tydligt på olika skärmstorlekar, och dubbla tillbaka-knappar är borttagna. Chatt, planering och tidigare samtal fungerar som förut ovanpå bakgrunden. Ej publicerat."],
+    items: [
+      "Pace-sidan (/assistant) visar nu de godkända fotobakgrunderna – stående på mobil, liggande på desktop – i stället för CSS-bakgrunden och de separata stenarna. Bakgrunden tonar ut mjukt nedåt, stenarna syns tydligt på olika skärmstorlekar, och dubbla tillbaka-knappar är borttagna. Chatt, planering och tidigare samtal fungerar som förut ovanpå bakgrunden. Ej publicerat.",
+    ],
   },
   {
     title: "2026-10-19 – Säkerhet: låsta hjälpfunktioner och säkrare byggpaket",
-    items: ["Säkerhet (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterades till säkra versioner inom samma huvudversion; kvar är tolv mindre risker i mobilbyggets och dokumentexportens verktyg som kräver större uppgraderingar. Ingen data ändrad, ingen publicering."],
+    items: [
+      "Säkerhet (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterades till säkra versioner inom samma huvudversion; kvar är tolv mindre risker i mobilbyggets och dokumentexportens verktyg som kräver större uppgraderingar. Ingen data ändrad, ingen publicering.",
+    ],
   },
   {
     title: "2026-10-19 – Rättat krasch vid inloggning (Idag)",
-    items: ["App-layout (2026-10-19): återinfört saknad import av vykomponenten som fällde hela appen till felsidan direkt efter inloggning på publicerade sidan. Rättat även ett gammalt typfel i studiequizzen (kommenterad kodrad) som blockerade bygget. Verifierat inloggat i förhandsvisningen: Idag renderar utan fel. Ingen publicering."],
+    items: [
+      "App-layout (2026-10-19): återinfört saknad import av vykomponenten som fällde hela appen till felsidan direkt efter inloggning på publicerade sidan. Rättat även ett gammalt typfel i studiequizzen (kommenterad kodrad) som blockerade bygget. Verifierat inloggat i förhandsvisningen: Idag renderar utan fel. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-19 – Rättat byggfel i snabbregistreringen",
-    items: ["Snabbregistrering och kalender (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet och tagit bort en oanvänd kalenderdeklaration som refererade till en saknad typ. Automatisk byggkontroll godkänd. Befintliga tester för uppgifter/kalender/snabbregistrering har separata mock-/förväntningsfel och är inte godkända. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering."],
+    items: [
+      "Snabbregistrering och kalender (2026-10-19): stängt ett ofullständigt JSX-uttryck runt det valfria tidsfältet och tagit bort en oanvänd kalenderdeklaration som refererade till en saknad typ. Automatisk byggkontroll godkänd. Befintliga tester för uppgifter/kalender/snabbregistrering har separata mock-/förväntningsfel och är inte godkända. Befintligt beteende, sparning och användardata oförändrade. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-17 – UX-förbättring etapp 2: lugnare månadsvy",
-    items: ["Kalender → Månad: diskret månadssammanfattning med antal planerade aktiviteter, dagar med innehåll och dagar utan planering – ärligt, utan prognoser. Varje månadsruta visar antal aktiviteter som liten siffra bredvid områdesprickarna och i skärmläsartexten. Den valda dagens sektion under månadsrätten är en kompakt kronologisk lista enligt Idags princip, med klara poster dämpade. Kapacitet, områdesprickar, bildstöd, familjeraden, drag-och-släpp och övriga kontroller orörda. Ingen data-, lagrings- eller routsändring, ingen publicering."],
+    items: [
+      "Kalender → Månad: diskret månadssammanfattning med antal planerade aktiviteter, dagar med innehåll och dagar utan planering – ärligt, utan prognoser. Varje månadsruta visar antal aktiviteter som liten siffra bredvid områdesprickarna och i skärmläsartexten. Den valda dagens sektion under månadsrätten är en kompakt kronologisk lista enligt Idags princip, med klara poster dämpade. Kapacitet, områdesprickar, bildstöd, familjeraden, drag-och-släpp och övriga kontroller orörda. Ingen data-, lagrings- eller routsändring, ingen publicering.",
+    ],
   },
   {
     title: "2026-10-17 – UX-förbättring etapp 1",
-    items: ["Idag: kompakt planeringsrad med Idag/Imorgon/Veckan och Få ihop dagen; Barnens schema kvar som separat ingång. Dagens lista har frivilligt visningsfilter Alla/Viktigast/Med tid som bara påverkar visningen, aldrig data eller avbockning. Kalender → Vecka visar diskret sammanfattning per dag med antal aktiviteter och befintlig belastningsetikett; okänd belastning visas ärligt som Inte uppskattad. Kapacitet, Din dag, Pace, familjeperspektiv, WeeklyPulse, synk och barnens integritet bevaras. Ingen databasändring, ingen publicering."],
+    items: [
+      "Idag: kompakt planeringsrad med Idag/Imorgon/Veckan och Få ihop dagen; Barnens schema kvar som separat ingång. Dagens lista har frivilligt visningsfilter Alla/Viktigast/Med tid som bara påverkar visningen, aldrig data eller avbockning. Kalender → Vecka visar diskret sammanfattning per dag med antal aktiviteter och befintlig belastningsetikett; okänd belastning visas ärligt som Inte uppskattad. Kapacitet, Din dag, Pace, familjeperspektiv, WeeklyPulse, synk och barnens integritet bevaras. Ingen databasändring, ingen publicering.",
+    ],
   },
   {
     title: "2026-10-16 – Frivillig veckopuls i appen",
-    items: ["Tre fasta frågor på Idag, skala 1–5 utan förvalda svar. Inte nu pausar frågan för veckan. Svaren sparas först efter Skicka mina svar och kan ändras eller tas bort under aktuell vecka. Separat adminöversikt visar antal svar av startade veckopulser, fördelningar och medianer över åtta svenska kalenderveckor; admin/demo undantas och inga namn visas. Åtkomst och skrivningar är kontobundna, samtidiga ändringar skyddas och ingen koppling görs till anonym användningsstatistik. Databasmigration krävs före aktivering; ingen publicering eller produktionsinsamling ingår i utkastet."],
+    items: [
+      "Tre fasta frågor på Idag, skala 1–5 utan förvalda svar. Inte nu pausar frågan för veckan. Svaren sparas först efter Skicka mina svar och kan ändras eller tas bort under aktuell vecka. Separat adminöversikt visar antal svar av startade veckopulser, fördelningar och medianer över åtta svenska kalenderveckor; admin/demo undantas och inga namn visas. Åtkomst och skrivningar är kontobundna, samtidiga ändringar skyddas och ingen koppling görs till anonym användningsstatistik. Databasmigration krävs före aktivering; ingen publicering eller produktionsinsamling ingår i utkastet.",
+    ],
   },
   {
     title: "2026-10-16 – Fristående filmutkast v5",
-    items: ["Filmförfining (2026-10-16): separat 20-sekunders MP4 med svävande tankebubblor, kantvis förångning till färgmatchad rök, text efter absorption och lätt rörliga luftpartiklar. Redigerbar v5-källa sparad; v4 och det publicerade introt bevaras. Bildsekvenser och full avkodning kontrollerade; realtidsuppspelning och lyssning återstår. Röken är mjukare/molnigare än referensen, några inbakade partiklar är statiska och färdbanornas tidigare svävningsbidrag har justerats cirka 1–3 px. Granskningsutkast, ingen publicering eller funktionell appändring."],
+    items: [
+      "Filmförfining (2026-10-16): separat 20-sekunders MP4 med svävande tankebubblor, kantvis förångning till färgmatchad rök, text efter absorption och lätt rörliga luftpartiklar. Redigerbar v5-källa sparad; v4 och det publicerade introt bevaras. Bildsekvenser och full avkodning kontrollerade; realtidsuppspelning och lyssning återstår. Röken är mjukare/molnigare än referensen, några inbakade partiklar är statiska och färdbanornas tidigare svävningsbidrag har justerats cirka 1–3 px. Granskningsutkast, ingen publicering eller funktionell appändring.",
+    ],
   },
   {
     title: "2026-10-15 – Beslut som personlig papperssida",
-    items: ["Handskrivet redigerbart ämne, diskreta salvia-/aprikosrubriker och mjuka papperslinjer. Punktåtgärder samlas i Fler alternativ; viktighet och stjärna syns intill texten. Spalter anpassas efter läsbart utrymme och textstorlek. Sparanrop, versioner, kontogränser och övriga bokdelar bevaras. Ingen publicering."],
+    items: [
+      "Handskrivet redigerbart ämne, diskreta salvia-/aprikosrubriker och mjuka papperslinjer. Punktåtgärder samlas i Fler alternativ; viktighet och stjärna syns intill texten. Spalter anpassas efter läsbart utrymme och textstorlek. Sparanrop, versioner, kontogränser och övriga bokdelar bevaras. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-15 – Tankar som reflektionsbok",
-    items: ["Reflektionsbok (2026-10-15): Dagbok, Beslut, Tankekarta och Reflektioner har sammanhängande ingångar under befintliga Tankar/Fånga. Privat autosparning återanvänder kontolagring, kryptering och synk med separata återställbara textversioner och synlig hantering av samtidiga ändringar. Beslut har inlinepunkter, markeringar, spaltflytt och fokusläge; kartor har draggrepp, riktningar, zoom och listvy. Dagbokscitat kopieras med bekräftelse och stabil källänk utan att originalet ändras. Äldre Fånga/anteckningar bevaras. Inga nya paket, databasändringar, AI-anrop för boktext, familjedelning, native-versioner eller publicering."],
+    items: [
+      "Reflektionsbok (2026-10-15): Dagbok, Beslut, Tankekarta och Reflektioner har sammanhängande ingångar under befintliga Tankar/Fånga. Privat autosparning återanvänder kontolagring, kryptering och synk med separata återställbara textversioner och synlig hantering av samtidiga ändringar. Beslut har inlinepunkter, markeringar, spaltflytt och fokusläge; kartor har draggrepp, riktningar, zoom och listvy. Dagbokscitat kopieras med bekräftelse och stabil källänk utan att originalet ändras. Äldre Fånga/anteckningar bevaras. Inga nya paket, databasändringar, AI-anrop för boktext, familjedelning, native-versioner eller publicering.",
+    ],
   },
   {
     title: "2026-10-15 – Få ihop dagen på Idag",
-    items: ["En lugn knapp under Din dag öppnar valbara förslag som kan lösa tidskrockar mellan egna uppgifter när längder och luckor är kända. Den senaste loggade kapaciteten från Idag kan frivilligt ge förslag om ett mindre första steg vid låg ork; den blir aldrig en minutbudget eller en prognos. Planering fungerar utan incheckning. Byte till imorgon kräver ett eget val, visas utan bestämd tid och ändrar inget innan godkännande. Påminnelser, bokningar, barnens schema och kända deadlines skyddas. Registrerad förberedelse/restid och beroenden bevaras. Ändringar görs i befintliga kontobundna uppgifter; gammalt underlag och kontobyten stoppas. Inga nya aktiviteter, AI-anrop eller ändringar av kapacitet skapas av planeringen."],
+    items: [
+      "En lugn knapp under Din dag öppnar valbara förslag som kan lösa tidskrockar mellan egna uppgifter när längder och luckor är kända. Den senaste loggade kapaciteten från Idag kan frivilligt ge förslag om ett mindre första steg vid låg ork; den blir aldrig en minutbudget eller en prognos. Planering fungerar utan incheckning. Byte till imorgon kräver ett eget val, visas utan bestämd tid och ändrar inget innan godkännande. Påminnelser, bokningar, barnens schema och kända deadlines skyddas. Registrerad förberedelse/restid och beroenden bevaras. Ändringar görs i befintliga kontobundna uppgifter; gammalt underlag och kontobyten stoppas. Inga nya aktiviteter, AI-anrop eller ändringar av kapacitet skapas av planeringen.",
+    ],
   },
   {
     title: "2026-10-15 – Konkret pilotstatistik",
-    items: ["Admin och Appstatistik visar aktiva externa konton, ursprung per plattform, konkreta kärnhandlingar och återkommande användning med tydliga perioder och nämnare. Sidvisningar räknas inte som kärnanvändning och app-/webbläsar-ID skiljs från konton. Märkta interna ID undantas; okänd status och mätluckor förklaras. Upplevd avlastning och appens egen belastning följer testprotokollets frågor och visas som saknat underlag tills enkätsvar ansluts. Historik, granskning och export finns som fördjupning, med en kort aggregerad översikt att kopiera. Inga privata appinnehåll läses och ingen ny spårning eller enkätinsamling införs."],
+    items: [
+      "Admin och Appstatistik visar aktiva externa konton, ursprung per plattform, konkreta kärnhandlingar och återkommande användning med tydliga perioder och nämnare. Sidvisningar räknas inte som kärnanvändning och app-/webbläsar-ID skiljs från konton. Märkta interna ID undantas; okänd status och mätluckor förklaras. Upplevd avlastning och appens egen belastning följer testprotokollets frågor och visas som saknat underlag tills enkätsvar ansluts. Historik, granskning och export finns som fördjupning, med en kort aggregerad översikt att kopiera. Inga privata appinnehåll läses och ingen ny spårning eller enkätinsamling införs.",
+    ],
   },
   {
     title: "2026-10-15 – Aktiva konton i adminstatistiken",
-    items: ["Kontolistan, plattformsfördelningen och kontostatistiken visar aktiva senaste 30 dagarna som standard. Aktivitet betyder registrerad användning eller inloggning. Visa även inaktiva och Visa äldre aktivitet tar fram historik utan att ändra eller radera konton. Registreringsdiagram och exporter använder samma tydliga period. Saknade aktivitetsuppgifter visas som okända, inte som noll. Anonym webbläsarstatistik förblir separat."],
+    items: [
+      "Kontolistan, plattformsfördelningen och kontostatistiken visar aktiva senaste 30 dagarna som standard. Aktivitet betyder registrerad användning eller inloggning. Visa även inaktiva och Visa äldre aktivitet tar fram historik utan att ändra eller radera konton. Registreringsdiagram och exporter använder samma tydliga period. Saknade aktivitetsuppgifter visas som okända, inte som noll. Anonym webbläsarstatistik förblir separat.",
+    ],
   },
   {
     title: "2026-10-15 – Konton per registreringsplattform",
-    items: ["Användare & roller visar antal för iOS-appen, Androidappen, Webben och Okänd. Tryck på en plattform för att filtrera användarlistan. Plattformen sparas när ett nytt konto skapas; äldre konton utan uppgift visas som Okänd. Samma konto räknas en gång. Datumfilter och roller behålls och admin-/demokonton ingår i denna lista. Integritetstexten beskriver kontouppgiften. Ingen bakåtfyllning eller publicering."],
+    items: [
+      "Användare & roller visar antal för iOS-appen, Androidappen, Webben och Okänd. Tryck på en plattform för att filtrera användarlistan. Plattformen sparas när ett nytt konto skapas; äldre konton utan uppgift visas som Okänd. Samma konto räknas en gång. Datumfilter och roller behålls och admin-/demokonton ingår i denna lista. Integritetstexten beskriver kontouppgiften. Ingen bakåtfyllning eller publicering.",
+    ],
   },
   {
     title: "2026-10-15 – Dubbletter i barnens dag",
-    items: ["Identiska tidsatta hållpunkter visas en gång per barn, med rätt Nu/Nästa. Originalposter, privata anteckningar och familjekopplingar bevaras. En uttrycklig tids- eller kopplingsändring gäller alla versioner av samma visade aktivitet. Kopiering och dagsmallar hoppar över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering."],
+    items: [
+      "Identiska tidsatta hållpunkter visas en gång per barn, med rätt Nu/Nästa. Originalposter, privata anteckningar och familjekopplingar bevaras. En uttrycklig tids- eller kopplingsändring gäller alla versioner av samma visade aktivitet. Kopiering och dagsmallar hoppar över återkommande aktiviteter som redan gäller på måldagen. Ingen automatisk radering och ingen publicering.",
+    ],
   },
   {
     title: "2026-10-14 – Min dag och barnens schema",
-    items: ["Min dag visar dina egna aktiviteter. Barnens schema visas under respektive barn och i Familj, även när en barnhändelse kräver dig. Dina egna familjeuppgifter och deras kopplingar finns kvar. Samma visningsfilter används på Idag och Family Flow."],
+    items: [
+      "Min dag visar dina egna aktiviteter. Barnens schema visas under respektive barn och i Familj, även när en barnhändelse kräver dig. Dina egna familjeuppgifter och deras kopplingar finns kvar. Samma visningsfilter används på Idag och Family Flow.",
+    ],
   },
   {
     title: "2026-10-14 – Offentlig introduktionsfilm",
-    items: ["Introduktionsfilm (2026-10-14): den färdiga svenska Paceable-filmen på 54 sekunder används som beständig projektasset i startsidans videodialog. Äldre MyFlove-sources och fallback används inte; knapptexten visar ca 54 sek. Dialog och övrig app oförändrade. Ingen publicering."],
+    items: [
+      "Introduktionsfilm (2026-10-14): den färdiga svenska Paceable-filmen på 54 sekunder används som beständig projektasset i startsidans videodialog. Äldre MyFlove-sources och fallback används inte; knapptexten visar ca 54 sek. Dialog och övrig app oförändrade. Ingen publicering.",
+    ],
   },
   {
     title: "2026-10-13 – Harmoniska pitchdeck",
-    items: ["Harmoniska pitchdeck (2026-10-13): svenska och engelska redigerbara 16:9-presentationer med 16 slides vardera, PDF och bildöversikter. Kombinerar uppladdad pappers-/pastelldesign med aktuell produktberättelse och enbart demobilder; pris, pilot och budget är tydligt märkta hypoteser. Ingen appfunktion, kontodata eller publicering ändrad."],
+    items: [
+      "Harmoniska pitchdeck (2026-10-13): svenska och engelska redigerbara 16:9-presentationer med 16 slides vardera, PDF och bildöversikter. Kombinerar uppladdad pappers-/pastelldesign med aktuell produktberättelse och enbart demobilder; pris, pilot och budget är tydligt märkta hypoteser. Ingen appfunktion, kontodata eller publicering ändrad.",
+    ],
   },
   {
     title: "2026-10-12 – Energi, historik och en sammanhängande app",
@@ -162,26 +230,78 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
 
-  { title: "Insikter – endast etapp 2B", items: ["Insikter (2026-10-10): separat navigeringsrad, Fraunces-rubrik och Inter-undertitel med befintlig Paceable-listbredd och semantiska teman. Sidmetadata heter Insikter · Paceable. Navigation, data och diagramlogik bevarade; ingen publicering eller etapp 2C/2D."] },
-  { title: "Paceable designsystem – etapp 1", items: ["Designreferens (2026-10-10): semantiska HSL-variabler för Paceables befintliga #512654, sidmarginaler, innehållsbredder, kort, informationsblock, kontroller, formulär, dialoger och typografi. Allt är explicit opt-in och påverkar inte befintliga vyer. Fyra kända mobilproblem dokumenterade för senare avgränsade etapper; ingen publicering."] },
-  { title: "Appnamn Paceable", items: ["Appnamn (2026-10-10): synligt appnamn ändrat från MyFlove till Paceable på Android och iOS. Appen använder fortfarande www.myflove.se internt tills lokal data migrerats säkert. Paket-ID, Bundle ID, lagring, kryptering, inloggning och synk oförändrade. Inga byggen skapade."] },
-  { title: "Appikoner för iPhone och Android", items: ["Appikoner (2026-10-09): native-projektens ikoner ersatta med godkända Paceable-ikoner. Paket-ID, appnamn och funktioner oförändrade; nytt appbygge krävs."] },
-  { title: "Rutiner, Påminnelser och Inköp", items: ["Vardagsverktyg (2026-10-09): Rutiner, Påminnelser och Inköp får samma kompakta knappar, val och rubriker som Mitt batteri och Återhämtning, med minst 44 px tryckyta. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ingen publicering."] },
-  { title: "Hälsa & välmående", items: ["Hälsa & välmående (2026-10-09): Mitt batteri, Återhämtning, Mående och Energikarta får samma lugna plommonrubriker och kortkanter som Min plats. Pausval, Starta, energinivåer och måendeval kompaktare med minst 44 px tryckyta. Data, loggar, paus och diagram oförändrade. Ingen publicering."] },
-  { title: "Kalender, Fånga och Min plats", items: ["Kalender, Fånga och Min plats (2026-10-09): utvalda kontroller får kompaktare visuella ytor inom separerade 44 px tryckytor och lokal mörklila plommonton. Ingångskort behåller beskrivningar och områdesfärger. Idag, Mer, kalendergeometri, dialoghandlingar, data och originalassets bevaras. Ingen publicering."] },
-  { title: "Idag – sidhuvud", items: ["Idag, sidhuvud (2026-10-09): befintlig mobil-logotyp vänsterställd i 220 px bredd utan dubblering, mindre Fraunces-hälsning med datum och tillgänglig namnmeny i sidflödet. Extra dekorativa stenar bredvid hälsningen visas inte längre på Idag; original och övriga användningar bevaras. Knappar, personval, kapacitet, aktiviteter och data oförändrade. Ingen publicering."] },
-  { title: "Maskotbild", items: ["2026-10-09: gemensam lila maskotbild och tomma bildutrymmen borttagna, med texter, samtalsknappar, status och handlingar bevarade. Originalassets, sparade val, logotyper och stenar orörda. Rumsbilder i Anpassa/Min samling pausade eftersom maskoten ingår i hela scenen och hälsningsytan; ingen publicering."] },
+  {
+    title: "Insikter – endast etapp 2B",
+    items: [
+      "Insikter (2026-10-10): separat navigeringsrad, Fraunces-rubrik och Inter-undertitel med befintlig Paceable-listbredd och semantiska teman. Sidmetadata heter Insikter · Paceable. Navigation, data och diagramlogik bevarade; ingen publicering eller etapp 2C/2D.",
+    ],
+  },
+  {
+    title: "Paceable designsystem – etapp 1",
+    items: [
+      "Designreferens (2026-10-10): semantiska HSL-variabler för Paceables befintliga #512654, sidmarginaler, innehållsbredder, kort, informationsblock, kontroller, formulär, dialoger och typografi. Allt är explicit opt-in och påverkar inte befintliga vyer. Fyra kända mobilproblem dokumenterade för senare avgränsade etapper; ingen publicering.",
+    ],
+  },
+  {
+    title: "Appnamn Paceable",
+    items: [
+      "Appnamn (2026-10-10): synligt appnamn ändrat från MyFlove till Paceable på Android och iOS. Appen använder fortfarande www.myflove.se internt tills lokal data migrerats säkert. Paket-ID, Bundle ID, lagring, kryptering, inloggning och synk oförändrade. Inga byggen skapade.",
+    ],
+  },
+  {
+    title: "Appikoner för iPhone och Android",
+    items: [
+      "Appikoner (2026-10-09): native-projektens ikoner ersatta med godkända Paceable-ikoner. Paket-ID, appnamn och funktioner oförändrade; nytt appbygge krävs.",
+    ],
+  },
+  {
+    title: "Rutiner, Påminnelser och Inköp",
+    items: [
+      "Vardagsverktyg (2026-10-09): Rutiner, Påminnelser och Inköp får samma kompakta knappar, val och rubriker som Mitt batteri och Återhämtning, med minst 44 px tryckyta. Dialoger, listor, sparning, delning och påminnelser oförändrade. Ingen publicering.",
+    ],
+  },
+  {
+    title: "Hälsa & välmående",
+    items: [
+      "Hälsa & välmående (2026-10-09): Mitt batteri, Återhämtning, Mående och Energikarta får samma lugna plommonrubriker och kortkanter som Min plats. Pausval, Starta, energinivåer och måendeval kompaktare med minst 44 px tryckyta. Data, loggar, paus och diagram oförändrade. Ingen publicering.",
+    ],
+  },
+  {
+    title: "Kalender, Fånga och Min plats",
+    items: [
+      "Kalender, Fånga och Min plats (2026-10-09): utvalda kontroller får kompaktare visuella ytor inom separerade 44 px tryckytor och lokal mörklila plommonton. Ingångskort behåller beskrivningar och områdesfärger. Idag, Mer, kalendergeometri, dialoghandlingar, data och originalassets bevaras. Ingen publicering.",
+    ],
+  },
+  {
+    title: "Idag – sidhuvud",
+    items: [
+      "Idag, sidhuvud (2026-10-09): befintlig mobil-logotyp vänsterställd i 220 px bredd utan dubblering, mindre Fraunces-hälsning med datum och tillgänglig namnmeny i sidflödet. Extra dekorativa stenar bredvid hälsningen visas inte längre på Idag; original och övriga användningar bevaras. Knappar, personval, kapacitet, aktiviteter och data oförändrade. Ingen publicering.",
+    ],
+  },
+  {
+    title: "Maskotbild",
+    items: [
+      "2026-10-09: gemensam lila maskotbild och tomma bildutrymmen borttagna, med texter, samtalsknappar, status och handlingar bevarade. Originalassets, sparade val, logotyper och stenar orörda. Rumsbilder i Anpassa/Min samling pausade eftersom maskoten ingår i hela scenen och hälsningsytan; ingen publicering.",
+    ],
+  },
   {
     title: "Pace – stegvis anpassning",
-    items: ["Konto/inställningar (2026-10-09): Inställningar och Pace-inställningar delar befintliga Pace-block, knappar och tidsfält; oinramad orienterande rubrik, funktionell Inter och större klickytor. Värden, handlingar och sparning bevaras. Profil/barn och Mer orörda; ingen publicering.", "Sidrubriker (2026-10-09): Inställningar, Anpassa appen, Anteckningar och Relationer använder gemensam orienterande rubrik utan ändrade formulär. Huvudmenyn och hela Mer-vyn behålls. Ingen publicering; återstående sidor/formulär följer i små etapper."],
+    items: [
+      "Konto/inställningar (2026-10-09): Inställningar och Pace-inställningar delar befintliga Pace-block, knappar och tidsfält; oinramad orienterande rubrik, funktionell Inter och större klickytor. Värden, handlingar och sparning bevaras. Profil/barn och Mer orörda; ingen publicering.",
+      "Sidrubriker (2026-10-09): Inställningar, Anpassa appen, Anteckningar och Relationer använder gemensam orienterande rubrik utan ändrade formulär. Huvudmenyn och hela Mer-vyn behålls. Ingen publicering; återstående sidor/formulär följer i små etapper.",
+    ],
   },
   {
     title: "Pace-designsystem",
-    items: ["Designsystem (2026-10-09): återanvändbara opt-in-mönster för sidor och formulär, fristående referens på /designsystem och dokumenterad konverteringsguide. Piloten behåller befintlig funktion och sparning. 537 tester godkända; ingen publicering. Alla sidor är inte konverterade; fysisk mobil och skärmläsare är inte verifierade."],
+    items: [
+      "Designsystem (2026-10-09): återanvändbara opt-in-mönster för sidor och formulär, fristående referens på /designsystem och dokumenterad konverteringsguide. Piloten behåller befintlig funktion och sparning. 537 tester godkända; ingen publicering. Alla sidor är inte konverterade; fysisk mobil och skärmläsare är inte verifierade.",
+    ],
   },
   {
     title: "Formulär",
-    items: ["Formulär (2026-10-09): Logga just nu, Anpassa, aviseringskort och rutinformulär har lokal Paceable-presentation och flexibel radbrytning. Sparning, data och funktioner bevaras. 532 tester godkända; ingen publicering. Alla dolda formulär är ännu inte slutverifierade."],
+    items: [
+      "Formulär (2026-10-09): Logga just nu, Anpassa, aviseringskort och rutinformulär har lokal Paceable-presentation och flexibel radbrytning. Sparning, data och funktioner bevaras. 532 tester godkända; ingen publicering. Alla dolda formulär är ännu inte slutverifierade.",
+    ],
   },
   {
     title: "Navigation",
@@ -236,86 +356,86 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Landningssidan: svensk/engelsk språkväxling och ny slogan 'your flow, with love' (2026-10-05)",
       "Familj: barnets eget konto ser sin kalender direkt, aldrig förälderns privata uppgifter om barnet (2026-10-05)",
       "Familj/Dela: välj hela familjen eller utvalda personer för listor och barnsaker (2026-10-05)",
-      "Familj: kopplat konto behåller egna verktyg; uttryckligt delade poster visas under \"Delat med dig\" (2026-10-05)",
+      'Familj: kopplat konto behåller egna verktyg; uttryckligt delade poster visas under "Delat med dig" (2026-10-05)',
       "Flow i chatten: lägg till, ändra och ta bort uppgifter efter ditt godkännande; snyggare text; QuickFlow i nedre raden (2026-10-04)",
-    "Mobilappar: säkerhetskopia per konto, tydlig kalenderkoppling och behörigheter för mikrofon/kamera/plats (iPhone 1.1, Android 6.3) (2026-10-04)",
-    "Ljud: inget pip längre när iPhone-appen öppnas – tyst upplåsning utan larmsignalen (2026-10-04)",
-    "Ljud: inget larmljud längre vid första trycket i appen på iPhone; Morgonstartens klang bara om Morgonstart är påslagen (2026-10-04)",
-    "Notiser: den som delar en barnaktivitet väljer själv vilka mottagare som får notiser om den – båda sidor måste säga ja (2026-10-04)",
-    "Notiser: kvällshälsningen avstängd, alla skickade notiser loggas och du väljer vems delade familjesaker du får notiser om (2026-10-04)",
-    "Notiser: barnpåminnelser avstängda som standard och aldrig för delade barn (2026-10-04)",
-    "Notiser: bara larm och påminnelser du själv bett om – inga automatiska puffar, väder eller hälsningar (2026-10-04)",
-    "Ljud: Morgonstartens klang respekterar avstängt/tyst larm (2026-10-04)",
-    "Notiser: tomma konton får inte längre Flows fråga om orken (2026-10-04)",
-    "Notiser: aktiviteter med klockslag låter inte längre med larmljud om du inte själv valt påminnelse (2026-10-04)",
-    "Appversioner: Android 6.4 (versionCode 23) och iOS 1.2 (build 13) med Paceable-ikoner (2026-10-09)",
-    "Android: appikonen matchar den bifogade MyFlove-ikonen; App Bundle 6.2 (versionCode 21) för Google Play (2026-10-04)",
-    "iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen (2026-10-03)",
-    "Mobilprojektet: Capacitor-appen använder nu app-ID \"se.myflove.app\" (matchar Apple Developer) och iOS-mappen är förberedd; Android bygger fortfarande med \"app.myflove.mobile\" (2026-10-03)",
-    "Imorgon med Flow – kvällens förberedelse av det vi redan vet, utan energiprognos; ny morgoncheck sätter dagens läge (2026-10-02)",
-    "Min Flow är tillfälligt borttagen – Flow-fliken öppnar chatten direkt; sparade val och minnen ligger kvar (2026-10-02)",
-    "Min Flow: den godkända Flow-figuren visas i fåtöljen; tidigare figurvariant och missanpassade tillbehör döljs utan att sparade val raderas. Poseanpassade resurser återstår (2026-10-02)",
-    "Flow i rummet är helt täckande även när han går, med mjuka kanter, verklig skugga och ljus som följer rummet (2026-10-02)",
-    "Min Flow: rummet följer dag, kväll och natt; Flow kan utforska fyra platser och vila i pyjamas på natten. En bottenpanel för kläder, accessoarer och rumsdetaljer visar ändringar innan de sparas (2026-10-02)",
-    "Flow bor nu i rummet: sitter i fåtöljen, tar en kort promenad på mattan, dricker te eller myser med filt; uppladdad GIF och stillhetsval används (2026-10-02)",
-    "Min Flow: ett tryggt rum, befintlig chatt, frivilliga minnen, tre rumsteman som kan väljas i samlingen och valfri rörelse; chatten prioriterar samtalet på mobil och QuickFlow ligger kvar separat (2026-10-02)",
-    "Äldre data utan konto kan nu läggas till i ditt konto (eller tas bort) via en fråga överst, och osynkade ändringar från en offline-utloggning kommer alltid tillbaka vid ny inloggning (2026-10-02)",
-    "Säkerhet och synk: lokal data hålls isär per konto, osynkade ändringar sparas för rätt konto vid utloggning, synken slår ihop ändringar från flera enheter utan att borttagna poster återkommer, känsliga uppgifter skrivs aldrig okrypterat, diskret synkstatus, och Återhämtning nås från Hem även i lågt läge (2026-10-02)",
-    "Kalenderimport: PDF:er läses nu som text och Flows svar tolkas även som ren lista – importerade händelser hittas igen (2026-10-02)",
-    "AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini (2026-10-02)",
-    "Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup (2026-10-02)",
-    "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",
-    "Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet (2026-10-02)",
-    "Popup-fönster överallt: alla \"Lägg till\"- och \"Ändra\"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Energi, Profil med flera (2026-10-02)",
-    "Android: App Bundle 6.0 (versionCode 19) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
-    "Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
-    "Barnschema: lägga till/ändra aktivitet öppnas i popup-fönster (2026-10-02)",
-    "Navigering: varje sida öppnas längst upp (2026-10-02)",
-    "Kalender: aktiviteter hamnar inte längre felaktigt i Vård på grund av ord som \"test\" (2026-10-02)",
-    "Barnschema: borttagning av en återkommande aktivitet från en dag behåller tidigare dagar (2026-10-02)",
-    "Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-01)",
-    "Landningssidans äldre film har ersatts av en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval och dagens plan (2026-10-01)",
-    "Landningssidan: ny knapp \"Se allt som finns i appen\" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)",
-    "Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – helt lokalt, inget sparas och inget konto behövs (2026-10-01)",
-    "Landningssidans exempelvy är större och luftigare på mobil med tydligare hälsning, energi, mående, uppgifter och inspiration; exemplen är fortsatt fristående från kontodata (2026-10-01)",
-    "QuickFlow: text med datum eller tid (\"tvätta fredag 10-14\", \"12 oktober kl 14\") ger ett direkt förslag att lägga det i kalendern på rätt dag och tid (2026-10-01)",
-    "QuickFlow: egen knapp för PDF/dokument direkt på importkortet – möten och deadlines hittas som i bilder (2026-10-01)",
-    "Kalender: möten med Zoom/Teams/Meet-länk får en klickbar Anslut-knapp direkt i dagsvyn (2026-10-01)",
-    "QuickFlow: Importera från bild/PDF – Flow hittar kalenderhändelser, du granskar och godkänner; osäkra datum och dubbletter markeras, möteslänkar blir klickbara (2026-10-01)",
-    "Landningssidan har varm krämvit bakgrund, liggande exempelvy, tre funktionskort och en spelbar introduktionsfilm (2026-10-01)",
-    "Startsidan visar nu MyFloves dagsvy, tre tydliga kärnfördelar och enkla vägar till inloggning och registrering (2026-10-01)",
-    "Ta bort: dolda kopior med samma namn och tid (t.ex. en oavslutad från en tidigare dag) tas bort tillsammans med raden (2026-10-01)",
-    "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",
-    "Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla kopia, så gamla påminnelser slutar dyka upp (2026-09-30)",
-    "Android: App Bundle 5.6 (versionCode 15) med uppdaterat versionsnummer; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-09-30)",
-    "Barn/Familje Flow: kompakta barnkort med Schema och Hjälp, ⋯-meny för profiländringar och barnspecifik profil med stödchips och sparade övningar. Båda ingångarna öppnar samma visuella schema; gamla detaljer finns kvar bakom profilen (2026-09-30)",
-    "Typografi: egna aktivitetsnamn och kalenderposter visas i upprätt Caveat i dagvy, veckovy, uppgiftslista och på Hem; tider och kontroller behåller standardtypsnitt (2026-09-30)",
-    "Typografi: Caveat används sparsamt för hälsningen på Hem och Flows välkomstfråga, utan kursiv stil eller ändring av övrig text (2026-09-30)",
-    "Hem: rutan \"Lägg till på hemskärmen\" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen (2026-09-30)",
-    "Dator: Träning i sidomenyn öppnar nu sidan direkt även om sidbytet fastnat i den öppna fliken (2026-09-30)",
-    "Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild (2026-09-30)",
-    "Hem: batterirutan \"Hur är läget idag?\" har stora färgkodade val där vald nivå lyser tydligt, och \"Just nu\"-kortet har markant etikett och violett accentlinje så dagens viktigaste uppgift syns direkt (2026-09-30)",
-    "Hem: de fyra genvägarna (Kalender, Mitt batteri, Prata med Flow, QuickFlow) ligger nu längst upp, direkt under hälsningen (2026-09-28)",
-    "Lägg till: bekräftelse visas när en händelse med klockslag sparas, t.ex. \"Sparad idag kl 17:30\" (2026-09-28)",
-    "Admin \"Aktiva användare\": visar även konton som använt appen i inloggat läge senaste dygnet/7/30 dagarna – bara tidpunkt sparas (2026-09-28)",
-      "Admin \"Hur går MyFlove?\": ny ruta \"Aktiva användare\" – inloggade senaste 7/30 dagarna och obekräftade e-postadresser (2026-09-28)",
+      "Mobilappar: säkerhetskopia per konto, tydlig kalenderkoppling och behörigheter för mikrofon/kamera/plats (iPhone 1.1, Android 6.3) (2026-10-04)",
+      "Ljud: inget pip längre när iPhone-appen öppnas – tyst upplåsning utan larmsignalen (2026-10-04)",
+      "Ljud: inget larmljud längre vid första trycket i appen på iPhone; Morgonstartens klang bara om Morgonstart är påslagen (2026-10-04)",
+      "Notiser: den som delar en barnaktivitet väljer själv vilka mottagare som får notiser om den – båda sidor måste säga ja (2026-10-04)",
+      "Notiser: kvällshälsningen avstängd, alla skickade notiser loggas och du väljer vems delade familjesaker du får notiser om (2026-10-04)",
+      "Notiser: barnpåminnelser avstängda som standard och aldrig för delade barn (2026-10-04)",
+      "Notiser: bara larm och påminnelser du själv bett om – inga automatiska puffar, väder eller hälsningar (2026-10-04)",
+      "Ljud: Morgonstartens klang respekterar avstängt/tyst larm (2026-10-04)",
+      "Notiser: tomma konton får inte längre Flows fråga om orken (2026-10-04)",
+      "Notiser: aktiviteter med klockslag låter inte längre med larmljud om du inte själv valt påminnelse (2026-10-04)",
+      "Appversioner: Android 6.4 (versionCode 23) och iOS 1.2 (build 13) med Paceable-ikoner (2026-10-09)",
+      "Android: appikonen matchar den bifogade MyFlove-ikonen; App Bundle 6.2 (versionCode 21) för Google Play (2026-10-04)",
+      "iOS: AppIcon-bilden har bytts till den bifogade MyFlove-ikonen för TestFlight och hemskärmen (2026-10-03)",
+      'Mobilprojektet: Capacitor-appen använder nu app-ID "se.myflove.app" (matchar Apple Developer) och iOS-mappen är förberedd; Android bygger fortfarande med "app.myflove.mobile" (2026-10-03)',
+      "Imorgon med Flow – kvällens förberedelse av det vi redan vet, utan energiprognos; ny morgoncheck sätter dagens läge (2026-10-02)",
+      "Min Flow är tillfälligt borttagen – Flow-fliken öppnar chatten direkt; sparade val och minnen ligger kvar (2026-10-02)",
+      "Min Flow: den godkända Flow-figuren visas i fåtöljen; tidigare figurvariant och missanpassade tillbehör döljs utan att sparade val raderas. Poseanpassade resurser återstår (2026-10-02)",
+      "Flow i rummet är helt täckande även när han går, med mjuka kanter, verklig skugga och ljus som följer rummet (2026-10-02)",
+      "Min Flow: rummet följer dag, kväll och natt; Flow kan utforska fyra platser och vila i pyjamas på natten. En bottenpanel för kläder, accessoarer och rumsdetaljer visar ändringar innan de sparas (2026-10-02)",
+      "Flow bor nu i rummet: sitter i fåtöljen, tar en kort promenad på mattan, dricker te eller myser med filt; uppladdad GIF och stillhetsval används (2026-10-02)",
+      "Min Flow: ett tryggt rum, befintlig chatt, frivilliga minnen, tre rumsteman som kan väljas i samlingen och valfri rörelse; chatten prioriterar samtalet på mobil och QuickFlow ligger kvar separat (2026-10-02)",
+      "Äldre data utan konto kan nu läggas till i ditt konto (eller tas bort) via en fråga överst, och osynkade ändringar från en offline-utloggning kommer alltid tillbaka vid ny inloggning (2026-10-02)",
+      "Säkerhet och synk: lokal data hålls isär per konto, osynkade ändringar sparas för rätt konto vid utloggning, synken slår ihop ändringar från flera enheter utan att borttagna poster återkommer, känsliga uppgifter skrivs aldrig okrypterat, diskret synkstatus, och Återhämtning nås från Hem även i lågt läge (2026-10-02)",
+      "Kalenderimport: PDF:er läses nu som text och Flows svar tolkas även som ren lista – importerade händelser hittas igen (2026-10-02)",
+      "AI: hela appens Flow-AI använder nu Google Gemini via Lovable AI – även träningsskaparen och kalenderimporten byter till Gemini (2026-10-02)",
+      "Popup-fönster på mobil: innehållet trycks inte längre utanför kanten – pictogram visas tre i bredd, start- och sluttid ligger bredvid varandra, och Flytta/Kopiera i barnschemat öppnas också som popup (2026-10-02)",
+      "Telefonappen: uppgifter och annan data sparas nu även i telefonens egen lagring och återställs automatiskt om en ny version skulle rensa den (2026-10-02)",
+      "Genomgång av appen: dubbla menyval borttagna (Chatta med Flow, Morgonstart), Översikt heter nu Hem, Min dag heter Idag överallt, emojis i menyn ersatta och färger enhetliga med designsystemet (2026-10-02)",
+      'Popup-fönster överallt: alla "Lägg till"- och "Ändra"-formulär öppnas nu mitt på skärmen som popup – Relationer, Ekonomi, Jobb, Påminnelser, Rutiner, Städning, Inköp, Medicin, Studier, Energi, Profil med flera (2026-10-02)',
+      "Android: App Bundle 6.0 (versionCode 19) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
+      "Android: App Bundle 5.9 (versionCode 18) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-02)",
+      "Barnschema: lägga till/ändra aktivitet öppnas i popup-fönster (2026-10-02)",
+      "Navigering: varje sida öppnas längst upp (2026-10-02)",
+      'Kalender: aktiviteter hamnar inte längre felaktigt i Vård på grund av ord som "test" (2026-10-02)',
+      "Barnschema: borttagning av en återkommande aktivitet från en dag behåller tidigare dagar (2026-10-02)",
+      "Android: App Bundle 5.8 (versionCode 17) byggd; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-10-01)",
+      "Landningssidans äldre film har ersatts av en nyare svensk 24-sekunders introduktion med QuickFlow, kapacitetsval och dagens plan (2026-10-01)",
+      'Landningssidan: ny knapp "Se allt som finns i appen" öppnar en förhandsvisning av hela sidomenyn grupperad per område – helt lokalt, inget konto behövs (2026-10-01)',
+      "Landningssidan: de tre funktionskorten (QuickFlow, Planering utifrån energi, Ett steg i taget) öppnar nu små prova-på-demoer direkt på sidan – helt lokalt, inget sparas och inget konto behövs (2026-10-01)",
+      "Landningssidans exempelvy är större och luftigare på mobil med tydligare hälsning, energi, mående, uppgifter och inspiration; exemplen är fortsatt fristående från kontodata (2026-10-01)",
+      'QuickFlow: text med datum eller tid ("tvätta fredag 10-14", "12 oktober kl 14") ger ett direkt förslag att lägga det i kalendern på rätt dag och tid (2026-10-01)',
+      "QuickFlow: egen knapp för PDF/dokument direkt på importkortet – möten och deadlines hittas som i bilder (2026-10-01)",
+      "Kalender: möten med Zoom/Teams/Meet-länk får en klickbar Anslut-knapp direkt i dagsvyn (2026-10-01)",
+      "QuickFlow: Importera från bild/PDF – Flow hittar kalenderhändelser, du granskar och godkänner; osäkra datum och dubbletter markeras, möteslänkar blir klickbara (2026-10-01)",
+      "Landningssidan har varm krämvit bakgrund, liggande exempelvy, tre funktionskort och en spelbar introduktionsfilm (2026-10-01)",
+      "Startsidan visar nu MyFloves dagsvy, tre tydliga kärnfördelar och enkla vägar till inloggning och registrering (2026-10-01)",
+      "Ta bort: dolda kopior med samma namn och tid (t.ex. en oavslutad från en tidigare dag) tas bort tillsammans med raden (2026-10-01)",
+      "Ta bort/ändra: aktiviteter som tas bort sparas nu direkt och kommer inte tillbaka (2026-10-01)",
+      "Medicin: borttagna mediciner återuppstår inte längre från en annan enhets gamla kopia, så gamla påminnelser slutar dyka upp (2026-09-30)",
+      "Android: App Bundle 5.6 (versionCode 15) med uppdaterat versionsnummer; behöver signeras med befintlig uppladdningsnyckel före Google Play (2026-09-30)",
+      "Barn/Familje Flow: kompakta barnkort med Schema och Hjälp, ⋯-meny för profiländringar och barnspecifik profil med stödchips och sparade övningar. Båda ingångarna öppnar samma visuella schema; gamla detaljer finns kvar bakom profilen (2026-09-30)",
+      "Typografi: egna aktivitetsnamn och kalenderposter visas i upprätt Caveat i dagvy, veckovy, uppgiftslista och på Hem; tider och kontroller behåller standardtypsnitt (2026-09-30)",
+      "Typografi: Caveat används sparsamt för hälsningen på Hem och Flows välkomstfråga, utan kursiv stil eller ändring av övrig text (2026-09-30)",
+      'Hem: rutan "Lägg till på hemskärmen" ligger nu allra längst ner på sidan, efter guiden och Anpassa hemskärmen (2026-09-30)',
+      "Dator: Träning i sidomenyn öppnar nu sidan direkt även om sidbytet fastnat i den öppna fliken (2026-09-30)",
+      "Träning: passet följer nu vald tid, har färre pauser (ingen vila i uppvärmning/nedvarvning eller mellan övningar) och korta instruktioner ovanför varje bild (2026-09-30)",
+      'Hem: batterirutan "Hur är läget idag?" har stora färgkodade val där vald nivå lyser tydligt, och "Just nu"-kortet har markant etikett och violett accentlinje så dagens viktigaste uppgift syns direkt (2026-09-30)',
+      "Hem: de fyra genvägarna (Kalender, Mitt batteri, Prata med Flow, QuickFlow) ligger nu längst upp, direkt under hälsningen (2026-09-28)",
+      'Lägg till: bekräftelse visas när en händelse med klockslag sparas, t.ex. "Sparad idag kl 17:30" (2026-09-28)',
+      'Admin "Aktiva användare": visar även konton som använt appen i inloggat läge senaste dygnet/7/30 dagarna – bara tidpunkt sparas (2026-09-28)',
+      'Admin "Hur går MyFlove?": ny ruta "Aktiva användare" – inloggade senaste 7/30 dagarna och obekräftade e-postadresser (2026-09-28)',
       "Uppgifter med klockslag som blev sena följer nu med in i Idag/Min dag tills de blir gjorda – en missad tid gör saken sen, inte borttappad. Riktiga möten bor i kalendern (2026-09-28)",
-      "Kalender och Idag: \"Kopiera dagen\" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)",
+      'Kalender och Idag: "Kopiera dagen" – kopiera en dags uppgifter och påminnelser till en eller flera dagar, med dubblettskydd (2026-09-28)',
       "UX-förenkling 1.0: ett tydligt första steg på Hem, Hälsa, Flow, Min dag, Återhämtning, Studier, Familj/Barn och Inställningar; mer innehåll bakom klick. Batteriets Varför? förklarar skillnaden mellan uppskattad energi och ditt kapacitetsval (2026-09-27)",
-      "Flow: prata in i stället för att skriva – \"Prata\"-knappen i chattrutan spelar in din röst och skriver ut det du sa i textrutan (2026-09-27)",
+      'Flow: prata in i stället för att skriva – "Prata"-knappen i chattrutan spelar in din röst och skriver ut det du sa i textrutan (2026-09-27)',
       "Flow har fått röst – en högtalarknapp vid varje svar läser upp det med en mjuk, varm och tydlig röst; tryck igen för att stoppa, inget spelas automatiskt (2026-09-27)",
-      "Mitt batteri och \"Hur mår du?\" sammanslagna – en enda incheckningsplats; Hem har ett enda \"Hur är läget idag?\"-kort som loggar kapacitet och ork direkt (2026-09-27)",
+      'Mitt batteri och "Hur mår du?" sammanslagna – en enda incheckningsplats; Hem har ett enda "Hur är läget idag?"-kort som loggar kapacitet och ork direkt (2026-09-27)',
       "Återhämtning: Flow-övningar kan sparas – Återhämtningsbiblioteket visar först 🌿 För mig, 👨‍👩‍👧 Barn & familj och ⭐ Mina sparade. Övningar från Flow kan startas steg för steg (med timer när längd finns), sparas för ett visst barn och föreslås igen av Flow när de passar. Syns även i Familj och kan tas bort (2026-09-27)",
       "Hem: snäll starttimer vid tidsatta saker – mjuk puff ca 15 min innan, ett litet första steg och 2 lugna minuter utan larm eller försening (2026-09-27)",
-      "Kalender: \"Veckans mål\" – saker som ska bli gjorda någon gång i veckan; välj en dag när det passar så hamnar det i Min dag (2026-09-27)",
+      'Kalender: "Veckans mål" – saker som ska bli gjorda någon gång i veckan; välj en dag när det passar så hamnar det i Min dag (2026-09-27)',
 
-      "Familj: \"Tidigare situationer\" syns nu direkt på Family Flow-sidan – med en summering av vilka vägar som fungerat för barnet och hela loggen hopfälld under \"Alla situationer\". Loggen delas med \"Hjälp mig med en situation\" och synkas mellan enheter (2026-09-27)",
-      "Familj: \"Hjälp mig med en situation\" sparar nu varje situation i en egen logg – vilka vägar du provat, om de fungerade eller inte och vad som hjälpte mest. Visas som \"Tidigare situationer\" under första steget och synkas mellan enheter (2026-09-27)",
-      "Familj: \"Hjälp mig med en situation\" är nu ett steg-för-steg-stöd – Vad händer? → Vem gäller det? → 1–3 korta följdfrågor → Flow sammanfattar → 3–5 vägar att prova med konkreta steg och \"Säg så här\" → \"Det fungerade inte\" ger nya vägar → kort feedback som kan sparas i barnets profil. Använder befintliga barnprofiler, barnschema, kapacitetsläge, Min dag och bildstöd (2026-09-27)",
+      'Familj: "Tidigare situationer" syns nu direkt på Family Flow-sidan – med en summering av vilka vägar som fungerat för barnet och hela loggen hopfälld under "Alla situationer". Loggen delas med "Hjälp mig med en situation" och synkas mellan enheter (2026-09-27)',
+      'Familj: "Hjälp mig med en situation" sparar nu varje situation i en egen logg – vilka vägar du provat, om de fungerade eller inte och vad som hjälpte mest. Visas som "Tidigare situationer" under första steget och synkas mellan enheter (2026-09-27)',
+      'Familj: "Hjälp mig med en situation" är nu ett steg-för-steg-stöd – Vad händer? → Vem gäller det? → 1–3 korta följdfrågor → Flow sammanfattar → 3–5 vägar att prova med konkreta steg och "Säg så här" → "Det fungerade inte" ger nya vägar → kort feedback som kan sparas i barnets profil. Använder befintliga barnprofiler, barnschema, kapacitetsläge, Min dag och bildstöd (2026-09-27)',
       "Anpassa hemskärmen ligger sist på Hem; sparade val för block, ordning och checklistan bevaras även på nya enheter (2026-09-26)",
       "Hem fokuserar på vad du behöver just nu: Enkelt läge-knappen och dagfördjupningen har flyttats bort. Dagfördjupningen finns hopfälld i Idag, och Ny på MyFlove?-guiden ligger sist på Hem med väg till Flow (2026-09-26)",
-      "Hem: \"Ny på MyFlove?\" och \"Så funkar MyFlove\" sammanslagna till en ruta – kartan leder vidare till hela översikten (2026-09-26)",
-      "Hem: hopfälld \"Ny på MyFlove? Så funkar det\"-lathund längst ner – visuell karta över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning (2026-09-26)",
+      'Hem: "Ny på MyFlove?" och "Så funkar MyFlove" sammanslagna till en ruta – kartan leder vidare till hela översikten (2026-09-26)',
+      'Hem: hopfälld "Ny på MyFlove? Så funkar det"-lathund längst ner – visuell karta över QuickFlow, Mitt batteri, Flow, Min dag och Återhämtning (2026-09-26)',
       "Studier: Word-, PowerPoint-, Excel- och OpenDocument-dokument kan laddas upp (2026-09-25)",
       "Ikoner: emojis ersatta med riktiga Lucide-ikoner överallt – inga tomma fyrkanter; kapacitetslägen visar färgade prickar (2026-09-25)",
       "Familj: Rutiner och Anteckningar kan vara Kan ändra – bocka av rutiner, skriva anteckningar (2026-09-25)",
@@ -328,7 +448,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
       "Barnens aktivitetslista visar bara läsbara anteckningar, inte intern pictogram- och färginformation (2026-09-25)",
       "Städning steg 5: verifierat oanvänd planeringskod har tagits bort utan datarensning. Historik, sparade omplaneringsvärden, FlowScore, energidata, QuickFlow-kompatibilitet och Jobb/Studier-stöd är kvar. (2026-09-25)",
       "Städning steg 4: Hem har en enda kapacitetskontroll med Fullt/Mellan/Lågt. Planera och Idag visar samma dagsplan utan egna energi- eller FlowScore-val; Lågt visar bara Nu och döljer extra val. Historiska energi- och mönsterdata finns kvar. (2026-09-25)",
-      "Städning steg 3: FlowPlan är enda motorn för \"Vad gör jag nu?\". Den bygger bara på prioritet P1–P4 och kapacitetsläget, respekterar fasta tider och beroenden och ger Nu/Sedan/Kan vänta (i Lågt bara Nu). Just nu, Nästa rimliga steg, Hur är läget idag?, Planera, Planera om, Idag, Flow-chatten och Flows påminnelser visar samma plan; batteri och FlowScore påverkar inte längre urval eller ordning. (2026-09-25)",
+      'Städning steg 3: FlowPlan är enda motorn för "Vad gör jag nu?". Den bygger bara på prioritet P1–P4 och kapacitetsläget, respekterar fasta tider och beroenden och ger Nu/Sedan/Kan vänta (i Lågt bara Nu). Just nu, Nästa rimliga steg, Hur är läget idag?, Planera, Planera om, Idag, Flow-chatten och Flows påminnelser visar samma plan; batteri och FlowScore påverkar inte längre urval eller ordning. (2026-09-25)',
       "Städning steg 2: Fullt/Mellan/Lågt är enda källan för aktuellt kapacitetsläge. Användarens val gäller tills hen ändrar det (standard Mellan); batteri, FlowScore och Energiflöde styr inte längre läget men finns kvar för historik. Orkfrågan har tre val (gamla värden Mycket/Okej/Lite/Nästan slut läses som Fullt/Mellan/Lågt). Påverkan-kortet föreslår ett lägre läge i stället för batterinivå. (2026-09-25)",
       "Städning steg 1: QuickFlow använder prioritetsmotorn P1–P4 som enda källa; Nu/Sedan/Kan vänta/Om du orkar är bara visningsord och gammal sparad data översätts vid läsning (2026-09-25)",
       "Passerade möten och tidsbokade aktiviteter rullar inte över till Idag; tidlösa uppgifter följer med (2026-09-25)",
@@ -431,7 +551,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     title: "Family Flow möter Mitt batteri och Flow",
     items: [
       "Familjeaktiviteter kan märkas med närvaro, förberedelse, resa och lugn stund efteråt (2026-09-23)",
-      "Familj visar \"Vad kräver dig idag?\" utifrån ditt befintliga batteri (2026-09-23)",
+      'Familj visar "Vad kräver dig idag?" utifrån ditt befintliga batteri (2026-09-23)',
       "Återhämtning räknar med förberedelse och resa och prioriterar tiden efteråt (2026-09-23)",
       "Flow väger in familjens åtaganden utan att boka om fasta tider (2026-09-23)",
     ],
@@ -550,7 +670,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     items: [
       "Nytt område Familj under Mer – få vardagen att fungera för hela familjen (2026-09-23)",
       "Skriv en familjesituation, välj om det gäller dig, ett barn eller familjen, och få små steg utifrån dagens kapacitet (2026-09-23)",
-      "Barnprofiler med namn, bild och \"det här brukar hjälpa mitt barn\" – privat, utan diagnosfält (2026-09-23)",
+      'Barnprofiler med namn, bild och "det här brukar hjälpa mitt barn" – privat, utan diagnosfält (2026-09-23)',
       "Godkända förslag hamnar som vanliga uppgifter i din dag och använder befintligt Nästa rimliga steg (2026-09-23)",
     ],
   },
@@ -563,7 +683,6 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
     ],
   },
   {
-
     title: "Svenska återställs i hela appen",
     items: [
       "Byte tillbaka till svenska sätter tillbaka all översatt text direkt, inga engelska rubriker eller menyord blir kvar (2026-09-22)",
@@ -773,7 +892,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Incheckningen dyker upp varje gång",
     items: [
-      "\"Hur kändes det?\" visas nu oavsett var du bockar av något – dagslistan, kalendern, Att göra, Jobb och Studier (2026-09-19)",
+      '"Hur kändes det?" visas nu oavsett var du bockar av något – dagslistan, kalendern, Att göra, Jobb och Studier (2026-09-19)',
       "Samma fyra svar som förut, plus Hoppa över – och bara en ruta per avbockning (2026-09-19)",
     ],
   },
@@ -796,32 +915,32 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Ingen vit skärm längre",
     items: [
-      "Om något oväntat går fel visas en lugn sida med \"Ladda om\" i stället för en tom skärm (2026-09-19)",
+      'Om något oväntat går fel visas en lugn sida med "Ladda om" i stället för en tom skärm (2026-09-19)',
       "Omladdningen rensar gamla sparade filer så appen startar på senaste versionen (2026-09-19)",
     ],
   },
   {
     title: "Flow anpassar det du vill göra efter dagens kapacitet",
     items: [
-      "Säg \"Jag vill träna\" eller \"Jag behöver plugga\" – Flow föreslår en rimlig version (2026-09-19)",
+      'Säg "Jag vill träna" eller "Jag behöver plugga" – Flow föreslår en rimlig version (2026-09-19)',
       "Finns på Hem, i QuickFlow, på raderna i Min dag och Kalendern samt i Studier och Träning (2026-09-19)",
       "Mindre, Större eller Senare – du bestämmer, och fasta tider ändras aldrig (2026-09-19)",
       "Vid låg kapacitet föreslås Återhämtning i stället för att pressa igenom (2026-09-19)",
     ],
   },
   {
-    title: "\"Hur kändes det?\" direkt när du bockar av",
+    title: '"Hur kändes det?" direkt när du bockar av',
     items: [
       "Mjuk check-in efter avbockning i både Min dag och Kalendern (2026-09-18)",
       "Gav energi, Tog energi, Både och, Vet inte – eller Hoppa över (2026-09-18)",
       "Frågan ställs en gång per avbockning, utan dubbla energiloggar (2026-09-18)",
-      "Nytt kort \"Vad ger dig energi?\" på Mitt batteri leder till historiken (2026-09-18)",
+      'Nytt kort "Vad ger dig energi?" på Mitt batteri leder till historiken (2026-09-18)',
     ],
   },
   {
     title: "Välj flashcards, quiz eller båda i Studier",
     items: [
-      "Nytt val \"Vad vill du få?\": Både och, Bara flashcards eller Bara quiz (2026-09-15)",
+      'Nytt val "Vad vill du få?": Både och, Bara flashcards eller Bara quiz (2026-09-15)',
       "Flow skapar bara det du valt och knappen visar vad som kommer (2026-09-15)",
       "Material utan quiz visar ingen quizknapp, och tvärtom (2026-09-15)",
     ],
@@ -829,15 +948,15 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Visa mindre viker allt utom översta kortet",
     items: [
-      "\"Visa mindre\" på Hem lämnar bara översta kortet med hälsning och snabbknappar (2026-09-15)",
-      "Även \"Din dag – när du vill fördjupa\" viks ihop i enkelt läge (2026-09-15)",
-      "\"Visa allt igen\" återställer allt som vanligt (2026-09-15)",
+      '"Visa mindre" på Hem lämnar bara översta kortet med hälsning och snabbknappar (2026-09-15)',
+      'Även "Din dag – när du vill fördjupa" viks ihop i enkelt läge (2026-09-15)',
+      '"Visa allt igen" återställer allt som vanligt (2026-09-15)',
     ],
   },
   {
     title: "Egna genvägar på startsidan",
     items: [
-      "Nytt block \"Mina genvägar\" på Hem – lägg till det du behöver (2026-09-15)",
+      'Nytt block "Mina genvägar" på Hem – lägg till det du behöver (2026-09-15)',
       "Ta bort genvägar direkt på Hem eller under Anpassa hemskärmen (2026-09-15)",
       "Valen sparas per konto och följer med mellan enheter (2026-09-15)",
     ],
@@ -870,8 +989,8 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "Prata med Flow i bottenmenyn",
     items: [
-      "\"Prata med Flow\" är en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus (2026-09-15)",
-      "Länken visas kort som \"Flow\" i menyn och markeras tydligt när chatten är öppen (2026-09-15)",
+      '"Prata med Flow" är en fast plats i bottenmenyn vid sidan av Hem, Kalender och Paus (2026-09-15)',
+      'Länken visas kort som "Flow" i menyn och markeras tydligt när chatten är öppen (2026-09-15)',
       "Alla övriga funktioner finns kvar som vanligt via Mer (2026-09-15)",
     ],
   },
