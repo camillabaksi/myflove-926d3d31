@@ -181,16 +181,19 @@ async function loadAll(): Promise<void> {
       // Familjemedlemmar att dela med – användaren kan vara med i flera familjer,
       // så vi samlar medlemmar från alla och tar bort dubbletter.
       let members: FamilyMember[] = [];
-      const { data: mine } = await supabase
+      const { data: mine, error: mineErr } = await supabase
         .from("household_members")
         .select("household_id")
         .eq("user_id", uid);
+      // Ett fel får aldrig se ut som att familjen inte finns.
+      if (mineErr) throw mineErr;
       const hids = (mine ?? []).map((m) => m.household_id);
       if (hids.length > 0) {
-        const { data: mem } = await supabase
+        const { data: mem, error: memErr } = await supabase
           .from("household_members")
           .select("user_id, display_name, color")
           .in("household_id", hids);
+        if (memErr) throw memErr;
         const seen = new Map<string, FamilyMember>();
         for (const m of (mem ?? []) as FamilyMember[]) {
           if (m.user_id !== uid && !seen.has(m.user_id)) seen.set(m.user_id, m);
@@ -199,11 +202,16 @@ async function loadAll(): Promise<void> {
       }
 
       // Barnkonto: egen barnvy via säkra RPC:er – aldrig förälderns profilfält.
-      const [{ data: selfRows }, { data: selfSched }, { data: sharedRows }] = await Promise.all([
+      const [{ data: selfRows, error: selfErr }, { data: selfSched, error: schedErr }, { data: sharedRows, error: sharedErr }] = await Promise.all([
         supabase.rpc("get_my_child_profiles"),
         supabase.rpc("get_my_child_schedule"),
         supabase.rpc("get_my_shared_child_items"),
       ]);
+      // Ett misslyckat anrop får aldrig se ut som att schemat eller de
+      // delade posterna saknas.
+      if (selfErr) throw selfErr;
+      if (schedErr) throw schedErr;
+      if (sharedErr) throw sharedErr;
       const selfProfiles: Child[] = (selfRows ?? []).map((r) => ({
         id: r.id,
         owner_id: r.owner_id,
