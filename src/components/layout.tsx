@@ -8,8 +8,6 @@ import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { pageAreaFor } from "@/lib/page-area";
 
-/** Pace's "Härnäst" card belongs to the day overview only; deeper pages start with their own heading. */
-const COMPANION_PATHS = new Set(["/idag", "/hem"]);
 /** Legal footer lives with settings, not on every app page. */
 const FOOTER_PATHS = new Set(["/installningar", "/oversikt"]);
 /** Single-column list/form pages use a reading width on desktop. */
@@ -78,7 +76,6 @@ import { usePushSubscriptionSync } from "@/hooks/use-push-subscription-sync";
 import { useNotificationActions } from "@/hooks/use-notification-actions";
 
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import FlowCompanion from "@/components/flow/flow-companion";
 import FlowCheckinPopup from "@/components/flow-checkin-popup";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import GlobalActivityEnergyPrompt from "@/components/global-activity-energy-prompt";
@@ -915,7 +912,6 @@ export default function Layout({ children }: LayoutProps) {
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
           <div key={location} className={cn("mx-auto w-full p-4 md:p-6 page-enter", READING_PATHS.has(location) ? "max-w-3xl" : "max-w-6xl", refreshDesign && "pace-ds pace-design-refresh")}>
-            {COMPANION_PATHS.has(location) && <FlowCompanion stage="mini" className="mb-4" />}
             <FlowCheckinPopup />
             <GlobalActivityEnergyPrompt />
             <AutoTranslateProvider />
