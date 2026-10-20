@@ -1,5 +1,5 @@
 ## 2026-10-20 – Områdesfärger som bakgrund
-- Dov bakgrundston per område (Idag, Kalender, Fånga/Tankar, Min plats, Hem, Återhämtning) med färgad rubriklinje; övriga sidor ivory, Pace oförändrad. Ej publicerat.
+- Dov bakgrundston per område (Idag, Kalender, Fånga/Tankar, Min plats, Hem, Återhämtning) med färgad rubriklinje, mycket dov ton, mjuk ljusbåge och diskreta ljusstrimmor som i Pace-bakgrunden; övriga sidor ivory, Pace oförändrad. Ej publicerat.
 
 ## 2026-10-20 – Pace-sidan på desktop
 - Varm bakgrund över hela ytan, mjuk bildtoning utan skarv, dubbel historik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade. Ej publicerat.
