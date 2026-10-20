@@ -45,6 +45,15 @@ export function usePushSubscriptionSync(): void {
       if (document.visibilityState === "visible") void sync();
     };
     document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
+    const onWorkerMessage = (event: MessageEvent<unknown>) => {
+      const value = event.data;
+      if (typeof value === "object" && value !== null &&
+          "type" in value && value.type === "myflove-push-renewal-needed") void sync();
+    };
+    navigator.serviceWorker?.addEventListener("message", onWorkerMessage);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      navigator.serviceWorker?.removeEventListener("message", onWorkerMessage);
+    };
   }, [save]);
 }

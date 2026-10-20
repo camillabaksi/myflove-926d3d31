@@ -370,8 +370,7 @@ export const pushEventToCalendar = createServerFn({ method: "POST" })
       return { ok: false as const, connected: true, reconnectRequired: true };
     }
     if (!res.ok) {
-      const text = await res.text();
-      console.error(`Kunde inte spara i kalendern (${data.provider}): ${res.status} ${text}`);
+      console.error(`Kunde inte spara i kalendern (${data.provider}): ${res.status}`);
       return { ok: false as const, connected: true };
     }
     const created = (await res.json()) as { id?: string };

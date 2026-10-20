@@ -89,8 +89,8 @@ self.addEventListener("push", (event) => {
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-/* Webbläsaren kan byta ut prenumerationen. Då skapar vi en ny direkt och
-   berättar för servern, annars slutar notiserna komma när appen är stängd. */
+/* Förnya lokalt; serverregistreringen sker i appens autentiserade flöde.
+   Om appen är stängd kan notiser pausa tills användaren öppnar den igen. */
 function urlB64ToBuffer(base64) {
   const pad = "=".repeat((4 - (base64.length % 4)) % 4);
   const b64 = (base64 + pad).replace(/-/g, "+").replace(/_/g, "/");
@@ -112,7 +112,6 @@ function keyToB64(sub, name) {
 self.addEventListener("pushsubscriptionchange", (event) => {
   event.waitUntil(
     (async () => {
-      const oldEndpoint = event.oldSubscription?.endpoint;
       try {
         const sub =
           event.newSubscription ||
@@ -120,17 +119,11 @@ self.addEventListener("pushsubscriptionchange", (event) => {
             userVisibleOnly: true,
             applicationServerKey: urlB64ToBuffer(VAPID_PUBLIC_KEY),
           }));
-        if (!sub || !oldEndpoint) return;
-        await fetch("/api/public/hooks/push-resubscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            oldEndpoint,
-            endpoint: sub.endpoint,
-            p256dh: keyToB64(sub, "p256dh"),
-            auth: keyToB64(sub, "auth"),
-          }),
-        });
+        if (!sub) return;
+        // No account credentials in the worker and no endpoint-only writes.
+        // Existing foreground sync registers through authenticated subscribeToPush.
+        const clients = await self.clients.matchAll({ type: "window" });
+        for (const client of clients) client.postMessage({ type: "myflove-push-renewal-needed" });
       } catch (_) {}
     })(),
   );

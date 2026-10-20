@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { isTrustedPushEndpoint } from "./push-endpoint";
 
 // ---- Subscribe --------------------------------------------------------------
 
@@ -8,22 +9,10 @@ const SubscribeSchema = z.object({
   endpoint: z
     .string()
     .url()
-    .refine((value) => {
-      try {
-        const u = new URL(value);
-        return (
-          u.protocol === "https:" &&
-          /(^|\.)(googleapis\.com|mozilla\.com|mozaws\.net|push\.apple\.com|notify\.windows\.com)$/.test(
-            u.hostname,
-          )
-        );
-      } catch {
-        return false;
-      }
-    }, "Unsupported push endpoint"),
-  p256dh: z.string().min(1),
-  auth: z.string().min(1),
-  userAgent: z.string().optional(),
+    .refine(isTrustedPushEndpoint, "Unsupported push endpoint"),
+  p256dh: z.string().min(1).max(256),
+  auth: z.string().min(1).max(256),
+  userAgent: z.string().max(1024).optional(),
   /** Accepteras från äldre klienter; webbläsarinformation identifierar inte en enhet. */
   replaceOthers: z.boolean().optional(),
 });

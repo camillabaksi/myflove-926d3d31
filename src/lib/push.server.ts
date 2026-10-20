@@ -4,6 +4,7 @@ import {
   type PushMessage,
   type VapidKeys,
 } from "@block65/webcrypto-web-push";
+import { isTrustedPushEndpoint } from "./push-endpoint";
 
 export type StoredSubscription = {
   endpoint: string;
@@ -50,13 +51,12 @@ export async function sendPushTo(
   meta?: PushLogMeta,
 ): Promise<"ok" | "gone" | "error"> {
   const result = await deliverPush(sub, notification);
-  if (meta) await logPush(sub, notification, meta, result);
+  if (meta) await logPush(sub, meta, result);
   return result;
 }
 
 async function logPush(
   sub: StoredSubscription,
-  n: PushNotificationBody,
   meta: PushLogMeta,
   result: "ok" | "gone" | "error",
 ): Promise<void> {
@@ -71,15 +71,15 @@ async function logPush(
     await supabaseAdmin.from("push_delivery_log").insert({
       user_id: meta.userId,
       source: meta.source,
-      ref: meta.ref ?? null,
-      tag: n.tag ?? null,
-      title: n.title,
+      ref: null,
+      tag: null,
+      title: "Paceable notification",
       endpoint_host: host,
-      endpoint_tail: sub.endpoint.slice(-12),
+      endpoint_tail: "redacted",
       result,
     });
-  } catch (err) {
-    console.error("[push] log failed", err);
+  } catch {
+    console.error("[push] log failed");
   }
 }
 
@@ -87,6 +87,7 @@ async function deliverPush(
   sub: StoredSubscription,
   notification: PushNotificationBody,
 ): Promise<"ok" | "gone" | "error"> {
+  if (!isTrustedPushEndpoint(sub.endpoint)) return "error";
   const vapid = getVapid();
   const wp: WebPushSubscription = {
     endpoint: sub.endpoint,
@@ -104,13 +105,14 @@ async function deliverPush(
       ...payload,
       body,
       signal: AbortSignal.timeout(15_000),
+      redirect: "error",
     });
     if (res.status === 404 || res.status === 410) return "gone";
     if (res.status >= 200 && res.status < 300) return "ok";
-    console.error("[push] send failed", res.status, await res.text().catch(() => ""));
+    console.error("[push] send failed", res.status);
     return "error";
-  } catch (err) {
-    console.error("[push] send threw", err);
+  } catch {
+    console.error("[push] send threw");
     return "error";
   }
 }
