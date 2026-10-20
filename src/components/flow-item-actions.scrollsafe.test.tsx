@@ -39,4 +39,40 @@ describe("Skroll-säker tre-prick-meny", () => {
     fireEvent.pointerUp(trigger, { pointerType: "touch", button: 0, clientX: 10, clientY: 120 });
     expect(screen.queryByRole("menuitem", { name: "Ändra" })).not.toBeInTheDocument();
   });
+
+  it("öppnar inte när pekgesten avbryts (t.ex. när skrollen tar över)", () => {
+    render(<FlowItemActions itemId="task-1" compact />);
+    const trigger = screen.getByRole("button", { name: "Fler val" });
+    fireEvent.pointerDown(trigger, { pointerType: "touch", button: 0, clientX: 10, clientY: 10 });
+    fireEvent.pointerCancel(trigger);
+    fireEvent.pointerUp(trigger, { pointerType: "touch", button: 0, clientX: 10, clientY: 10 });
+    expect(screen.queryByRole("menuitem", { name: "Ändra" })).not.toBeInTheDocument();
+  });
+
+  it("öppnar vid klick utan pekhändelser (hjälpmedel som aktiverar programmässigt)", () => {
+    render(<FlowItemActions itemId="task-1" compact />);
+    const trigger = screen.getByRole("button", { name: "Fler val" });
+    fireEvent.click(trigger);
+    expect(screen.getByRole("menuitem", { name: "Ändra" })).toBeInTheDocument();
+  });
+
+  it("växlar inte dubbelt när ett riktigt tryck även skickar klick", () => {
+    render(<FlowItemActions itemId="task-1" compact />);
+    const trigger = screen.getByRole("button", { name: "Fler val" });
+    fireEvent.pointerDown(trigger, { pointerType: "touch", button: 0, clientX: 10, clientY: 10 });
+    fireEvent.pointerUp(trigger, { pointerType: "touch", button: 0, clientX: 10, clientY: 10 });
+    expect(screen.getByRole("menuitem", { name: "Ändra" })).toBeInTheDocument();
+    // Klicket som följer ett riktigt tryck får inte stänga menyn igen.
+    fireEvent.click(trigger);
+    expect(screen.getByRole("menuitem", { name: "Ändra" })).toBeInTheDocument();
+  });
+
+  it("växlar inte dubbelt när Enter både öppnar och skickar klick", () => {
+    render(<FlowItemActions itemId="task-1" compact />);
+    const trigger = screen.getByRole("button", { name: "Fler val" });
+    fireEvent.keyDown(trigger, { key: "Enter" });
+    fireEvent.click(trigger, { detail: 0 });
+    // Menyn ska vara öppen exakt en gång – inte öppnad och genast stängd.
+    expect(screen.getByRole("menuitem", { name: "Ändra" })).toBeInTheDocument();
+  });
 });
