@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Områdesfärger som bakgrund",
+    items: ["Idag, Kalender, Fånga, Min plats, Hem och Återhämtning har nu en dov bakgrundston i sitt områdes färg och en liten färgad linje under rubriken. Övriga sidor behåller varm ivory, Pace sin bild. Inga funktioner eller data ändrade."],
+  },
+  {
     title: "2026-10-20 – Pace-sidan på desktop",
     items: ["Varm bakgrund fyller hela ytan, bilden tonar ut mjukt utan skarv, dubbel samtalshistorik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade."],
   },

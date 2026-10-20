@@ -6,6 +6,7 @@ import { SyncStatusNote } from "@/components/sync-status-note";
 import { UnownedDataPrompt } from "@/components/unowned-data-prompt";
 import { ReactNode, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
+import { pageAreaFor } from "@/lib/page-area";
 import { Link as RouterLink, useRouter } from "@tanstack/react-router";
 import {
   Home,
@@ -902,6 +903,7 @@ export default function Layout({ children }: LayoutProps) {
           ref={mainScrollRef}
           tabIndex={-1}
           data-page-focus-target
+          data-page-area={pageAreaFor(location) ?? undefined}
           className="pace-mobile-content-scroll flex-1 overflow-y-auto pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-8"
           style={PACEABLE_PATHS.has(location) || personalization.theme !== "paceable" ? undefined : CATEGORY_THEMES[location] as React.CSSProperties}
         >
