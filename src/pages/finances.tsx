@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import Layout from "@/components/layout";
 import {
@@ -17,7 +18,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import BudgetPanel from "@/components/budget-panel";
-import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveBalanceBars } from "@/components/myflove/motion";
 import CollapsibleSection from "@/components/collapsible-section";
 import { todayISO } from "@/lib/day";
@@ -88,11 +88,10 @@ export default function Finances() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <MyFloveHeader
+          <PacePageHeader icon={Wallet}
             title="Din ekonomi"
-            emojiKey="finance"
             description="Den här månaden – inkomster, utgifter och det som är på väg."
           />
         </MyFloveWide>

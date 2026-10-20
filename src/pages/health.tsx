@@ -23,7 +23,7 @@ export default function HealthPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-place">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pace-next-page pace-next-place">
         <MyFloveWide>
           <PacePageHeader
             title="Min plats"

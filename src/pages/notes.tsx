@@ -14,7 +14,7 @@ export default function NotesPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid className="pace-ds pace-compact-page">
         <MyFloveWide>
           <PacePageHeader icon={NotebookPen} title={t("Anteckningar")}
             description={t(

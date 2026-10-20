@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
@@ -229,24 +230,14 @@ export default function StudyflowPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="planera">
+      <MyFlovePageGrid area="planera" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-5 pb-24">
-            <header className={card}>
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h1 className={`pace-app-title ${sectionTitle}`}>
-                    <GraduationCap className="h-5 w-5 text-gold" /> Studier – din planering
-                  </h1>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Du behöver inte plugga allt. Jag säger vad som är rimligt just nu.
-                  </p>
-                </div>
-                <div className="shrink-0 rounded-2xl bg-sage/30 px-3 py-2 text-center text-xs text-ink">
-                  <div className="font-semibold">⚡ {energy ? `${energy}/5` : "–"}</div>
-                  <div className="text-muted-foreground">Energi</div>
-                </div>
-              </div>
+          <div className="space-y-5 pb-24 pace-compact-stack">
+            <div className="space-y-3">
+<PacePageHeader icon={GraduationCap} title="Studier – din planering"
+                description="Du behöver inte plugga allt. Jag säger vad som är rimligt just nu."
+                action={<div className="shrink-0 rounded-2xl bg-sage/30 px-3 py-2 text-center text-xs text-ink"><div className="font-semibold">⚡ {energy ? `${energy}/5` : "–"}</div><div className="text-muted-foreground">Energi</div></div>}
+              />
 
               <Button
                 type="button"
@@ -283,7 +274,7 @@ export default function StudyflowPage() {
                   </form>
                 </DialogContent>
               </Dialog>
-            </header>
+            </div>
 
             <MySchedule />
 

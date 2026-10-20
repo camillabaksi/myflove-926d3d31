@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useRef, useState } from "react";
 import Layout from "@/components/layout";
@@ -119,17 +120,10 @@ export default function Pomodoro() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="flow">
+      <MyFlovePageGrid area="flow" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
-            <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">
-                {APP_DESTINATIONS["/pomodoro"].label}
-              </h1>
-              <p className="text-muted-foreground">
-                Jobba i korta pass med tydliga pauser emellan.
-              </p>
-            </div>
+          <div className="space-y-8 pace-compact-stack">
+<PacePageHeader icon={Brain} title={APP_DESTINATIONS["/pomodoro"].label} description="Jobba i korta pass med tydliga pauser emellan." />
 
             <div className="pace-card-surface bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border flex flex-col items-center gap-6">
               <div className="flex items-center gap-2">

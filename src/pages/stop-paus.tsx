@@ -1,7 +1,7 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useState } from "react";
 import { Hand } from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import StopModal from "@/components/stop-modal";
 import EnergyAfterCheck from "@/components/recovery/energy-after-check";
@@ -26,13 +26,11 @@ export default function StopPausPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-6">
-            <MyFloveHeader
-              area="aterhamtning"
+          <div className="space-y-6 pace-compact-stack">
+            <PacePageHeader icon={Hand}
               title="Stop-paus"
-              emojiKey="wellness"
               description="En paus mellan impuls och beslut – andas, sätt ord, välj."
             />
             {check && (

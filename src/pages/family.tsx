@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -408,15 +409,10 @@ export default function FamilyPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-4">
-            <div>
-              <h1 className="font-display text-xl font-semibold text-ink sm:text-2xl mb-1 flex items-center gap-2">
-                <MyFloveHeart size={26} /> {APP_DESTINATIONS["/familj"].label}
-              </h1>
-
-            </div>
+          <div className="space-y-4 pace-compact-stack">
+<PacePageHeader icon={Users} title={APP_DESTINATIONS["/familj"].label} />
 
             <Show when="signed-out">
               <div className="max-w-md mx-auto text-center py-16 bg-card/50 border-2 border-dashed border-border rounded-3xl space-y-4">

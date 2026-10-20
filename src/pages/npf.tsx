@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useState } from "react";
 import { ANALYTICS_OPT_OUT_KEY, track } from "@/lib/analytics";
 import { DeleteAccountButton } from "@/components/delete-account-button";
@@ -8,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { RotateCcw, Accessibility, BarChart3, Eye, Hand } from "lucide-react";
 import { useNpfSettings, type NpfSettings } from "@/lib/npf-mode";
 import { PersonalizationSettings } from "@/components/personalization-settings";
-import { PacePageTitle, paceFormSurface } from "@/components/paceable/design-system";
+import { paceFormSurface } from "@/components/paceable/design-system";
 import { Link } from "@tanstack/react-router";
 
 function readAnalyticsOptOut(): boolean {
@@ -83,17 +84,9 @@ export default function NpfPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid>
+      <MyFlovePageGrid className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <header className="space-y-2">
-            <div className="flex items-center gap-2 text-primary">
-              <Accessibility size={22} className="shrink-0" aria-hidden />
-              <PacePageTitle>
-                Anpassa appen
-              </PacePageTitle>
-            </div>
-            <p className="text-muted-foreground">Välj hur Paceable ska se ut och kännas.</p>
-          </header>
+<PacePageHeader icon={Accessibility} title="Anpassa appen" description="Välj hur Paceable ska se ut och kännas." />
         </MyFloveWide>
 
         <MyFloveBlock

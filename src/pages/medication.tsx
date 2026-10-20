@@ -1,8 +1,8 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import { useFlowExplainer } from "@/hooks/use-flow-explainer";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
 import { useMedications } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
@@ -69,12 +69,11 @@ export function MedicationContent({ showHeader = true }: MedicationContentProps)
   };
 
   return (
-    <MyFlovePageGrid>
+    <MyFlovePageGrid className="pace-ds pace-compact-page">
       {showHeader && (
         <MyFloveWide>
-          <MyFloveHeader
+          <PacePageHeader icon={Pill}
             title="Medicinpåminnelser"
-            emojiKey="medicine"
             description={`Lägg till dina mediciner och bocka av när du tagit dem.${medExplainer ? ` ${medExplainer}` : ""}`}
           />
         </MyFloveWide>

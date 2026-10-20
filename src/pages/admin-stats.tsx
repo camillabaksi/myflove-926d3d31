@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -52,11 +53,10 @@ export function PilotDashboard() {
     try { await navigator.clipboard.writeText(pilotSnapshot(accounts.data, data)); setCopyStatus(t("Översikten är kopierad.")); }
     catch { setCopyStatus(t("Kunde inte kopiera. Försök igen i en webbläsare med tillgång till urklipp.")); }
   }
-  return <div className="min-w-0 max-w-5xl mx-auto space-y-6">
+  return <div className="pace-ds pace-compact-page min-w-0 max-w-5xl mx-auto pace-compact-stack">
     <header className="space-y-3">
       <Link to="/admin" className="text-sm underline underline-offset-4">{t("Till adminöversikten")}</Link>
-      <h1 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2"><BarChart3 size={25} aria-hidden="true" />{t("Paceable i test")}</h1>
-      <p className="text-muted-foreground">{t("Kommer stödet till användning, kommer man tillbaka och blir vardagen lättare? Här följer vi pilotens viktigaste frågor.")}</p>
+<PacePageHeader icon={BarChart3} title={t("Paceable i test")} description={t("Kommer stödet till användning, kommer man tillbaka och blir vardagen lättare? Här följer vi pilotens viktigaste frågor.")} />
       <p className="text-sm">{t("Senaste 30 dagarna, löpande. Dagindelning: svensk tid.")}{data && ` ${pilotDate(data.from)}–${pilotDate(data.to)}.`}</p>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={copySnapshot} disabled={!accounts.data || !data || accounts.isError || usage.isError}><Copy size={16} className="mr-2" />{t("Kopiera översikt att dela")}</Button>

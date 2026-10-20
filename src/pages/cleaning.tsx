@@ -1,7 +1,7 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -138,12 +138,10 @@ export default function CleaningPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <MyFloveHeader
-            area="hem"
+          <PacePageHeader icon={ListChecks}
             title="Städning"
-            emoji="🧹"
             description="Välj rum och läge. Kryssa av i din takt – allt räknas."
           />
         </MyFloveWide>

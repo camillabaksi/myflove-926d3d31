@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { LinkifiedText } from "@/components/linkified-text";
 import { useMemo, useState } from "react";
 import { Link } from "wouter";
@@ -585,24 +586,12 @@ export default function Tasks() {
 
   return (
     <Layout>
-      <MyFlovePageGrid className="page-enter pace-tasks-page">
+      <MyFlovePageGrid className="pace-ds pace-compact-page page-enter pace-tasks-page">
         <MyFloveWide>
           <div
             className="pace-tasks-header"
           >
-            <div className="flex items-start gap-3">
-              <span aria-hidden className="pace-tasks-heading-icon">
-                <ListChecks size={24} />
-              </span>
-              <div className="min-w-0">
-                <h1 className="pace-app-title pace-tasks-heading text-ink">
-                  Alla uppgifter
-                </h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Hela listan framåt – samma uppgifter som i Idag, Planera och Hem.
-                </p>
-              </div>
-            </div>
+<PacePageHeader icon={ListChecks} title="Alla uppgifter" description="Hela listan framåt – samma uppgifter som i Idag, Planera och Hem." />
             <AreaSwitcher className="mt-4" size="sm" />
             {activeArea !== "alla" && (
               <p className="text-xs text-muted-foreground mt-2">
@@ -618,7 +607,7 @@ export default function Tasks() {
 
         <MyFloveWide>
           {/* Flikar: Idag är standardvyn */}
-          <div className="pace-tasks-tabs" role="group" aria-label="Visa uppgifter">
+          <div className="pace-tasks-tabs pace-segmented" role="group" aria-label="Visa uppgifter">
             {TABS.map((t) => {
               const count =
                 t.id === "idag"
@@ -632,7 +621,7 @@ export default function Tasks() {
                   type="button"
                   onClick={() => setTab(t.id)}
                   aria-pressed={tab === t.id}
-                  className="pace-tasks-tab"
+                  className="pace-tasks-tab pace-segment"
                 >
                   {t.id === "idag" ? <Sun aria-hidden size={16} /> : t.id === "kommande" ? <CalendarIcon aria-hidden size={16} /> : <Check aria-hidden size={16} />}
                    <span>{t.label}{count > 0 && <span className="ml-1 opacity-70">{count}</span>}</span>
@@ -644,7 +633,7 @@ export default function Tasks() {
 
         {tab === "idag" && (
           <MyFloveWide>
-            <div className="space-y-6">
+            <div className="space-y-6 pace-compact-stack">
               {suggestion && (
                 <div className="pace-tasks-support p-4">
                   <div className="flex items-start gap-2">

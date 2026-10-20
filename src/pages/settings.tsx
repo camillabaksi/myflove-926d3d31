@@ -107,7 +107,7 @@ export default function SettingsPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid className="pace-ds pace-account-forms gap-5">
+      <MyFlovePageGrid className="pace-ds pace-compact-page pace-ds pace-account-forms gap-5">
         <MyFloveWide>
           <PacePageHeader icon={Settings} title="Inställningar" description="Anpassa Paceable, konto och appens inställningar." />
         </MyFloveWide>

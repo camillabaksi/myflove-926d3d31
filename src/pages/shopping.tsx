@@ -1,8 +1,8 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveEmptyIllustration } from "@/components/myflove/motion";
-import { MyFloveHeader } from "@/components/myflove";
 import {
   useSavedStores,
   STORE_RADIUS_OPTIONS,
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
+  ShoppingBasket,
   Plus,
   Trash2,
   CheckCircle2,
@@ -215,34 +216,32 @@ export default function Shopping() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem" className="pace-next-page pace-next-health pace-next-tools">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
           <div>
-            <MyFloveHeader
-              area="hem"
+            <PacePageHeader icon={ShoppingBasket}
               title="Inköpslista"
-              emojiKey="shopping"
               description="Vad behöver du handla? Släpp tanken på att komma ihåg allt."
             />
             {canShare ? (
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                <div className="inline-flex rounded-full bg-muted p-1">
-                  <button
+                <div className="pace-segmented">
+                  <Button
                     type="button"
                     onClick={() => setMode("shared")}
                     aria-pressed={mode === "shared"}
-                    className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "shared" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                    className="pace-segment"
                   >
                     Delad med familjen
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => setMode("personal")}
                     aria-pressed={mode === "personal"}
-                    className={`px-3 py-1.5 text-sm rounded-full transition ${mode === "personal" ? "bg-card shadow-sm text-primary" : "text-muted-foreground"}`}
+                    className="pace-segment"
                   >
                     Bara min lista
-                  </button>
+                  </Button>
                 </div>
                 <span className="text-sm text-muted-foreground inline-flex items-center gap-1.5">
                   <Users size={14} />
@@ -301,7 +300,7 @@ export default function Shopping() {
         </Dialog>
 
         <MyFloveWide span="wide">
-          <div className="space-y-6">
+          <div className="space-y-6 pace-compact-stack">
             {activeItems.length === 0 && completedItems.length === 0 && (
               <div className="text-center py-16 text-muted-foreground border-2 border-dashed border-border rounded-3xl">
                 <MyFloveEmptyIllustration kind="default" className="mb-2 block" />

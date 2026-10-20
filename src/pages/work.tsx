@@ -1,9 +1,9 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { openSignedDocument } from "@/lib/open-signed-document";
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -234,12 +234,11 @@ export default function WorkPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="planera">
+      <MyFlovePageGrid area="planera" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
-            <MyFloveHeader
+          <div className="space-y-8 pace-compact-stack">
+            <PacePageHeader icon={Briefcase}
               title="Jobb"
-              emojiKey="work"
               description="Din arbetsdag – plan, uppgifter, projekt och dokument på ett ställe."
             />
 

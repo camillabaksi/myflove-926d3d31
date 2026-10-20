@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa" className="gap-5">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page gap-5">
         <MyFloveWide>
           <PacePageHeader
             title="Min profil"

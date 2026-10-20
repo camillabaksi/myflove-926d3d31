@@ -368,7 +368,7 @@ export default function RemindersPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="idag" className="pace-next-page pace-next-health pace-next-tools">
+      <MyFlovePageGrid area="idag" className="pace-ds pace-compact-page pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
           <PacePageHeader icon={BellRing} title="Påminnelser" titleId="reminders-title" description="Håll koll på det du inte vill glömma." action={
             <Button onClick={() => setAddOpen(true)} className="min-h-11 shrink-0 rounded-xl px-3">
