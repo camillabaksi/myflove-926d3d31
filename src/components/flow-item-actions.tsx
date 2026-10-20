@@ -124,17 +124,14 @@ export function FlowItemActions({
   if (compact) {
     return (
       <>
-        <DropdownMenu>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               className={className ?? "h-9 w-9 text-muted-foreground"}
               aria-label="Fler val"
-              onTouchStart={(event) => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; touchScrolling.current = false; }}
-              onTouchMove={(event) => { if (touchStart.current && (Math.abs(event.touches[0].clientY - touchStart.current.y) > 8 || Math.abs(event.touches[0].clientX - touchStart.current.x) > 8)) touchScrolling.current = true; }}
-              onPointerUpCapture={(event) => { if (event.pointerType === "touch" && touchScrolling.current) { event.preventDefault(); event.stopPropagation(); } }}
-              onClickCapture={(event) => { if (touchScrolling.current) { event.preventDefault(); event.stopPropagation(); touchScrolling.current = false; } }}
+              {...triggerProps}
             >
               <MoreHorizontal size={size + 2} />
             </Button>
