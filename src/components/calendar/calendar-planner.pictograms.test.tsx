@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { createEvent, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CalendarPlanner from "./calendar-planner";
@@ -17,8 +18,12 @@ const children: Child[] = ["Bella", "Bianca", "Foreign"].map((name, i) => ({ id:
 beforeEach(() => { addChild.mockReset(); addChild.mockResolvedValue("created"); write.mockClear(); model.entries = [fixture]; model.ready = true; model.error = false; });
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: "owner" } }) }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, locale: "sv-SE" }) }));
+vi.mock("wouter", () => ({
+  Link: ({ href, children }: { href: string; children: ReactNode }) => <a href={href}>{children}</a>,
+  useLocation: () => ["/kalender", () => {}] as const,
+}));
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: useRef(null), enlarged: false }) }));
-vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: (_key: string, initial: unknown) => useState(initial), getSyncUser: async () => ({ id: "owner" }) }));
+vi.mock("@/lib/cloud-storage", () => ({ ACCOUNT_BOUND_EVENT: "myflove-account-bound", useCloudSyncedStorage: (_key: string, initial: unknown) => useState(initial), getSyncUser: async () => ({ id: "owner" }) }));
 vi.mock("@/hooks/use-visual-calendar", () => ({ useVisualCalendar: (dates: string[]) => ({ days: Object.fromEntries(dates.map(date => [date, model.entries.filter(entry => entry.date === date)])), familyMembers: [], externalError: null, planningReady: model.ready, planningError: model.error }) }));
 vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: model.entries.filter(entry => entry.source === "task").map(entry => ({ id: entry.sourceId, dueDate: entry.date, title: entry.title, time: entry.time, endTime: entry.endTime })), addTask: write, updateTask: write }), useReminders: () => ({ reminders: [], addReminder: write, updateReminder: write }) }));
 vi.mock("@/lib/account-scope", () => ({ isActiveOwner: () => true }));

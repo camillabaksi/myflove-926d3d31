@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import CalendarPlanner from "./calendar-planner";
@@ -11,6 +12,10 @@ const write = vi.fn();
 
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: "owner" } }) }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, locale: "sv-SE" }) }));
+vi.mock("wouter", () => ({
+  Link: ({ href, children }: { href: string; children: ReactNode }) => <a href={href}>{children}</a>,
+  useLocation: () => ["/kalender", () => {}] as const,
+}));
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: { current: null }, enlarged: false }) }));
 vi.mock("@/lib/cloud-storage", () => ({
   ACCOUNT_BOUND_EVENT: "myflove-account-bound",
