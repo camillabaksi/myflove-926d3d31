@@ -13,6 +13,7 @@ vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: "owner" } }) }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, locale: "sv-SE" }) }));
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: { current: null }, enlarged: false }) }));
 vi.mock("@/lib/cloud-storage", () => ({
+  ACCOUNT_BOUND_EVENT: "myflove-account-bound",
   useCloudSyncedStorage: (_key: string, initial: unknown) => {
     const [value, setValue] = useState(initial);
     return [value, (next: unknown) => {

@@ -12,6 +12,7 @@ vi.mock("@/hooks/use-data", () => ({
 vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => ({ percent: null }) }));
 vi.mock("@/components/day/day-replan", () => ({ DayReplanButton: () => null }));
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+vi.mock("wouter", () => ({ Link: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a> }));
 
 const date = "2026-10-20";
 const entries = (): CalendarEntry[] => [
