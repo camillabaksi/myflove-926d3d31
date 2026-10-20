@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import BatteryPage from "./battery";
 import CapacitySelector from "@/components/capacity-selector";
@@ -68,7 +69,7 @@ describe("battery check-in entry", () => {
     );
   });
 
-  it("keeps registered 25 percent, read-only energy history and the existing energy tools", () => {
+  it("keeps registered 25 percent, read-only energy history and the existing energy tools", async () => {
     capacity.percent = 25;
     render(<BatteryPage />);
     expect(screen.getByTestId("capacity-summary")).toHaveTextContent("25 %");
@@ -78,7 +79,7 @@ describe("battery check-in entry", () => {
       "false",
     );
     fireEvent.click(screen.getByRole("button", { name: "Historik" }));
-    fireEvent.click(screen.getByRole("tab", { name: /Energi/ }));
+    await userEvent.click(screen.getByRole("tab", { name: /Energi/ }));
     expect(screen.getByTestId("energy-history")).toHaveAttribute("data-readonly", "true");
     fireEvent.click(screen.getByRole("button", { name: "Vad påverkar min energi?" }));
     expect(screen.getByTestId("existing-energy-tools")).toBeVisible();
