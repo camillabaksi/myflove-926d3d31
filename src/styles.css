@@ -3042,10 +3042,10 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   .pace-app-text-enlarged .pace-more-mobile { display: block; }
   .pace-app-text-enlarged .pace-compact-header + div { display: none; }
   .pace-app-text-enlarged .pace-mobile-content-scroll { padding-bottom: calc(var(--pace-mobile-nav-height, 8rem) + 1rem); }
-  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-header { grid-template-columns: 2.75rem minmax(0,1fr) 2.75rem; row-gap: 0; }
-  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-app-brand { grid-column: 2; grid-row: 1; justify-self: center; width: 8.5rem; }
-  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-back { grid-column: 1; grid-row: 1; }
-  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-actions { grid-column: 3; grid-row: 1; }
+  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-header { grid-template-columns: 2.75rem minmax(0,1fr) 2.75rem !important; row-gap: 0 !important; }
+  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-app-brand { grid-column: 2 !important; grid-row: 1 !important; justify-self: center !important; width: 8.5rem !important; }
+  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-back { grid-column: 1 !important; grid-row: 1 !important; }
+  [data-paceable-typography="true"] .pace-app-text-enlarged .pace-compact-header .pace-shell-brand-actions { grid-column: 3 !important; grid-row: 1 !important; }
 }
 
 /* Compact secondary pages opt in, preserving legacy pages and all state owners. */

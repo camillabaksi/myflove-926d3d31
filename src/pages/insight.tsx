@@ -282,8 +282,8 @@ export default function InsightPage() {
 
   return (
     <Layout>
-      <PacePage className="page-enter px-[16px]! pb-28 sm:px-[24px]! lg:px-[32px]!">
-        <PaceContent width="list" className="@container space-y-6">
+      <PacePage className="pace-compact-page page-enter px-[16px]! pb-28 sm:px-[24px]! lg:px-[32px]!">
+        <PaceContent width="list" className="@container pace-compact-stack">
         <header className="min-w-0 space-y-4" data-testid="insight-header">
           <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-[8px] sm:flex sm:justify-between">
             <PaceButton
