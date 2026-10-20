@@ -289,6 +289,20 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
                   </div>
                 </div>
               )}
+              {saveWarning && (
+                <div className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                  Samtalet kunde inte sparas just nu – texten finns kvar här på skärmen.
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-2 rounded-xl"
+                    onClick={() => void retryPendingSaves()}
+                  >
+                    Försök spara igen
+                  </Button>
+                </div>
+              )}
             </div>
             <div className="border-t border-border p-3 flex gap-2 items-end">
               <textarea
