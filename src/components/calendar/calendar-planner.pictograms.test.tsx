@@ -129,7 +129,7 @@ describe("Calendar entry view", () => {
       const first = Number(timeline.dataset.calendarTimelineStart);
       vi.spyOn(timeline, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
       const event = createEvent.drop(timeline, { dataTransfer: { getData: () => fixture.id } });
-      Object.defineProperty(event, "clientY", { value: 100 + (minute - first) * 1.7 });
+      Object.defineProperty(event, "clientY", { value: 100 + (minute - first) * Number(timeline.dataset.calendarTimelineScale) });
       fireEvent(timeline, event);
     };
     dragTo(10 * 60);

@@ -269,7 +269,7 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)]">
+    <div className="pace-mobile-controls pace-planning-workspace mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)]">
       <section
         className="min-w-0 rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t("Lägg till aktiviteter")}

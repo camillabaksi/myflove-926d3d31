@@ -69,14 +69,14 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
     toast.success(mode === "planera" ? `${movableCount} flyttbara aktiviteter har flyttats.` : "Ändringar för stödda uppgifter har sparats. Övriga aktiviteter lämnades orörda.");
     setSelected([]); setSelectedCalendar([]); setPreview(false); setDrafts({});
   };
-  return <section className="space-y-3 rounded-2xl bg-[#F5F1F8] p-3" aria-label="Välj stöd för dagen">
+  return <section className="pace-mobile-controls pace-day-support space-y-3 rounded-2xl bg-[#F5F1F8] p-3" aria-label="Välj stöd för dagen">
     <p className="text-sm font-medium text-[#512654]">Vad skulle hjälpa dig idag?</p>
     <div className="grid grid-cols-2 gap-2">{labels.map(item => <Button key={item.id} type="button" variant={mode === item.id ? "default" : "outline"} className="min-h-11 whitespace-normal" onClick={() => reset(item.id)}>{item.label}</Button>)}</div>
     {mode === "aterhamtning" ? <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm">Välj hur lång paus du vill få plats med.</p>
       <div className="flex flex-wrap gap-2">{[5, 10, 20].map(n => <Button type="button" key={n} size="sm" variant={duration === n ? "default" : "outline"} onClick={() => { setDuration(n); setSlot(""); setPreview(false); }}>{n} min</Button>)}</div>
       {validGaps.length ? <div className="space-y-2">{validGaps.map(gap => { const start = Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start); const value = clock(start); if (start + duration > gap.end) return null; return <label key={value} className="flex min-h-11 items-center gap-2 rounded-lg bg-muted/40 p-2 text-sm"><input type="radio" name="recovery-gap" checked={slot === value} onChange={() => { setSlot(value); setPreview(false); }} />{value}–{clock(gap.end)} · ledig lucka</label>; })}</div> : <p className="text-sm text-muted-foreground">Inga säkra luckor hittades automatiskt. Du kan välja en tid själv nedan.</p>}
-      <label className="block text-sm">Välj en tid själv (kontrollera att den passar)<input type="time" value={manualSlot} onChange={event => { setManualSlot(event.target.value); setSlot(""); setPreview(false); }} className="mt-1 block min-h-10 rounded-lg border bg-card px-2" /></label>
+      <label className="block text-sm">Välj en tid själv (kontrollera att den passar)<input type="time" value={manualSlot} onChange={event => { setManualSlot(event.target.value); setSlot(""); setPreview(false); }} className="mt-1 block min-h-11 max-w-full rounded-lg border bg-card px-2" /></label>
       <Link href="/aterhamtning" className="inline-block text-sm font-medium text-primary underline">Öppna återhämtning</Link>
     </div> : <div className="space-y-2 rounded-xl bg-card p-3">
       <p className="text-sm text-muted-foreground">{mode === "prioritera" ? "Välj vilka uppgifter som är viktigast." : mode === "dela" ? "Välj uppgifter att dela upp i små steg." : "Välj uppgifter att flytta till imorgon. Fasta tider och deadlines skyddas."}</p>
