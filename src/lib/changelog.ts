@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-20 – Kompakt layout på återstående appdelar",
-    items: ["35 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering."],
+    items: ["36 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering."],
   },
   {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 3",
