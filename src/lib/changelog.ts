@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Pace-blocket bort från toppen av Idag",
+    items: ["Kortet \"Jag är här om du behöver mig\" med \"Prata med Pace\"-knappen tas bort från toppen av förstasidan, så hälsningen och \"Din energi just nu\" hamnar högst upp. Pace finns kvar via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Adresser, registreringar, utkast och lagring bevaras. Ingen publicering."],
+  },
+  {
     title: "2026-10-20 – Sammanhängande Tankar och tydligare energiöverblick",
     items: ["Extra Fånga-stenar borttagna, gemensam yttre sidlayout för reflektionsboken och fullbred bottenmeny. Pappersdesign, privata utkast och originalbilder bevaras.", "Mitt batteri samlar Just nu, Historik och Vad påverkar min energi med befintliga verktyg. Min plats och Mer får tydligare beskrivningar; Stop-paus finns i Återhämtning. Adresser, registreringar, beräkningar och lagring bevaras. Ingen publicering."],
   },

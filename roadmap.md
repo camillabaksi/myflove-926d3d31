@@ -1,4 +1,7 @@
 # Roadmap
+## Pace-blocket bort från Idag (2026-10-20)
+- [x] Begäran mottagen: ta bort "Prata med Pace"-blocket längst upp på förstasidan.
+- [x] Blocket borttaget ur layouten; Pace nås fortfarande via sidhuvudets chattikon, Prata med Pace-sidan och Pace-inställningar under Inställningar. 14 riktade tester, typkontroll och byggkontroll godkända; inloggad efterbild av Idag granskad. Ingen publicering.
 ## Tankar-layout och energiöverlapp (2026-10-20)
 - [x] Registrerat bilder och önskemål; granskar extra Fånga-stenar, anteckningsbokens layout/bottennavigation och överlappande energiingångar.
 - [x] Avgränsad plan godkänd; Tankar-layout/bottenmeny och samlad batteripresentation genomförs med befintliga verktyg. Ingen publicering.
