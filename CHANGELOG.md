@@ -1,3 +1,7 @@
+## 2026-10-20 – Sammanhängande Tankar och tydligare energiöverblick
+- Extra Fånga-stenar borttagna; reflektionsboken följer samma yttre sidlayout och bottenmenyn fyller bredden. Pappersdesign, privata utkast och originalbilder bevaras.
+- Mitt batteri samlar Just nu, Historik och Vad påverkar min energi med befintliga energiverktyg; duplicerad mönsterflik ersätts av samlad fördjupning. Min plats och Mer får tydligare beskrivningar, Stop-paus finns kvar i Återhämtning. Befintliga adresser, registreringar, beräkningar och lagring bevaras. Ingen publicering.
+
 ## 2026-10-20 – Enhetligare normalstorlekar i hela appen
 - Gemensamma mindre rem-baserade textroller för sidor, undervyer och dialoger; aktivitetsnamn, knapptext och formulär följer samma skala. Befintlig Större text, läsbar anteckningshandstil, minst 44 px tryckytor, logotyper, data och tidsgeometri bevaras. Ingen publicering.
 - Verifiering: 54 riktade tester och 3 216 adress/bredd/tema/textkontroller utan dokumentoverflow; detaljer och begränsningar i docs/app-type-scale-verification.md.

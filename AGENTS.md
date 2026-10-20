@@ -23,3 +23,5 @@ Compact secondary-page layouts opt in through `.pace-ds.pace-compact-page`; shar
 Enlarged-text tablet navigation reuses the mobile shell controls and bounds desktop brand/sidebar width independently of text size, preserving readable content without shrinking user text.
 Mobile calendar geometry comes from calendar-geometry for every forward/reverse coordinate and visual collision floor; compact controls opt in without shrinking their hit areas, preserving event times, desktop geometry and caller-owned drafts.
 App-wide text sizes use shared rem roles in app-typography.css under the existing app flag, including portals; shared Button marks command surfaces separately from timeline targets to preserve text enlargement, brand assets and time geometry.
+Notebook workspaces reuse the shared page geometry and full-width mobile navigation; paper styling stays inside editors so private draft and revision ownership is unchanged.
+Battery groups existing read-only check-in history separately from the embedded EnergyFlowContent tools; source hooks, forms and legacy destinations retain ownership to avoid parallel health storage.

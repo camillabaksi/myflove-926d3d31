@@ -332,7 +332,7 @@
     display: block;
   }
   .pace-shell-navigation:has(.notebook) > .pace-mobile-navigation {
-    display: flex;
+    display: block;
   }
   .pace-shell-navigation:has(.notebook) .pace-mobile-content-scroll {
     padding-bottom: calc(6rem + env(safe-area-inset-bottom));
@@ -890,4 +890,13 @@
   --book-lavender: #3c3047;
   --book-muted: #c2b4c5;
   color: #f2e5f3;
+}
+
+/* The shared page owns outer geometry; paper remains inside the editors. */
+.notebook.notebook-workspace {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
 }

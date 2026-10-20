@@ -53,6 +53,7 @@ import {
 interface Props {
   showHeader?: boolean;
   showDayFlow?: boolean;
+  embedded?: boolean;
 }
 
 /** Liten horisontell nyckeltalsruta – används i Dagens balans. */
@@ -157,7 +158,7 @@ export function EnergyFlowInsights() {
   );
 }
 
-export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Props) {
+export function EnergyFlowContent({ showHeader = true, showDayFlow = true, embedded = false }: Props) {
   const {
     entries,
     presets,
@@ -247,7 +248,7 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   }
 
   return (
-    <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pb-24">
+    <MyFlovePageGrid area="halsa" className={`pace-ds pace-compact-page${embedded ? "" : " pb-24"}`}>
       {showHeader && (
         <MyFloveWide>
           <PacePageHeader icon={Activity}

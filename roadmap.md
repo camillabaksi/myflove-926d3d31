@@ -1,7 +1,8 @@
 # Roadmap
 ## Tankar-layout och energiöverlapp (2026-10-20)
 - [x] Registrerat bilder och önskemål; granskar extra Fånga-stenar, anteckningsbokens layout/bottennavigation och överlappande energiingångar.
-- [ ] Visa avgränsad plan före appändringar; genomförande väntar på godkännande. Ingen publicering.
+- [x] Avgränsad plan godkänd; Tankar-layout/bottenmeny och samlad batteripresentation genomförs med befintliga verktyg. Ingen publicering.
+- [ ] Verifiera bilder, flikbyte, befintliga energi- och pausöppningar, riktade tester och aktuellt byggresultat.
 ## Enhetlig mindre normalstorlek i hela appen (2026-10-20)
 - [x] Registrerat önskemålet: godkänd kalenderbild som riktmärke, samma textstorlek per roll på alla sidor inklusive undervyer och dialoger; större text fortsatt valbar.
 - [x] Inventerat typografi, knappar och textinställningar; planen godkänd före appkodändring.
