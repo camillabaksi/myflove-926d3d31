@@ -17,5 +17,6 @@ CREATE INDEX tester_applications_status_created_idx
   ON public.tester_applications(status, created_at DESC);
 ALTER TABLE public.tester_applications ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.tester_applications FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.tester_applications TO service_role;
 -- No public policies: unauthenticated users submit only through the validated server action.
 -- Email addresses are not added to analytics or app user tables.
