@@ -900,3 +900,6 @@
   border-radius: 0;
   background: transparent;
 }
+html[data-paceable-typography="true"] .book-tabs.pace-thoughts-tabs {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr));
+}
