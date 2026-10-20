@@ -265,7 +265,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
       setJustAnswered(true);
-      await saveFlowMessage(id, "assistant", reply);
+      try {
+        await saveFlowMessage(id, "assistant", reply);
+        setUnsavedReply(null);
+      } catch {
+        // Svaret visas men är inte sparat – säg det ärligt och erbjud återförsök.
+        setUnsavedReply({ conversationId: id, content: reply });
+        setError("Svaret kunde inte sparas. Det finns kvar här på skärmen – försök spara igen nedan.");
+      }
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
       if (created) {
@@ -612,7 +619,30 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               {error && (
                 <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
                   {error}
+                  {unsavedReply && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="mt-2 rounded-xl"
+                      onClick={() => {
+                        const pending = unsavedReply;
+                        void saveFlowMessage(pending.conversationId, "assistant", pending.content)
+                          .then(() => {
+                            setUnsavedReply(null);
+                            setError(null);
+                            void refresh();
+                          })
+                          .catch(() => setError("Det gick fortfarande inte att spara. Försök igen om en liten stund."));
+                      }}
+                    >
+                      Försök spara igen
+                    </Button>
+                  )}
                 </div>
+              )}
+              {(conversationsError || messagesError) && (
+                <p className="text-xs text-muted-foreground">{conversationsError ?? messagesError}</p>
               )}
             </div>
           </section>}
