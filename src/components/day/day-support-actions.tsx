@@ -46,7 +46,7 @@ export default function DaySupportActions({ date, entries, calendarReady, calend
   const today = date === todayISO();
   const validGaps = gaps.filter(gap => !today || gap.end - duration >= new Date().getHours() * 60 + new Date().getMinutes());
   const chosenGap = validGaps.find(gap => clock(Math.max(gap.start, today ? new Date().getHours() * 60 + new Date().getMinutes() : gap.start)) === slot);
-  const manualTimeValid = /^([01]\\d|2[0-3]):[0-5]\\d$/.test(manualSlot) && Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) + duration <= 1440 && (!today || Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) >= new Date().getHours() * 60 + new Date().getMinutes());
+  const manualTimeValid = /^([01]\d|2[0-3]):[0-5]\d$/.test(manualSlot) && Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) + duration <= 1440 && (!today || Number(manualSlot.slice(0,2)) * 60 + Number(manualSlot.slice(3)) >= new Date().getHours() * 60 + new Date().getMinutes());
   const recoveryTime = chosenGap ? slot : manualTimeValid ? manualSlot : "";
   const canSave = mode === "aterhamtning" ? Boolean((chosenGap && slot) || manualTimeValid) : mode === "planera" ? movableCount > 0 && replanSelectionValid : selectionCount > 0;
   const reset = (next: Mode) => { setMode(next); setSelected([]); setSelectedCalendar([]); setPreview(false); setDrafts({}); setSlot(""); setManualSlot(""); };
