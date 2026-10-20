@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useRef, useState } from "react";
+import { useMemo, type ReactNode, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -32,6 +32,43 @@ import type { Routine } from "@/lib/recurrence";
  * behöva leta upp rätt vy först. Saker som kommer från ett schema (lektioner,
  * barnens hållpunkter) ändras där de hör hemma – då visar vi vart man går.
  */
+
+/**
+ * Tre-prick-menyer ska inte poppa upp mitt i en skroll. Radix-menyer öppnar
+ * normalt redan vid pek ned (som på mobil är skrollstarten), så öppningen
+ * flyttas till pek upp – ett riktigt tryck utan skrollrörelse. Klick kan inte
+ * användas: när pek ned avbryts blir klicket detail 0 (som tangentbordet) på
+ * riktiga tappar, så vakten kunde inte skilja dem åt.
+ */
+export function useScrollSafeMenu() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const pointerScrolling = useRef(false);
+  const triggerProps = {
+    onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      // Pek ned är ofta början på en skroll – hindra Radix från att öppna här.
+      // Radix kör sina handlers efter våra och hoppar över när eventet är avbrutet.
+      event.preventDefault();
+      pointerStart.current = { x: event.clientX, y: event.clientY };
+      pointerScrolling.current = false;
+    },
+    onPointerMove: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (pointerStart.current && !pointerScrolling.current) {
+        const moved = Math.abs(event.clientX - pointerStart.current.x) > 8 || Math.abs(event.clientY - pointerStart.current.y) > 8;
+        if (moved) pointerScrolling.current = true;
+      }
+    },
+    onPointerUp: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      const start = pointerStart.current;
+      pointerStart.current = null;
+      if (!start) return;
+      if (pointerScrolling.current || Math.abs(event.clientX - start.x) > 8 || Math.abs(event.clientY - start.y) > 8) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      setMenuOpen((v) => !v);
+    },
+  };
+  return { menuOpen, setMenuOpen, triggerProps };
+}
 
 export type EditableKind = "uppgift" | "kalender" | "tanke" | "quickflow" | "rutin" | "extern";
 
@@ -83,8 +120,7 @@ export function FlowItemActions({
   children?: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
-  const touchScrolling = useRef(false);
+  const { menuOpen, setMenuOpen, triggerProps } = useScrollSafeMenu();
   const { kind } = kindFromId(itemId);
   const home = externalHome(itemId);
 
@@ -93,17 +129,14 @@ export function FlowItemActions({
   if (compact) {
     return (
       <>
-        <DropdownMenu>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               className={className ?? "h-9 w-9 text-muted-foreground"}
               aria-label="Fler val"
-              onTouchStart={(event) => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; touchScrolling.current = false; }}
-              onTouchMove={(event) => { if (touchStart.current && (Math.abs(event.touches[0].clientY - touchStart.current.y) > 8 || Math.abs(event.touches[0].clientX - touchStart.current.x) > 8)) touchScrolling.current = true; }}
-              onPointerUpCapture={(event) => { if (event.pointerType === "touch" && touchScrolling.current) { event.preventDefault(); event.stopPropagation(); } }}
-              onClickCapture={(event) => { if (touchScrolling.current) { event.preventDefault(); event.stopPropagation(); touchScrolling.current = false; } }}
+              {...triggerProps}
             >
               <MoreHorizontal size={size + 2} />
             </Button>

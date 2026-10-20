@@ -3,11 +3,13 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useScrollSafeMenu } from "@/components/flow-item-actions";
 import { useLang } from "@/hooks/use-language";
 
 /** Diskret ⋯-meny i Idag-hälsningen för att ändra det egna visningsnamnet. */
 export function GreetingNameMenu({ name, onSave }: { name: string; onSave: (value: string) => Promise<boolean> }) {
   const { t } = useLang();
+  const { menuOpen, setMenuOpen, triggerProps } = useScrollSafeMenu();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(name);
   const [error, setError] = useState<string | null>(null);
@@ -32,13 +34,14 @@ export function GreetingNameMenu({ name, onSave }: { name: string; onSave: (valu
 
   return (
     <>
-      <DropdownMenu modal={false}>
+      <DropdownMenu modal={false} open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <button
             ref={triggerRef}
             type="button"
             aria-label={t("Fler val för hälsningen")}
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            {...triggerProps}
           >
             <MoreHorizontal size={20} aria-hidden />
           </button>

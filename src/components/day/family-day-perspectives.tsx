@@ -7,6 +7,7 @@ import { FAMILY_ID, PersonAvatar, PersonSwitcher, possessive, type Person, type 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useScrollSafeMenu } from "@/components/flow-item-actions";
 import { Input } from "@/components/ui/input";
 import { useChildEvents } from "@/hooks/use-child-events";
 import { useChildren } from "@/hooks/use-children";
@@ -195,10 +196,11 @@ export default function FamilyDayPerspectives({
   // ---- Rendering ----------------------------------------------------------
   const EntryMenu = ({ entry }: { entry: TimelineEntry }) => {
     const linked = linkedSiblings(entry, allEntries).length > 0;
+    const { menuOpen, setMenuOpen, triggerProps } = useScrollSafeMenu();
     return (
-      <DropdownMenu>
+      <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
-          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0 text-muted-foreground" aria-label={`Fler val för ${entry.title}`}>
+          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0 text-muted-foreground" aria-label={`Fler val för ${entry.title}`} {...triggerProps}>
             <MoreHorizontal size={15} />
           </Button>
         </DropdownMenuTrigger>
@@ -284,7 +286,7 @@ export default function FamilyDayPerspectives({
             })}
           </span>
         )}
-        {EntryMenu({ entry })}
+        <EntryMenu entry={entry} />
       </div>
     );
   };
