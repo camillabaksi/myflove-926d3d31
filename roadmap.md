@@ -1,4 +1,7 @@
 # Roadmap
+## Rättat: handinmatad tid blockerades (2026-10-20)
+- [x] Rättat tidskontrollen i kalenderns rutinval och i dagstödets pausval så en självvald tid kan sparas; två riktade tester tillagda och gröna. Ingen publicering.
+
 ## Samlat Paceable-material och editorialbilder (2026-10-19)
 - [x] Omfattning vald: dokument, pitchfilmer, korta appfilmer och fristående reklamfilm; anonymiserat verkligt kontoinnehåll.
 - [x] Inventerat senaste källor och aktuell produkt; materialplan godkänd.

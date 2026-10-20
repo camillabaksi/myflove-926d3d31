@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-19";
+export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-20 – Rättat: egen tid gick inte att spara i kalendern",
+    items: ["Kontrollen av handinmatade tider var felaktig och godkände ingen tid alls: ”Spara bara idag” för en enstaka rutin var alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till. Ingen ändring av data, lagring, rutt eller något annat flöde. Ingen publicering."],
+  },
   {
     title: "2026-10-19 – Pace-sidan: finjusterad responsiv bakgrund",
     items: ["Ny liggande desktopbakgrund med bibehållna proportioner; bilden fortsätter bakom historik, förslag och chatt och tonar mjukt ut mot sidans ivory utan synlig kant. På mobil ritas den stående bilden i naturlig proportion så alla tre stenar alltid syns med luft från högerkanten, med en diskret ljus toning bakom texten och gradvis lugnare kontrast nedåt. Verifierat på 360/390/430 px, surfplatta och desktop. Ingen ändring av data, chattlogik eller funktioner. Ej publicerat."],
