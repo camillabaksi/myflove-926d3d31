@@ -132,7 +132,7 @@ function RootComponent() {
   const appTypography = useRouterState({
     select: (s) =>
       s.matches.some((match) => match.routeId === "/_app") ||
-      ["/sign-in", "/sign-up", "/designsystem"].includes(s.location.pathname),
+      ["/sign-in", "/sign-up", "/glomt-losenord", "/nytt-losenord", "/designsystem"].includes(s.location.pathname),
   });
   // Portalled dialogs/menus share the same type as their page. Public marketing
   // keeps its own typography; this flag never changes a saved preference.

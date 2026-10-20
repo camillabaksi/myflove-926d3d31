@@ -419,7 +419,7 @@ html[data-paceable-typography="true"] :is(h3, .pace-ds-heading-3, .pace-more-car
 html[data-paceable-typography="true"] :is(h4, h5, h6) {
   font-size: var(--pace-type-body) !important;
 }
-html[data-paceable-typography="true"] :is(p, li, dd, dt, td, th, .text-base, .text-sm, .text-lg, .text-xl):not(:is(.tabular-nums, .font-mono, .pace-type-time, .book-hand, .book-writing, .book-import-preview, .book-map-canvas *, .book-map-overview *, h1, h2, h3, h4, h5, h6, button, input, textarea, select)) {
+html[data-paceable-typography="true"] :is(p, li, dd, dt, td, th, .text-base, .text-sm, .text-lg, .text-xl):not(:is(.tabular-nums, .font-mono, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl, .pace-type-time, .book-hand, .book-writing, .book-import-preview, .book-map-canvas *, .book-map-overview *, h1, h2, h3, h4, h5, h6, button, input, textarea, select)) {
   font-size: var(--pace-type-body);
 }
 html[data-paceable-typography="true"] :is(.pace-type-activity, .pace-tasks-title) {
@@ -480,4 +480,18 @@ html[data-paceable-typography="true"] .notebook .book-decision .book-sheet .book
 }
 html[data-paceable-typography="true"] .notebook .book-sheet .book-add-line {
   font-size: var(--pace-type-control) !important;
+}
+html[data-paceable-typography="true"] :is([role="tab"], .book-tabs a) {
+  min-height: 44px;
+  white-space: normal;
+}
+html[data-paceable-typography="true"] .book-tabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+html[data-paceable-typography="true"] .notebook :is(.book-header, .book-tools) {
+  gap: 0.5rem;
+}
+/* The existing roomy preference remains an explicit accessibility choice. */
+html[data-paceable-typography="true"][data-npf-space="roomy"] [data-pace-command]:not(.pace-calendar-entry, .pace-calendar-timeline *, .book-point-menu) {
+  padding-block: 0.25rem;
 }
