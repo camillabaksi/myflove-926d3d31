@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Enhetligare normalstorlekar i hela appen",
+    items: ["Gemensamma mindre rem-baserade textroller för sidor, undervyer och dialoger; aktivitetsnamn, knapptext och formulär följer samma skala. Befintlig Större text, läsbar anteckningshandstil, minst 44 px tryckytor, logotyper, data och tidsgeometri bevaras. Ingen publicering.", "Verifiering: 54 riktade tester och 3 216 adress/bredd/tema/textkontroller utan dokumentoverflow; detaljer och begränsningar i docs/app-type-scale-verification.md."],
+  },
+  {
     title: "2026-10-20 – Kompaktare mobilkontroller och tidsrader",
     items: ["Mobilöverblick (2026-10-20): mindre synliga knappytor med minst 44 px tryckytor på optade kompakta sidor, Kalender, Planera och dagstöd. Tätare tidsval och dagslistor; veckans tidslinje använder samma samlade skala för aktiviteter, timlinjer, NU och drag/flytt. Korta aktiviteter och stor text får extra visuellt utrymme utan ändrade klockslag eller antagna längder. Datorns skala och funktioner, data och utkast bevaras. Ingen publicering."],
   },

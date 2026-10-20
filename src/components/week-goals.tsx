@@ -162,7 +162,7 @@ export function WeekGoals() {
                       {done && <Check size={16} aria-hidden />}
                     </button>
                     <div className="min-w-0 flex-1">
-                       <p className={`font-handwritten break-words text-[22px] font-semibold leading-tight ${done ? "text-muted-foreground line-through" : "text-ink"}`}>
+                       <p className={`pace-type-activity font-handwritten break-words text-[22px] font-semibold leading-tight ${done ? "text-muted-foreground line-through" : "text-ink"}`}>
                         {g.title}
                       </p>
                       {g.scheduledDate && !done && (

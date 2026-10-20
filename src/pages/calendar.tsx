@@ -621,7 +621,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                                 {e.sharedWith.length > 0 && ` · ${t("delad")}`}
                               </div>
                               <div
-                                 className={`font-display truncate text-2xl font-semibold leading-tight ${e.completed ? "line-through opacity-60" : ""}`}
+                                 className={`pace-type-activity font-display truncate text-2xl font-semibold leading-tight ${e.completed ? "line-through opacity-60" : ""}`}
                               >
                                 {e.title}
                               </div>
@@ -660,7 +660,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                               {e.member?.displayName ?? t("Familj")}{" "}
                               {e.time && `${t("kl")} ${e.time}`}
                             </div>
-                             <div className="font-display break-words text-2xl font-semibold leading-tight">{e.title}</div>
+                             <div className="pace-type-activity font-display break-words text-2xl font-semibold leading-tight">{e.title}</div>
                           </div>
                         </div>
                         <button
@@ -684,7 +684,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                           <div className="text-xs text-accent-foreground font-medium uppercase tracking-wider mb-0.5">
                             {t("Viktigast idag")}
                           </div>
-                           <div className="font-display break-words text-2xl font-semibold leading-tight">{selectedItems.focus.text}</div>
+                           <div className="pace-type-activity font-display break-words text-2xl font-semibold leading-tight">{selectedItems.focus.text}</div>
                         </div>
                       </div>
                     )}
@@ -707,7 +707,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                                 : t("Påminnelse")}{" "}
                               {r.time && `kl ${r.time}${r.endTime ? `–${r.endTime}` : ""}`}
                             </div>
-                             <div className="font-display truncate text-2xl font-semibold leading-tight">{r.title}</div>
+                             <div className="pace-type-activity font-display truncate text-2xl font-semibold leading-tight">{r.title}</div>
                             {r.note && (
                               <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
                                 <LinkifiedText text={r.note} />
@@ -771,7 +771,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                               </div>
                             )}
                             <div
-                               className={`font-display truncate text-2xl font-semibold leading-tight ${task.completed ? "line-through text-muted-foreground" : ""}`}
+                               className={`pace-type-activity font-display truncate text-2xl font-semibold leading-tight ${task.completed ? "line-through text-muted-foreground" : ""}`}
                             >
                               {task.title}
                             </div>
