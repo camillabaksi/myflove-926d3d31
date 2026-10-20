@@ -27,6 +27,7 @@ import {
   PlayCircle,
   BarChart3,
   Briefcase,
+  ClipboardCheck,
 } from "lucide-react";
 import ChangelogExport from "@/components/changelog-export";
 import UserFunnelCard from "@/components/admin/user-funnel";
@@ -83,6 +84,12 @@ export default function AdminPage() {
               className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
             >
               <BarChart3 size={16} /> {t("Appstatistik")}
+            </Link>
+            <Link
+              to="/admin-testare"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-secondary"
+            >
+              <ClipboardCheck size={16} /> {t("Testanmälningar")}
             </Link>
             <Link
               to="/pitch"
