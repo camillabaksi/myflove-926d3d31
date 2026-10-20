@@ -3032,6 +3032,18 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 .pace-standard-header-action { flex: 0 1 auto; min-width: 0; max-width: 100%; }
 .pace-standard-header-extra { flex-basis: 100%; min-width: 0; }
 
+/* Large text needs the full reading surface on tablets, not a wider sidebar. */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .pace-shell-navigation.pace-app-text-enlarged { flex-direction: column; }
+  .pace-app-text-enlarged .pace-shell-sidebar,
+  .pace-app-text-enlarged .pace-more-desktop { display: none; }
+  .pace-app-text-enlarged .pace-compact-header,
+  .pace-app-text-enlarged .pace-mobile-navigation,
+  .pace-app-text-enlarged .pace-more-mobile { display: block; }
+  .pace-app-text-enlarged .pace-compact-header + div { display: none; }
+  .pace-app-text-enlarged .pace-mobile-content-scroll { padding-bottom: calc(var(--pace-mobile-nav-height, 8rem) + 1rem); }
+}
+
 /* Compact secondary pages opt in, preserving legacy pages and all state owners. */
 .pace-ds.pace-compact-page { background: transparent; }
 .pace-compact-page { --pace-section-gap: var(--pace-space-4); }
