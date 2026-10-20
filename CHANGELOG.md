@@ -1,3 +1,6 @@
+## 2026-10-20 – Kompaktare mobilkontroller och tidsrader
+- **Mobilöverblick** (2026-10-20): mindre synliga knappytor med minst 44 px tryckytor på optade kompakta sidor, Kalender, Planera och dagstöd. Tätare tidsval och dagslistor; veckans tidslinje använder samma samlade skala för aktiviteter, timlinjer, NU och drag/flytt. Korta aktiviteter och stor text får extra visuellt utrymme utan ändrade klockslag eller antagna längder. Datorns skala och funktioner, data och utkast bevaras. Ingen publicering.
+
 ## 2026-10-20 – Kompakt layout på återstående appdelar
 - 36 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering.
 

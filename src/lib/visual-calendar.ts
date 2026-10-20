@@ -163,13 +163,13 @@ export function calendarLoad(items: CalendarEntry[]): { label: string; segments:
   return { label: ["", "Låg", "Lagom", "Ganska hög", "Hög"][segments] ?? "Inte uppskattad", segments, unknown };
 }
 /** Greedy lanes with connected overlap groups; geometry never grants edit permission. */
-export function layoutCalendar(items: CalendarEntry[]): Array<{ item: CalendarEntry; start: number; end: number; lane: number; lanes: number }> {
+export function layoutCalendar(items: CalendarEntry[], visualMinimumMinutes = 32): Array<{ item: CalendarEntry; start: number; end: number; lane: number; lanes: number }> {
   const sorted = items.flatMap(item => {
     const start = minuteOf(item.time);
     if (start === null) return [];
     const finish = minuteOf(item.endTime);
     // Visual minimum for readable touch targets, not an asserted duration.
-    return [{ item, start, end: Math.max(start + 32, finish !== null && finish > start ? finish : start), lane: 0, lanes: 1 }];
+    return [{ item, start, end: Math.max(start + visualMinimumMinutes, finish !== null && finish > start ? finish : start), lane: 0, lanes: 1 }];
   }).sort((a, b) => a.start - b.start || b.end - a.end);
   let group: typeof sorted = [];
   let groupEnd = -1;

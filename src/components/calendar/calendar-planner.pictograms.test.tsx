@@ -129,7 +129,7 @@ describe("Calendar entry view", () => {
       const first = Number(timeline.dataset.calendarTimelineStart);
       vi.spyOn(timeline, "getBoundingClientRect").mockReturnValue({ top: 100 } as DOMRect);
       const event = createEvent.drop(timeline, { dataTransfer: { getData: () => fixture.id } });
-      Object.defineProperty(event, "clientY", { value: 100 + (minute - first) * 1.7 });
+      Object.defineProperty(event, "clientY", { value: 100 + (minute - first) * Number(timeline.dataset.calendarTimelineScale) });
       fireEvent(timeline, event);
     };
     dragTo(10 * 60);
@@ -137,6 +137,30 @@ describe("Calendar entry view", () => {
     fireEvent.click(screen.getByRole("button", { name: "Visa hela dygnet (00–24)" }));
     dragTo(22 * 60 + 15);
     expect(write).toHaveBeenLastCalledWith("a", expect.objectContaining({ time: "22:15", endTime: "22:45" }));
+  });
+  it("anchors mobile events and the current-time marker to the same compressed hour scale", () => {
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline");
+    if (!timeline) throw new Error("Expected the occupied timeline");
+    expect(timeline.dataset.calendarTimelineScale).toBe("1.35");
+    const first = Number(timeline.dataset.calendarTimelineStart);
+    const block = within(timeline).getByRole("button", { name: /Fika med Sara, 09:00/ }).closest<HTMLElement>(".absolute");
+    expect(Number.parseFloat(block?.style.top ?? "NaN")).toBeCloseTo((540 - first) * 1.35);
+    fireEvent.click(screen.getByRole("button", { name: "Visa hela dygnet (00–24)" }));
+    const marker = container.querySelector<HTMLElement>("[data-calendar-now]");
+    const now = new Date();
+    expect(Number.parseFloat(marker?.style.top ?? "NaN")).toBeCloseTo((now.getHours() * 60 + now.getMinutes()) * 1.35);
+  });
+  it("keeps short mobile activities in an accessible cluster without overlapping targets", () => {
+    model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", time: "09:30", endTime: "09:35", title: "Kort samtal" }];
+    const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const timeline = container.querySelector<HTMLElement>(".pace-calendar-timeline");
+    if (!timeline) throw new Error("Expected the occupied timeline");
+    const group = within(timeline).getByRole("button", { name: /2 aktiviteter/ });
+    fireEvent.click(group);
+    const dialog = within(screen.getByRole("dialog"));
+    expect(dialog.getByRole("button", { name: /Fika med Sara, 09:00/ })).toBeInTheDocument();
+    expect(dialog.getByRole("button", { name: /Kort samtal, 09:30/ })).toBeInTheDocument();
   });
   it("opens the requested week and still lets the user choose another view", () => {
     render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
