@@ -5,6 +5,7 @@ import type { User, Session } from "@supabase/supabase-js";
 import { clearLocalUserData } from "@/lib/local-data";
 import { setDemoSession } from "@/lib/demo-account";
 import { bindAccount, parkActiveData } from "@/lib/account-scope";
+import { lockSecureLocal } from "@/lib/secure-local";
 import { ACCOUNT_BOUND_EVENT } from "@/lib/cloud-storage";
 
 type AuthState = {
