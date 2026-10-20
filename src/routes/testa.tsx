@@ -26,7 +26,7 @@ type Participation = "technical" | "everyday" | "both";
 type Focus = "planning" | "energy" | "capture" | "recovery" | "overview" | "general";
 
 const control = "min-h-12 w-full rounded-2xl border border-[#DED7DE] bg-[#FFFEFC] px-4 py-3 text-sm text-[#392B3D] outline-none transition-colors focus-visible:border-[#78557D] focus-visible:ring-2 focus-visible:ring-[#78557D]/25";
-const label = "mb-1.5 block text-sm font-semibold text-[#392B3D]";
+const label = "mb-1 block text-sm font-semibold text-[#392B3D]";
 
 function TesterPage() {
   const [email, setEmail] = useState("");
@@ -61,37 +61,43 @@ function TesterPage() {
   return (
     <PublicPage quiet>
       <div className="bg-[radial-gradient(ellipse_at_90%_8%,#F6E7E0_0%,transparent_48%),radial-gradient(ellipse_at_0%_85%,#EFE7F3_0%,transparent_50%)]">
-        <div className="welcome-wrap grid items-start gap-8 py-12 sm:gap-12 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
-          <section className="space-y-6 lg:pt-5" aria-labelledby="tester-title">
+        <div className="welcome-wrap grid items-start gap-6 py-7 sm:gap-10 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]">
+          <section className="space-y-4 sm:space-y-6 lg:pt-5" aria-labelledby="tester-title">
             <p className="welcome-eyebrow">Paceable i test</p>
-            <h1 id="tester-title" className="!mt-0">Vill du hjälpa oss göra vardagen lite lättare?</h1>
-            <p className="max-w-xl text-base leading-8 text-[#635968] sm:text-lg">
-              Vi söker vuxna som vill prova Paceable och berätta vad som fungerar.
-              Du kan hjälpa oss testa appen tekniskt, använda den i din egen vardag – eller både och.
+            <h1 id="tester-title" className="!mt-0 !max-w-[18ch] !text-[clamp(2.15rem,7.5vw,3.3rem)] !leading-[1.11] sm:!max-w-[13ch] sm:!text-[clamp(3rem,4.5vw,4.2rem)]">Vill du hjälpa oss göra vardagen lite lättare?</h1>
+            <p className="max-w-xl text-sm leading-6 text-[#635968] sm:text-lg sm:leading-8">
+              Vi söker vuxna som vill prova Paceable – som tekniktestare, i vardagen eller både och.
             </p>
-            <p className="max-w-xl text-sm leading-7 text-[#635968]">
-              Paceable samlar tankar, planering, energi och återhämtning på ett lugnare sätt.
-              Du behöver inte ha någon diagnos eller vara teknikvan. Vi vill lära oss vad som faktiskt hjälper.
+            <p className="max-w-xl text-sm leading-6 text-[#635968]">
+              Hjälp oss se om planering, energi och återhämtning faktiskt blir enklare.
+              Ingen diagnos eller teknikvana behövs.
             </p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-3xl border border-[#E4DCEB] bg-[#F5F0F8]/90 p-5">
-                <Smartphone className="mb-3 h-6 w-6 text-[#775584]" aria-hidden="true" />
-                <h2 className="text-xl">Testa tekniken</h2>
-                <p className="mt-2 text-sm leading-6 text-[#635968]">Hjälp oss upptäcka problem med installation, Android, iPhone och funktioner.</p>
+            <a href="#anmalan" className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[#D6CBD8] bg-[#FFFEFC]/80 px-4 text-sm font-medium text-[#512654] hover:bg-[#F5F0F8] lg:hidden">
+              Gå till anmälan <ArrowRight className="h-4 w-4 rotate-90" aria-hidden="true" />
+            </a>
+            <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-3">
+              <div className="flex items-start gap-3 rounded-2xl border border-[#E4DCEB] bg-[#F5F0F8]/90 p-3.5 sm:block sm:rounded-3xl sm:p-5">
+                <Smartphone className="mt-1 h-5 w-5 shrink-0 text-[#775584] sm:mb-3 sm:mt-0 sm:h-6 sm:w-6" aria-hidden="true" />
+                <div>
+                  <h2 className="!text-lg sm:!text-xl">Testa tekniken</h2>
+                  <p className="mt-1 text-sm leading-5 text-[#635968] sm:mt-2 sm:leading-6">Hjälp oss hitta problem med installation och funktioner på Android och iPhone.</p>
+                </div>
               </div>
-              <div className="rounded-3xl border border-[#E0E8DD] bg-[#F0F5EF]/90 p-5">
-                <Heart className="mb-3 h-6 w-6 text-[#698471]" aria-hidden="true" />
-                <h2 className="text-xl">Testa i vardagen</h2>
-                <p className="mt-2 text-sm leading-6 text-[#635968]">Se om Paceable hjälper dig med överblick, ork och nästa lilla steg.</p>
+              <div className="flex items-start gap-3 rounded-2xl border border-[#E0E8DD] bg-[#F0F5EF]/90 p-3.5 sm:block sm:rounded-3xl sm:p-5">
+                <Heart className="mt-1 h-5 w-5 shrink-0 text-[#698471] sm:mb-3 sm:mt-0 sm:h-6 sm:w-6" aria-hidden="true" />
+                <div>
+                  <h2 className="!text-lg sm:!text-xl">Testa i vardagen</h2>
+                  <p className="mt-1 text-sm leading-5 text-[#635968] sm:mt-2 sm:leading-6">Se om Paceable hjälper dig med överblick, ork och nästa lilla steg.</p>
+                </div>
               </div>
             </div>
-            <div className="space-y-2 text-sm leading-7 text-[#635968]">
+            <div className="space-y-1 text-xs leading-6 text-[#635968] sm:space-y-2 sm:text-sm sm:leading-7">
               <p><Check className="mr-2 inline h-4 w-4 text-[#698471]" aria-hidden="true" />Gratis test, ungefär två veckor</p>
               <p><Check className="mr-2 inline h-4 w-4 text-[#698471]" aria-hidden="true" />Ingen skyldighet att använda alla funktioner</p>
               <p><Check className="mr-2 inline h-4 w-4 text-[#698471]" aria-hidden="true" />Några korta frågor om hur det fungerat</p>
             </div>
           </section>
-          <section aria-labelledby="form-title" className="min-w-0 rounded-[2rem] border border-[#E9E1E5] bg-[#FFFEFC]/95 p-5 shadow-[0_12px_40px_rgba(81,38,84,0.07)] sm:p-8">
+          <section aria-labelledby="form-title" id="anmalan" className="min-w-0 scroll-mt-4 rounded-[2rem] border border-[#E9E1E5] bg-[#FFFEFC]/95 p-5 shadow-[0_12px_40px_rgba(81,38,84,0.07)] sm:p-8">
             {submitted ? (
               <div role="status" className="space-y-5 py-8 text-center">
                 <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#EEF4EB] text-[#62816B]"><Check className="h-8 w-8" aria-hidden="true" /></span>
@@ -101,9 +107,9 @@ function TesterPage() {
               </div>
             ) : (
               <>
-                <h2 id="form-title" className="text-3xl">Anmäl ditt intresse</h2>
+                <h2 id="form-title" className="!text-[1.85rem] sm:!text-3xl">Anmäl ditt intresse</h2>
                 <p className="mt-2 text-sm leading-6 text-[#635968]">Det tar ungefär en minut. Vi hör av oss via mejl när vi har en testplats.</p>
-                <form onSubmit={submit} className="mt-7 space-y-5">
+                <form onSubmit={submit} className="mt-5 space-y-4 sm:mt-7 sm:space-y-5">
                   <div>
                     <label htmlFor="tester-email" className={label}>Din mejladress *</label>
                     <input id="tester-email" className={control} type="email" name="email" autoComplete="email" maxLength={254} required value={email} onChange={e => setEmail(e.target.value)} placeholder="namn@exempel.se" />
@@ -139,7 +145,7 @@ function TesterPage() {
                       <option value="overview">Få ihop vardagen</option>
                     </select>
                   </div>
-                  <div className="space-y-3 border-t border-[#EAE5E9] pt-5 text-sm leading-6 text-[#493B4D]">
+                  <div className="space-y-3 border-t border-[#EAE5E9] pt-4 text-sm leading-6 text-[#493B4D] sm:pt-5">
                     <label className="flex cursor-pointer items-start gap-3">
                       <input className="mt-1 h-4 w-4 accent-[#512654]" type="checkbox" checked={feedback} onChange={e => setFeedback(e.target.checked)} />
                       <span>Jag kan tänka mig att svara på några korta frågor om testet.</span>
@@ -153,7 +159,7 @@ function TesterPage() {
                       <span>Jag samtycker till att Paceable sparar min mejladress och mina val för att kontakta mig om testningen. *</span>
                     </label>
                   </div>
-                  <p className="text-xs leading-6 text-[#746979]">
+                  <p className="rounded-xl bg-[#FAF7F9] p-3 text-xs leading-5 text-[#746979] sm:leading-6">
                     Uppgifterna används bara för testrekrytering, inte för reklam. Du kan när som helst be oss ta bort din anmälan via <a className="underline underline-offset-2" href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>. Läs vår <Link to="/integritet" className="underline underline-offset-2">integritetspolicy</Link>.
                   </p>
                   {/* Honeypot: kept out of keyboard and screen-reader navigation. */}
@@ -162,7 +168,7 @@ function TesterPage() {
                     <input id="tester-company" name="company" tabIndex={-1} autoComplete="off" value={company} onChange={e => setCompany(e.target.value)} />
                   </div>
                   {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-800">{error}</p>}
-                  <button type="submit" disabled={sending} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#512654] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#66376a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#512654] disabled:opacity-60">
+                  <button type="submit" disabled={sending} className="!mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#512654] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#66376a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#512654] disabled:opacity-60">
                     {sending ? "Skickar…" : "Jag vill testa Paceable"}
                     {!sending && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
                   </button>
@@ -171,7 +177,7 @@ function TesterPage() {
             )}
           </section>
         </div>
-        <div className="welcome-wrap pb-14 text-center text-sm text-[#635968]">
+        <div className="welcome-wrap pb-9 text-center text-sm text-[#635968] sm:pb-14">
           <MessageCircle className="mx-auto mb-2 h-6 w-6 text-[#967AA0]" aria-hidden="true" />
           <p>Alla ansökningar behöver inte leda till en testplats. Tack för att du vill hjälpa till.</p>
           <p className="mt-2 inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4" aria-hidden="true" /> Du behöver inte lämna några hälsouppgifter eller diagnoser.</p>
