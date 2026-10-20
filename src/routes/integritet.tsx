@@ -118,9 +118,14 @@ function PrivacyPage() {
         Rättslig grund är ditt samtycke. Uppgifterna används endast för att kontakta dig
         om testplatser, inbjudningar och frivillig återkoppling, inte för marknadsföring.
         Anmälningarna hålls åtskilda från appkonton och användningsstatistik och kan bara
-        ses av behöriga administratörer. De sparas under rekryteringen och den aktuella
-        testperioden, eller tills du ber oss radera dem. Återkalla samtycket eller be
-        om utdrag eller radering via <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
+        ses av behöriga administratörer. Om automatiska mejl är aktiverade används
+        leverantören Resend för att skicka ett bekräftelsemejl till dig och en avisering
+        till Paceables kontaktadress. För det delas din mejladress samt de testval som
+        behövs för aviseringen med mejlleverantören. Inga diagnosuppgifter ingår.
+        Mejl till vår kontaktadress hanteras enligt vår e-postlösning hos Loopia.
+        Anmälningarna sparas under rekryteringen och den aktuella testperioden,
+        eller tills du ber oss radera dem. Återkalla samtycket eller be om
+        utdrag eller radering via <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
       </p>
 
       <h2>Frivillig veckopuls</h2>
