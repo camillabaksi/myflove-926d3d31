@@ -22,6 +22,10 @@ vi.mock("wouter", () => ({
   Link: ({ href, children }: { href: string; children: ReactNode }) => <a href={href}>{children}</a>,
   useLocation: () => ["/kalender", () => {}] as const,
 }));
+vi.mock("@tanstack/react-router", async importOriginal => {
+  const actual = await importOriginal<typeof import("@tanstack/react-router")>();
+  return { ...actual, Link: ({ children, to }: { children?: ReactNode; to: string }) => <a href={String(to)}>{children}</a> };
+});
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: useRef(null), enlarged: false }) }));
 vi.mock("@/lib/cloud-storage", () => ({ ACCOUNT_BOUND_EVENT: "myflove-account-bound", useCloudSyncedStorage: (_key: string, initial: unknown) => useState(initial), getSyncUser: async () => ({ id: "owner" }) }));
 vi.mock("@/hooks/use-visual-calendar", () => ({ useVisualCalendar: (dates: string[]) => ({ days: Object.fromEntries(dates.map(date => [date, model.entries.filter(entry => entry.date === date)])), familyMembers: [], externalError: null, planningReady: model.ready, planningError: model.error }) }));
