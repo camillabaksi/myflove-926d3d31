@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type TouchEvent as ReactTouchEvent } from "react";
+import { type ReactNode, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type TouchEvent as ReactTouchEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -52,13 +52,16 @@ export function useScrollSafeMenu() {
     },
     onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
       // Pek ned är ofta början på en skroll – hindra Radix från att öppna här.
-      if (event.pointerType !== "mouse") event.preventDefault();
+      // Öppning sker i stället vid ett riktigt tryck i onClick nedan.
+      event.preventDefault();
     },
-    onClick: () => {
+    onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
       if (touchScrolling.current) {
         touchScrolling.current = false;
         return;
       }
+      // Enter/space på tangentbordet hanteras av Radix (klicket har detail 0).
+      if (event.detail === 0) return;
       setMenuOpen((v) => !v);
     },
   };
