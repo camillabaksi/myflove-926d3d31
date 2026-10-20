@@ -146,6 +146,8 @@ const cache = new Map<string, string | null>();
 const pendingWrites = new Set<string>();
 let ready: Promise<void> | null = null;
 let lastFailure = 0;
+// Every lock invalidates asynchronous work from the previous account session.
+let storageGeneration = 0;
 
 async function encrypt(plain: string): Promise<string> {
   if (!cryptoKey) throw new Error("locked");
@@ -173,13 +175,15 @@ async function decrypt(stored: string): Promise<string | null> {
 }
 
 async function writeEncrypted(key: string, value: string): Promise<void> {
+  const generation = storageGeneration;
   try {
     const encrypted = await encrypt(value);
     // En nyare skrivning har redan tagit över – låt den vinna.
-    if (cache.get(key) !== value) return;
+    if (generation !== storageGeneration || cache.get(key) !== value) return;
     window.localStorage.setItem(key, encrypted);
     pendingWrites.delete(key);
   } catch {
+    if (generation !== storageGeneration) return;
     // Full lagring eller låst nyckel: värdet finns kvar i minnet och
     // försöket görs om vid nästa skrivning/upplåsning.
     pendingWrites.add(key);
@@ -202,14 +206,19 @@ function baseOfStash(storageKey: string): string | null {
  */
 export function unlockSecureLocal(): Promise<void> {
   if (ready) return ready;
+  const generation = storageGeneration;
+  const isCurrent = () => generation === storageGeneration;
   ready = (async () => {
     if (!hasCrypto()) {
       setStatus("unavailable");
       return;
     }
     try {
-      cryptoKey = await loadKey();
+      const loadedKey = cryptoKey ?? await loadKey();
+      if (!isCurrent()) return;
+      cryptoKey = loadedKey;
     } catch {
+      if (!isCurrent()) return;
       lastFailure = Date.now();
       setStatus("unavailable");
       // Tillåt ett nytt försök senare.
@@ -219,6 +228,7 @@ export function unlockSecureLocal(): Promise<void> {
 
     const touched: string[] = [];
     for (const key of SENSITIVE_KEYS) {
+      if (!isCurrent()) return;
       // Värden skrivna före upplåsningen är nyare än disken.
       if (pendingWrites.has(key) && cache.has(key)) continue;
       let raw: string | null = null;
@@ -230,6 +240,7 @@ export function unlockSecureLocal(): Promise<void> {
       if (raw === null) continue;
       if (raw.startsWith(PREFIX)) {
         const plain = await decrypt(raw);
+        if (!isCurrent() || window.localStorage.getItem(key) !== raw || pendingWrites.has(key)) continue;
         // Går inte att dekryptera (nyckeln byttes ut): visa tomt men låt
         // chiffertexten ligga orörd tills användaren själv skriver nytt.
         if (plain !== null) cache.set(key, plain);
@@ -237,6 +248,7 @@ export function unlockSecureLocal(): Promise<void> {
       } else {
         cache.set(key, raw);
         await writeEncrypted(key, raw);
+        if (!isCurrent()) return;
         touched.push(key);
       }
     }
@@ -253,7 +265,9 @@ export function unlockSecureLocal(): Promise<void> {
         if (!base || !isSensitiveKey(base)) continue;
         const raw = window.localStorage.getItem(k);
         if (raw !== null && !raw.startsWith(PREFIX)) {
-          window.localStorage.setItem(k, await encrypt(raw));
+          const encrypted = await encrypt(raw);
+          if (!isCurrent()) return;
+          if (window.localStorage.getItem(k) === raw) window.localStorage.setItem(k, encrypted);
         }
       }
     } catch {
@@ -261,10 +275,12 @@ export function unlockSecureLocal(): Promise<void> {
     }
 
     for (const key of [...pendingWrites]) {
+      if (!isCurrent()) return;
       const v = cache.get(key);
       if (typeof v === "string") await writeEncrypted(key, v);
     }
 
+    if (!isCurrent()) return;
     setStatus(pendingWrites.size > 0 ? "error" : "ready");
     window.dispatchEvent(new CustomEvent(SECURE_UNLOCK_EVENT, { detail: { keys: touched } }));
   })();
@@ -324,8 +340,10 @@ export function hasUnpersistedSecureWrites(): boolean {
  * raderas när inget förråd längre behöver den, så rester blir oläsbara.
  */
 export function lockSecureLocal(options: { keepKey?: boolean } = {}): void {
+  storageGeneration += 1;
   cache.clear();
   pendingWrites.clear();
+  ready = null;
   if (options.keepKey) return;
   cryptoKey = null;
   ready = null;
@@ -340,6 +358,7 @@ export function lockSecureLocal(options: { keepKey?: boolean } = {}): void {
 
 /** Endast för tester. */
 export function __resetSecureLocal(): void {
+  storageGeneration += 1;
   cache.clear();
   pendingWrites.clear();
   cryptoKey = null;
@@ -354,12 +373,14 @@ if (typeof window !== "undefined") {
     const key = event.key;
     if (!key || !isSensitiveKey(key) || event.storageArea !== window.localStorage) return;
     const raw = event.newValue;
+    const generation = storageGeneration;
     void (async () => {
       if (raw === null) cache.set(key, null);
       else if (raw.startsWith(PREFIX)) {
         if (!cryptoKey) await unlockSecureLocal();
+        if (generation !== storageGeneration) return;
         const plain = await decrypt(raw);
-        if (plain === null) return;
+        if (plain === null || generation !== storageGeneration || window.localStorage.getItem(key) !== raw || pendingWrites.has(key)) return;
         cache.set(key, plain);
       } else return;
       pendingWrites.delete(key);

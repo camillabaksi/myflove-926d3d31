@@ -22,7 +22,7 @@ export const STASH_PREFIX = "myflove-stash:";
 export const UNOWNED = "unowned";
 
 /** Prefix som räknas som användarens egen data. */
-const USER_DATA_PREFIXES = ["myflove", "myflow", "flow-", "sb-"];
+const USER_DATA_PREFIXES = ["myflove", "myflow", "flow-", "sb-", "paceable-"];
 
 /** Nycklar som beskriver enheten/visningen och inte flyttas mellan konton. */
 export const DEVICE_KEYS = new Set<string>([

@@ -25,3 +25,6 @@ Mobile calendar geometry comes from calendar-geometry for every forward/reverse 
 App-wide text sizes use shared rem roles in app-typography.css under the existing app flag, including portals; shared Button marks command surfaces separately from timeline targets to preserve text enlargement, brand assets and time geometry.
 Notebook workspaces reuse the shared page geometry and full-width mobile navigation; paper styling stays inside editors so private draft and revision ownership is unchanged.
 Battery groups existing read-only check-in history separately from the embedded EnergyFlowContent tools; source hooks, forms and legacy destinations retain ownership to avoid parallel health storage.
+Push renewal uses the existing authenticated registration flow; endpoint possession never authorizes a public account write, so workers keep no session credentials.
+Structural CSP is enforced independently of report-only integration diagnostics; allowlisted content-free error categories preserve debugging without exporting private messages, URLs or stacks.
+Account-owned Paceable preferences participate in the same owner/stash and cloud manifest rules as legacy keys, preventing cross-account inheritance without renaming saved values.

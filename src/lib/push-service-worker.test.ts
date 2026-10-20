@@ -79,3 +79,23 @@ it("falls back to Today for a notification pointing outside the app", async () =
   const result = await clickNotification("https://other.example/");
   expect(result.openWindow).toHaveBeenCalledWith("/idag");
 });
+
+it("requests authenticated app renewal instead of posting an endpoint-only credential", async () => {
+  const listeners = new Map<string, (event: unknown) => void>();
+  const postMessage = vi.fn();
+  const fetch = vi.fn();
+  runInNewContext(readFileSync(resolve("public/sw.js"), "utf8"), {
+    fetch,
+    self: {
+      addEventListener: (name: string, handler: (event: unknown) => void) => listeners.set(name, handler),
+      clients: { matchAll: async () => [{ postMessage }] },
+    },
+  });
+  const pending: Promise<unknown>[] = [];
+  const handler = listeners.get("pushsubscriptionchange");
+  if (!handler) throw new Error("Missing renewal handler");
+  handler({ newSubscription: { endpoint: "https://fcm.googleapis.com/test" }, waitUntil: (work: Promise<unknown>) => pending.push(work) });
+  await Promise.all(pending);
+  expect(postMessage).toHaveBeenCalledWith({ type: "myflove-push-renewal-needed" });
+  expect(fetch).not.toHaveBeenCalled();
+});
