@@ -8,6 +8,7 @@ import { LandingTranslateProvider } from "@/components/auto-translate-provider";
 const MENU = [
   { to: "/", label: "Hem" },
   { to: "/", hash: "funktioner", label: "Funktioner" },
+  { to: "/testa", label: "Bli testare" },
   { to: "/om-oss", label: "Om oss" },
   { to: "/guide/adhd-planner-for-adults", label: "ADHD-guide" },
 ] as const;
@@ -170,6 +171,9 @@ export function PublicPage({ children, quiet = false }: { children: ReactNode; q
           </Link>
           <Link to="/om-oss" className="inline-flex min-h-11 items-center hover:text-primary">
             Om oss
+          </Link>
+          <Link to="/testa" className="inline-flex min-h-11 items-center hover:text-primary">
+            Bli testare
           </Link>
           <Link
             to="/guide/adhd-planner-for-adults"

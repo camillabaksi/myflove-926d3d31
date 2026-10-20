@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_URL } from "@/lib/public-url";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Heart, Play, NotebookPen, Footprints, BatteryMedium } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -171,6 +171,19 @@ function LandingPage() {
       </section>
 
       <PlatformChoices />
+
+      <section className="welcome-wrap py-12 sm:py-16" aria-labelledby="testers-invitation-title">
+        <div className="flex flex-col items-start justify-between gap-6 rounded-[2rem] border border-[#E4DCE6] bg-[linear-gradient(115deg,#F2EDF7,#FAEFE8)] p-6 sm:flex-row sm:items-center sm:p-9">
+          <div className="max-w-xl">
+            <p className="welcome-eyebrow">Hjälp oss utveckla Paceable</p>
+            <h2 id="testers-invitation-title" className="mt-2 text-2xl sm:text-3xl">Vill du vara med och testa?</h2>
+            <p className="mt-3 text-sm leading-7 text-[#635968]">Vi söker testare för Android och iPhone – och vuxna som vill berätta vad som faktiskt hjälper i vardagen.</p>
+          </div>
+          <Button asChild size="lg" className="welcome-primary shrink-0">
+            <Link to="/testa">Bli testare <ArrowRight aria-hidden="true" /></Link>
+          </Button>
+        </div>
+      </section>
 
       <section className="welcome-invitation" aria-labelledby="invitation-title">
         <div className="welcome-wrap">
