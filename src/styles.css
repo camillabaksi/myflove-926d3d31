@@ -2954,3 +2954,20 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
     backdrop-filter: none;
   }
 }
+
+/* Pace desktop: seamless warm canvas, photo dissolves before its own edge. */
+@media (min-width: 700px) {
+  main:has(.pace-scene) { background: linear-gradient(180deg, #f7ded3 0%, #f9e7df 30rem, #fff7f1 55rem, #fffdfb 85rem); }
+  main:has(.pace-scene) .pace-mobile-content-scroll > div { background: transparent; }
+  .pace-scene { background: transparent; }
+  .pace-scene::before {
+    height: auto;
+    aspect-ratio: 1344 / 756;
+    background-size: 100% auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, rgba(0,0,0,.55) 75%, transparent 97%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 50%, rgba(0,0,0,.55) 75%, transparent 97%);
+  }
+  .pace-scene::after { display: none; }
+  .pace-scene-actions button { display: none; }
+  .pace-scene-actions { min-height: 44px; }
+}

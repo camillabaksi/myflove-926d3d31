@@ -1,3 +1,6 @@
+## 2026-10-20 – Pace-sidan på desktop
+- Varm bakgrund över hela ytan, mjuk bildtoning utan skarv, dubbel historik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade. Ej publicerat.
+
 ## 2026-10-20 – Förberett nya mobilversioner
 - Android höjd till 6.6 (versionskod 27), iOS till 1.4 (byggnummer 16) i Debug/Release. App-ID:n, Paceable-ikoner, webbhost, signering och användardata oförändrade. Befintliga Codemagic-flöden och kontrollinstruktioner dokumenterade. Signerade AAB/IPA och butikernas senaste nummer är ännu inte verifierade; byggning kräver befintlig byggtjänst och signering. Ingen webbpublicering eller uppladdning.
 
