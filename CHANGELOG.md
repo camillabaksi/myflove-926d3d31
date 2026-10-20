@@ -1,3 +1,6 @@
+## 2026-10-20 – Prick-menyer öppnar inte mitt i skroll
+- Trepricksmenyer och rullgardinsmenyer på Idag (hälsningens ⋯, "Fler val", "Filtrera" och varje aktivitetsrad) öppnar bara vid ett riktigt tryck, inte när en skroll börjar på knappen. Öppningen sker vid pek upp eftersom riktiga tappar ger klick utan räknare när pek ned avbrutits. Tangentbord, mus, menyval, avbockning och data är oförändrade. 7 riktade tester passerade och mobil förhandsvisning kontrollerad; ingen publicering.
+
 ## 2026-10-20 – Fördjupade säkerhetsrättningar
 - Sena dekrypteringar och inloggningssvar får inte återfylla tidigare kontos data. Paceable-inställningar följer kontots befintliga förråd och synkmanifest; anteckningar och historik ändras inte.
 - Notisförnyelse kräver appens vanliga autentiserade registrering, utskick begränsas till betrodda HTTPS-tjänster utan omdirigering och privata texter/adresser lämnas inte i nya felloggar. Om prenumerationen byts när appen är stängd kan notiser pausa tills appen öppnas igen.
