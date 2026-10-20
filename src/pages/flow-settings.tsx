@@ -2,7 +2,8 @@ import { Link } from "wouter";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { RotateCcw, Sparkles } from "lucide-react";
-import { PaceBlock as MyFloveBlock, PaceButton as Button, PaceInput as Input, PacePageTitle } from "@/components/paceable/design-system";
+import { PaceBlock as MyFloveBlock, PaceButton as Button, PaceInput as Input } from "@/components/paceable/design-system";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -23,17 +24,7 @@ export default function FlowSettingsPage() {
     <MyFlovePageGrid className="pace-ds pace-account-forms mx-auto w-full max-w-4xl pb-24">
 
       <MyFloveWide>
-        <header className="pace-account-heading flex flex-wrap items-center gap-4">
-          <div className="min-w-0 flex-1 basis-64 space-y-1">
-            <PacePageTitle>
-              Pace-inställningar
-            </PacePageTitle>
-            <p className="text-sm text-muted-foreground">
-              Du bestämmer hur mycket Pace får säga, när Pace får höra av sig och vad Pace ska hålla
-              koll på. Inget av det här ändrar dina uppgifter.
-            </p>
-          </div>
-        </header>
+        <PacePageHeader icon={Sparkles} title="Pace-inställningar" description="Du bestämmer hur mycket Pace får säga, när Pace får höra av sig och vad Pace ska hålla koll på. Inget av det här ändrar dina uppgifter." />
       </MyFloveWide>
 
       <MyFloveWide span="wide">

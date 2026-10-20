@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Smile, Battery, Zap } from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { useDayCapacity } from "@/hooks/use-day-capacity";
 import { todayISO } from "@/lib/day";
@@ -42,12 +42,11 @@ export default function BatteryPage() {
     <Layout>
       <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
         <MyFloveWide>
-          <MyFloveHeader
-            area="halsa"
+          <PacePageHeader
             title={
               name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")
             }
-            emojiKey="wellness"
+            icon={Battery}
             description={t("Hur mycket ork har du idag?")}
           />
         </MyFloveWide>

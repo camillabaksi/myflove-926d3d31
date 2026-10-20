@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import Layout from "@/components/layout";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import {
@@ -369,15 +370,11 @@ export default function RemindersPage() {
     <Layout>
       <MyFlovePageGrid area="idag" className="pace-next-page pace-next-health pace-next-tools">
         <MyFloveWide>
-          <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card/80 px-3 py-3 sm:px-4" aria-labelledby="reminders-title">
-            <div className="min-w-0">
-              <h1 id="reminders-title" className="font-display text-2xl font-semibold text-ink">Påminnelser</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">Håll koll på det du inte vill glömma.</p>
-            </div>
+          <PacePageHeader icon={BellRing} title="Påminnelser" titleId="reminders-title" description="Håll koll på det du inte vill glömma." action={
             <Button onClick={() => setAddOpen(true)} className="min-h-11 shrink-0 rounded-xl px-3">
               <Plus size={17} className="mr-1.5" aria-hidden /> Lägg till
             </Button>
-          </section>
+          } />
         </MyFloveWide>
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl">

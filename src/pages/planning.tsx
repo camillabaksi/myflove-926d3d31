@@ -1,6 +1,7 @@
 import { Link, useSearch } from "@tanstack/react-router";
 import { useUser } from "@clerk/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarDays } from "lucide-react";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import Layout from "@/components/layout";
 import { PlanningWorkspace } from "@/components/day/planning-workspace";
 import { useLang } from "@/hooks/use-language";
@@ -11,14 +12,12 @@ export default function PlanningPage() {
   const { t } = useLang();
   return (
     <Layout>
-      <div className="pace-next-page mx-auto w-full max-w-3xl space-y-6">
+      <div className="pace-next-page mx-auto w-full max-w-6xl space-y-6">
         <Link to="/idag" className="inline-flex min-h-11 items-center gap-2 text-sm">
           <ArrowLeft size={16} aria-hidden />
           {t("Till min dag")}
         </Link>
-        <h1 className="pace-next-title font-display text-2xl font-medium">
-          {t(audience === "children" ? "Barnens schema" : "Planera")}
-        </h1>
+        <PacePageHeader icon={CalendarDays} title={t(audience === "children" ? "Barnens schema" : "Planera")} />
         <nav className="flex flex-wrap gap-2" aria-label={t("Vem vill du planera för?")}>
           {(
             [

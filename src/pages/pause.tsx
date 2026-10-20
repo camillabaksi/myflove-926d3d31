@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Hand, Sunset, Timer } from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import LightBoost from "@/components/light-boost";
 import PauseSession from "@/components/recovery/pause-session";
@@ -65,10 +65,9 @@ export default function PausePage() {
       <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
         <MyFloveWide>
           <div className="space-y-5">
-            <MyFloveHeader
-              area="aterhamtning"
+            <PacePageHeader
               title={t("Återhämtning")}
-              emojiKey="wellness"
+              icon={Timer}
               description={t("Vad behöver du just nu?")}
             />
 

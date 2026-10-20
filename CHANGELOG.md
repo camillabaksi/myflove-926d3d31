@@ -1,3 +1,6 @@
+## 2026-10-20 – Kompaktare sidlayout, etapp 2
+- **Sidrubriker** (2026-10-20): Min plats, Inställningar, Anteckningar, Pace-inställningar, Mitt batteri, Återhämtning, Profil, Planera, Påminnelser och Historik delar ett öppet rubrikblock med liten ikon, rubriklinje och befintlig undertext/handling. Planera får utrymme för sina befintliga två spalter på dator. Pace, Mer, flikar, data och funktioner oförändrade. Ingen publicering.
+
 ## 2026-10-20 – Kompaktare sidlayout, etapp 1
 - Mobilhuvud på en rad, Härnäst endast Idag/Hem, sidfot endast Inställningar/Översikt, läsbredd på list-/formulärsidor, rubriklinje under rubriken. Ej publicerat.
 

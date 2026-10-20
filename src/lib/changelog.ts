@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Kompaktare sidlayout, etapp 2",
+    items: ["Sidrubriker (2026-10-20): Min plats, Inställningar, Anteckningar, Pace-inställningar, Mitt batteri, Återhämtning, Profil, Planera, Påminnelser och Historik delar ett öppet rubrikblock med liten ikon, rubriklinje och befintlig undertext/handling. Planera får utrymme för sina befintliga två spalter på dator. Pace, Mer, flikar, data och funktioner oförändrade. Ingen publicering."],
+  },
+  {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 1",
     items: ["Mobilens sidhuvud på en rad, Pace-kortet Härnäst bara på Idag/Hem, sidfoten bara i Inställningar/Översikt, läsbredd på list- och formulärsidor på datorn och rubriklinjen ligger under rubriken. Inga funktioner eller data ändrade."],
   },

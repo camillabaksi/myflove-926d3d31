@@ -1,4 +1,9 @@
 # Roadmap
+## Kompaktare sidlayout – etapp 2 (2026-10-20)
+- [x] Granska godkänd plan och befintliga rubriker; Pace och Mer skyddas.
+- [ ] Inför gemensamt rubrikblock på sekundärsidor och Min plats, med bevarade texter och handlingar.
+- [ ] Kontrollera mobil/dator, teman och stor text; kör berörda tester och uppdatera ändringsloggar. Ingen publicering.
+- [ ] Etapp 3: flikar, huvudknappar och kortavstånd väntar på nästa fortsättning.
 ## Nya mobilversioner för Play och TestFlight (2026-10-20)
 - [x] Granska befintliga versionsnummer, appidentiteter, webbhost och byggflöden.
 - [x] Avgränsad releaseplan godkänd 2026-10-20.

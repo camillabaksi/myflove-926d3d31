@@ -1,5 +1,5 @@
 import Layout from "@/components/layout";
-import { PacePageTitle } from "@/components/paceable/design-system";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import NotesPanel from "@/components/notes-panel";
 import { NotebookPen } from "lucide-react";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -16,16 +16,10 @@ export default function NotesPage() {
     <Layout>
       <MyFlovePageGrid>
         <MyFloveWide>
-          <header className="space-y-1">
-            <PacePageTitle className="flex items-center gap-2">
-              <NotebookPen className="h-7 w-7 shrink-0 text-primary" aria-hidden /> {t("Anteckningar")}
-            </PacePageTitle>
-            <p className="text-muted-foreground">
-              {t(
+          <PacePageHeader icon={NotebookPen} title={t("Anteckningar")}
+            description={t(
                 "Din idébank. Skriv ner tankar utan deadline – och omvandla dem när du vill, eller flytta tillbaka dem till Fånga.",
-              )}
-            </p>
-          </header>
+              )} />
         </MyFloveWide>
 
         <MyFloveWide>
