@@ -142,22 +142,34 @@ async function loadAll(): Promise<void> {
         return;
       }
 
-      const [{ data: kids, error: kidsErr }, { data: rows, error: rowsErr }, { data: shares }] =
+      const [{ data: kids, error: kidsErr }, { data: shares, error: sharesErr }] =
         await Promise.all([
           supabase
             .from("children")
             .select("id, owner_id, name, birthdate, color, note, helps, avatar, account_user_id")
             .order("created_at"),
-          supabase
-            .from("child_items")
-            .select(
-              "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family",
-            )
-            .order("created_at", { ascending: false }),
           supabase.from("child_item_shares").select("item_id, user_id, notify"),
         ]);
       if (kidsErr) throw kidsErr;
-      if (rowsErr) throw rowsErr;
+      // Ett fel på delningslistan får aldrig se ut som att inget är delat.
+      if (sharesErr) throw sharesErr;
+
+      // Aktiviteterna hämtas i omgångar så att större historik inte klipps
+      // av ett svarstak.
+      const rows: Record<string, unknown>[] = [];
+      const ITEM_PAGE = 1000;
+      for (let page = 0; page < 10; page++) {
+        const { data: pageRows, error: rowsErr } = await supabase
+          .from("child_items")
+          .select(
+            "id, child_id, owner_id, kind, title, notes, date, time, completed, remind, repeat, file_path, created_at, updated_at, share_family",
+          )
+          .order("created_at", { ascending: false })
+          .range(page * ITEM_PAGE, (page + 1) * ITEM_PAGE - 1);
+        if (rowsErr) throw rowsErr;
+        rows.push(...((pageRows ?? []) as Record<string, unknown>[]));
+        if ((pageRows ?? []).length < ITEM_PAGE) break;
+      }
 
       const shareMap = new Map<string, string[]>();
       const notifyMap = new Map<string, Record<string, boolean>>();
