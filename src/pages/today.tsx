@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
 import { CalendarDays, Plus, ChevronDown, NotebookPen, Images, SlidersHorizontal } from "lucide-react";
+import { useScrollSafeMenu } from "@/components/flow-item-actions";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
@@ -35,6 +36,9 @@ export function TodayContent() {
   const { t, locale } = useLang();
   const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
+  // Även rubrikens rullgardinsmenyer ska inte poppa upp mitt i en skroll.
+  const { menuOpen: filterMenuOpen, setMenuOpen: setFilterMenuOpen, triggerProps: filterTriggerProps } = useScrollSafeMenu();
+  const { menuOpen: extraMenuOpen, setMenuOpen: setExtraMenuOpen, triggerProps: extraTriggerProps } = useScrollSafeMenu();
   const [dayFilter, setDayFilter] = useState<DailyFlowFilter>("alla");
   const [todayPictograms, setTodayPictograms] = useCloudSyncedStorage<boolean>("paceable-today-pictograms", false);
   const [hour, setHour] = useState(() => new Date().getHours());
@@ -83,8 +87,8 @@ export function TodayContent() {
               <div className="flex shrink-0 items-center gap-1">
                 <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-lavender/55 px-2 text-xs font-semibold text-ink hover:bg-lavender/75"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
                 <RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><CalendarDays size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Veckan")}</span><span className="sr-only min-[390px]:hidden">{t("Visa veckan")}</span></RouterLink>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild><button type="button" aria-label="Filtrera dagens aktiviteter" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><SlidersHorizontal size={15} aria-hidden /><span className="hidden min-[420px]:inline">Filtrera</span><span className="sr-only min-[420px]:hidden">Filtrera</span>{dayFilter !== "alla" && <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}</button></DropdownMenuTrigger>
+                <DropdownMenu open={filterMenuOpen} onOpenChange={setFilterMenuOpen}>
+                  <DropdownMenuTrigger asChild><button type="button" aria-label="Filtrera dagens aktiviteter" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50" {...filterTriggerProps}><SlidersHorizontal size={15} aria-hidden /><span className="hidden min-[420px]:inline">Filtrera</span><span className="sr-only min-[420px]:hidden">Filtrera</span>{dayFilter !== "alla" && <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}</button></DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-44">
                     {([["alla", "Alla"], ["viktigast", "Viktigast"], ["tid", "Med tid"]] as const).map(([value, label]) => <DropdownMenuItem key={value} onSelect={() => setDayFilter(value)}>{dayFilter === value ? "✓ " : ""}{label}</DropdownMenuItem>)}
                   </DropdownMenuContent>
@@ -95,8 +99,8 @@ export function TodayContent() {
           <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
               <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 whitespace-nowrap rounded-xl px-2.5 text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-border bg-card px-2.5 text-xs text-muted-foreground">{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
+              <DropdownMenu open={extraMenuOpen} onOpenChange={setExtraMenuOpen}>
+                <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-border bg-card px-2.5 text-xs text-muted-foreground" {...extraTriggerProps}>{t("Fler val")}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="min-w-44">
                   <DropdownMenuItem asChild><Link href="/paminnelser">{t("Påminnelse")}</Link></DropdownMenuItem>
                   <div className="p-1"><CopyDayButton date={today} shortLabel className="min-h-11 w-full rounded-xl" /></div>
