@@ -1,9 +1,9 @@
 # Roadmap
 ## Kompaktare sidlayout – återstående appdelar (2026-10-20)
 - [x] Begäran mottagen: samma rubriker, valstil och kompakta avstånd på återstående appdelar.
-- [ ] Inventera återstående sidor och visa avgränsad fortsättningsplan före appkodändring.
-- [ ] Efter godkännande: anpassa återstående sekundärsidor gruppvis med bevarade funktioner och skyddade Pace/Mer-vyer.
-- [ ] Kontrollera mobil/dator, båda teman, stor text och befintliga handlingar; dokumentera resultat och båda ändringsloggarna. Ingen publicering.
+- [x] Inventering och fortsättningsplan godkända före appkodändring.
+- [x] 36 sekundärsidor optas in till gemensamma rubriker och/eller kompakta avstånd; skyddade Pace/Mer och befintliga funktioner bevaras. Sidomenyn begränsad och stor text på surfplatta använder mobilnavigation.
+- [x] 27 riktade tester och build OK; 744 bredd/tema/textmätningar, verkliga filter/navigation/formulär utan sparning och representativa bilder granskade. Begränsningar och misslyckade förebilder redovisade i docs/compact-layout-remaining-verification.md. Båda ändringsloggarna uppdaterade. Ingen publicering.
 ## Kompaktare sidlayout – etapp 3 (2026-10-20)
 - [x] Fortsättning godkänd: granska nästa presentationsgrupp, ta förebilder och bevara Pace/Mer samt alla funktioner.
 - [x] Enhetliga val och kompaktare avstånd på Planera, Mitt batteri, Historik och Återhämtning.
