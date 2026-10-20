@@ -1,4 +1,8 @@
 # Roadmap
+## Enhetlig mindre normalstorlek i hela appen (2026-10-20)
+- [x] Registrerat önskemålet: godkänd kalenderbild som riktmärke, samma textstorlek per roll på alla sidor inklusive undervyer och dialoger; större text fortsatt valbar.
+- [ ] Inventera typografi, knappar och textinställningar; visa plan och invänta godkännande före appkodändring.
+- [ ] Genomför godkänd presentation utan funktions-/dataändringar, kontrollera mobil/dator och större text, visa före/efter och uppdatera ändringsloggar. Ingen publicering.
 ## Kompaktare mobilknappar och tidsslotter (2026-10-20)
 - [x] Registrerat önskemålet och påbörjat inventering av knappar, tidsval och kalenderns tidsgeometri.
 - [x] Avgränsad plan godkänd före appkodändring: både tidsrader och tidsval omfattas.
