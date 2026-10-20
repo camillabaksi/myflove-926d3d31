@@ -47,7 +47,7 @@ describe("Compact day activity presentation", () => {
     expect(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` })).toHaveClass("h-9", "w-9");
     expect(screen.queryByRole("button", { name: /Klarmarkera Familjens schema/ })).not.toBeInTheDocument();
     expect(container.querySelectorAll(".shadow-sm")).toHaveLength(0);
-    expect(container.querySelectorAll('[style*="border-left"]')).toHaveLength(0);
+    expect(container.querySelectorAll('[style*="border-left"]')).toHaveLength(rows.length);
     expect(screen.queryByTestId("legacy-transition")).not.toBeInTheDocument();
     expect(Array.from(container.querySelectorAll("li p")).map(p => p.textContent)).toEqual(rows.map(row => row.title));
     fireEvent.click(screen.getByRole("button", { name: `Klarmarkera ${rows[1].title}` }));
