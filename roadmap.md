@@ -1,4 +1,6 @@
 # Roadmap
+## Kalenderprover efter tidsrättningen (2026-10-20)
+- [ ] Rätta äldre testval och testförutsättningar mot dagens kalender; bevara appfunktioner och kör riktade tester. Ingen publicering.
 ## Rättat: handinmatad tid blockerades (2026-10-20)
 - [x] Rättat tidskontrollen i kalenderns rutinval och i dagstödets pausval så en självvald tid kan sparas; två riktade tester tillagda och gröna. Ingen publicering.
 
