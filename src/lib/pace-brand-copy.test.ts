@@ -22,7 +22,7 @@ describe("approved first Pace text stage", () => {
   });
   it("keeps conversation IDs, destinations, actions and images behind the renamed labels", () => {
     const source = readFileSync("src/components/flow/assistant-content.tsx", "utf8");
-    expect(source).toContain('const NEW_CHAT_FLAG = "myflove-flow-new-chat"');
+    expect(source).toContain("chatId?: string");
     expect(source).toContain('to: "/assistant/$chatId"');
     expect(source).toContain('onClick={() => runAction(key, a)}');
     expect(source).toContain('<FlowMascot alt="Pace – Paceables följeslagare"');

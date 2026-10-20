@@ -179,7 +179,8 @@ describe("reminder history", () => {
     const localMidnight = new Date(2026, 9, 12, 0, 30);
     vi.setSystemTime(localMidnight);
     render(<RemindersPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Lägg till påminnelse" }));
+    fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till påminnelse" }));
     expect(within(screen.getByRole("dialog")).getByLabelText("Datum")).toHaveValue("2026-10-12");
   });
 });

@@ -28,7 +28,7 @@ describe("calendar area presentation", () => {
   });
 });
 describe("consistent area colors across calendar and app", () => {
-  const css = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
+  const css = readFileSync("src/styles.css", "utf8");
 
   it("uses the same base HSL token for every life area", () => {
     for (const area of ALL_AREAS) {
