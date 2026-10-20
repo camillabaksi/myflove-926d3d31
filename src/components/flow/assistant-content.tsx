@@ -343,8 +343,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   className="flex items-center gap-1 p-2"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    void rename(c.id, renameValue);
-                    setRenamingId(null);
+                    void rename(c.id, renameValue)
+                      .then(() => setRenamingId(null))
+                      .catch((err) => toast.error(err instanceof Error ? err.message : "Namnet kunde inte sparas."));
                   }}
                 >
                   <input
@@ -427,8 +428,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                       onClick={() => {
                         setConfirmDelete(null);
                         setMenuFor(null);
-                        void remove(c.id);
-                        if (c.id === conversationId) void navigate({ to: "/assistant" });
+                        void remove(c.id)
+                          .then(() => {
+                            if (c.id === conversationId) void navigate({ to: "/assistant" });
+                          })
+                          .catch((err) => toast.error(err instanceof Error ? err.message : "Samtalet kunde inte tas bort."));
                       }}
                     >
                       Ja, ta bort
