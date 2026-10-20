@@ -744,7 +744,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} style={mobileNavigationHeight === null ? undefined : { "--pace-mobile-nav-height": `${mobileNavigationHeight}px` } as React.CSSProperties} className={`app-shell-bg pace-shell-navigation h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${paceableApp && textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
+    <div data-paceable-surface={PACEABLE_PATHS.has(location) ? "true" : undefined} data-paceable-app={paceableApp ? "true" : undefined} style={mobileNavigationHeight === null ? undefined : { "--pace-mobile-nav-height": `${mobileNavigationHeight}px` } as React.CSSProperties} className={`app-shell-bg pace-shell-navigation h-[100dvh] overflow-hidden overscroll-none flex flex-col md:flex-row relative${textLayout.enlarged ? " pace-app-text-enlarged" : ""}`}>
       <span ref={textLayout.ref} className="pace-text-probe" aria-hidden="true" />
       {/* Desktop Sidebar */}
       <nav

@@ -11,7 +11,10 @@ const actions = vi.hoisted(() => ({
   addTaskStep: vi.fn(), addTaskSteps: vi.fn(), toggleTaskStep: vi.fn(), deleteTaskStep: vi.fn(),
 }));
 const task: Task = { id: "owned-task", title: "En lång uppgift som ska behålla sitt fullständiga namn", completed: false, createdAt: 1 };
-vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ ...actions, activeTasks: [task], completedTasks: [], snoozedTasks: [] }) }));
+vi.mock("@/hooks/use-data", () => ({
+  useTasks: () => ({ ...actions, activeTasks: [task], completedTasks: [], snoozedTasks: [] }),
+  useReminders: () => ({ addReminder: vi.fn() }),
+}));
 vi.mock("@/components/layout", () => ({ default: ({ children }: { children: ReactNode }) => <main>{children}</main> }));
 vi.mock("@/components/myflove/block", () => ({
   MyFlovePageGrid: ({ children, className }: { children: ReactNode; className?: string }) => <div className={className}>{children}</div>,

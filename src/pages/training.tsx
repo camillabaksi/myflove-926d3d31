@@ -526,17 +526,6 @@ export default function TrainingPage() {
               />
             </div>
 
-            {view === "overview"
-                  ? "Träning"
-                  : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
-              </h1>
-              <p className="text-muted-foreground">
-                {view === "overview"
-                  ? "Välj en del i taget – du behöver inte se allt på en gång."
-                  : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
-              </p>
-            </header>
-
             {view === "overview" && (
               <AreaFocus
                 intent="Jag vill träna"

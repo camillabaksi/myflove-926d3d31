@@ -1,3 +1,6 @@
+## 2026-10-20 – Kompakt layout på återstående appdelar
+- 36 sekundärsidor får gemensamma rubriker och/eller kompakta avstånd; befintliga handlingar och data bevaras. Uppgifter, inköp och admin återanvänder valstilen. Sidomenyn begränsas och stor text på surfplatta använder mobilnavigation. Skyddade Pace-, Mer-, kalender- och anteckningsboksvyer är inte omarbetade. Ingen publicering.
+
 ## 2026-10-20 – Kompaktare sidlayout, etapp 3
 - **Sidval och avstånd** (2026-10-20): Planera och Mitt batteri återanvänder samma tillgängliga valstil. Tätare sektionsavstånd på Planera, Mitt batteri, Historik och Återhämtning; Historiks veckonavigering och Återhämtnings eget tidsfält staplas vid liten bredd/stor text. Befintliga flikar, utkast, handlingar och data bevaras. Pace och Mer orörda. Ingen publicering.
 

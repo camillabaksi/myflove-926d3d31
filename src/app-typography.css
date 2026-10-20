@@ -108,7 +108,7 @@ html[data-paceable-typography="true"] body,
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-navigation {
-  --pace-shell-sidebar-width: calc(var(--pace-brand-width) + 2rem);
+  --pace-shell-sidebar-width: min(288px, calc(var(--pace-brand-width) + 2rem));
 }
 
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-shell-brand-header {
