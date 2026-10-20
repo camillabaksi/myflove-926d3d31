@@ -3022,6 +3022,16 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 }
 [data-page-area] h1 svg:first-child { color: var(--page-tone); }
 
+/* Opt-in page orientation; no card, typography reset or form ownership. */
+.pace-ds.pace-standard-header { display: flex; flex-wrap: wrap; align-items: start; gap: 1rem; background: transparent; }
+.pace-standard-header-main { flex: 1 1 16rem; min-width: 0; }
+.pace-standard-header-title { display: flex; align-items: start; gap: .625rem; min-width: 0; }
+.pace-standard-header-icon { width: 1.5rem; height: 1.5rem; flex-shrink: 0; margin-top: .375rem; color: var(--page-tone, var(--pace-text)); }
+.pace-standard-header .pace-page-title { overflow-wrap: normal; word-break: normal; hyphens: auto; margin: 0 0 .875rem; }
+.pace-standard-header-description { margin: 0; max-width: 65ch; color: var(--pace-text-secondary); font-size: var(--pace-type-body, 1rem); line-height: 1.5; overflow-wrap: normal; word-break: normal; hyphens: auto; }
+.pace-standard-header-action { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.pace-standard-header-extra { flex-basis: 100%; min-width: 0; }
+
 /* Kompakt mobilhuvud: tillbaka · logotyp · chatt på en rad. */
 @media (max-width: 767px) {
   [data-paceable-typography="true"] .pace-compact-header .pace-shell-brand-header {

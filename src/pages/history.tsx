@@ -1,6 +1,7 @@
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import WeekReviewCard from "@/components/week-review-card";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -14,7 +15,7 @@ import {
 } from "@/lib/activity-history";
 import { weekDates, weekStartISO, weekdayName } from "@/lib/week-review";
 import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, History as HistoryIcon } from "lucide-react";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
@@ -80,14 +81,7 @@ export default function History() {
       <MyFlovePageGrid area="flow">
         <MyFloveWide>
           <div className="space-y-6">
-            <header>
-              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl">
-                {t(APP_DESTINATIONS["/historik"].label)}
-              </h1>
-              <p className="mt-1 text-muted-foreground">
-                {t("Vad hände de här dagarna – och hur påverkade det din ork?")}
-              </p>
-            </header>
+            <PacePageHeader icon={HistoryIcon} title={t(APP_DESTINATIONS["/historik"].label)} description={t("Vad hände de här dagarna – och hur påverkade det din ork?")} />
 
             <div className="flex items-center justify-between gap-3">
               <button

@@ -18,3 +18,4 @@ Decision presentation stays scoped to `.book-decision` and its notebook workspac
 Standalone film refinements use versioned copies of the saved renderer and its source assets outside app routes; preserve deterministic motion/text timing and never replace the published intro, so media review cannot alter account data or the live product.
 
 Native release preparation changes Android Gradle and both iOS target version settings together, while retaining each platform's existing store identity, host and signing; use existing Codemagic workflows and report signed artifacts separately from source preparation because web validation cannot prove a native release.
+Secondary page headers opt in to PacePageHeader with existing title, description and action slots; the component owns presentation only, so approved Pace/More views and caller-owned drafts, navigation and persistence remain unchanged.

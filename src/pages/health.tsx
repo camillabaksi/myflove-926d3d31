@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Battery, MessageCircle, Heart } from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
@@ -25,13 +25,10 @@ export default function HealthPage() {
     <Layout>
       <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-place">
         <MyFloveWide>
-          <MyFloveHeader
+          <PacePageHeader
             title="Min plats"
-            titleClassName="pace-next-title pace-editorial"
-            area="halsa"
-            emojiKey="wellness"
+            icon={Heart}
             description="Din plats för energi, återhämtning och det som påverkar dagen."
-            className="paceable-my-place-header"
           />
         </MyFloveWide>
 

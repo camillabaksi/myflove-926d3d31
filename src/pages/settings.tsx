@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 
 import Layout from "@/components/layout";
-import { PacePageTitle, PaceBlock as MyFloveBlock, PaceButton as Button } from "@/components/paceable/design-system";
+import { PaceBlock as MyFloveBlock, PaceButton as Button } from "@/components/paceable/design-system";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import PwaInstallButton from "@/components/pwa-install-button";
 import { track } from "@/lib/analytics";
@@ -108,13 +109,7 @@ export default function SettingsPage() {
     <Layout>
       <MyFlovePageGrid className="pace-ds pace-account-forms gap-5">
         <MyFloveWide>
-          <header className="space-y-2">
-            <div className="flex items-center gap-2 text-primary">
-              <Settings className="size-6 shrink-0" aria-hidden />
-              <PacePageTitle>Inställningar</PacePageTitle>
-            </div>
-            <p className="text-muted-foreground">Anpassa Paceable, konto och appens inställningar.</p>
-          </header>
+          <PacePageHeader icon={Settings} title="Inställningar" description="Anpassa Paceable, konto och appens inställningar." />
         </MyFloveWide>
 
         <MyFloveBlock title="Profil och konto" subtitle="Dina uppgifter och ditt konto" icon={User} tone="lavender" surface="lavender">

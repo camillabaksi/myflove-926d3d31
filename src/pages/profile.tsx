@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, Pencil, Plus, Trash2 } from "lucide-react";
+import { Check, Pencil, Plus, Trash2, User } from "lucide-react";
 import Layout from "@/components/layout";
-import { MyFloveHeader } from "@/components/myflove";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,10 +101,9 @@ export default function ProfilePage() {
     <Layout>
       <MyFlovePageGrid area="halsa" className="gap-5">
         <MyFloveWide>
-          <MyFloveHeader
-            area="halsa"
+          <PacePageHeader
             title="Min profil"
-            emojiKey="wellness"
+            icon={User}
             description="Allt om dig på ett ställe – ditt namn, dina barn och din livsprofil."
           />
         </MyFloveWide>
