@@ -52,15 +52,25 @@ async function clickNotification(url: string, action = "", openClient = false) {
     URL,
     self: {
       location: { origin: "https://www.paceable.se" },
-      addEventListener: (name: string, handler: (event: unknown) => void) => listeners.set(name, handler),
+      addEventListener: (name: string, handler: (event: unknown) => void) =>
+        listeners.set(name, handler),
       clients: {
         openWindow,
-        matchAll: async () => openClient ? [{ url: "https://www.paceable.se/kalender", focus, navigate, postMessage }] : [],
+        matchAll: async () =>
+          openClient
+            ? [{ url: "https://www.paceable.se/kalender", focus, navigate, postMessage }]
+            : [],
       },
     },
   });
   let pending!: Promise<unknown>;
-  listeners.get("notificationclick")!({ notification: { data: { url, itemKey: "reminder:one" }, close: vi.fn() }, action, waitUntil: (work: Promise<unknown>) => { pending = work; } });
+  listeners.get("notificationclick")!({
+    notification: { data: { url, itemKey: "reminder:one" }, close: vi.fn() },
+    action,
+    waitUntil: (work: Promise<unknown>) => {
+      pending = work;
+    },
+  });
   await pending;
   return { openWindow, navigate, focus, postMessage };
 }
@@ -73,7 +83,9 @@ it("opens an app reminder in the existing tab and keeps the fragment", async () 
 });
 it("places action parameters before the section fragment when opening the app", async () => {
   const result = await clickNotification("/daglig-rutin#Medicin", "snooze");
-  expect(result.openWindow).toHaveBeenCalledWith("/daglig-rutin?notis=reminder%3Aone&atgard=snooze#Medicin");
+  expect(result.openWindow).toHaveBeenCalledWith(
+    "/daglig-rutin?notis=reminder%3Aone&atgard=snooze#Medicin",
+  );
 });
 it("falls back to Today for a notification pointing outside the app", async () => {
   const result = await clickNotification("https://other.example/");
@@ -87,14 +99,18 @@ it("requests authenticated app renewal instead of posting an endpoint-only crede
   runInNewContext(readFileSync(resolve("public/sw.js"), "utf8"), {
     fetch,
     self: {
-      addEventListener: (name: string, handler: (event: unknown) => void) => listeners.set(name, handler),
+      addEventListener: (name: string, handler: (event: unknown) => void) =>
+        listeners.set(name, handler),
       clients: { matchAll: async () => [{ postMessage }] },
     },
   });
   const pending: Promise<unknown>[] = [];
   const handler = listeners.get("pushsubscriptionchange");
   if (!handler) throw new Error("Missing renewal handler");
-  handler({ newSubscription: { endpoint: "https://fcm.googleapis.com/test" }, waitUntil: (work: Promise<unknown>) => pending.push(work) });
+  handler({
+    newSubscription: { endpoint: "https://fcm.googleapis.com/test" },
+    waitUntil: (work: Promise<unknown>) => pending.push(work),
+  });
   await Promise.all(pending);
   expect(postMessage).toHaveBeenCalledWith({ type: "myflove-push-renewal-needed" });
   expect(fetch).not.toHaveBeenCalled();

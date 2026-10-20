@@ -21,15 +21,33 @@ async function post(path: string, body: string) {
 }
 
 it("rejects endpoint-only renewal without reading or modifying any subscription", async () => {
-  const response = await post("/api/public/hooks/push-resubscribe", JSON.stringify({ oldEndpoint: "https://fcm.googleapis.com/old", endpoint: "https://attacker.test/new" }));
+  const response = await post(
+    "/api/public/hooks/push-resubscribe",
+    JSON.stringify({
+      oldEndpoint: "https://fcm.googleapis.com/old",
+      endpoint: "https://attacker.test/new",
+    }),
+  );
   expect(response.status).toBe(410);
   expect(database.from).not.toHaveBeenCalled();
 });
 it("does not place CSP URLs or script samples in logs", async () => {
   const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
-  const response = await post("/api/public/csp-report", JSON.stringify({ "csp-report": { "effective-directive": "script-src", "script-sample": "synthetic diary", "document-uri": "https://example.test/private" } }));
+  const response = await post(
+    "/api/public/csp-report",
+    JSON.stringify({
+      "csp-report": {
+        "effective-directive": "script-src",
+        "script-sample": "synthetic diary",
+        "document-uri": "https://example.test/private",
+      },
+    }),
+  );
   expect(response.status).toBe(204);
-  expect(warn).toHaveBeenCalledWith("[CSP-REPORT]", { directive: "script-src", disposition: "report" });
+  expect(warn).toHaveBeenCalledWith("[CSP-REPORT]", {
+    directive: "script-src",
+    disposition: "report",
+  });
   expect(JSON.stringify(warn.mock.calls)).not.toContain("synthetic diary");
   warn.mockRestore();
 });

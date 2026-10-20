@@ -3,22 +3,42 @@ import type { AuthChangeEvent, Session } from "@supabase/supabase-js";
 
 const mocks = vi.hoisted(() => ({
   auth: null as null | ((event: AuthChangeEvent, session: Session | null) => void),
-  getSession: vi.fn(), bindAccount: vi.fn(), parkActiveData: vi.fn(), lockSecureLocal: vi.fn(),
+  getSession: vi.fn(),
+  bindAccount: vi.fn(),
+  parkActiveData: vi.fn(),
+  lockSecureLocal: vi.fn(),
 }));
-vi.mock("@/integrations/supabase/client", () => ({ supabase: { auth: {
-  getSession: mocks.getSession,
-  onAuthStateChange: (callback: (event: AuthChangeEvent, session: Session | null) => void) => { mocks.auth = callback; },
-} } }));
-vi.mock("@/lib/account-scope", () => ({ bindAccount: mocks.bindAccount, parkActiveData: mocks.parkActiveData }));
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {
+    auth: {
+      getSession: mocks.getSession,
+      onAuthStateChange: (callback: (event: AuthChangeEvent, session: Session | null) => void) => {
+        mocks.auth = callback;
+      },
+    },
+  },
+}));
+vi.mock("@/lib/account-scope", () => ({
+  bindAccount: mocks.bindAccount,
+  parkActiveData: mocks.parkActiveData,
+}));
 vi.mock("@/lib/secure-local", () => ({ lockSecureLocal: mocks.lockSecureLocal }));
 vi.mock("@/lib/cloud-storage", () => ({ ACCOUNT_BOUND_EVENT: "test-account-bound" }));
 vi.mock("@/lib/local-data", () => ({ clearLocalUserData: vi.fn() }));
 vi.mock("@/lib/demo-account", () => ({ setDemoSession: vi.fn() }));
-beforeEach(() => { vi.resetModules(); vi.clearAllMocks(); mocks.bindAccount.mockReturnValue("same"); });
+beforeEach(() => {
+  vi.resetModules();
+  vi.clearAllMocks();
+  mocks.bindAccount.mockReturnValue("same");
+});
 
 it("parks data and locks plaintext on unexpected sign-out; a late initial session cannot rebind it", async () => {
   let resolve: ((value: { data: { session: Session | null } }) => void) | undefined;
-  mocks.getSession.mockReturnValue(new Promise((done) => { resolve = done; }));
+  mocks.getSession.mockReturnValue(
+    new Promise((done) => {
+      resolve = done;
+    }),
+  );
   await import("./clerk");
   mocks.auth?.("SIGNED_OUT", null);
   expect(mocks.parkActiveData).toHaveBeenCalledOnce();

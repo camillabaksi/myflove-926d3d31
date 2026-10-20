@@ -214,7 +214,7 @@ export function unlockSecureLocal(): Promise<void> {
       return;
     }
     try {
-      const loadedKey = cryptoKey ?? await loadKey();
+      const loadedKey = cryptoKey ?? (await loadKey());
       if (!isCurrent()) return;
       cryptoKey = loadedKey;
     } catch {
@@ -240,7 +240,8 @@ export function unlockSecureLocal(): Promise<void> {
       if (raw === null) continue;
       if (raw.startsWith(PREFIX)) {
         const plain = await decrypt(raw);
-        if (!isCurrent() || window.localStorage.getItem(key) !== raw || pendingWrites.has(key)) continue;
+        if (!isCurrent() || window.localStorage.getItem(key) !== raw || pendingWrites.has(key))
+          continue;
         // Går inte att dekryptera (nyckeln byttes ut): visa tomt men låt
         // chiffertexten ligga orörd tills användaren själv skriver nytt.
         if (plain !== null) cache.set(key, plain);
@@ -380,7 +381,13 @@ if (typeof window !== "undefined") {
         if (!cryptoKey) await unlockSecureLocal();
         if (generation !== storageGeneration) return;
         const plain = await decrypt(raw);
-        if (plain === null || generation !== storageGeneration || window.localStorage.getItem(key) !== raw || pendingWrites.has(key)) return;
+        if (
+          plain === null ||
+          generation !== storageGeneration ||
+          window.localStorage.getItem(key) !== raw ||
+          pendingWrites.has(key)
+        )
+          return;
         cache.set(key, plain);
       } else return;
       pendingWrites.delete(key);

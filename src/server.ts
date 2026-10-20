@@ -120,12 +120,14 @@ export default {
       return applySecurityHeaders(withSecurityHeaders(normalized));
     } catch {
       console.error("[SSR] Request failed");
-      return applySecurityHeaders(withSecurityHeaders(
-        new Response(renderErrorPage(), {
-          status: 500,
-          headers: { "content-type": "text/html; charset=utf-8" },
-        }),
-      ));
+      return applySecurityHeaders(
+        withSecurityHeaders(
+          new Response(renderErrorPage(), {
+            status: 500,
+            headers: { "content-type": "text/html; charset=utf-8" },
+          }),
+        ),
+      );
     }
   },
 };

@@ -47,8 +47,13 @@ export function usePushSubscriptionSync(): void {
     document.addEventListener("visibilitychange", onVisible);
     const onWorkerMessage = (event: MessageEvent<unknown>) => {
       const value = event.data;
-      if (typeof value === "object" && value !== null &&
-          "type" in value && value.type === "myflove-push-renewal-needed") void sync();
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        "type" in value &&
+        value.type === "myflove-push-renewal-needed"
+      )
+        void sync();
     };
     navigator.serviceWorker?.addEventListener("message", onWorkerMessage);
     return () => {
