@@ -130,18 +130,23 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
     setInput("");
     setSending(true);
     try {
-      // Spara samtalet så att det dyker upp bland Flow-chattarna
+      // Spara samtalet så att det dyker upp bland Flow-chattarna.
+      // Ett sparfel får aldrig avbryta själva samtalet – det markeras och kan försökas igen.
       if (!convIdRef.current) {
-        const id = await createFlowConversation(`Stop: ${text}`);
-        if (id) {
-          convIdRef.current = id;
-          const opener = messages[0];
-          if (opener?.role === "assistant") {
-            await saveFlowMessage(id, "assistant", opener.content);
+        try {
+          const id = await createFlowConversation(`Stop: ${text}`);
+          if (id) {
+            convIdRef.current = id;
+            const opener = messages[0];
+            if (opener?.role === "assistant") {
+              await trySave("assistant", opener.content);
+            }
           }
+        } catch {
+          setSaveWarning(true);
         }
       }
-      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "user", text);
+      await trySave("user", text);
       const payload: Msg[] = [
         { role: "user", content: STOP_SYSTEM_HINT },
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
@@ -155,7 +160,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         data: { messages: payload.slice(-40), context },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
-      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "assistant", reply);
+      await trySave("assistant", reply);
     } catch {
       setMessages((m) => [
         ...m,
