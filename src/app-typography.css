@@ -9,12 +9,14 @@
     "Bricolage Grotesque", "Nunito", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Noto Color Emoji";
   --pace-brand-width: 16rem;
-  --pace-type-welcome: 1.75rem;
-  --pace-type-page: 1.75rem;
+  --pace-type-welcome: 1.5rem;
+  --pace-type-page: 1.5rem;
   --pace-type-greeting: 1.5rem;
-  --pace-type-section: 1.25rem;
-  --pace-type-card: 1.125rem;
-  --pace-type-body: 1rem;
+  --pace-type-section: 1.125rem;
+  --pace-type-card: 1rem;
+  --pace-type-body: 0.9375rem;
+  --pace-type-control: 0.875rem;
+  --pace-type-input: 1rem;
   --pace-type-help: 0.875rem;
   --pace-type-meta: 0.75rem;
   --font-sans: var(--pace-type-family);
@@ -394,4 +396,88 @@ html[data-paceable-typography="true"] body,
 :is(html, .pace-type-scope)[data-paceable-typography="true"] .pace-journal-child-schedule {
   border-radius: 1.5rem;
   border-color: hsl(var(--border) / .7);
+}
+
+/* Approved compact normal scale. The app flag includes all authenticated
+   descendants and their portals, but never marketing. Explicit text roles win
+   over legacy responsive utility sizes without scaling whole UI surfaces. */
+html[data-paceable-typography="true"] :is(h1, .pace-app-title, .pace-page-title, .pace-next-title, .pace-tasks-heading, .pace-ds-heading-1, .pace-editorial-greeting, .pace-welcome-title) {
+  font-size: var(--pace-type-page) !important;
+  line-height: 1.3;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: auto;
+}
+html[data-paceable-typography="true"] :is(h2, .pace-editorial-section, .pace-ds-heading-2, .pace-place-section-title) {
+  font-size: var(--pace-type-section) !important;
+  line-height: 1.4;
+}
+html[data-paceable-typography="true"] :is(h3, .pace-ds-heading-3, .pace-more-card-title, .pace-place-entry-title, .book-entrance strong) {
+  font-size: var(--pace-type-card) !important;
+  line-height: 1.4;
+}
+html[data-paceable-typography="true"] :is(h4, h5, h6) {
+  font-size: var(--pace-type-body) !important;
+}
+html[data-paceable-typography="true"] :is(p, li, dd, dt, td, th, .text-base, .text-sm, .text-lg, .text-xl):not(:is(.tabular-nums, .font-mono, .pace-type-time, .book-hand, .book-writing, .book-import-preview, .book-map-canvas *, .book-map-overview *, h1, h2, h3, h4, h5, h6, button, input, textarea, select)) {
+  font-size: var(--pace-type-body);
+}
+html[data-paceable-typography="true"] :is(.pace-type-activity, .pace-tasks-title) {
+  font-size: var(--pace-type-body) !important;
+  line-height: 1.5;
+}
+html[data-paceable-typography="true"] :is(.pace-type-help, .pace-type-category, .pace-standard-header-description, .pace-more-card-hint, .pace-more-header p, label, legend, .pace-ds-help, .pace-ds-error, .pace-ds-status, .book-label, .book-entrance span) {
+  font-size: var(--pace-type-help) !important;
+  line-height: 1.5;
+}
+html[data-paceable-typography="true"] :is(.text-xs, .pace-mobile-nav-label, .pace-type-meta) {
+  font-size: var(--pace-type-meta);
+}
+html[data-paceable-typography="true"] :is(button, [role="button"], [role="tab"], [role="combobox"], [role^="menuitem"], .pace-segment, .pace-more-link, .book-tabs a):not(.pace-calendar-entry, .pace-activity-row, .book-map-canvas *, .book-map-overview *) {
+  font-size: var(--pace-type-control) !important;
+  line-height: 1.5;
+}
+html[data-paceable-typography="true"] :is(input, textarea, select):not([type="checkbox"], [type="radio"], [type="range"], .book-hand, .book-writing, .book-decision-title, .book-diary-title, .book-map-canvas *) {
+  font-size: var(--pace-type-input) !important;
+  min-height: 44px;
+  max-width: 100%;
+}
+html[data-paceable-typography="true"] :is(time, .pace-type-time):not(input, .book-map-canvas *) {
+  font-size: var(--pace-type-help) !important;
+}
+/* Only shared command buttons, never timeline blocks, switches or checkboxes.
+   The transparent inset shrinks paint, not the focus ring or pointer target. */
+html[data-paceable-typography="true"] [data-pace-command]:not(.pace-calendar-entry, .pace-calendar-timeline *, .book-point-menu, [role="switch"], [role="checkbox"]) {
+  min-height: 44px;
+  min-width: 44px;
+  height: auto;
+  max-width: 100%;
+  padding-block: 0.125rem;
+  border-block: 5px solid transparent;
+  background-clip: padding-box;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+html[data-paceable-typography="true"] [data-pace-command] > svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+/* Role exceptions must remain explicit: timer/battery readouts and map zoom
+   keep their dimensions, and notebook handwriting keeps its optical size. */
+html[data-paceable-typography="true"] .notebook :is(.book-decision-title, .book-diary-title) {
+  font-size: var(--pace-type-page) !important;
+}
+html[data-paceable-typography="true"] .notebook :is(.book-diary-sheet textarea.book-writing, .book-decision .book-sheet textarea.book-hand) {
+  font-size: 1.125rem !important;
+}
+html[data-paceable-typography="true"] .notebook :is(.book-print, .book-diary-title.book-print) {
+  font-size: var(--pace-type-input) !important;
+}
+html[data-paceable-typography="true"] .notebook .book-decision .book-sheet .book-column h2 {
+  font-size: var(--pace-type-section) !important;
+}
+html[data-paceable-typography="true"] .notebook .book-sheet .book-add-line {
+  font-size: var(--pace-type-control) !important;
 }
