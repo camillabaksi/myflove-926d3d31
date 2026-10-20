@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -251,17 +252,10 @@ export default function FrictionIndexPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="flow">
+      <MyFlovePageGrid area="flow" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-6">
-            <div>
-              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
-                <Flame className="text-primary" /> Feedback & förslag
-              </h1>
-              <p className="text-muted-foreground">
-                Säg till om något skaver – varje liten notis gör appen bättre.
-              </p>
-            </div>
+          <div className="space-y-6 pace-compact-stack">
+<PacePageHeader icon={Flame} title="Feedback & förslag" description="Säg till om något skaver – varje liten notis gör appen bättre." />
 
             {error && (
               <div className="bg-destructive/10 text-destructive rounded-2xl p-3 text-sm flex items-center gap-2">

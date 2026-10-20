@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Layout from "@/components/layout";
@@ -510,22 +511,22 @@ export default function TrainingPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
-            <header className="space-y-2">
+          <div className="max-w-3xl mx-auto pace-compact-stack">
+            <div className="space-y-2">
               {view !== "overview" && (
-                <button
-                  type="button"
-                  onClick={() => setView("overview")}
-                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-ink"
-                >
+                <Button variant="ghost" type="button" onClick={() => setView("overview")} className="min-h-11 justify-start gap-1">
                   <ChevronLeft size={16} /> Tillbaka till översikten
-                </button>
+                </Button>
               )}
-              <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-2">
-                <Dumbbell className="text-primary" />{" "}
-                {view === "overview"
+              <PacePageHeader icon={Dumbbell}
+                title={view === "overview" ? "Träning" : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
+                description={view === "overview" ? "Välj en del i taget – du behöver inte se allt på en gång." : (SECTIONS.find((s) => s.id === view)?.desc ?? "")}
+              />
+            </div>
+
+            {view === "overview"
                   ? "Träning"
                   : (SECTIONS.find((s) => s.id === view)?.label ?? "Träning")}
               </h1>

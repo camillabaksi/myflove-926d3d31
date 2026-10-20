@@ -1,7 +1,7 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveFloatingElement } from "@/components/myflove/motion";
 import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -276,28 +276,12 @@ export default function MealPlannerPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-6">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-1 flex items-center gap-3">
-                  Veckomatlista <MyFloveFloatingElement tone="sun" size={18} />
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Planera veckans måltider – för dig själv eller hela familjen.
-                </p>
-                <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
-                  <ShoppingCart size={12} />
-                  {isShared
-                    ? "Varor skickas till familjens inköpslista"
-                    : "Varor skickas till din egen inköpslista"}
-                </span>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <UtensilsCrossed size={20} />
-              </div>
-            </div>
+          <div className="space-y-6 pace-compact-stack">
+<PacePageHeader icon={UtensilsCrossed} title="Veckomatlista" description="Planera veckans måltider – för dig själv eller hela familjen.">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground"><ShoppingCart size={12} aria-hidden />{isShared ? "Varor skickas till familjens inköpslista" : "Varor skickas till din egen inköpslista"}</span>
+            </PacePageHeader>
 
             <div className="flex flex-wrap gap-2">
               <Button onClick={suggestWeek} className="rounded-2xl h-11">

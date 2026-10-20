@@ -1,6 +1,6 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { useMoods } from "@/hooks/use-data";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from "lucide-react";
@@ -36,17 +36,10 @@ export default function Stats() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="flow">
+      <MyFlovePageGrid area="flow" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
-            <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-3">
-                Veckostatistik <MyFloveInsightGather className="shrink-0" />
-              </h1>
-              <p className="text-muted-foreground">
-                Så har ditt mående sett ut den senaste veckan.
-              </p>
-            </div>
+          <div className="space-y-8 pace-compact-stack">
+<PacePageHeader icon={BarChart3} title="Veckostatistik" description="Så har ditt mående sett ut den senaste veckan." />
 
             <CollapsibleSection
               title="Den här veckan"

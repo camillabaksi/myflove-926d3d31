@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import EnergyHistory from "@/components/energy-history";
 import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useMemo, useState } from "react";
@@ -25,7 +26,6 @@ import {
   MyFloveButton,
   MyFloveChip,
   MyFloveEmptyState,
-  MyFloveHeader,
   MyFloveLoading,
 } from "@/components/myflove";
 import { Input } from "@/components/ui/input";
@@ -247,17 +247,15 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true }: Pro
   }
 
   return (
-    <MyFlovePageGrid area="halsa" className="pb-24">
+    <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pb-24">
       {showHeader && (
         <MyFloveWide>
-          <MyFloveHeader
-            area="halsa"
+          <PacePageHeader icon={Activity}
             title={t(APP_DESTINATIONS["/energifloede"].label)}
-            emoji="📈"
             description={t("Se vad som brukar ge och ta energi över tid.")}
-            why={t(
+            children={<WhyHint label="energiflöde">{t(
               "Genom att logga vad som påverkar dig kan Pace upptäcka mönster över tid. Det handlar inte om att göra rätt eller fel – utan om att förstå vad som fungerar för just dig.",
-            )}
+            )}</WhyHint>}
           />
         </MyFloveWide>
       )}

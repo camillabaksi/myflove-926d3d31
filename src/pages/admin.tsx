@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -73,14 +75,8 @@ export default function AdminPage() {
 
   return (
     <Layout>
-      <div className="min-w-0 max-w-5xl mx-auto space-y-6">
-        <header className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-1">
-            <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-              {t("Adminöversikt")}
-            </h1>
-            <p className="text-muted-foreground">{t("Hantera feedback, roller och åtkomst.")}</p>
-          </div>
+      <div className="pace-ds pace-compact-page min-w-0 max-w-5xl mx-auto pace-compact-stack">
+<PacePageHeader icon={Shield} title={t("Adminöversikt")} description={t("Hantera feedback, roller och åtkomst.")} action={
           <div className="flex flex-wrap gap-2">
             <Link
               to="/admin-statistik"
@@ -95,11 +91,11 @@ export default function AdminPage() {
               <PlayCircle size={16} /> {t("Pitchmaterial")}
             </Link>
           </div>
-        </header>
+        } />
 
         <UserFunnelCard className="rounded-2xl border border-border/60 bg-card/80 p-4 sm:p-6" />
 
-        <div className="flex min-w-0 max-w-full gap-2 overflow-x-auto border-b border-border">
+        <div className="pace-segmented">
           <TabBtn
             active={tab === "friction"}
             onClick={() => setTab("friction")}
@@ -156,19 +152,10 @@ function TabBtn({
   children: React.ReactNode;
 }) {
   return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={`flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap [overflow-wrap:normal] [&>svg]:shrink-0 px-4 py-2 text-sm font-medium border-b-2 transition ${
-        active
-          ? "border-primary text-primary"
-          : "border-transparent text-muted-foreground hover:text-foreground"
-      }`}
-    >
+    <Button variant="ghost" type="button" aria-pressed={active} onClick={onClick} className="pace-segment">
       {icon}
       {children}
-    </button>
+    </Button>
   );
 }
 

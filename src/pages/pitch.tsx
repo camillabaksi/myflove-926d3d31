@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import { Link } from "@tanstack/react-router";
@@ -84,7 +85,7 @@ export default function PitchPage() {
 
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="pace-ds pace-compact-page max-w-3xl mx-auto pace-compact-stack">
         <Link
           to={isAdmin ? "/admin" : "/idag"}
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -92,10 +93,7 @@ export default function PitchPage() {
           <ArrowLeft size={16} /> {isAdmin ? "Tillbaka till admin" : "Tillbaka till Idag"}
         </Link>
 
-        <header className="space-y-1">
-          <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">Pitchmaterial</h1>
-          <p className="text-muted-foreground">Spela upp pitchvideon och ladda ner pitchdecken.</p>
-        </header>
+<PacePageHeader icon={Film} title="Pitchmaterial" description="Spela upp pitchvideon och ladda ner pitchdecken." />
 
         <details open className="group rounded-2xl border border-border bg-card p-4 space-y-3">
           <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">

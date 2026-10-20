@@ -1,10 +1,11 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { MyFloveCelebration } from "@/components/myflove/motion";
 import { useMoods, useTasks, useFocus, useMedications } from "@/hooks/use-data";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getAchievements } from "@/lib/achievements";
-import { Lock } from "lucide-react";
+import { Award, Lock } from "lucide-react";
 
 export default function Achievements() {
   const { moods } = useMoods();
@@ -28,16 +29,11 @@ export default function Achievements() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="aterhamtning">
+      <MyFlovePageGrid area="aterhamtning" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
+          <div className="space-y-8 pace-compact-stack">
             <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">
-                Belöningar
-              </h1>
-              <p className="text-muted-foreground">
-                {unlockedCount} av {achievements.length} upplåsta — varje litet steg räknas.
-              </p>
+<PacePageHeader icon={Award} title="Belöningar" description={`${unlockedCount} av ${achievements.length} upplåsta — varje litet steg räknas.`} />
               <div className="mt-3">
                 {unlockedCount > 0 && (
                   <MyFloveCelebration

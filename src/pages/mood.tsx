@@ -1,15 +1,15 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { useMoods } from "@/hooks/use-data";
 import { Button } from "@/components/ui/button";
 import FlowInsightsModal from "@/components/flow-insights-modal";
-import { Sparkles } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 import { getRandomEncouragement } from "@/lib/encouragements";
 import { useToast } from "@/hooks/use-toast";
 import { getGreeting } from "@/lib/greeting";
 import { useLang } from "@/hooks/use-language";
-import { MyFloveHeart } from "@/components/myflove/motion";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import CollapsibleSection from "@/components/collapsible-section";
 
@@ -58,7 +58,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
     }).format(new Date(timestamp));
 
   return (
-    <MyFlovePageGrid className="pace-next-page pace-next-health">
+    <MyFlovePageGrid className="pace-ds pace-compact-page pace-next-page pace-next-health">
       {showHeader && (
         <MyFloveWide>
           <MoodHeader />
@@ -203,13 +203,6 @@ function MoodHeader() {
   const { lang, t } = useLang();
   const g = getGreeting({ name, lastVisit, lang });
   return (
-    <div>
-      <h1 className="pace-next-title font-display text-2xl font-bold text-ink sm:text-3xl mb-2 flex items-center gap-2">
-        <MyFloveHeart size={26} /> {g.title}
-      </h1>
-      <p className="text-muted-foreground">
-        {t("Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.")}
-      </p>
-    </div>
+<PacePageHeader icon={Heart} title={g.title} description={t("Hur känns det i kroppen och knoppen just nu? Ingen dömer dig här.")} />
   );
 }

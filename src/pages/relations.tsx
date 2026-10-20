@@ -1,11 +1,10 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, Check, X, Zap } from "lucide-react";
+import { Heart, Plus, Trash2, Pencil, Check, X, Zap } from "lucide-react";
 import Layout from "@/components/layout";
-import { PacePageTitle } from "@/components/paceable/design-system";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveHeart } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -350,19 +349,10 @@ function RelationsContent() {
 export default function RelationsPage() {
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
-            <div>
-              <PacePageTitle className="mb-2 flex items-center gap-2 [&>span]:shrink-0">
-                <MyFloveHeart size={26} /> Relationer
-              </PacePageTitle>
-              <p className="text-muted-foreground">
-                Människorna – och djuren – som hör till ditt liv. Pace använder dem som kontext i
-                Fånga, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder
-                för dig.
-              </p>
-            </div>
+          <div className="space-y-8 pace-compact-stack">
+<PacePageHeader icon={Heart} title="Relationer" description="Människorna – och djuren – som hör till ditt liv. Pace använder dem som kontext i Fånga, kalender, uppgifter och påminnelser, men gissar aldrig vad någon betyder för dig." />
             <RelationsContent />
           </div>
         </MyFloveWide>

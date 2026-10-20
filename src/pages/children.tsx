@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { openSignedDocument } from "@/lib/open-signed-document";
 import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -724,15 +725,10 @@ export default function ChildrenPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="hem">
+      <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-8">
-            <div>
-              <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl mb-2">Barn</h1>
-              <p className="text-muted-foreground">
-                Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill.
-              </p>
-            </div>
+          <div className="space-y-8 pace-compact-stack">
+<PacePageHeader icon={Baby} title="Barn" description="Allt som rör barnen på ett ställe – privat för dig, delat bara när du vill." />
 
             <Show when="signed-out">
               <div className="max-w-md mx-auto text-center py-16 surface-card border-dashed bg-card/60 space-y-4">

@@ -21,7 +21,7 @@ export default function FlowSettingsPage() {
 
   return (
     <Layout>
-    <MyFlovePageGrid className="pace-ds pace-account-forms mx-auto w-full max-w-4xl pb-24">
+    <MyFlovePageGrid className="pace-ds pace-compact-page pace-ds pace-account-forms mx-auto w-full max-w-4xl pb-24">
 
       <MyFloveWide>
         <PacePageHeader icon={Sparkles} title="Pace-inställningar" description="Du bestämmer hur mycket Pace får säga, när Pace får höra av sig och vad Pace ska hålla koll på. Inget av det här ändrar dina uppgifter." />

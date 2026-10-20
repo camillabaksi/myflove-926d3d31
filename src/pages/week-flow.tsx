@@ -1,7 +1,7 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useMemo } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
-import { MyFloveInsightGather } from "@/components/myflove/motion";
 import { CalendarRange } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
@@ -69,20 +69,10 @@ export default function WeekFlowPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="planera">
+      <MyFlovePageGrid area="planera" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-6">
-            <header className="space-y-1">
-              <div className="flex items-center gap-2">
-                <CalendarRange className="text-primary" size={26} />
-                <h1 className="pace-app-title font-display text-2xl font-bold text-ink sm:text-3xl flex items-center gap-3">
-                  Veckans översikt <MyFloveInsightGather className="shrink-0" />
-                </h1>
-              </div>
-              <p className="text-muted-foreground">
-                En lugn tillbakablick på din vecka. Inget mål, inga poäng.
-              </p>
-            </header>
+          <div className="space-y-6 pace-compact-stack">
+<PacePageHeader icon={CalendarRange} title="Veckans översikt" description="En lugn tillbakablick på din vecka. Inget mål, inga poäng." />
 
             <CollapsibleSection
               title="Din vecka"

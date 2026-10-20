@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
@@ -143,22 +144,10 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
   }
 
   return (
-    <MyFlovePageGrid className="pace-next-page pace-next-health">
+    <MyFlovePageGrid className="pace-ds pace-compact-page pace-next-page pace-next-health">
       {showHeader && (
         <MyFloveWide>
-          <header className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Battery className="text-primary" size={28} />
-              <h1 className="pace-next-title font-display text-2xl font-bold text-ink sm:text-3xl">
-                {t("Energikarta")}
-              </h1>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {t(
-                "Logga hur du känner dig just nu. Pace lär sig när på dygnet du har mest att ge – och när du behöver vila.",
-              )}
-            </p>
-          </header>
+<PacePageHeader icon={Battery} title={t("Energikarta")} description={t("Logga hur du känner dig just nu. Pace lär sig när på dygnet du har mest att ge – och när du behöver vila.")} />
         </MyFloveWide>
       )}
 

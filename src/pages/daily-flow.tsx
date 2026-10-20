@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useRouterState } from "@tanstack/react-router";
 import Layout from "@/components/layout";
 import { MyFloveBlock, MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -28,21 +29,10 @@ export default function DailyFlowPage() {
   const reveal = (id: string) => location.hash === id ? location.href : undefined;
   return (
     <Layout>
-      <MyFlovePageGrid area="idag">
+      <MyFlovePageGrid area="idag" className="pace-ds pace-compact-page">
         <MyFloveWide>
-          <div className="space-y-6">
-            <header className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Sun className="text-primary" size={26} />
-                <h1 className="font-display text-2xl font-bold text-ink sm:text-3xl">
-                  Rutiner &amp; medicin
-                </h1>
-              </div>
-              <p className="text-muted-foreground">
-                Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och
-                Pace.
-              </p>
-            </header>
+          <div className="space-y-6 pace-compact-stack">
+<PacePageHeader icon={Sun} title="Rutiner & medicin" description="Morgonstart, dina fasta rutiner och doser. Dagens plan och förslag bor i Idag och Pace." />
 
             <MyFloveBlock
               title="I dag"

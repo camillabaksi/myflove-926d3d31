@@ -1,7 +1,7 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useEffect, useState } from "react";
 import Layout from "@/components/layout";
 import { MyFlovePageGrid, MyFloveWide, MyFloveBlock } from "@/components/myflove/block";
-import { MyFloveHeader } from "@/components/myflove";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
@@ -182,12 +182,11 @@ export function RoutinesContent({ showHeader = true }: RoutinesContentProps) {
   const sorted = [...routines].sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <MyFlovePageGrid className="pace-next-page pace-next-health pace-next-tools">
+    <MyFlovePageGrid className="pace-ds pace-compact-page pace-next-page pace-next-health pace-next-tools">
       {showHeader && (
         <MyFloveWide>
-          <MyFloveHeader
+          <PacePageHeader icon={Repeat}
             title="Rutiner"
-            emojiKey="routines"
             description="Dina dagliga hållpunkter. Läggs automatiskt in i kalendern varje dag och skickar påminnelse om notiser är på."
           />
         </MyFloveWide>

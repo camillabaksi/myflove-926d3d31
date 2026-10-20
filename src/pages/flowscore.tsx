@@ -1,3 +1,4 @@
+import { PacePageHeader } from "@/components/paceable/page-header";
 import { useMemo } from "react";
 import { Link } from "wouter";
 import { CalendarDays, Gauge } from "lucide-react";
@@ -34,18 +35,9 @@ export default function FlowScorePage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pace-next-page pace-next-health">
         <MyFloveWide>
-          <header>
-            <h1 className="pace-app-title flex items-center gap-2 font-display text-2xl font-bold text-ink sm:text-3xl">
-              <Gauge className="h-7 w-7 shrink-0 text-primary" aria-hidden /> {t("Dagens balans")}
-            </h1>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {t(
-                "Din egen kapacitet och det du har planerat, sida vid sida. Samma underlag som i Idag och Kalender.",
-              )}
-            </p>
-          </header>
+<PacePageHeader icon={Gauge} title={t("Dagens balans")} description={t("Din egen kapacitet och det du har planerat, sida vid sida. Samma underlag som i Idag och Kalender.")} />
         </MyFloveWide>
         <MyFloveWide>
           <TodayCapacity percent={capacity.percent} />
