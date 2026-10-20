@@ -1,3 +1,6 @@
+## 2026-10-20 – Säkerhetsrättningar före bred spridning
+- Dekrypterad data töms ur minnet när en session tar slut oväntat; familjemedlemskap kan bara skapas via inbjudningskod och inte flyttas; barnkonton får bara delade aktiviteter utan dokument; notisadresser begränsas till kända pushtjänster; testkontofunktionen kräver uttrycklig aktivering. Ingen publicering.
+
 ## 2026-10-20 – Pace-blocket bort från toppen av Idag
 - **Idag** (2026-10-20): kortet "Jag är här om du behöver mig" med "Prata med Pace"-knappen tas bort från toppen av förstasidan, så hälsningen och "Din energi just nu" hamnar högst upp. Pace finns kvar som förut via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Inga adresser, registreringar, utkast, lagring eller andra funktioner ändras. Ingen publicering.
 
