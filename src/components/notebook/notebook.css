@@ -75,7 +75,7 @@
 }
 .book-tabs {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr));
   gap: 0.25rem;
   padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--book-line);
@@ -332,7 +332,7 @@
     display: block;
   }
   .pace-shell-navigation:has(.notebook) > .pace-mobile-navigation {
-    display: flex;
+    display: block;
   }
   .pace-shell-navigation:has(.notebook) .pace-mobile-content-scroll {
     padding-bottom: calc(6rem + env(safe-area-inset-bottom));
@@ -890,4 +890,16 @@
   --book-lavender: #3c3047;
   --book-muted: #c2b4c5;
   color: #f2e5f3;
+}
+
+/* The shared page owns outer geometry; paper remains inside the editors. */
+.notebook.notebook-workspace {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+html[data-paceable-typography="true"] .book-tabs.pace-thoughts-tabs {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr));
 }

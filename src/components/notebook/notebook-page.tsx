@@ -4,6 +4,7 @@ import { useSearch } from "@tanstack/react-router";
 import { Plus, Feather, RotateCcw } from "lucide-react";
 import Layout from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import { isActiveOwner } from "@/lib/account-scope";
 import { localBookDate, type BookKind } from "@/lib/notebook";
 import { useNotebook } from "@/hooks/use-notebook";
@@ -57,7 +58,7 @@ function OwnedNotebook({
     }
   };
   return (
-    <section className="notebook" data-book-kind={kind} aria-labelledby="notebook-title">
+    <section className="notebook notebook-workspace" data-book-kind={kind} aria-labelledby="notebook-title">
       <BookNavigation kind={kind} />
       <header className="book-header">
         <div>
@@ -212,6 +213,8 @@ export default function NotebookPage({ kind }: { kind: PageKind }) {
   const search = useSearch({ strict: false }) as { entry?: string };
   return (
     <Layout>
+      <MyFlovePageGrid className="pace-next-page pace-next-capture">
+        <MyFloveWide>
       {isLoaded && user && isActiveOwner(user.id) ? (
         <OwnedNotebook
           key={`${user.id}-${kind}`}
@@ -224,6 +227,8 @@ export default function NotebookPage({ kind }: { kind: PageKind }) {
           <p role="status">Öppnar din privata bok…</p>
         </section>
       )}
+        </MyFloveWide>
+      </MyFlovePageGrid>
     </Layout>
   );
 }

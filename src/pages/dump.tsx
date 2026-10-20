@@ -13,7 +13,6 @@ import CollapsibleSection from "@/components/collapsible-section";
 import QuickflowRulesSettings from "@/components/quickflow-rules-settings";
 import WhyHint from "@/components/why-hint";
 import { useLang } from "@/hooks/use-language";
-import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { ThoughtsIcon } from "@/components/paceable/navigation-icons";
 import { BookNavigation } from "@/components/notebook/book-navigation";
 
@@ -42,7 +41,6 @@ export default function Dump() {
                   <h1 id="thoughts-title" className="mt-1 pace-next-title pace-editorial text-3xl text-ink">{t("Vad har du i huvudet?")}</h1>
                   <p className="mt-1 text-base text-muted-foreground">{t("Skriv eller säg det som det är.")}</p>
                 </div>
-                <PaceableStones compact tactile className="pace-stones-contained h-12 w-24 shrink-0 [&_.pace-stones-img]:absolute [&_.pace-stones-img]:right-0 [&_.pace-stones-img]:!w-[76px] [&_.pace-stones-img]:!max-w-none" />
               </header>
               <div className="space-y-3">
                 <QuickflowCapture appearance="paceable" />

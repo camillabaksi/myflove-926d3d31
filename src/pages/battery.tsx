@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Smile, Battery, Zap } from "lucide-react";
+import { Link } from "wouter";
+import { Smile, Battery } from "lucide-react";
 import Layout from "@/components/layout";
 import { PacePageHeader } from "@/components/paceable/page-header";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -14,7 +15,8 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
-import { EnergyFlowInsights } from "@/pages/energy-flow";
+import { EnergyFlowContent } from "@/pages/energy-flow";
+import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
 import { useUserProfile } from "@/hooks/use-user-profile";
 import { useLang } from "@/hooks/use-language";
@@ -24,9 +26,9 @@ import { Switch } from "@/components/ui/switch";
 
 /**
  * Mitt batteri – lugn översikt över registrerad energi och mående.
- * Registrering sker på Idag; här visas kapacitet, energiresa och historik.
+ * Registrering sker på Idag; här visas kapacitet, historik och energipåverkan.
  * Samma data som tidigare, bara tydligare ordning.
- * Stop-paus har flyttat till Mer → Stop-paus.
+ * Befintliga formulär och datakällor behåller ägandet över registreringar.
  */
 export default function BatteryPage() {
   const { name } = useUserProfile();
@@ -47,16 +49,19 @@ export default function BatteryPage() {
               name ? `${name}${lang === "en" ? "'s battery" : "s batteri"}` : t("Mitt batteri")
             }
             icon={Battery}
-            description={t("Hur mycket ork har du idag?")}
+            description={t("Din energi just nu, tidigare mående och det som påverkar dig.")}
           />
         </MyFloveWide>
 
         {/* Samma egenregistrerade värde som i Idag och Kalender. */}
         <MyFloveWide>
-          <section className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5" data-testid="capacity-summary">
-            <h2 className="font-sans text-[22px] font-semibold text-ink">{t("Din kapacitet idag")}</h2>
+          <section className="pace-surface rounded-3xl p-4 shadow-soft sm:p-5" data-testid="capacity-summary">
+            <h2 className="font-sans text-base font-semibold text-foreground">{t("Just nu")}</h2>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Ingen energi registrerad ännu. Logga energi & mående på Idag." : "Utifrån din registrering idag och eventuella valfria uppskattningar. Du kan uppdatera den på Idag.")}</p>
             <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
+            <Button asChild variant="ghost" className="mt-3 min-h-11 w-full whitespace-normal !bg-transparent !text-foreground underline underline-offset-4">
+              <Link href="/idag">{t("Logga energi & mående")}</Link>
+            </Button>
             <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/80 p-3">
               <div className="min-w-0">
                 <label htmlFor="follow-energy-rhythm" className="text-sm font-semibold text-ink">Följ min energirytm</label>
@@ -69,23 +74,18 @@ export default function BatteryPage() {
           </section>
         </MyFloveWide>
 
-        <MyFloveWide>
-          <DayEdgesCheckin />
-        </MyFloveWide>
-
         {/* All befintlig fördjupning finns kvar, men visas först efter klick. */}
         <MyFloveWide>
           <CollapsibleSection
             id="battery-more-details"
             defaultCollapsed
-            title={t("Historik & insikter")}
-            description={t("Tidigare registreringar och mönster, utan nya formulär.")}
-            className="pace-surface rounded-3xl p-4 shadow-[0_6px_22px_-12px_rgba(81,38,84,0.22)] sm:p-5"
+            title={t("Historik")}
+            description={t("Dina registreringar av mående och energi.")}
+            className="pace-surface rounded-3xl p-4 shadow-soft sm:p-5"
             headingClassName="font-sans text-base font-semibold text-ink"
           >
 
           <div className="space-y-3">
-            <h3 className="mb-3 text-sm font-semibold text-ink">{t("Tidigare mående och energi")}</h3>
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="pace-segmented">
               <TabsTrigger value="mood" className="pace-segment">
@@ -94,9 +94,6 @@ export default function BatteryPage() {
               <TabsTrigger value="energy" className="pace-segment">
                 <Battery size={14} className="mr-1" /> {t("Energi")}
               </TabsTrigger>
-              <TabsTrigger value="flow" className="pace-segment">
-                <Zap size={14} className="mr-1" /> {t("Mönster")}
-              </TabsTrigger>
             </TabsList>
             <TabsContent value="mood" className="mt-4">
               <MoodContent showHeader={false} readOnly />
@@ -104,13 +101,24 @@ export default function BatteryPage() {
             <TabsContent value="energy" className="mt-4">
               <EnergyContent showHeader={false} readOnly />
             </TabsContent>
-            <TabsContent value="flow" className="mt-4">
-              <EnergyFlowInsights />
-            </TabsContent>
           </Tabs>
-          <PatternsCard />
-          <CycleCard />
           </div>
+          </CollapsibleSection>
+        </MyFloveWide>
+
+        <MyFloveWide>
+          <CollapsibleSection
+            id="battery-energy-influences"
+            title={t("Vad påverkar min energi?")}
+            description={t("Aktiviteter och sådant du själv har märkt ger eller tar energi – inte ditt registrerade batterivärde.")}
+            defaultCollapsed
+            className="border-t border-border/60 pt-3"
+            headingClassName="font-sans text-base font-semibold text-ink"
+          >
+            <EnergyFlowContent showHeader={false} showDayFlow={false} embedded />
+            <PatternsCard />
+            <CycleCard />
+            <DayEdgesCheckin />
           </CollapsibleSection>
         </MyFloveWide>
 

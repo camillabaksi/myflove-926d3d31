@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import BatteryPage from "./battery";
 import CapacitySelector from "@/components/capacity-selector";
@@ -38,7 +39,9 @@ vi.mock("@/components/simple-checkin", () => ({
 }));
 vi.mock("@/pages/mood", () => ({ MoodContent: () => null }));
 vi.mock("@/pages/energy-map", () => ({ EnergyContent: ({ readOnly }: { readOnly?: boolean }) => <div data-testid="energy-history" data-readonly={String(!!readOnly)} /> }));
-vi.mock("@/pages/energy-flow", () => ({ EnergyFlowInsights: () => <div data-testid="energy-insights-readonly" /> }));
+vi.mock("@/pages/energy-flow", () => ({ EnergyFlowContent: () => <div data-testid="existing-energy-tools" /> }));
+vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: () => [false, vi.fn()] }));
+vi.mock("@/hooks/use-energy-pattern", () => ({ useEnergyPattern: () => ({ pattern: { reliable: false } }) }));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/hooks/use-user-profile", () => ({ useUserProfile: () => ({ name: "Cam" }) }));
 vi.mock("@/hooks/use-language", () => ({
@@ -52,31 +55,10 @@ const capacity = vi.hoisted(() => ({ percent: null as number | null }));
 vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => capacity }));
 
 describe("battery check-in entry", () => {
-  it("opens and focuses the existing check-in without navigating or resetting its draft", () => {
-    const scroll = vi.fn();
-    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
-      configurable: true,
-      value: scroll,
-    });
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
-      callback(0);
-      return 1;
-    });
+  it("reuses Today's existing check-in destination instead of owning another draft", () => {
     render(<BatteryPage />);
-    const section = screen.getByRole("button", { name: "Logga energi & mående" });
-    expect(section).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByRole("link", { name: "Logga energi & mående" })).toHaveAttribute("href", "/idag");
     expect(screen.queryByTestId("existing-checkin")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Checka in" }));
-    expect(section).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByTestId("existing-checkin")).toHaveAttribute("data-source", "mitt-batteri");
-    expect(document.activeElement).toHaveAttribute("aria-label", "Logga energi & mående");
-    expect(scroll).toHaveBeenCalledWith({ block: "start" });
-    fireEvent.change(screen.getByRole("textbox", { name: "Anteckning" }), {
-      target: { value: "Påbörjad text" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Checka in" }));
-    expect(screen.getByRole("textbox", { name: "Anteckning" })).toHaveValue("Påbörjad text");
   });
 
   it("keeps the battery link for entries on other pages", () => {
@@ -87,22 +69,21 @@ describe("battery check-in entry", () => {
     );
   });
 
-  it("keeps the registered capacity first and lets an existing value be logged again", () => {
+  it("keeps registered 25 percent, read-only energy history and the existing energy tools", async () => {
     capacity.percent = 25;
     render(<BatteryPage />);
-    expect(screen.getByTestId("capacity-summary")).toHaveTextContent("Din kapacitet idag");
     expect(screen.getByTestId("capacity-summary")).toHaveTextContent("25 %");
     expect(screen.queryByText(/Din uppskattade energi/)).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Historik & insikter" })).toHaveAttribute(
+    expect(screen.getByRole("button", { name: "Historik" })).toHaveAttribute(
       "aria-expanded",
       "false",
     );
-    fireEvent.click(screen.getByRole("button", { name: "Historik & insikter" }));
-    fireEvent.click(screen.getByRole("tab", { name: /Energi/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Historik" }));
+    await userEvent.click(screen.getByRole("tab", { name: /Energi/ }));
     expect(screen.getByTestId("energy-history")).toHaveAttribute("data-readonly", "true");
-    const buttons = screen.getAllByRole("button", { name: "Logga energi & mående" });
-    fireEvent.click(buttons[0]);
-    expect(screen.getByTestId("existing-checkin")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Vad påverkar min energi?" }));
+    expect(screen.getByTestId("existing-energy-tools")).toBeVisible();
+    expect(screen.getByRole("link", { name: "Logga energi & mående" })).toHaveAttribute("href", "/idag");
     capacity.percent = null;
   });
 });

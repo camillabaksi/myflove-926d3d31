@@ -106,7 +106,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
   const groupMeta: Record<string, { icon: typeof User; tone: string; hint: string }> = {
     "Min dag": { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
     "Pace och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
-    "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Energi och vila" },
+    "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Batteri, återhämtning och personliga stöd" },
     "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
   };
   const groupCard = (title: string, compact = false) => {
