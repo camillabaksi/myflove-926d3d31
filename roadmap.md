@@ -1,4 +1,10 @@
 # Roadmap
+## Nya mobilversioner för Play och TestFlight (2026-10-20)
+- [x] Granska befintliga versionsnummer, appidentiteter, webbhost och byggflöden.
+- [ ] Godkänn avgränsad releaseplan före versionsändring.
+- [ ] Höj Android- och iOS-versionerna och kontrollera oförändrade appidentiteter/host.
+- [ ] Bygg och verifiera signerad AAB och IPA via befintlig byggmiljö; åtkomst till Codemagic och signering behöver verifieras.
+- [ ] Redovisa paket, kontroller och eventuella hinder; ingen webb- eller butikspublicering.
 ## Kalenderprover efter tidsrättningen (2026-10-20)
 - [x] Rättat äldre testval och testförutsättningar mot dagens kalender; 14 riktade tester godkända och automatisk byggkontroll visar build OK. Appfunktioner och användardata orörda. Ingen publicering.
 ## Rättat: handinmatad tid blockerades (2026-10-20)
