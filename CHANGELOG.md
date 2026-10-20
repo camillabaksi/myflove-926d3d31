@@ -1,3 +1,6 @@
+## 2026-10-20 – Kompaktare sidlayout, etapp 1
+- Mobilhuvud på en rad, Härnäst endast Idag/Hem, sidfot endast Inställningar/Översikt, läsbredd på list-/formulärsidor, rubriklinje under rubriken. Ej publicerat.
+
 ## 2026-10-20 – Områdesfärger som bakgrund
 - Dov bakgrundston per område (Idag, Kalender, Fånga/Tankar, Min plats, Hem, Återhämtning) med färgad rubriklinje, mycket dov ton, mjuk ljusbåge och diskreta ljusstrimmor som i Pace-bakgrunden; övriga sidor ivory, Pace oförändrad. Ej publicerat.
 
