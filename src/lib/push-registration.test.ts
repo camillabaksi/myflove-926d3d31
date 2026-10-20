@@ -63,7 +63,7 @@ const call = subscribeToPush as unknown as (args: {
 beforeEach(() => {
   saveError = null;
   rows = [
-    { user_id: "account-a", endpoint: "https://push.test/android", user_agent: "same-browser" },
+    { user_id: "account-a", endpoint: "https://fcm.googleapis.com/android", user_agent: "same-browser" },
   ];
 });
 
@@ -72,7 +72,7 @@ describe("registrering av flera enheter", () => {
     await call({
       context,
       data: {
-        endpoint: "https://push.test/web",
+        endpoint: "https://fcm.googleapis.com/web",
         p256dh: "key",
         auth: "auth",
         userAgent: "same-browser",
@@ -80,8 +80,8 @@ describe("registrering av flera enheter", () => {
       },
     });
     expect(rows.map((row) => row.endpoint)).toEqual([
-      "https://push.test/android",
-      "https://push.test/web",
+      "https://fcm.googleapis.com/android",
+      "https://fcm.googleapis.com/web",
     ]);
     expect(rows[1].user_id).toBe("account-a");
   });
@@ -89,7 +89,7 @@ describe("registrering av flera enheter", () => {
   it("uppdaterar samma endpoint utan dubbletter eller borttagning av andra", async () => {
     await call({
       context,
-      data: { endpoint: "https://push.test/android", p256dh: "new-key", auth: "new-auth" },
+      data: { endpoint: "https://fcm.googleapis.com/android", p256dh: "new-key", auth: "new-auth" },
     });
     expect(rows).toHaveLength(1);
     expect(rows[0].p256dh).toBe("new-key");
@@ -98,8 +98,8 @@ describe("registrering av flera enheter", () => {
   it("signalerar databasfel och behåller tidigare enheter", async () => {
     saveError = { message: "Save failed" };
     await expect(
-      call({ context, data: { endpoint: "https://push.test/web", p256dh: "key", auth: "auth" } }),
+      call({ context, data: { endpoint: "https://fcm.googleapis.com/web", p256dh: "key", auth: "auth" } }),
     ).rejects.toThrow("Save failed");
-    expect(rows.map((row) => row.endpoint)).toEqual(["https://push.test/android"]);
+    expect(rows.map((row) => row.endpoint)).toEqual(["https://fcm.googleapis.com/android"]);
   });
 });
