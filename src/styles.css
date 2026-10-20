@@ -2974,12 +2974,12 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 
 /* Områdesbakgrunder: dov ton per område, tonar mot ivory nedåt. */
 :root {
-  --page-bg-idag: #E6ECF5; --page-tone-idag: #4F6E9C;
-  --page-bg-kalender: #F1E8F4; --page-tone-kalender: #8A4E8F;
-  --page-bg-tankar: #ECE7F6; --page-tone-tankar: #6A57A3;
-  --page-bg-halsa: #E5EFE9; --page-tone-halsa: #4C7A62;
-  --page-bg-hem: #F6E6DA; --page-tone-hem: #A0603A;
-  --page-bg-aterhamtning: #F5EDD8; --page-tone-aterhamtning: #8C6E2A;
+  --page-bg-idag: #F1F3F6; --page-tone-idag: #4F6E9C;
+  --page-bg-kalender: #F6F1F5; --page-tone-kalender: #8A4E8F;
+  --page-bg-tankar: #F4F1F6; --page-tone-tankar: #6A57A3;
+  --page-bg-halsa: #F1F4F0; --page-tone-halsa: #4C7A62;
+  --page-bg-hem: #F8F0E9; --page-tone-hem: #A0603A;
+  --page-bg-aterhamtning: #F8F4E8; --page-tone-aterhamtning: #8C6E2A;
   --page-bg-neutral: #FAF9F6; --page-tone-neutral: #512654;
   --page-bg-base: #FAF9F6;
 }
@@ -3001,7 +3001,17 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 [data-page-area="aterhamtning"] { --page-bg: var(--page-bg-aterhamtning); --page-tone: var(--page-tone-aterhamtning); }
 [data-page-area="neutral"] { --page-bg: var(--page-bg-neutral); --page-tone: var(--page-tone-neutral); }
 .pace-mobile-content-scroll[data-page-area] {
-  background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg) 22rem, color-mix(in srgb, var(--page-bg) 45%, var(--page-bg-base)) 60rem) !important;
+  background:
+    radial-gradient(ellipse 34rem 26rem at 92% -4%, rgba(255,255,255,.6), transparent 70%),
+    radial-gradient(circle 15rem at 88% 9rem, rgba(255,255,255,.42) 0 99%, transparent 100%),
+    repeating-linear-gradient(118deg, transparent 0 5.5rem, rgba(255,255,255,.28) 5.5rem 6.4rem, transparent 6.4rem 9rem),
+    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg) 20rem, var(--page-bg-base) 55rem) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100%, 100% 100%, 100% 32rem, 100% 100% !important;
+}
+.dark .pace-mobile-content-scroll[data-page-area] {
+  background: radial-gradient(circle 15rem at 88% 9rem, rgba(255,255,255,.03) 0 99%, transparent 100%),
+    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg) 20rem, var(--page-bg-base) 55rem) !important;
 }
 .pace-mobile-content-scroll[data-page-area] > div,
 .pace-mobile-content-scroll[data-page-area] .pace-ds-page { background: transparent !important; }
