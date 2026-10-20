@@ -89,6 +89,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Ett svar som visats men inte kunnat sparas – kan försökas igen. */
+  const [unsavedReply, setUnsavedReply] = useState<{ conversationId: string; content: string } | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(true);
@@ -234,7 +236,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         if (!id) throw new Error("Kunde inte skapa chatten. Är du inloggad?");
         created = true;
       }
-      await saveFlowMessage(id, "user", trimmed);
+      try {
+        await saveFlowMessage(id, "user", trimmed);
+      } catch (saveError) {
+        // Texten får aldrig försvinna tyst – lägg tillbaka den i rutan.
+        setInput(trimmed);
+        setMessages(messages);
+        throw saveError;
+      }
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
       const exerciseContext = savedExercisesContext(
