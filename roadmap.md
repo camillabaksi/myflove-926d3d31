@@ -1,4 +1,8 @@
 # Roadmap
+## Återstående säkerhetsrättningar (2026-10-20)
+- [x] Begäran mottagen: återstående beroenden, webbskydd, privata feluppgifter och återregistrering av notiser ska åtgärdas utan kontoskrivningar eller publicering.
+- [ ] Visa avgränsad plan och invänta godkännande före appändringar.
+- [ ] Genomför godkända rättningar och riktade integritets-/regressionstester; redovisa kvarstående begränsningar.
 ## Pace-blocket bort från Idag (2026-10-20)
 - [x] Begäran mottagen: ta bort "Prata med Pace"-blocket längst upp på förstasidan.
 - [x] Blocket borttaget ur layouten; Pace nås fortfarande via sidhuvudets chattikon, Prata med Pace-sidan och Pace-inställningar under Inställningar. 14 riktade tester, typkontroll och byggkontroll godkända; inloggad efterbild av Idag granskad. Ingen publicering.
