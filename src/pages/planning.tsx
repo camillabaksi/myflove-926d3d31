@@ -12,13 +12,13 @@ export default function PlanningPage() {
   const { t } = useLang();
   return (
     <Layout>
-      <div className="pace-next-page mx-auto w-full max-w-6xl space-y-6">
+      <div className="pace-ds pace-compact-page pace-next-page pace-compact-stack mx-auto w-full max-w-6xl">
         <Link to="/idag" className="inline-flex min-h-11 items-center gap-2 text-sm">
           <ArrowLeft size={16} aria-hidden />
           {t("Till min dag")}
         </Link>
         <PacePageHeader icon={CalendarDays} title={t(audience === "children" ? "Barnens schema" : "Planera")} />
-        <nav className="flex flex-wrap gap-2" aria-label={t("Vem vill du planera för?")}>
+        <nav className="pace-segmented" aria-label={t("Vem vill du planera för?")}>
           {(
             [
               ["me", "Min plan"],
@@ -30,7 +30,7 @@ export default function PlanningPage() {
               to="/planera"
               search={{ audience: value, period }}
               aria-current={audience === value ? "page" : undefined}
-              className={`inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm ${audience === value ? "bg-primary text-primary-foreground" : "bg-card text-ink"}`}
+              className="pace-segment"
             >
               {t(label)}
             </Link>

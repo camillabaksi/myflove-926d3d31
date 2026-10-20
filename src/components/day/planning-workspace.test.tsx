@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PlanningWorkspace } from "./planning-workspace";
 import PlanningPage from "@/pages/planning";
+import type { ReactNode } from "react";
 
 const model = vi.hoisted(() => ({
   owner: "owner",
@@ -13,7 +14,7 @@ const model = vi.hoisted(() => ({
   navigate: vi.fn(),
 }));
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, to, search, ...props }: any) => (
+  Link: ({ children, to, search: _search, ...props }: { children: ReactNode; to: string; search?: unknown }) => (
     <a href={to} {...props}>
       {children}
     </a>
@@ -22,11 +23,11 @@ vi.mock("@tanstack/react-router", () => ({
   useSearch: () => ({ audience: model.audience, period: model.period }),
 }));
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: model.owner } }) }));
-vi.mock("@/components/layout", () => ({ default: ({ children }: any) => <div>{children}</div> }));
+vi.mock("@/components/layout", () => ({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> }));
 vi.mock("@/hooks/use-language", () => ({
   useLang: () => ({ t: (text: string) => text, locale: "sv-SE" }),
 }));
-vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ addPlannedTasks: model.addTasks }) }));
+vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ addPlannedTasks: model.addTasks }), useReminders: () => ({ addPlannedPeriods: vi.fn() }) }));
 vi.mock("@/hooks/use-children", () => ({
   useChildren: () => ({
     userId: model.owner,
@@ -41,7 +42,7 @@ vi.mock("@/hooks/use-visual-calendar", () => ({
   useVisualCalendar: () => ({ days: {}, planningReady: true, planningError: false }),
 }));
 vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => ({ percent: 42 }) }));
-vi.mock("@/lib/life-areas", () => ({ useActiveArea: () => ({ activeArea: "alla" }) }));
+vi.mock("@/lib/life-areas", async (importOriginal) => ({ ...await importOriginal<typeof import("@/lib/life-areas")>(), useActiveArea: () => ({ activeArea: "alla" }) }));
 vi.mock("@/lib/cloud-storage", () => ({
   getSyncUser: model.syncUser,
   useCloudSyncedStorage: (_key: string, initial: unknown) => [initial],
@@ -114,11 +115,11 @@ describe("Plan several activities before saving", () => {
   });
   it("keeps separate audience drafts and clears them when the account changes", () => {
     const page = render(<PlanningPage />);
-    const own = within(screen.getByRole("region", { name: "Planera i din takt" }));
+    const own = within(screen.getByRole("region", { name: "Lägg till aktiviteter" }));
     fireEvent.change(own.getByRole("textbox"), { target: { value: "Privat aktivitet" } });
     model.audience = "children";
     page.rerender(<PlanningPage />);
-    const child = within(screen.getByRole("region", { name: "Planera barnens dagar" }));
+    const child = within(screen.getByRole("region", { name: "Lägg till aktiviteter" }));
     expect(child.getByRole("textbox")).toHaveValue("");
     fireEvent.change(child.getByRole("textbox"), { target: { value: "Barnens aktivitet" } });
     model.audience = "me";

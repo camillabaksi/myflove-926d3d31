@@ -269,7 +269,7 @@ export function PlanningWorkspace({
     }
   }
   return (
-    <div className="mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)] lg:gap-6">
+    <div className="mx-auto grid max-w-6xl items-start gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,1fr)]">
       <section
         className="min-w-0 rounded-3xl border border-border/60 bg-[#FFFEFC] p-4 shadow-sm sm:p-5"
         aria-label={t("Lägg till aktiviteter")}
@@ -348,7 +348,7 @@ export function PlanningWorkspace({
           </>
         )}
         <div
-          className="mt-4 grid grid-cols-3 gap-1 rounded-2xl border border-border/60 bg-[#F7F1F5] p-1"
+          className="pace-segmented mt-4"
           role="group"
           aria-label={t("Välj planeringsperiod")}
         >
@@ -358,7 +358,7 @@ export function PlanningWorkspace({
               type="button"
               variant={period === value ? "default" : "ghost"}
               aria-pressed={period === value}
-              className="min-h-11 rounded-xl px-2 text-sm shadow-none"
+              className="pace-segment"
               onClick={() => void navigate({ to: "/planera", search: { audience, period: value } })}
             >
               {t(label)}
@@ -470,7 +470,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!lineCount || !ready || (forChildren && !selected.length)}
-              className="min-h-12 w-full whitespace-normal rounded-xl bg-[#512654] text-white shadow-[0_3px_8px_-5px_rgba(81,38,84,0.4)] hover:bg-[#633569]"
+              className="pace-ds-button min-h-12 w-full bg-primary text-primary-foreground"
             >
               {t("Granska aktiviteter")} ({lineCount})<ArrowRight size={16} aria-hidden />
             </Button>
@@ -621,7 +621,7 @@ export function PlanningWorkspace({
             <Button
               type="submit"
               disabled={!rows.length || !ready || saving}
-              className="min-h-12 w-full whitespace-normal rounded-xl bg-[#512654] text-white shadow-[0_3px_8px_-5px_rgba(81,38,84,0.4)] hover:bg-[#633569]"
+              className="pace-ds-button min-h-12 w-full bg-primary text-primary-foreground"
             >
               {saving
                 ? t("Sparar...")

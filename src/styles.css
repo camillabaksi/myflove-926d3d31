@@ -3032,6 +3032,37 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 .pace-standard-header-action { flex: 0 1 auto; min-width: 0; max-width: 100%; }
 .pace-standard-header-extra { flex-basis: 100%; min-width: 0; }
 
+/* Compact secondary pages opt in, preserving legacy pages and all state owners. */
+.pace-ds.pace-compact-page { background: transparent; }
+.pace-compact-page { --pace-section-gap: var(--pace-space-4); }
+.pace-compact-page .pace-compact-stack { display: flex; flex-direction: column; gap: var(--pace-section-gap); min-width: 0; }
+.pace-ds.pace-compact-page .pace-segmented {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 6rem), 1fr));
+  gap: var(--pace-space-1); height: auto; width: 100%; min-width: 0;
+  padding: var(--pace-space-1); border: 1px solid var(--pace-border-warm);
+  border-radius: var(--pace-radius-control); background: var(--pace-selected);
+}
+.pace-ds.pace-compact-page .pace-segment {
+  display: flex; align-items: center; justify-content: center; gap: var(--pace-space-2);
+  min-width: 0; min-height: var(--pace-touch); height: auto; padding: var(--pace-space-2);
+  border: 0; border-radius: var(--pace-radius-control); background: transparent;
+  color: var(--pace-text); box-shadow: none; font-size: .875rem; line-height: 1.5;
+  white-space: normal; overflow-wrap: normal; word-break: normal; hyphens: auto;
+}
+.pace-ds.pace-compact-page .pace-segment svg { flex-shrink: 0; }
+.pace-ds.pace-compact-page .pace-segment:is([data-state="active"], [aria-current="page"], [aria-pressed="true"]) {
+  background: var(--pace-primary); color: var(--pace-on-primary);
+}
+.pace-ds.pace-compact-page .pace-segment:focus-visible { outline: 2px solid var(--pace-focus); outline-offset: 2px; }
+.pace-compact-page .pace-period-navigation { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--pace-space-2); }
+.pace-compact-page .pace-period-label { min-width: 0; margin: 0; text-align: center; overflow-wrap: normal; hyphens: auto; }
+.pace-compact-page .pace-period-navigation > button { min-width: var(--pace-touch); }
+@media (max-width: 40rem) {
+  .pace-compact-page .pace-period-navigation { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .pace-compact-page .pace-period-label { grid-column: 1 / -1; grid-row: 1; }
+  .pace-compact-page .pace-period-navigation > button { width: 100%; }
+}
+
 /* Kompakt mobilhuvud: tillbaka · logotyp · chatt på en rad. */
 @media (max-width: 767px) {
   [data-paceable-typography="true"] .pace-compact-header .pace-shell-brand-header {
