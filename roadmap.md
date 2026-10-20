@@ -1,8 +1,8 @@
 # Roadmap
 ## Kompaktare sidlayout – etapp 3 (2026-10-20)
 - [x] Fortsättning godkänd: granska nästa presentationsgrupp, ta förebilder och bevara Pace/Mer samt alla funktioner.
-- [ ] Enhetliga val och kompaktare avstånd på Planera, Mitt batteri, Historik och Återhämtning.
-- [ ] Kontrollera befintliga flöden utan kontosparning, mobil/dator, teman och stor text; uppdatera ändringsloggar. Ingen publicering.
+- [x] Enhetliga val och kompaktare avstånd på Planera, Mitt batteri, Historik och Återhämtning.
+- [x] 8 riktade tester och automatisk byggkontroll gröna. Inloggade osparade planerings-/historik-/flikflöden kontrollerade; 96 bredd/tema/textkombinationer utan dokumentoverflow och med minst 44 px valknappar. Bilder visar kvarstående gemensamt sidomenyfel vid 768 px/stor text och kontrastproblem; full tillgänglighet därför inte verifierad. Två äldre batteritestfel redovisade. Se docs/compact-layout-stage-three-verification.md. Ingen publicering.
 ## Kompaktare sidlayout – etapp 2 (2026-10-20)
 - [x] Granska godkänd plan och befintliga rubriker; Pace och Mer skyddas.
 - [x] Infört gemensamt rubrikblock på tio sidor inklusive Min plats, med bevarade texter och handlingar; Planera får plats för befintliga två spalter.
