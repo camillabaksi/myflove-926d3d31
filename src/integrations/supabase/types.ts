@@ -930,6 +930,48 @@ export type Database = {
         }
         Relationships: []
       }
+      tester_applications: {
+        Row: {
+          consent_version: number
+          consented_at: string
+          created_at: string
+          email: string
+          feedback_willing: boolean
+          focus: string
+          id: string
+          participation: string
+          platform: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          consent_version?: number
+          consented_at?: string
+          created_at?: string
+          email: string
+          feedback_willing?: boolean
+          focus: string
+          id?: string
+          participation: string
+          platform: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          consent_version?: number
+          consented_at?: string
+          created_at?: string
+          email?: string
+          feedback_willing?: boolean
+          focus?: string
+          id?: string
+          participation?: string
+          platform?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_kv: {
         Row: {
           key: string
