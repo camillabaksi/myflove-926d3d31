@@ -11,7 +11,7 @@
 - Före-/efterbilder för Kalender, Planera och Uppgifter vid 360/390/430/768/1280/1600 px i `/tmp/browser/mobile-controls/`.
 - 120 inloggade layoutkontroller: fem sidor × sex bredder × två teman × normal/32 px rottext. Ingen dokumentoverflow och inga pageerrors. Samtliga mätta mobilkontroller minst 44×44 px. Desktopkalenderns sex äldre smala kontroller lämnas oförändrade.
 - Kalenderns registreringsdialog: 08:30 och 30 minuter valda, dialog scrollad och stängd med Escape utan sparning. Planeringslista granskad med ett osparat exempel och start/slut 08:30–09:00; värden lästes tillbaka genom formuläret, ingen sparning.
-- Riktade tester täcker skalor, drop-inversion, aktuelltidsmarkör, korta aktiviteters gruppöppning, sena familjeaktiviteter, manuella rutin-/paustider, utkast och befintlig batchsparning i mockad testmiljö.
+- 40 riktade tester godkända i sju filer; automatisk byggkontroll godkänd. Proverna täcker skalor, drop-inversion, aktuelltidsmarkör, korta aktiviteters gruppöppning, sena familjeaktiviteter, manuella rutin-/paustider, utkast och befintlig batchsparning i mockad testmiljö.
 - Desktopens tidslinjehöjd för samma laddade period oförändrad 1648 px. Mobilens jämförbara laddade period 1312 px, cirka 20 % kortare. En tidig 360 px-bild hade ofullständigt laddad period och används inte för höjdjämförelse.
 
 ## Begränsningar
