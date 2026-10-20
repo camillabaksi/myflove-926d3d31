@@ -1,4 +1,4 @@
-import { type ReactNode, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type TouchEvent as ReactTouchEvent } from "react";
+import { type ReactNode, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -36,32 +36,34 @@ import type { Routine } from "@/lib/recurrence";
 /**
  * Tre-prick-menyer ska inte poppa upp mitt i en skroll. Radix-menyer öppnar
  * normalt redan vid pek ned (som på mobil är skrollstarten), så öppningen
- * flyttas till ett riktigt tryck utan skrollrörelse.
+ * flyttas till pek upp – ett riktigt tryck utan skrollrörelse. Klick kan inte
+ * användas: när pek ned avbryts blir klicket detail 0 (som tangentbordet) på
+ * riktiga tappar, så vakten kunde inte skilja dem åt.
  */
 export function useScrollSafeMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const touchStart = useRef<{ x: number; y: number } | null>(null);
-  const touchScrolling = useRef(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const pointerScrolling = useRef(false);
   const triggerProps = {
-    onTouchStart: (event: ReactTouchEvent<HTMLButtonElement>) => {
-      touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY };
-      touchScrolling.current = false;
-    },
-    onTouchMove: (event: ReactTouchEvent<HTMLButtonElement>) => {
-      if (touchStart.current && (Math.abs(event.touches[0].clientY - touchStart.current.y) > 8 || Math.abs(event.touches[0].clientX - touchStart.current.x) > 8)) touchScrolling.current = true;
-    },
     onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
       // Pek ned är ofta början på en skroll – hindra Radix från att öppna här.
-      // Öppning sker i stället vid ett riktigt tryck i onClick nedan.
+      // Radix kör sina handlers efter våra och hoppar över när eventet är avbrutet.
       event.preventDefault();
+      pointerStart.current = { x: event.clientX, y: event.clientY };
+      pointerScrolling.current = false;
     },
-    onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
-      if (touchScrolling.current) {
-        touchScrolling.current = false;
-        return;
+    onPointerMove: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      if (pointerStart.current && !pointerScrolling.current) {
+        const moved = Math.abs(event.clientX - pointerStart.current.x) > 8 || Math.abs(event.clientY - pointerStart.current.y) > 8;
+        if (moved) pointerScrolling.current = true;
       }
-      // Enter/space på tangentbordet hanteras av Radix (klicket har detail 0).
-      if (event.detail === 0) return;
+    },
+    onPointerUp: (event: ReactPointerEvent<HTMLButtonElement>) => {
+      const start = pointerStart.current;
+      pointerStart.current = null;
+      if (!start) return;
+      if (pointerScrolling.current || Math.abs(event.clientX - start.x) > 8 || Math.abs(event.clientY - start.y) > 8) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       setMenuOpen((v) => !v);
     },
   };
