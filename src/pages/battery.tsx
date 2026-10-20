@@ -40,7 +40,7 @@ export default function BatteryPage() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pace-next-page pace-next-health gap-4">
         <MyFloveWide>
           <PacePageHeader
             title={
@@ -87,24 +87,24 @@ export default function BatteryPage() {
           <div className="space-y-3">
             <h3 className="mb-3 text-sm font-semibold text-ink">{t("Tidigare mående och energi")}</h3>
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
-            <TabsList className="grid h-10 w-full grid-cols-3 rounded-2xl bg-[#F5EDF7]/60">
-              <TabsTrigger value="mood" className="rounded-xl text-xs font-medium">
+            <TabsList className="pace-segmented">
+              <TabsTrigger value="mood" className="pace-segment">
                 <Smile size={14} className="mr-1" /> {t("Mående")}
               </TabsTrigger>
-              <TabsTrigger value="energy" className="rounded-xl text-xs">
+              <TabsTrigger value="energy" className="pace-segment">
                 <Battery size={14} className="mr-1" /> {t("Energi")}
               </TabsTrigger>
-              <TabsTrigger value="flow" className="rounded-xl text-xs">
+              <TabsTrigger value="flow" className="pace-segment">
                 <Zap size={14} className="mr-1" /> {t("Mönster")}
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="mood" className="mt-6">
+            <TabsContent value="mood" className="mt-4">
               <MoodContent showHeader={false} readOnly />
             </TabsContent>
-            <TabsContent value="energy" className="mt-6">
+            <TabsContent value="energy" className="mt-4">
               <EnergyContent showHeader={false} readOnly />
             </TabsContent>
-            <TabsContent value="flow" className="mt-6">
+            <TabsContent value="flow" className="mt-4">
               <EnergyFlowInsights />
             </TabsContent>
           </Tabs>

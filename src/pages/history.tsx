@@ -2,6 +2,7 @@ import { APP_DESTINATIONS } from "@/lib/app-destinations";
 import { useEffect, useMemo, useState } from "react";
 import Layout from "@/components/layout";
 import { PacePageHeader } from "@/components/paceable/page-header";
+import { Button } from "@/components/ui/button";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import WeekReviewCard from "@/components/week-review-card";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -78,30 +79,32 @@ export default function History() {
 
   return (
     <Layout>
-      <MyFlovePageGrid area="flow">
+      <MyFlovePageGrid area="flow" className="pace-ds pace-compact-page gap-4">
         <MyFloveWide>
-          <div className="space-y-6">
+          <div className="pace-compact-stack">
             <PacePageHeader icon={HistoryIcon} title={t(APP_DESTINATIONS["/historik"].label)} description={t("Vad hände de här dagarna – och hur påverkade det din ork?")} />
 
-            <div className="flex items-center justify-between gap-3">
-              <button
+            <div className="pace-period-navigation">
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => setWeekStart(addDaysISO(weekStart, -7))}
-                className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1.5 text-sm text-ink"
+                className="pace-ds-button gap-1"
               >
                 <ChevronLeft size={16} aria-hidden /> {t("Förra veckan")}
-              </button>
-              <p className="text-sm text-muted-foreground">
+              </Button>
+              <p className="pace-period-label text-sm text-muted-foreground">
                 {formatDay(days[0]!, locale)} – {formatDay(days[6]!, locale)}
               </p>
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 disabled={isCurrentWeek}
                 onClick={() => setWeekStart(addDaysISO(weekStart, 7))}
-                className="inline-flex items-center gap-1 rounded-full border border-border/60 px-3 py-1.5 text-sm text-ink disabled:opacity-40"
+                className="pace-ds-button gap-1"
               >
                 {t("Nästa")} <ChevronRight size={16} aria-hidden />
-              </button>
+              </Button>
             </div>
 
             <WeekReviewCard review={review} showLink={false} />
@@ -163,14 +166,15 @@ export default function History() {
                             </p>
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
                               {ENERGY_CHOICES.map((choice: ActivityEnergy) => (
-                                <button
+                                <Button
                                   key={choice}
                                   type="button"
+                                  variant="outline"
                                   onClick={() => setEnergy(item.sourceId, item.plannedDate, choice)}
-                                  className="rounded-full border border-border/60 bg-card px-2.5 py-1 text-xs text-ink hover:border-primary"
+                                  className="pace-ds-button px-2.5 text-xs"
                                 >
                                   {ENERGY_META[choice].dot} {t(ENERGY_META[choice].label)}
-                                </button>
+                                </Button>
                               ))}
                             </div>
                           </div>

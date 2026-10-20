@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Kompaktare sidlayout, etapp 3",
+    items: ["Sidval och avstånd (2026-10-20): Planera och Mitt batteri återanvänder samma tillgängliga valstil. Tätare sektionsavstånd på Planera, Mitt batteri, Historik och Återhämtning; Historiks veckonavigering och Återhämtnings eget tidsfält staplas vid liten bredd/stor text. Befintliga flikar, utkast, handlingar och data bevaras. Pace och Mer orörda. Ingen publicering."],
+  },
+  {
     title: "2026-10-20 – Kompaktare sidlayout, etapp 2",
     items: ["Sidrubriker (2026-10-20): Min plats, Inställningar, Anteckningar, Pace-inställningar, Mitt batteri, Återhämtning, Profil, Planera, Påminnelser och Historik delar ett öppet rubrikblock med liten ikon, rubriklinje och befintlig undertext/handling. Planera får utrymme för sina befintliga två spalter på dator. Pace, Mer, flikar, data och funktioner oförändrade. Ingen publicering."],
   },

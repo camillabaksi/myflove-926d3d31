@@ -62,9 +62,9 @@ export default function PausePage() {
         }}
       />
 
-      <MyFlovePageGrid area="halsa" className="pace-next-page pace-next-health">
+      <MyFlovePageGrid area="halsa" className="pace-ds pace-compact-page pace-next-page pace-next-health gap-4">
         <MyFloveWide>
-          <div className="space-y-5">
+          <div className="pace-compact-stack">
             <PacePageHeader
               title={t("Återhämtning")}
               icon={Timer}
@@ -113,7 +113,7 @@ export default function PausePage() {
                 ))}
               </div>
 
-              <div className="mt-3 flex gap-2">
+              <div className="mt-3 grid grid-cols-[repeat(auto-fit,minmax(min(100%,8rem),1fr))] gap-2">
                 <Input
                   inputMode="numeric"
                   value={custom}
@@ -124,7 +124,7 @@ export default function PausePage() {
                 />
                 <Button
                   type="button"
-                  className="pace-compact-control pace-compact-primary shrink-0"
+                  className="pace-ds-button pace-compact-control pace-compact-primary"
                   disabled={!custom}
                   onClick={() => {
                     startPause(Number(custom));
