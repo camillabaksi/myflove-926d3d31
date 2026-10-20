@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -78,11 +79,12 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const {
     conversations,
     loading: loadingConversations,
+    error: conversationsError,
     refresh,
     remove,
     rename,
   } = useFlowConversations();
-  const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
+  const { messages, setMessages, loading: loadingMessages, error: messagesError } = useFlowMessages(conversationId);
 
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
