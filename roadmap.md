@@ -1,8 +1,9 @@
 # Roadmap
 ## Återstående säkerhetsrättningar (2026-10-20)
 - [x] Begäran mottagen: återstående beroenden, webbskydd, privata feluppgifter och återregistrering av notiser ska åtgärdas utan kontoskrivningar eller publicering.
-- [ ] Visa avgränsad plan och invänta godkännande före appändringar.
-- [ ] Genomför godkända rättningar och riktade integritets-/regressionstester; redovisa kvarstående begränsningar.
+- [x] Avgränsad plan godkänd före appändringar.
+- [x] Godkända kontominne-/diagnostik-/push-/webbskydd och paketlås rättade; 101 riktade tester, 25 isolerade SQL-kontroller och paketgranskning passerar. Kontot/anteckningarna orörda, ingen publicering. Begränsningar och fullsuitens återstående fel dokumenteras i docs/security-hardening-2026-10-20.md.
+- [ ] Automatisk djupanalys och verklig fler-konto-/notisverifiering inför bred spridning: saknar aktuell automatisk djupskanning och en isolerad komplett testbackend; inga personliga konton används.
 ## Pace-blocket bort från Idag (2026-10-20)
 - [x] Begäran mottagen: ta bort "Prata med Pace"-blocket längst upp på förstasidan.
 - [x] Blocket borttaget ur layouten; Pace nås fortfarande via sidhuvudets chattikon, Prata med Pace-sidan och Pace-inställningar under Inställningar. 14 riktade tester, typkontroll och byggkontroll godkända; inloggad efterbild av Idag granskad. Ingen publicering.

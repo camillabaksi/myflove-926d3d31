@@ -10,6 +10,18 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Fördjupade säkerhetsrättningar",
+    items: [
+      "Sena dekrypteringar och inloggningssvar får inte återfylla tidigare kontos data. Paceable-inställningar följer kontots befintliga förråd och synkmanifest; anteckningar och historik ändras inte.",
+      "Notisförnyelse kräver appens vanliga autentiserade registrering, utskick begränsas till betrodda HTTPS-tjänster utan omdirigering och privata texter/adresser lämnas inte i nya felloggar. Om prenumerationen byts när appen är stängd kan notiser pausa tills appen öppnas igen.",
+      "Strukturellt webbskydd verkställs utan att ändra integrationspolicyn; paket och låsfiler uppdaterade. 101 riktade tester och 25 isolerade SQL-åtkomstkontroller passerade; paketgranskningen fann inga kända sårbarheter. Ingen publicering. Fullständig kontokontroll, automatisk djupanalys och övriga testfel återstår enligt docs/security-hardening-2026-10-20.md.",
+    ],
+  },
+  {
+    title: "2026-10-20 – Säkerhetsrättningar före bred spridning",
+    items: ["Dekrypterad data töms ur minnet när en session tar slut oväntat; familjemedlemskap kan bara skapas via inbjudningskod och inte flyttas; barnkonton får bara delade aktiviteter utan dokument; notisadresser begränsas till kända pushtjänster; testkontofunktionen kräver uttrycklig aktivering. Ingen publicering."],
+  },
+  {
     title: "2026-10-20 – Pace-blocket bort från toppen av Idag",
     items: ["Kortet \"Jag är här om du behöver mig\" med \"Prata med Pace\"-knappen tas bort från toppen av förstasidan, så hälsningen och \"Din energi just nu\" hamnar högst upp. Pace finns kvar via chattikonen i sidhuvudet, Prata med Pace-sidan och Pace-inställningarna under Inställningar. Adresser, registreringar, utkast och lagring bevaras. Ingen publicering."],
   },
