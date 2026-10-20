@@ -44,6 +44,8 @@ export function useScrollSafeMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const pointerScrolling = useRef(false);
+  const handledByPointer = useRef(false);
+  const handledByKeyboard = useRef(false);
   const triggerProps = {
     onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => {
       // Pek ned är ofta början på en skroll – hindra Radix från att öppna här.
@@ -64,6 +66,30 @@ export function useScrollSafeMenu() {
       if (!start) return;
       if (pointerScrolling.current || Math.abs(event.clientX - start.x) > 8 || Math.abs(event.clientY - start.y) > 8) return;
       if (event.pointerType === "mouse" && event.button !== 0) return;
+      handledByPointer.current = true;
+      setMenuOpen((v) => !v);
+    },
+    onPointerCancel: () => {
+      // Avbruten gest (t.ex. skroll som tog över) ska aldrig öppna menyn.
+      pointerStart.current = null;
+      pointerScrolling.current = false;
+    },
+    onKeyDown: (event: ReactKeyboardEvent<HTMLButtonElement>) => {
+      // Radix öppnar själv på Enter/Blanksteg – klicket som följer ska inte växla tillbaka.
+      if (event.key === "Enter" || event.key === " ") handledByKeyboard.current = true;
+    },
+    onClick: () => {
+      // Klick utan pek- eller tangentsekvens (t.ex. hjälpmedel som aktiverar
+      // programmässigt) ska öppna menyn. Vanliga tryck och tangenttryck har
+      // redan hanterats och hoppar över.
+      if (handledByPointer.current) {
+        handledByPointer.current = false;
+        return;
+      }
+      if (handledByKeyboard.current) {
+        handledByKeyboard.current = false;
+        return;
+      }
       setMenuOpen((v) => !v);
     },
   };
