@@ -1,6 +1,6 @@
 -- Recruitment applications are separate from app accounts and app activity.
 -- Only the trusted server (service role) can read or write contact details.
-CREATE TABLE public.tester_applications (
+CREATE TABLE IF NOT EXISTS public.tester_applications (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   email text NOT NULL UNIQUE CHECK (email = lower(email) AND char_length(email) <= 254),
   platform text NOT NULL CHECK (platform IN ('android', 'ios', 'both', 'web')),
@@ -13,7 +13,7 @@ CREATE TABLE public.tester_applications (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
-CREATE INDEX tester_applications_status_created_idx
+CREATE INDEX IF NOT EXISTS tester_applications_status_created_idx
   ON public.tester_applications(status, created_at DESC);
 ALTER TABLE public.tester_applications ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.tester_applications FROM PUBLIC, anon, authenticated;
