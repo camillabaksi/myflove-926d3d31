@@ -137,6 +137,7 @@ describe("recovery feedback", () => {
 it("låter användaren avgöra promenadens påverkan i två tryck", async () => {
   render(<DidThisQuickAdd />);
   expand();
+  showAllSuggestions();
   fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
   expect(mocks.addFactor).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
@@ -152,6 +153,7 @@ it.each([
 ] as const)("registrerar %s utan en ny uppgift", async (label, direction) => {
   render(<DidThisQuickAdd />);
   expand();
+  showAllSuggestions();
   fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
   fireEvent.click(screen.getByRole("button", { name: label }));
   await waitFor(() => expect(mocks.announce).toHaveBeenCalledOnce());
