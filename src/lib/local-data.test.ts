@@ -19,7 +19,8 @@ describe("lokal användardata", () => {
   });
 
   it("lämnar enhetsinställningar i fred", () => {
-    expect(isUserDataKey("myflove-theme")).toBe(false);
+    expect(isUserDataKey("myflove-text-size")).toBe(false);
+    expect(isUserDataKey("myflove-theme")).toBe(true);
     expect(isUserDataKey("cookie-consent")).toBe(false);
   });
 
@@ -72,7 +73,8 @@ describe("lokal användardata", () => {
     expect(window.localStorage.getItem("myflove-finances")).toBeNull();
     expect(window.sessionStorage.getItem("myflove-draft")).toBeNull();
 
-    expect(window.localStorage.getItem("myflove-theme")).toBe("dark");
+    expect(window.localStorage.getItem("myflove-theme")).toBeNull();
+    expect(stashed("myflove-theme")).toBe("dark");
     expect(window.localStorage.getItem("cookie-consent")).toBe("1");
   });
 

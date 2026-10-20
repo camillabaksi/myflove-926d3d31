@@ -28,3 +28,4 @@ Battery groups existing read-only check-in history separately from the embedded 
 Push renewal uses the existing authenticated registration flow; endpoint possession never authorizes a public account write, so workers keep no session credentials.
 Structural CSP is enforced independently of report-only integration diagnostics; allowlisted content-free error categories preserve debugging without exporting private messages, URLs or stacks.
 Account-owned Paceable preferences participate in the same owner/stash and cloud manifest rules as legacy keys, preventing cross-account inheritance without renaming saved values.
+Secure-local asynchronous reads and writes carry a lock generation, and initial auth reads cannot overwrite later auth events; stale work must never refill another session's cache or storage.
