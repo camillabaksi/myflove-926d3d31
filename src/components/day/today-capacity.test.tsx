@@ -2,6 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (text: string) => text }) }));
+vi.mock("wouter", () => ({
+  Link: ({ href, children, ...props }: { href: string; children: ReactNode }) => (
+    <a href={href} {...props}>{children}</a>
+  ),
+}));
 vi.mock("@/components/simple-checkin", () => ({
   default: ({ onSaved, onCancel }: { onSaved: () => void; onCancel: () => void }) => (
     <>
