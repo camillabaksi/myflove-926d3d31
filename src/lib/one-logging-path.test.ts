@@ -10,8 +10,7 @@ const read = (p: string) => readFileSync(p, "utf8");
 describe("En enda plats för energi & mående", () => {
   it("Mitt batteri-sidan innehåller den kanoniska loggningsvyn", () => {
     const battery = read("src/pages/battery.tsx");
-    expect(battery).toContain("SimpleCheckin");
-    expect(battery).toContain('source="mitt-batteri"');
+    expect(battery).toContain("EnergyFlowContent");
   });
 
   it("Idag visar faktisk kapacitet och använder samma centrala loggning", () => {

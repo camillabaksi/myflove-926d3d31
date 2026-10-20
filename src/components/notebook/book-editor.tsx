@@ -160,6 +160,27 @@ export function BookTextEditor({
   );
   const copy = () => {
     if (!selection.trim()) return;
+    // Tankekarta: skapa en ny karta med citatet som första bubbla, med
+    // källlänk tillbaka till dagbokssidan. Originalet rörs aldrig.
+    if (destination === "map") {
+      const mapId = store.create("map", {
+        title: newTitle.trim() || "Tankekarta från dagboken",
+        text: "",
+        date: draft.date,
+      });
+      if (!mapId) return;
+      const nodeId = store.create("node", {
+        ...linkedContent(selection, entity.id, mapId),
+        bookId: mapId,
+        x: 24,
+        y: 24,
+      });
+      if (nodeId) {
+        setCopied("map");
+        setCopyOpen(false);
+      }
+      return;
+    }
     const existing = destinations.find((e) => e.id === destination);
     const targetKind = "decision" as const;
     const targetId =
@@ -293,13 +314,14 @@ export function BookTextEditor({
             onChange={(e) => setDestination(e.target.value)}
           >
             <option value="">Skapa ny</option>
+            <option value="map">Tankekarta (ny karta)</option>
             {destinations.map((e) => (
               <option key={e.id} value={e.id}>
                 För & emot: {e.content.title || "Utan rubrik"}
               </option>
             ))}
           </select>
-          {!destination && (
+          {(!destination || destination === "map") && (
             <>
               <label className="book-label" htmlFor="copy-title">
                 Ny rubrik

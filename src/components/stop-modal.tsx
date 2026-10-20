@@ -76,6 +76,27 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const convIdRef = useRef<string | null>(null);
+  /** Meddelanden som inte kunnat sparas – kan försökas igen utan att chatten avbryts. */
+  const pendingSavesRef = useRef<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [saveWarning, setSaveWarning] = useState(false);
+
+  /** Sparar ett meddelande; vid fel läggs det i kö för återförsök i stället för att avbryta chatten. */
+  const trySave = async (role: "user" | "assistant", content: string) => {
+    if (!convIdRef.current) return;
+    try {
+      await saveFlowMessage(convIdRef.current, role, content);
+    } catch {
+      pendingSavesRef.current.push({ role, content });
+      setSaveWarning(true);
+    }
+  };
+
+  const retryPendingSaves = async () => {
+    const pending = [...pendingSavesRef.current];
+    pendingSavesRef.current = [];
+    setSaveWarning(false);
+    for (const p of pending) await trySave(p.role, p.content);
+  };
 
   // Reset on open
   useEffect(() => {
@@ -109,18 +130,23 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
     setInput("");
     setSending(true);
     try {
-      // Spara samtalet så att det dyker upp bland Flow-chattarna
+      // Spara samtalet så att det dyker upp bland Flow-chattarna.
+      // Ett sparfel får aldrig avbryta själva samtalet – det markeras och kan försökas igen.
       if (!convIdRef.current) {
-        const id = await createFlowConversation(`Stop: ${text}`);
-        if (id) {
-          convIdRef.current = id;
-          const opener = messages[0];
-          if (opener?.role === "assistant") {
-            await saveFlowMessage(id, "assistant", opener.content);
+        try {
+          const id = await createFlowConversation(`Stop: ${text}`);
+          if (id) {
+            convIdRef.current = id;
+            const opener = messages[0];
+            if (opener?.role === "assistant") {
+              await trySave("assistant", opener.content);
+            }
           }
+        } catch {
+          setSaveWarning(true);
         }
       }
-      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "user", text);
+      await trySave("user", text);
       const payload: Msg[] = [
         { role: "user", content: STOP_SYSTEM_HINT },
         { role: "assistant", content: "Okej, jag är här. Jag lyssnar utan att döma." },
@@ -134,7 +160,7 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
         data: { messages: payload.slice(-40), context },
       });
       setMessages((m) => [...m, { role: "assistant", content: reply }]);
-      if (convIdRef.current) await saveFlowMessage(convIdRef.current, "assistant", reply);
+      await trySave("assistant", reply);
     } catch {
       setMessages((m) => [
         ...m,
@@ -261,6 +287,20 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
                   <div className="bg-secondary text-muted-foreground rounded-2xl px-4 py-2.5 text-sm">
                     Pace tänker …
                   </div>
+                </div>
+              )}
+              {saveWarning && (
+                <div className="rounded-xl border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                  Samtalet kunde inte sparas just nu – texten finns kvar här på skärmen.
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-2 rounded-xl"
+                    onClick={() => void retryPendingSaves()}
+                  >
+                    Försök spara igen
+                  </Button>
                 </div>
               )}
             </div>

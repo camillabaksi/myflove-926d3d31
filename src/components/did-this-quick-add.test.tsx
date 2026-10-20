@@ -37,6 +37,13 @@ beforeEach(() => {
   mocks.addFactor.mockImplementation(async (input) => savedEntry(input));
 });
 
+/** Snabbregistreringen är ihopfälld som standard – öppna den först. */
+const expand = () =>
+  fireEvent.click(screen.getByRole("button", { name: "Lägg till det du gjorde" }));
+/** Förslagen visas sex i taget – fälla ut resten när ett senare förslag behövs. */
+const showAllSuggestions = () =>
+  fireEvent.click(screen.getByRole("button", { name: /Visa fler förslag/ }));
+
 it("waits for a confirmed observation before offering a battery update", async () => {
   let finish!: (entry: EnergyFactorEntry) => void;
   mocks.addFactor.mockImplementation(
@@ -46,6 +53,7 @@ it("waits for a confirmed observation before offering a battery update", async (
       }),
   );
   render(<DidThisQuickAdd />);
+  expand();
   expect(mocks.announce).not.toHaveBeenCalled();
   fireEvent.change(screen.getByPlaceholderText("Något annat du gjorde…"), {
     target: { value: "Diska" },
@@ -71,6 +79,7 @@ it.each([null, new Error("Offline")])(
     if (result instanceof Error) mocks.addFactor.mockRejectedValue(result);
     else mocks.addFactor.mockResolvedValue(result);
     render(<DidThisQuickAdd />);
+    expand();
     fireEvent.change(screen.getByPlaceholderText("Något annat du gjorde…"), {
       target: { value: "Mitt utkast" },
     });
@@ -84,6 +93,7 @@ it.each([null, new Error("Offline")])(
 
 it("passes the actual historical date rather than claiming yesterday changed today's battery", async () => {
   render(<DidThisQuickAdd />);
+  expand();
   fireEvent.click(screen.getByRole("button", { name: "Annan tid" }));
   fireEvent.click(screen.getByRole("button", { name: "Igår" }));
   fireEvent.change(screen.getByPlaceholderText("Något annat du gjorde…"), {
@@ -126,6 +136,8 @@ describe("recovery feedback", () => {
 
 it("låter användaren avgöra promenadens påverkan i två tryck", async () => {
   render(<DidThisQuickAdd />);
+  expand();
+  showAllSuggestions();
   fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
   expect(mocks.addFactor).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Tog energi" }));
@@ -140,6 +152,8 @@ it.each([
   ["Gav lite energi", "gives"],
 ] as const)("registrerar %s utan en ny uppgift", async (label, direction) => {
   render(<DidThisQuickAdd />);
+  expand();
+  showAllSuggestions();
   fireEvent.click(screen.getByRole("button", { name: /Promenad/ }));
   fireEvent.click(screen.getByRole("button", { name: label }));
   await waitFor(() => expect(mocks.announce).toHaveBeenCalledOnce());

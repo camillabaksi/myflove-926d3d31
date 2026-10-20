@@ -67,7 +67,10 @@ export function useVisualCalendar(dates: string[]) {
     for (const item of childItems) if (item.kind === "activity" && !members.has(item.child_id)) members.set(item.child_id, { id: item.child_id, name: "Delad barnaktivitet" });
     return [...members.values()];
   }, [children, childItems]);
-  const planningError = childrenError || householdQuery.error || familyQuery.error || external.error;
+  // En trasig eller ofullständig kalenderläsning får aldrig se ut som ledig tid:
+  // planeringen är inte redo förrän kopplade kalendrar lästs klart utan fel.
+  const externalIncomplete = Boolean(external.data?.reconnectRequired || external.data?.incomplete);
+  const planningError = childrenError || householdQuery.error || familyQuery.error || external.error || externalIncomplete;
   const planningReady = !childrenLoading && !householdQuery.isFetching && !familyQuery.isFetching && !external.isFetching && !planningError;
   return { days, familyMembers, externalError: external.error, externalLoading: external.isFetching, planningReady: !!planningReady, planningError: !!planningError };
 }

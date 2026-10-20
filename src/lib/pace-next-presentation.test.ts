@@ -11,7 +11,8 @@ describe("next-page presentation safeguards", () => {
     }
   });
   it("retains actual 44px control boxes without changing global color tokens", () => {
-    const css = readFileSync("src/styles.css", "utf8").split("/* Next-page opt-in:")[1];
+    // Granska bara själva opt-in-blocket – senare sektioner får definiera egna tokens.
+    const css = readFileSync("src/styles.css", "utf8").split("/* Next-page opt-in:")[1].split("\n/*")[0];
     expect(css).toContain("min-height: 44px; min-width: 44px");
     expect(css).toContain("background-clip: padding-box");
     expect(css).toContain("pointer-events: none");

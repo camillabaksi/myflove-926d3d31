@@ -1,3 +1,10 @@
+## 2026-10-20 – Ärligare sparning och fullständigare läsningar
+- Pace-chattar: meddelanden som inte går att spara markeras tydligt med återförsök i stället för att se sparade ut; texten läggs tillbaka i rutan vid fel. Samtal och meddelanden hämtas i omgångar så äldre historik inte klipps bort. Stop-pausen avbryter aldrig samtalet vid sparfel.
+- Kalenderkopplingar (Google/Outlook) läser alla sidor av händelser och markerar ofullständiga läsningar, så en upptagen kalender aldrig ser ut som ledig tid i planeringen.
+- Familjeläsningar skiljer på "saknas" och "kunde inte hämtas" – fel visar senast bekräftade data med felmarkering i stället för en tyst tom lista.
+- Prickmenyerna öppnar även vid klick från hjälpmedel utan pekhändelser, utan att skrollskyddet försvinner. /om-oss tillagd i sitemap. Dagbokens "kopiera till tankekarta" återställd.
+- Hela testsviten grön: 1 073 tester i 177 filer passerar. Ingen publicering.
+
 ## 2026-10-20 – Prick-menyer öppnar inte mitt i skroll
 - Trepricksmenyer och rullgardinsmenyer på Idag (hälsningens ⋯, "Fler val", "Filtrera" och varje aktivitetsrad) öppnar bara vid ett riktigt tryck, inte när en skroll börjar på knappen. Öppningen sker vid pek upp eftersom riktiga tappar ger klick utan räknare när pek ned avbrutits. Tangentbord, mus, menyval, avbockning och data är oförändrade. 7 riktade tester passerade och mobil förhandsvisning kontrollerad; ingen publicering.
 

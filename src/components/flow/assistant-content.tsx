@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 import { MyFloveThinking } from "@/components/myflove/motion";
 import { Button } from "@/components/ui/button";
@@ -78,15 +79,18 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const {
     conversations,
     loading: loadingConversations,
+    error: conversationsError,
     refresh,
     remove,
     rename,
   } = useFlowConversations();
-  const { messages, setMessages, loading: loadingMessages } = useFlowMessages(conversationId);
+  const { messages, setMessages, loading: loadingMessages, error: messagesError } = useFlowMessages(conversationId);
 
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** Ett svar som visats men inte kunnat sparas – kan försökas igen. */
+  const [unsavedReply, setUnsavedReply] = useState<{ conversationId: string; content: string } | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(true);
@@ -232,7 +236,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         if (!id) throw new Error("Kunde inte skapa chatten. Är du inloggad?");
         created = true;
       }
-      await saveFlowMessage(id, "user", trimmed);
+      try {
+        await saveFlowMessage(id, "user", trimmed);
+      } catch (saveError) {
+        // Texten får aldrig försvinna tyst – lägg tillbaka den i rutan.
+        setInput(trimmed);
+        setMessages(messages);
+        throw saveError;
+      }
 
       // Håll anropet inom serverns gränser: max 50 meddelanden och 4000 tecken kontext.
       const exerciseContext = savedExercisesContext(
@@ -254,7 +265,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       });
       setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
       setJustAnswered(true);
-      await saveFlowMessage(id, "assistant", reply);
+      try {
+        await saveFlowMessage(id, "assistant", reply);
+        setUnsavedReply(null);
+      } catch {
+        // Svaret visas men är inte sparat – säg det ärligt och erbjud återförsök.
+        setUnsavedReply({ conversationId: id, content: reply });
+        setError("Svaret kunde inte sparas. Det finns kvar här på skärmen – försök spara igen nedan.");
+      }
       void refresh();
       // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
       if (created) {
@@ -325,8 +343,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                   className="flex items-center gap-1 p-2"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    void rename(c.id, renameValue);
-                    setRenamingId(null);
+                    void rename(c.id, renameValue)
+                      .then(() => setRenamingId(null))
+                      .catch((err) => toast.error(err instanceof Error ? err.message : "Namnet kunde inte sparas."));
                   }}
                 >
                   <input
@@ -409,8 +428,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                       onClick={() => {
                         setConfirmDelete(null);
                         setMenuFor(null);
-                        void remove(c.id);
-                        if (c.id === conversationId) void navigate({ to: "/assistant" });
+                        void remove(c.id)
+                          .then(() => {
+                            if (c.id === conversationId) void navigate({ to: "/assistant" });
+                          })
+                          .catch((err) => toast.error(err instanceof Error ? err.message : "Samtalet kunde inte tas bort."));
                       }}
                     >
                       Ja, ta bort
@@ -601,7 +623,30 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
               {error && (
                 <div className="text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-xl px-3 py-2">
                   {error}
+                  {unsavedReply && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="mt-2 rounded-xl"
+                      onClick={() => {
+                        const pending = unsavedReply;
+                        void saveFlowMessage(pending.conversationId, "assistant", pending.content)
+                          .then(() => {
+                            setUnsavedReply(null);
+                            setError(null);
+                            void refresh();
+                          })
+                          .catch(() => setError("Det gick fortfarande inte att spara. Försök igen om en liten stund."));
+                      }}
+                    >
+                      Försök spara igen
+                    </Button>
+                  )}
                 </div>
+              )}
+              {(conversationsError || messagesError) && (
+                <p className="text-xs text-muted-foreground">{conversationsError ?? messagesError}</p>
               )}
             </div>
           </section>}
