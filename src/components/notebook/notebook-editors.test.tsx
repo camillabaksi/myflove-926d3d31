@@ -197,7 +197,7 @@ describe("Dagbokens papperssida", () => {
     text.setSelectionRange(0, 3);
     fireEvent.select(text);
     await userEvent.click(screen.getByRole("button", { name: "Kopiera markerad text" }));
-    fireEvent.change(screen.getByLabelText("Bokdel"), { target: { value: "map" } });
+    fireEvent.change(screen.getByLabelText("Destination"), { target: { value: "map" } });
     await userEvent.click(screen.getByRole("button", { name: "Bekräfta kopia" }));
     expect(saved.entities().find((entry) => entry.kind === "node")?.content).toMatchObject({
       text: "Tid",

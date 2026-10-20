@@ -321,7 +321,7 @@ export function BookTextEditor({
               </option>
             ))}
           </select>
-          {!destination && (
+          {(!destination || destination === "map") && (
             <>
               <label className="book-label" htmlFor="copy-title">
                 Ny rubrik
