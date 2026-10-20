@@ -40,6 +40,9 @@ beforeEach(() => {
 /** Snabbregistreringen är ihopfälld som standard – öppna den först. */
 const expand = () =>
   fireEvent.click(screen.getByRole("button", { name: "Lägg till det du gjorde" }));
+/** Förslagen visas sex i taget – fälla ut resten när ett senare förslag behövs. */
+const showAllSuggestions = () =>
+  fireEvent.click(screen.getByRole("button", { name: /Visa fler förslag/ }));
 
 it("waits for a confirmed observation before offering a battery update", async () => {
   let finish!: (entry: EnergyFactorEntry) => void;
