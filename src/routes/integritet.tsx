@@ -33,7 +33,7 @@ export const Route = createFileRoute("/integritet")({
 
 function PrivacyPage() {
   return (
-    <LegalShell title="Integritetspolicy" updated="16 oktober 2026">
+    <LegalShell title="Integritetspolicy" updated="20 oktober 2026">
       <p>
         Paceable är byggd för att minska mental belastning – och det gäller även dina
         personuppgifter. Vi samlar in så lite som möjligt, förklarar varför, och du bestämmer alltid
@@ -106,6 +106,22 @@ function PrivacyPage() {
           produktstatistik.
         </li>
       </ul>
+
+      <h2>Intresseanmälan som testare</h2>
+      <p>
+        Om du anmäler intresse via <Link to="/testa">Bli testare</Link> behandlar vi din
+        mejladress, val av plattform, vilket slags test du vill bidra till och vad du helst
+        vill prova. Vi sparar även om du vill lämna feedback och när du gav ditt samtycke.
+        Inga uppgifter om diagnos eller hälsotillstånd efterfrågas i formuläret.
+      </p>
+      <p>
+        Rättslig grund är ditt samtycke. Uppgifterna används endast för att kontakta dig
+        om testplatser, inbjudningar och frivillig återkoppling, inte för marknadsföring.
+        Anmälningarna hålls åtskilda från appkonton och användningsstatistik och kan bara
+        ses av behöriga administratörer. De sparas under rekryteringen och den aktuella
+        testperioden, eller tills du ber oss radera dem. Återkalla samtycket eller be
+        om utdrag eller radering via <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
+      </p>
 
       <h2>Frivillig veckopuls</h2>
       <p>
