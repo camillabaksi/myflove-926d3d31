@@ -1,3 +1,6 @@
+## 2026-10-20 – Rättat: egen tid gick inte att spara i kalendern
+- **Kalender och dagstöd** (2026-10-20): kontrollen av handinmatade tider var felaktig och godkände ingen tid alls. Därför var ”Spara bara idag” för en enstaka rutin alltid grå, och en paus på en självvald tid kunde inte läggas in när ingen automatisk lucka hittades. Kontrollen godkänner nu giltiga klockslag som 08:30 och avslår ofullständiga eller ogiltiga. Två riktade tester har lagts till: en rutin som sparas med en inmatad tid och en paus som sparas på en självvald tid. Ingen ändring av data, lagring, rutten eller något annat flöde. Ingen publicering.
+
 ## 2026-10-20 – Fristående Paceable-material
 - Tvåspråkiga blueprintar, pitchdeck, manus och pilotunderlag; 56 anonymiserade kontobilder, 8 editorialramar och elva nya ljudlösa filmutkast. Reklamfilm v7 bevarad som oförändrad granskningskopia. Dokumentens kvarvarande namn/porträtt borttagna vid QA; filmernas rörelse-/övertoningsbegränsningar redovisas i leveransrapporten. Endast materialdokumentation uppdaterad; appens ändringslogg, konto, appkod och publicerat intro orörda. Ingen publicering.
 
