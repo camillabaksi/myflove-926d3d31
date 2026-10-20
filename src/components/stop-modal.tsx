@@ -76,6 +76,27 @@ export default function StopModal({ open, onOpenChange }: StopModalProps) {
   const [breathCount, setBreathCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const convIdRef = useRef<string | null>(null);
+  /** Meddelanden som inte kunnat sparas – kan försökas igen utan att chatten avbryts. */
+  const pendingSavesRef = useRef<{ role: "user" | "assistant"; content: string }[]>([]);
+  const [saveWarning, setSaveWarning] = useState(false);
+
+  /** Sparar ett meddelande; vid fel läggs det i kö för återförsök i stället för att avbryta chatten. */
+  const trySave = async (role: "user" | "assistant", content: string) => {
+    if (!convIdRef.current) return;
+    try {
+      await saveFlowMessage(convIdRef.current, role, content);
+    } catch {
+      pendingSavesRef.current.push({ role, content });
+      setSaveWarning(true);
+    }
+  };
+
+  const retryPendingSaves = async () => {
+    const pending = [...pendingSavesRef.current];
+    pendingSavesRef.current = [];
+    setSaveWarning(false);
+    for (const p of pending) await trySave(p.role, p.content);
+  };
 
   // Reset on open
   useEffect(() => {
