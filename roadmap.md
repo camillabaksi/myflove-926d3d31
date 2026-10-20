@@ -1,11 +1,11 @@
 # Roadmap
 ## Samlat Paceable-material och editorialbilder (2026-10-19)
 - [x] Omfattning vald: dokument, pitchfilmer, korta appfilmer och fristående reklamfilm; anonymiserat verkligt kontoinnehåll.
-- [ ] Inventera senaste källor och verifiera aktuell produkt; visa materialplan för godkännande.
-- [ ] Fånga svenska/engelska mobil- och desktopbilder med kontoskrivningar blockerade; anonymisera och granska före användning.
-- [ ] Uppdatera blueprint, pitchdeck, manus och relevanta stöddokument med nya versionsnamn på svenska/engelska.
-- [ ] Producera fyra pitchfilmer, sex korta appfilmer samt uppdaterad separat intro/reklamleverans från verifierade källor; bevara låsta reklamlager.
-- [ ] Granska alla dokument- och presentationssidor samt filmernas rörelse, text, format och integritet; samla i Files med begränsningar. Ingen appändring eller publicering.
+- [x] Inventerat senaste källor och aktuell produkt; materialplan godkänd.
+- [x] Fångat och granskat 56 anonymiserade svenska/engelska bilder samt 8 editorialramar; kontoskrivningar blockerade och engelska vyers svenska etiketter redovisade.
+- [x] Blueprint SV/EN i Word/PDF v3, pitchdeck SV/EN i PowerPoint/PDF v6 samt manus och pilotunderlag versionsnamngivna; kvarvarande namn/porträtt borttagna och rättningar omgranskade.
+- [x] Fyra 180,5-sekunders pitchfilmer, sex 24,5–25-sekunders appfilmer och separat 54-sekunders intro producerade. Reklamfilm v7 är oförändrad granskningskopia; publicerat intro bevarat.
+- [x] Alla dokument-/presentationssidor och filmsamplingsbilder granskade; alla MP4 helt avkodade utan fel. Levereras i Files med rapport som granskningsutkast: full realtidsrörelse ej verifierad, övertoningstexter överlappar kort och pitch använder ersättningsfont. Ingen appändring eller publicering.
 ## Byggfel i snabbregistreringen (2026-10-19)
 - [x] Rättat saknad avslutande JSX-klammer kring det valfria tidsfältet; inga funktions- eller dataändringar.
 - [x] Tagit bort oanvänd kalenderdeklaration med saknad typ; automatisk byggkontroll visar build OK och båda ändrade appmoduler laddas med HTTP 200. Befintliga riktade tester körda men har separata mock-/förväntningsfel; inga test- eller funktionsändringar ingår. Ingen publicering.
