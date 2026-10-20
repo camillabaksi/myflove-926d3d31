@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Pace-sidan på desktop",
+    items: ["Varm bakgrund fyller hela ytan, bilden tonar ut mjukt utan skarv, dubbel samtalshistorik och ensam chattknapp dolda på desktop. Mobil, chatt och data oförändrade."],
+  },
+  {
     title: "2026-10-20 – Förberett nya mobilversioner",
     items: ["Android 6.6 (versionskod 27) och iOS 1.4 (byggnummer 16) förberedda. Appidentiteter, ikoner, webbhost, signering och användardata bevarade. Signerade paket återstår via befintlig byggtjänst; butikernas senaste byggnummer är inte verifierade. Ingen publicering eller uppladdning."],
   },
