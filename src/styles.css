@@ -3001,7 +3001,18 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 [data-page-area="aterhamtning"] { --page-bg: var(--page-bg-aterhamtning); --page-tone: var(--page-tone-aterhamtning); }
 [data-page-area="neutral"] { --page-bg: var(--page-bg-neutral); --page-tone: var(--page-tone-neutral); }
 .pace-mobile-content-scroll[data-page-area] {
-  background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg) 22rem, color-mix(in srgb, var(--page-bg) 45%, var(--page-bg-base)) 60rem) !important;
+  --page-soft: color-mix(in srgb, var(--page-bg) 50%, var(--page-bg-base));
+  background:
+    radial-gradient(ellipse 34rem 26rem at 92% -4%, color-mix(in srgb, #fff 55%, transparent), transparent 70%),
+    radial-gradient(circle 15rem at 88% 9rem, color-mix(in srgb, var(--page-bg) 70%, transparent) 0 99%, transparent 100%),
+    repeating-linear-gradient(118deg, transparent 0 5.5rem, color-mix(in srgb, #fff 22%, transparent) 5.5rem 6.4rem, transparent 6.4rem 9rem),
+    linear-gradient(180deg, var(--page-soft) 0%, var(--page-soft) 20rem, var(--page-bg-base) 55rem) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100%, 100% 100%, 100% 32rem, 100% 100% !important;
+}
+.dark .pace-mobile-content-scroll[data-page-area] {
+  background: radial-gradient(circle 15rem at 88% 9rem, color-mix(in srgb, var(--page-bg) 80%, transparent) 0 99%, transparent 100%),
+    linear-gradient(180deg, var(--page-soft) 0%, var(--page-soft) 20rem, var(--page-bg-base) 55rem) !important;
 }
 .pace-mobile-content-scroll[data-page-area] > div,
 .pace-mobile-content-scroll[data-page-area] .pace-ds-page { background: transparent !important; }
