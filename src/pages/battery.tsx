@@ -56,10 +56,10 @@ export default function BatteryPage() {
         {/* Samma egenregistrerade värde som i Idag och Kalender. */}
         <MyFloveWide>
           <section className="pace-surface rounded-3xl p-4 shadow-soft sm:p-5" data-testid="capacity-summary">
-            <h2 className="font-sans text-base font-semibold text-ink">{t("Just nu")}</h2>
+            <h2 className="font-sans text-base font-semibold text-foreground">{t("Just nu")}</h2>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t(capacity.percent === null ? "Ingen energi registrerad ännu. Logga energi & mående på Idag." : "Utifrån din registrering idag och eventuella valfria uppskattningar. Du kan uppdatera den på Idag.")}</p>
             <div className="mt-3 flex justify-center"><SoftEnergyBattery percent={capacity.percent} linked={false} /></div>
-            <Button asChild variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">
+            <Button asChild variant="secondary" className="mt-3 min-h-11 w-full whitespace-normal bg-secondary text-secondary-foreground">
               <Link href="/idag">{t("Logga energi & mående")}</Link>
             </Button>
             <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/80 p-3">

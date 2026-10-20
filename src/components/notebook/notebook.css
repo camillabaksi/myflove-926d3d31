@@ -75,7 +75,7 @@
 }
 .book-tabs {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr) minmax(0, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr));
   gap: 0.25rem;
   padding-bottom: 0.65rem;
   border-bottom: 1px solid var(--book-line);
