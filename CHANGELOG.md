@@ -1,3 +1,6 @@
+## 2026-10-20 – Fristående Paceable-material
+- Tvåspråkiga blueprintar, pitchdeck, manus och pilotunderlag; 56 anonymiserade kontobilder, 8 editorialramar och elva nya ljudlösa filmutkast. Reklamfilm v7 bevarad som oförändrad granskningskopia. Dokumentens kvarvarande namn/porträtt borttagna vid QA; filmernas rörelse-/övertoningsbegränsningar redovisas i leveransrapporten. Endast materialdokumentation uppdaterad; appens ändringslogg, konto, appkod och publicerat intro orörda. Ingen publicering.
+
 ## 2026-10-19 – Säkerhet: låsta hjälpfunktioner och säkrare byggpaket
 - **Säkerhet** (2026-10-19): två familjehjälpfunktioner kan inte längre anropas av utloggade. Sårbara underpaket uppdaterade till säkra versioner inom samma huvudversion; tolv mindre risker kvar i mobilbyggets/dokumentexportens verktyg. Ingen data ändrad, ingen publicering.
 
