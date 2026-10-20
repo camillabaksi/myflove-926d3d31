@@ -37,6 +37,10 @@ beforeEach(() => {
   mocks.addFactor.mockImplementation(async (input) => savedEntry(input));
 });
 
+/** Snabbregistreringen är ihopfälld som standard – öppna den först. */
+const expand = () =>
+  fireEvent.click(screen.getByRole("button", { name: "Lägg till det du gjorde" }));
+
 it("waits for a confirmed observation before offering a battery update", async () => {
   let finish!: (entry: EnergyFactorEntry) => void;
   mocks.addFactor.mockImplementation(
