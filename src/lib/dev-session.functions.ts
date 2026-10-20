@@ -10,12 +10,17 @@ export type DevSessionCredentials = { email: string; password: string };
 
 export const ensureDevTestUserFn = createServerFn({ method: "POST" }).handler(
   async (): Promise<DevSessionCredentials> => {
-    if (process.env["NODE_ENV"] === "production") {
+    if (
+      process.env["NODE_ENV"] === "production" ||
+      process.env["DEV_SESSION_ENABLED"] !== "true"
+    ) {
       throw new Error("Not available");
     }
 
-    const email = process.env["DEV_TEST_EMAIL"] ?? "testflow@myflove.test";
-    const password = process.env["DEV_TEST_PASSWORD"] ?? "PaceableDev!2026";
+    const email = process.env["DEV_TEST_EMAIL"];
+    const password = process.env["DEV_TEST_PASSWORD"];
+    if (!email || !password) throw new Error("Not available");
+
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

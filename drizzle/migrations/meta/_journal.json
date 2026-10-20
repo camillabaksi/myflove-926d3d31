@@ -169,6 +169,13 @@
       "when": 1792421989222,
       "tag": "0023_revoke_anon_helper_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792516966072,
+      "tag": "0024_lock_household_membership_child_access",
+      "breakpoints": true
     }
   ]
 }

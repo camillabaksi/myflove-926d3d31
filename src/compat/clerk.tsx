@@ -5,6 +5,7 @@ import type { User, Session } from "@supabase/supabase-js";
 import { clearLocalUserData } from "@/lib/local-data";
 import { setDemoSession } from "@/lib/demo-account";
 import { bindAccount, parkActiveData } from "@/lib/account-scope";
+import { lockSecureLocal } from "@/lib/secure-local";
 import { ACCOUNT_BOUND_EVENT } from "@/lib/cloud-storage";
 
 type AuthState = {
@@ -48,6 +49,8 @@ if (typeof window !== "undefined") {
       // Sessionen tog slut utan vår egen utloggning (utgången token, annan
       // flik): parkera kontots data så att nästa person inte ser den.
       parkActiveData();
+      // Töm dekrypterad klartext i minnet; nyckeln behålls för förrådet.
+      lockSecureLocal({ keepKey: true });
     } else if (!bindSession(session, event === "INITIAL_SESSION")) {
       return;
     }
