@@ -4,6 +4,10 @@ import { currentCopyDictionary } from "@/lib/public-copy";
 export const LANDING_EN: Record<string, string> = currentCopyDictionary({
  
   "Bli testare": "Become a tester",
+  "Vi söker vuxna som vill prova Paceable – som tekniktestare, i vardagen eller både och.": "We’re looking for adults to try Paceable – as technical testers, in daily life, or both.",
+  "Hjälp oss se om planering, energi och återhämtning faktiskt blir enklare. Ingen diagnos eller teknikvana behövs.": "Help us find out if planning, energy and recovery can feel easier. No diagnosis or technical experience needed.",
+  "Gå till anmälan": "Go to the sign-up form",
+  "Hjälp oss hitta problem med installation och funktioner på Android och iPhone.": "Help us identify installation and feature issues on Android and iPhone.",
   "Hjälp oss utveckla Paceable": "Help shape Paceable",
   "Vill du vara med och testa?": "Would you like to test Paceable?",
   "Vi söker testare för Android och iPhone – och vuxna som vill berätta vad som faktiskt hjälper i vardagen.": "We're looking for Android and iPhone testers, and adults willing to share what actually helps in daily life.",
