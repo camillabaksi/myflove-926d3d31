@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-20";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-20 – Kompaktare sidlayout, etapp 1",
+    items: ["Mobilens sidhuvud på en rad, Pace-kortet Härnäst bara på Idag/Hem, sidfoten bara i Inställningar/Översikt, läsbredd på list- och formulärsidor på datorn och rubriklinjen ligger under rubriken. Inga funktioner eller data ändrade."],
+  },
+  {
     title: "2026-10-20 – Områdesfärger som bakgrund",
     items: ["Idag, Kalender, Fånga, Min plats, Hem och Återhämtning har nu en dov bakgrundston i sitt områdes färg och en liten färgad linje under rubriken, nu mycket dovt med mjuk ljusbåge och diskreta ljusstrimmor. Övriga sidor behåller varm ivory, Pace sin bild. Inga funktioner eller data ändrade."],
   },
