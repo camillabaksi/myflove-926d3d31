@@ -1,4 +1,8 @@
 # Roadmap
+## Kompaktare mobilknappar och tidsslotter (2026-10-20)
+- [x] Registrerat önskemålet och påbörjat inventering av knappar, tidsval och kalenderns tidsgeometri.
+- [ ] Visa avgränsad plan och invänta godkännande före appkodändring.
+- [ ] Genomför godkänd mobilpresentation, verifiera normal/förstorad text och oförändrad desktop, visa före/efter och uppdatera båda ändringsloggarna. Ingen publicering.
 ## Kompaktare sidlayout – återstående appdelar (2026-10-20)
 - [x] Begäran mottagen: samma rubriker, valstil och kompakta avstånd på återstående appdelar.
 - [x] Inventering och fortsättningsplan godkända före appkodändring.
