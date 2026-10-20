@@ -6,9 +6,11 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/api/public/hooks/push-resubscribe")({
   server: {
     handlers: {
-      POST: async () => new Response("Authenticated registration required", {
-        status: 410, headers: { "Cache-Control": "no-store" },
-      }),
+      POST: async () =>
+        new Response("Authenticated registration required", {
+          status: 410,
+          headers: { "Cache-Control": "no-store" },
+        }),
     },
   },
 });

@@ -26,7 +26,10 @@ export const Route = createFileRoute("/api/public/csp-report")({
           }
           const bytes = new Uint8Array(size);
           let offset = 0;
-          for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+          for (const chunk of chunks) {
+            bytes.set(chunk, offset);
+            offset += chunk.byteLength;
+          }
           const parsed: unknown = JSON.parse(new TextDecoder().decode(bytes));
           const reports = Array.isArray(parsed) ? parsed.slice(0, 10) : [parsed];
           for (const report of reports) {

@@ -1,7 +1,13 @@
 import { beforeEach, expect, it, vi } from "vitest";
 import { waitFor } from "@testing-library/react";
 import { installIndexedDbMock, resetIndexedDbMock } from "@/test/indexeddb-mock";
-import { __resetSecureLocal, unlockSecureLocal, lockSecureLocal, secureSetItem, secureGetItem } from "./secure-local";
+import {
+  __resetSecureLocal,
+  unlockSecureLocal,
+  lockSecureLocal,
+  secureSetItem,
+  secureGetItem,
+} from "./secure-local";
 
 beforeEach(async () => {
   vi.restoreAllMocks();
@@ -19,7 +25,9 @@ it("a delayed unlock cannot restore private plaintext after logout", async () =>
   lockSecureLocal({ keepKey: true });
   const originalDecrypt = crypto.subtle.decrypt.bind(crypto.subtle);
   let release: (() => void) | undefined;
-  const gate = new Promise<void>((resolve) => { release = resolve; });
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
   const decrypt = vi.spyOn(crypto.subtle, "decrypt").mockImplementation(async (...args) => {
     const result = await originalDecrypt(...args);
     await gate;
@@ -43,13 +51,17 @@ it("a delayed cross-tab decrypt cannot refill the next session's cache", async (
   const raw = localStorage.getItem(key);
   const originalDecrypt = crypto.subtle.decrypt.bind(crypto.subtle);
   let release: (() => void) | undefined;
-  const gate = new Promise<void>((resolve) => { release = resolve; });
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
   const decrypt = vi.spyOn(crypto.subtle, "decrypt").mockImplementation(async (...args) => {
     const result = await originalDecrypt(...args);
     await gate;
     return result;
   });
-  window.dispatchEvent(new StorageEvent("storage", { key, newValue: raw, storageArea: localStorage }));
+  window.dispatchEvent(
+    new StorageEvent("storage", { key, newValue: raw, storageArea: localStorage }),
+  );
   await waitFor(() => expect(decrypt).toHaveBeenCalled());
   lockSecureLocal({ keepKey: true });
   localStorage.removeItem(key);

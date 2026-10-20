@@ -1,3 +1,8 @@
+## 2026-10-20 – Fördjupade säkerhetsrättningar
+- Sena dekrypteringar och inloggningssvar får inte återfylla tidigare kontos data. Paceable-inställningar följer kontots befintliga förråd och synkmanifest; anteckningar och historik ändras inte.
+- Notisförnyelse kräver appens vanliga autentiserade registrering, utskick begränsas till betrodda HTTPS-tjänster utan omdirigering och privata texter/adresser lämnas inte i nya felloggar. Om prenumerationen byts när appen är stängd kan notiser pausa tills appen öppnas igen.
+- Strukturellt webbskydd verkställs utan att ändra integrationspolicyn; paket och låsfiler uppdaterade. 101 riktade tester och 25 isolerade SQL-åtkomstkontroller passerade; paketgranskningen fann inga kända sårbarheter. Ingen publicering. Fullständig kontokontroll, automatisk djupanalys och övriga testfel återstår enligt docs/security-hardening-2026-10-20.md.
+
 ## 2026-10-20 – Säkerhetsrättningar före bred spridning
 - Dekrypterad data töms ur minnet när en session tar slut oväntat; familjemedlemskap kan bara skapas via inbjudningskod och inte flyttas; barnkonton får bara delade aktiviteter utan dokument; notisadresser begränsas till kända pushtjänster; testkontofunktionen kräver uttrycklig aktivering. Ingen publicering.
 

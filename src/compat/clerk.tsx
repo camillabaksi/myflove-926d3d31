@@ -16,6 +16,7 @@ type AuthState = {
 
 const listeners = new Set<() => void>();
 let state: AuthState = { user: null, session: null, loading: true };
+let authRevision = 0;
 
 function notify() {
   listeners.forEach((l) => l());
@@ -39,12 +40,15 @@ function bindSession(session: Session | null, initial: boolean): boolean {
 }
 
 if (typeof window !== "undefined") {
+  const initialRevision = authRevision;
   supabase.auth.getSession().then(({ data }) => {
+    if (initialRevision !== authRevision) return;
     if (!bindSession(data.session, true)) return;
     state = { session: data.session, user: data.session?.user ?? null, loading: false };
     notify();
   });
   supabase.auth.onAuthStateChange((event, session) => {
+    authRevision += 1;
     if (event === "SIGNED_OUT") {
       // Sessionen tog slut utan vår egen utloggning (utgången token, annan
       // flik): parkera kontots data så att nästa person inte ser den.
