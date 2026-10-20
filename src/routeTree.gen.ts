@@ -22,11 +22,13 @@ import { Route as OmOssRouteImport } from './routes/om-oss'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TestaRouteImport } from './routes/testa'
 import { Route as VillkorRouteImport } from './routes/villkor'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AppAdminRouteImport } from './routes/_app.admin'
 import { Route as AppAdminStatistikRouteImport } from './routes/_app.admin-statistik'
+import { Route as AppAdminTestareRouteImport } from './routes/_app.admin-testare'
 import { Route as AppAnpassaRouteImport } from './routes/_app.anpassa'
 import { Route as AppAnpassaHemRouteImport } from './routes/_app.anpassa-hem'
 import { Route as AppAnteckningarRouteImport } from './routes/_app.anteckningar'
@@ -167,6 +169,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TestaRoute = TestaRouteImport.update({
+  id: '/testa',
+  path: '/testa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VillkorRoute = VillkorRouteImport.update({
   id: '/villkor',
   path: '/villkor',
@@ -192,6 +199,11 @@ const AppAdminRoute = AppAdminRouteImport.update({
 const AppAdminStatistikRoute = AppAdminStatistikRouteImport.update({
   id: '/admin-statistik',
   path: '/admin-statistik',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminTestareRoute = AppAdminTestareRouteImport.update({
+  id: '/admin-testare',
+  path: '/admin-testare',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnpassaRoute = AppAnpassaRouteImport.update({
@@ -586,11 +598,13 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/testa': typeof TestaRoute
   '/villkor': typeof VillkorRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
+  '/admin-testare': typeof AppAdminTestareRoute
   '/anpassa': typeof AppAnpassaRoute
   '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
@@ -680,11 +694,13 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/testa': typeof TestaRoute
   '/villkor': typeof VillkorRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AppAdminRoute
   '/admin-statistik': typeof AppAdminStatistikRoute
+  '/admin-testare': typeof AppAdminTestareRoute
   '/anpassa': typeof AppAnpassaRoute
   '/anpassa-hem': typeof AppAnpassaHemRoute
   '/anteckningar': typeof AppAnteckningarRoute
@@ -776,11 +792,13 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/testa': typeof TestaRoute
   '/villkor': typeof VillkorRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_app/admin': typeof AppAdminRoute
   '/_app/admin-statistik': typeof AppAdminStatistikRoute
+  '/_app/admin-testare': typeof AppAdminTestareRoute
   '/_app/anpassa': typeof AppAnpassaRoute
   '/_app/anpassa-hem': typeof AppAnpassaHemRoute
   '/_app/anteckningar': typeof AppAnteckningarRoute
@@ -872,11 +890,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
+    | '/testa'
     | '/villkor'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
+    | '/admin-testare'
     | '/anpassa'
     | '/anpassa-hem'
     | '/anteckningar'
@@ -966,11 +986,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
+    | '/testa'
     | '/villkor'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
     | '/admin-statistik'
+    | '/admin-testare'
     | '/anpassa'
     | '/anpassa-hem'
     | '/anteckningar'
@@ -1061,11 +1083,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sitemap.xml'
+    | '/testa'
     | '/villkor'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/_app/admin'
     | '/_app/admin-statistik'
+    | '/_app/admin-testare'
     | '/_app/anpassa'
     | '/_app/anpassa-hem'
     | '/_app/anteckningar'
@@ -1157,6 +1181,7 @@ export interface RootRouteChildren {
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TestaRoute: typeof TestaRoute
   VillkorRoute: typeof VillkorRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -1264,6 +1289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/testa': {
+      id: '/testa'
+      path: '/testa'
+      fullPath: '/testa'
+      preLoaderRoute: typeof TestaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/villkor': {
       id: '/villkor'
       path: '/villkor'
@@ -1297,6 +1329,13 @@ declare module '@tanstack/react-router' {
       path: '/admin-statistik'
       fullPath: '/admin-statistik'
       preLoaderRoute: typeof AppAdminStatistikRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/admin-testare': {
+      id: '/_app/admin-testare'
+      path: '/admin-testare'
+      fullPath: '/admin-testare'
+      preLoaderRoute: typeof AppAdminTestareRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/anpassa': {
@@ -1830,6 +1869,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRoute
   AppAdminStatistikRoute: typeof AppAdminStatistikRoute
+  AppAdminTestareRoute: typeof AppAdminTestareRoute
   AppAnpassaRoute: typeof AppAnpassaRoute
   AppAnpassaHemRoute: typeof AppAnpassaHemRoute
   AppAnteckningarRoute: typeof AppAnteckningarRoute
@@ -1901,6 +1941,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRoute,
   AppAdminStatistikRoute: AppAdminStatistikRoute,
+  AppAdminTestareRoute: AppAdminTestareRoute,
   AppAnpassaRoute: AppAnpassaRoute,
   AppAnpassaHemRoute: AppAnpassaHemRoute,
   AppAnteckningarRoute: AppAnteckningarRoute,
@@ -1985,6 +2026,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TestaRoute: TestaRoute,
   VillkorRoute: VillkorRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
