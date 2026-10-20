@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PlanningWorkspace } from "./planning-workspace";
 import PlanningPage from "@/pages/planning";
 import type { ReactNode } from "react";
-import { AREA_META } from "@/lib/life-areas";
 
 const model = vi.hoisted(() => ({
   owner: "owner",
