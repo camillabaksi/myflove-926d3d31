@@ -74,7 +74,7 @@ describe("Beslut – papperspresentation", () => {
     fireEvent.change(screen.getByLabelText("Visa spalter"), { target: { value: "cons" } });
     expect(screen.queryByRole("region", { name: "Fördelar" })).toBeNull();
     expect(within(screen.getByRole("region", { name: "Nackdelar" })).getByRole("button", { name: "Lägg till…" })).toBeTruthy();
-    await userEvent.click(screen.getByRole("button", { name: "Osäkert än" }));
+    await userEvent.click(screen.getByRole("button", { name: "Lägg till osäkra tankar" }));
     expect(calls.update).toHaveBeenCalledWith({ uncertain: true });
     await userEvent.click(screen.getByRole("button", { name: "Hjälp mig sortera tankarna" }));
     expect(screen.getByText("Vad känns viktigt för dig just nu?")).toBeTruthy();
