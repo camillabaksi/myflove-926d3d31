@@ -13,6 +13,9 @@ export type TesterApplication = {
   participation: "technical" | "everyday" | "both";
   focus: "planning" | "energy" | "capture" | "recovery" | "overview" | "general";
   feedback_willing: boolean;
+  language: "sv" | "en";
+  confirmation_accepted_at: string | null;
+  admin_notice_accepted_at: string | null;
   status: "new" | "invited" | "testing" | "complete";
   created_at: string;
 };
@@ -23,6 +26,7 @@ const submission = z.object({
   participation: z.enum(["technical", "everyday", "both"]),
   focus: z.enum(["planning", "energy", "capture", "recovery", "overview", "general"]),
   feedback_willing: z.boolean(),
+  language: z.enum(["sv", "en"]).default("sv"),
   adult: z.literal(true),
   consent: z.literal(true),
   // A hidden honeypot; real visitors should never fill this in.
@@ -41,17 +45,28 @@ export const submitTesterApplicationFn = createServerFn({ method: "POST" })
     if (data.company.trim()) return { ok: true }; // silently discard spam
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const db = supabaseAdmin as unknown as SupabaseClient;
-    const { error } = await db.from("tester_applications").insert({
+    const { data: inserted, error } = await db.from("tester_applications").insert({
       email: data.email,
       platform: data.platform,
       participation: data.participation,
       focus: data.focus,
       feedback_willing: data.feedback_willing,
+      language: data.language,
       consent_version: 1,
-    });
-    // Duplicate email must not reveal who is registered; return the same receipt.
-    if (error && error.code !== "23505") {
+    }).select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at").single();
+    // Duplicate email must not reveal who is registered or trigger another mail.
+    if (error?.code === "23505") return { ok: true };
+    if (error || !inserted) {
       throw new Error("Anmälan kunde inte sparas just nu. Försök igen senare.");
+    }
+
+    // The application was saved. Email is a best-effort follow-up, never
+    // a reason to tell the person their application failed.
+    try {
+      const { sendTesterSignupEmails } = await import("@/lib/tester-recruitment-mail.server");
+      await sendTesterSignupEmails(db, inserted as import("@/lib/tester-recruitment-mail.server").MailApplicant);
+    } catch {
+      console.warn("[tester-email] confirmation/notification could not be started");
     }
     return { ok: true };
   });
@@ -70,7 +85,7 @@ export const listTesterApplicationsFn = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await (supabaseAdmin as unknown as SupabaseClient)
       .from("tester_applications")
-      .select("id, email, platform, participation, focus, feedback_willing, status, created_at")
+      .select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at, status, created_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw new Error("Kunde inte läsa testanmälningarna.");
@@ -102,4 +117,21 @@ export const deleteTesterApplicationFn = createServerFn({ method: "POST" })
       .delete().eq("id", data.id);
     if (error) throw new Error("Kunde inte radera testanmälan.");
     return { ok: true };
+  });
+
+/** Admin-only manual retry for missing confirmations; also handles pre-existing signups. */
+export const retryTesterApplicationEmailsFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => recordId.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = supabaseAdmin as unknown as SupabaseClient;
+    const { data: row, error } = await db.from("tester_applications")
+      .select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at")
+      .eq("id", data.id).single();
+    if (error || !row) throw new Error("Anmälan finns inte kvar.");
+    const { sendTesterSignupEmails } = await import("@/lib/tester-recruitment-mail.server");
+    const result = await sendTesterSignupEmails(db, row as import("@/lib/tester-recruitment-mail.server").MailApplicant);
+    return result;
   });

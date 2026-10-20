@@ -7,7 +7,7 @@ import { PacePageHeader } from "@/components/paceable/page-header";
 import { useIsAdmin } from "@/hooks/use-is-admin";
 import {
   listTesterApplicationsFn, updateTesterApplicationFn,
-  deleteTesterApplicationFn, type TesterApplication,
+  deleteTesterApplicationFn, retryTesterApplicationEmailsFn, type TesterApplication,
 } from "@/lib/tester-recruitment.functions";
 
 const platformLabels: Record<TesterApplication["platform"], string> = {
@@ -39,6 +39,7 @@ function TesterList() {
   const queryClient = useQueryClient();
   const [platformFilter, setPlatformFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [mailResult, setMailResult] = useState("");
   const applications = useQuery({ queryKey: ["admin-tester-applications"], queryFn: () => listTesterApplicationsFn(), retry: false });
   const update = useMutation({
     mutationFn: (data: { id: string; status: TesterApplication["status"] }) => updateTesterApplicationFn({ data }),
@@ -47,6 +48,20 @@ function TesterList() {
   const remove = useMutation({
     mutationFn: (id: string) => deleteTesterApplicationFn({ data: { id } }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-tester-applications"] }),
+  });
+  const retryMail = useMutation({
+    mutationFn: (id: string) => retryTesterApplicationEmailsFn({ data: { id } }),
+    onSuccess: (result) => {
+      void queryClient.invalidateQueries({ queryKey: ["admin-tester-applications"] });
+      if (!result.configured) {
+        setMailResult("Automatiska mejl är inte aktiverade ännu. Verifiera paceable.se hos Resend och lägg in RESEND_API_KEY som serverhemlighet i Lovable.");
+      } else if (result.failed) {
+        setMailResult("Minst ett mejl kunde inte tas emot av mejltjänsten. Prova igen senare.");
+      } else {
+        setMailResult("Saknade mejl har tagits emot av mejltjänsten. Det bekräftar inte leverans till inkorgen.");
+      }
+    },
+    onError: () => setMailResult("Kunde inte kontrollera eller skicka mejlen just nu."),
   });
   const rows = applications.data ?? [];
   const shown = rows.filter(row =>
@@ -83,6 +98,7 @@ function TesterList() {
           <RefreshCw className="h-4 w-4" aria-hidden="true" /> Uppdatera
         </button>
       </div>
+      {mailResult && <p role="status" className="mt-3 rounded-xl bg-secondary/70 p-3 text-sm">{mailResult}</p>}
       {applications.isLoading ? <p className="py-6 text-sm text-muted-foreground">Laddar anmälningar…</p> :
         applications.isError ? <p className="py-6 text-sm text-destructive" role="alert">Kunde inte hämta anmälningarna. Kontrollera att databasändringen har körts.</p> :
         shown.length === 0 ? <p className="py-6 text-sm text-muted-foreground">Inga anmälningar i det här urvalet ännu.</p> :
@@ -93,6 +109,9 @@ function TesterList() {
                 <h2 className="break-all text-sm font-semibold">{row.email}</h2>
                 <p className="text-xs text-muted-foreground">{platformLabels[row.platform]} · {participationLabels[row.participation]} · {focusLabels[row.focus]}</p>
                 <p className="text-xs text-muted-foreground">{row.feedback_willing ? "Kan lämna feedback" : "Ingen feedback utlovad"} · {new Date(row.created_at).toLocaleDateString("sv-SE")}</p>
+                <p className="text-xs text-muted-foreground">
+                  Mejltjänst: {row.confirmation_accepted_at ? "bekräftelse mottagen" : "bekräftelse saknas"} · {row.admin_notice_accepted_at ? "avisering mottagen" : "avisering saknas"}
+                </p>
               </div>
               <a className="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm hover:bg-secondary" href={`mailto:${row.email}`}>
                 <Mail className="h-4 w-4" aria-hidden="true" /> Kontakta
@@ -103,6 +122,12 @@ function TesterList() {
               <select id={`tester-status-${row.id}`} className="min-h-10 rounded-lg border bg-card px-2 text-sm" value={row.status} onChange={e => update.mutate({ id: row.id, status: e.target.value as TesterApplication["status"] })} disabled={update.isPending}>
                 {Object.entries(statusLabels).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
               </select>
+              {(!row.confirmation_accepted_at || !row.admin_notice_accepted_at) && (
+                <button type="button" className="inline-flex min-h-10 items-center gap-1 rounded-full border px-3 text-xs hover:bg-secondary disabled:opacity-50"
+                  disabled={retryMail.isPending} onClick={() => { setMailResult(""); retryMail.mutate(row.id); }}>
+                  <Mail className="h-4 w-4" aria-hidden="true" /> Skicka saknade mejl
+                </button>
+              )}
               <button type="button" className="ml-auto inline-flex min-h-10 items-center gap-1 px-2 text-xs text-destructive disabled:opacity-50" disabled={remove.isPending} onClick={() => {
                 if (window.confirm("Radera denna testanmälan och mejladressen permanent?")) remove.mutate(row.id);
               }}><Trash2 className="h-4 w-4" aria-hidden="true" /> Radera</button>
@@ -110,6 +135,7 @@ function TesterList() {
           </article>)}
         </div>
       }
+      <p className="mt-3 text-xs text-muted-foreground">Mejlstatus betyder att leverantören tagit emot utskicket, inte att det säkert nått mottagarens inkorg.</p>
       {(update.isError || remove.isError) && <p className="mt-3 text-sm text-destructive" role="alert">Ändringen kunde inte sparas. Försök igen.</p>}
       {rows.length === 500 && <p className="mt-3 text-xs text-destructive">Visar endast 500 senaste anmälningar.</p>}
     </section>
