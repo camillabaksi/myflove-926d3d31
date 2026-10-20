@@ -70,9 +70,13 @@ describe("Routine exception for one day", () => {
     fireEvent.click(dialog.getByRole("button", { name: "Ändra eller hoppa över idag" }));
 
     const save = dialog.getByRole("button", { name: "Spara bara idag" });
+    expect(save).toBeEnabled();
+
+    const field = dialog.getByLabelText("Tid för detta tillfälle");
+    fireEvent.change(field, { target: { value: "" } });
     expect(save).toBeDisabled();
 
-    fireEvent.change(dialog.getByLabelText("Tid för detta tillfälle"), { target: { value: "08:30" } });
+    fireEvent.change(field, { target: { value: "08:30" } });
     expect(save).toBeEnabled();
     fireEvent.click(save);
 
