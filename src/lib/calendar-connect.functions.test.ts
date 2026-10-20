@@ -78,8 +78,8 @@ describe("Externa kalenderläsningar", () => {
           items: [{ id: "g2", summary: "Möte 2", start: { dateTime: "2026-10-06T09:00:00+02:00" } }],
         },
       },
-      // Outlook har ingen koppling i testet? Båda leverantörerna får svar –
-      // andra svaret är tomt så bara Google bidrar med händelser.
+      // Båda leverantörerna läses; Outlooks svar är tomt så bara Google
+      // bidrar med händelser.
       { ok: true, status: 200, body: { value: [] } },
     ];
     const result = await run({ context, data: range });
