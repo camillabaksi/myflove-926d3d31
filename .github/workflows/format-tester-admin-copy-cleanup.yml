@@ -1,0 +1,29 @@
+name: Format tester admin copy
+on:
+  push:
+    branches: [paceable-tester-admin-copy-cleanup]
+    paths: ['.github/workflows/format-tester-admin-copy-cleanup.yml']
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: paceable-tester-admin-copy-cleanup
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx prettier --write src/pages/admin-testare.tsx
+      - name: Commit formatting
+        run: |
+          if ! git diff --quiet -- src/pages/admin-testare.tsx; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/pages/admin-testare.tsx
+            git commit -m "Format tester admin copy"
+            git push origin HEAD:paceable-tester-admin-copy-cleanup
+          fi
