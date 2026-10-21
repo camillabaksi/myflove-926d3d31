@@ -30,6 +30,7 @@ import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
 import { DaySummaryCard } from "@/components/day/day-summary-card";
+import { DaySpaceNote } from "@/components/day/day-space-note";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
@@ -112,6 +113,9 @@ export function TodayContent() {
 
       <MyFloveWide className="pt-2">
         <DaySummaryCard />
+      </MyFloveWide>
+      <MyFloveWide className="pace-today-pace pt-2">
+        <DaySpaceNote />
       </MyFloveWide>
       <MyFloveWide className="pace-today-pace pt-2">
         <TodayPace pace={pace} />

@@ -29,3 +29,4 @@ Push renewal uses the existing authenticated registration flow; endpoint possess
 Structural CSP is enforced independently of report-only integration diagnostics; allowlisted content-free error categories preserve debugging without exporting private messages, URLs or stacks.
 Account-owned Paceable preferences participate in the same owner/stash and cloud manifest rules as legacy keys, preventing cross-account inheritance without renaming saved values.
 Secure-local asynchronous reads and writes carry a lock generation, and initial auth reads cannot overwrite later auth events; stale work must never refill another session's cache or storage.
+Daily space notes use a separate encrypted account-owned append-only revision list keyed by local date; shared editors preserve conflict heads and never feed calendar, family, energy or chat history. AI transfer remains disabled until content-free gateway logging is verified, so consent alone cannot weaken the privacy boundary.

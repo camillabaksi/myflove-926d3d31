@@ -52,6 +52,7 @@ import { useSharedShoppingList } from "@/hooks/use-shared-shopping-list";
 import { FlowExerciseDraftCard, FlowSavedSuggestionCard } from "@/components/recovery/flow-exercise-cards";
 import { relativeDayLabel } from "@/lib/flow-chat-history";
 import { track } from "@/lib/analytics";
+import { DaySpaceNote } from "@/components/day/day-space-note";
 
 const todayStr = (): string => todayISO();
 
@@ -666,6 +667,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           )}
 
           <div className="pace-serene-composer bg-card/90 p-2 rounded-2xl border border-border/70 focus-within:ring-2 focus-within:ring-primary/15 transition-all">
+            <DaySpaceNote compact />
             <textarea
               ref={inputRef}
               id="pace-chat-input"

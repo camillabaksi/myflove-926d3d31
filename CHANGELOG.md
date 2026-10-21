@@ -1,4 +1,5 @@
 ## 2026-10-21
+- Det som också tog plats: frivillig privat dagsanteckning på Idag och samma skrivflöde från Pace, med fri text, valfria kategorier, krypterad kontosynk och bevarade konfliktversioner. Ingen kalender- eller energiändring. Överföring till Pace är pausad eftersom content-free tjänsteloggning inte har verifierats. Ingen publicering.
 - Android höjd till 6.7 (versionCode 28) och iOS till 1.5 (byggnummer 17). App-ID:n, domän, ikoner och signering oförändrade. Ingen signerad AAB/IPA byggd i denna miljö; bygget sker i Codemagic. Ingen publicering.
 - Veckostatistik, Träning (steg och vikt) och Mitt batteri (snittenergi per timme) visar mjuka böljande vågor i stället för staplar. Värdena är oförändrade. Ingen publicering.
 - Mer: verktygen sorteras efter samma livsområden och färger som kalendern – Hem & vardag, Arbete, Studier, Ekonomi, Hälsa & egen tid, Familj & barn – plus Stöd & reflektion och Insikter & historik. Inga länkar eller inställningar har tagits bort. Ingen publicering.
