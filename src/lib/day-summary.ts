@@ -21,5 +21,6 @@ export function daySummaryLines({ completedToday, energyGivers, checkedIn }: Day
 export function waitingCapturesLine(count: number, hour: number): string | null {
   if (count <= 0) return null;
   const things = count === 1 ? "1 fångad tanke väntar" : `${count} fångade tankar väntar`;
-  return hour >= 17 ? `${things} – vill du titta på dem innan dagen är slut?` : `Du har ${things} på dig när det passar.`;
+  const them = count === 1 ? "den" : "dem";
+  return hour >= 17 ? `${things} – vill du titta på ${them} innan dagen är slut?` : `${things}, när det passar dig.`;
 }

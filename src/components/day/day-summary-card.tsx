@@ -1,10 +1,12 @@
 import { useMemo } from "react";
-import { Sparkles } from "lucide-react";
+import { Feather, Sparkles } from "lucide-react";
 import { useTasks } from "@/hooks/use-data";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import type { EnergyLogEntry } from "@/hooks/use-quick-checkin";
-import { daySummaryLines } from "@/lib/day-summary";
+import { daySummaryLines, waitingCapturesLine } from "@/lib/day-summary";
+import { useQuickflow } from "@/hooks/use-quickflow";
+import { Link } from "@tanstack/react-router";
 import { useLang } from "@/hooks/use-language";
 
 const sameDay = (a: Date, b: Date) => a.toDateString() === b.toDateString();
@@ -15,6 +17,8 @@ export function DaySummaryCard() {
   const { tasks } = useTasks();
   const { entries } = useEnergyFlow();
   const [energyLog] = useCloudSyncedStorage<EnergyLogEntry[]>("myflove-energy-log", []);
+  const { openItems } = useQuickflow();
+  const waiting = waitingCapturesLine(openItems.length, new Date().getHours());
   const lines = useMemo(() => {
     const now = new Date();
     return daySummaryLines({
@@ -31,6 +35,11 @@ export function DaySummaryCard() {
       <ul className="mt-1 space-y-0.5 text-sm text-foreground">
         {lines.map((line) => <li key={line}>{t(line)}</li>)}
       </ul>
+      {waiting && (
+        <Link to="/quickflow" className="mt-2 inline-flex min-h-11 w-full items-center gap-2 rounded-xl bg-lavender/40 px-3 text-sm font-medium text-ink hover:bg-lavender/60" data-testid="waiting-captures">
+          <Feather size={15} className="shrink-0 text-primary" aria-hidden /><span className="min-w-0">{t(waiting)}</span>
+        </Link>
+      )}
     </section>
   );
 }
