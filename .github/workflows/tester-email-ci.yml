@@ -38,5 +38,7 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm test -- --run
+      - name: Check formatting of tester files
+        run: npx prettier --check src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
       - name: Check lint on modified tester files
         run: npx eslint src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
