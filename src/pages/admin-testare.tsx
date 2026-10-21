@@ -76,16 +76,17 @@ function FollowupEditor({ row }: { row: TesterApplication }) {
   const [last, setLast] = useState(row.last_followup_at ?? "");
   const [notes, setNotes] = useState(row.admin_notes ?? "");
   const save = useMutation({
-    mutationFn: () => updateTesterFollowupFn({
-      data: {
-        id: row.id,
-        contacted_at: contacted || null,
-        testing_started_at: started || null,
-        followup_due_at: due || null,
-        last_followup_at: last || null,
-        admin_notes: notes,
-      },
-    }),
+    mutationFn: () =>
+      updateTesterFollowupFn({
+        data: {
+          id: row.id,
+          contacted_at: contacted || null,
+          testing_started_at: started || null,
+          followup_due_at: due || null,
+          last_followup_at: last || null,
+          admin_notes: notes,
+        },
+      }),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["admin-tester-applications"] });
       setOpen(false);
@@ -93,33 +94,61 @@ function FollowupEditor({ row }: { row: TesterApplication }) {
   });
   return (
     <div className="mt-3">
-      <button type="button" className="text-sm text-primary underline underline-offset-4" onClick={() => setOpen(!open)}>
+      <button
+        type="button"
+        className="text-sm text-primary underline underline-offset-4"
+        onClick={() => setOpen(!open)}
+      >
         {open ? "Dölj uppföljning" : "Datum, anteckningar och uppföljning"}
       </button>
       {!open && row.followup_due_at && (
-        <p className="mt-1 text-xs text-muted-foreground">Nästa uppföljning: {row.followup_due_at}</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Nästa uppföljning: {row.followup_due_at}
+        </p>
       )}
       {open && (
         <div className="mt-3 space-y-3 rounded-xl border bg-card p-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {([
-              ["Första kontakt", contacted, setContacted],
-              ["Teststart", started, setStarted],
-              ["Nästa uppföljning", due, setDue],
-              ["Senast följt upp", last, setLast],
-            ] as const).map(([label, value, setter]) => (
+            {(
+              [
+                ["Första kontakt", contacted, setContacted],
+                ["Teststart", started, setStarted],
+                ["Nästa uppföljning", due, setDue],
+                ["Senast följt upp", last, setLast],
+              ] as const
+            ).map(([label, value, setter]) => (
               <label key={label} className="flex flex-col gap-1 text-xs">
                 {label}
-                <input type="date" className="min-h-10 rounded-lg border bg-background px-2 text-sm" value={value} onChange={(event) => setter(event.target.value)} />
+                <input
+                  type="date"
+                  className="min-h-10 rounded-lg border bg-background px-2 text-sm"
+                  value={value}
+                  onChange={(event) => setter(event.target.value)}
+                />
               </label>
             ))}
           </div>
           <label className="flex flex-col gap-1 text-xs">
             Intern anteckning (endast admin)
-            <textarea maxLength={2000} rows={3} className="w-full rounded-lg border bg-background p-2 text-sm" value={notes} onChange={(event) => setNotes(event.target.value)} />
+            <textarea
+              maxLength={2000}
+              rows={3}
+              className="w-full rounded-lg border bg-background p-2 text-sm"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+            />
           </label>
-          {save.isError && <p role="alert" className="text-xs text-destructive">Kunde inte spara. Försök igen.</p>}
-          <button type="button" disabled={save.isPending} onClick={() => save.mutate()} className="min-h-10 rounded-full bg-primary px-4 text-sm text-primary-foreground disabled:opacity-50">
+          {save.isError && (
+            <p role="alert" className="text-xs text-destructive">
+              Kunde inte spara. Försök igen.
+            </p>
+          )}
+          <button
+            type="button"
+            disabled={save.isPending}
+            onClick={() => save.mutate()}
+            className="min-h-10 rounded-full bg-primary px-4 text-sm text-primary-foreground disabled:opacity-50"
+          >
             {save.isPending ? "Sparar…" : "Spara uppföljning"}
           </button>
         </div>
