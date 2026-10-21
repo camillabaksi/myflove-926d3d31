@@ -1,13 +1,13 @@
 # Paceable — Native app (iOS + Android)
 
-## Aktuell releaseförberedelse — 2026-10-20
+## Aktuell releaseförberedelse — 2026-10-21
 
 | Plattform | Version | Byggnummer | Befintligt butik-ID |
 | --- | --- | --- | --- |
-| Android | 6.6 | versionCode 27 | app.myflove.mobile |
-| iOS | 1.4 | CURRENT_PROJECT_VERSION 16 | se.myflove.app |
+| Android | 6.7 | versionCode 28 | app.myflove.mobile |
+| iOS | 1.5 | CURRENT_PROJECT_VERSION 17 | se.myflove.app |
 
-Versionsnumren är höjda i projektet, **inte verifierade mot butikernas senaste uppladdningar**. Kontrollera först att 27 respektive 16 är högre än senaste använda nummer. Ingen AAB/IPA är byggd eller uppladdad i denna miljö: Java/Android SDK, Xcode och tillgång till Codemagic-signeringen saknas.
+Versionsnumren är höjda i projektet, **inte verifierade mot butikernas senaste uppladdningar**. Kontrollera först att 28 respektive 17 är högre än senaste använda nummer. Ingen AAB/IPA är byggd eller uppladdad i denna miljö: Java/Android SDK, Xcode och tillgång till Codemagic-signeringen saknas.
 
 Aktuell app heter **Paceable**, använder befintliga ikoner och laddar **https://www.paceable.se** via `capacitor.config.ts`. Behåll denna host och butikernas befintliga app-ID:n. Capacitor-konfigurationens iOS-ID och Androids separata `applicationId` är avsiktligt olika och får inte likriktas. Synk sköts av byggflödena. Apparna visar den publicerade webben; opublicerade webbändringar följer inte med ett nytt mobilpaket.
 
