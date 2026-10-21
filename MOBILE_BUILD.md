@@ -13,7 +13,7 @@ Aktuell app heter **Paceable**, använder befintliga ikoner och laddar **https:/
 
 ### Starta befintliga byggflöden i Codemagic
 
-1. Vänta tills dessa versionsändringar syns på den anslutna repogrenen. Välj samma gren i Codemagic; använd senaste revisionen med Android 6.6/27 och iOS 1.4/16.
+1. Vänta tills dessa versionsändringar syns på den anslutna repogrenen. Välj samma gren i Codemagic; använd senaste revisionen med Android 6.7/28 och iOS 1.5/17.
 2. Android: välj `android-release`. Befintlig hemlighetsgrupp `paceable_android_signing` måste innehålla den **befintliga** uppladdningsnyckeln och lösenorden; skapa ingen ersättningsnyckel. Flödet kör native-tester och bygger signerad AAB. Hämta `android/app/build/outputs/bundle/release/app-release.aab` från körningens artifacts. Flödet laddar inte upp till Play; ladda upp i önskat testspår efter kontroll.
 3. iOS: välj `ios-release`. Befintlig App Store Connect-integration `MyFlove ASC` måste ha fungerande signering. **Flödet laddar automatiskt upp till TestFlight**, så starta bara när även uppladdningen är avsedd/godkänd. IPA finns under `build/ios/ipa/`. Ingen App Store-release görs av flödet.
 4. Kontrollera det faktiska paketets signering, app-ID och versionsnummer samt testresultaten. Verifiera därefter på fysisk Android/iPhone: inloggning, bevarade kontodata, påminnelser med låst skärm och navigation.
