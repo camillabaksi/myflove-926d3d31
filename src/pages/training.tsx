@@ -58,6 +58,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { celebrateFromEvent } from "@/lib/celebrate";
 import { manualWorkout, sessionFromWorkout } from "@/lib/training-program";
 import type { Workout, WorkoutBlock } from "@/lib/workout-generator";
+import SoftWaveChart from "@/components/soft-wave-chart";
 
 const FOCUS: { id: TrainingGoal["focus"]; label: string }[] = [
   { id: "styrka", label: "Styrka" },
@@ -634,21 +635,15 @@ export default function TrainingPage() {
                   </div>
                 </div>
 
-                <div className="flex items-end gap-2 h-24">
-                  {week.map((d) => (
-                    <div key={d.date} className="flex-1 flex flex-col items-center gap-1">
-                      <div
-                        className="w-full rounded-t-lg bg-primary/30"
-                        style={{ height: `${Math.max(4, (d.steps / maxSteps) * 72)}px` }}
-                        title={`${d.steps} steg`}
-                      />
-                      <span className="text-[10px] text-muted-foreground">
-                        {new Date(d.date + "T00:00:00")
-                          .toLocaleDateString("sv-SE", { weekday: "short" })
-                          .slice(0, 2)}
+                <div role="img" aria-label={`Steg per dag: ${week.map((d) => `${d.steps}`).join(", ")}`}>
+                  <SoftWaveChart series={[{ id: "steps", tone: "primary", values: week.map((d) => (d.steps / maxSteps) * 100) }]} />
+                  <div className="mt-1 flex justify-between" aria-hidden="true">
+                    {week.map((d) => (
+                      <span key={d.date} className="flex-1 text-center text-[10px] text-muted-foreground">
+                        {new Date(d.date + "T00:00:00").toLocaleDateString("sv-SE", { weekday: "short" }).slice(0, 2)}
                       </span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap gap-2 items-center">
@@ -1437,27 +1432,20 @@ export default function TrainingPage() {
                 </div>
 
                 {weights.length > 1 && (
-                  <div className="flex items-end gap-1 h-28">
-                    {weights.slice(-14).map((w) => {
-                      const min = Math.min(...weights.slice(-14).map((x) => x.kg));
-                      const max = Math.max(...weights.slice(-14).map((x) => x.kg));
-                      const span = Math.max(1, max - min);
-                      return (
-                        <div key={w.date} className="flex-1 flex flex-col items-center gap-1">
-                          <div
-                            className="w-full rounded-t-lg bg-primary/30"
-                            style={{ height: `${16 + ((w.kg - min) / span) * 60}px` }}
-                            title={`${w.kg} kg`}
-                          />
-                          <span className="text-[10px] text-muted-foreground">
-                            {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", {
-                              day: "numeric",
-                              month: "numeric",
-                            })}
-                          </span>
-                        </div>
-                      );
-                    })}
+                  <div role="img" aria-label={`Vikt: ${weights.slice(-14).map((w) => `${w.kg} kg`).join(", ")}`}>
+                    {(() => {
+                      const recent = weights.slice(-14);
+                      const min = Math.min(...recent.map((x) => x.kg));
+                      const span = Math.max(1, Math.max(...recent.map((x) => x.kg)) - min);
+                      return <SoftWaveChart series={[{ id: "weight", tone: "accent", values: recent.map((w) => 15 + ((w.kg - min) / span) * 70) }]} />;
+                    })()}
+                    <div className="mt-1 flex justify-between" aria-hidden="true">
+                      {weights.slice(-14).map((w) => (
+                        <span key={w.date} className="flex-1 text-center text-[10px] text-muted-foreground">
+                          {new Date(w.date + "T00:00:00").toLocaleDateString("sv-SE", { day: "numeric", month: "numeric" })}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 

@@ -5,6 +5,7 @@ import { useMoods } from "@/hooks/use-data";
 import { getWeeklyMoodStats } from "@/lib/mood-stats";
 import { TrendingUp, TrendingDown, Minus, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
+import SoftWaveChart from "@/components/soft-wave-chart";
 import CollapsibleSection from "@/components/collapsible-section";
 
 const EMOJI_BY_ROUNDED_SCORE: Record<number, string> = {
@@ -67,27 +68,16 @@ export default function Stats() {
                 </div>
               </div>
 
-              <div className="flex items-end justify-between gap-2 h-40">
-                {days.map((day) => {
-                  const heightPct = day.avg !== null ? Math.max(10, (day.avg / 5) * 100) : 4;
-                  return (
-                    <div
-                      key={day.date}
-                      className="flex-1 flex flex-col items-center gap-2 h-full justify-end"
-                    >
-                      <span className="text-lg">
-                        {day.avg !== null ? EMOJI_BY_ROUNDED_SCORE[Math.round(day.avg)] : ""}
-                      </span>
-                      <div
-                        className={`w-full rounded-xl transition-all duration-500 ${
-                          day.avg !== null ? "bg-primary" : "bg-secondary"
-                        }`}
-                        style={{ height: `${heightPct}%` }}
-                      />
+              <div role="img" aria-label={`Mående per dag: ${days.map((d) => `${d.label} ${d.avg !== null ? d.avg.toFixed(1) : "ingen incheckning"}`).join(", ")}`}>
+                <SoftWaveChart series={[{ id: "mood", tone: "primary", values: days.map((d) => (d.avg !== null ? (d.avg / 5) * 100 : null)) }]} />
+                <div className="mt-2 flex justify-between gap-1" aria-hidden="true">
+                  {days.map((day) => (
+                    <div key={day.date} className="flex flex-1 flex-col items-center gap-1">
+                      <span className="text-lg">{day.avg !== null ? EMOJI_BY_ROUNDED_SCORE[Math.round(day.avg)] : ""}</span>
                       <span className="text-xs text-muted-foreground font-medium">{day.label}</span>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
 
               {trendLabel && TrendIcon && (

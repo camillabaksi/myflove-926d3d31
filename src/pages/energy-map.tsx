@@ -18,6 +18,7 @@ import {
 import CollapsibleSection from "@/components/collapsible-section";
 import { MyFloveEnergyDots } from "@/components/myflove/motion";
 import { useLang } from "@/hooks/use-language";
+import SoftWaveChart from "@/components/soft-wave-chart";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
 
 const LEVEL_LABELS: Record<number, string> = {
@@ -274,22 +275,15 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                 </p>
               ) : (
                 <>
-                  <div className="h-40">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart
-                        data={hourAverages}
-                        margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
-                      >
-                        
-                        <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-                        <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 11 }} />
-                        <Tooltip
-                          formatter={(v: number) => [v, t("Snitt")]}
-                          contentStyle={{ borderRadius: 12, fontSize: 12 }}
-                        />
-                        <Bar dataKey="avg" fill="#A996C6" radius={[8, 8, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                  <div role="img" aria-label={`${t("Snittenergi per timme")}: ${hourAverages.map((r) => `${r.hour} ${r.avg}`).join(", ")}`}>
+                    <SoftWaveChart series={[{ id: "hour", tone: "primary", values: hourAverages.map((r) => ((r.avg - 1) / 4) * 100) }]} />
+                    <div className="mt-1 flex justify-between" aria-hidden="true">
+                      {hourAverages.map((r, i) => (
+                        <span key={r.hour} className="flex-1 text-center text-[10px] text-muted-foreground">
+                          {i === 0 || i === hourAverages.length - 1 || hourAverages.length <= 8 ? r.hour : ""}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   {logs.length >= 7 && peakHour && lowHour && peakHour.hour !== lowHour.hour && (
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
