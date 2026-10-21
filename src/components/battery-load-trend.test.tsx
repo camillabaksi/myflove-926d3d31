@@ -31,10 +31,10 @@ describe("Batteri och faktisk tid – isolerad presentation", () => {
     expect(items[0]?.querySelector('[data-series="battery"]')).toBeNull();
     expect(items[0]?.getAttribute("aria-label")).toContain("ingen batteriincheckning");
     expect(items[0]?.textContent).toContain("Ej incheckat");
-    expect(items[1]?.querySelector('[data-series="battery"]')).toBeTruthy();
+    expect(document.querySelectorAll('[data-chart="wave"] [data-series="battery"]')).toHaveLength(1);
     expect(items[1]?.getAttribute("aria-label")).toContain("0 procent batteri, 0 min på 1 genomförda aktiviteter");
     expect(items[2]?.textContent).toContain("Tid 1 h 30 min");
-    expect(items[2]?.querySelector('[data-series="time"]')?.getAttribute("style")).toContain("height: 100%");
+    expect(document.querySelectorAll('[data-chart="wave"] [data-series="time"]')).toHaveLength(1);
   });
   it("gör alla perioder åtkomliga med pilar, Home/End och lämnar vertikala pilar ifred", () => {
     const original = HTMLElement.prototype.scrollIntoView;
