@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-21 – Böljande diagram i Insikter",
     items: [
+      "Idag: ny lugn ruta \"Din dag hittills\" beskriver det som faktiskt hänt (gjort, gett energi, incheckning) utan poäng eller krav, och en Fånga-genväg ligger bredvid Planera. Ingen publicering.",
       "Insikter: ny ruta \"Det som hjälper dig – och det som tar energi\" visar vilka sorters aktiviteter som oftast gett eller tagit energi, ur dina egna svar (minst tre svar per sort, aldrig titlar eller anteckningar). Ingen publicering.",
       "Insikter: Energipåverkan & mående och Batteri & aktivitetstid visas som mjuka böljande vågor i Paceable-färger i stället för staplar. Vågen bryts där underlag saknas, så saknat blir aldrig noll. Värden, beräkningar och skärmläsartexter är oförändrade. Ingen publicering.",
     ],

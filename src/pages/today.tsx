@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { CalendarDays, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
+import { CalendarDays, Feather, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
 import { useScrollSafeMenu } from "@/components/flow-item-actions";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import IntroTour from "@/components/intro-tour";
@@ -29,6 +29,7 @@ import { useTextLayout } from "@/hooks/use-text-layout";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
+import { DaySummaryCard } from "@/components/day/day-summary-card";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
@@ -84,6 +85,7 @@ export function TodayContent() {
             <div className="flex min-w-0 items-center justify-between gap-2">
               <div className="min-w-0"><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div>
               <div className="flex shrink-0 items-center gap-1">
+                <RouterLink to="/quickflow" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><Feather size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Fånga")}</span><span className="sr-only min-[390px]:hidden">{t("Fånga en tanke")}</span></RouterLink>
                 <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-lavender/55 px-2 text-xs font-semibold text-ink hover:bg-lavender/75"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
                 <RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><CalendarDays size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Veckan")}</span><span className="sr-only min-[390px]:hidden">{t("Visa veckan")}</span></RouterLink>
               </div>
@@ -108,6 +110,9 @@ export function TodayContent() {
         </section>
       </MyFloveWide>
 
+      <MyFloveWide className="pt-2">
+        <DaySummaryCard />
+      </MyFloveWide>
       <MyFloveWide className="pace-today-pace pt-2">
         <TodayPace pace={pace} />
       </MyFloveWide>
