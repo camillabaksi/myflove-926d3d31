@@ -236,13 +236,9 @@ function TesterList() {
           </div>
         ))}
       </section>
-      <p className="text-sm text-muted-foreground">
-        Totalt {rows.length} intresseanmälningar. Statusen ändras manuellt och betyder inte att
-        testaren är verifierad i Google Play eller TestFlight.
-      </p>
       <p className="text-xs leading-5 text-muted-foreground">
-        Antalen visar bara intresseanmälningar. De verifierar inte Googles krav på 12 aktiva testare
-        under 14 dagar.
+        {rows.length} intresseanmälningar. Statusarna uppdateras manuellt och bekräftar inte
+        aktiva testare i Google Play eller TestFlight.
       </p>
       <section className="rounded-2xl border border-border bg-card p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-3">
