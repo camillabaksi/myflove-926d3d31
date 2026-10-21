@@ -96,9 +96,10 @@ export function DailyActivityRow({
                 )}
               </Button>
             )}
+            <div className="min-w-0 flex-1">
             <p
               className={cn(
-                "pace-type-activity min-w-0 flex-1 break-words leading-snug",
+                "pace-type-activity min-w-0 break-words leading-snug",
                 integrated
                   ? "font-sans text-base font-semibold text-ink"
                   : "font-display pt-0.5 text-xl font-semibold text-ink",
@@ -108,12 +109,10 @@ export function DailyActivityRow({
             >
               {(item.href?.startsWith("/aterhamtning?start=") || item.href === "/stop-paus") ? <Link href={item.href} className="rounded-sm underline decoration-primary/40 underline-offset-4 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={`Öppna ${item.title}`}>{item.title}</Link> : item.title}
             </p>
-          </div>
           <div
             className={cn(
               "flex min-w-0 flex-wrap items-center gap-1.5",
               integrated ? "mt-0" : "mt-1",
-              item.completable && (integrated ? "pl-9" : "sm:pl-7"),
             )}
           >
             <span
@@ -129,7 +128,7 @@ export function DailyActivityRow({
             </span>
             {(!integrated || SOURCE_LABEL[item.source] !== visual.label) && (
               <span className="pace-type-category text-[10px] font-medium text-muted-foreground">
-                {SOURCE_LABEL[item.source]}
+                {integrated && <span aria-hidden>· </span>}{SOURCE_LABEL[item.source]}
               </span>
             )}
             {item.linkedLabel && (
@@ -139,6 +138,8 @@ export function DailyActivityRow({
                 <span className="truncate">{item.linkedLabel}</span>
               </span>
             )}
+          </div>
+            </div>
           </div>
           {item.meetingUrl && (
             <a

@@ -230,8 +230,8 @@ export function DailyFlowList({
 
           return (
             <li key={item.id}>
-              {dayHeadings && index === firstTimedIndex && <h2 className={cn("px-2 pb-0.5 pt-1 text-primary", integrated ? "font-sans text-base font-semibold leading-snug" : "font-display text-sm font-bold")}>Tider idag</h2>}
-              {dayHeadings && index === firstUntimedIndex && <h2 className={cn("px-2 pb-0.5 pt-2 text-primary", integrated ? "font-sans text-lg font-semibold leading-snug" : "font-display text-sm font-bold")}>Övrigt idag</h2>}
+              {dayHeadings && index === firstTimedIndex && <h2 className={cn("px-2 pb-0.5 pt-1 text-primary", integrated ? "font-sans text-sm font-semibold leading-snug text-muted-foreground" : "font-display text-sm font-bold")}>Tider idag</h2>}
+              {dayHeadings && index === firstUntimedIndex && <h2 className={cn("px-2 pb-0.5 pt-2 text-primary", integrated ? "font-sans text-sm font-semibold leading-snug text-muted-foreground" : "font-display text-sm font-bold")}>Övrigt idag</h2>}
               {index === nowIndex && (
                 <div className="flex items-center gap-2 py-1" aria-label="Just nu">
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
