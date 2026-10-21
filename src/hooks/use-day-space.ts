@@ -18,7 +18,7 @@ export function useDaySpace(owner: string, date: string) {
   const safeRows = active && Array.isArray(rows) ? rows : [];
   const heads = spaceHeads(safeRows, date);
   function save(text: string, categories: SpaceCategory[], parents: string[]) {
-    if (!isActiveOwner(owner)) return null;
+    if (!isActiveOwner(owner) || (!text.trim() && !safeRows.some(row => row.date === date))) return null;
     const revision = makeSpaceRevision(date, text, categories, parents);
     setRows(previous => isActiveOwner(owner) ? appendSpaceRevision(previous, revision) : previous);
     return revision;

@@ -20,13 +20,13 @@ export function DaySpaceNote({ compact = false }: { compact?: boolean }) {
   useEffect(() => {
     const timer = window.setInterval(() => {
       const next = todayISO();
-      setCurrentDay(previous => { if (previous !== next) { setOpen(false); setDate(next); } return next; });
+      setCurrentDay(next);
     }, 30_000);
     return () => window.clearInterval(timer);
   }, []);
   useEffect(() => { setOpen(false); setDate(todayISO()); }, [user?.id]);
   if (!user?.id || !isActiveOwner(user.id)) return null;
-  const editor = <SpaceEditor key={`${user.id}:${date}:${currentDay}`} owner={user.id} date={date} currentDay={currentDay} />;
+  const editor = <SpaceEditor key={`${user.id}:${date}`} owner={user.id} date={date} currentDay={currentDay} />;
   return <section className="min-w-0 space-y-2" aria-label="Det som också tog plats">
     {compact ? <>
       <Button ref={opener} variant="ghost" className="min-h-11 max-w-full gap-2 whitespace-normal text-left text-muted-foreground" onClick={() => { setDate(todayISO()); setOpen(true); }}><Feather size={15} aria-hidden />Det som också tog plats</Button>
@@ -67,8 +67,10 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
   }, [dirty]);
   function save() {
     if (!isActiveOwner(owner) || todayISO() !== currentDay) { setMessage("Dagen eller kontot har ändrats. Öppna anteckningen igen."); return; }
-    const revision = store.save(text, categories, parents);
-    if (revision) { clearSpaceDraft(owner, date); setParents([revision.id]); setDirty(false); setMessage(""); }
+    try {
+      const revision = store.save(text, categories, parents);
+      if (revision) { clearSpaceDraft(owner, date); setParents([revision.id]); setDirty(false); setMessage(""); }
+    } catch { setMessage("Anteckningen kunde inte sparas. Din text finns kvar; försök igen."); }
   }
   if (!isActiveOwner(owner)) return null;
   return <div className="min-w-0 space-y-2">
@@ -80,7 +82,7 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
     <p role="status" className="text-xs text-muted-foreground">{dirty ? "Inte sparat än" : store.hasRows ? store.status : "Bara för dig"}</p>
     {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) updateDraft("", [], store.heads.map(head => head.id)); }}>Ta bort anteckning</Button>}
     {store.status.includes("misslyckades") && <Button variant="ghost" size="sm" onClick={() => void store.retry()}>Försök synka igen</Button>}
-    {help && <div className="space-y-2 border-l-2 border-border pl-3 text-sm"><div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setConsent(false); setMessage(""); }}><X size={15} aria-hidden /></Button></div><p className="whitespace-pre-wrap break-words text-muted-foreground">{text}</p><label className="flex min-h-11 items-start gap-2"><input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-primary" /><span>Ta med denna anteckning när Pace hjälper mig att planera om</span></label><p className="text-xs text-muted-foreground">Överföring till Pace är pausad tills skyddet för privata texter har verifierats. Anteckningen stannar hos dig.</p><Button variant="outline" disabled={!consent} onClick={() => setMessage("Anteckningen har inte skickats. Du kan fortfarande använda Få ihop dagen utan att dela texten.")}>Kontrollera om hjälpen är tillgänglig</Button><Button variant="ghost" asChild><a href="/idag?replan=1">Få ihop dagen utan att dela anteckningen</a></Button></div>}
+    {help && <div className="space-y-2 border-l-2 border-border pl-3 text-sm"><div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setConsent(false); setMessage(""); }}><X size={15} aria-hidden /></Button></div><p className="whitespace-pre-wrap break-words text-muted-foreground">{text}</p><label className="flex min-h-11 items-start gap-2"><input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-primary" /><span>Ta med denna anteckning när Pace hjälper mig att planera om</span></label><p className="text-xs text-muted-foreground">Överföring till Pace är pausad tills skyddet för privata texter har verifierats. Anteckningen stannar hos dig.</p><Button variant="ghost" asChild><a href="/idag?replan=1">Få ihop dagen utan att dela anteckningen</a></Button></div>}
     {message && <p role="alert" className="text-sm text-muted-foreground">{message}</p>}
   </div>;
 }
