@@ -3,6 +3,9 @@ import { ChevronDown, ChevronLeft, Heart, Leaf, Moon, Sparkles, X } from "lucide
 import { useLang } from "@/hooks/use-language";
 import { useEveningCheck } from "@/hooks/use-evening-check";
 import { useDayJourney } from "@/hooks/use-day-journey";
+import { useDayWindow } from "@/hooks/use-day-window";
+import { useEnergyFlow } from "@/hooks/use-energy-flow";
+import { isSameDay } from "@/lib/energy-flow";
 import { EVENING_ANSWERS, eveningReply, type EveningAnswer } from "@/lib/day-journey";
 import { buildEveningInsight } from "@/lib/evening-insight";
 import { track } from "@/lib/analytics";
@@ -17,19 +20,26 @@ export default function EveningCheck() {
   const { t } = useLang();
   const { evening, eveningHistory, logEvening } = useEveningCheck();
   const { input } = useDayJourney();
+  const { todayEdges, setEvening } = useDayWindow();
+  const { entries } = useEnergyFlow();
+  const [eveningEnergy, setEveningEnergy] = useState<number | null>(null);
+  const todayEnergy = useMemo(() => entries.filter(entry => isSameDay(entry.occurredAt)), [entries]);
+  const gives = todayEnergy.filter(entry => entry.direction === "gives" || entry.direction === "both").length;
+  const drains = todayEnergy.filter(entry => entry.direction === "drains" || entry.direction === "both").length;
   const { collapsed, toggle } = useCollapsible("home-evening-check");
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [answer, setAnswer] = useState<EveningAnswer | null>(null);
   const insight = useMemo(() => buildEveningInsight(eveningHistory, evening), [eveningHistory, evening]);
-  const screens = 4;
+  const screens = 5;
 
-  function start() { setStep(0); setAnswer(evening?.answer ?? null); setOpen(true); }
+  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setOpen(true); }
   function next() {
     if (step === 1 && answer && answer !== evening?.answer) {
       logEvening(answer, { ork10: input.ork10, battery: input.batteryNow, planned: input.planned, done: input.done, openThoughts: input.openThoughts });
       track("evening_check_completed", { source: "kvallsstund", method: answer });
     }
+    if (step === 2 && eveningEnergy !== null && eveningEnergy !== todayEdges.evening) setEvening(eveningEnergy);
     setStep(current => Math.min(screens - 1, current + 1));
   }
 
@@ -66,12 +76,23 @@ export default function EveningCheck() {
               <DialogDescription className="text-sm text-[#6D566C]">Det finns inget rätt eller fel. Du behöver inte välja något.</DialogDescription>
               <div className="grid grid-cols-2 gap-3">{EVENING_ANSWERS.map(option => <button key={option.id} type="button" aria-pressed={answer === option.id} onClick={() => setAnswer(option.id)} className={cn("min-h-28 rounded-[2rem] border p-4 text-sm transition-all duration-300", answer === option.id ? "border-[#A585A8] bg-[#E5D4E5] shadow-md" : "border-transparent bg-white/65")}><span className="mb-2 block text-2xl">{option.emoji}</span>{t(option.label)}</button>)}<button type="button" onClick={() => setAnswer(null)} aria-pressed={answer === null} className="min-h-28 rounded-[2rem] bg-[#EDE6E0] p-4 text-sm">☁️<span className="mt-2 block">Vet inte / hoppa över</span></button></div>
             </div>}
-            {step === 2 && <div className="space-y-5 pt-8">
+            {step === 2 && <div className="space-y-6 pt-10 text-center">
+              <DialogTitle className="font-handwritten text-4xl font-normal">Hur är din energi nu?</DialogTitle>
+              <DialogDescription className="text-sm text-[#6D566C]">{todayEdges.morning != null ? `I morse registrerade du ${todayEdges.morning} av 10. Hur känns det nu?` : "Du behöver inte ha registrerat morgonenergi. Välj bara om du vill."}</DialogDescription>
+              <div className="rounded-3xl bg-white/70 p-5">
+                <label htmlFor="evening-ritual-energy" className="mb-4 block text-sm font-medium">{eveningEnergy === null ? "Inte valt" : `${eveningEnergy} av 10`}</label>
+                <input id="evening-ritual-energy" type="range" min="1" max="10" step="1" value={eveningEnergy ?? 5} onChange={event => setEveningEnergy(Number(event.target.value))} className="w-full accent-[#9873A0]" />
+                <div className="mt-2 flex justify-between text-xs text-[#6D566C]"><span>Låg energi</span><span>Hög energi</span></div>
+                <button type="button" className="mt-5 min-h-11 text-sm underline underline-offset-4" onClick={() => setEveningEnergy(null)}>Jag vill inte registrera</button>
+              </div>
+              <div className="rounded-3xl bg-white/60 p-4 text-left text-sm"><p className="mb-2 font-medium">Det du redan registrerat idag</p><p className="text-[#6D566C]">{gives > 0 ? `${gives} aktiviteter som gav energi` : "Inga aktiviteter som gav energi registrerade"}</p><p className="mt-1 text-[#6D566C]">{drains > 0 ? `${drains} aktiviteter som tog energi` : "Inga aktiviteter som tog energi registrerade"}</p></div>
+            </div>}
+            {step === 3 && <div className="space-y-5 pt-8">
               <DialogTitle className="font-handwritten text-center text-4xl font-normal">Så här såg din dag ut</DialogTitle>
-              <div className="rounded-3xl bg-white/75 p-5 shadow-sm"><p className="text-sm font-medium">Din dag i korthet</p><p className="mt-3 text-sm text-[#6D566C]">{input.planned > 0 ? `${input.done} av ${input.planned} planerade aktiviteter markerades klara.` : "Inga planerade aktiviteter att sammanfatta just nu."}</p><p className="mt-3 text-sm text-[#6D566C]">{input.ork10 != null ? `Registrerad ork: ${input.ork10} av 10.` : "Ingen ork registrerad – vi gissar inte hur du mådde."}</p><p className="mt-3 text-sm text-[#6D566C]">Din energikurva visas när det finns verkliga mätningar från dagen.</p></div>
+              <div className="rounded-3xl bg-white/75 p-5 shadow-sm"><p className="text-sm font-medium">Din dag i korthet</p><p className="mt-3 text-sm text-[#6D566C]">{input.planned > 0 ? `${input.done} av ${input.planned} planerade aktiviteter markerades klara.` : "Inga planerade aktiviteter att sammanfatta just nu."}</p><p className="mt-3 text-sm text-[#6D566C]">{input.ork10 != null ? `Registrerad ork: ${input.ork10} av 10.` : "Ingen ork registrerad – vi gissar inte hur du mådde."}</p><p className="mt-3 text-sm text-[#6D566C]">{todayEdges.morning != null && todayEdges.evening != null ? `Morgon: ${todayEdges.morning}/10 · Kväll: ${todayEdges.evening}/10` : "Ingen komplett morgon- och kvällsmätning ännu – vi visar ingen påhittad kurva."}</p><p className="mt-3 text-sm text-[#6D566C]">{gives} registrerade energigivare · {drains} energitagare</p></div>
               <div className="rounded-3xl bg-[#F4E0D6]/70 p-4 text-center font-handwritten text-2xl">Allt som tog energi syns inte i kalendern.</div>
             </div>}
-            {step === 3 && <div className="space-y-6 pt-12 text-center">
+            {step === 4 && <div className="space-y-6 pt-12 text-center">
               <Moon className="mx-auto text-[#B58DA5]" size={34} strokeWidth={1.2}/>
               <DialogTitle className="font-handwritten text-5xl font-normal">Tack för idag ♡</DialogTitle>
               <DialogDescription className="text-base text-[#6D566C]">Du dök upp, och det räcker långt.</DialogDescription>
@@ -81,7 +102,7 @@ export default function EveningCheck() {
           </div>
           <div className="mt-10 space-y-3">
             <button type="button" onClick={() => step === screens - 1 ? setOpen(false) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Stäng min kvällsstund" : step === 0 ? "Börja" : "Nästa"}</button>
-            {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
+            {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); if (step === 2) setEveningEnergy(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
             <p className="text-center text-xs text-[#806F7C]">Helt frivilligt. Du kan avsluta när som helst.</p>
           </div>
         </div>
