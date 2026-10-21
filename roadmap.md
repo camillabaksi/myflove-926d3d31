@@ -1,4 +1,7 @@
 # Roadmap
+## GitHub pull requests (2026-10-21)
+- [x] Begäran mottagen: lista öppna pull requests och ge råd om åtgärder.
+- [ ] Den sparade GitHub-nyckeln avvisas (401); inväntar ny nyckel via återanslutningskortet, därefter hämtas listan. Gamla "MyFloveAugusti"-nyckeln (full admin, inget utgångsdatum, aldrig använd) flaggad för radering.
 ## Återstående säkerhetsrättningar (2026-10-20)
 - [x] Begäran mottagen: återstående beroenden, webbskydd, privata feluppgifter och återregistrering av notiser ska åtgärdas utan kontoskrivningar eller publicering.
 - [x] Avgränsad plan godkänd före appändringar.
