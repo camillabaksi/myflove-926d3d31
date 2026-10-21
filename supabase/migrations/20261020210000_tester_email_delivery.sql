@@ -12,3 +12,9 @@ ALTER TABLE public.tester_applications
 ALTER TABLE public.tester_applications ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.tester_applications FROM PUBLIC, anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.tester_applications TO service_role;
+
+-- Track in-progress delivery attempts independently for each email type.
+ALTER TABLE public.tester_applications
+  ADD COLUMN IF NOT EXISTS confirmation_claimed_at timestamptz;
+ALTER TABLE public.tester_applications
+  ADD COLUMN IF NOT EXISTS admin_notice_claimed_at timestamptz;
