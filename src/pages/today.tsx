@@ -11,7 +11,6 @@ import FamilyDayPerspectives from "@/components/day/family-day-perspectives";
 import { GreetingNameMenu } from "@/components/day/greeting-name-menu";
 import { DayGreeting } from "@/components/day/day-greeting";
 import { TodayCapacity } from "@/components/day/today-capacity";
-import { TodayPace } from "@/components/day/today-pace";
 import { DayReplanButton } from "@/components/day/day-replan";
 import { PlanningEntry } from "@/components/day/planning-workspace";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
@@ -120,9 +119,6 @@ export function TodayContent() {
       </MyFloveWide>
       <MyFloveWide className="pace-today-pace pt-2">
         <DaySpaceNote />
-      </MyFloveWide>
-      <MyFloveWide className="pace-today-pace pt-2">
-        <TodayPace pace={pace} />
       </MyFloveWide>
       <MyFloveWide className="pt-2">
         <WeeklyPulse />
