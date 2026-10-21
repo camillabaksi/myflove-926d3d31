@@ -1,7 +1,7 @@
 # Roadmap
 ## GitHub pull requests (2026-10-21)
 - [x] Begäran mottagen: lista öppna pull requests och ge råd om åtgärder.
-- [ ] Den sparade GitHub-nyckeln avvisas (401); inväntar ny nyckel via återanslutningskortet, därefter hämtas listan. Gamla "MyFloveAugusti"-nyckeln (full admin, inget utgångsdatum, aldrig använd) flaggad för radering.
+- [x] Ny GitHub-nyckel sparad via återanslutning; 12 öppna PR:ar hittade i myflove-926d3d31 (inga i övriga fem repon). #189 mergebar, #97 mergebar men utkast, övriga tio krockar med main. Råd levererat: behåll #189 tills Resend är uppsatt, granska #38 (träning/Morgonstart) innan stängning, stäng övriga nio som ersatts av publicerat Lovable-arbete. Gamla "MyFloveAugusti"-nyckeln flaggad för radering.
 ## Återstående säkerhetsrättningar (2026-10-20)
 - [x] Begäran mottagen: återstående beroenden, webbskydd, privata feluppgifter och återregistrering av notiser ska åtgärdas utan kontoskrivningar eller publicering.
 - [x] Avgränsad plan godkänd före appändringar.
