@@ -61,6 +61,13 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
         </Button>
       </div>
       <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och aktivitetstid" tabIndex={0} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
+      <div className="w-max min-w-full">
+      <div className="px-1 pt-1">
+        <SoftWaveChart series={[
+          { id: "battery", tone: "primary", values: periods.map((p) => p.battery) },
+          { id: "time", tone: "accent", dashed: true, values: periods.map((p) => (p.loadMinutes === 0 ? null : Math.max(8, (p.loadMinutes / maxMinutes) * 100))) },
+        ]} />
+      </div>
       <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(min(8rem,calc(100cqw-12px)), 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
@@ -86,18 +93,6 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             title={description}
             className="min-w-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
-            <div aria-hidden="true" className="relative mx-auto h-20 w-full max-w-14 overflow-hidden rounded-xl border border-border bg-background">
-              {period.loadMinutes > 0 && <div
-                data-series="time"
-                className="pace-insight-series-striped absolute inset-x-0 bottom-0 transition-[height] duration-500 motion-reduce:transition-none"
-                style={{ height: `${loadHeight}%` }}
-              />}
-              {period.battery != null && <div
-                data-series="battery"
-                className="pace-insight-series-energy absolute left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-card shadow-sm transition-[bottom] duration-500 motion-reduce:transition-none"
-                style={{ bottom: `${Math.max(5, Math.min(82, period.battery))}%` }}
-              />}
-            </div>
             <span className="mt-2 block break-words text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
