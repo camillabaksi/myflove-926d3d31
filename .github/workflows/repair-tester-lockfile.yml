@@ -1,0 +1,41 @@
+name: Repair tester branch lockfile
+
+on:
+  push:
+    branches:
+      - paceable-tester-email-rebase-safe
+    paths:
+      - '.github/workflows/repair-tester-lockfile.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: paceable-tester-email-rebase-safe
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Upgrade npm for lockfile generation
+        run: npm install --global npm@11
+      - name: Regenerate lockfile only (no application install)
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Validate clean install
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Commit repaired lockfile on test branch
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "Lockfile unchanged"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "Sync npm lockfile for tester email CI"
+            git push origin HEAD:paceable-tester-email-rebase-safe
+          fi
