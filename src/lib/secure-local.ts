@@ -20,6 +20,7 @@
 
 /** Nycklar som alltid krypteras: energi, mående, medicin och ekonomi. */
 const SENSITIVE_KEYS = new Set<string>([
+  "myflove-day-space-revisions-v1",
   "myflove-notebook-revisions-v1",
   "myflove-flow-memories",
   "myflove-energy-log",

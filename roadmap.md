@@ -1,9 +1,11 @@
 # Roadmap
 ## Det som också tog plats (2026-10-21)
 - [x] Registrerat kraven och påbörjat granskning av Idag, privat kontolagring och Pace-omplanering.
-- [ ] Visa avgränsad plan och invänta godkännande före appkodändringar.
-- [ ] Bygg gemensam frivillig dagsanteckning med fri text, valfria kategorier och uttrycklig användning i Pace-hjälp; inga kalender-/energi-/mejländringar.
-- [ ] Granska och testa sparning/återläsning, kontoseparering, samtycke och mobil/dator; uppdatera båda ändringsloggarna och redovisa risker. Ingen publicering.
+- [x] Avgränsad plan godkänd och arkiverad före implementation.
+- [x] Gemensam frivillig dagsanteckning med fri text, valfria kategorier, krypterad datumsparning och privata konfliktversioner; inga kalender-/energi-/mejländringar.
+- [x] Granskningens utkast-/datum-/sparfel rättade; isolerad lokal sparning och återläsning via Pace samt 320/390/768/1280 px verifierade. Båda ändringsloggarna uppdaterade. Ingen publicering.
+- [ ] Använd anteckningen i Pace-omplanering: blockerad tills content-free AI-tjänsteloggning verifierats. Ingen privat text skickas.
+- [ ] Verklig två-enhetssynk behöver isolerat testkonto; Camillas konto användes läsande med kontoskrivningar blockerade.
 ## Codemagic-byggen till TestFlight och Play (2026-10-21)
 - [x] Begäran mottagen: kör Codemagic-flödena och publicera ny version i TestFlight och Play med ny ikon, namn och behörigheter.
 - [x] Verifierat att main-grenen har Android 6.6/versionCode 27 (app.myflove.mobile) och iOS 1.4/build 16 (se.myflove.app).
