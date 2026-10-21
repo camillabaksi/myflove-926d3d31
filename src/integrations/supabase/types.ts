@@ -932,51 +932,72 @@ export type Database = {
       }
       tester_applications: {
         Row: {
+          admin_notes: string
           admin_notice_accepted_at: string | null
+          admin_notice_claimed_at: string | null
           confirmation_accepted_at: string | null
+          confirmation_claimed_at: string | null
           consent_version: number
           consented_at: string
+          contacted_at: string | null
           created_at: string
           email: string
           feedback_willing: boolean
           focus: string
+          followup_due_at: string | null
           id: string
           language: string
+          last_followup_at: string | null
           participation: string
           platform: string
           status: string
+          testing_started_at: string | null
           updated_at: string
         }
         Insert: {
+          admin_notes?: string
           admin_notice_accepted_at?: string | null
+          admin_notice_claimed_at?: string | null
           confirmation_accepted_at?: string | null
+          confirmation_claimed_at?: string | null
           consent_version?: number
           consented_at?: string
+          contacted_at?: string | null
           created_at?: string
           email: string
           feedback_willing?: boolean
           focus: string
+          followup_due_at?: string | null
           id?: string
           language?: string
+          last_followup_at?: string | null
           participation: string
           platform: string
           status?: string
+          testing_started_at?: string | null
           updated_at?: string
         }
         Update: {
+          admin_notes?: string
           admin_notice_accepted_at?: string | null
+          admin_notice_claimed_at?: string | null
           confirmation_accepted_at?: string | null
+          confirmation_claimed_at?: string | null
           consent_version?: number
           consented_at?: string
+          contacted_at?: string | null
           created_at?: string
           email?: string
           feedback_willing?: boolean
           focus?: string
+          followup_due_at?: string | null
           id?: string
           language?: string
+          last_followup_at?: string | null
           participation?: string
           platform?: string
           status?: string
+          testing_started_at?: string | null
           updated_at?: string
         }
         Relationships: []
