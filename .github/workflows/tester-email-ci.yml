@@ -1,0 +1,44 @@
+name: Tester email CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/lib/tester-recruitment*'
+      - 'src/pages/admin-testare.tsx'
+      - 'src/routes/testa.tsx'
+      - 'src/routes/integritet.tsx'
+      - 'supabase/migrations/20261020210000_tester_email_delivery.sql'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tester-email-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Run build
+        run: npm run build
+      - name: Run tests
+        run: npm test -- --run
+      - name: Check formatting of tester files
+        run: npx prettier --check src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
+      - name: Check lint on modified tester files
+        run: npx eslint src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
