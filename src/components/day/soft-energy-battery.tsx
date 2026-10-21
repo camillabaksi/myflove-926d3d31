@@ -26,7 +26,7 @@ export function SoftEnergyBattery({ percent, linked = true }: { percent: number 
           <path d="M53 50 Q52 44 61 44" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" opacity=".85"/>
         </g>
       </svg>
-      <span className="mt-[-3px] text-sm font-semibold tabular-nums text-ink">{known ? `${value} %` : "– %"}</span>
+      <span className="mt-[-3px] text-sm font-semibold tabular-nums text-ink">{known ? `${value} %` : "Inte incheckad än"}</span>
       {linked && <span className="text-[11px] font-medium text-muted-foreground">Mitt batteri ↗</span>}
     </div>
   );
