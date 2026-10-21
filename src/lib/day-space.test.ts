@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { appendSpaceRevision, makeSpaceRevision, maySendSpaceNote, spaceHeads, validSpaceDate } from "./day-space";
-import { mergeValues } from "./sync-merge";
+import { mergeSyncValues, snapshotBase } from "./sync-merge";
 
 describe("private daily space rules", () => {
   it("accepts a local calendar date and rejects impossible dates", () => {
@@ -22,7 +22,7 @@ describe("private daily space rules", () => {
     const original = makeSpaceRevision("2026-10-21", "Original", [], []);
     const a = makeSpaceRevision(original.date, "Enhet A", [], [original.id]);
     const b = makeSpaceRevision(original.date, "Enhet B", [], [original.id]);
-    const merged = mergeValues([original,a], [original,b], [original]) as typeof original[];
+    const merged = mergeSyncValues({ local: [original,a], cloud: [original,b], base: snapshotBase([original]), removed: new Set(), localUpdatedAt: 1, cloudUpdatedAt: 2 });
     expect(spaceHeads(merged, original.date).map(r => r.text).sort()).toEqual(["Enhet A", "Enhet B"]);
     expect(merged.find(r => r.id === original.id)?.text).toBe("Original");
     const resolved = makeSpaceRevision(original.date, "Mitt val", [], [a.id,b.id]);

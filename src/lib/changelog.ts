@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-21";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-21 – Det som också tog plats",
-    items: ["Frivillig privat dagsanteckning på Idag och samma skrivflöde från Pace. Fri text, valfria kategorier, krypterad kontosynk och konfliktversioner; kalender, batteri och mejlmallar oförändrade. Överföring till Pace är pausad tills privat tjänsteloggning har verifierats. Ingen publicering."],
+    items: ["Frivillig privat dagsanteckning på Idag och samma skrivflöde från Pace. Fri text, valfria kategorier, krypterad kontosynk och konfliktversioner. Osparade utkast behålls vid dialog-/datumbyte och rensas vid utloggning; kalender, batteri och mejlmallar oförändrade. Överföring till Pace är pausad tills privat tjänsteloggning har verifierats. Ingen publicering."],
   },
   {
     title: "2026-10-21 – Nyare versionsnummer för apparna",
