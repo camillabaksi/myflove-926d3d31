@@ -112,9 +112,12 @@ function TesterList() {
         (platformFilter === "ios" && row.platform === "both")) &&
       (statusFilter === "all" || row.status === statusFilter),
   );
-  const android = rows.filter(
-    (row) => row.platform === "android" || row.platform === "both",
-  ).length;
+  const summary = [
+    { label: "Nya", count: rows.filter((row) => row.status === "new").length },
+    { label: "Inbjudna", count: rows.filter((row) => row.status === "invited").length },
+    { label: "Testar", count: rows.filter((row) => row.status === "testing").length },
+    { label: "Avslutade", count: rows.filter((row) => row.status === "complete").length },
+  ];
   return (
     <div className="pace-ds pace-compact-page mx-auto max-w-5xl space-y-5">
       <header className="space-y-2">
@@ -130,22 +133,18 @@ function TesterList() {
           description="Separat från registrerade konton och appstatistik. Bara administratörer har tillgång till kontaktuppgifterna."
         />
       </header>
-      <section className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Intresserade totalt</p>
-          <p className="text-2xl font-semibold">{rows.length}</p>
-        </div>
-        <div className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Android / båda</p>
-          <p className="text-2xl font-semibold">{android}</p>
-        </div>
-        <div className="col-span-2 rounded-2xl border bg-card p-4 sm:col-span-1">
-          <p className="text-xs text-muted-foreground">Inbjudna eller testar</p>
-          <p className="text-2xl font-semibold">
-            {rows.filter((row) => ["invited", "testing"].includes(row.status)).length}
-          </p>
-        </div>
+      <section aria-label="Testarstatus" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {summary.map(({ label, count }) => (
+          <div key={label} className="rounded-2xl border bg-card px-4 py-3">
+            <p className="text-xs text-muted-foreground">{label}</p>
+            <p className="text-2xl font-semibold tabular-nums">{count}</p>
+          </div>
+        ))}
       </section>
+      <p className="text-sm text-muted-foreground">
+        Totalt {rows.length} intresseanmälningar. Statusen ändras manuellt och betyder inte att
+        testaren är verifierad i Google Play eller TestFlight.
+      </p>
       <p className="text-xs leading-5 text-muted-foreground">
         Antalen visar bara intresseanmälningar. De verifierar inte Googles krav på 12 aktiva testare
         under 14 dagar.
@@ -209,11 +208,11 @@ function TesterList() {
             {shown.map((row) => (
               <article
                 key={row.id}
-                className="rounded-xl border border-border/80 bg-background/80 p-4"
+                className="rounded-xl border border-border/80 bg-background/80 p-3 sm:p-4"
               >
-                <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0 space-y-1">
-                    <h2 className="break-all text-sm font-semibold">{row.email}</h2>
+                    <h2 className="break-all text-sm font-semibold leading-5">{row.email}</h2>
                     <p className="text-xs text-muted-foreground">
                       {platformLabels[row.platform]} · {participationLabels[row.participation]} ·{" "}
                       {focusLabels[row.focus]}
@@ -229,19 +228,19 @@ function TesterList() {
                     </p>
                   </div>
                   <a
-                    className="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 text-sm hover:bg-secondary"
+                    className="inline-flex min-h-9 w-fit items-center gap-2 rounded-full border px-3 text-xs hover:bg-secondary"
                     href={`mailto:${row.email}`}
                   >
                     <Mail className="h-4 w-4" aria-hidden="true" /> Kontakta
                   </a>
                 </div>
-                <div className="mt-4 flex flex-wrap items-center gap-2">
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
                   <label className="text-xs" htmlFor={`tester-status-${row.id}`}>
                     Status
                   </label>
                   <select
                     id={`tester-status-${row.id}`}
-                    className="min-h-10 rounded-lg border bg-card px-2 text-sm"
+                    className="min-h-9 rounded-lg border bg-card px-2 text-sm"
                     value={row.status}
                     onChange={(e) =>
                       update.mutate({
