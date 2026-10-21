@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronLeft, Heart, Leaf, Moon, Sparkles, X, CheckCircle2, BatteryCharging, CloudSun, BookHeart } from "lucide-react";
+import { ChevronDown, ChevronLeft, Heart, Leaf, Moon, Sparkles, X, CheckCircle2, BatteryCharging } from "lucide-react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { useNavigate } from "@tanstack/react-router";
 import { useLang } from "@/hooks/use-language";
@@ -21,8 +21,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 export default function EveningCheck() {
   const { t } = useLang();
   const navigate = useNavigate();
-  const [savedReflections, setSavedReflections] = useCloudSyncedStorage<Record<string, string>>("paceable-evening-reflections-v1", {});
-  const [daySaved, setDaySaved] = useState(false);
+  const [, setSavedReflections] = useCloudSyncedStorage<Record<string, string>>("paceable-evening-reflections-v1", {});
   const [mood, setMood] = useState<string | null>(null);
   const moodOptions = [{label:"Tungt",tone:"lilac",emoji:"☁"},{label:"Blandat",tone:"apricot",emoji:"◒"},{label:"Ganska bra",tone:"sage",emoji:"✦"},{label:"Bra",tone:"lavender",emoji:"☀"},{label:"Vet inte",tone:"cream",emoji:"· · ·"}] as const;
   const todayKey = new Date().toLocaleDateString("sv-SE");
@@ -42,7 +41,7 @@ export default function EveningCheck() {
   const insight = useMemo(() => buildEveningInsight(eveningHistory, evening), [eveningHistory, evening]);
   const screens = 6;
 
-  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setReflection(""); setMood(null); setDaySaved(false); setOpen(true); }
+  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setReflection(""); setMood(null); setOpen(true); }
   function next() {
     if (step === 1 && mood && mood !== "Vet inte" && answer && answer !== evening?.answer) {
       logEvening(answer, { ork10: input.ork10, battery: input.batteryNow, planned: input.planned, done: input.done, openThoughts: input.openThoughts });
@@ -83,7 +82,7 @@ export default function EveningCheck() {
             {step === 1 && <div className="space-y-6 pt-10 text-center">
               <DialogTitle className="font-handwritten text-4xl font-normal">Hur känns det efter idag?</DialogTitle>
               <DialogDescription className="text-sm text-[#6D566C]">Det finns inget rätt eller fel. Du behöver inte välja något.</DialogDescription>
-              <div className="pace-evening-stones">{moodOptions.map((option, index) => <button key={option.label} type="button" aria-pressed={mood === option.label} onClick={() => { setMood(option.label); setAnswer(option.label === "Tungt" ? "tyngre" : option.label === "Blandat" ? "ungefar" : option.label === "Vet inte" ? null : "lattare"); }} className={cn("pace-evening-stone", "pace-evening-stone-" + option.tone, mood === option.label && "is-selected")} style={{ animationDelay: `${index * 110}ms` }}><span className="pace-evening-stone-symbol" aria-hidden>{option.emoji}</span><span>{option.label}</span></button>)}</div>
+              <div className="pace-evening-stones">{moodOptions.map((option, index) => <button key={option.label} type="button" aria-pressed={mood === option.label} onClick={() => { setMood(option.label); setAnswer(option.label === "Tungt" ? "tyngre" : option.label === "Blandat" ? "som-vantat" : option.label === "Vet inte" ? null : "lattare"); }} className={cn("pace-evening-stone", "pace-evening-stone-" + option.tone, mood === option.label && "is-selected")} style={{ animationDelay: `${index * 110}ms` }}><span className="pace-evening-stone-symbol" aria-hidden>{option.emoji}</span><span>{option.label}</span></button>)}</div>
             </div>}
             {step === 2 && <div className="space-y-6 pt-10 text-center">
               <DialogTitle className="font-handwritten text-4xl font-normal">Hur är din energi nu?</DialogTitle>
@@ -118,7 +117,7 @@ export default function EveningCheck() {
             </div>}
           </div>
           <div className="relative z-10 mt-auto space-y-3 pt-8">
-            <button type="button" onClick={() => step === screens - 1 ? (reflection.trim() && setSavedReflections(prev => ({ ...prev, [todayKey]: reflection.trim() })), setDaySaved(true), setOpen(false)) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Spara min dag" : step === 0 ? "Börja" : "Nästa"}</button>
+            <button type="button" onClick={() => step === screens - 1 ? (reflection.trim() && setSavedReflections(prev => ({ ...prev, [todayKey]: reflection.trim() })), setOpen(false)) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Spara min dag" : step === 0 ? "Börja" : "Nästa"}</button>
             {step === screens - 1 && <button type="button" onClick={() => { setOpen(false); navigate({ to: "/insight" }); }} className="min-h-11 w-full rounded-full border border-[#BCA6BA] bg-white/70 text-[#512654]">Till insikter</button>}
             {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); if (step === 2) setEveningEnergy(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
             <p className="text-center text-xs text-[#806F7C]">Helt frivilligt. Du kan avsluta när som helst.</p>
