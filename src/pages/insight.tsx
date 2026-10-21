@@ -42,6 +42,7 @@ import InsightApplySetting from "@/components/insight-apply-setting";
 import WhyHint from "@/components/why-hint";
 import BatteryLoadTrend from "@/components/battery-load-trend";
 import EnergyMoodTrend from "@/components/energy-mood-trend";
+import HelpsDrainsCard from "@/components/helps-drains-card";
 
 const ANALYSIS_STEPS = [
   "Identifierar styrkor",
@@ -338,6 +339,8 @@ export default function InsightPage() {
                 Du behöver inte fylla den för att få stöd.
               </p>
             </div>
+
+            <HelpsDrainsCard />
 
             <EnergyMoodTrend />
 
