@@ -1,19 +1,19 @@
 # Paceable — Native app (iOS + Android)
 
-## Aktuell releaseförberedelse — 2026-10-20
+## Aktuell releaseförberedelse — 2026-10-21
 
 | Plattform | Version | Byggnummer | Befintligt butik-ID |
 | --- | --- | --- | --- |
-| Android | 6.6 | versionCode 27 | app.myflove.mobile |
-| iOS | 1.4 | CURRENT_PROJECT_VERSION 16 | se.myflove.app |
+| Android | 6.7 | versionCode 28 | app.myflove.mobile |
+| iOS | 1.5 | CURRENT_PROJECT_VERSION 17 | se.myflove.app |
 
-Versionsnumren är höjda i projektet, **inte verifierade mot butikernas senaste uppladdningar**. Kontrollera först att 27 respektive 16 är högre än senaste använda nummer. Ingen AAB/IPA är byggd eller uppladdad i denna miljö: Java/Android SDK, Xcode och tillgång till Codemagic-signeringen saknas.
+Versionsnumren är höjda i projektet, **inte verifierade mot butikernas senaste uppladdningar**. Kontrollera först att 28 respektive 17 är högre än senaste använda nummer. Ingen AAB/IPA är byggd eller uppladdad i denna miljö: Java/Android SDK, Xcode och tillgång till Codemagic-signeringen saknas.
 
 Aktuell app heter **Paceable**, använder befintliga ikoner och laddar **https://www.paceable.se** via `capacitor.config.ts`. Behåll denna host och butikernas befintliga app-ID:n. Capacitor-konfigurationens iOS-ID och Androids separata `applicationId` är avsiktligt olika och får inte likriktas. Synk sköts av byggflödena. Apparna visar den publicerade webben; opublicerade webbändringar följer inte med ett nytt mobilpaket.
 
 ### Starta befintliga byggflöden i Codemagic
 
-1. Vänta tills dessa versionsändringar syns på den anslutna repogrenen. Välj samma gren i Codemagic; använd senaste revisionen med Android 6.6/27 och iOS 1.4/16.
+1. Vänta tills dessa versionsändringar syns på den anslutna repogrenen. Välj samma gren i Codemagic; använd senaste revisionen med Android 6.7/28 och iOS 1.5/17.
 2. Android: välj `android-release`. Befintlig hemlighetsgrupp `paceable_android_signing` måste innehålla den **befintliga** uppladdningsnyckeln och lösenorden; skapa ingen ersättningsnyckel. Flödet kör native-tester och bygger signerad AAB. Hämta `android/app/build/outputs/bundle/release/app-release.aab` från körningens artifacts. Flödet laddar inte upp till Play; ladda upp i önskat testspår efter kontroll.
 3. iOS: välj `ios-release`. Befintlig App Store Connect-integration `MyFlove ASC` måste ha fungerande signering. **Flödet laddar automatiskt upp till TestFlight**, så starta bara när även uppladdningen är avsedd/godkänd. IPA finns under `build/ios/ipa/`. Ingen App Store-release görs av flödet.
 4. Kontrollera det faktiska paketets signering, app-ID och versionsnummer samt testresultaten. Verifiera därefter på fysisk Android/iPhone: inloggning, bevarade kontodata, påminnelser med låst skärm och navigation.

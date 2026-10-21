@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-10-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-21 – Nyare versionsnummer för apparna",
+    items: [
+      "Android höjd till 6.7 (versionCode 28) och iOS till 1.5 (byggnummer 17) i både felsöknings- och releasedelen av Xcode-projektet. App-ID:n, värddomän, ikoner och signering är oförändrade. Ingen signerad AAB eller IPA är byggd i denna miljö – bygget sker i Codemagic. Ingen publicering.",
+    ],
+  },
+  {
     title: "2026-10-21 – Böljande diagram i Insikter",
     items: [
       "Veckostatistik, Träning (steg och vikt) och Mitt batteri (snittenergi per timme) visar mjuka böljande vågor i stället för staplar. Värdena är oförändrade. Ingen publicering.",

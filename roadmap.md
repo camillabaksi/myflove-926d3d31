@@ -2,6 +2,7 @@
 ## Codemagic-byggen till TestFlight och Play (2026-10-21)
 - [x] Begäran mottagen: kör Codemagic-flödena och publicera ny version i TestFlight och Play med ny ikon, namn och behörigheter.
 - [x] Verifierat att main-grenen har Android 6.6/versionCode 27 (app.myflove.mobile) och iOS 1.4/build 16 (se.myflove.app).
+- [ ] Bygg och ladda upp Android 6.7/28 och iOS 1.5/17 via Codemagic; TestFlight-uppladdning sker automatiskt, Play-uppladdning är manuell.
 - [ ] Starta ios-release och android-release: blockerad av att ingen Codemagic-anslutning finns; inväntar Codemagic API-nyckel via säkert formulär. iOS-flödet laddar automatiskt upp till TestFlight; Android-flödet bygger bara signerad AAB — uppladdning till Play Console görs manuellt. Kräver att hemlighetsgruppen paceable_android_signing och integrationen MyFlove ASC finns i Codemagic, och att 27/16 är högre än butikernas senaste nummer.
 ## GitHub pull requests (2026-10-21)
 - [x] Begäran mottagen: lista öppna pull requests och ge råd om åtgärder.
