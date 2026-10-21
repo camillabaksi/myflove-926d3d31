@@ -88,8 +88,8 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
       <fieldset className="space-y-2"><legend className="font-medium text-ink">Vad behöver få plats i planeringen?</legend>
         {["Något oväntat tog tid", "Mycket praktiskt att göra", "Andras behov tog plats", "Många avbrott", "Jag vill ta det varsammare"].map(option => <label key={option} className="flex min-h-11 items-center gap-2 rounded-xl bg-card/80 px-3 py-2"><input type="radio" name={id + "-context"} checked={context === option} onChange={() => setContext(option)} className="h-4 w-4 shrink-0 accent-primary" /><span>{option}</span></label>)}
       </fieldset>
-      <p className="text-xs text-muted-foreground">{context ? "Du valde: " + context + ". " : ""}Sammanhanget sparas inte i chatthistoriken eller delas med andra. Förslagen bygger tills vidare på kalender och kapacitet; ditt val påverkar inte beräkningen ännu.</p>
-      <Button variant="outline" asChild className="min-h-11 w-full whitespace-normal"><a href="/idag?replan=1">Få ihop dagen – granska förslag</a></Button>
+      <p className="text-xs text-muted-foreground">{context ? "Du valde: " + context + ". " : ""}Sammanhanget sparas inte i chatthistoriken eller delas med andra. Sammanhanget ger ett varsamt råd i nästa steg, utan att ändra kalendern eller batteriet.</p>
+      <Button variant="outline" type="button" className="min-h-11 w-full whitespace-normal" onClick={() => { if (!isActiveOwner(owner) || date !== todayISO()) return; window.dispatchEvent(new CustomEvent("paceable:day-space-replan", { detail: { owner, date, context } })); setHelp(false); setContext(""); }}>Få ihop dagen – granska förslag</Button>
     </div>}
     {message && <p role="alert" className="text-sm text-muted-foreground">{message}</p>}
   </div>;
