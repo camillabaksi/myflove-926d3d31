@@ -3295,3 +3295,22 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
     background-image:linear-gradient(180deg,rgba(250,247,244,.23),rgba(250,247,244,.34)),url('/images/evening/outro-desktop.webp');
   }
 }
+
+
+/* Reference design: matte organic ceramic pebbles, no concentric-ripple texture. */
+.pace-evening-ritual .pace-evening-stone {
+  border-radius: 44% 56% 53% 47% / 55% 46% 54% 45%;
+  background-image:
+    radial-gradient(ellipse at 27% 20%,rgba(255,255,255,.42),transparent 56%),
+    radial-gradient(ellipse at 80% 83%,rgba(76,48,76,.11),transparent 64%);
+  box-shadow: inset 4px 7px 11px rgba(255,255,255,.5),
+    inset -9px -11px 17px rgba(81,38,84,.13),
+    0 12px 19px rgba(81,38,84,.19),0 3px 4px rgba(81,38,84,.05);
+}
+.pace-evening-ritual .pace-evening-stone-lilac { background-color:#e6d5e9; }
+.pace-evening-ritual .pace-evening-stone-apricot { background-color:#f7ddcc; }
+.pace-evening-ritual .pace-evening-stone-sage { background-color:#d9e9dd; }
+.pace-evening-ritual .pace-evening-stone-lavender { background-color:#ded3ef; }
+.pace-evening-ritual .pace-evening-stone-cream { background-color:#f2e7df; }
+.pace-evening-ritual .pace-evening-intro .rounded-3xl.bg-white\/65 { backdrop-filter:blur(5px); }
+.pace-evening-ritual .pace-evening-outro > .relative.z-10:first-child span { color:#fff8f2; text-shadow:0 1px 4px rgba(40,18,40,.7); }
