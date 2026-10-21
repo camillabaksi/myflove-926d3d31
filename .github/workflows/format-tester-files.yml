@@ -6,6 +6,7 @@ on:
       - paceable-tester-email-rebase-safe
     paths:
       - '.github/workflows/format-tester-files.yml'
+      - 'src/lib/tester-recruitment-mail.server.ts'
 
 permissions:
   contents: write
