@@ -30,10 +30,11 @@ export default function EveningCheck() {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [answer, setAnswer] = useState<EveningAnswer | null>(null);
+  const [reflection, setReflection] = useState("");
   const insight = useMemo(() => buildEveningInsight(eveningHistory, evening), [eveningHistory, evening]);
-  const screens = 5;
+  const screens = 6;
 
-  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setOpen(true); }
+  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setReflection(""); setOpen(true); }
   function next() {
     if (step === 1 && answer && answer !== evening?.answer) {
       logEvening(answer, { ork10: input.ork10, battery: input.batteryNow, planned: input.planned, done: input.done, openThoughts: input.openThoughts });
@@ -55,13 +56,13 @@ export default function EveningCheck() {
         {(insight.todayLine || insight.patternLine) && <div className="mt-3 rounded-2xl bg-muted/50 p-3 text-sm text-muted-foreground">{insight.todayLine && <p>{t(insight.todayLine)}</p>}{insight.patternLine && <p className="mt-1">{t(insight.patternLine)}</p>}</div>}
       </>}
     </section>
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[92dvh] max-w-md overflow-y-auto border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:rounded-[2rem] [&>button]:hidden">
+    <Dialog open={open} onOpenChange={value => { setOpen(value); if (!value) setReflection(""); }}>
+      <DialogContent className="pace-evening-ritual max-h-[92dvh] max-w-md overflow-y-auto border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:rounded-[2rem] [&>button]:hidden">
         <div className="relative min-h-[min(75dvh,630px)] overflow-hidden rounded-[1.8rem] bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 sm:p-7">
           <div className="flex items-center justify-between gap-2">
             <button type="button" onClick={() => step ? setStep(step - 1) : setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/60" aria-label={step ? "Föregående" : "Stäng"}>{step ? <ChevronLeft size={20}/> : <X size={19}/>}</button>
             <span className="text-xs text-[#6D566C]">Kvällsstund · {step + 1} av {screens}</span>
-            <button type="button" onClick={() => setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/60" aria-label="Stäng kvällsstunden"><X size={19}/></button>
+            <button type="button" onClick={() => { setReflection(""); setOpen(false); }} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/60" aria-label="Stäng kvällsstunden"><X size={19}/></button>
           </div>
           <div className="mt-3 flex gap-1.5" aria-label={`Steg ${step + 1} av ${screens}`}>{Array.from({ length: screens }, (_, index) => <span key={index} className={cn("h-1 flex-1 rounded-full transition-colors duration-300", index <= step ? "bg-[#A585A8]" : "bg-[#E7DDE3]")}/>)}</div>
           <div key={step} className="animate-in fade-in slide-in-from-right-2 duration-300 motion-reduce:animate-none">
@@ -89,10 +90,19 @@ export default function EveningCheck() {
             </div>}
             {step === 3 && <div className="space-y-5 pt-8">
               <DialogTitle className="font-handwritten text-center text-4xl font-normal">Så här såg din dag ut</DialogTitle>
-              <div className="rounded-3xl bg-white/75 p-5 shadow-sm"><p className="text-sm font-medium">Din dag i korthet</p><p className="mt-3 text-sm text-[#6D566C]">{input.planned > 0 ? `${input.done} av ${input.planned} planerade aktiviteter markerades klara.` : "Inga planerade aktiviteter att sammanfatta just nu."}</p><p className="mt-3 text-sm text-[#6D566C]">{input.ork10 != null ? `Registrerad ork: ${input.ork10} av 10.` : "Ingen ork registrerad – vi gissar inte hur du mådde."}</p><p className="mt-3 text-sm text-[#6D566C]">{todayEdges.morning != null && todayEdges.evening != null ? `Morgon: ${todayEdges.morning}/10 · Kväll: ${todayEdges.evening}/10` : "Ingen komplett morgon- och kvällsmätning ännu – vi visar ingen påhittad kurva."}</p><p className="mt-3 text-sm text-[#6D566C]">{gives} registrerade energigivare · {drains} energitagare</p></div>
+              <div className="rounded-3xl bg-white/75 p-5 shadow-sm"><p className="text-sm font-medium">Din dag i korthet</p><p className="mt-3 text-sm text-[#6D566C]">{input.planned > 0 ? `${input.done} av ${input.planned} planerade aktiviteter markerades klara.` : "Inga planerade aktiviteter att sammanfatta just nu."}</p><p className="mt-3 text-sm text-[#6D566C]">{input.ork10 != null ? `Registrerad ork: ${input.ork10} av 10.` : "Ingen ork registrerad – vi gissar inte hur du mådde."}</p><p className="mt-3 text-sm text-[#6D566C]">{todayEdges.morning != null && todayEdges.evening != null ? `Morgon: ${todayEdges.morning}/10 · Kväll: ${todayEdges.evening}/10` : "Ingen komplett morgon- och kvällsmätning ännu – vi visar ingen påhittad kurva."}</p><p className="mt-3 text-sm text-[#6D566C]">{gives} registrerade energigivare · {drains} energitagare</p>{todayEdges.morning != null && todayEdges.evening != null && <div className="mt-4 rounded-2xl bg-[#F7F0F5] p-3"><p className="mb-2 text-xs text-[#6D566C]">Morgon och kväll · registrerad energi</p><svg viewBox="0 0 280 110" className="w-full" role="img" aria-label={`Morgon ${todayEdges.morning} av 10, kväll ${todayEdges.evening} av 10`}><line x1="25" y1="87" x2="255" y2="87" stroke="#DDCCD9" /><line x1="25" y1="12" x2="25" y2="87" stroke="#DDCCD9" /><path d={`M25 ${87 - todayEdges.morning * 7} L255 ${87 - todayEdges.evening * 7}`} stroke="#9A7BA9" strokeWidth="3" fill="none" strokeLinecap="round" /><circle cx="25" cy={87 - todayEdges.morning * 7} r="5" fill="#9A7BA9" /><circle cx="255" cy={87 - todayEdges.evening * 7} r="5" fill="#9A7BA9" /><text x="25" y="105" fontSize="11" textAnchor="start" fill="#6D566C">Morgon</text><text x="255" y="105" fontSize="11" textAnchor="end" fill="#6D566C">Kväll</text></svg><p className="text-xs text-[#6D566C]">Linjen förbinder två registreringar – den visar inte hur energin varierade däremellan.</p></div>}</div>
               <div className="rounded-3xl bg-[#F4E0D6]/70 p-4 text-center font-handwritten text-2xl">Allt som tog energi syns inte i kalendern.</div>
             </div>}
-            {step === 4 && <div className="space-y-6 pt-12 text-center">
+            {step === 4 && <div className="space-y-5 pt-8">
+              <DialogTitle className="font-handwritten text-center text-4xl font-normal">Vad vill du ta med dig från idag?</DialogTitle>
+              <DialogDescription className="text-center text-sm text-[#6D566C]">En tanke, känsla eller något du är stolt över. Du kan också hoppa över.</DialogDescription>
+              <label htmlFor="evening-ritual-reflection" className="sr-only">Frivillig reflektion</label>
+              <textarea id="evening-ritual-reflection" value={reflection} onChange={event => setReflection(event.target.value)} maxLength={500} placeholder="Skriv här, bara om du vill…" className="min-h-36 w-full resize-y rounded-3xl border border-[#E8DEE5] bg-white/75 p-5 text-sm text-[#512654] placeholder:text-[#A2939E] focus-visible:outline-2 focus-visible:outline-[#9873A0]" />
+              <p className="text-xs text-[#806F7C]">Texten används bara i denna öppna kvällsstund och sparas inte ännu. Stäng för att rensa den.</p>
+              <div className="rounded-3xl bg-[#F4E0D6]/75 p-5"><p className="font-handwritten text-2xl">Dagens styrka</p><p className="mt-2 text-sm">Vad visade du idag, även om det var svårt?</p></div>
+              <div className="flex flex-wrap gap-2">{["Jag tog en paus", "Jag var snäll mot mig själv", "Jag kämpade vidare"].map(value => <button key={value} type="button" onClick={() => setReflection(value)} className="min-h-11 rounded-full bg-white/70 px-4 py-2 text-sm">{value}</button>)}</div>
+            </div>}
+            {step === 5 && <div className="space-y-6 pt-12 text-center">
               <Moon className="mx-auto text-[#B58DA5]" size={34} strokeWidth={1.2}/>
               <DialogTitle className="font-handwritten text-5xl font-normal">Tack för idag ♡</DialogTitle>
               <DialogDescription className="text-base text-[#6D566C]">Du dök upp, och det räcker långt.</DialogDescription>
@@ -101,7 +111,7 @@ export default function EveningCheck() {
             </div>}
           </div>
           <div className="mt-10 space-y-3">
-            <button type="button" onClick={() => step === screens - 1 ? setOpen(false) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Stäng min kvällsstund" : step === 0 ? "Börja" : "Nästa"}</button>
+            <button type="button" onClick={() => step === screens - 1 ? (setReflection(""), setOpen(false)) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Stäng min kvällsstund" : step === 0 ? "Börja" : "Nästa"}</button>
             {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); if (step === 2) setEveningEnergy(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
             <p className="text-center text-xs text-[#806F7C]">Helt frivilligt. Du kan avsluta när som helst.</p>
           </div>
