@@ -134,6 +134,23 @@ async function sendIfNeeded(
     kind === "confirmation" ? "confirmation_accepted_at" : "admin_notice_accepted_at";
   if (row[acceptedField]) return { accepted: true, failed: false };
 
+  // Claim the delivery before contacting the provider. Only one concurrent
+  // request may claim a given application and message type.
+  const claimField =
+    kind === "confirmation" ? "confirmation_claimed_at" : "admin_notice_claimed_at";
+  const { data: claimed, error: claimError } = await db
+    .from("tester_applications")
+    .update({ [claimField]: new Date().toISOString() })
+    .eq("id", row.id)
+    .is(claimField, null)
+    .is(acceptedField, null)
+    .select("id");
+  if (claimError || !claimed || claimed.length !== 1) {
+    // An existing claim may be in progress or have an uncertain outcome.
+    // Never automatically resend in that situation.
+    return { accepted: false, failed: true };
+  }
+
   const message = kind === "confirmation" ? confirmationCopy(row) : ownerCopy(row);
   let accepted: boolean;
   try {
