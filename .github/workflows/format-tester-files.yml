@@ -1,0 +1,44 @@
+name: Format tester files
+
+on:
+  push:
+    branches:
+      - paceable-tester-email-rebase-safe
+    paths:
+      - '.github/workflows/format-tester-files.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: paceable-tester-email-rebase-safe
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Format only the tester files
+        run: >-
+          npx prettier --write
+          src/lib/tester-recruitment-mail.server.ts
+          src/lib/tester-recruitment.functions.ts
+          src/pages/admin-testare.tsx
+          src/routes/testa.tsx
+          src/routes/integritet.tsx
+      - name: Commit formatting if needed
+        run: |
+          if git diff --quiet -- src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx; then
+            echo "Already formatted"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
+            git commit -m "Format tester recruitment code"
+            git push origin HEAD:paceable-tester-email-rebase-safe
+          fi
