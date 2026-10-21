@@ -3156,3 +3156,9 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   .pace-calendar-week-scroll { touch-action: pan-x pan-y; }
   .pace-calendar-timeline .pace-type-time { white-space: normal; overflow-wrap: normal; word-break: normal; }
 }
+
+/* The evening ritual intentionally uses the journal handwriting even inside the app shell. */
+.app-shell-bg[data-paceable-app="true"] .pace-evening-ritual .font-handwritten {
+  font-family: var(--font-handwritten);
+  font-style: normal;
+}
