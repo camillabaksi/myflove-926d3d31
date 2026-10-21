@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode, type CSSProperties } from "react";
 import { Link } from "wouter";
 import { User, Settings2, Search, X, ChevronRight, ChevronDown, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History, MessageCircle, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -110,7 +110,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const content = entries.length === 1 && g.area
       ? card(g.title, g.hint, g.icon, g.tone, entries[0].href)
       : card(g.title, g.hint, g.icon, g.tone, undefined, g.title, rows(entries));
-    return <div key={g.title} className="pace-more-area" style={g.area ? { borderInlineStart: `3px solid ${areaColor(g.area)}`, borderRadius: "1.5rem" } : undefined}>{content}</div>;
+    return <div key={g.title} className="pace-more-area" style={g.area ? { borderInlineStart: `3px solid ${areaColor(g.area)}`, borderRadius: "1.5rem", "--pace-more-area-color": areaColor(g.area) } as CSSProperties : undefined}>{content}</div>;
   };
   const areas = MORE_AREAS.map(groupCard).filter(Boolean), overall = MORE_OVERALL.map(groupCard).filter(Boolean), legacy = visible(MORE_LEGACY);
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
