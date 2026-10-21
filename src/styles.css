@@ -3162,3 +3162,43 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   font-family: var(--font-handwritten);
   font-style: normal;
 }
+
+/* Evening ritual: immersive, warm, quiet first screen. No decorative layers intercept taps. */
+.pace-evening-intro {
+  background:
+    radial-gradient(ellipse at 76% 78%, rgba(255, 218, 166, .62), transparent 34%),
+    radial-gradient(ellipse at 17% 87%, rgba(124, 82, 91, .42), transparent 42%),
+    linear-gradient(160deg, #866b7d 0%, #b58b8e 46%, #edc2a7 100%);
+  color: #fffaf7;
+}
+.pace-evening-intro::before {
+  content: "✦       ☾        ✧";
+  position: absolute;
+  top: 16%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #fff0ce;
+  font-size: 2.2rem;
+  letter-spacing: 1.6rem;
+  pointer-events: none;
+  opacity: .8;
+}
+.pace-evening-intro::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 35%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(91, 55, 73, .33), transparent 70%);
+  pointer-events: none;
+}
+.pace-evening-intro .font-handwritten,
+.pace-evening-intro [data-radix-dialog-title] { color: #fffaf7; }
+.pace-evening-intro [data-radix-dialog-description] { color: #fff2ee; }
+.pace-evening-mood { box-shadow: 0 8px 24px rgba(81,38,84,.07); }
+@media (prefers-reduced-motion: reduce) {
+  .pace-evening-ritual *, .pace-evening-ritual *::before, .pace-evening-ritual *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
