@@ -45,15 +45,21 @@ export const submitTesterApplicationFn = createServerFn({ method: "POST" })
     if (data.company.trim()) return { ok: true }; // silently discard spam
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const db = supabaseAdmin as unknown as SupabaseClient;
-    const { data: inserted, error } = await db.from("tester_applications").insert({
-      email: data.email,
-      platform: data.platform,
-      participation: data.participation,
-      focus: data.focus,
-      feedback_willing: data.feedback_willing,
-      language: data.language,
-      consent_version: 1,
-    }).select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at").single();
+    const { data: inserted, error } = await db
+      .from("tester_applications")
+      .insert({
+        email: data.email,
+        platform: data.platform,
+        participation: data.participation,
+        focus: data.focus,
+        feedback_willing: data.feedback_willing,
+        language: data.language,
+        consent_version: 1,
+      })
+      .select(
+        "id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at",
+      )
+      .single();
     // Duplicate email must not reveal who is registered or trigger another mail.
     if (error?.code === "23505") return { ok: true };
     if (error || !inserted) {
@@ -64,7 +70,10 @@ export const submitTesterApplicationFn = createServerFn({ method: "POST" })
     // a reason to tell the person their application failed.
     try {
       const { sendTesterSignupEmails } = await import("@/lib/tester-recruitment-mail.server");
-      await sendTesterSignupEmails(db, inserted as import("@/lib/tester-recruitment-mail.server").MailApplicant);
+      await sendTesterSignupEmails(
+        db,
+        inserted as import("@/lib/tester-recruitment-mail.server").MailApplicant,
+      );
     } catch {
       console.warn("[tester-email] confirmation/notification could not be started");
     }
@@ -73,8 +82,12 @@ export const submitTesterApplicationFn = createServerFn({ method: "POST" })
 
 /** Every admin read/write is authenticated and role-checked on the server. */
 async function assertAdmin(supabase: SupabaseClient<Database>, userId: string) {
-  const { data, error } = await supabase.from("user_roles")
-    .select("role").eq("user_id", userId).eq("role", "admin").maybeSingle();
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
   if (error || !data) throw new Error("Forbidden");
 }
 
@@ -85,7 +98,9 @@ export const listTesterApplicationsFn = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await (supabaseAdmin as unknown as SupabaseClient)
       .from("tester_applications")
-      .select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at, status, created_at")
+      .select(
+        "id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at, status, created_at",
+      )
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw new Error("Kunde inte läsa testanmälningarna.");
@@ -114,7 +129,8 @@ export const deleteTesterApplicationFn = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await (supabaseAdmin as unknown as SupabaseClient)
       .from("tester_applications")
-      .delete().eq("id", data.id);
+      .delete()
+      .eq("id", data.id);
     if (error) throw new Error("Kunde inte radera testanmälan.");
     return { ok: true };
   });
@@ -127,11 +143,18 @@ export const retryTesterApplicationEmailsFn = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const db = supabaseAdmin as unknown as SupabaseClient;
-    const { data: row, error } = await db.from("tester_applications")
-      .select("id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at")
-      .eq("id", data.id).single();
+    const { data: row, error } = await db
+      .from("tester_applications")
+      .select(
+        "id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at",
+      )
+      .eq("id", data.id)
+      .single();
     if (error || !row) throw new Error("Anmälan finns inte kvar.");
     const { sendTesterSignupEmails } = await import("@/lib/tester-recruitment-mail.server");
-    const result = await sendTesterSignupEmails(db, row as import("@/lib/tester-recruitment-mail.server").MailApplicant);
+    const result = await sendTesterSignupEmails(
+      db,
+      row as import("@/lib/tester-recruitment-mail.server").MailApplicant,
+    );
     return result;
   });

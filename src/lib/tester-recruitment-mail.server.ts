@@ -94,7 +94,11 @@ function ownerCopy(row: MailApplicant): MailContent {
   };
 }
 
-async function sendWithResend(key: string, mail: MailContent, idempotencyKey: string): Promise<boolean> {
+async function sendWithResend(
+  key: string,
+  mail: MailContent,
+  idempotencyKey: string,
+): Promise<boolean> {
   // No applicant-provided HTML; plain-text body prevents markup injection.
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -126,7 +130,8 @@ async function sendIfNeeded(
   key: string,
   kind: "confirmation" | "owner",
 ): Promise<{ accepted: boolean; failed: boolean }> {
-  const acceptedField = kind === "confirmation" ? "confirmation_accepted_at" : "admin_notice_accepted_at";
+  const acceptedField =
+    kind === "confirmation" ? "confirmation_accepted_at" : "admin_notice_accepted_at";
   if (row[acceptedField]) return { accepted: true, failed: false };
 
   const message = kind === "confirmation" ? confirmationCopy(row) : ownerCopy(row);
@@ -140,7 +145,8 @@ async function sendIfNeeded(
 
   if (!accepted) return { accepted: false, failed: true };
 
-  const { error } = await db.from("tester_applications")
+  const { error } = await db
+    .from("tester_applications")
     .update({ [acceptedField]: new Date().toISOString() })
     .eq("id", row.id)
     .is(acceptedField, null);
@@ -153,14 +159,18 @@ async function sendIfNeeded(
 }
 
 /** Best effort: accepting a signup must not depend on the email provider being online. */
-export async function sendTesterSignupEmails(db: SupabaseClient, row: MailApplicant): Promise<MailDeliveryResult> {
+export async function sendTesterSignupEmails(
+  db: SupabaseClient,
+  row: MailApplicant,
+): Promise<MailDeliveryResult> {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return {
-    configured: false,
-    confirmationAccepted: Boolean(row.confirmation_accepted_at),
-    ownerNoticeAccepted: Boolean(row.admin_notice_accepted_at),
-    failed: false,
-  };
+  if (!apiKey)
+    return {
+      configured: false,
+      confirmationAccepted: Boolean(row.confirmation_accepted_at),
+      ownerNoticeAccepted: Boolean(row.admin_notice_accepted_at),
+      failed: false,
+    };
 
   const [confirmation, owner] = await Promise.all([
     sendIfNeeded(db, row, apiKey, "confirmation"),

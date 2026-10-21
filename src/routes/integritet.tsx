@@ -51,9 +51,9 @@ function PrivacyPage() {
       <ul>
         <li>
           <strong>Kontouppgifter:</strong> e-postadress och krypterat lösenord när du skapar konto.
-          Loggar du in med Google får vi din e-postadress och ditt namn från Google.
-          Vi sparar också om kontot skapades i iOS-appen, Androidappen eller webbappen,
-          för att kunna följa antalet registrerade konton per plattform.
+          Loggar du in med Google får vi din e-postadress och ditt namn från Google. Vi sparar också
+          om kontot skapades i iOS-appen, Androidappen eller webbappen, för att kunna följa antalet
+          registrerade konton per plattform.
         </li>
         <li>
           <strong>Innehåll du skapar:</strong> uppgifter, rutiner, kalenderposter, anteckningar,
@@ -109,23 +109,22 @@ function PrivacyPage() {
 
       <h2>Intresseanmälan som testare</h2>
       <p>
-        Om du anmäler intresse via <Link to="/testa">Bli testare</Link> behandlar vi din
-        mejladress, val av plattform, vilket slags test du vill bidra till och vad du helst
-        vill prova. Vi sparar även om du vill lämna feedback och när du gav ditt samtycke.
-        Inga uppgifter om diagnos eller hälsotillstånd efterfrågas i formuläret.
+        Om du anmäler intresse via <Link to="/testa">Bli testare</Link> behandlar vi din mejladress,
+        val av plattform, vilket slags test du vill bidra till och vad du helst vill prova. Vi
+        sparar även om du vill lämna feedback och när du gav ditt samtycke. Inga uppgifter om
+        diagnos eller hälsotillstånd efterfrågas i formuläret.
       </p>
       <p>
-        Rättslig grund är ditt samtycke. Uppgifterna används endast för att kontakta dig
-        om testplatser, inbjudningar och frivillig återkoppling, inte för marknadsföring.
-        Anmälningarna hålls åtskilda från appkonton och användningsstatistik och kan bara
-        ses av behöriga administratörer. Om automatiska mejl är aktiverade används
-        leverantören Resend för att skicka ett bekräftelsemejl till dig och en avisering
-        till Paceables kontaktadress. För det delas din mejladress samt de testval som
-        behövs för aviseringen med mejlleverantören. Inga diagnosuppgifter ingår.
-        Mejl till vår kontaktadress hanteras enligt vår e-postlösning hos Loopia.
-        Anmälningarna sparas under rekryteringen och den aktuella testperioden,
-        eller tills du ber oss radera dem. Återkalla samtycket eller be om
-        utdrag eller radering via <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
+        Rättslig grund är ditt samtycke. Uppgifterna används endast för att kontakta dig om
+        testplatser, inbjudningar och frivillig återkoppling, inte för marknadsföring. Anmälningarna
+        hålls åtskilda från appkonton och användningsstatistik och kan bara ses av behöriga
+        administratörer. Om automatiska mejl är aktiverade används leverantören Resend för att
+        skicka ett bekräftelsemejl till dig och en avisering till Paceables kontaktadress. För det
+        delas din mejladress samt de testval som behövs för aviseringen med mejlleverantören. Inga
+        diagnosuppgifter ingår. Mejl till vår kontaktadress hanteras enligt vår e-postlösning hos
+        Loopia. Anmälningarna sparas under rekryteringen och den aktuella testperioden, eller tills
+        du ber oss radera dem. Återkalla samtycket eller be om utdrag eller radering via{" "}
+        <a href="mailto:kontakt@paceable.se">kontakt@paceable.se</a>.
       </p>
 
       <h2>Frivillig veckopuls</h2>
@@ -144,9 +143,9 @@ function PrivacyPage() {
         till appen. Du kan ändra eller ta bort den aktuella veckans svar i veckopulsen.
       </p>
       <p>
-        Veckopulsens uppgifter sparas så länge kontot finns eller tills du ber oss radera dem.
-        För tillgång till eller borttagning av äldre veckopulssvar kan du kontakta oss på adressen
-        ovan. Vid radering av hela kontot tas även veckopulsens uppgifter bort.
+        Veckopulsens uppgifter sparas så länge kontot finns eller tills du ber oss radera dem. För
+        tillgång till eller borttagning av äldre veckopulssvar kan du kontakta oss på adressen ovan.
+        Vid radering av hela kontot tas även veckopulsens uppgifter bort.
       </p>
       <h2>Var dina uppgifter lagras</h2>
       <p>
