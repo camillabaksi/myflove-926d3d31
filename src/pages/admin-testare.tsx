@@ -237,8 +237,8 @@ function TesterList() {
         ))}
       </section>
       <p className="text-xs leading-5 text-muted-foreground">
-        {rows.length} intresseanmälningar. Statusarna uppdateras manuellt och bekräftar inte
-        aktiva testare i Google Play eller TestFlight.
+        {rows.length} intresseanmälningar. Statusarna uppdateras manuellt och bekräftar inte aktiva
+        testare i Google Play eller TestFlight.
       </p>
       <section className="rounded-2xl border border-border bg-card p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-3">
