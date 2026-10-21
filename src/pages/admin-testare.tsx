@@ -8,6 +8,7 @@ import { useIsAdmin } from "@/hooks/use-is-admin";
 import {
   listTesterApplicationsFn,
   updateTesterApplicationFn,
+  updateTesterFollowupFn,
   deleteTesterApplicationFn,
   retryTesterApplicationEmailsFn,
   type TesterApplication,
@@ -34,8 +35,10 @@ const focusLabels: Record<TesterApplication["focus"], string> = {
 };
 const statusLabels: Record<TesterApplication["status"], string> = {
   new: "Ny anmälan",
+  contacted: "Kontaktad",
   invited: "Inbjuden",
   testing: "Testar",
+  followed_up: "Följt upp",
   complete: "Avslutad",
 };
 
@@ -61,6 +64,96 @@ export default function AdminTesterApplications() {
     <Layout>
       <TesterList />
     </Layout>
+  );
+}
+
+function FollowupEditor({ row }: { row: TesterApplication }) {
+  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [contacted, setContacted] = useState(row.contacted_at?.slice(0, 10) ?? "");
+  const [started, setStarted] = useState(row.testing_started_at ?? "");
+  const [due, setDue] = useState(row.followup_due_at ?? "");
+  const [last, setLast] = useState(row.last_followup_at ?? "");
+  const [notes, setNotes] = useState(row.admin_notes ?? "");
+  const save = useMutation({
+    mutationFn: () =>
+      updateTesterFollowupFn({
+        data: {
+          id: row.id,
+          contacted_at: contacted || null,
+          testing_started_at: started || null,
+          followup_due_at: due || null,
+          last_followup_at: last || null,
+          admin_notes: notes,
+        },
+      }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["admin-tester-applications"] });
+      setOpen(false);
+    },
+  });
+  return (
+    <div className="mt-3">
+      <button
+        type="button"
+        className="text-sm text-primary underline underline-offset-4"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? "Dölj uppföljning" : "Datum, anteckningar och uppföljning"}
+      </button>
+      {!open && row.followup_due_at && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          Nästa uppföljning: {row.followup_due_at}
+        </p>
+      )}
+      {open && (
+        <div className="mt-3 space-y-3 rounded-xl border bg-card p-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {(
+              [
+                ["Första kontakt", contacted, setContacted],
+                ["Teststart", started, setStarted],
+                ["Nästa uppföljning", due, setDue],
+                ["Senast följt upp", last, setLast],
+              ] as const
+            ).map(([label, value, setter]) => (
+              <label key={label} className="flex flex-col gap-1 text-xs">
+                {label}
+                <input
+                  type="date"
+                  className="min-h-10 rounded-lg border bg-background px-2 text-sm"
+                  value={value}
+                  onChange={(event) => setter(event.target.value)}
+                />
+              </label>
+            ))}
+          </div>
+          <label className="flex flex-col gap-1 text-xs">
+            Intern anteckning (endast admin)
+            <textarea
+              maxLength={2000}
+              rows={3}
+              className="w-full rounded-lg border bg-background p-2 text-sm"
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+            />
+          </label>
+          {save.isError && (
+            <p role="alert" className="text-xs text-destructive">
+              Kunde inte spara. Försök igen.
+            </p>
+          )}
+          <button
+            type="button"
+            disabled={save.isPending}
+            onClick={() => save.mutate()}
+            className="min-h-10 rounded-full bg-primary px-4 text-sm text-primary-foreground disabled:opacity-50"
+          >
+            {save.isPending ? "Sparar…" : "Spara uppföljning"}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -114,8 +207,10 @@ function TesterList() {
   );
   const summary = [
     { label: "Nya", count: rows.filter((row) => row.status === "new").length },
+    { label: "Kontaktade", count: rows.filter((row) => row.status === "contacted").length },
     { label: "Inbjudna", count: rows.filter((row) => row.status === "invited").length },
     { label: "Testar", count: rows.filter((row) => row.status === "testing").length },
+    { label: "Följt upp", count: rows.filter((row) => row.status === "followed_up").length },
     { label: "Avslutade", count: rows.filter((row) => row.status === "complete").length },
   ];
   return (
@@ -133,7 +228,7 @@ function TesterList() {
           description="Separat från registrerade konton och appstatistik. Bara administratörer har tillgång till kontaktuppgifterna."
         />
       </header>
-      <section aria-label="Testarstatus" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <section aria-label="Testarstatus" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {summary.map(({ label, count }) => (
           <div key={label} className="rounded-2xl border bg-card px-4 py-3">
             <p className="text-xs text-muted-foreground">{label}</p>
@@ -234,6 +329,7 @@ function TesterList() {
                     <Mail className="h-4 w-4" aria-hidden="true" /> Kontakta
                   </a>
                 </div>
+                <FollowupEditor key={row.id} row={row} />
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
                   <label className="text-xs" htmlFor={`tester-status-${row.id}`}>
                     Status

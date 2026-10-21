@@ -16,7 +16,12 @@ export type TesterApplication = {
   language: "sv" | "en";
   confirmation_accepted_at: string | null;
   admin_notice_accepted_at: string | null;
-  status: "new" | "invited" | "testing" | "complete";
+  status: "new" | "contacted" | "invited" | "testing" | "followed_up" | "complete";
+  contacted_at: string | null;
+  testing_started_at: string | null;
+  followup_due_at: string | null;
+  last_followup_at: string | null;
+  admin_notes: string;
   created_at: string;
 };
 
@@ -35,7 +40,7 @@ const submission = z.object({
 
 const recordId = z.object({ id: z.string().uuid() });
 const updateStatus = recordId.extend({
-  status: z.enum(["new", "invited", "testing", "complete"]),
+  status: z.enum(["new", "contacted", "invited", "testing", "followed_up", "complete"]),
 });
 
 /** No user account required. The browser never receives the service-role key. */
@@ -99,7 +104,7 @@ export const listTesterApplicationsFn = createServerFn({ method: "GET" })
     const { data, error } = await (supabaseAdmin as unknown as SupabaseClient)
       .from("tester_applications")
       .select(
-        "id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at, status, created_at",
+        "id, email, platform, participation, focus, feedback_willing, language, confirmation_accepted_at, admin_notice_accepted_at, status, created_at, contacted_at, testing_started_at, followup_due_at, last_followup_at, admin_notes",
       )
       .order("created_at", { ascending: false })
       .limit(500);
@@ -118,6 +123,29 @@ export const updateTesterApplicationFn = createServerFn({ method: "POST" })
       .update({ status: data.status, updated_at: new Date().toISOString() })
       .eq("id", data.id);
     if (error) throw new Error("Kunde inte uppdatera testanmälan.");
+    return { ok: true };
+  });
+
+const followupFields = recordId.extend({
+  contacted_at: z.string().date().nullable(),
+  testing_started_at: z.string().date().nullable(),
+  followup_due_at: z.string().date().nullable(),
+  last_followup_at: z.string().date().nullable(),
+  admin_notes: z.string().max(2000),
+});
+
+export const updateTesterFollowupFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => followupFields.parse(input))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { id, ...fields } = data;
+    const { error } = await (supabaseAdmin as unknown as SupabaseClient)
+      .from("tester_applications")
+      .update({ ...fields, updated_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) throw new Error("Kunde inte spara uppföljningen.");
     return { ok: true };
   });
 
