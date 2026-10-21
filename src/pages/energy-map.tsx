@@ -10,8 +10,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
   Area,
   AreaChart,
 } from "recharts";

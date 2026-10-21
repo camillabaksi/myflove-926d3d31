@@ -12,6 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-21 – Böljande diagram i Insikter",
     items: [
+      "Veckostatistik, Träning (steg och vikt) och Mitt batteri (snittenergi per timme) visar mjuka böljande vågor i stället för staplar. Värdena är oförändrade. Ingen publicering.",
       "Mer: verktygen sorteras efter samma livsområden och färger som kalendern – Hem & vardag, Arbete, Studier, Ekonomi, Hälsa & egen tid, Familj & barn – plus Stöd & reflektion och Insikter & historik. Inga länkar eller inställningar har tagits bort. Ingen publicering.",
       "Idag: \"Din dag hittills\" påminner mjukt om fångade tankar som väntar och länkar till Fånga; på kvällen frågar den om du vill titta på dem. Inget flyttas eller raderas automatiskt. Ingen publicering.",
       "Idag: ny lugn ruta \"Din dag hittills\" beskriver det som faktiskt hänt (gjort, gett energi, incheckning) utan poäng eller krav, och en Fånga-genväg ligger bredvid Planera. Ingen publicering.",
