@@ -2188,6 +2188,14 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-tone-blush { --more-tone: var(--more-blush); }
 .pace-more-tone-plain { --more-tone: hsl(var(--secondary)); }
 .pace-more-card-shell { overflow: hidden; border: 1px solid var(--pace-border-warm); border-radius: 1.2rem; background: var(--pace-surface-raised); box-shadow: var(--pace-highlight-top), var(--pace-elevation-1); }
+/* A whisper of the user's existing life-area colour, only for the six area cards.
+   Overall tools keep their neutral surfaces. */
+.pace-more-area[style*="--pace-more-area-color"] .pace-more-card-shell {
+  background: color-mix(in srgb, var(--pace-more-area-color) 9%, var(--pace-surface-raised));
+}
+.pace-more-area[style*="--pace-more-area-color"] .pace-more-card:hover {
+  background: color-mix(in srgb, var(--pace-more-area-color) 13%, var(--pace-surface-raised));
+}
 .pace-more-card { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr) auto; width: 100%; min-height: 5rem; height: auto; gap: 0.85rem; padding: 0.85rem 1rem; border-radius: inherit; text-align: left; color: hsl(var(--foreground)); background: transparent; isolation: isolate; }
 .pace-more-card:hover { background: var(--pace-surface); }
 .pace-more-card .pace-more-icon { border-radius: 50%; color: hsl(var(--foreground)); background: var(--more-tone); width: 2.6rem; height: 2.6rem; }

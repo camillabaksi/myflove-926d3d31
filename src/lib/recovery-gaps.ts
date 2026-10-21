@@ -306,9 +306,13 @@ export function buildRecoveryGaps(input: RecoveryGapsInput): RecoveryGapsResult 
     usedFallback,
     fixedCount,
     gaps,
+    // En hittad pauslucka säger inget om hur full dagen är.
+    // Undvik belastningsbedömningar när aktiviteternas verkliga längd är okänd.
     headline: gaps.length
-      ? "Dagen är ganska full, men allt behöver inte ändras."
-      : "Dagen ser tät ut.",
+      ? capacity === "låg"
+        ? "Det finns plats för en liten paus, i din takt."
+        : "Här finns en stund för återhämtning."
+      : "Jag hittar ingen säker ledig lucka just nu.",
     intro: gaps.length
       ? gaps.length === 1
         ? "Jag hittar ett litet utrymme för återhämtning:"
