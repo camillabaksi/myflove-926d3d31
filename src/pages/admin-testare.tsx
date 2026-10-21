@@ -142,8 +142,8 @@ function TesterList() {
         ))}
       </section>
       <p className="text-sm text-muted-foreground">
-        Totalt {rows.length} intresseanmälningar. Statusen ändras manuellt och betyder inte
-        att testaren är verifierad i Google Play eller TestFlight.
+        Totalt {rows.length} intresseanmälningar. Statusen ändras manuellt och betyder inte att
+        testaren är verifierad i Google Play eller TestFlight.
       </p>
       <p className="text-xs leading-5 text-muted-foreground">
         Antalen visar bara intresseanmälningar. De verifierar inte Googles krav på 12 aktiva testare
