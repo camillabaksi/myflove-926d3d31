@@ -2196,6 +2196,12 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-area[style*="--pace-more-area-color"] .pace-more-card:hover {
   background: color-mix(in srgb, var(--pace-more-area-color) 13%, var(--pace-surface-raised));
 }
+/* Match each life-area icon disc to its existing category colour.
+   This selector excludes profile, overview tools and other cards. */
+.pace-more-area[style*="--pace-more-area-color"] .pace-more-card .pace-more-icon {
+  background: color-mix(in srgb, var(--pace-more-area-color) 20%, var(--pace-surface-raised));
+  color: hsl(var(--foreground));
+}
 .pace-more-card { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr) auto; width: 100%; min-height: 5rem; height: auto; gap: 0.85rem; padding: 0.85rem 1rem; border-radius: inherit; text-align: left; color: hsl(var(--foreground)); background: transparent; isolation: isolate; }
 .pace-more-card:hover { background: var(--pace-surface); }
 .pace-more-card .pace-more-icon { border-radius: 50%; color: hsl(var(--foreground)); background: var(--more-tone); width: 2.6rem; height: 2.6rem; }
