@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Activity, ArrowLeft, ArrowRight, BatteryMedium, Clock, TrendingDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SoftWaveChart from "@/components/soft-wave-chart";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useBatteryLoadTrend } from "@/hooks/use-battery-load-trend";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -60,7 +61,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
         </Button>
       </div>
       <div ref={viewport} id={timelineId} onScroll={updateEdges} role="region" aria-label="Tidslinje för batteri och aktivitetstid" tabIndex={0} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring">
-      <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
+      <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(min(8rem,calc(100cqw-12px)), 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
         if (index < 0) return;
@@ -83,7 +84,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             tabIndex={0}
             aria-label={description}
             title={description}
-            className="w-[min(8rem,calc(100cqw-12px))] shrink-0 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="min-w-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <div aria-hidden="true" className="relative mx-auto h-20 w-full max-w-14 overflow-hidden rounded-xl border border-border bg-background">
               {period.loadMinutes > 0 && <div
@@ -110,6 +111,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
           </div>
         );
       })}
+      </div>
       </div>
       </div>
     </div>
