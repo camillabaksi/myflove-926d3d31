@@ -89,7 +89,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             tabIndex={0}
             aria-label={description}
             title={description}
-            className="min-w-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="w-[min(8rem,calc(100cqw-12px))] shrink-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <span className="mt-2 block break-words text-xs font-medium leading-relaxed text-foreground">
               {period.label}

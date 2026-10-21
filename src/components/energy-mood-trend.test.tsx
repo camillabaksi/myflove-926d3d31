@@ -26,7 +26,8 @@ describe("Energi och mående – periodpresentation", () => {
     expect(items[0]?.querySelectorAll("[data-series]")).toHaveLength(0);
     expect(items[0]?.getAttribute("aria-label")).toContain("inga energisvar");
     expect(items[1]?.getAttribute("aria-label")).toContain("energipåverkan 0 av 100");
-    expect(items[1]?.querySelectorAll('[data-series="energy"]')).toHaveLength(1);
+    // Vågen bryts vid saknade värden: en sammanhängande energidel (0 och 70), aldrig nollad.
+    expect(document.querySelectorAll('[data-chart="wave"] [data-series="energy"]')).toHaveLength(1);
     expect(items[2]?.getAttribute("aria-label")).toContain("mående 50 av 100");
   });
   it("gör datum och båda värdena åtkomliga utan att förlita sig på färger", () => {
