@@ -10,6 +10,12 @@ export const CHANGELOG_UPDATED = "2026-10-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-21 – Böljande diagram i Insikter",
+    items: [
+      "Insikter: Energipåverkan & mående och Batteri & aktivitetstid visas som mjuka böljande vågor i Paceable-färger i stället för staplar. Vågen bryts där underlag saknas, så saknat blir aldrig noll. Värden, beräkningar och skärmläsartexter är oförändrade. Ingen publicering.",
+    ],
+  },
+  {
     title: "2026-10-21 – Lugnare Idag",
     items: [
       "\"Vad påverkar mig idag?\" ligger nu i Logga energi & mående. Filtret är samlat i Fler val, batteriet visar \"Inte incheckad än\" och hälsningen får inget komma efter frågetecken. Rubrikerna i dagens lista har samma stil och undertexten står i linje med titeln. Ingen publicering.",

@@ -1,4 +1,5 @@
 ## 2026-10-21
+- Insikter: Energipåverkan & mående och Batteri & aktivitetstid visas som mjuka böljande vågor i Paceable-färger i stället för staplar. Vågen bryts där underlag saknas, så saknat blir aldrig noll. Värden, beräkningar och skärmläsartexter är oförändrade. Ingen publicering.
 - Idag: "Vad påverkar mig idag?" flyttad in i Logga energi & mående, filtret samlat i Fler val, batteriet visar "Inte incheckad än" och hälsningen får inget komma efter frågetecken. "Tider idag"/"Övrigt idag" har samma dämpade rubrikstil och aktivitetsradernas undertext står i linje med titeln.
 
 ## 2026-10-20 – Ärligare sparning och fullständigare läsningar
