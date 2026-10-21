@@ -57,15 +57,15 @@ export default function EveningCheck() {
       </>}
     </section>
     <Dialog open={open} onOpenChange={value => { setOpen(value); if (!value) setReflection(""); }}>
-      <DialogContent className="pace-evening-ritual max-h-[92dvh] max-w-md overflow-y-auto border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:rounded-[2rem] [&>button]:hidden">
-        <div className="relative min-h-[min(75dvh,630px)] overflow-hidden rounded-[1.8rem] bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 sm:p-7">
-          <div className="flex items-center justify-between gap-2">
+      <DialogContent className="pace-evening-ritual !fixed !inset-0 !left-0 !top-0 !h-[100dvh] !w-screen !max-h-none !max-w-none !translate-x-0 !translate-y-0 overflow-y-auto border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:!inset-auto sm:!left-1/2 sm:!top-1/2 sm:!h-[min(92dvh,820px)] sm:!w-full sm:!max-w-md sm:!-translate-x-1/2 sm:!-translate-y-1/2 sm:rounded-[2rem] [&>button]:hidden">
+        <div className={cn("relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:min-h-full sm:rounded-[1.8rem] sm:p-7", step === 0 && "pace-evening-intro")}>
+          <div className="relative z-10 flex items-center justify-between gap-2">
             <button type="button" onClick={() => step ? setStep(step - 1) : setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/60" aria-label={step ? "Föregående" : "Stäng"}>{step ? <ChevronLeft size={20}/> : <X size={19}/>}</button>
             <span className="text-xs text-[#6D566C]">Kvällsstund · {step + 1} av {screens}</span>
             <button type="button" onClick={() => { setReflection(""); setOpen(false); }} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/60" aria-label="Stäng kvällsstunden"><X size={19}/></button>
           </div>
-          <div className="mt-3 flex gap-1.5" aria-label={`Steg ${step + 1} av ${screens}`}>{Array.from({ length: screens }, (_, index) => <span key={index} className={cn("h-1 flex-1 rounded-full transition-colors duration-300", index <= step ? "bg-[#A585A8]" : "bg-[#E7DDE3]")}/>)}</div>
-          <div key={step} className="animate-in fade-in slide-in-from-right-2 duration-300 motion-reduce:animate-none">
+          <div className="relative z-10 mt-3 flex gap-1.5" aria-label={`Steg ${step + 1} av ${screens}`}>{Array.from({ length: screens }, (_, index) => <span key={index} className={cn("h-1 flex-1 rounded-full transition-colors duration-300", index <= step ? "bg-[#A585A8]" : "bg-[#E7DDE3]")}/>)}</div>
+          <div key={step} className="relative z-10 flex-1 animate-in fade-in slide-in-from-right-2 duration-300 motion-reduce:animate-none">
             {step === 0 && <div className="space-y-6 pt-12 text-center">
               <Moon className="mx-auto text-[#A786A4]" size={36} strokeWidth={1.3}/>
               <DialogTitle className="font-handwritten text-5xl font-normal leading-tight">En stund för dig</DialogTitle>
@@ -75,7 +75,7 @@ export default function EveningCheck() {
             {step === 1 && <div className="space-y-6 pt-10 text-center">
               <DialogTitle className="font-handwritten text-4xl font-normal">Hur känns det efter idag?</DialogTitle>
               <DialogDescription className="text-sm text-[#6D566C]">Det finns inget rätt eller fel. Du behöver inte välja något.</DialogDescription>
-              <div className="grid grid-cols-2 gap-3">{EVENING_ANSWERS.map(option => <button key={option.id} type="button" aria-pressed={answer === option.id} onClick={() => setAnswer(option.id)} className={cn("min-h-28 rounded-[2rem] border p-4 text-sm transition-all duration-300", answer === option.id ? "border-[#A585A8] bg-[#E5D4E5] shadow-md" : "border-transparent bg-white/65")}><span className="mb-2 block text-2xl">{option.emoji}</span>{t(option.label)}</button>)}<button type="button" onClick={() => setAnswer(null)} aria-pressed={answer === null} className="min-h-28 rounded-[2rem] bg-[#EDE6E0] p-4 text-sm">☁️<span className="mt-2 block">Vet inte / hoppa över</span></button></div>
+              <div className="grid grid-cols-2 gap-3">{EVENING_ANSWERS.map(option => <button key={option.id} type="button" aria-pressed={answer === option.id} onClick={() => setAnswer(option.id)} className={cn("pace-evening-mood min-h-28 rounded-[40%_52%_45%_49%] border p-4 text-sm transition-all duration-300", answer === option.id ? "border-[#A585A8] shadow-md ring-2 ring-[#A585A8]/25" : "border-transparent", option.id === "lattare" ? "bg-[#DDE9DC]" : option.id === "tyngre" ? "bg-[#E7D8E4]" : "bg-[#F4DED1]")}><span className="mb-2 block text-2xl">{option.emoji}</span>{t(option.label)}</button>)}<button type="button" onClick={() => setAnswer(null)} aria-pressed={answer === null} className="pace-evening-mood col-span-2 mx-auto min-h-24 w-36 rounded-[45%_50%_45%_48%] bg-[#EDE6E0] p-4 text-sm">☁️<span className="mt-2 block">Vet inte / hoppa över</span></button></div>
             </div>}
             {step === 2 && <div className="space-y-6 pt-10 text-center">
               <DialogTitle className="font-handwritten text-4xl font-normal">Hur är din energi nu?</DialogTitle>
@@ -110,7 +110,7 @@ export default function EveningCheck() {
               <p className="font-handwritten text-2xl">Du har gjort mer än det som syns. Det räknas också.</p>
             </div>}
           </div>
-          <div className="mt-10 space-y-3">
+          <div className="relative z-10 mt-auto space-y-3 pt-8">
             <button type="button" onClick={() => step === screens - 1 ? (setReflection(""), setOpen(false)) : next()} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? "Stäng min kvällsstund" : step === 0 ? "Börja" : "Nästa"}</button>
             {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); if (step === 2) setEveningEnergy(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
             <p className="text-center text-xs text-[#806F7C]">Helt frivilligt. Du kan avsluta när som helst.</p>
