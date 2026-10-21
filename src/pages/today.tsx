@@ -30,6 +30,7 @@ import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
 import { DaySummaryCard } from "@/components/day/day-summary-card";
+import EveningCheck from "@/components/journey/evening-check";
 import { DaySpaceNote } from "@/components/day/day-space-note";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
@@ -113,6 +114,9 @@ export function TodayContent() {
 
       <MyFloveWide className="pt-2">
         <DaySummaryCard />
+      </MyFloveWide>
+      <MyFloveWide className="pt-2">
+        <EveningCheck />
       </MyFloveWide>
       <MyFloveWide className="pace-today-pace pt-2">
         <DaySpaceNote />
