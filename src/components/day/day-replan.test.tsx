@@ -7,7 +7,7 @@ import { DayReplanButton, DayReplanDialog } from "./day-replan";
 const state = vi.hoisted(() => ({ tasks: [] as Task[], apply: vi.fn(), track: vi.fn(), close: vi.fn(), success: vi.fn(), owner: "a", user: "a" }));
 vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: state.tasks, applyDayReplan: state.apply }) }));
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: state.user } }) }));
-vi.mock("@/lib/account-scope", () => ({ isActiveOwner: (id: string) => id === state.owner }));
+vi.mock("@/lib/account-scope", () => ({ isActiveOwner: (id: string) => id === state.owner, getDataOwner: () => state.owner }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s }) }));
 vi.mock("@/lib/analytics", () => ({ track: state.track }));
 vi.mock("sonner", () => ({ toast: { success: state.success, error: vi.fn() } }));
