@@ -9,6 +9,7 @@ export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-notebook-revisions-v1",
   "myflove-routine-occurrence-exceptions",
   "paceable-follow-energy-rhythm",
+  "paceable-evening-reflections-v1",
   "paceable-today-pictograms",
   "myflove-flow-appearance",
   "myflove-personal-preferences",
