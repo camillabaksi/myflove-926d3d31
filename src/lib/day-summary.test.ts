@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { daySummaryLines } from "@/lib/day-summary";
+import { daySummaryLines, waitingCapturesLine } from "@/lib/day-summary";
 
 describe("daySummaryLines", () => {
   it("visar aldrig noll eller krav när inget hänt", () => {
@@ -13,5 +13,13 @@ describe("daySummaryLines", () => {
       "En sak har gett dig energi.",
       "Du har checkat in hur du mår – bra koll på dig själv.",
     ]);
+  });
+});
+
+describe("waitingCapturesLine", () => {
+  it("visas inte när inget väntar", () => expect(waitingCapturesLine(0, 20)).toBeNull());
+  it("dag och kväll", () => {
+    expect(waitingCapturesLine(3, 10)).toBe("Du har 3 fångade tankar väntar på dig när det passar.");
+    expect(waitingCapturesLine(1, 19)).toBe("1 fångad tanke väntar – vill du titta på dem innan dagen är slut?");
   });
 });
