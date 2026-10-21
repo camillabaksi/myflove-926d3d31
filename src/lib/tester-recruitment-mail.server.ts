@@ -30,13 +30,71 @@ export type MailDeliveryResult = {
   failed: boolean;
 };
 
-type MailContent = { to: string; subject: string; text: string };
+type MailContent = { to: string; subject: string; text: string; html: string };
+
+const platformLabels: Record<string, string> = {
+  android: "Android",
+  ios: "iPhone / iPad",
+  both: "Android och iPhone",
+  web: "Webbläsare",
+};
+const participationLabels: Record<string, string> = {
+  technical: "Tekniktest",
+  everyday: "Test i vardagen",
+  both: "Teknik och vardag",
+};
+const focusLabels: Record<string, string> = {
+  planning: "Planering och överblick",
+  energy: "Energi och batteri",
+  capture: "Fånga tankar",
+  recovery: "Återhämtning och pauser",
+  overview: "Få ihop vardagen",
+  general: "Lite av allt",
+};
+
+function escapeHtml(value: string): string {
+  return value.replace(
+    /[&<>"']/g,
+    (char) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[char] ?? char,
+  );
+}
+
+function emailLayout(
+  title: string,
+  paragraphs: string[],
+  action: { label: string; url: string },
+): string {
+  const body = paragraphs
+    .map(
+      (paragraph) =>
+        `<p style="margin:0 0 18px;color:#504656;font-size:16px;line-height:1.65;">${escapeHtml(paragraph)}</p>`,
+    )
+    .join("");
+  return `<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:32px 12px;background:#FAF9F6;font-family:Arial,Helvetica,sans-serif;color:#392B3D;"><table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:560px;margin:0 auto;"><tr><td style="padding:12px 12px 24px;font-size:23px;font-weight:bold;color:#512654;">Paceable <span style="font-size:13px;font-weight:normal;color:#77657A;">Ditt liv, i din takt.</span></td></tr><tr><td style="padding:32px 26px;background:#FFFEFC;border:1px solid #E9E1E5;border-radius:22px;"><h1 style="font-family:Georgia,serif;font-size:30px;line-height:1.2;color:#512654;margin:0 0 24px;">${escapeHtml(title)}</h1>${body}<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#512654;border-radius:24px;"><a href="${escapeHtml(action.url)}" style="display:inline-block;padding:14px 23px;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;">${escapeHtml(action.label)}</a></td></tr></table></td></tr><tr><td style="padding:24px 12px;color:#746979;font-size:12px;line-height:1.6;">Paceable · En sak i taget.<br>Frågor? <a href="mailto:kontakt@paceable.se" style="color:#512654;">kontakt@paceable.se</a></td></tr></table></body></html>`;
+}
 
 function confirmationCopy(row: MailApplicant): MailContent {
   if (row.language === "en") {
     return {
       to: row.email,
       subject: "Thank you for signing up to test Paceable 💜",
+      html: emailLayout(
+        "Thank you for your interest! 💜",
+        [
+          "Hello!",
+          "Thank you for your interest in testing Paceable.",
+          "We have received your application. We will contact you if a testing place becomes available.",
+          "You do not need to do anything else right now.",
+        ],
+        { label: "Visit Paceable", url: "https://www.paceable.se" },
+      ),
       text: [
         "Hello!",
         "",
@@ -56,6 +114,16 @@ function confirmationCopy(row: MailApplicant): MailContent {
   return {
     to: row.email,
     subject: "Tack för att du vill testa Paceable 💜",
+    html: emailLayout(
+      "Tack för ditt intresse! 💜",
+      [
+        "Hej!",
+        "Tack för att du vill hjälpa oss utveckla Paceable.",
+        "Vi har tagit emot din intresseanmälan. Om en testplats finns hör vi av oss med nästa steg.",
+        "Du behöver inte göra något mer just nu. Anmälan ger inte automatiskt tillgång till Google Play eller TestFlight.",
+      ],
+      { label: "Besök Paceable", url: "https://www.paceable.se" },
+    ),
     text: [
       "Hej!",
       "",
@@ -77,13 +145,25 @@ function ownerCopy(row: MailApplicant): MailContent {
   return {
     to: TESTER_OWNER,
     subject: "Ny intresseanmälan – Paceable",
+    html: emailLayout(
+      "Ny intresseanmälan",
+      [
+        "En person vill testa Paceable.",
+        `Mejladress: ${row.email}`,
+        `Plattform: ${platformLabels[row.platform] ?? row.platform}`,
+        `Testtyp: ${participationLabels[row.participation] ?? row.participation}`,
+        `Fokus: ${focusLabels[row.focus] ?? row.focus}`,
+        `Vill svara på frågor: ${row.feedback_willing ? "Ja" : "Nej"}`,
+      ],
+      { label: "Visa anmälningar", url: "https://www.paceable.se/admin-testare" },
+    ),
     text: [
       "En person har anmält intresse för att testa Paceable.",
       "",
       `Mejladress: ${row.email}`,
-      `Plattform: ${row.platform}`,
-      `Testtyp: ${row.participation}`,
-      `Fokus: ${row.focus}`,
+      `Plattform: ${platformLabels[row.platform] ?? row.platform}`,
+      `Testtyp: ${participationLabels[row.participation] ?? row.participation}`,
+      `Fokus: ${focusLabels[row.focus] ?? row.focus}`,
       `Vill svara på frågor: ${row.feedback_willing ? "Ja" : "Nej"}`,
       "",
       "Se anmälan och uppdatera status här:",
@@ -112,6 +192,7 @@ async function sendWithResend(
       to: [mail.to],
       subject: mail.subject,
       text: mail.text,
+      html: mail.html,
     }),
     signal: AbortSignal.timeout(8000),
   });
