@@ -1,5 +1,5 @@
 ## 2026-10-21
-- Idag: "Vad påverkar mig idag?" flyttad in i Logga energi & mående, filtret samlat i Fler val, batteriet visar "Inte incheckad än" och hälsningen får inget komma efter frågetecken.
+- Idag: "Vad påverkar mig idag?" flyttad in i Logga energi & mående, filtret samlat i Fler val, batteriet visar "Inte incheckad än" och hälsningen får inget komma efter frågetecken. "Tider idag"/"Övrigt idag" har samma dämpade rubrikstil och aktivitetsradernas undertext står i linje med titeln.
 
 ## 2026-10-20 – Ärligare sparning och fullständigare läsningar
 - Pace-chattar: meddelanden som inte går att spara markeras tydligt med återförsök i stället för att se sparade ut; texten läggs tillbaka i rutan vid fel. Samtal och meddelanden hämtas i omgångar så äldre historik inte klipps bort. Stop-pausen avbryter aldrig samtalet vid sparfel.
