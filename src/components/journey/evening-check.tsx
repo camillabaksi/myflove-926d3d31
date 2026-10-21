@@ -64,15 +64,15 @@ export default function EveningCheck() {
       </>}
     </section>
     <Dialog open={open} onOpenChange={value => { setOpen(value); if (!value) setReflection(""); }}>
-      <DialogContent className="pace-evening-ritual !fixed !inset-0 !left-0 !top-0 !h-[100dvh] !w-screen !max-h-none !max-w-none !translate-x-0 !translate-y-0 overflow-y-auto border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:!inset-auto sm:!left-1/2 sm:!top-1/2 sm:!h-[min(92dvh,820px)] sm:!w-full sm:!max-w-md sm:!-translate-x-1/2 sm:!-translate-y-1/2 sm:rounded-[2rem] [&>button]:hidden">
-        <div className={cn("relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:min-h-full sm:rounded-[1.8rem] sm:p-7", step === 0 && "pace-evening-intro", step === 5 && "pace-evening-outro")}>
+      <DialogContent className="pace-evening-ritual !fixed !inset-0 !left-0 !top-0 !h-[100dvh] !w-screen !max-h-none !max-w-none !translate-x-0 !translate-y-0 overflow-hidden border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:!inset-auto sm:!left-1/2 sm:!top-1/2 sm:!h-[min(92dvh,820px)] sm:!w-full sm:!max-w-md sm:!-translate-x-1/2 sm:!-translate-y-1/2 sm:rounded-[2rem] [&>button]:hidden">
+        <div className={cn("relative flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:min-h-0 sm:rounded-[1.8rem] sm:p-7", step === 0 && "pace-evening-intro", step === 5 && "pace-evening-outro")}>
           <div className="relative z-10 flex items-center justify-between gap-2">
             <button type="button" onClick={() => step ? setStep(step - 1) : setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/75 text-[#512654]" aria-label={step ? "Föregående" : "Stäng"}>{step ? <ChevronLeft size={20}/> : <X size={19}/>}</button>
             <span className={cn("text-xs", step === 0 ? "text-white" : "text-[#6D566C]")}>Kvällsstund · {step + 1} av {screens}</span>
             {step > 0 ? <button type="button" onClick={() => { setReflection(""); setOpen(false); }} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/75 text-[#512654]" aria-label="Stäng kvällsstunden"><X size={19}/></button> : <span className="h-11 w-11" aria-hidden="true" />}
           </div>
           <div className="relative z-10 mt-3 flex gap-1.5" aria-label={`Steg ${step + 1} av ${screens}`}>{Array.from({ length: screens }, (_, index) => <span key={index} className={cn("h-1 flex-1 rounded-full transition-colors duration-300", index <= step ? "bg-[#A585A8]" : "bg-[#E7DDE3]")}/>)}</div>
-          <div key={step} className="relative z-10 flex-1 animate-in fade-in slide-in-from-right-2 duration-300 motion-reduce:animate-none">
+          <div key={step} className="relative z-10 shrink-0 flex-1 animate-in fade-in slide-in-from-right-2 duration-300 motion-reduce:animate-none">
             {step === 0 && <div className="space-y-6 pt-12 text-center">
               <Moon className="mx-auto text-[#FFF2EE]" size={36} strokeWidth={1.3}/>
               <DialogTitle className="font-handwritten text-5xl font-normal leading-tight">En stund för dig</DialogTitle>
