@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useUser } from "@clerk/react";
-import { Feather, History, Save, X } from "lucide-react";
+import { Feather, History, Save, X, Sparkles, Heart, BriefcaseBusiness, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,9 +32,10 @@ export function DaySpaceNote({ compact = false }: { compact?: boolean }) {
       <Button ref={opener} variant="ghost" className="min-h-11 max-w-full gap-2 whitespace-normal text-left text-muted-foreground" onClick={() => { setDate(todayISO()); setOpen(true); }}><Feather size={15} aria-hidden />Det som också tog plats</Button>
       <Dialog open={open} onOpenChange={setOpen}><DialogContent className="pace-ds max-h-[85dvh] overflow-y-auto" onCloseAutoFocus={event => { event.preventDefault(); opener.current?.focus(); }}><DialogTitle>Det som också tog plats</DialogTitle><DialogDescription>Din privata anteckning för dagen.</DialogDescription>{editor}</DialogContent></Dialog>
     </> : <>
-      <header className="flex min-w-0 items-center justify-between gap-2"><h2 className="pace-editorial-section text-base font-medium text-ink">Det som också tog plats</h2><Button variant="ghost" size="icon" aria-label="Välj tidigare datum" aria-expanded={history} onClick={() => setHistory(value => !value)}><History size={16} aria-hidden /></Button></header>
+      <div className="pace-day-space-card"><header className="flex min-w-0 items-center justify-between gap-2"><h2 className="font-handwritten text-[clamp(1.9rem,6vw,2.5rem)] leading-tight text-ink">Det som också tog plats</h2><Button variant="ghost" size="icon" aria-label="Välj tidigare datum" aria-expanded={history} onClick={() => setHistory(value => !value)}><History size={18} aria-hidden /></Button></header>
       {history && <label className="block text-sm text-muted-foreground">Datum<input aria-label="Anteckningens datum" type="date" value={date} max={currentDay} onChange={event => { if (validSpaceDate(event.target.value) && event.target.value <= currentDay) setDate(event.target.value); }} className="ml-2 min-h-11 max-w-full rounded-lg border border-border bg-card px-2 text-ink" /></label>}
       {editor}
+      </div>
     </>}
   </section>;
 }
@@ -73,14 +74,14 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
     } catch { setMessage("Anteckningen kunde inte sparas. Din text finns kvar; försök igen."); }
   }
   if (!isActiveOwner(owner)) return null;
-  return <div className="min-w-0 space-y-2">
+  return <div className="min-w-0 space-y-3">
     <label htmlFor={id} className="text-sm text-muted-foreground">Vad tog plats utöver din plan?</label>
-    <Textarea id={id} value={text} placeholder="Skriv det som det var…" onChange={event => updateDraft(event.target.value, categories)} className="min-h-24 resize-y border-border/60 bg-card/60 text-ink" />
-    <div className="flex flex-wrap gap-1" aria-label="Valfria kategorier">{SPACE_CATEGORIES.map(category => <Button key={category} variant="ghost" size="sm" aria-pressed={categories.includes(category)} className={`min-h-11 text-xs ${categories.includes(category) ? "bg-lavender/50 text-ink" : "text-muted-foreground"}`} onClick={() => updateDraft(text, categories.includes(category) ? categories.filter(value => value !== category) : [...categories, category])}>{category}</Button>)}</div>
+    <Textarea id={id} value={text} placeholder="Skriv det som det var…" onChange={event => updateDraft(event.target.value, categories)} className="min-h-28 resize-y rounded-[1.5rem] border-[#E8DDE5] bg-white/75 px-4 py-3 text-ink shadow-sm" />
+    <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" aria-label="Valfria kategorier">{SPACE_CATEGORIES.map(category => <Button key={category} variant="ghost" size="sm" aria-pressed={categories.includes(category)} className={`min-h-11 rounded-full px-3 text-sm ${categories.includes(category) ? "bg-lavender/60 text-ink ring-1 ring-[#CDB5D2]" : "bg-white/70 text-muted-foreground"}`} onClick={() => updateDraft(text, categories.includes(category) ? categories.filter(value => value !== category) : [...categories, category])}>{category}</Button>)}</div>
     {store.heads.length > 1 && <div role="status" className="space-y-2 border-l-2 border-border pl-3 text-sm"><p>Det finns flera sparade versioner. Din text är kvar.</p>{store.heads.map((head, index) => <Button key={head.id} variant="outline" className="h-auto min-h-11 w-full whitespace-normal text-left" onClick={() => updateDraft(head.text, head.categories, store.heads.map(value => value.id))}>Använd version {index + 1}: {head.text || "Tom anteckning"}</Button>)}</div>}
-    <div className="flex flex-wrap items-center gap-2"><Button size="sm" variant="outline" disabled={!dirty || (!text.trim() && !store.hasRows)} onClick={save}><Save size={14} aria-hidden className="mr-1" />Spara anteckning</Button><Button variant="ghost" size="sm" disabled={!text.trim() || date !== currentDay} onClick={() => { setHelp(value => !value); setContext(""); setMessage(""); }}>Använd för omplaneringshjälp</Button></div>
+    <div className="space-y-2 border-t border-[#E8DFE5] pt-3"><Button size="sm" variant="outline" disabled={!dirty || (!text.trim() && !store.hasRows)} onClick={save}><Save size={14} aria-hidden className="mr-1" />Spara anteckning</Button><Button variant="ghost" size="sm" className="h-auto min-h-11 w-full justify-start whitespace-normal text-left" disabled={!text.trim() || date !== currentDay} onClick={() => { setHelp(value => !value); setContext(""); setMessage(""); }}><Sparkles size={16} aria-hidden className="mr-2 shrink-0" />Använd för omplaneringshjälp</Button></div>
     <p role="status" className="text-xs text-muted-foreground">{dirty ? "Inte sparat än" : store.hasRows ? store.status : "Bara för dig"}</p>
-    {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) updateDraft("", [], store.heads.map(head => head.id)); }}>Ta bort anteckning</Button>}
+    {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) updateDraft("", [], store.heads.map(head => head.id)); }}><Trash2 size={15} aria-hidden className="mr-2" />Ta bort anteckning</Button>}
     {store.status.includes("misslyckades") && <Button variant="ghost" size="sm" onClick={() => void store.retry()}>Försök synka igen</Button>}
     {help && <div className="space-y-3 rounded-2xl bg-lavender/25 p-3 text-sm">
       <div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setContext(""); setMessage(""); }}><X size={15} aria-hidden /></Button></div>
