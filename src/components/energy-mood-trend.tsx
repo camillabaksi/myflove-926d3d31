@@ -55,6 +55,13 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
         </Button>
       </div>
       <div ref={viewport} id={timelineId} onScroll={updateEdges} className="@container min-w-0 overflow-x-auto snap-x snap-proximity rounded-lg pb-2 focus-visible:outline-2 focus-visible:outline-ring" role="region" aria-label="Tidslinje för energipåverkan och mående" tabIndex={0}>
+      <div className="w-max min-w-full">
+      <div className="px-1 pt-1">
+        <SoftWaveChart series={[
+          { id: "energy", tone: "primary", values: periods.map((p) => p.energy) },
+          { id: "mood", tone: "accent", dashed: true, values: periods.map((p) => p.mood) },
+        ]} />
+      </div>
       <div className="flex w-max min-w-full gap-2 p-1" role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
@@ -83,20 +90,6 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
             title={description}
             className="w-[min(6rem,calc(100cqw-12px))] shrink-0 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
-            <div className="mx-auto flex h-20 w-full max-w-14 items-end justify-center gap-1 rounded-xl border border-border bg-background p-1">
-              {period.energy != null && <span
-                aria-hidden="true"
-                data-series="energy"
-                className="pace-insight-series-energy w-1/2 rounded-md transition-[height] duration-500 motion-reduce:transition-none"
-                style={{ height: `${Math.max(6, period.energy)}%` }}
-              />}
-              {period.mood != null && <span
-                aria-hidden="true"
-                data-series="mood"
-                className="pace-insight-series-striped w-1/2 rounded-md transition-[height] duration-500 motion-reduce:transition-none"
-                style={{ height: `${Math.max(6, period.mood)}%` }}
-              />}
-            </div>
             <span className="mt-2 block text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
