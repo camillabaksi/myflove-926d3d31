@@ -92,7 +92,7 @@ function TesterList() {
           "Automatiska mejl är inte aktiverade ännu. Verifiera paceable.se hos Resend och lägg in RESEND_API_KEY som serverhemlighet i Lovable.",
         );
       } else if (result.failed) {
-        setMailResult("Minst ett mejl har inte bekräftats av mejltjänsten. Utskicket behöver kontrolleras manuellt innan ett nytt försök kan göras, för att undvika dubbla mejl.");
+        setMailResult("Mejlstatus är osäker. Kontrollera utskicket manuellt före nytt försök, så att inget mejl skickas dubbelt.");
       } else {
         setMailResult(
           "Saknade mejl har tagits emot av mejltjänsten. Det bekräftar inte leverans till inkorgen.",
