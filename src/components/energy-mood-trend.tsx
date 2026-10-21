@@ -159,10 +159,10 @@ export default function EnergyMoodTrend() {
         <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background/60 p-[8px] sm:p-[12px]">
           <div className="mb-2 flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground" aria-label="Diagramförklaring">
             <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden="true" className="pace-insight-series-energy h-3 w-3 shrink-0 rounded-sm" /> Energipåverkan · enfärgad
+              <span aria-hidden="true" className="h-1 w-4 shrink-0 rounded-full bg-primary" /> Energipåverkan · hel våg
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden="true" className="pace-insight-series-striped h-3 w-3 shrink-0 rounded-sm" /> Mående · randig
+              <span aria-hidden="true" className="h-1 w-4 shrink-0 rounded-full bg-accent-foreground/70" /> Mående · prickad våg
             </span>
           </div>
           <p className="mb-3 text-sm font-medium text-ink">{RANGE_DESCRIPTIONS[range]} · skala 0–100</p>
@@ -176,7 +176,7 @@ export default function EnergyMoodTrend() {
         </div>
 
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Staplarna visar genomsnitt av dina svar. Ett streck betyder att underlag saknas i
+          Vågorna visar genomsnitt av dina svar. Ett avbrott i vågen eller ett streck betyder att underlag saknas i
           den här vyn; noll är ett registrerat värde.
         </p>
         <details className="text-sm leading-relaxed text-muted-foreground">

@@ -81,8 +81,6 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
         items[next]?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "auto" });
       }}>
       {periods.map((period) => {
-        const loadHeight =
-          period.loadMinutes === 0 ? 0 : Math.max(12, (period.loadMinutes / maxMinutes) * 100);
         const description = `${period.accessibleLabel}: ${period.battery == null ? "ingen batteriincheckning" : `${period.battery} procent batteri`}, ${formatMinutes(period.loadMinutes)} på ${period.loadCount} genomförda aktiviteter, ${period.observedDays} dagar med incheckningar. Tiden kan vara uppskattad.`;
         return (
           <div
@@ -161,10 +159,10 @@ export default function BatteryLoadTrend() {
         <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-background/60 p-[8px] sm:p-[12px]">
           <div className="mb-2 flex flex-wrap gap-x-4 gap-y-2 text-sm text-foreground" aria-label="Diagramförklaring">
             <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden="true" className="pace-insight-series-energy h-3 w-3 shrink-0 rounded-full" /> Batteri · punkt
+              <span aria-hidden="true" className="h-1 w-4 shrink-0 rounded-full bg-primary" /> Batteri · hel våg
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <span aria-hidden="true" className="pace-insight-series-striped h-3 w-3 shrink-0 rounded-sm" /> Aktivitetstid · randig stapel
+              <span aria-hidden="true" className="h-1 w-4 shrink-0 rounded-full bg-accent-foreground/70" /> Aktivitetstid · prickad våg
             </span>
           </div>
           <p className="mb-3 text-sm font-medium text-ink">{RANGE_DESCRIPTIONS[range]}</p>
@@ -190,7 +188,7 @@ export default function BatteryLoadTrend() {
         </div>
 
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Tiden kan vara uppskattad. Ett streck vid batteriet betyder att incheckningar saknas;
+          Tiden kan vara uppskattad. Ett avbrott i vågen eller ett streck betyder att incheckningar saknas;
           noll betyder att du har checkat in på lägsta nivån.
         </p>
         <details className="text-sm leading-relaxed text-muted-foreground">
@@ -199,13 +197,13 @@ export default function BatteryLoadTrend() {
           </summary>
           <div className="space-y-2 pb-2">
             <p>
-              Punkten visar genomsnitt av dina batteriincheckningar på skalan 0–100 %. Stapeln
+              Den hela vågen visar genomsnitt av dina batteriincheckningar på skalan 0–100 %. Den prickade vågen
               visar den sammanlagda aktivitetstiden och blir högre när mer tid har registrerats
               i den valda perioden.
             </p>
             <p>
               Tiden räknas som sluttid minus starttid, eller uppskattat 30 minuter när tider saknas.
-              Stapelns höjd jämförs med den längsta tiden i den valda vyn; den har en annan skala
+              Vågens höjd jämförs med den längsta tiden i den valda vyn; den har en annan skala
               än batteriet.
             </p>
             <p>
