@@ -47,8 +47,14 @@ function TesterPage() {
     setSending(true);
     setError("");
     try {
+      let language: "sv" | "en" = "sv";
+      try {
+        if (window.localStorage.getItem("myflove-landing-language") === "en") language = "en";
+      } catch {
+        // Locale preference is optional.
+      }
       await submitTesterApplicationFn({
-        data: { email, platform, participation, focus, feedback_willing: feedback, adult: true, consent: true, company },
+        data: { email, platform, participation, focus, feedback_willing: feedback, language, adult: true, consent: true, company },
       });
       setSubmitted(true);
     } catch {
