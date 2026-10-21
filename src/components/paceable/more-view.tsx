@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type ComponentType, type MouseEvent, type ReactNode } from "react";
 import { Link } from "wouter";
-import { User, Settings2, Search, X, ChevronRight, ChevronDown, CheckSquare, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History, CalendarDays, MessageCircle, BatteryCharging, Home } from "lucide-react";
+import { User, Settings2, Search, X, ChevronRight, ChevronDown, Wallet, BookOpen, Briefcase, HeartPulse, Users, BarChart3, Sparkles, History, MessageCircle, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MyFloveIcon } from "@/components/myflove";
 import { cn } from "@/lib/utils";
+import { areaColor, type LifeArea } from "@/lib/life-areas";
 
 export type MoreItem = {
   href: string;
@@ -13,25 +14,26 @@ export type MoreItem = {
   icon: ComponentType<{ size?: number; strokeWidth?: number; className?: string }>;
 };
 
-export const MORE_GROUPS = [
-  { title: "Min dag", hrefs: ["/idag", "/kalender", "/quickflow", "/paminnelser", "/pomodoro"] },
-  { title: "Pace och samtal", hrefs: ["/flow", "/assistant", "/flowplan", "/anteckningar"] },
-  { title: "Ork och återhämtning", hrefs: ["/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/daglig-rutin"] },
-  { title: "Hem och vardag", hrefs: ["/matlista", "/shopping", "/stadning"] },
-  { title: "Konto och app", hrefs: ["/installningar", "/friktionsindex"] },
+export type MoreArea = { title: string; area: LifeArea | null; hint: string; icon: typeof User; tone: string; hrefs: readonly string[] };
+/** Livsområden i samma indelning och färg som kalendern. Familj+Barn och Hälsa+Egen tid delar kort. */
+export const MORE_AREAS: readonly MoreArea[] = [
+  { title: "Hem & vardag", area: "vardag", hint: "Dagen, uppgifter och hemmet", icon: Home, tone: "sage", hrefs: ["/idag", "/kalender", "/tasks", "/paminnelser", "/daglig-rutin", "/matlista", "/shopping", "/stadning"] },
+  { title: "Arbete", area: "jobb", hint: "Din arbetsvardag", icon: Briefcase, tone: "blush", hrefs: ["/jobb"] },
+  { title: "Studier", area: "studier", hint: "Lärande i din takt", icon: BookOpen, tone: "peach", hrefs: ["/studyflow"] },
+  { title: "Ekonomi", area: "ekonomi", hint: "Pengar och överblick", icon: Wallet, tone: "sage", hrefs: ["/finances"] },
+  { title: "Hälsa & egen tid", area: "halsa", hint: "Ork, återhämtning och rörelse", icon: HeartPulse, tone: "lavender", hrefs: ["/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/pomodoro"] },
+  { title: "Familj & barn", area: "privat", hint: "Familjens vardag och relationer", icon: Users, tone: "blush", hrefs: ["/familjeflow", "/familj", "/barn", "/relationer"] },
+];
+export const MORE_OVERALL: readonly MoreArea[] = [
+  { title: "Stöd & reflektion", area: null, hint: "Pace, Fånga och anteckningar", icon: MessageCircle, tone: "peach", hrefs: ["/assistant", "/quickflow", "/anteckningar", "/flow", "/flowplan"] },
+  { title: "Insikter & historik", area: null, hint: "Se mönster över tid", icon: BarChart3, tone: "lavender", hrefs: ["/insight", "/historik", "/statistik", "/friktionsindex"] },
+];
+export const MORE_TOOL_GROUPS = [
+  { title: "Konto och app", hrefs: ["/installningar"] },
   { title: "Admin", hrefs: ["/admin", "/admin-statistik"] },
 ] as const;
-export const MORE_TOOL_GROUPS = MORE_GROUPS.slice(4);
-export const MORE_FAMILY = ["/familjeflow", "/barn", "/relationer", "/familj"];
-export const MORE_INSIGHTS = ["/insight", "/historik", "/statistik"];
 export const MORE_LEGACY = ["/flowscore", "/beloningar"];
-const DAILY = [
-  { href: "/tasks", label: "Uppgifter", hint: "Det du behöver göra", icon: CheckSquare, tone: "lavender" },
-  { href: "/finances", label: "Ekonomi", hint: "Pengar och överblick", icon: Wallet, tone: "sage" },
-  { href: "/studyflow", label: "Studier", hint: "Lärande i din takt", icon: BookOpen, tone: "peach" },
-  { href: "/jobb", label: "Arbete", hint: "Din arbetsvardag", icon: Briefcase, tone: "blush" },
-] as const;
-export const MORE_FEATURED_HREFS: string[] = [...DAILY.map((item) => item.href), "/traning"];
+export const MORE_ALL_HREFS: string[] = [...MORE_AREAS, ...MORE_OVERALL, ...MORE_TOOL_GROUPS].flatMap((g) => [...g.hrefs]).concat(MORE_LEGACY);
 
 export function getMoreItems(items: MoreItem[], hrefs: readonly string[], simpleMode: boolean) {
   return hrefs.flatMap((href) => {
@@ -89,7 +91,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const content = <>
       {compact && <span aria-hidden className="pace-more-card-tint"><Sprig /></span>}
       <MyFloveIcon icon={Icon} size="md" className="pace-more-icon" />
-      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label === "Pace och samtal" ? "Pace & samtal" : label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
+      <span className="pace-more-card-copy"><span className="pace-more-card-title">{t(label)}</span><span className="pace-more-muted pace-more-card-hint">{t(hint)}</span></span>
       {group && expanded ? <ChevronDown className="pace-more-arrow" aria-hidden /> : <ChevronRight className="pace-more-arrow" aria-hidden />}
       {!compact && group !== "legacy" && <Sprig className="pace-more-wide-decor" />}
     </>;
@@ -102,25 +104,15 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
   function section(title: string, content: ReactNode) {
     return <section className="pace-more-section"><h2>{t(title)}</h2>{content}</section>;
   }
-  const family = visible(MORE_FAMILY), insights = visible(MORE_INSIGHTS), legacy = visible(MORE_LEGACY);
-  const groupMeta: Record<string, { icon: typeof User; tone: string; hint: string }> = {
-    "Min dag": { icon: CalendarDays, tone: "lavender", hint: "Din dag i din takt" },
-    "Pace och samtal": { icon: MessageCircle, tone: "peach", hint: "Samtal och anteckningar" },
-    "Ork och återhämtning": { icon: BatteryCharging, tone: "sage", hint: "Batteri, återhämtning och personliga stöd" },
-    "Hem och vardag": { icon: Home, tone: "blush", hint: "Vardagen hemma" },
+  const groupCard = (g: MoreArea) => {
+    const entries = visible(g.hrefs);
+    if (!entries.length) return null;
+    const content = entries.length === 1 && g.area
+      ? card(g.title, g.hint, g.icon, g.tone, entries[0].href)
+      : card(g.title, g.hint, g.icon, g.tone, undefined, g.title, rows(entries));
+    return <div key={g.title} className="pace-more-area" style={g.area ? { borderInlineStart: `3px solid ${areaColor(g.area)}`, borderRadius: "1.5rem" } : undefined}>{content}</div>;
   };
-  const groupCard = (title: string, compact = false) => {
-    const group = MORE_GROUPS.find((entry) => entry.title === title);
-    const meta = groupMeta[title];
-    const entries = group ? visible(group.hrefs) : [];
-    return group && meta && entries.length ? card(title, meta.hint, meta.icon, meta.tone, undefined, `direct-${title}`, rows(entries), compact, compact) : null;
-  };
-  const minDag = groupCard("Min dag", true), hemVardag = groupCard("Hem och vardag", true), ork = groupCard("Ork och återhämtning"), flowSamtal = groupCard("Pace och samtal");
-  const dailyExpansion = (title: string) => {
-    const group = MORE_GROUPS.find((entry) => entry.title === title);
-    const entries = group ? visible(group.hrefs) : [];
-    return entries.length > 0 && open.includes(`direct-${title}`) ? <div id={`pace-more-group-direct-${title}`} className="pace-more-expanded col-span-full min-w-0" role="region" aria-label={t(title)}>{rows(entries)}</div> : null;
-  };
+  const areas = MORE_AREAS.map(groupCard).filter(Boolean), overall = MORE_OVERALL.map(groupCard).filter(Boolean), legacy = visible(MORE_LEGACY);
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
@@ -131,22 +123,8 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     {query.trim() ? <section aria-label={t("Sökresultat")}>{results.length ? rows(results) : <p className="pace-more-muted">{t("Hittade inget som matchar")} ”{query}”.</p>}</section> : <>
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
       <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} />{t("Inställningar")}</Link>
-      {(visible(DAILY.map((item) => item.href)).length > 0 || minDag || hemVardag) && section("MIN VARDAG", <>
-        <div className="pace-more-daily">
-          {DAILY.filter((item) => visible([item.href]).length).map((item) => <div key={item.href}>{card(item.label, item.hint, item.icon, item.tone, item.href, undefined, undefined, true)}</div>)}
-          {minDag}
-          {hemVardag}
-          {dailyExpansion("Min dag")}
-          {dailyExpansion("Hem och vardag")}
-        </div>
-      </>)}
-      {(visible(["/traning"]).length > 0 || ork) && section("HÄLSA & VÄLMÅENDE", <>
-        {visible(["/traning"]).length > 0 && card("Träning och rörelse", "Rörelse på dina villkor", HeartPulse, "lavender", "/traning")}
-        {ork}
-      </>)}
-      {flowSamtal && section("STÖD & SAMTAL", flowSamtal)}
-      {family.length > 0 && section("FAMILJ & RELATIONER", card("Familj", "Familjens vardag", Users, "sage", undefined, "family", rows(family)))}
-      {insights.length > 0 && section("ÖVERBLICK & INSIKTER", card("Insikter och historik", "Se mönster över tid", BarChart3, "lavender", undefined, "insights", rows(insights)))}
+      {areas.length > 0 && section("DINA LIVSOMRÅDEN", <div className="grid gap-2">{areas}</div>)}
+      {overall.length > 0 && section("ÖVERGRIPANDE", <div className="grid gap-2">{overall}</div>)}
       {section("FLER VERKTYG", <>
         {card("Fler funktioner", "Alla andra verktyg i appen", Sparkles, "lavender", undefined, "tools", MORE_TOOL_GROUPS.map((group) => {
           const entries = visible(group.hrefs);
