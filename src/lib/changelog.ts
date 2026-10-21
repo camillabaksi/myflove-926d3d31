@@ -12,7 +12,7 @@ export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-21 – Lugnare Idag",
     items: [
-      "\"Vad påverkar mig idag?\" ligger nu i Logga energi & mående. Filtret är samlat i Fler val, batteriet visar \"Inte incheckad än\" och hälsningen får inget komma efter frågetecken. Ingen publicering.",
+      "\"Vad påverkar mig idag?\" ligger nu i Logga energi & mående. Filtret är samlat i Fler val, batteriet visar \"Inte incheckad än\" och hälsningen får inget komma efter frågetecken. Rubrikerna i dagens lista har samma stil och undertexten står i linje med titeln. Ingen publicering.",
     ],
   },
   {
