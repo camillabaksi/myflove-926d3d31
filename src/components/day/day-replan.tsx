@@ -23,7 +23,19 @@ export function DayReplanButton({ compact = false, ...props }: DayReplanProps & 
   const { user } = useUser();
   const trigger = useRef<HTMLButtonElement>(null);
   const [openedFor, setOpenedFor] = useState<string | null>(null);
-  useEffect(() => { setOpenedFor(null); }, [user?.id, props.date]);
+  const [spaceContext, setSpaceContext] = useState("");
+  useEffect(() => { setOpenedFor(null); setSpaceContext(""); }, [user?.id, props.date]);
+  useEffect(() => {
+    const openFromNote = (event: Event) => {
+      const detail = (event as CustomEvent<{ owner?: string; date?: string; context?: string }>).detail;
+      if (!detail || !user?.id || detail.owner !== user.id || detail.date !== props.date || props.date !== todayISO() || !isActiveOwner(user.id)) return;
+      const allowed = ["Något oväntat tog tid", "Mycket praktiskt att göra", "Andras behov tog plats", "Många avbrott", "Jag vill ta det varsammare"];
+      setSpaceContext(allowed.includes(detail.context ?? "") ? detail.context! : "");
+      setOpenedFor(user.id);
+    };
+    window.addEventListener("paceable:day-space-replan", openFromNote);
+    return () => window.removeEventListener("paceable:day-space-replan", openFromNote);
+  }, [user?.id, props.date]);
   useEffect(() => {
     if (props.date !== todayISO() || !user?.id || !isActiveOwner(user.id) || typeof window === "undefined") return;
     const url = new URL(window.location.href);
@@ -35,17 +47,17 @@ export function DayReplanButton({ compact = false, ...props }: DayReplanProps & 
   return <>
     <button ref={trigger} type="button" onClick={() => {
       if (!user?.id || !isActiveOwner(user.id)) { toast.error(t("Vänta tills ditt konto har laddats och försök igen.")); return; }
-      setOpenedFor(user.id); track("planning_viewed", { source: "idag" });
+      setSpaceContext(""); setOpenedFor(user.id); track("planning_viewed", { source: "idag" });
     }} className={compact ? "mt-3 flex min-h-11 w-full items-center gap-3 rounded-full px-2 py-2 text-left text-ink hover:bg-mint/40" : "mb-4 flex min-h-16 w-full items-center gap-3 rounded-2xl border border-border/70 bg-mint/40 px-4 py-3 text-left text-ink transition-colors hover:bg-mint/60"}>
       <WandSparkles size={20} className="shrink-0 text-primary" aria-hidden />
       <span className="min-w-0 flex-1"><span className={compact ? "block text-sm font-medium" : "block text-base font-medium"}>{t("Få ihop dagen")}</span>{!compact && <span className="block text-sm text-muted-foreground">{t("Prioritera, fördela och hitta återhämtning")}</span>}</span>
       <ChevronRight size={18} className="shrink-0 text-muted-foreground" aria-hidden />
     </button>
-    {openedFor && openedFor === user?.id && isActiveOwner(openedFor) && <DayReplanDialog key={`${openedFor}:${props.date}`} {...props} ownerId={openedFor} onRestoreFocus={() => trigger.current?.focus()} onClose={() => setOpenedFor(null)} />}
+    {openedFor && openedFor === user?.id && isActiveOwner(openedFor) && <DayReplanDialog key={`${openedFor}:${props.date}`} {...props} ownerId={openedFor} onRestoreFocus={() => trigger.current?.focus()} onClose={() => { setOpenedFor(null); setSpaceContext(""); }} spaceContext={spaceContext} />}
   </>;
 }
 
-export function DayReplanDialog({ date, entries, capacity, calendarReady, calendarError, ownerId, onClose, onRestoreFocus }: DayReplanProps & { ownerId: string; onClose: () => void; onRestoreFocus?: () => void }) {
+export function DayReplanDialog({ date, entries, capacity, calendarReady, calendarError, ownerId, onClose, onRestoreFocus, spaceContext = "" }: DayReplanProps & { ownerId: string; onClose: () => void; onRestoreFocus?: () => void; spaceContext?: string }) {
   const { t } = useLang();
   const { user } = useUser();
   const { tasks, addTask, applyDayReplan } = useTasks();
@@ -115,6 +127,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
         <DialogDescription>{t("Prioritera, fördela och hitta återhämtning. Du väljer vad som passar.")}</DialogDescription>
       </DialogHeader>
     <div className="min-h-0 min-w-0 space-y-5 overflow-y-auto px-5 py-4">
+      {spaceContext && <div className="rounded-2xl bg-lavender/30 p-4 text-sm space-y-1"><p className="font-medium text-ink">Det som också tog plats</p><p className="text-muted-foreground">{spaceContext}</p><p className="text-xs text-muted-foreground">Ett varsamt råd: se om något kan vänta eller delas upp. Bara dina valda ändringar genomförs. Ingen privat anteckning används eller sparas här.</p></div>}
       <div className="rounded-2xl bg-mint/40 p-4 text-sm">
         {capacity === null ? <p>{t("Ingen kapacitet är loggad idag. Du kan planera ändå, utifrån dina tider och egna val.")}</p> : <>
           <label className="flex min-h-11 items-center gap-3"><input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" checked={useCapacity} onChange={event => { setUseCapacity(event.target.checked); refresh(event.target.checked); }} /><span>{t("Utgå från min loggade kapacitet")}: {capacity} %</span></label>

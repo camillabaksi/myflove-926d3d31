@@ -48,11 +48,11 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
   const [parents, setParents] = useState<string[]>(initialDraft.current?.parents ?? []);
   const [dirty, setDirty] = useState(Boolean(initialDraft.current));
   const [help, setHelp] = useState(false);
-  const [consent, setConsent] = useState(false);
+  const [context, setContext] = useState("");
   const [message, setMessage] = useState("");
   const fingerprint = store.heads.map(head => head.id).join("|");
   function updateDraft(nextText: string, nextCategories: SpaceCategory[], nextParents = parents) {
-    setText(nextText); setCategories(nextCategories); setParents(nextParents); setDirty(true); setConsent(false); setMessage("");
+    setText(nextText); setCategories(nextCategories); setParents(nextParents); setDirty(true); setContext(""); setMessage("");
     writeSpaceDraft(owner, date, { text: nextText, categories: nextCategories, parents: nextParents });
   }
   useEffect(() => {
@@ -78,11 +78,19 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
     <Textarea id={id} value={text} placeholder="Skriv det som det var…" onChange={event => updateDraft(event.target.value, categories)} className="min-h-24 resize-y border-border/60 bg-card/60 text-ink" />
     <div className="flex flex-wrap gap-1" aria-label="Valfria kategorier">{SPACE_CATEGORIES.map(category => <Button key={category} variant="ghost" size="sm" aria-pressed={categories.includes(category)} className={`min-h-11 text-xs ${categories.includes(category) ? "bg-lavender/50 text-ink" : "text-muted-foreground"}`} onClick={() => updateDraft(text, categories.includes(category) ? categories.filter(value => value !== category) : [...categories, category])}>{category}</Button>)}</div>
     {store.heads.length > 1 && <div role="status" className="space-y-2 border-l-2 border-border pl-3 text-sm"><p>Det finns flera sparade versioner. Din text är kvar.</p>{store.heads.map((head, index) => <Button key={head.id} variant="outline" className="h-auto min-h-11 w-full whitespace-normal text-left" onClick={() => updateDraft(head.text, head.categories, store.heads.map(value => value.id))}>Använd version {index + 1}: {head.text || "Tom anteckning"}</Button>)}</div>}
-    <div className="flex flex-wrap items-center gap-2"><Button size="sm" variant="outline" disabled={!dirty || (!text.trim() && !store.hasRows)} onClick={save}><Save size={14} aria-hidden className="mr-1" />Spara anteckning</Button><Button variant="ghost" size="sm" disabled={!text.trim() || date !== currentDay} onClick={() => { setHelp(value => !value); setConsent(false); setMessage(""); }}>Använd för omplaneringshjälp</Button></div>
+    <div className="flex flex-wrap items-center gap-2"><Button size="sm" variant="outline" disabled={!dirty || (!text.trim() && !store.hasRows)} onClick={save}><Save size={14} aria-hidden className="mr-1" />Spara anteckning</Button><Button variant="ghost" size="sm" disabled={!text.trim() || date !== currentDay} onClick={() => { setHelp(value => !value); setContext(""); setMessage(""); }}>Använd för omplaneringshjälp</Button></div>
     <p role="status" className="text-xs text-muted-foreground">{dirty ? "Inte sparat än" : store.hasRows ? store.status : "Bara för dig"}</p>
     {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) updateDraft("", [], store.heads.map(head => head.id)); }}>Ta bort anteckning</Button>}
     {store.status.includes("misslyckades") && <Button variant="ghost" size="sm" onClick={() => void store.retry()}>Försök synka igen</Button>}
-    {help && <div className="space-y-2 border-l-2 border-border pl-3 text-sm"><div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setConsent(false); setMessage(""); }}><X size={15} aria-hidden /></Button></div><p className="whitespace-pre-wrap break-words text-muted-foreground">{text}</p><label className="flex min-h-11 items-start gap-2"><input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-primary" /><span>Ta med denna anteckning när Pace hjälper mig att planera om</span></label><p className="text-xs text-muted-foreground">Överföring till Pace är pausad tills skyddet för privata texter har verifierats. Anteckningen stannar hos dig.</p><Button variant="ghost" asChild><a href="/idag?replan=1">Få ihop dagen utan att dela anteckningen</a></Button></div>}
+    {help && <div className="space-y-3 rounded-2xl bg-lavender/25 p-3 text-sm">
+      <div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setContext(""); setMessage(""); }}><X size={15} aria-hidden /></Button></div>
+      <p className="text-muted-foreground">Din anteckning stannar privat. Välj ett allmänt sammanhang om du vill, utan att dela texten.</p>
+      <fieldset className="space-y-2"><legend className="font-medium text-ink">Vad behöver få plats i planeringen?</legend>
+        {["Något oväntat tog tid", "Mycket praktiskt att göra", "Andras behov tog plats", "Många avbrott", "Jag vill ta det varsammare"].map(option => <label key={option} className="flex min-h-11 items-center gap-2 rounded-xl bg-card/80 px-3 py-2"><input type="radio" name={id + "-context"} checked={context === option} onChange={() => setContext(option)} className="h-4 w-4 shrink-0 accent-primary" /><span>{option}</span></label>)}
+      </fieldset>
+      <p className="text-xs text-muted-foreground">{context ? "Du valde: " + context + ". " : ""}Sammanhanget sparas inte i chatthistoriken eller delas med andra. Sammanhanget ger ett varsamt råd i nästa steg, utan att ändra kalendern eller batteriet.</p>
+      <Button variant="outline" type="button" className="min-h-11 w-full whitespace-normal" onClick={() => { if (!isActiveOwner(owner) || date !== todayISO()) return; window.dispatchEvent(new CustomEvent("paceable:day-space-replan", { detail: { owner, date, context } })); setHelp(false); setContext(""); }}>Få ihop dagen – granska förslag</Button>
+    </div>}
     {message && <p role="alert" className="text-sm text-muted-foreground">{message}</p>}
   </div>;
 }
