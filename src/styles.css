@@ -3224,3 +3224,47 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
     background-image: linear-gradient(180deg,rgba(250,247,244,.76),rgba(250,247,244,.89)),url('/images/evening/outro-desktop.webp');
   }
 }
+
+
+/* Kvällsstundens mjuka typografi och taktila stenar. */
+.pace-evening-ritual { font-family: "Nunito", "Quicksand", "Segoe UI", sans-serif; }
+.pace-evening-ritual .font-handwritten { font-family: "Caveat", "Segoe Print", cursive !important; font-weight: 500 !important; line-height: 1.12; }
+.pace-evening-ritual .pace-evening-intro {
+  background-image: linear-gradient(180deg,rgba(38,23,46,.20),rgba(38,23,46,.28)),url('/images/evening/intro-mobile.webp');
+}
+.pace-evening-ritual .pace-evening-intro::after {
+  inset: 0;
+  height: auto;
+  background: rgba(65,36,62,.08);
+  backdrop-filter: blur(1.6px);
+}
+.pace-evening-ritual .pace-evening-outro {
+  background-image: linear-gradient(180deg,rgba(250,247,244,.54),rgba(250,247,244,.65)),url('/images/evening/outro-mobile.webp');
+}
+.pace-evening-stones { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:1.1rem .9rem; justify-items:center; padding: .5rem 0 1rem; }
+.pace-evening-stone {
+  width:100%; min-height:125px; padding:1rem .45rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.35rem;
+  color:#512654; font-size:1rem; font-weight:600; border:2px solid rgba(255,255,255,.75);
+  border-radius: 46% 54% 51% 49% / 53% 45% 55% 47%;
+  box-shadow: inset -12px -13px 22px rgba(77,52,76,.09), inset 8px 10px 16px rgba(255,255,255,.62), 0 10px 20px rgba(81,38,84,.10);
+  animation:pace-stone-arrive .65s both ease-out; transition:transform .25s ease,box-shadow .25s ease;
+}
+.pace-evening-stone:nth-child(2n) { border-radius: 54% 46% 48% 52% / 45% 53% 47% 55%; }
+.pace-evening-stone:last-child { grid-column:1 / -1; max-width:54%; min-height:110px; }
+.pace-evening-stone:active { transform:scale(.97); }
+.pace-evening-stone.is-selected { outline:3px solid #9B79A0; outline-offset:3px; transform:translateY(-3px); }
+.pace-evening-stone-symbol { font-family:"Segoe UI Symbol",sans-serif; font-size:1.7rem; line-height:1.2; }
+.pace-evening-stone-lilac { background:linear-gradient(140deg,#f3e5f1,#dfcee4); }
+.pace-evening-stone-apricot { background:linear-gradient(140deg,#fff0e6,#f2d6c7); }
+.pace-evening-stone-sage { background:linear-gradient(140deg,#edf4e9,#d4e6d9); }
+.pace-evening-stone-lavender { background:linear-gradient(140deg,#f3edf8,#ded5ed); }
+.pace-evening-stone-cream { background:linear-gradient(140deg,#faf6ef,#e9e2da); }
+@keyframes pace-stone-arrive { from {opacity:0;transform:translateY(12px) scale(.96)} to {opacity:1;transform:translateY(0) scale(1)} }
+.pace-evening-energy-range { appearance:none; height:19px; border-radius:999px; background:linear-gradient(90deg,#c7b3db 0%,#e4c8df 50%,#f7d5b9 100%); cursor:pointer; }
+.pace-evening-energy-range::-webkit-slider-thumb { appearance:none; width:31px; height:31px; border-radius:50%; border:4px solid white; background:#9e7eaa; box-shadow:0 2px 8px #7a587555; }
+.pace-evening-energy-range::-moz-range-thumb { width:25px; height:25px; border-radius:50%; border:4px solid white; background:#9e7eaa; }
+@media(min-width:640px) {
+  .pace-evening-ritual .pace-evening-intro { background-image:linear-gradient(180deg,rgba(38,23,46,.20),rgba(38,23,46,.28)),url('/images/evening/intro-desktop.webp'); }
+  .pace-evening-ritual .pace-evening-outro { background-image:linear-gradient(180deg,rgba(250,247,244,.54),rgba(250,247,244,.65)),url('/images/evening/outro-desktop.webp'); }
+}
+@media(prefers-reduced-motion:reduce) { .pace-evening-stone {animation:none;transition:none} }
