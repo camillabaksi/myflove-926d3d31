@@ -3202,3 +3202,25 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Optional optimized image assets: public/images/evening/*.webp.
+   Existing gradients remain visible while the image assets are being uploaded. */
+.pace-evening-ritual .pace-evening-intro {
+  background-image: linear-gradient(180deg,rgba(38,23,46,.20),rgba(38,23,46,.30)),url('/images/evening/intro-mobile.webp');
+  background-size: cover;
+  background-position: center;
+}
+.pace-evening-ritual .pace-evening-outro {
+  background-image: linear-gradient(180deg,rgba(250,247,244,.78),rgba(250,247,244,.90)),url('/images/evening/outro-mobile.webp');
+  background-size: cover;
+  background-position: center;
+}
+@media(min-width: 640px) {
+  .pace-evening-ritual .pace-evening-intro {
+    background-image: linear-gradient(180deg,rgba(38,23,46,.18),rgba(38,23,46,.27)),url('/images/evening/intro-desktop.webp');
+  }
+  .pace-evening-ritual .pace-evening-outro {
+    background-image: linear-gradient(180deg,rgba(250,247,244,.76),rgba(250,247,244,.89)),url('/images/evening/outro-desktop.webp');
+  }
+}
