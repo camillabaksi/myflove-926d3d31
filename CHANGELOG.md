@@ -1,4 +1,5 @@
 ## 2026-10-21
+- Android höjd till 6.7 (versionCode 28) och iOS till 1.5 (byggnummer 17). App-ID:n, domän, ikoner och signering oförändrade. Ingen signerad AAB/IPA byggd i denna miljö; bygget sker i Codemagic. Ingen publicering.
 - Veckostatistik, Träning (steg och vikt) och Mitt batteri (snittenergi per timme) visar mjuka böljande vågor i stället för staplar. Värdena är oförändrade. Ingen publicering.
 - Mer: verktygen sorteras efter samma livsområden och färger som kalendern – Hem & vardag, Arbete, Studier, Ekonomi, Hälsa & egen tid, Familj & barn – plus Stöd & reflektion och Insikter & historik. Inga länkar eller inställningar har tagits bort. Ingen publicering.
 - Idag: "Din dag hittills" påminner mjukt om fångade tankar som väntar och länkar till Fånga; på kvällen frågar den om du vill titta på dem. Inget flyttas eller raderas automatiskt. Ingen publicering.
