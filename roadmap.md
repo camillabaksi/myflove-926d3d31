@@ -1,4 +1,8 @@
 # Roadmap
+## Codemagic-byggen till TestFlight och Play (2026-10-21)
+- [x] Begäran mottagen: kör Codemagic-flödena och publicera ny version i TestFlight och Play med ny ikon, namn och behörigheter.
+- [x] Verifierat att main-grenen har Android 6.6/versionCode 27 (app.myflove.mobile) och iOS 1.4/build 16 (se.myflove.app).
+- [ ] Starta ios-release och android-release: blockerad av att ingen Codemagic-anslutning finns; inväntar Codemagic API-nyckel via säkert formulär. iOS-flödet laddar automatiskt upp till TestFlight; Android-flödet bygger bara signerad AAB — uppladdning till Play Console görs manuellt. Kräver att hemlighetsgruppen paceable_android_signing och integrationen MyFlove ASC finns i Codemagic, och att 27/16 är högre än butikernas senaste nummer.
 ## GitHub pull requests (2026-10-21)
 - [x] Begäran mottagen: lista öppna pull requests och ge råd om åtgärder.
 - [x] Ny GitHub-nyckel sparad via återanslutning; 12 öppna PR:ar hittade i myflove-926d3d31 (inga i övriga fem repon). Råd levererat och godkänt: tio föråldrade PR:ar (176, 177, 146, 141, 130, 98, 97, 96, 81, 79) stängda utan merge 2026-10-21. Kvar öppna: #189 (testarmejl via Resend — inväntar Resend-uppsättning) och #38 (träningsspelare/Morgonstart — inväntar svar om problemen finns kvar i appen). Gamla "MyFloveAugusti"-nyckeln flaggad för radering.
