@@ -7,7 +7,7 @@ Osparade utkast stannar i kontobundet sessionsminne vid dialogstängning, naviga
 
 ## Kontroller
 - Granskarfynd om förlorade utkast, tom första sparning och midnatt rättade.
-- Riktade tester: datum, fri text, konkurrerande versioner, radering med historik, kontobyte, sena skrivningar, samtyckesspärr, lokal kryptering och cloud-manifest.
+- 35 riktade tester i sju filer passerar: datum, fri text, konkurrerande versioner, radering med historik, kontobyte, sena skrivningar, samtyckesspärr, lokal kryptering och cloud-manifest. Senaste automatiska bygge visar build OK.
 - Inloggad webbläsare: syntetisk anteckning sparad lokalt, samma text återläst via Pace-ingången, osparat utkast återläst efter dialogstängning. Alla kontoskrivningar blockerades för att skydda användarens konto.
 - Mobil/dator 320, 390, 768 och 1280 px: ingen horisontell dokumentöverströmning; mobil-/datorbilder granskade. Synkfel i bilderna är avsiktligt framkallade av nätverksspärren, inte verifierad produktionssynk.
 - Läste aktuella familjedelningsfunktioner: den nya anteckningsnyckeln ingår inte i `get_family_shared_data`-funktionens uttryckliga nyckellista. Barnfunktionens aktivitetsschema läser inte user_kv.
