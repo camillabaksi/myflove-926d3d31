@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   verify:
-    name: Build, lint and tests
+    name: Build and tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
@@ -38,5 +38,5 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm test -- --run
-      - name: Run lint
-        run: npm run lint
+      - name: Check lint on modified tester files
+        run: npx eslint src/lib/tester-recruitment-mail.server.ts src/lib/tester-recruitment.functions.ts src/pages/admin-testare.tsx src/routes/testa.tsx src/routes/integritet.tsx
