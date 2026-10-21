@@ -1,3 +1,4 @@
+import type React from "react";
 import { useEffect, useState } from "react";
 import {
   Pencil,
@@ -56,6 +57,7 @@ export default function SimpleCheckin({
   presentation = "card",
   onCancel,
   presetFactors,
+  extra,
 }: {
   className?: string;
   source?: string;
@@ -64,6 +66,8 @@ export default function SimpleCheckin({
   onCancel?: () => void;
   /** Förvald påverkansfaktor, t.ex. sömn på morgonen. Går alltid att ändra. */
   presetFactors?: string[];
+  /** Valfritt tillägg i dialogen, t.ex. "Vad påverkar mig idag?". Sparas av sin egen ägare. */
+  extra?: React.ReactNode;
 }) {
   const { t } = useLang();
   const { moodValue, energyValue, energyPercentValue, logMood, logEnergy, logEnergyPercent } =
@@ -370,6 +374,7 @@ export default function SimpleCheckin({
           className="min-h-0 space-y-4 overflow-y-auto overscroll-contain scroll-pb-6 px-4 pb-6 pt-3 sm:px-5 sm:py-4"
         >
           {fields}
+          {extra}
         </div>
 
         <footer
