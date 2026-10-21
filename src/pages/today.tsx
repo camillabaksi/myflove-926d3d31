@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Link as RouterLink } from "@tanstack/react-router";
-import { CalendarDays, Plus, ChevronDown, NotebookPen, Images, SlidersHorizontal } from "lucide-react";
+import { CalendarDays, Plus, ChevronDown, NotebookPen, Images } from "lucide-react";
 import { useScrollSafeMenu } from "@/components/flow-item-actions";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import IntroTour from "@/components/intro-tour";
 import { CopyDayButton } from "@/components/day/copy-day-dialog";
 import DailyFlowList, { type DailyFlowFilter } from "@/components/day/daily-flow-list";
