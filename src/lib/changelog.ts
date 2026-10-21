@@ -6,9 +6,15 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-20";
+export const CHANGELOG_UPDATED = "2026-10-21";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-21 – Lugnare Idag",
+    items: [
+      "\"Vad påverkar mig idag?\" ligger nu i Logga energi & mående. Filtret är samlat i Fler val, batteriet visar \"Inte incheckad än\" och hälsningen får inget komma efter frågetecken. Ingen publicering.",
+    ],
+  },
   {
     title: "2026-10-20 – Ärligare sparning och fullständigare läsningar",
     items: [
