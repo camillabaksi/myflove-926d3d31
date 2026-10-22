@@ -177,7 +177,7 @@ export function ActivityEnergyPrompt({
           </details>
           <p className="text-xs text-muted-foreground">Energipåverkan sparas på den dag du gjorde aktiviteten, inte automatiskt på idag.</p>
         </fieldset>
-      )
+      )}
       <WhyHint label="vi frågar om energin" className="self-start">
         Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
         och tar energi för just dig. Svaret är alltid frivilligt.
