@@ -869,8 +869,18 @@ export function useReminders() {
 
   const toggleReminder = (id: string) => {
     const before = reminders.find((r) => r.id === id);
+    if (!before) return;
     setReminders(reminders.map((r) => (r.id === id ? { ...r, completed: !r.completed } : r)));
-    if (before && !before.completed) track("reminder_completed", { source: "app" });
+    if (!before.completed) {
+      track("reminder_completed", { source: "app" });
+      // One-off reminders can also be completed from notifications and other
+      // screens, not only from useFlowItems. The source owns this single event.
+      // Recurring instances signal independently for their selected date.
+      // Continuous periods are context, not daily tasks to check off.
+      if ((before.repeat ?? "none") === "none" && !before.canceled && !(before.endDate && !before.time)) {
+        emitActivityDone({ id: `rem-${before.id}`, title: before.title, dueDate: before.date });
+      }
+    }
   };
 
   const deleteReminder = (id: string) => {
