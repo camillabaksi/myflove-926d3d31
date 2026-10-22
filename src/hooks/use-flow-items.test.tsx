@@ -2,7 +2,7 @@ import { beforeEach, describe, it, expect, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { useFlowItems } from "@/hooks/use-flow-items";
 import type { Reminder, Task } from "@/hooks/use-data";
-import { ACTIVITY_DONE_EVENT } from "@/lib/activity-energy-event";
+import { ACTIVITY_DONE_EVENT, emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/flow-items";
 import type { FlowItem } from "@/lib/flow-items";
 
@@ -57,6 +57,26 @@ const isoDaysAgo = (days: number): string => {
 };
 
 describe("useFlowItems – sena uppgifter följer med in i idag", () => {
+  it("delegates an ordinary reminder to the source, producing just one energy prompt", () => {
+    const date = todayISO();
+    reminders = [{ id: "once", title: "Lämna nyckel", date, time: "16:00", completed: false, createdAt: 1, repeat: "none" }];
+    const events: unknown[] = [];
+    const listener = (event: Event) => events.push((event as CustomEvent).detail);
+    window.addEventListener(ACTIVITY_DONE_EVENT, listener);
+    toggleReminder.mockImplementationOnce(() => emitActivityDone({ id: "rem-once", title: "Lämna nyckel", dueDate: date }));
+    try {
+      const { result } = renderHook(() => useFlowItems(date));
+      const selected = result.current.items.find((entry) => entry.id === "rem-once")!;
+      act(() => result.current.toggleItem(selected));
+      expect(toggleReminder).toHaveBeenCalledOnce();
+      expect(toggleReminder).toHaveBeenCalledWith("once");
+      expect(events).toEqual([{ id: "rem-once", title: "Lämna nyckel", dueDate: date }]);
+      expect(setInstanceDone).not.toHaveBeenCalled();
+    } finally {
+      window.removeEventListener(ACTIVITY_DONE_EVENT, listener);
+    }
+  });
+
   it.each(["2026-10-11", "2026-10-12"])(
     "registrerar energisvaret på den genomförda förekomsten %s, inte seriens startdatum",
     (date) => {
