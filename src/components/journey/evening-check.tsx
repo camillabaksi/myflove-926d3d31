@@ -76,9 +76,9 @@ export default function EveningCheck() {
   }
 
   return <>
-    <section aria-label={t("Hur blev dagen?")} data-testid="home-evening-check" className="rounded-3xl border border-border/60 bg-card p-5 shadow-soft">
-      <button type="button" onClick={toggle} aria-expanded={!collapsed} className="flex w-full items-center gap-2 text-left">
-        <h2 className="min-w-0 flex-1 text-base font-semibold text-ink"><span aria-hidden>🌙</span> {t("Hur blev dagen?")}</h2>
+    <section aria-label={t("Hur blev dagen?")} data-testid="home-evening-check" className="rounded-3xl border border-border/60 bg-card px-5 py-4 shadow-soft">
+      <button type="button" onClick={toggle} aria-expanded={!collapsed} className="flex min-h-12 w-full items-center gap-3 text-left">
+        <h2 className="min-w-0 flex-1 text-lg font-semibold leading-snug text-ink"><span aria-hidden>🌙</span> {t("Hur blev dagen?")}</h2>
         <ChevronDown size={18} className={cn("text-muted-foreground transition-transform", collapsed && "-rotate-90")} />
       </button>
       {!collapsed && <>
