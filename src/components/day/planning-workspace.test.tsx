@@ -12,6 +12,7 @@ const model = vi.hoisted(() => ({
   addChildren: vi.fn(),
   syncUser: vi.fn(),
   navigate: vi.fn(),
+  supports: [] as Array<{id:string;strategyId:string;title:string;areaId:"tid";contexts:["vardag"];friction:number;minutes:number;nudges:[];addedAt:number}>,
 }));
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, to, search: _search, ...props }: { children: ReactNode; to: string; search?: unknown }) => (
@@ -23,6 +24,7 @@ vi.mock("@tanstack/react-router", () => ({
   useSearch: () => ({ audience: model.audience, period: model.period }),
 }));
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: model.owner } }) }));
+vi.mock("@/hooks/use-insight", () => ({ useInsightStrategies: () => ({ saved: model.supports }) }));
 vi.mock("@/components/layout", () => ({ default: ({ children }: { children: ReactNode }) => <div>{children}</div> }));
 vi.mock("@/hooks/use-language", () => ({
   useLang: () => ({ t: (text: string) => text, locale: "sv-SE" }),
@@ -56,6 +58,7 @@ beforeEach(() => {
   model.owner = "owner";
   model.audience = "me";
   model.period = "today";
+  model.supports = [];
   model.addTasks.mockReset();
   model.addChildren.mockReset().mockResolvedValue(undefined);
   model.syncUser.mockReset().mockResolvedValue({ id: "owner" });
@@ -66,6 +69,27 @@ const write = (text: string) =>
   });
 
 describe("Plan several activities before saving", () => {
+  it("only turns a saved Insight support into a task after the Planera review and save", async () => {
+    model.supports = [{ id:"s1", strategyId:"time-visible", title:"Gör tiden synlig", areaId:"tid",
+      contexts:["vardag"], friction:2, minutes:5, nudges:[], addedAt:1 }];
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    const supports = screen.getByRole("button", { name: "Mina frivilliga stöd" });
+    expect(supports).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(supports);
+    expect(model.addTasks).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Ta med i utkastet" }));
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Gör tiden synlig");
+    expect(model.addTasks).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "Finns i utkastet" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(model.addTasks).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
+    await waitFor(() => expect(model.addTasks).toHaveBeenCalledTimes(1));
+    expect(model.addTasks.mock.calls[0]?.[0]).toEqual(expect.arrayContaining([
+      expect.objectContaining({ title: "Gör tiden synlig", completed: false }),
+    ]));
+  });
+
   it("saves one reviewed personal batch and retains edited rows across period changes", async () => {
     const page = render(
       <PlanningWorkspace owner="owner" audience="me" requestedPeriod="tomorrow" />,
