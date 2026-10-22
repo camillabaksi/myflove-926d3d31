@@ -58,6 +58,15 @@ describe("Compact day activity presentation", () => {
     expect(completed).toHaveBeenCalledOnce();
   });
 
+  it("shows independent same-titled tasks separately but one source projection only once", () => {
+    const sameTitleDifferentTask: FlowItem = { ...rows[1]!, id: "task-separate" };
+    render(<DailyFlowList presentation="integrated" extraItems={[sameTitleDifferentTask, { ...rows[1]! }, { ...sameTitleDifferentTask }]} />);
+    // Two genuinely separate tasks, even if both were planned for 14:00.
+    expect(screen.getAllByText(rows[1]!.title)).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: `Klarmarkera ${rows[1]!.title}` })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: "Fler val" })).toHaveLength(rows.length + 1);
+  });
+
   it("leaves legacy card presentation as the default", () => {
     const { container } = render(<DailyFlowList />);
     expect(container.querySelectorAll(".shadow-sm")).toHaveLength(rows.length);
