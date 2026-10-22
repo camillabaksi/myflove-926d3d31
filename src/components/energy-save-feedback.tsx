@@ -74,7 +74,11 @@ export default function EnergySaveFeedback() {
             }}
           />
         ) : (
-          t(detail.automaticallyApplied ? "Aktiviteten är sparad. Om du har en tidigare incheckning kan den påverka batteriet automatiskt." : "Sparat i din energihistorik.")
+          t(detail.date && detail.date !== todayISO()
+            ? "Sparat i historiken för valt datum. Dagens batteri påverkas inte."
+            : detail.automaticallyApplied
+              ? "Aktiviteten är sparad. Om du har en tidigare incheckning kan den påverka batteriet automatiskt."
+              : "Sparat i din energihistorik.")
         ),
         duration: canUpdate ? Infinity : 5_000,
         className: "flex-col items-stretch gap-3 space-x-0 rounded-2xl p-4 pr-8 [&>div]:min-w-0",
