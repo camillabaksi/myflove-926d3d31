@@ -32,6 +32,7 @@ import {
   type StrategyNudge,
 } from "@/lib/insight";
 import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
+import { prioritizedInsights, insightEvidenceLabel } from "@/lib/insight-priority";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
 import { useVisitStreak } from "@/hooks/use-visit-streak";
@@ -224,6 +225,8 @@ export default function InsightPage() {
       }),
     [knowledge, totalDays, completedTasks.length, energyLog],
   );
+  const insightsByEvidence = useMemo(() => prioritizedInsights(personal.insights), [personal.insights]);
+  const featuredInsight = insightsByEvidence[0];
 
   useEffect(() => {
     if (demoMode) track("insight_demo_opened", { source: "insight" });
@@ -324,38 +327,115 @@ export default function InsightPage() {
         </header>
 
         {!demoMode && (
-          <section data-testid="insight-personal" className="space-y-5">
-            <div className="min-w-0 space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]">
-              <p className="font-medium">Ditt underlag hittills</p>
-              <p className="text-sm text-muted-foreground">{personal.label}</p>
-              <div aria-hidden="true" className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-primary transition-all duration-700"
-                  style={{ width: `${Math.max(6, personal.level)}%` }}
-                />
-              </div>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Balken speglar hur mycket underlag som finns från din användning av appen.
-                Du behöver inte fylla den för att få stöd.
-              </p>
+          <section data-testid="insight-personal" className="min-w-0 space-y-4">
+            {/* The first screen should answer "what did I learn?" – not score the user. */}
+            <div className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5" data-testid="insight-observations">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Det här har vi lagt märke till</p>
+              {personal.ready && featuredInsight ? (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs text-muted-foreground" data-testid="insight-evidence">
+                    {insightEvidenceLabel(featuredInsight.confidence)}
+                  </p>
+                  <p className="text-base leading-relaxed text-ink" data-testid="insight-featured">{featuredInsight.text}</p>
+                  <p className="text-xs leading-relaxed text-muted-foreground">En observation utifrån dina registreringar – inte en regel om hur du fungerar.</p>
+                </div>
+              ) : (
+                <div data-testid="insight-empty" className="mt-3 space-y-2">
+                  <p className="text-sm leading-relaxed text-foreground">
+                    Här samlar vi försiktiga observationer när det finns tillräckligt med underlag.
+                    Du behöver inte registrera mer än du själv vill.
+                  </p>
+                  <details className="text-sm text-muted-foreground">
+                    <summary className="min-h-11 cursor-pointer py-3 font-medium text-primary">Exempel på vad du kan få syn på</summary>
+                    <ul className="space-y-1.5 pb-2">
+                      {INSIGHT_EXAMPLES.map((example) => <li key={example}>· {example}</li>)}
+                    </ul>
+                  </details>
+                </div>
+              )}
             </div>
 
             <HelpsDrainsCard />
 
-            <EnergyMoodTrend />
+            {insightsByEvidence.length > 1 && (
+              <CollapsibleSection
+                id="insight-more-observations"
+                title="Fler observationer"
+                description="Andra möjliga mönster från dina registreringar"
+                defaultCollapsed
+                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                headingClassName="text-base font-semibold"
+              >
+                <ul data-testid="insight-personal-list" className="space-y-3">
+                  {insightsByEvidence.slice(1).map((insight) => (
+                    <li key={insight.id} className="space-y-1 rounded-2xl bg-secondary/40 p-3">
+                      <p className="text-xs text-muted-foreground">{insightEvidenceLabel(insight.confidence)}</p>
+                      <p className="text-sm leading-relaxed text-ink">{insight.text}</p>
+                    </li>
+                  ))}
+                </ul>
+              </CollapsibleSection>
+            )}
 
+            {personal.ready && personal.areas.length > 0 && (
+              <CollapsibleSection
+                id="insight-strategy-suggestions"
+                title="Förslag att prova"
+                description="Frivilliga strategier – inte slutsatser om dig"
+                defaultCollapsed
+                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                headingClassName="text-base font-semibold"
+              >
+                <p className="text-sm text-muted-foreground">
+                  Några områden kan vara värda att utforska. Du avgör själv om ett förslag passar.
+                </p>
+                <AreaStrategies
+                  areas={personal.areas}
+                  openArea={openArea}
+                  setOpenArea={setOpenArea}
+                  hasStrategy={hasStrategy}
+                  maxFriction={flow.maxFriction}
+                  onAdd={openAdd}
+                />
+              </CollapsibleSection>
+            )}
+
+            <CollapsibleSection
+              id="insight-my-data"
+              title="Mitt underlag"
+              description="Vilka registreringar som ligger bakom observationerna"
+              defaultCollapsed
+              className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+              headingClassName="text-base font-semibold"
+            >
+              <p className="text-sm text-foreground">{personal.label}</p>
+              <dl className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
+                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Aktiva dagar</dt><dd className="font-semibold tabular-nums">{totalDays}</dd></div>
+                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Avslutade uppgifter</dt><dd className="font-semibold tabular-nums">{completedTasks.length}</dd></div>
+                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Energiincheckningar</dt><dd className="font-semibold tabular-nums">{energyLog?.length ?? 0}</dd></div>
+              </dl>
+              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                Detta är antal registreringar, inte ett betyg på dig. Inga slutsatser dras när underlaget är för tunt.
+              </p>
+            </CollapsibleSection>
+
+            <div className="space-y-2 pt-2">
+              <h2 className="text-base font-semibold text-ink">Trender och fördjupning</h2>
+              <p className="text-sm text-muted-foreground">Öppna bara de diagram som hjälper dig just nu.</p>
+            </div>
+            <EnergyMoodTrend />
             <BatteryLoadTrend />
 
             {patterns.ready && (
               <CollapsibleSection
                 id="insight-everyday-patterns"
                 title="Din vardag"
-                description="Det här har Paceable lärt sig av dina egna dagar"
-                data-testid="insight-everyday-patterns"
-                className="min-w-0 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]"
-                headingClassName="font-semibold"
+                description="Möjliga samband utifrån dina egna dagar"
+                defaultCollapsed
+                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                headingClassName="text-base font-semibold"
               >
-                <ul className="mt-3 space-y-2">
+                <ul className="mt-2 space-y-2">
                   {patterns.lines.map((line) => (
                     <li key={line} className="flex items-start gap-2 text-sm text-ink">
                       <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
@@ -364,53 +444,6 @@ export default function InsightPage() {
                   ))}
                 </ul>
               </CollapsibleSection>
-            )}
-
-            {personal.ready ? (
-              <>
-                <ul data-testid="insight-personal-list" className="space-y-3">
-                  {personal.insights.map((i) => (
-                    <li
-                      key={i.id}
-                      className="rounded-2xl border border-border bg-secondary/40 p-[16px] leading-relaxed"
-                    >
-                      {i.text}
-                    </li>
-                  ))}
-                </ul>
-
-                {personal.areas.length > 0 && (
-                  <>
-                    <p className="leading-relaxed">
-                      Utifrån det här kan de här områdena vara relevanta för dig just nu.
-                    </p>
-                    <AreaStrategies
-                      areas={personal.areas}
-                      openArea={openArea}
-                      setOpenArea={setOpenArea}
-                      hasStrategy={hasStrategy}
-                      maxFriction={flow.maxFriction}
-                      onAdd={openAdd}
-                    />
-                  </>
-                )}
-              </>
-            ) : (
-              <div
-                data-testid="insight-empty"
-                className="space-y-3 rounded-3xl border border-border bg-card p-[12px] @[22rem]:p-[20px]"
-              >
-                <p className="leading-relaxed">
-                  Det finns ännu för lite underlag för personliga mönster. Börja gärna med en
-                  incheckning eller en liten uppgift när det passar dig. 💜
-                </p>
-                <p className="text-sm font-medium">Exempel på vad som kan komma längre fram</p>
-                <ul className="space-y-1.5 text-sm text-muted-foreground">
-                  {INSIGHT_EXAMPLES.map((e) => (
-                    <li key={e}>· {e}</li>
-                  ))}
-                </ul>
-              </div>
             )}
           </section>
         )}
