@@ -1,6 +1,6 @@
 import { PacePageHeader } from "@/components/paceable/page-header";
 import { openSignedDocument } from "@/lib/open-signed-document";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useClerk, Show } from "@clerk/react";
 import Layout from "@/components/layout";
@@ -121,6 +121,13 @@ function ChildrenContent() {
     [children, userId],
   );
 
+  const [openWeekFromCalendar, setOpenWeekFromCalendar] = useState(false);
+  useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("vecka") === "1") {
+      setOpenWeekFromCalendar(true);
+      setView("schedule");
+    }
+  }, []);
   const activeChildId = selectedChild ?? myChildren[0]?.id ?? sharedChildren[0]?.id ?? null;
   const activeChild = children.find((c) => c.id === activeChildId) ?? null;
   const isOwner = activeChild?.owner_id === userId;
@@ -299,7 +306,8 @@ function ChildrenContent() {
       {view !== "overview" && activeChild && <div className="space-y-4">
         {view === "profile" && <ChildProfileDetail child={activeChild} canEdit={isOwner} members={members} onLinkAccount={setChildAccount} onBack={() => setView("overview")} onSchedule={() => setView("schedule")} onHelp={() => setView("help")} onUpdate={async (id, d) => { await updateChild(id, { name: d.name, helps: d.helps, avatar: d.avatar }); }} onDelete={deleteChild} />}
         {view === "help" && <div className="flex items-center gap-3"><Button variant="ghost" type="button" onClick={() => setView("profile")}>← {activeChild.name}</Button><span aria-hidden className="text-2xl">{activeChild.avatar || "💜"}</span><h2 className="truncate font-display text-xl font-bold text-ink">{activeChild.name}</h2></div>}
-        {view === "schedule" && <VisualChildSchedule child={activeChild} children={children} items={items} onClose={() => setView("profile")} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />}
+        {view === "schedule" && <div className="flex flex-wrap items-center gap-2"><span className="text-sm font-medium text-muted-foreground">Barnens vecka:</span>{children.map((kid) => <Button key={kid.id} type="button" size="sm" variant={kid.id === activeChild.id ? "default" : "outline"} className="min-h-11 rounded-xl" onClick={() => { setOpenWeekFromCalendar(true); setSelectedChild(kid.id); }}>{kid.name}</Button>)}</div>}
+        {view === "schedule" && <VisualChildSchedule key={activeChild.id} initialMode={openWeekFromCalendar ? "week" : "today"} child={activeChild} children={children} items={items} onClose={() => setView("profile")} addItem={addItem} updateItem={updateItem} toggleItem={toggleItem} deleteItem={deleteItem} uploadDoc={uploadDoc} copyDoc={copyDoc} openDoc={openDoc} />}
         {view === "help" && <FamilySituation key={activeChild.id} selectedChildId={activeChild.id} childrenList={[{ id: activeChild.id, name: activeChild.name, helps: activeChild.helps }]} onSaveHelp={(id, helps) => updateChild(id, { helps })} log={(situationLog ?? []).filter((entry) => entry.childId === activeChild.id || (!entry.childId && entry.who === activeChild.name))} onChangeLog={(update) => setSituationLog((prev) => update(prev ?? []))} />}
         {view === "profile" && <Button variant="link" type="button" onClick={() => setView("details")} className="px-0">Aktiviteter, anteckningar och dokument →</Button>}
       </div>}
