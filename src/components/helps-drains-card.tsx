@@ -3,17 +3,14 @@ import { Leaf, Wind } from "lucide-react";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
 import { buildHelpsDrains, MIN_ANSWERS, type HelpDrainItem } from "@/lib/helps-drains";
 
-function Column({ title, icon: Icon, items, tone, empty }: { title: string; icon: typeof Leaf; items: HelpDrainItem[]; tone: "primary" | "accent"; empty: string }) {
+function Column({ title, icon: Icon, items, tone }: { title: string; icon: typeof Leaf; items: HelpDrainItem[]; tone: "primary" | "accent" }) {
   return (
     <div className="min-w-0 rounded-2xl bg-secondary/40 p-[12px] sm:p-[16px]">
       <h3 className="mb-3 flex items-center gap-2 font-semibold text-ink">
         <Icon size={18} aria-hidden className={tone === "primary" ? "text-primary" : "text-accent-foreground"} />
         {title}
       </h3>
-      {items.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{empty}</p>
-      ) : (
-        <ul className="space-y-3">
+      <ul className="space-y-3">
           {items.map((item) => (
             <li key={item.category} className="min-w-0">
               <div className="flex items-baseline justify-between gap-2 text-sm">
@@ -26,8 +23,7 @@ function Column({ title, icon: Icon, items, tone, empty }: { title: string; icon
               <p className="mt-1 text-xs text-muted-foreground">{item.share} % av {item.answers} svar</p>
             </li>
           ))}
-        </ul>
-      )}
+      </ul>
     </div>
   );
 }
@@ -36,14 +32,29 @@ function Column({ title, icon: Icon, items, tone, empty }: { title: string; icon
 export default function HelpsDrainsCard() {
   const { entries } = useEnergyFlow();
   const { helps, drains } = useMemo(() => buildHelpsDrains(entries), [entries]);
+  const hasPatterns = helps.length > 0 || drains.length > 0;
   return (
     <section className="@container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px]" aria-labelledby="helps-drains-title" data-testid="helps-drains">
-      <h2 id="helps-drains-title" className="font-semibold text-ink">Det som hjälper dig – och det som tar energi</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Ur dina egna svar om hur saker kändes. Ett mönster, inte en regel.</p>
-      <div className="mt-4 grid grid-cols-1 gap-3 @[30rem]:grid-cols-2">
-        <Column title="Ger dig ofta energi" icon={Leaf} tone="primary" items={helps} empty={`Visas när en sorts aktivitet fått minst ${MIN_ANSWERS} svar.`} />
-        <Column title="Tar ofta energi" icon={Wind} tone="accent" items={drains} empty={`Visas när en sorts aktivitet fått minst ${MIN_ANSWERS} svar.`} />
-      </div>
+      <h2 id="helps-drains-title" className="font-semibold text-ink">Vad ger och tar energi?</h2>
+      {hasPatterns ? (
+        <>
+          <p className="mt-1 text-xs text-muted-foreground">Möjliga mönster från dina egna svar.</p>
+          <div className={`mt-3 grid grid-cols-1 gap-3 ${helps.length && drains.length ? "@[30rem]:grid-cols-2" : ""}`}>
+            {helps.length > 0 && <Column title="Ger energi" icon={Leaf} tone="primary" items={helps} />}
+            {drains.length > 0 && <Column title="Tar energi" icon={Wind} tone="accent" items={drains} />}
+          </div>
+          {(helps.length === 0 || drains.length === 0) && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              {helps.length === 0 ? "Inget tydligt mönster för vad som ger energi ännu." : "Inget tydligt mönster för vad som tar energi ännu."}
+            </p>
+          )}
+        </>
+      ) : (
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Inga tydliga mönster ännu. När samma sorts aktivitet har minst {MIN_ANSWERS} svar
+          kan vi börja se vad som brukar hjälpa eller ta energi.
+        </p>
+      )}
     </section>
   );
 }
