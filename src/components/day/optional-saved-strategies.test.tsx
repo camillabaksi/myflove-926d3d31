@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useState, type ReactNode } from "react";
 import OptionalSavedStrategies from "./optional-saved-strategies";
+import { setCollapsed } from "@/lib/collapse-store";
 import type { SavedStrategy } from "@/hooks/use-insight";
 
 const model = vi.hoisted(() => ({
@@ -21,6 +22,7 @@ const strategy = (title: string, profileId?: string): SavedStrategy => ({
 
 beforeEach(() => {
   model.saved = [strategy("Gör tiden synlig"), strategy("Fiktivt demostöd", "demo-01")];
+  setCollapsed(`${window.location.pathname}::optional-saved-strategies`, true, true);
 });
 
 describe("Optional strategy surfaces", () => {
