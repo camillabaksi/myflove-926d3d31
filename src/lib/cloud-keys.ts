@@ -6,6 +6,7 @@
  */
 export const CLOUD_USER_DATA_KEYS = new Set([
   "myflove-day-space-revisions-v1",
+  "paceable-invisible-work-v1",
   "myflove-notebook-revisions-v1",
   "myflove-routine-occurrence-exceptions",
   "paceable-follow-energy-rhythm",

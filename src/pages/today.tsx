@@ -30,6 +30,8 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
 import EveningCheck from "@/components/journey/evening-check";
 import { DaySpaceNote } from "@/components/day/day-space-note";
+import { InvisibleWorkToday } from "@/components/day/invisible-work-today";
+import type { FlowItem } from "@/lib/flow-items";
 
 /** Primär dagsupplevelse: faktisk Capacity, egen dag och en transparent Pace. */
 export function TodayContent() {
@@ -37,6 +39,7 @@ export function TodayContent() {
   const { t, locale } = useLang();
   const { name, hasChosenName, saveName } = useUserProfile();
   const [addOpen, setAddOpen] = useState(false);
+  const [pendingInvisible, setPendingInvisible] = useState<{ id: string; title: string } | null>(null);
   // Även rubrikens rullgardinsmenyer ska inte poppa upp mitt i en skroll.
   const { menuOpen: extraMenuOpen, setMenuOpen: setExtraMenuOpen, triggerProps: extraTriggerProps } = useScrollSafeMenu();
   const [dayFilter, setDayFilter] = useState<DailyFlowFilter>("alla");
@@ -104,7 +107,7 @@ export function TodayContent() {
                   <div className="p-1"><CopyDayButton date={today} shortLabel className="min-h-11 w-full rounded-xl" /></div>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} selectedFilter={dayFilter} showPictograms={todayPictograms} pictogramLibrary="mulberry" />} />
+            </>} selectorTrailingControl={<button type="button" title={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-label={`Bildstöd ${todayPictograms ? "på" : "av"}`} aria-pressed={todayPictograms} onClick={() => setTodayPictograms(v => !v)} className={`inline-flex min-h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${todayPictograms ? "border-primary/40 bg-lavender/60 text-primary" : "border-border bg-card text-muted-foreground"}`}><Images size={18} aria-hidden /></button>} myDay={<><DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false} selectedFilter={dayFilter} showPictograms={todayPictograms} pictogramLibrary="mulberry" onCompleted={(item: FlowItem) => { if (!item.time) setPendingInvisible({ id: item.id, title: item.title }); }} /><InvisibleWorkToday pending={pendingInvisible} onDismiss={() => setPendingInvisible(null)} /></>} />
             <div className="mt-2 space-y-1.5 border-t border-border/50 pt-2"><PlanningEntry compact><DayReplanButton compact date={today} entries={calendarEntries} capacity={dayCapacity.percent} calendarReady={planningReady} calendarError={planningError} /></PlanningEntry><PlanningEntry childrenOnly /></div>
           </div>
         </section>
