@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link as PlanningLink } from "@tanstack/react-router";
+import { PRIMARY_ADD_CHOICES, TODAY_ADD_KIND } from "@/lib/add-entry-choices";
 import { paceEveryday } from "@/components/paceable/design-system";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTasks, useReminders } from "@/hooks/use-data";
@@ -17,10 +19,14 @@ import { CalendarDays, Brain, Bell, CheckSquare } from "lucide-react";
 
 type Kind = "aktivitet" | "handelse" | "paminnelse" | "tanke";
 
+const PRIMARY_ICONS = { task: CheckSquare, event: CalendarDays, reminder: Bell } as const;
 const KINDS: { id: Kind; label: string; hint: string; icon: typeof Brain }[] = [
-  { id: "aktivitet", label: "Aktivitet", hint: "Något du ska göra", icon: CheckSquare },
-  { id: "handelse", label: "Händelse", hint: "Något som händer en tid", icon: CalendarDays },
-  { id: "paminnelse", label: "Påminnelse", hint: "Bli påmind", icon: Bell },
+  ...PRIMARY_ADD_CHOICES.map(choice => ({
+    id: TODAY_ADD_KIND[choice.id],
+    label: choice.label,
+    hint: choice.hint,
+    icon: PRIMARY_ICONS[choice.id],
+  })),
   { id: "tanke", label: "Bara en tanke", hint: "Strukturera sen", icon: Brain },
 ];
 
@@ -259,6 +265,7 @@ export default function QuickAddSheet({
             {t("Spara")}
           </button>
 
+          <PlanningLink to="/planera" search={{ audience: "me", period: "today" }} onClick={() => onOpenChange(false)} className="flex min-h-11 items-center justify-center rounded-xl px-3 text-sm font-medium text-primary underline-offset-4 hover:underline">{t("Planera flera aktiviteter i stället")}</PlanningLink>
           <p aria-live="polite" className="text-center text-xs text-muted-foreground">
             {saved
               ? `${t("Sparat")}: ${saved}`
