@@ -111,12 +111,13 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const planningEntries = (planningDays[date] ?? []).filter(e => !e.parentTaskId || !entries.some(own => own.source === "task" && own.sourceId === e.parentTaskId));
   const monthStats = view === "manad" ? (() => {
     const monthDates = dates.filter(d => d.slice(0, 7) === date.slice(0, 7));
-    const counts = monthDates.map(d => (days[d] ?? []).filter(e => !isFamilyEntry(e) || e.requiresParent === true).length);
+    const counts = monthDates.map(d => (days[d] ?? []).filter(e => !e.periodEnd && (!isFamilyEntry(e) || e.requiresParent === true)).length);
     const total = counts.reduce((a, b) => a + b, 0);
     const active = counts.filter(n => n > 0).length;
     return { total, active, empty: monthDates.length - active };
   })() : null;
-  const selectedDayList = [...myEntries.filter(e => e.time && !e.periodEnd).sort((a, b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0)), ...myEntries.filter(e => !e.time)];
+  const ongoingPeriods = myEntries.filter(e => e.periodEnd);
+  const selectedDayList = [...myEntries.filter(e => e.time && !e.periodEnd).sort((a, b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0)), ...myEntries.filter(e => !e.time && !e.periodEnd)];
   const [familyConfirm, setFamilyConfirm] = useState<{ entries: CalendarEntry[]; action: () => void; duration: number; day: string } | null>(null);
   const [familyAlternatives, setFamilyAlternatives] = useState<{ day: string; duration: number } | null>(null);
   const { tasks, addTask, updateTask } = useTasks();
@@ -423,6 +424,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}</h2>
         </div>
+        {ongoingPeriods.length > 0 && <div className="space-y-1 rounded-xl bg-[#F2EDF5] p-2" aria-label={t("Pågående perioder")}><p className="text-xs font-medium text-[#512654]">{t("Pågående perioder")}</p>{ongoingPeriods.map(entry => <button key={entry.id} type="button" onClick={() => openDetails(entry)} className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg bg-white/70 px-2 text-left text-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><span className="min-w-0 flex-1 truncate">{entry.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {entry.periodEnd?.slice(5)}</span><ChevronRight size={15} className="shrink-0 text-muted-foreground" aria-hidden /></button>)}</div>}
         {selectedDayList.length ? <ul className="space-y-1.5">
           {selectedDayList.slice(0, 3).map(entry => <li key={entry.id}>
             <button type="button" onClick={() => openDetails(entry)} data-calendar-area={calendarArea(entry)} className={cn("w-full text-left", paceEveryday.inset, paceEveryday.row)}>
@@ -432,7 +434,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
               <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
             </button>
           </li>)}
-        </ul> : <p className="py-3 text-sm text-muted-foreground">{t(familyEntries.length > 0 ? "Inga egna aktiviteter planerade. Familjens händelser finns nedan." : "Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
+        </ul> : <p className="py-3 text-sm text-muted-foreground">{t(ongoingPeriods.length > 0 ? "Inga enskilda aktiviteter planerade den här dagen." : familyEntries.length > 0 ? "Inga egna aktiviteter planerade. Familjens händelser finns nedan." : "Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
         {familyEntries.length > 0 && <details className="rounded-xl border border-[#EDE5E9] bg-[#FAF9F6] px-3 py-2"><summary className="min-h-11 cursor-pointer py-2 text-sm text-[#512654]">{t("Familj (visas som stöd)")} · {familyEntries.length}</summary><ul className="mt-1 space-y-1.5">{familyEntries.map(entry => <li key={entry.id}>{blockButton(entry, true)}</li>)}</ul></details>}
         <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
       </section></>}
