@@ -430,7 +430,7 @@ export default function InsightPage() {
             <CollapsibleSection
               id="insight-deeper"
               title="Utforska mer"
-              description="Dina mönster, dina stöd och en valfri fördjupning"
+              description="Mina mönster, mina stöd och valfri fördjupning"
               defaultCollapsed
               className="min-w-0 rounded-3xl border border-border/70 bg-card p-4 @[22rem]:p-5"
               headingClassName="text-base font-semibold"
