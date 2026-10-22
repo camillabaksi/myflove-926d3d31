@@ -21,6 +21,8 @@ vi.mock("@tanstack/react-router", () => ({
     </a>
   ),
   useNavigate: () => model.navigate,
+  useRouterState: ({ select }: { select: (state: { location: { pathname: string } }) => unknown }) =>
+    select({ location: { pathname: window.location.pathname } }),
   useSearch: () => ({ audience: model.audience, period: model.period }),
 }));
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: model.owner } }) }));
