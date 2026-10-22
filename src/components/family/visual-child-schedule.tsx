@@ -20,6 +20,7 @@ import {
   Trash2,
   UserRound,
   ChevronDown,
+  ArrowLeftRight,
   ChevronUp,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -150,6 +151,7 @@ export default function VisualChildSchedule({
   copyDoc,
   openDoc,
   readOnly = false,
+  initialMode = "today",
 }: {
   child: Child;
   children: Child[];
@@ -164,6 +166,7 @@ export default function VisualChildSchedule({
   openDoc: (path: string) => Promise<string>;
   /** Barnets egen vy: bara titta, föräldern administrerar schemat. */
   readOnly?: boolean;
+  initialMode?: "today" | "week";
 }) {
   const { t, locale } = useLang();
   const { openItems: quickItems, absorb } = useQuickflow();
@@ -171,7 +174,7 @@ export default function VisualChildSchedule({
   const [picturePreferences, setPicturePreferences] = useCloudSyncedStorage<Record<string, boolean>>("myflove-child-picture-support", {});
   const showPictograms = picturePreferences[child.id] !== false;
   const [templates, setTemplates] = useCloudSyncedStorage<ChildScheduleTemplate[]>(TEMPLATE_KEY, []);
-  const [mode, setMode] = useState<"week" | "today">("today");
+  const [mode, setMode] = useState<"week" | "today">(initialMode);
   const [viewDate, setViewDate] = useState<string | null>(null);
   const [anchor, setAnchor] = useState(todayISO());
   const [adding, setAdding] = useState(false);
@@ -477,6 +480,7 @@ export default function VisualChildSchedule({
 
   return (
     <section className="pace-journal-child-schedule mx-auto min-h-[70vh] w-full max-w-5xl space-y-4 overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-soft sm:p-5" data-testid="visual-child-schedule">
+      {!readOnly && <a href="/kalender" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-secondary/30 px-3 text-sm font-medium text-primary"><ArrowLeftRight size={16} aria-hidden />Min kalender</a>}
       <header className="flex items-center gap-3 border-b border-border/70 pb-4">
         <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
         <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-primary" aria-hidden>{child.avatar ? <span className="text-2xl">{child.avatar}</span> : <UserRound size={24} />}</span>

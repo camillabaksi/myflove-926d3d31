@@ -437,7 +437,10 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
       </section></>}
     {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
-      <h2 className="px-2 font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")} · v.{isoWeekNumber(new Date(`${date}T12:00:00`))}</h2>
+      <div className="flex flex-wrap items-center justify-between gap-2 px-2">
+        <h2 className="font-display text-base font-medium text-[#512654]">{t("Veckan i korthet")} · v.{isoWeekNumber(new Date(`${date}T12:00:00`))}</h2>
+        <Button type="button" variant="outline" size="sm" className="min-h-11 rounded-xl" onClick={() => navigate("/barn?vecka=1")}><Users size={16} aria-hidden />Barnens vecka<ArrowLeftRight size={14} aria-hidden /></Button>
+      </div>
       {(() => { const active = dates.flatMap(d => days[d] ?? []).filter(e => e.periodEnd && (!isFamilyEntry(e) || familyPreferences.mode !== "mine")); const unique = [...new Map(active.map(e => [e.source === "child" ? `${e.title}:${e.periodEnd}:${e.linkGroup ?? e.sourceId}` : e.sourceId, e])).values()]; return unique.length ? <div className="space-y-1 rounded-xl bg-[#F2EDF5] p-2" aria-label="Perioder under veckan"><p className="text-xs font-medium text-[#512654]">Pågående perioder</p>{unique.map(e => <div key={e.id} className="flex min-h-9 items-center gap-2 rounded-lg bg-white/70 px-2 text-sm"><span className="min-w-0 flex-1 truncate">{e.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {e.periodEnd?.slice(5)}</span></div>)}</div> : null; })()}
       <div className="divide-y divide-[#EDE5E9]">{dates.map(d => {
         const dayEntries = (days[d] ?? []).filter(e => !isFamilyEntry(e) && !e.periodEnd);
