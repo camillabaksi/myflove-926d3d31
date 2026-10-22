@@ -206,6 +206,33 @@ describe("MyFlove Insight", () => {
     expect(savedActions.addTask).not.toHaveBeenCalled();
   });
 
+  it("hittar Mina stöd med ett tryck och kan gå direkt till Planera utan att spara något", () => {
+    state.saved = [
+      { id: "saved-1", strategyId: "time-visible", title: "Gör tiden synlig med timer", areaId: "tid",
+        contexts: ["vardag"], friction: 2, minutes: 5, nudges: [], source: "personal", addedAt: 1 },
+    ];
+    render(<InsightPage />);
+    const shortcut = screen.getByTestId("insight-show-saved-supports");
+    expect(shortcut.textContent).toContain("Mina stöd (1)");
+    expect(screen.getByRole("button", { name: "Utforska mer" })).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(shortcut);
+    expect(screen.getByRole("button", { name: "Utforska mer" })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: "Mina stöd" })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByTestId("insight-saved-supports")).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Använd ett stöd i Planera/ }).getAttribute("to")).toBe("/planera");
+    expect(savedActions.addTask).not.toHaveBeenCalled();
+    expect(savedActions.addStrategy).not.toHaveBeenCalled();
+  });
+
+  it("visar inte någon stödgenväg när enbart fiktiva demostrategier finns", () => {
+    state.saved = [
+      { id: "demo", strategyId: "time-visible", title: "Exempelstöd", areaId: "tid",
+        contexts: ["vardag"], friction: 2, minutes: 5, nudges: [], source: "demo", addedAt: 1 },
+    ];
+    render(<InsightPage />);
+    expect(screen.queryByTestId("insight-show-saved-supports")).toBeNull();
+  });
+
   it("visar ett enda valfritt litet steg utan att skapa något vid förhandsvisning", () => {
     render(<InsightPage />);
     expect(screen.getByText("Dina morgnar brukar fungera.")).toBeTruthy();
