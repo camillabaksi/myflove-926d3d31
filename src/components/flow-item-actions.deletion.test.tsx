@@ -25,7 +25,8 @@ beforeEach(() => { calls.deleteTask.mockReset(); calls.updateTask.mockReset(); c
 
 describe("Delete a day activity by source identity", () => {
   it("edits title, date and time in one step, while keeping optional controls collapsed", () => {
-    render(<FlowItemActions itemId="task-a" showLabel />);
+    const saved = vi.fn();
+    render(<FlowItemActions itemId="task-a" showLabel onSaved={saved} />);
     fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
     const dialog = within(screen.getByRole("dialog"));
     expect(dialog.getByLabelText("Vad gäller det?")).toHaveValue("Ring skolan");
@@ -41,6 +42,7 @@ describe("Delete a day activity by source identity", () => {
       title: "Ring läraren", dueDate: "2026-10-25", time: "10:15",
     }));
     expect(calls.deleteTask).not.toHaveBeenCalled();
+    expect(saved).toHaveBeenCalledTimes(1);
   });
 
   it("keeps existing continuous-period settings available without turning it into a timed task", () => {
