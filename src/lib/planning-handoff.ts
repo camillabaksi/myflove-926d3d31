@@ -8,8 +8,8 @@ export type PlanningAudience = "me" | "children";
  *
  * - Kept only in JS memory, never localStorage/cloud and never an actual task.
  * - Separated by audience and by the currently active account.
- * - Taken (consumed) on return, so a saved or abandoned old draft cannot
- *   silently reappear on a later visit.
+ * - Read on return, then cleared after the page mounts. This stays safe
+ *   under React StrictMode, which may initialize components more than once.
  * - Gone on reload/tab close. This is navigation recovery, not a backup.
  */
 export interface PlanningHandoff {
@@ -31,14 +31,13 @@ function ownerIsCurrent(owner: string): boolean {
   return Boolean(owner) && currentOwner === owner;
 }
 
-export function takePlanningHandoff(owner: string, audience: PlanningAudience): PlanningHandoff | null {
+export function readPlanningHandoff(owner: string, audience: PlanningAudience): PlanningHandoff | null {
   if (!owner) return null;
   if (currentOwner !== owner) {
     handoffs.clear();
     currentOwner = owner;
   }
   const saved = handoffs.get(audience);
-  handoffs.delete(audience);
   return saved ? structuredClone(saved) : null;
 }
 
