@@ -171,7 +171,7 @@ describe("MyFlove Insight", () => {
     expect(savedActions.addStrategy).not.toHaveBeenCalled();
 
     fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
-    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till utan påminnelser" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till som uppgift utan påminnelser" }));
     expect(savedActions.addTask).toHaveBeenCalledTimes(1);
     expect(savedActions.addTask).toHaveBeenCalledWith("Gör tiden synlig med timer", undefined,
       expect.objectContaining({ kind: "uppgift", steps: [] }));
@@ -179,6 +179,22 @@ describe("MyFlove Insight", () => {
     expect(savedActions.addStrategy).toHaveBeenCalledWith(expect.objectContaining({
       strategyId: "time-visible", areaId: "tid",
     }));
+  });
+
+  it("sparar strategi som frivilligt stöd utan att lägga till en uppgift idag", () => {
+    render(<InsightPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Visa ett litet steg att prova" }));
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    const dialog = within(screen.getByRole("dialog"));
+    expect(dialog.getByText("Ingen uppgift och ingen påminnelse skapas.")).toBeTruthy();
+    fireEvent.click(dialog.getByRole("button", { name: "Spara som frivilligt stöd" }));
+    expect(savedActions.addStrategy).toHaveBeenCalledOnce();
+    expect(savedActions.addStrategy).toHaveBeenCalledWith(expect.objectContaining({
+      strategyId: "time-visible",
+      areaId: "tid",
+      nudges: [],
+    }));
+    expect(savedActions.addTask).not.toHaveBeenCalled();
   });
 
   it("visar inget handlingsförslag utan en känd personlig observation", () => {
