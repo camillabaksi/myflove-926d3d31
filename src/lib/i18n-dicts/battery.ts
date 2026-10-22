@@ -1,5 +1,11 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_BATTERY: Record<string, string> = {
+  "Dina manuella energi- och måendeincheckningar. Aktiviteters påverkan visas längre ner.": "Your manual energy and mood check-ins. Activity influences are shown further down.",
+  "Här visas dina incheckningar. Under Vad påverkar min energi? ser du det aktiviteter gett eller tagit. I Historik ser du vad som faktiskt genomfördes.": "Here are your check-ins. Under What affects my energy? you can see what activities gave or drained. History shows what actually happened.",
+  "Öppna Historik": "Open History",
+  "Endast timmar med egna loggningar visas. Tomma timmar betyder att underlag saknas, inte att energin var noll.": "Only hours you logged are shown. Empty hours mean no data, not zero energy.",
+  "Vi behöver återkommande loggningar vid flera tider och minst tre olika dagar innan vi kan föreslå en vanlig energitopp.": "We need repeated check-ins at different hours over at least three days to suggest a typical energy peak.",
+  "dagar med loggningar": "days with check-ins",
   "Energipåverkan sparad": "Energy influence saved",
   "Du har loggat något som tog energi. Uppdatera batteriet om din ork har ändrats.":
     "You logged something that took energy. Update your battery if your energy has changed.",
