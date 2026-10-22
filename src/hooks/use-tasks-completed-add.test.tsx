@@ -12,6 +12,28 @@ vi.mock("@/lib/haptics", () => ({ haptic: vi.fn() }));
 import { useTasks } from "./use-data";
 
 describe("manual completed task creation", () => {
+  it("uses one shared energy event when a planned task is completed and none when reopened", () => {
+    const events: ActivityDoneDetail[] = [];
+    const listener = (event: Event) => events.push((event as CustomEvent<ActivityDoneDetail>).detail);
+    window.addEventListener(ACTIVITY_DONE_EVENT, listener);
+    try {
+      const { result } = renderHook(() => useTasks());
+      act(() => result.current.addTask("Handla", "2026-10-22"));
+      const task = result.current.tasks[0]!;
+      expect(events).toHaveLength(0); // planning itself never changes the battery
+
+      act(() => result.current.toggleTask(task.id));
+      expect(result.current.tasks[0]?.completed).toBe(true);
+      expect(events).toEqual([{ id: `task-${task.id}`, title: "Handla", dueDate: "2026-10-22" }]);
+
+      act(() => result.current.toggleTask(task.id));
+      expect(result.current.tasks[0]?.completed).toBe(false);
+      expect(events).toHaveLength(1);
+    } finally {
+      window.removeEventListener(ACTIVITY_DONE_EVENT, listener);
+    }
+  });
+
   it("asks about a newly completed activity immediately, retaining its id and chosen date", () => {
     const events: ActivityDoneDetail[] = [];
     const listener = (event: Event) => events.push((event as CustomEvent<ActivityDoneDetail>).detail);
