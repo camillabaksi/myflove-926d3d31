@@ -63,17 +63,17 @@ describe("aktivitetens faktiska energipåverkan", () => {
     expect(setHistoryEnergy).toHaveBeenCalledWith("reminder-one", "2026-10-10", "drains_much", {
       id: input.id,
       occurredAt: input.occurredAt,
-    });
+    }, "2026-10-10");
     expect(setTaskActualEnergy).not.toHaveBeenCalled();
     // The instance journal keeps the planned occurrence, while energy is
     // observed on the actual local day (needed for accurate battery feedback).
     expect(announceSavedEnergy).toHaveBeenCalledWith(
       expect.objectContaining({ id: input.id }),
-      dayOf(input.occurredAt),
+      "2026-10-10",
     );
-    expect(dayOf(input.occurredAt)).toBe(todayISO());
-    expect(dayOf(input.occurredAt)).not.toBe("2026-10-10");
-    expect(screen.getByText(/Planerad 2026-10-10 · energin visas för dagen då den registrerades/)).toBeInTheDocument();
+    expect(dayOf(input.occurredAt)).toBe("2026-10-10");
+    expect(screen.getByRole("group", { name: "När gjorde du det?" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Planerad dag (2026-10-10)" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("uses today's local day for an overdue task, without moving its old history record", async () => {
@@ -85,10 +85,45 @@ describe("aktivitetens faktiska energipåverkan", () => {
     expect(factor.strength).toBe(1);
     expect(setHistoryEnergy).toHaveBeenCalledWith(
       "task-overdue", "2026-01-05", "gives",
-      expect.objectContaining({ id: factor.id, occurredAt: factor.occurredAt }),
+      expect.objectContaining({ id: factor.id, occurredAt: factor.occurredAt }), "2026-01-05",
     );
-    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), dayOf(factor.occurredAt));
-    expect(dayOf(factor.occurredAt)).toBe(todayISO());
+    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), "2026-01-05");
+    expect(dayOf(factor.occurredAt)).toBe("2026-01-05");
+  });
+
+  it("can mark an overdue plan done today, allowing today's battery only when selected", async () => {
+    const onClose = vi.fn();
+    render(<ActivityEnergyPrompt item={item("task-shop", "2026-10-10")} onClose={onClose} />);
+    fireEvent.click(screen.getByRole("button", { name: "Idag" }));
+    expect(screen.getByRole("button", { name: "Idag" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Tog lite energi" }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
+    const input = addFactor.mock.calls[0][0];
+    expect(input.strength).toBe(1);
+    expect(dayOf(input.occurredAt)).toBe(todayISO());
+    expect(setHistoryEnergy).toHaveBeenCalledWith("task-shop", "2026-10-10", "drains_little",
+      expect.objectContaining({ id: input.id }), todayISO());
+    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), todayISO());
+  });
+
+  it("can correct an earlier completed activity without duplicating its energy factor", async () => {
+    records = [{
+      key: "task-shop|2026-10-21", sourceId: "task-shop", date: "2026-10-21",
+      energyImpact: "drains_little", energyFactorId: "shop-factor",
+      energyFactorOccurredAt: "2026-10-22T12:09:54.916Z",
+    }];
+    const onClose = vi.fn();
+    render(<ActivityEnergyPrompt item={item("task-shop", "2026-10-21")} onClose={onClose} />);
+    expect(screen.getByRole("button", { name: "Idag" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Planerad dag (2026-10-21)" }));
+    fireEvent.click(screen.getByRole("button", { name: "Tog lite energi" }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
+    const saved = addFactor.mock.calls[0][0];
+    expect(saved.id).toBe("shop-factor");
+    expect(dayOf(saved.occurredAt)).toBe("2026-10-21");
+    expect(setHistoryEnergy).toHaveBeenCalledWith("task-shop", "2026-10-21", "drains_little",
+      expect.objectContaining({ id: "shop-factor" }), "2026-10-21");
+    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), "2026-10-21");
   });
 
   it("keeps an existing energy factor on its original observation date when it is corrected", async () => {
@@ -158,7 +193,7 @@ describe("aktivitetens faktiska energipåverkan", () => {
       "task-one",
       "2026-10-11",
       "gives",
-      expect.objectContaining({ id: "old-factor" }),
+      expect.objectContaining({ id: "old-factor" }), "2026-10-11",
     );
   });
 
@@ -276,5 +311,5 @@ it.each([
   fireEvent.click(screen.getByRole("button", { name: label }));
   await waitFor(() => expect(close).toHaveBeenCalledOnce());
   expect(addFactor).toHaveBeenCalledWith(expect.objectContaining({ direction, strength: 1 }));
-  expect(setHistoryEnergy).toHaveBeenCalledWith("task-shelf", "2026-10-11", history, expect.any(Object));
+  expect(setHistoryEnergy).toHaveBeenCalledWith("task-shelf", "2026-10-11", history, expect.any(Object), "2026-10-11");
 });

@@ -70,6 +70,22 @@ describe("aktiviteters sparade energipåverkan", () => {
     ).toBe("gives");
   });
 
+  it("stores an overdue activity's selected actual day on its original planned occurrence", () => {
+    data.tasks = [{
+      id: "shopping", title: "Handla", dueDate: "2026-10-21",
+      completed: true, completedAt: Date.parse("2026-10-22T12:09:00+02:00"),
+    } as Task];
+    const { result } = renderHook(() => useActivityHistory());
+    const factor = { id: "factor-shopping", occurredAt: "2026-10-21T12:00:00+02:00" };
+    act(() => result.current.setEnergy("task-shopping", "2026-10-21", "drains_little", factor, "2026-10-21"));
+    const instance = result.current.instancesBetween("2026-10-21", "2026-10-22").find(i => i.sourceId === "task-shopping");
+    expect(instance).toMatchObject({
+      date: "2026-10-21", plannedDate: "2026-10-21", actualDate: "2026-10-21",
+      energyImpact: "drains_little", status: "genomford",
+    });
+    expect(result.current.records[0]).toMatchObject({ key: "task-shopping|2026-10-21", actualDate: "2026-10-21", energyFactorId: "factor-shopping" });
+  });
+
   it("visar en odaterad genomförd uppgift på dess faktiska dag utan att ge öppna uppgifter ett påhittat datum", () => {
     data.tasks = [
       {

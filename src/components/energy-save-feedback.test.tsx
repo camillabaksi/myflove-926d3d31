@@ -158,7 +158,8 @@ describe("optional small battery update", () => {
     render(<Host />);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    announce(entry(), dayOf(yesterday)!);
+    announce(entry({ kind: "planerat", note: "Genomförd aktivitet", direction: "drains" }), dayOf(yesterday)!);
+    expect(screen.getByText("Sparat i historiken för valt datum. Dagens batteri påverkas inte.")).toBeVisible();
     expect(screen.queryByRole("button", { name: /Uppdatera/ })).not.toBeInTheDocument();
   });
   it("opens the existing check-in when there is no baseline, without inventing a starting percentage", async () => {

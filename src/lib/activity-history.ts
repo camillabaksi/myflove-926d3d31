@@ -273,11 +273,13 @@ export function recordEnergy(
   energy: ActivityEnergy,
   at = Date.now(),
   factor?: { id: string; occurredAt: string },
+  actualDate?: string,
 ): InstanceRecord[] {
   return upsertRecord(records, sourceId, date, {
     energyImpact: energy,
     energyImpactRecordedAt: at,
     ...(factor ? { energyFactorId: factor.id, energyFactorOccurredAt: factor.occurredAt } : {}),
+    ...(actualDate ? { actualDate } : {}),
   });
 }
 
