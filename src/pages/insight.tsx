@@ -341,10 +341,7 @@ export default function InsightPage() {
               <p className="font-sans text-sm leading-relaxed text-muted-foreground">
                 Se dina egna mönster och hitta ett litet nästa steg.
               </p>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
-                Här samlas sådant du har loggat om energi, mående och aktiviteter. Du väljer
-                själv vad du vill använda.
-              </p>
+
               <div className="mt-2 [&_[role=region]]:max-w-full">
                 <WhyHint label="insikter">
                   När du loggar över tid kan Pace hjälpa dig upptäcka vad som brukar ge eller ta
@@ -423,13 +420,22 @@ export default function InsightPage() {
 
             <HelpsDrainsCard />
 
+            <CollapsibleSection
+              id="insight-deeper"
+              title="Utforska mer"
+              description="Fler observationer, strategier, diagram och underlag – bara om du vill"
+              defaultCollapsed
+              className="min-w-0 rounded-3xl border border-border/70 bg-card p-4 @[22rem]:p-5"
+              headingClassName="text-base font-semibold"
+            >
+              <div className="space-y-3" data-testid="insight-deeper-content">
             {insightsByEvidence.length > 1 && (
               <CollapsibleSection
                 id="insight-more-observations"
                 title="Fler observationer"
                 description="Andra möjliga mönster från dina registreringar"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <ul data-testid="insight-personal-list" className="space-y-3">
@@ -449,7 +455,7 @@ export default function InsightPage() {
                 title="Förslag att prova"
                 description="Frivilliga strategier – inte slutsatser om dig"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <p className="text-sm text-muted-foreground">
@@ -471,7 +477,7 @@ export default function InsightPage() {
               title="Mitt underlag"
               description="Vilka registreringar som ligger bakom observationerna"
               defaultCollapsed
-              className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+              className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
               headingClassName="text-base font-semibold"
             >
               <p className="text-sm text-foreground">{personal.label}</p>
@@ -485,10 +491,7 @@ export default function InsightPage() {
               </p>
             </CollapsibleSection>
 
-            <div className="space-y-2 pt-2">
-              <h2 className="text-base font-semibold text-ink">Trender och fördjupning</h2>
-              <p className="text-sm text-muted-foreground">Öppna bara de diagram som hjälper dig just nu.</p>
-            </div>
+            <p className="pt-2 text-xs font-medium text-muted-foreground">Diagram</p>
             <EnergyMoodTrend />
             <BatteryLoadTrend />
 
@@ -498,7 +501,7 @@ export default function InsightPage() {
                 title="Din vardag"
                 description="Möjliga samband utifrån dina egna dagar"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <ul className="mt-2 space-y-2">
@@ -511,6 +514,8 @@ export default function InsightPage() {
                 </ul>
               </CollapsibleSection>
             )}
+              </div>
+            </CollapsibleSection>
           </section>
         )}
 
