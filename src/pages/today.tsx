@@ -28,7 +28,6 @@ import { useTextLayout } from "@/hooks/use-text-layout";
 import { track } from "@/lib/analytics";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import WeeklyPulse from "@/components/weekly-pulse";
-import { DaySummaryCard } from "@/components/day/day-summary-card";
 import EveningCheck from "@/components/journey/evening-check";
 import { DaySpaceNote } from "@/components/day/day-space-note";
 
@@ -112,7 +111,6 @@ export function TodayContent() {
       </MyFloveWide>
 
       <MyFloveWide className="pt-2">
-        <DaySummaryCard />
       </MyFloveWide>
       <MyFloveWide className="pt-2">
         <EveningCheck />
