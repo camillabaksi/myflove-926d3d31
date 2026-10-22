@@ -118,6 +118,9 @@ describe("Plan several activities before saving", () => {
     render(<StrictMode><PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" /></StrictMode>);
     expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Tvätta");
     expect(screen.getByRole("button", { name: "Veckan" })).toHaveAttribute("aria-pressed", "true");
+    // URL still says "today"; selecting "Idag" must nevertheless work.
+    fireEvent.click(screen.getByRole("button", { name: "Idag" }));
+    expect(screen.getByRole("button", { name: "Idag" })).toHaveAttribute("aria-pressed", "true");
     expect(model.addTasks).not.toHaveBeenCalled();
   });
 
