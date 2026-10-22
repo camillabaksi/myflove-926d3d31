@@ -77,7 +77,7 @@ const write = (text: string) =>
 describe("Plan several activities before saving", () => {
   it("restores the unsaved review and edited date after leaving for Insights and returning", () => {
     const visit = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
-    write("Handla\\nBoka tid");
+    write("Handla\nBoka tid");
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
     fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-18" } });
     expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
@@ -90,7 +90,7 @@ describe("Plan several activities before saving", () => {
     expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Handla");
     expect(model.addTasks).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Ändra listan" }));
-    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Handla\\nBoka tid");
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Handla\nBoka tid");
     expect(model.addTasks).not.toHaveBeenCalled();
     back.unmount();
   });
