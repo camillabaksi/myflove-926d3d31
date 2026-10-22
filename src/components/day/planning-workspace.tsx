@@ -35,7 +35,7 @@ import { DayReplanButton } from "@/components/day/day-replan";
 import OptionalSavedStrategies from "@/components/day/optional-saved-strategies";
 import { addStrategyToPlanningDraft } from "@/lib/saved-strategy-planning";
 import {
-  takePlanningHandoff,
+  readPlanningHandoff,
   rememberPlanningHandoff,
   discardPlanningHandoff,
   type PlanningHandoff,
@@ -143,7 +143,7 @@ export function PlanningWorkspace({
   const navigate = useNavigate();
   // Restore only an unfinished, same-account draft from an earlier visit to Planera.
   // Nothing here is synced or turned into an activity until the usual save action.
-  const [restored] = useState(() => takePlanningHandoff(owner, audience));
+  const [restored] = useState(() => readPlanningHandoff(owner, audience));
   const [target, setTarget] = useState<"me" | "children" | "both">(restored?.target ?? audience);
   const forChildren = target !== "me";
   const forMe = target !== "children";
@@ -176,9 +176,11 @@ export function PlanningWorkspace({
   });
   // Capture current controlled input on every render, including review edits.
   handoffRef.current = { target, period, date, weekAnchor, selected, text, rows, periodAreas, stage };
-  const restoringPeriod = useRef(Boolean(restored));
+  const initialRequestedPeriod = useRef(requestedPeriod);
   useEffect(() => {
     mounted.current = true;
+    // Clear the handoff only after mounting; React may run initializers twice.
+    discardPlanningHandoff(owner, audience);
     return () => {
       mounted.current = false;
       // Do not hand off a partial/failed save: repeating it after remount could
@@ -191,10 +193,9 @@ export function PlanningWorkspace({
   useEffect(() => {
     if (!requestedPeriod) return;
     // Returning from Insikter must not overwrite the selected date/week.
-    if (restoringPeriod.current) {
-      restoringPeriod.current = false;
-      return;
-    }
+    // Comparing route input also remains safe if StrictMode re-runs effects.
+    if (restored && initialRequestedPeriod.current === requestedPeriod) return;
+    initialRequestedPeriod.current = requestedPeriod;
     setPeriod(requestedPeriod);
     setDate(requestedPeriod === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
     setWeekAnchor(todayISO());
