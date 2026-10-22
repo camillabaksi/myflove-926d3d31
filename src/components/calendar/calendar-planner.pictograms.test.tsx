@@ -200,6 +200,18 @@ describe("Calendar month summary", () => {
     const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`);
     expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 egen aktivitet eller närvaro, 0 familjehändelser\./));
   });
+  it("shows an ongoing period separately without counting it as a daily activity", () => {
+    model.entries = [fixture, { ...fixture, id: "period-course", sourceId: "course", source: "reminder", title: "Pågående kurs", time: undefined, endTime: undefined, periodEnd: fixture.date }];
+    const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`);
+    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 egen aktivitet eller närvaro, 0 familjehändelser\./));
+    const selectedDay = within(screen.getByRole("region", { name: "Vald dags aktiviteter" }));
+    expect(selectedDay.getByText("Pågående perioder")).toBeInTheDocument();
+    expect(selectedDay.getByRole("button", { name: /Pågående kurs/ })).toBeInTheDocument();
+    const activityList = selectedDay.getByRole("list");
+    expect(within(activityList).getAllByRole("button")).toHaveLength(1);
+    expect(within(activityList).getByRole("button")).toHaveTextContent("Fika med Sara");
+  });
   it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
     model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", title: "Ring banken", time: undefined, endTime: undefined }, { ...fixture, id: "task-c", sourceId: "c", title: "Morgonpromenad", time: "07:00", endTime: "07:15" }];
     render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
