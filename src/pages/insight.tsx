@@ -435,7 +435,7 @@ export default function InsightPage() {
                 title="Fler observationer"
                 description="Andra möjliga mönster från dina registreringar"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <ul data-testid="insight-personal-list" className="space-y-3">
@@ -455,7 +455,7 @@ export default function InsightPage() {
                 title="Förslag att prova"
                 description="Frivilliga strategier – inte slutsatser om dig"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <p className="text-sm text-muted-foreground">
@@ -477,7 +477,7 @@ export default function InsightPage() {
               title="Mitt underlag"
               description="Vilka registreringar som ligger bakom observationerna"
               defaultCollapsed
-              className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+              className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
               headingClassName="text-base font-semibold"
             >
               <p className="text-sm text-foreground">{personal.label}</p>
@@ -501,7 +501,7 @@ export default function InsightPage() {
                 title="Din vardag"
                 description="Möjliga samband utifrån dina egna dagar"
                 defaultCollapsed
-                className="min-w-0 rounded-3xl border border-border bg-card p-4 @[22rem]:p-5"
+                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
                 headingClassName="text-base font-semibold"
               >
                 <ul className="mt-2 space-y-2">
@@ -513,7 +513,8 @@ export default function InsightPage() {
                   ))}
                 </ul>
               </CollapsibleSection>
-            )}              </div>
+            )}
+              </div>
             </CollapsibleSection>
           </section>
         )}
