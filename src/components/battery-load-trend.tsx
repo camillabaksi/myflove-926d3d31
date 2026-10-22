@@ -68,7 +68,7 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
           { id: "time", tone: "accent", dashed: true, values: periods.map((p) => (p.loadMinutes === 0 ? null : Math.max(8, (p.loadMinutes / maxMinutes) * 100))) },
         ]} />
       </div>
-      <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(min(8rem,calc(100cqw-12px)), 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
+      <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(160px, 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
         if (index < 0) return;
@@ -89,16 +89,16 @@ export function BatteryLoadPeriods({ periods }: { periods: BatteryLoadPeriod[] }
             tabIndex={0}
             aria-label={description}
             title={description}
-            className="w-[min(8rem,calc(100cqw-12px))] shrink-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="min-w-0 w-full shrink-0 px-2 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <span className="mt-2 block break-words text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
-            <div aria-hidden="true" className="mt-1 space-y-1 break-words text-sm leading-relaxed text-foreground">
-              <p>Batteri {period.battery == null ? "–" : `${period.battery} %`}</p>
+            <div aria-hidden="true" className="mt-1 space-y-1 text-sm leading-relaxed tabular-nums text-foreground">
+              <p className="whitespace-nowrap">Batteri {period.battery == null ? "–" : `${period.battery} %`}</p>
               {period.battery == null && <p>Ej incheckat</p>}
-              <p>Tid {formatMinutes(period.loadMinutes)}</p>
-              <p>{period.loadCount} genomförda aktiviteter</p>
+              <p className="whitespace-nowrap">Tid {formatMinutes(period.loadMinutes)}</p>
+              <p className="text-xs text-muted-foreground">{period.loadCount} genomförda {period.loadCount === 1 ? "aktivitet" : "aktiviteter"}</p>
               <p className="text-xs text-muted-foreground">{period.observedDays} {period.observedDays === 1 ? "dag" : "dagar"} med incheckningar</p>
             </div>
           </div>
@@ -148,9 +148,9 @@ export default function BatteryLoadTrend() {
         </div>
 
         <Tabs value={range} onValueChange={(value) => setRange(value as BatteryLoadRange)}>
-          <TabsList className="grid h-auto w-full grid-cols-1 gap-1 rounded-2xl @[22rem]:grid-cols-3">
+          <TabsList className="grid h-auto w-full grid-cols-3 gap-1 rounded-full">
             {(Object.keys(RANGE_LABELS) as BatteryLoadRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full px-[8px]">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-nowrap rounded-full px-1 text-sm">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}

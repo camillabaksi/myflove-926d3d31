@@ -64,11 +64,15 @@ describe("Batteri och faktisk tid – isolerad presentation", () => {
     for (const button of screen.getAllByRole("button")) expect(button.className).toContain("h-11");
     expect(screen.getAllByRole("listitem")[0]?.className).toContain("focus-visible:outline-ring");
   });
-  it("A1: staplar periodväljare och anpassar periodbredd efter diagrammets synliga yta", () => {
+  it("visar tre kompakta periodval och bevarar läsbar bredd i svepbar tidslinje", () => {
     render(<BatteryLoadTrend />);
-    expect(screen.getByRole("tablist").className).toContain("grid-cols-1");
-    expect(screen.getByRole("tablist").className).toContain("@[22rem]:grid-cols-3");
+    expect(screen.getByRole("tablist").className).toContain("grid-cols-3");
+    expect(screen.getByRole("tablist").className).not.toContain("grid-cols-1");
     expect(screen.getByRole("region").className).toContain("@container");
-    expect(screen.getAllByRole("listitem")[0].className).toContain("w-[min(8rem,calc(100cqw-12px))]");
+    expect(screen.getByRole("list").style.gridTemplateColumns).toContain("minmax(160px, 1fr)");
+    expect(screen.getAllByRole("listitem")[0].className).toContain("w-full");
+    expect(screen.getAllByRole("listitem")[0].className).not.toContain("100cqw");
+    expect(screen.getAllByRole("tab").every(tab => tab.className.includes("whitespace-nowrap"))).toBe(true);
+    expect(screen.getAllByRole("listitem")[2].querySelectorAll("p.whitespace-nowrap")).toHaveLength(2);
   });
 });

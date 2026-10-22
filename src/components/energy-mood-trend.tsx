@@ -63,7 +63,7 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
           { id: "mood", tone: "accent", dashed: true, values: periods.map((p) => p.mood) },
         ]} />
       </div>
-      <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(min(6rem,calc(100cqw-12px)), 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
+      <div className="grid w-max min-w-full p-1" style={{ gridTemplateColumns: `repeat(${periods.length}, minmax(148px, 1fr))` }} role="list" aria-label="Perioder" onKeyDown={(event) => {
         const items = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="listitem"]'));
         const index = items.indexOf(event.target as HTMLElement);
         if (index < 0) return;
@@ -89,15 +89,16 @@ export function EnergyMoodPeriods({ periods }: { periods: TrendPeriod[] }) {
              tabIndex={0}
             aria-label={description}
             title={description}
-            className="w-[min(6rem,calc(100cqw-12px))] shrink-0 px-1 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
+            className="min-w-0 w-full shrink-0 px-2 snap-start rounded-lg text-center focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2"
           >
             <span className="mt-2 block text-xs font-medium leading-relaxed text-foreground">
               {period.label}
             </span>
-             <div aria-hidden="true" className="mt-1 space-y-1 break-words text-sm leading-relaxed text-foreground">
-               <p>Energipåverkan {period.energy == null ? "–" : `${period.energy}/100`}</p>
-               <p>Mående {period.mood == null ? "–" : `${period.mood}/100`}</p>
-               <p className="text-xs text-muted-foreground">{sampleLabel}</p>
+             <div aria-hidden="true" className="mt-1 space-y-1 text-sm leading-relaxed tabular-nums text-foreground">
+               <p className="whitespace-nowrap">Energi {period.energy == null ? "–" : `${period.energy}/100`}</p>
+               <p className="whitespace-nowrap">Mående {period.mood == null ? "–" : `${period.mood}/100`}</p>
+               <p className="text-xs leading-5 text-muted-foreground">{energyCount} energisvar</p>
+               <p className="text-xs leading-5 text-muted-foreground">{moodCount} {moodCount === 1 ? "måendelogg" : "måendeloggar"}</p>
              </div>
           </div>
         );
@@ -148,9 +149,9 @@ export default function EnergyMoodTrend() {
         </div>
 
         <Tabs value={range} onValueChange={(value) => setRange(value as TrendRange)}>
-          <TabsList className="grid h-auto w-full grid-cols-1 gap-1 rounded-2xl @[16rem]:grid-cols-2 @[16rem]:rounded-full">
+          <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-full">
             {(Object.keys(RANGE_LABELS) as TrendRange[]).map((value) => (
-              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-normal rounded-full px-[8px]">
+              <TabsTrigger key={value} value={value} className="min-h-11 min-w-0 whitespace-nowrap rounded-full px-2 text-sm">
                 {RANGE_LABELS[value]}
               </TabsTrigger>
             ))}

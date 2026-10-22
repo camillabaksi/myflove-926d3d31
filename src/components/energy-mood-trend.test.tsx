@@ -33,7 +33,7 @@ describe("Energi och mående – periodpresentation", () => {
   it("gör datum och båda värdena åtkomliga utan att förlita sig på färger", () => {
     render(<EnergyMoodPeriods periods={periods} />);
     const item = screen.getByRole("listitem", { name: "Vecka 3: energipåverkan 70 av 100, mående 50 av 100, 1 energisvar · 1 måendelogg" });
-    expect(item.textContent).toContain("Energipåverkan 70/100");
+    expect(item.textContent).toContain("Energi 70/100");
     expect(item.textContent).toContain("Mående 50/100");
   });
   it("stöder piltangenter, Home och End utan att fånga vertikala pilar", () => {
@@ -53,9 +53,13 @@ describe("Energi och mående – periodpresentation", () => {
     expect(fireEvent.keyDown(items[1] ?? first, { key: "ArrowDown" })).toBe(true);
     expect(scroll).toHaveBeenCalled();
   });
-  it("A1: periodbredden anpassas efter diagrammets synliga yta", () => {
+  it("låser en läsbar minsta periodbredd på mobil och sveper i sidled", () => {
     render(<EnergyMoodPeriods periods={Array.from({ length: 8 }, (_, i) => ({ key: `p${i}`, label: `V${i}`, accessibleLabel: `Vecka ${i}`, energy: null, mood: null })) as unknown as TrendPeriod[]} />);
     expect(screen.getByRole("region").className).toContain("@container");
-    expect(screen.getAllByRole("listitem")[0].className).toContain("w-[min(6rem,calc(100cqw-12px))]");
+    expect(screen.getByRole("list").style.gridTemplateColumns).toContain("minmax(148px, 1fr)");
+    expect(screen.getAllByRole("listitem")[0].className).toContain("w-full");
+    expect(screen.getAllByRole("listitem")[0].className).not.toContain("100cqw");
+    expect(screen.getAllByRole("listitem")[2].querySelectorAll("p.whitespace-nowrap")).toHaveLength(2);
+    expect(screen.getAllByText("0 energisvar")).toHaveLength(8);
   });
 });
