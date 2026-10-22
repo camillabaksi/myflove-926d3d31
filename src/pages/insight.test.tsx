@@ -102,6 +102,43 @@ describe("MyFlove Insight", () => {
     expect(screen.queryByTestId("insight-empty")).toBeNull();
   });
 
+  it("visar viktigaste underbyggda observationen först utan nivåpoäng", () => {
+    state.knowledge = {
+      level: 65,
+      label: "Jag börjar lära känna dina mönster",
+      insights: [
+        { id: "energy", text: "Ett första energimönster.", confidence: "börjar" },
+        { id: "mornings", text: "En återkommande morgonobservation.", confidence: "ser" },
+        { id: "postponed", text: "Ett starkare mönster.", confidence: "vet" },
+      ],
+    };
+    render(<InsightPage />);
+    const observations = screen.getByTestId("insight-observations");
+    expect(within(observations).getByText("Ett starkare mönster.")).toBeTruthy();
+    expect(within(observations).getByText(/Flera registreringar pekar åt samma håll/)).toBeTruthy();
+    expect(screen.queryByText("Ett första energimönster.")).toBeNull();
+    expect(screen.queryByText("En återkommande morgonobservation.")).toBeNull();
+    expect(screen.queryByText(/Balken speglar hur mycket underlag/)).toBeNull();
+    const more = screen.getByRole("button", { name: "Fler observationer" });
+    expect(more.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(more);
+    expect(screen.getByText("En återkommande morgonobservation.")).toBeTruthy();
+    expect(screen.getByText("Ett första energimönster.")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Förslag att prova" }).getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("låter användaren välja fördjupning utan att behöva öppna diagram", () => {
+    render(<InsightPage />);
+    expect(screen.getByText("Trender och fördjupning")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Energipåverkan & mående" }).getAttribute("aria-expanded")).toBe("false");
+    expect(screen.getByRole("button", { name: "Batteri & aktivitetstid" }).getAttribute("aria-expanded")).toBe("false");
+    const basis = screen.getByRole("button", { name: "Mitt underlag" });
+    expect(basis.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(basis);
+    expect(screen.getByText("Avslutade uppgifter")).toBeTruthy();
+    expect(screen.getByText(/antal registreringar, inte ett betyg/)).toBeTruthy();
+  });
+
   it("visar ett lugnt tomläge när underlaget saknas", () => {
     state.totalDays = 1;
     state.completed = [];

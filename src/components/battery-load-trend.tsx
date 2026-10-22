@@ -126,6 +126,7 @@ export default function BatteryLoadTrend() {
   return (
     <CollapsibleSection
       id="insight-battery-load-trend"
+      defaultCollapsed
       title="Batteri & aktivitetstid"
       description="Dina batteriincheckningar och tiden för genomförda aktiviteter"
       className="pace-insight-chart @container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
