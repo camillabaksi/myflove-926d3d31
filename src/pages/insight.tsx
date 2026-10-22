@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Brain, Check, ChevronRight, Home, Info, Plus, Sparkles, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Home, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { useSmartBack } from "@/hooks/use-smart-back";
 import Layout from "@/components/layout";
@@ -42,7 +42,8 @@ import { track } from "@/lib/analytics";
 import CollapsibleSection from "@/components/collapsible-section";
 import InsightApplySetting from "@/components/insight-apply-setting";
 import WhyHint from "@/components/why-hint";
-import BatteryLoadTrend from "@/components/battery-load-trend";
+import { mergedInsightPatterns } from "@/lib/insight-merged-patterns";
+import { personalSavedStrategies } from "@/lib/saved-strategy-planning";
 import EnergyMoodTrend from "@/components/energy-mood-trend";
 import HelpsDrainsCard from "@/components/helps-drains-card";
 
@@ -229,6 +230,11 @@ export default function InsightPage() {
   );
   const insightsByEvidence = useMemo(() => prioritizedInsights(personal.insights), [personal.insights]);
   const featuredInsight = insightsByEvidence[0];
+  const personalSaved = useMemo(() => personalSavedStrategies(saved), [saved]);
+  const mergedPatterns = useMemo(
+    () => mergedInsightPatterns(insightsByEvidence.slice(1), patterns, insightEvidenceLabel),
+    [insightsByEvidence, patterns],
+  );
   const featuredSupport = useMemo(
     () => optionalSupportForInsight(featuredInsight, flow.maxFriction),
     [featuredInsight, flow.maxFriction],
@@ -367,7 +373,7 @@ export default function InsightPage() {
                     <div className="pt-2" data-testid="insight-featured-support">
                       {hasStrategy(featuredSupport.id) ? (
                         <p className="rounded-xl bg-secondary/40 px-3 py-2 text-sm text-muted-foreground">
-                          Du har redan sparat ett stöd för det här området. Det finns under Dina valda strategier.
+                          Du har redan sparat det här stödet. Du hittar det under Mina stöd i Utforska mer.
                         </p>
                       ) : (
                         <>
@@ -423,97 +429,109 @@ export default function InsightPage() {
             <CollapsibleSection
               id="insight-deeper"
               title="Utforska mer"
-              description="Fler observationer, strategier, diagram och underlag – bara om du vill"
+              description="Dina mönster, dina stöd och en valfri fördjupning"
               defaultCollapsed
               className="min-w-0 rounded-3xl border border-border/70 bg-card p-4 @[22rem]:p-5"
               headingClassName="text-base font-semibold"
             >
               <div className="space-y-3" data-testid="insight-deeper-content">
-            {insightsByEvidence.length > 1 && (
-              <CollapsibleSection
-                id="insight-more-observations"
-                title="Fler observationer"
-                description="Andra möjliga mönster från dina registreringar"
-                defaultCollapsed
-                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
-                headingClassName="text-base font-semibold"
-              >
-                <ul data-testid="insight-personal-list" className="space-y-3">
-                  {insightsByEvidence.slice(1).map((insight) => (
-                    <li key={insight.id} className="space-y-1 rounded-2xl bg-secondary/40 p-3">
-                      <p className="text-xs text-muted-foreground">{insightEvidenceLabel(insight.confidence)}</p>
-                      <p className="text-sm leading-relaxed text-ink">{insight.text}</p>
-                    </li>
-                  ))}
-                </ul>
-              </CollapsibleSection>
-            )}
+                {mergedPatterns.length > 0 && (
+                  <CollapsibleSection
+                    id="insight-merged-patterns"
+                    title="Mina mönster"
+                    description="Egna observationer och mönster i din planering"
+                    defaultCollapsed
+                    className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
+                    headingClassName="text-base font-semibold"
+                  >
+                    <ul data-testid="insight-personal-list" className="space-y-2">
+                      {mergedPatterns.map((item) => (
+                        <li key={item.id} className="space-y-1 rounded-xl bg-card/70 p-3">
+                          <p className="text-xs text-muted-foreground">{item.context}</p>
+                          <p className="text-sm leading-relaxed text-ink">{item.text}</p>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-xs text-muted-foreground">
+                      Planerade aktiviteter visar hur schemat ser ut, inte vad du säkert genomförde eller vad som orsakade en energiförändring.
+                    </p>
+                  </CollapsibleSection>
+                )}
 
-            {personal.ready && personal.areas.length > 0 && (
-              <CollapsibleSection
-                id="insight-strategy-suggestions"
-                title="Förslag att prova"
-                description="Frivilliga strategier – inte slutsatser om dig"
-                defaultCollapsed
-                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
-                headingClassName="text-base font-semibold"
-              >
-                <p className="text-sm text-muted-foreground">
-                  Några områden kan vara värda att utforska. Du avgör själv om ett förslag passar.
-                </p>
-                <AreaStrategies
-                  areas={personal.areas}
-                  openArea={openArea}
-                  setOpenArea={setOpenArea}
-                  hasStrategy={hasStrategy}
-                  maxFriction={flow.maxFriction}
-                  onAdd={openAdd}
-                />
-              </CollapsibleSection>
-            )}
+                {(personalSaved.length > 0 || (personal.ready && personal.areas.length > 0)) && (
+                  <CollapsibleSection
+                    id="insight-saved-and-optional-supports"
+                    title="Mina stöd"
+                    description="Sparade stöd och andra frivilliga förslag"
+                    defaultCollapsed
+                    className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
+                    headingClassName="text-base font-semibold"
+                  >
+                    {personalSaved.length > 0 && (
+                      <div className="space-y-2" data-testid="insight-saved-supports">
+                        <h3 className="text-sm font-medium text-ink">Sparade stöd</h3>
+                        <p className="text-xs text-muted-foreground">Samma stöd finns även i Idag och Planera.</p>
+                        {personalSaved.map((support) => (
+                          <div key={support.id} className="flex min-w-0 items-start gap-3 rounded-xl bg-card/70 p-3">
+                            <span className="mt-0.5 shrink-0" aria-hidden>{AREA_BY_ID[support.areaId]?.emoji}</span>
+                            <div className="min-w-0 flex-1 space-y-1">
+                              <p className="break-words text-sm font-medium">{support.title}</p>
+                              {support.nudges.length > 0 && (
+                                <p className="text-xs text-muted-foreground">
+                                  {support.nudges.length} valda påminnelsesteg
+                                </p>
+                              )}
+                              <InsightApplySetting strategyId={support.strategyId} />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => removeStrategy(support.id)}
+                              aria-label={`Ta bort stödet ${support.title}`}
+                              className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl text-muted-foreground hover:bg-secondary/70 hover:text-destructive"
+                            >
+                              <X size={16} aria-hidden />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {personal.ready && personal.areas.length > 0 && (
+                      <div className="space-y-2">
+                        <h3 className="text-sm font-medium text-ink">Fler stöd att prova</h3>
+                        <p className="text-xs text-muted-foreground">Du väljer själv om du vill spara ett stöd eller lägga till det i din plan.</p>
+                        <AreaStrategies
+                          areas={personal.areas}
+                          openArea={openArea}
+                          setOpenArea={setOpenArea}
+                          hasStrategy={hasStrategy}
+                          maxFriction={flow.maxFriction}
+                          onAdd={openAdd}
+                        />
+                      </div>
+                    )}
+                  </CollapsibleSection>
+                )}
 
-            <CollapsibleSection
-              id="insight-my-data"
-              title="Mitt underlag"
-              description="Vilka registreringar som ligger bakom observationerna"
-              defaultCollapsed
-              className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
-              headingClassName="text-base font-semibold"
-            >
-              <p className="text-sm text-foreground">{personal.label}</p>
-              <dl className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Aktiva dagar</dt><dd className="font-semibold tabular-nums">{totalDays}</dd></div>
-                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Avslutade uppgifter</dt><dd className="font-semibold tabular-nums">{completedTasks.length}</dd></div>
-                <div className="rounded-xl bg-secondary/40 p-3"><dt className="text-muted-foreground">Energiincheckningar</dt><dd className="font-semibold tabular-nums">{energyLog?.length ?? 0}</dd></div>
-              </dl>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                Detta är antal registreringar, inte ett betyg på dig. Inga slutsatser dras när underlaget är för tunt.
-              </p>
-            </CollapsibleSection>
+                <EnergyMoodTrend />
 
-            <p className="pt-2 text-xs font-medium text-muted-foreground">Diagram</p>
-            <EnergyMoodTrend />
-            <BatteryLoadTrend />
-
-            {patterns.ready && (
-              <CollapsibleSection
-                id="insight-everyday-patterns"
-                title="Din vardag"
-                description="Möjliga samband utifrån dina egna dagar"
-                defaultCollapsed
-                className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5"
-                headingClassName="text-base font-semibold"
-              >
-                <ul className="mt-2 space-y-2">
-                  {patterns.lines.map((line) => (
-                    <li key={line} className="flex items-start gap-2 text-sm text-ink">
-                      <Sparkles size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-                      <span className="min-w-0">{line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CollapsibleSection>
-            )}
+                <details className="min-w-0 rounded-2xl bg-secondary/25 px-3 py-2.5" data-testid="insight-method">
+                  <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-ink">
+                    Så fungerar mina insikter
+                  </summary>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    Insikter bygger på dina egna incheckningar och aktiviteter. Uppgifter som bara planerats räknas inte som genomförda,
+                    och ett sammanträffande betyder inte att en aktivitet orsakade en energiförändring.
+                  </p>
+                  <dl className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
+                    <div className="rounded-xl bg-card/70 p-3"><dt className="text-muted-foreground">Aktiva dagar</dt><dd className="font-semibold tabular-nums">{totalDays}</dd></div>
+                    <div className="rounded-xl bg-card/70 p-3"><dt className="text-muted-foreground">Avslutade uppgifter</dt><dd className="font-semibold tabular-nums">{completedTasks.length}</dd></div>
+                    <div className="rounded-xl bg-card/70 p-3"><dt className="text-muted-foreground">Energiincheckningar</dt><dd className="font-semibold tabular-nums">{energyLog?.length ?? 0}</dd></div>
+                  </dl>
+                  <p className="mt-2 text-xs text-muted-foreground">Antal registreringar är inget betyg och ger inte i sig säkra slutsatser.</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Detaljer om batteri och aktivitetstid hittar du under Mitt batteri.
+                  </p>
+                </details>
               </div>
             </CollapsibleSection>
           </section>
@@ -656,55 +674,6 @@ export default function InsightPage() {
           ) : null}
         </p>
 
-        {saved.length > 0 && (
-          <CollapsibleSection
-            id="valda-strategier"
-            title={
-              <span className="flex items-center gap-2">
-                <Brain size={18} className="text-primary" /> Dina valda strategier
-              </span>
-            }
-            headingClassName="font-semibold"
-          >
-            {saved.map((s) => (
-              <div
-                key={s.id}
-                className="pace-card-surface p-4 rounded-2xl bg-card border border-border flex items-start gap-3"
-              >
-                <span className="text-xl" aria-hidden>
-                  {AREA_BY_ID[s.areaId]?.emoji}
-                </span>
-                <div className="flex-1">
-                  <p className="font-medium">{s.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {s.contexts
-                      .map((c) => CONTEXTS.find((x) => x.id === c))
-                      .filter(Boolean)
-                      .map((c) => `${c!.emoji} ${c!.label}`)
-                      .join(" · ")}
-                  </p>
-                  {s.nudges.length > 0 && (
-                    <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                      {s.nudges.map((n, i) => (
-                        <li key={i}>
-                          {n.when} – {n.text}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <InsightApplySetting strategyId={s.strategyId} />
-                </div>
-                <button
-                  onClick={() => removeStrategy(s.id)}
-                  aria-label="Ta bort strategi"
-                  className="p-2 text-muted-foreground hover:text-destructive"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </CollapsibleSection>
-        )}
 
         {/* Var vill du använda den? + konkret förslag att acceptera, ändra eller avvisa */}
         <Dialog open={!!addFlow} onOpenChange={(o) => !o && setAddFlow(null)}>
