@@ -332,7 +332,7 @@ function FlowItemEditDialog({
   const save = () => {
     const title = form.title.trim();
     if (!title) return;
-    if ((kind === "uppgift" || kind === "kalender") && !form.date) {
+    if (kind === "kalender" && !form.date) {
       toast.error("Välj ett datum.");
       return;
     }
