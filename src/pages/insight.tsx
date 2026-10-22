@@ -258,6 +258,26 @@ export default function InsightPage() {
     setAddFlow({ strategy: s, anchor, nudges: s.makeNudges ? s.makeNudges(anchor) : [] });
   };
 
+  const saveSupportOnly = () => {
+    if (!addFlow) return;
+    const { strategy } = addFlow;
+    addStrategy({
+      strategyId: strategy.id,
+      title: strategy.title,
+      areaId: strategy.areaId,
+      contexts,
+      friction: strategy.friction,
+      minutes: strategy.minutes,
+      nudges: [],
+      profileId: profile?.id,
+    });
+    setAddFlow(null);
+    setShowFeaturedSupport(false);
+    toast.success("Sparat bland dina frivilliga stöd.", {
+      description: "Inget har lagts in som uppgift eller påminnelse. Du hittar stödet under Idag och Planera.",
+    });
+  };
+
   const confirmAdd = (withNudges: boolean) => {
     if (!addFlow) return;
     const { strategy, nudges } = addFlow;
@@ -736,9 +756,16 @@ export default function InsightPage() {
             )}
 
             <div className="space-y-2">
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Du kan behålla idén utan att lägga något på dagens att-göra-lista.
+              </p>
+              <Button type="button" className="min-h-12 w-full rounded-2xl" onClick={saveSupportOnly}>
+                Spara som frivilligt stöd
+              </Button>
+              <p className="text-xs text-muted-foreground">Ingen uppgift och ingen påminnelse skapas.</p>
               {addFlow && addFlow.nudges.length > 0 && (
                 <Button className="w-full h-12 rounded-2xl" onClick={() => confirmAdd(true)}>
-                  Ja, lägg till med påminnelserna
+                  Lägg till som uppgift med påminnelser
                 </Button>
               )}
               <Button
@@ -746,7 +773,7 @@ export default function InsightPage() {
                 className="w-full h-12 rounded-2xl"
                 onClick={() => confirmAdd(false)}
               >
-                Lägg till utan påminnelser
+                Lägg till som uppgift utan påminnelser
               </Button>
               <Button
                 variant="ghost"
