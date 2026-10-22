@@ -231,6 +231,7 @@ export default function InsightPage() {
   const insightsByEvidence = useMemo(() => prioritizedInsights(personal.insights), [personal.insights]);
   const featuredInsight = insightsByEvidence[0];
   const personalSaved = useMemo(() => personalSavedStrategies(saved), [saved]);
+  const hasPersonalStrategy = (id: string) => personalSaved.some((entry) => entry.strategyId === id);
   const mergedPatterns = useMemo(
     () => mergedInsightPatterns(insightsByEvidence.slice(1), patterns, insightEvidenceLabel),
     [insightsByEvidence, patterns],
@@ -371,7 +372,7 @@ export default function InsightPage() {
                   <p className="text-xs leading-relaxed text-muted-foreground">En observation utifrån dina registreringar – inte en regel om hur du fungerar.</p>
                   {featuredSupport && (
                     <div className="pt-2" data-testid="insight-featured-support">
-                      {hasStrategy(featuredSupport.id) ? (
+                      {hasPersonalStrategy(featuredSupport.id) ? (
                         <p className="rounded-xl bg-secondary/40 px-3 py-2 text-sm text-muted-foreground">
                           Du har redan sparat det här stödet. Du hittar det under Mina stöd i Utforska mer.
                         </p>
@@ -503,7 +504,7 @@ export default function InsightPage() {
                           areas={personal.areas}
                           openArea={openArea}
                           setOpenArea={setOpenArea}
-                          hasStrategy={hasStrategy}
+                          hasStrategy={hasPersonalStrategy}
                           maxFriction={flow.maxFriction}
                           onAdd={openAdd}
                         />
