@@ -1,6 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import type { FlowKnowledge } from "@/lib/flow-learning";
+import { setCollapsed } from "@/lib/collapse-store";
 
 const state = {
   demo: false,
@@ -24,7 +25,7 @@ vi.mock("@tanstack/react-router", () => ({
     navigate: vi.fn(),
   }),
   useRouterState: ({ select }: { select: (s: unknown) => unknown }) =>
-    select({ location: { search: state.demo ? { demo: "1" } : {} } }),
+    select({ location: { pathname: "/insight", search: state.demo ? { demo: "1" } : {} } }),
 }));
 // Sidan renderas i appens delade skal; skalet testas separat.
 vi.mock("@/components/layout", () => ({
@@ -63,6 +64,9 @@ beforeEach(() => {
   savedActions.addTask.mockClear();
   savedActions.addStrategy.mockClear();
   state.demo = false;
+  for (const id of ["insight-deeper", "insight-more-observations", "insight-strategy-suggestions", "insight-my-data", "insight-energy-mood-trend", "insight-battery-load-trend"]) {
+    setCollapsed(`/insight::${id}`, true, true);
+  }
   state.totalDays = 9;
   state.knowledge = {
     level: 55,
@@ -122,6 +126,10 @@ describe("MyFlove Insight", () => {
     expect(screen.queryByText("Ett första energimönster.")).toBeNull();
     expect(screen.queryByText("En återkommande morgonobservation.")).toBeNull();
     expect(screen.queryByText(/Balken speglar hur mycket underlag/)).toBeNull();
+    const deeper = screen.getByRole("button", { name: "Utforska mer" });
+    expect(deeper).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("button", { name: "Fler observationer" })).toBeNull();
+    fireEvent.click(deeper);
     const more = screen.getByRole("button", { name: "Fler observationer" });
     expect(more.getAttribute("aria-expanded")).toBe("false");
     fireEvent.click(more);
@@ -132,7 +140,12 @@ describe("MyFlove Insight", () => {
 
   it("låter användaren välja fördjupning utan att behöva öppna diagram", () => {
     render(<InsightPage />);
-    expect(screen.getByText("Trender och fördjupning")).toBeTruthy();
+    const deeper = screen.getByRole("button", { name: "Utforska mer" });
+    expect(deeper).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("button", { name: "Energipåverkan & mående" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Mitt underlag" })).toBeNull();
+    fireEvent.click(deeper);
+    expect(screen.getByText("Diagram")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Energipåverkan & mående" }).getAttribute("aria-expanded")).toBe("false");
     expect(screen.getByRole("button", { name: "Batteri & aktivitetstid" }).getAttribute("aria-expanded")).toBe("false");
     const basis = screen.getByRole("button", { name: "Mitt underlag" });
