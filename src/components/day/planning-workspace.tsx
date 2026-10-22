@@ -34,6 +34,12 @@ import {
 import { DayReplanButton } from "@/components/day/day-replan";
 import OptionalSavedStrategies from "@/components/day/optional-saved-strategies";
 import { addStrategyToPlanningDraft } from "@/lib/saved-strategy-planning";
+import {
+  takePlanningHandoff,
+  rememberPlanningHandoff,
+  discardPlanningHandoff,
+  type PlanningHandoff,
+} from "@/lib/planning-handoff";
 
 export const PLANNING_PERIODS = [
   ["today", "Idag"],
@@ -135,7 +141,10 @@ export function PlanningWorkspace({
 }) {
   const { t, locale } = useLang();
   const navigate = useNavigate();
-  const [target, setTarget] = useState<"me" | "children" | "both">(audience);
+  // Restore only an unfinished, same-account draft from an earlier visit to Planera.
+  // Nothing here is synced or turned into an activity until the usual save action.
+  const [restored] = useState(() => takePlanningHandoff(owner, audience));
+  const [target, setTarget] = useState<"me" | "children" | "both">(restored?.target ?? audience);
   const forChildren = target !== "me";
   const forMe = target !== "children";
   const childStore = useChildren();
@@ -144,14 +153,14 @@ export function PlanningWorkspace({
   const { addPlannedPeriods } = useReminders();
   const { activeArea } = useActiveArea();
   const today = todayISO();
-  const [period, setPeriod] = useState<PlanningPeriod>(requestedPeriod ?? "today");
-  const [date, setDate] = useState(requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today);
-  const [weekAnchor, setWeekAnchor] = useState(today);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [text, setText] = useState("");
-  const [rows, setRows] = useState<PlanningDraft[]>([]);
-  const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>({});
-  const [stage, setStage] = useState<"write" | "review">("write");
+  const [period, setPeriod] = useState<PlanningPeriod>(restored?.period ?? requestedPeriod ?? "today");
+  const [date, setDate] = useState(restored?.date ?? (requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today));
+  const [weekAnchor, setWeekAnchor] = useState(restored?.weekAnchor ?? today);
+  const [selected, setSelected] = useState<string[]>(restored?.selected ?? []);
+  const [text, setText] = useState(restored?.text ?? "");
+  const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
+  const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
+  const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -160,14 +169,32 @@ export function PlanningWorkspace({
   // A completed child write must not be repeated if the own-task write needs retrying.
   const childrenWritten = useRef(false);
   const mounted = useRef(true);
+  const lockedRef = useRef(locked);
+  lockedRef.current = locked;
+  const handoffRef = useRef<PlanningHandoff>({
+    target, period, date, weekAnchor, selected, text, rows, periodAreas, stage,
+  });
+  // Capture current controlled input on every render, including review edits.
+  handoffRef.current = { target, period, date, weekAnchor, selected, text, rows, periodAreas, stage };
+  const restoringPeriod = useRef(Boolean(restored));
   useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
+      // Do not hand off a partial/failed save: repeating it after remount could
+      // duplicate a child write. Ordinary unsaved drafts are safe to restore.
+      if (!busy.current && !lockedRef.current && !pending.current && !childrenWritten.current) {
+        rememberPlanningHandoff(owner, audience, handoffRef.current);
+      }
     };
-  }, []);
+  }, [owner, audience]);
   useEffect(() => {
     if (!requestedPeriod) return;
+    // Returning from Insikter must not overwrite the selected date/week.
+    if (restoringPeriod.current) {
+      restoringPeriod.current = false;
+      return;
+    }
     setPeriod(requestedPeriod);
     setDate(requestedPeriod === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
     setWeekAnchor(todayISO());
@@ -254,6 +281,11 @@ export function PlanningWorkspace({
       );
       pending.current = null;
       childrenWritten.current = false;
+      discardPlanningHandoff(owner, audience);
+      // Prevent a same-tick navigation from handing off the just-saved batch.
+      handoffRef.current = {
+        ...handoffRef.current, text: "", rows: [], periodAreas: {}, stage: "write",
+      };
       setLocked(false);
       setRows([]);
       setPeriodAreas({});
