@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useTasks, useReminders, useMedications } from "@/hooks/use-data";
 import { useQuickflow } from "@/hooks/use-quickflow";
+import { useInstanceStatus } from "@/hooks/use-instance-status";
+import { emitActivityDone } from "@/lib/activity-energy-event";
+import { todayISO } from "@/lib/day";
 import { syncReminder } from "@/lib/push.functions";
 import {
   captureActionFromUrl,
@@ -20,6 +23,7 @@ import {
 export function useNotificationActions() {
   const { tasks, toggleTask, setTaskTime } = useTasks();
   const { reminders, toggleReminder, updateReminder } = useReminders();
+  const { isInstanceDone, setInstanceDone } = useInstanceStatus();
   const { medications, isTaken, toggleTaken } = useMedications();
   const {
     items: quickflowItems,
@@ -39,6 +43,8 @@ export function useNotificationActions() {
     setTaskTime,
     toggleReminder,
     updateReminder,
+    isInstanceDone,
+    setInstanceDone,
     completeQuickflow,
     snoozeQuickflow,
   });
@@ -53,6 +59,8 @@ export function useNotificationActions() {
     setTaskTime,
     toggleReminder,
     updateReminder,
+    isInstanceDone,
+    setInstanceDone,
     completeQuickflow,
     snoozeQuickflow,
   };
@@ -85,7 +93,18 @@ export function useNotificationActions() {
         const rem = s.reminders.find((r) => r.id === id);
         if (!rem) return;
         if (action === "done") {
-          if (!rem.completed) s.toggleReminder(rem.id);
+          if ((rem.repeat ?? "none") !== "none") {
+            // A notification represents the occurrence being acknowledged today,
+            // never completion of the recurring master reminder itself.
+            const date = todayISO();
+            const sourceId = `reminder-${rem.id}`;
+            if (!s.isInstanceDone(sourceId, date)) {
+              s.setInstanceDone(sourceId, date, true);
+              emitActivityDone({ id: `rem-${rem.id}`, title: rem.title, dueDate: date });
+            }
+          } else if (!rem.completed) {
+            s.toggleReminder(rem.id);
+          }
           toast.success("Klart ✓", { description: rem.title });
         } else {
           if (rem.time) s.updateReminder(rem.id, { time: shiftTime(rem.time, SNOOZE_MINUTES) });
