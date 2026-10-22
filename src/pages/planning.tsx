@@ -7,7 +7,7 @@ import { PlanningWorkspace } from "@/components/day/planning-workspace";
 import { useLang } from "@/hooks/use-language";
 
 export default function PlanningPage() {
-  const { audience, period } = useSearch({ from: "/_app/planera" });
+  const { audience, period, supports } = useSearch({ from: "/_app/planera" });
   const { user } = useUser();
   const { t } = useLang();
   return (
@@ -44,6 +44,7 @@ export default function PlanningPage() {
                   owner={user.id}
                   audience={value}
                   requestedPeriod={audience === value ? period : undefined}
+                  revealSupports={audience === value && value === "me" && supports === "1"}
                 />
               </div>
             ))}

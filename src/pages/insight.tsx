@@ -203,6 +203,8 @@ export default function InsightPage() {
   const [addFlow, setAddFlow] = useState<AddFlowState | null>(null);
   const [demoChosenStrategyIds, setDemoChosenStrategyIds] = useState<string[]>([]);
   const [showFeaturedSupport, setShowFeaturedSupport] = useState(false);
+  // A single intentional tap reveals the nested saved-support section.
+  const [showMySupportsToken, setShowMySupportsToken] = useState(0);
   const [contexts, setContexts] = useState<InsightContext[]>(["vardag"]);
 
   const { addTask, completedTasks } = useTasks();
@@ -391,7 +393,7 @@ export default function InsightPage() {
                     <div className="pt-2" data-testid="insight-featured-support">
                       {hasPersonalStrategy(featuredSupport.id) ? (
                         <p className="rounded-xl bg-secondary/40 px-3 py-2 text-sm text-muted-foreground">
-                          Du har redan sparat det här stödet. Du hittar det under Mina stöd i Utforska mer.
+                          Du har redan sparat det här som ett frivilligt stöd.
                         </p>
                       ) : (
                         <>
@@ -443,9 +445,20 @@ export default function InsightPage() {
             </div>
 
             <HelpsDrainsCard />
+            {personalSaved.length > 0 && (
+              <button
+                type="button"
+                className="inline-flex min-h-11 w-fit items-center gap-2 rounded-xl px-2 text-sm font-medium text-primary underline underline-offset-4"
+                onClick={() => setShowMySupportsToken((previous) => previous + 1)}
+                data-testid="insight-show-saved-supports"
+              >
+                Mina stöd ({personalSaved.length}) <ChevronRight size={16} aria-hidden />
+              </button>
+            )}
 
             <CollapsibleSection
               id="insight-deeper"
+              revealToken={showMySupportsToken ? String(showMySupportsToken) : undefined}
               title="Utforska mer"
               description="Mina mönster, mina stöd och valfri fördjupning"
               defaultCollapsed
@@ -479,6 +492,7 @@ export default function InsightPage() {
                 {(personalSaved.length > 0 || (personal.ready && personal.areas.length > 0)) && (
                   <CollapsibleSection
                     id="insight-saved-and-optional-supports"
+                    revealToken={showMySupportsToken ? String(showMySupportsToken) : undefined}
                     title="Mina stöd"
                     description="Sparade stöd och andra frivilliga förslag"
                     defaultCollapsed
@@ -488,7 +502,14 @@ export default function InsightPage() {
                     {personalSaved.length > 0 && (
                       <div className="space-y-2" data-testid="insight-saved-supports">
                         <h3 className="text-sm font-medium text-ink">Sparade stöd</h3>
-                        <p className="text-xs text-muted-foreground">Samma stöd finns även i Idag och Planera.</p>
+                        <p className="text-xs text-muted-foreground">Du hittar också dina stöd i Idag och Planera.</p>
+                        <Link
+                          to="/planera"
+                          search={{ audience: "me", period: "today", supports: "1" }}
+                          className="inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-medium text-primary underline underline-offset-4"
+                        >
+                          Använd ett stöd i Planera <ChevronRight size={15} aria-hidden />
+                        </Link>
                         {personalSaved.map((support) => (
                           <div key={support.id} className="flex min-w-0 items-start gap-3 rounded-xl bg-card/70 p-3">
                             <span className="mt-0.5 shrink-0" aria-hidden>{AREA_BY_ID[support.areaId]?.emoji}</span>

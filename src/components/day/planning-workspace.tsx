@@ -125,10 +125,13 @@ export function PlanningWorkspace({
   owner,
   audience,
   requestedPeriod,
+  revealSupports = false,
 }: {
   owner: string;
   audience: "me" | "children";
   requestedPeriod?: PlanningPeriod;
+  /** Only opens the saved-support section. Never edits or saves a draft. */
+  revealSupports?: boolean;
 }) {
   const { t, locale } = useLang();
   const navigate = useNavigate();
@@ -461,6 +464,7 @@ export function PlanningWorkspace({
             {!forChildren && (
               <OptionalSavedStrategies
                 mode="planning"
+                revealToken={revealSupports ? "from-saved-supports" : undefined}
                 draftText={text}
                 onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
               />

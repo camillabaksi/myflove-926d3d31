@@ -5,9 +5,11 @@ import type { PlanningPeriod } from "@/lib/planning";
 export const Route = createFileRoute("/_app/planera")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { audience: "me" | "children"; period: PlanningPeriod } => ({
+  ): { audience: "me" | "children"; period: PlanningPeriod; supports?: "1" } => ({
     audience: search.audience === "children" ? "children" : "me",
     period: search.period === "tomorrow" || search.period === "week" ? search.period : "today",
+    // A navigation hint, not permission to add anything to the plan.
+    supports: search.supports === "1" ? "1" : undefined,
   }),
   head: () => ({
     meta: [

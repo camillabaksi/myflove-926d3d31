@@ -6,8 +6,8 @@ import { useInsightStrategies } from "@/hooks/use-insight";
 import { personalSavedStrategies, strategyInPlanningDraft } from "@/lib/saved-strategy-planning";
 
 type Props =
-  | { mode: "today"; draftText?: never; onAddToDraft?: never }
-  | { mode: "planning"; draftText: string; onAddToDraft: (title: string) => void };
+  | { mode: "today"; draftText?: never; onAddToDraft?: never; revealToken?: never }
+  | { mode: "planning"; draftText: string; onAddToDraft: (title: string) => void; revealToken?: string };
 
 /** Saved strategies are references, NEVER automatically due tasks. */
 export default function OptionalSavedStrategies(props: Props) {
@@ -19,8 +19,9 @@ export default function OptionalSavedStrategies(props: Props) {
   return (
     <CollapsibleSection
       id="optional-saved-strategies"
-      title="Mina frivilliga stöd"
-      description="Små idéer du själv har valt i Insikter – inget måste."
+      revealToken={props.mode === "planning" ? props.revealToken : undefined}
+      title="Mina stöd"
+      description="Frivilliga idéer du sparat från Insikter – inget måste."
       defaultCollapsed
       className="min-w-0 rounded-2xl border border-border/60 bg-card/75 p-3"
       headingClassName="text-sm font-semibold"
@@ -53,7 +54,7 @@ export default function OptionalSavedStrategies(props: Props) {
       {props.mode === "today" ? (
         <Link
           to="/planera"
-          search={{ audience: "me", period: "today" }}
+          search={{ audience: "me", period: "today", supports: "1" }}
           className="inline-flex min-h-11 items-center gap-2 rounded-xl px-2 text-sm font-medium text-primary underline underline-offset-4"
         >
           Använd ett stöd när jag planerar <ArrowUpRight size={16} aria-hidden />

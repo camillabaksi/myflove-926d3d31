@@ -12,7 +12,9 @@ vi.mock("@/hooks/use-insight", () => ({
   useInsightStrategies: () => ({ saved: model.saved }),
 }));
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, ..._props }: { children: ReactNode }) => <a href="/planera">{children}</a>,
+  Link: ({ children, search }: { children: ReactNode; search?: Record<string, string> }) => (
+    <a href="/planera" data-search={JSON.stringify(search)}>{children}</a>
+  ),
   useNavigate: () => vi.fn(),
   useRouterState: ({ select }: { select: (state: { location: { pathname: string } }) => unknown }) =>
     select({ location: { pathname: window.location.pathname } }),
@@ -32,18 +34,27 @@ describe("Optional strategy surfaces", () => {
   it("is absent if the user has saved no personal strategies", () => {
     model.saved = [];
     render(<OptionalSavedStrategies mode="today" />);
-    expect(screen.queryByText("Mina frivilliga stöd")).toBeNull();
+    expect(screen.queryByText("Mina stöd")).toBeNull();
   });
 
   it("stays out of the day checklist and only offers a voluntary path to planning", () => {
     render(<OptionalSavedStrategies mode="today" />);
-    const heading = screen.getByRole("button", { name: "Mina frivilliga stöd" });
+    const heading = screen.getByRole("button", { name: "Mina stöd" });
     expect(heading).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(heading);
     expect(screen.getByText("Gör tiden synlig")).toBeInTheDocument();
     expect(screen.queryByText("Fiktivt demostöd")).toBeNull();
     expect(screen.getByRole("link", { name: /Använd ett stöd när jag planerar/ })).toHaveAttribute("href", "/planera");
+    expect(screen.getByRole("link", { name: /Använd ett stöd när jag planerar/ }))
+      .toHaveAttribute("data-search", JSON.stringify({ audience: "me", period: "today", supports: "1" }));
     expect(screen.queryByRole("checkbox")).toBeNull();
+  });
+
+  it("reveals the list from an explicit navigation hint without selecting or saving an activity", () => {
+    render(<OptionalSavedStrategies mode="planning" revealToken="from-today" draftText="" onAddToDraft={vi.fn()} />);
+    expect(screen.getByRole("button", { name: "Mina stöd" })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("Gör tiden synlig")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Ta med i utkastet" })).toBeTruthy();
   });
 
   it("only updates a planning draft after explicit choice, never directly saves tasks", () => {
@@ -59,7 +70,7 @@ describe("Optional strategy surfaces", () => {
       </>;
     }
     render(<Harness />);
-    fireEvent.click(screen.getByRole("button", { name: "Mina frivilliga stöd" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mina stöd" }));
     expect(onSaved).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Ta med i utkastet" }));
     expect(onSaved).toHaveBeenCalledOnce();
