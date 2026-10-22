@@ -13,6 +13,9 @@ vi.mock("@/hooks/use-insight", () => ({
 }));
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, ..._props }: { children: ReactNode }) => <a href="/planera">{children}</a>,
+  useNavigate: () => vi.fn(),
+  useRouterState: ({ select }: { select: (state: { location: { pathname: string } }) => unknown }) =>
+    select({ location: { pathname: window.location.pathname } }),
 }));
 
 const strategy = (title: string, profileId?: string): SavedStrategy => ({
