@@ -43,6 +43,8 @@ export const EN_CALENDAR: Record<string, string> = {
 
   // calendar.tsx – selected day
   "Lägg till": "Add",
+  "Registrera aktivitet": "Log activity",
+  "Påminnelse och upprepning": "Reminder and repeats",
   Påminnelse: "Reminder",
   "Visa stora symboler för varje händelse": "Show large symbols for each event",
   Bildstöd: "Visual support",
