@@ -13,6 +13,7 @@ const state = {
   totalDays: 9,
 };
 const goBack = vi.fn();
+const savedActions = vi.hoisted(() => ({ addTask: vi.fn(), addStrategy: vi.fn() }));
 vi.mock("@/hooks/use-smart-back", () => ({ useSmartBack: () => goBack }));
 
 vi.mock("@tanstack/react-router", () => ({
@@ -30,7 +31,7 @@ vi.mock("@/components/layout", () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 vi.mock("@/hooks/use-data", () => ({
-  useTasks: () => ({ addTask: vi.fn(), completedTasks: state.completed, tasks: state.completed }),
+  useTasks: () => ({ addTask: savedActions.addTask, completedTasks: state.completed, tasks: state.completed }),
   useReminders: () => ({ reminders: [] }),
   useMoods: () => ({ moods: [], addMood: vi.fn(), setMoods: vi.fn() }),
 }));
@@ -38,7 +39,7 @@ vi.mock("@/hooks/use-flowscore", () => ({ useFlowScore: () => ({ flow: { maxFric
 vi.mock("@/hooks/use-insight", () => ({
   useInsightStrategies: () => ({
     saved: [],
-    addStrategy: vi.fn(),
+    addStrategy: savedActions.addStrategy,
     removeStrategy: vi.fn(),
     hasStrategy: () => false,
   }),
@@ -59,6 +60,8 @@ const { default: InsightPage } = await import("@/pages/insight");
 
 beforeEach(() => {
   goBack.mockClear();
+  savedActions.addTask.mockClear();
+  savedActions.addStrategy.mockClear();
   state.demo = false;
   state.totalDays = 9;
   state.knowledge = {
@@ -137,6 +140,54 @@ describe("MyFlove Insight", () => {
     fireEvent.click(basis);
     expect(screen.getByText("Avslutade uppgifter")).toBeTruthy();
     expect(screen.getByText(/antal registreringar, inte ett betyg/)).toBeTruthy();
+  });
+
+  it("visar ett enda valfritt litet steg utan att skapa något vid förhandsvisning", () => {
+    render(<InsightPage />);
+    expect(screen.getByText("Dina morgnar brukar fungera.")).toBeTruthy();
+    const show = screen.getByRole("button", { name: "Visa ett litet steg att prova" });
+    expect(show.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByTestId("insight-support-preview")).toBeNull();
+    fireEvent.click(show);
+    const preview = screen.getByTestId("insight-support-preview");
+    expect(within(preview).getByText("Gör tiden synlig med timer")).toBeTruthy();
+    expect(within(preview).getByText(/Inget läggs till förrän du väljer det/)).toBeTruthy();
+    expect(savedActions.addTask).not.toHaveBeenCalled();
+    expect(savedActions.addStrategy).not.toHaveBeenCalled();
+    fireEvent.click(within(preview).getByRole("button", { name: "Inte nu" }));
+    expect(screen.queryByTestId("insight-support-preview")).toBeNull();
+    expect(savedActions.addTask).not.toHaveBeenCalled();
+  });
+
+  it("kräver separat bekräftelse innan ett frivilligt stöd sparas som uppgift", () => {
+    render(<InsightPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Visa ett litet steg att prova" }));
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    expect(screen.getByRole("dialog", { name: "Var vill du använda den?" })).toBeTruthy();
+    expect(savedActions.addTask).not.toHaveBeenCalled();
+    const firstDialog = within(screen.getByRole("dialog"));
+    fireEvent.click(firstDialog.getByRole("button", { name: "Inte nu" }));
+    expect(savedActions.addTask).not.toHaveBeenCalled();
+    expect(savedActions.addStrategy).not.toHaveBeenCalled();
+
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till utan påminnelser" }));
+    expect(savedActions.addTask).toHaveBeenCalledTimes(1);
+    expect(savedActions.addTask).toHaveBeenCalledWith("Gör tiden synlig med timer", undefined,
+      expect.objectContaining({ kind: "uppgift", steps: [] }));
+    expect(savedActions.addStrategy).toHaveBeenCalledTimes(1);
+    expect(savedActions.addStrategy).toHaveBeenCalledWith(expect.objectContaining({
+      strategyId: "time-visible", areaId: "tid",
+    }));
+  });
+
+  it("visar inget handlingsförslag utan en känd personlig observation", () => {
+    state.totalDays = 1;
+    state.completed = [];
+    state.knowledge = { level: 0, label: "För lite underlag", insights: [] };
+    render(<InsightPage />);
+    expect(screen.queryByRole("button", { name: "Visa ett litet steg att prova" })).toBeNull();
+    expect(savedActions.addTask).not.toHaveBeenCalled();
   });
 
   it("visar ett lugnt tomläge när underlaget saknas", () => {

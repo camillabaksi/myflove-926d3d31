@@ -32,6 +32,7 @@ import {
   type StrategyNudge,
 } from "@/lib/insight";
 import { buildPersonalInsight, INSIGHT_EXAMPLES } from "@/lib/insight-personal";
+import { optionalSupportForInsight } from "@/lib/insight-optional-support";
 import { prioritizedInsights, insightEvidenceLabel } from "@/lib/insight-priority";
 import { useFlowLearning } from "@/hooks/use-flow-learning";
 import { useEverydayPatterns } from "@/hooks/use-everyday-patterns";
@@ -157,7 +158,7 @@ function AreaStrategies({
                       <p className="text-sm text-muted-foreground">{s.why}</p>
                       <p className="text-xs text-muted-foreground">
                         Svårighetsgrad {s.friction}/10 · ca {s.minutes} min
-                        {fitsNow ? " · Det här verkar vara en bra uppgift att göra nu." : ""}
+                        {fitsNow ? " · Ett litet steg att överväga." : ""}
                       </p>
                       <Button
                         size="sm"
@@ -197,6 +198,7 @@ export default function InsightPage() {
   const [phase, setPhase] = useState<"start" | "analys" | "resultat">("start");
   const [openArea, setOpenArea] = useState<InsightAreaId | null>(null);
   const [addFlow, setAddFlow] = useState<AddFlowState | null>(null);
+  const [showFeaturedSupport, setShowFeaturedSupport] = useState(false);
   const [contexts, setContexts] = useState<InsightContext[]>(["vardag"]);
 
   const { addTask, completedTasks } = useTasks();
@@ -227,6 +229,10 @@ export default function InsightPage() {
   );
   const insightsByEvidence = useMemo(() => prioritizedInsights(personal.insights), [personal.insights]);
   const featuredInsight = insightsByEvidence[0];
+  const featuredSupport = useMemo(
+    () => optionalSupportForInsight(featuredInsight, flow.maxFriction),
+    [featuredInsight, flow.maxFriction],
+  );
 
   useEffect(() => {
     if (demoMode) track("insight_demo_opened", { source: "insight" });
@@ -338,6 +344,44 @@ export default function InsightPage() {
                   </p>
                   <p className="text-base leading-relaxed text-ink" data-testid="insight-featured">{featuredInsight.text}</p>
                   <p className="text-xs leading-relaxed text-muted-foreground">En observation utifrån dina registreringar – inte en regel om hur du fungerar.</p>
+                  {featuredSupport && (
+                    <div className="pt-2" data-testid="insight-featured-support">
+                      {hasStrategy(featuredSupport.id) ? (
+                        <p className="rounded-xl bg-secondary/40 px-3 py-2 text-sm text-muted-foreground">
+                          Du har redan sparat ett stöd för det här området. Det finns under Dina valda strategier.
+                        </p>
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-primary/25 bg-secondary/30 px-4 text-sm font-medium text-primary hover:bg-secondary/50"
+                            aria-expanded={showFeaturedSupport}
+                            aria-controls="insight-featured-support-preview"
+                            onClick={() => setShowFeaturedSupport(open => !open)}
+                          >
+                            <Sparkles size={16} aria-hidden />
+                            {showFeaturedSupport ? "Dölj det lilla steget" : "Visa ett litet steg att prova"}
+                          </button>
+                          {showFeaturedSupport && (
+                            <div id="insight-featured-support-preview" className="mt-3 space-y-3 rounded-2xl border border-border bg-secondary/30 p-3" data-testid="insight-support-preview">
+                              <p className="text-xs font-medium text-muted-foreground">Ett möjligt stöd – bara om det passar dig</p>
+                              <p className="text-sm font-semibold text-ink">{featuredSupport.title}</p>
+                              <p className="text-sm leading-relaxed text-muted-foreground">{featuredSupport.why}</p>
+                              <p className="text-xs text-muted-foreground">Ungefär {featuredSupport.minutes} minuter. Inget läggs till förrän du väljer det.</p>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <Button type="button" className="min-h-11 rounded-xl" onClick={() => openAdd(featuredSupport)}>
+                                  <Plus size={16} aria-hidden /> Välj som uppgift
+                                </Button>
+                                <Button type="button" variant="ghost" className="min-h-11 rounded-xl" onClick={() => setShowFeaturedSupport(false)}>
+                                  Inte nu
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div data-testid="insight-empty" className="mt-3 space-y-2">
