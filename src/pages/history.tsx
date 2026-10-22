@@ -8,15 +8,16 @@ import WeekReviewCard from "@/components/week-review-card";
 import CollapsibleSection from "@/components/collapsible-section";
 import { useActivityHistory, useWeekReview } from "@/hooks/use-activity-history";
 import {
-  ENERGY_CHOICES,
   ENERGY_META,
   STATUS_LABELS,
   groupByDay,
-  type ActivityEnergy,
 } from "@/lib/activity-history";
 import { weekDates, weekStartISO, weekdayName } from "@/lib/week-review";
 import { addDaysISO, todayISO, parseISODate } from "@/lib/day";
 import { ChevronLeft, ChevronRight, History as HistoryIcon } from "lucide-react";
+import ActivityEnergyPrompt from "@/components/activity-energy-prompt";
+import { historyEnergyFlowItem } from "@/lib/history-energy-entry";
+import type { FlowItem } from "@/lib/flow-items";
 import { track } from "@/lib/analytics";
 import { useLang } from "@/hooks/use-language";
 import { useImpactCheckin } from "@/hooks/use-impact-checkin";
@@ -68,7 +69,8 @@ export default function History() {
   }, []);
 
   const [weekStart, setWeekStart] = useState(() => weekStartISO(todayISO()));
-  const { instancesBetween, setEnergy } = useActivityHistory();
+  const [energyItem, setEnergyItem] = useState<FlowItem | null>(null);
+  const { instancesBetween } = useActivityHistory();
   const { impactHistory } = useImpactCheckin();
   const review = useWeekReview(weekStart);
 
@@ -159,25 +161,20 @@ export default function History() {
                             </span>
                           )}
                         </div>
-                        {item.status === "genomford" && !item.energyImpact && (
-                          <div className="mt-2">
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("Hur påverkade den din ork? (frivilligt)")}
-                            </p>
-                            <div className="mt-1.5 flex flex-wrap gap-1.5">
-                              {ENERGY_CHOICES.map((choice: ActivityEnergy) => (
-                                <Button
-                                  key={choice}
-                                  type="button"
-                                  variant="outline"
-                                  onClick={() => setEnergy(item.sourceId, item.plannedDate, choice)}
-                                  className="pace-ds-button px-2.5 text-xs"
-                                >
-                                  {ENERGY_META[choice].dot} {t(ENERGY_META[choice].label)}
-                                </Button>
-                              ))}
-                            </div>
-                          </div>
+                        {item.actualDate && item.actualDate !== item.plannedDate && (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {t("Planerad")} {formatDay(item.plannedDate, locale)} · {t("Genomförd")} {formatDay(item.actualDate, locale)}
+                          </p>
+                        )}
+                        {item.status === "genomford" && (item.sourceId.startsWith("task-") || item.sourceId.startsWith("reminder-")) && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setEnergyItem(historyEnergyFlowItem(item))}
+                            className="mt-2 min-h-11 rounded-xl text-sm"
+                          >
+                            {t(item.energyImpact ? "Ändra energipåverkan" : "Hur påverkade den din ork?")}
+                          </Button>
                         )}
                         {item.expectedEnergy && item.energyImpact && (
                           <p className="mt-1 text-[11px] text-muted-foreground">
@@ -194,6 +191,7 @@ export default function History() {
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>
+      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
     </Layout>
   );
 }
