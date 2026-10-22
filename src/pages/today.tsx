@@ -94,7 +94,7 @@ export function TodayContent() {
           </header>
           <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
-              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 whitespace-nowrap rounded-xl px-2.5 text-xs" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
+              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 whitespace-nowrap rounded-full border-0 bg-[#512654] px-3 text-xs text-white shadow-none ring-0 hover:bg-[#623466] focus-visible:ring-2 focus-visible:ring-primary/50" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
               <DropdownMenu open={extraMenuOpen} onOpenChange={setExtraMenuOpen}>
                 <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-border bg-card px-2.5 text-xs text-muted-foreground" {...extraTriggerProps}>{t("Fler val")}{dayFilter !== "alla" && <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="min-w-44">
