@@ -357,8 +357,12 @@ export function useFlowItems(dateISO?: string): {
   const toggleItem = useCallback(
     (item: FlowItem) => {
       if (!item.completable || item.source === "barn" || item.id.startsWith("childitem-") || item.id.startsWith("child-")) return;
-      // Uppgifter skickar sin egen signal i useTasks – övriga källor gör det här.
-      if (!item.done && !item.id.startsWith("task-")) {
+      // Uppgifter och engångspåminnelser skickar sin signal från källan
+      // (useTasks/useReminders), även vid avbockning via notis. Återkommande
+      // påminnelser skickar per förekomst här, aldrig från hela serien.
+      const oneOffReminder = item.id.startsWith("rem-") &&
+        (reminders.find((r) => `rem-${r.id}` === item.id)?.repeat ?? "none") === "none";
+      if (!item.done && !item.id.startsWith("task-") && !oneOffReminder) {
         emitActivityDone({
           id: item.id,
           title: item.title,
