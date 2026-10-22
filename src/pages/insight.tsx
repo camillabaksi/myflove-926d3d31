@@ -270,6 +270,7 @@ export default function InsightPage() {
       minutes: strategy.minutes,
       nudges: [],
       profileId: profile?.id,
+      source: demoMode ? "demo" : "personal",
     });
     setAddFlow(null);
     setShowFeaturedSupport(false);
@@ -290,6 +291,7 @@ export default function InsightPage() {
       minutes: strategy.minutes,
       nudges: withNudges ? nudges : [],
       profileId: profile?.id,
+      source: demoMode ? "demo" : "personal",
     });
     // Koppling till MyFlow: strategin blir en uppgift (och ev. påminnelser).
     addTask(strategy.title, undefined, {
