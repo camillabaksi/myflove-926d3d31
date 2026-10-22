@@ -311,5 +311,5 @@ it.each([
   fireEvent.click(screen.getByRole("button", { name: label }));
   await waitFor(() => expect(close).toHaveBeenCalledOnce());
   expect(addFactor).toHaveBeenCalledWith(expect.objectContaining({ direction, strength: 1 }));
-  expect(setHistoryEnergy).toHaveBeenCalledWith("task-shelf", "2026-10-11", history, expect.any(Object));
+  expect(setHistoryEnergy).toHaveBeenCalledWith("task-shelf", "2026-10-11", history, expect.any(Object), "2026-10-11");
 });
