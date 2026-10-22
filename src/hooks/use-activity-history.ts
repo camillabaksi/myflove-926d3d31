@@ -74,8 +74,9 @@ export function useActivityHistory() {
       date: string,
       energy: ActivityEnergy,
       factor?: { id: string; occurredAt: string },
+      actualDate?: string,
     ) => {
-      setRecords((prev) => recordEnergy(prev, sourceId, date, energy, Date.now(), factor));
+      setRecords((prev) => recordEnergy(prev, sourceId, date, energy, Date.now(), factor, actualDate));
     },
     [setRecords],
   );
