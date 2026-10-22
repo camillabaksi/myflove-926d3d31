@@ -15,6 +15,14 @@ describe("capacityWithActivityFeedback", () => {
     expect(capacityWithActivityFeedback(base, "2026-10-18", [factor("a", "gives")], cutoff).percent).toBe(52);
     expect(capacityWithActivityFeedback(base, "2026-10-18", [factor("a", "drains", 4)], cutoff).percent).toBe(42);
   });
+  it("never changes today's battery for a past-day 'took a little energy' observation", () => {
+    const yesterday = { ...factor("shopping", "drains", 1), occurredAt: "2026-10-21T12:00:00+02:00", title: "Handla" };
+    expect(capacityWithActivityFeedback(base, "2026-10-22", [yesterday], "2026-10-22T06:12:00+02:00").percent).toBe(50);
+    expect(capacityWithActivityFeedback(base, "2026-10-21", [yesterday], "2026-10-21T06:12:00+02:00").percent).toBe(48);
+    const doneToday = { ...yesterday, occurredAt: "2026-10-22T12:00:00+02:00" };
+    expect(capacityWithActivityFeedback(base, "2026-10-22", [doneToday], "2026-10-22T06:12:00+02:00").percent).toBe(48);
+  });
+
   it("does not double-count duplicate factor IDs", () => {
     expect(capacityWithActivityFeedback(base, "2026-10-18", [factor("a", "gives"), factor("a", "gives")], cutoff).percent).toBe(52);
   });
