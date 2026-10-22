@@ -9,6 +9,7 @@ vi.mock("@/hooks/use-data", () => ({
     tasks: [
       { id: "a", title: "Ring skolan", dueDate: "2026-10-20", time: "09:00", completed: false },
       { id: "b", title: "Ring skolan", dueDate: "2026-10-21", time: "09:00", completed: false },
+      { id: "undated", title: "Skriv ett brev", completed: false },
     ],
     updateTask: calls.updateTask,
     deleteTask: calls.deleteTask,
@@ -43,6 +44,18 @@ describe("Delete a day activity by source identity", () => {
     }));
     expect(calls.deleteTask).not.toHaveBeenCalled();
     expect(saved).toHaveBeenCalledTimes(1);
+  });
+
+  it("allows editing a task with no due date without assigning a date", () => {
+    render(<FlowItemActions itemId="task-undated" showLabel />);
+    fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
+    const dialog = within(screen.getByRole("dialog"));
+    expect(dialog.getByLabelText("Datum")).toHaveValue("");
+    fireEvent.change(dialog.getByLabelText("Vad gäller det?"), { target: { value: "Skriv brevet" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
+    expect(calls.updateTask).toHaveBeenCalledWith("undated", expect.objectContaining({
+      title: "Skriv brevet", dueDate: undefined,
+    }));
   });
 
   it("keeps existing continuous-period settings available without turning it into a timed task", () => {
