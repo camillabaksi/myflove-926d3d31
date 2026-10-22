@@ -45,6 +45,12 @@ const AREA_FOR_INSIGHT: Record<string, InsightAreaId> = {
   people: "kommunikation",
 };
 
+/** Reuse the same evidence-to-support-area mapping throughout Insights.
+ * Unknown signals must not be assigned a guessed need or strategy. */
+export function areaForPersonalInsight(id: string): InsightAreaId | undefined {
+  return AREA_FOR_INSIGHT[id];
+}
+
 /** Insikter som inte är riktiga observationer utan bara en uppstartshälsning. */
 const PLACEHOLDER_IDS = new Set(["start"]);
 
@@ -63,7 +69,7 @@ export function buildPersonalInsight(
   const areas: InsightAreaId[] = [];
   if (ready) {
     for (const i of real) {
-      const area = AREA_FOR_INSIGHT[i.id];
+      const area = areaForPersonalInsight(i.id);
       if (area && !areas.includes(area)) areas.push(area);
     }
   }
