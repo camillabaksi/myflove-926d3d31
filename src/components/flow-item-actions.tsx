@@ -131,6 +131,7 @@ export function FlowItemActions({
   only,
   compact = false,
   showLabel = false,
+  onSaved,
   children,
 }: {
   itemId: string;
@@ -142,6 +143,8 @@ export function FlowItemActions({
   compact?: boolean;
   /** Show one clearly labeled edit action in the calendar detail view. */
   showLabel?: boolean;
+  /** Called only when a change or deletion succeeds, not on cancel. */
+  onSaved?: () => void;
   /** Vy-specifika val som flytta/öppna, före ändra och ta bort. */
   children?: ReactNode;
 }) {
@@ -184,6 +187,7 @@ export function FlowItemActions({
           <FlowItemEditDialog
             itemId={itemId}
             onClose={() => setOpen(false)}
+            onSaved={onSaved}
           />
         )}
       </>
@@ -219,6 +223,7 @@ export function FlowItemActions({
           <FlowItemEditDialog
             itemId={itemId}
             onClose={() => setOpen(false)}
+            onSaved={onSaved}
           />
         )}
     </>
@@ -228,9 +233,11 @@ export function FlowItemActions({
 function FlowItemEditDialog({
   itemId,
   onClose,
+  onSaved,
 }: {
   itemId: string;
   onClose: () => void;
+  onSaved?: () => void;
 }) {
   const { kind, realId } = kindFromId(itemId);
   const { tasks, updateTask, deleteTask } = useTasks();
@@ -364,6 +371,7 @@ function FlowItemEditDialog({
       );
     }
     toast.success("Ändringen är sparad");
+    onSaved?.();
     onClose();
   };
 
@@ -377,6 +385,7 @@ function FlowItemEditDialog({
     else if (kind === "rutin")
       setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
     toast.success("Borttagen", { description: "En sak mindre att hålla i huvudet. Planen får förändras." });
+    onSaved?.();
     onClose();
   };
 
