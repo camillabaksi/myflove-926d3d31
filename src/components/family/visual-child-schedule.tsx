@@ -587,16 +587,31 @@ export default function VisualChildSchedule({
             <p className="min-w-0 flex-1 text-center text-sm font-semibold leading-snug text-ink">{weekLabel}</p>
             <Button type="button" variant="ghost" size="icon" onClick={() => setAnchor(addDaysISO(anchor, 7))} className="h-11 w-11 rounded-2xl" aria-label={t("Nästa vecka")}><ChevronRight /></Button>
           </div>
-          <div className="grid min-w-0 grid-cols-7 gap-0.5 sm:gap-2" data-testid="family-week-grid">
+          <div className="space-y-2" data-testid="family-week-grid">
             {dates.map((date, index) => {
-               const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
-               const recurring = schoolEntries.filter((entry) => entry.weekday === index);
-                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 overflow-hidden rounded-xl px-0.5 py-2 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex min-w-0 flex-col items-center gap-1"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="w-full min-w-0 rounded-md text-center hover:bg-card/60"><p className="block w-full truncate whitespace-nowrap text-[10px] font-semibold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="block whitespace-nowrap text-sm font-semibold tabular-nums text-ink">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-7 w-7 shrink-0 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="flex flex-col items-center gap-1">
-                  {(recurring.length + dated.length) > 0 && <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-card/80 px-1 text-xs font-semibold tabular-nums text-ink" aria-label={`${recurring.length + dated.length} aktiviteter`}>{recurring.length + dated.length}</span>}
-                  {showPictograms && (dated[0] || recurring[0]) && <span className="flex min-h-7 items-center justify-center">{dated[0] ? <ActivityVisual enabled item={dated[0]} className="h-7 w-7 rounded-md" openDoc={openDoc} /> : <ActivityPictogram id="school" tone="sky" className="h-7 w-7 rounded-md" />}</span>}
-                  {(recurring.length + dated.length) > 0 && <button type="button" className="min-h-8 w-full rounded-md px-0.5 text-[10px] font-medium text-primary underline-offset-2 hover:underline" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`Visa aktiviteter ${date}`}>Visa</button>}
-                  {!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 min-w-0 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}
-                </div></section>;
+              const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
+              const recurring = schoolEntries.filter((entry) => entry.weekday === index);
+              return <section key={date} className={cn("grid min-w-0 grid-cols-[3.25rem_minmax(0,1fr)] gap-2 rounded-2xl border border-border/50 bg-card p-2 sm:grid-cols-[4rem_minmax(0,1fr)] sm:p-3", date === today && "ring-1 ring-primary/50")}>
+                <button type="button" onClick={() => { setViewDate(date); setMode("today"); }} className="flex min-h-11 flex-col items-center justify-start rounded-xl px-1 py-2 text-ink hover:bg-secondary/50" aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`}>
+                  <span className="text-xs font-medium">{t(SHORT_DAYS[index] ?? "")}</span>
+                  <span className="text-lg font-semibold tabular-nums">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</span>
+                </button>
+                <div className="min-w-0 space-y-1.5">
+                  {recurring.map((entry) => <div key={`school-${entry.id}`} className={cn("flex min-w-0 items-center gap-2 rounded-xl border px-2 py-2", CATEGORY_STYLES.skola.card)}>
+                    {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-9 w-9 shrink-0 rounded-lg" />}
+                    <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{entry.title}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{entry.start}</span>
+                  </div>)}
+                  {dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <button key={`${item.id}-${date}`} type="button" onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("flex min-h-11 w-full min-w-0 items-center gap-2 rounded-xl border px-2 py-2 text-left", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}>
+                    {showPictograms && <ActivityVisual enabled item={item} className="h-9 w-9 shrink-0 rounded-lg" openDoc={openDoc} />}
+                    <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{item.title}</span>
+                    {item.time && <span className="shrink-0 whitespace-nowrap text-xs tabular-nums text-muted-foreground">{item.time.slice(0, 5)}</span>}
+                    <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
+                  </button>; })}
+                  {dated.length + recurring.length === 0 && <p className="py-2 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
+                  {!readOnly && <button type="button" onClick={() => openAdd(undefined, date)} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-secondary/30 px-2 text-sm font-medium text-primary"><Plus size={16} aria-hidden />{t("Lägg till")}</button>}
+                </div>
+              </section>;
             })}
           </div>
           {!readOnly && <><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-11 w-full rounded-xl"><Plus size={16} /> {t("Lägg till aktivitet")}</Button>
