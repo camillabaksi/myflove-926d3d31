@@ -65,7 +65,7 @@ describe("Calendar entry view", () => {
     fireEvent.click(choices.getByRole("button", { name: "Påminnelse" }));
     fireEvent.change(add.getByLabelText("Tid"), { target: { value: "09:00" } });
     expect(add.getByRole("checkbox", { name: "Påminn mig vid start" })).toBeChecked();
-    expect(add.queryByRole("button", { name: "Återhämtning" })).not.toBeInTheDocument();
+    expect(add.getByText("Fler typer").closest("details")).not.toHaveAttribute("open");
     fireEvent.click(add.getByText("Fler typer"));
     fireEvent.click(add.getByRole("button", { name: "Återhämtning" }));
     expect(add.getByText("Återhämtning registreras som något som ger energi.")).toBeInTheDocument();
