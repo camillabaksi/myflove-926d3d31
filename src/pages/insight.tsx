@@ -99,6 +99,8 @@ interface AddFlowState {
   strategy: InsightStrategy;
   nudges: StrategyNudge[];
   anchor: string;
+  /** Capture which mode opened the dialog, even if navigation changes. */
+  demo: boolean;
 }
 
 /** Behovsområden med strategiförslag – används både i den personliga vyn och i demoläget. */
@@ -199,12 +201,13 @@ export default function InsightPage() {
   const [phase, setPhase] = useState<"start" | "analys" | "resultat">("start");
   const [openArea, setOpenArea] = useState<InsightAreaId | null>(null);
   const [addFlow, setAddFlow] = useState<AddFlowState | null>(null);
+  const [demoChosenStrategyIds, setDemoChosenStrategyIds] = useState<string[]>([]);
   const [showFeaturedSupport, setShowFeaturedSupport] = useState(false);
   const [contexts, setContexts] = useState<InsightContext[]>(["vardag"]);
 
   const { addTask, completedTasks } = useTasks();
   const { flow } = useFlowScore();
-  const { saved, addStrategy, removeStrategy, hasStrategy } = useInsightStrategies();
+  const { saved, addStrategy, removeStrategy } = useInsightStrategies();
 
   // Demoläge är en adminfunktion och kräver både explicit URL-flagga och
   // servervaliderad admin-roll. Vanliga användare kan aldrig öppna testprofiler.
@@ -262,12 +265,22 @@ export default function InsightPage() {
   const openAdd = (s: InsightStrategy) => {
     const anchor = "08:30";
     setContexts(["vardag"]);
-    setAddFlow({ strategy: s, anchor, nudges: s.makeNudges ? s.makeNudges(anchor) : [] });
+    setAddFlow({ strategy: s, anchor, nudges: s.makeNudges ? s.makeNudges(anchor) : [], demo: demoMode });
+  };
+
+  const finishDemoChoice = (strategy: InsightStrategy) => {
+    setDemoChosenStrategyIds((previous) => previous.includes(strategy.id) ? previous : [...previous, strategy.id]);
+    setAddFlow(null);
+    toast.info("Provat i demoläget. Inga riktiga uppgifter, påminnelser eller stöd har sparats.");
   };
 
   const saveSupportOnly = () => {
     if (!addFlow) return;
     const { strategy } = addFlow;
+    if (demoMode || addFlow.demo) {
+      finishDemoChoice(strategy);
+      return;
+    }
     addStrategy({
       strategyId: strategy.id,
       title: strategy.title,
@@ -289,6 +302,10 @@ export default function InsightPage() {
   const confirmAdd = (withNudges: boolean) => {
     if (!addFlow) return;
     const { strategy, nudges } = addFlow;
+    if (demoMode || addFlow.demo) {
+      finishDemoChoice(strategy);
+      return;
+    }
     addStrategy({
       strategyId: strategy.id,
       title: strategy.title,
@@ -646,7 +663,7 @@ export default function InsightPage() {
               areas={areas}
               openArea={openArea}
               setOpenArea={setOpenArea}
-              hasStrategy={hasStrategy}
+              hasStrategy={(id) => demoChosenStrategyIds.includes(id)}
               maxFriction={flow.maxFriction}
               onAdd={openAdd}
             />
@@ -680,8 +697,11 @@ export default function InsightPage() {
         <Dialog open={!!addFlow} onOpenChange={(o) => !o && setAddFlow(null)}>
           <DialogContent className="max-w-lg rounded-3xl">
             <DialogHeader>
-              <DialogTitle className="text-xl">Var vill du använda den?</DialogTitle>
-              <DialogDescription>{addFlow?.strategy.title}</DialogDescription>
+              <DialogTitle className="text-xl">{addFlow?.demo ? "Prova ett stöd i demoläge" : "Var vill du använda den?"}</DialogTitle>
+              <DialogDescription>
+                {addFlow?.strategy.title}
+                {addFlow?.demo && " · Bara en förhandsvisning. Inget sparas i dina riktiga uppgifter, påminnelser eller stöd."}
+              </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-wrap gap-2">
@@ -737,12 +757,14 @@ export default function InsightPage() {
                 Du kan behålla idén utan att lägga något på dagens att-göra-lista.
               </p>
               <Button type="button" className="min-h-12 w-full rounded-2xl" onClick={saveSupportOnly}>
-                Spara som frivilligt stöd
+                {addFlow?.demo ? "Prova att spara ett stöd" : "Spara som frivilligt stöd"}
               </Button>
-              <p className="text-xs text-muted-foreground">Ingen uppgift och ingen påminnelse skapas.</p>
+              <p className="text-xs text-muted-foreground">
+                {addFlow?.demo ? "Demoläget sparar inget i din riktiga planering." : "Ingen uppgift och ingen påminnelse skapas."}
+              </p>
               {addFlow && addFlow.nudges.length > 0 && (
                 <Button className="w-full h-12 rounded-2xl" onClick={() => confirmAdd(true)}>
-                  Lägg till som uppgift med påminnelser
+                  {addFlow?.demo ? "Prova uppgift med påminnelser" : "Lägg till som uppgift med påminnelser"}
                 </Button>
               )}
               <Button
@@ -750,7 +772,7 @@ export default function InsightPage() {
                 className="w-full h-12 rounded-2xl"
                 onClick={() => confirmAdd(false)}
               >
-                Lägg till som uppgift utan påminnelser
+                {addFlow?.demo ? "Prova uppgift utan påminnelser" : "Lägg till som uppgift utan påminnelser"}
               </Button>
               <Button
                 variant="ghost"
