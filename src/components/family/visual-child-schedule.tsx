@@ -595,23 +595,26 @@ export default function VisualChildSchedule({
             {dates.map((date, index) => {
               const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
               const recurring = schoolEntries.filter((entry) => entry.weekday === index);
+              const orderedRows = [
+                ...recurring.map(entry => ({ kind: "school" as const, entry, time: entry.start })),
+                ...dated.map(item => ({ kind: "activity" as const, item, time: item.time ?? "99:99" })),
+              ].sort((a, b) => a.time.localeCompare(b.time));
               return <section key={date} className={cn("grid min-w-0 grid-cols-[3.25rem_minmax(0,1fr)] gap-2 rounded-2xl border border-border/50 bg-card p-2 sm:grid-cols-[4rem_minmax(0,1fr)] sm:p-3", date === today && "ring-1 ring-primary/50")}>
                 <button type="button" onClick={() => { setViewDate(date); setMode("today"); }} className="flex min-h-11 flex-col items-center justify-start rounded-xl px-1 py-2 text-ink hover:bg-secondary/50" aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`}>
                   <span className="text-xs font-medium">{t(SHORT_DAYS[index] ?? "")}</span>
                   <span className="text-lg font-semibold tabular-nums">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</span>
                 </button>
                 <div className="min-w-0 space-y-1.5">
-                  {recurring.map((entry) => <div key={`school-${entry.id}`} className={cn("flex min-w-0 items-center gap-2 rounded-xl border px-2 py-2", CATEGORY_STYLES.skola.card)}>
+                  {orderedRows.map(row => row.kind === "school" ? (() => { const entry = row.entry; return <div key={`school-${entry.id}`} className={cn("flex min-w-0 items-center gap-2 rounded-xl border px-2 py-2", CATEGORY_STYLES.skola.card)}>
                     {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-9 w-9 shrink-0 rounded-lg" />}
                     <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{entry.title}</span>
                     <span className="shrink-0 text-xs text-muted-foreground">{entry.start}</span>
-                  </div>)}
-                  {dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <button key={`${item.id}-${date}`} type="button" onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("flex min-h-11 w-full min-w-0 items-center gap-2 rounded-xl border px-2 py-2 text-left", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}>
+                  </div>; })() : (() => { const item = row.item; const { meta } = decodeVisualNotes(item.notes); return <button key={`${item.id}-${date}`} type="button" onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("flex min-h-11 w-full min-w-0 items-center gap-2 rounded-xl border px-2 py-2 text-left", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}>
                     {showPictograms && <ActivityVisual enabled item={item} className="h-9 w-9 shrink-0 rounded-lg" openDoc={openDoc} />}
                     <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{item.title}</span>
                     {item.time && <span className="shrink-0 whitespace-nowrap text-xs tabular-nums text-muted-foreground">{item.time.slice(0, 5)}</span>}
                     <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
-                  </button>; })}
+                  </button>;; })())}
                   {dated.length + recurring.length === 0 && <p className="py-2 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
                   {!readOnly && <button type="button" onClick={() => openAdd(undefined, date)} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-secondary/30 px-2 text-sm font-medium text-primary"><Plus size={16} aria-hidden />{t("Lägg till")}</button>}
                 </div>
