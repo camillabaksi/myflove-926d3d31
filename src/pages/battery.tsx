@@ -80,12 +80,16 @@ export default function BatteryPage() {
             id="battery-more-details"
             defaultCollapsed
             title={t("Historik")}
-            description={t("Dina registreringar av mående och energi.")}
+            description={t("Dina manuella energi- och måendeincheckningar. Aktiviteters påverkan visas längre ner.")}
             className="pace-surface rounded-3xl p-4 shadow-soft sm:p-5"
             headingClassName="font-sans text-base font-semibold text-ink"
           >
 
           <div className="space-y-3">
+            <div className="mt-3 rounded-xl bg-secondary/30 px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
+              {t("Här visas dina incheckningar. Under Vad påverkar min energi? ser du det aktiviteter gett eller tagit. I Historik ser du vad som faktiskt genomfördes.")}
+              {" "}<Link href="/historik" className="font-medium text-primary underline underline-offset-2">{t("Öppna Historik")}</Link>
+            </div>
           <Tabs defaultValue="mood" className="w-full" data-testid="battery-history">
             <TabsList className="pace-segmented">
               <TabsTrigger value="mood" className="pace-segment">

@@ -1,5 +1,7 @@
 /** Engelska översättningar (sv → en). Nycklarna ÄR de svenska källsträngarna. */
 export const EN_HISTORY: Record<string, string> = {
+  "Hur påverkade den din ork?": "How did it affect your energy?",
+  "Ändra energipåverkan": "Edit energy influence",
   // ── Historik-sidan ────────────────────────────────────────────────────
   Historik: "History",
   "Vad hände de här dagarna – och hur påverkade det din ork?":

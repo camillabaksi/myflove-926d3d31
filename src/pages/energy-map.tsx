@@ -18,6 +18,7 @@ import { MyFloveEnergyDots } from "@/components/myflove/motion";
 import { useLang } from "@/hooks/use-language";
 import SoftWaveChart from "@/components/soft-wave-chart";
 import { useQuickCheckin } from "@/hooks/use-quick-checkin";
+import { hourlyEnergyProfile } from "@/lib/hourly-energy-profile";
 
 const LEVEL_LABELS: Record<number, string> = {
   1: "Tom",
@@ -42,10 +43,6 @@ const LEVEL_EMOJI: Record<number, string> = {
   4: "⚡",
   5: "🔋",
 };
-
-function formatHour(h: number) {
-  return `${String(h).padStart(2, "0")}:00`;
-}
 
 interface EnergyContentProps {
   showHeader?: boolean;
@@ -102,30 +99,11 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
       }));
   }, [logs, locale]);
 
-  const hourAverages = useMemo(() => {
-    const buckets: Record<number, { sum: number; n: number }> = {};
-    for (const l of logs) {
-      const h = new Date(l.logged_at).getHours();
-      buckets[h] = buckets[h] || { sum: 0, n: 0 };
-      buckets[h].sum += l.level;
-      buckets[h].n += 1;
-    }
-    return Array.from({ length: 24 }, (_, h) => ({
-      hour: formatHour(h),
-      avg: buckets[h] ? Number((buckets[h].sum / buckets[h].n).toFixed(2)) : 0,
-      n: buckets[h]?.n ?? 0,
-    })).filter((row) => row.n > 0);
-  }, [logs]);
-
-  const peakHour = useMemo(() => {
-    if (hourAverages.length === 0) return null;
-    return [...hourAverages].sort((a, b) => b.avg - a.avg)[0];
-  }, [hourAverages]);
-
-  const lowHour = useMemo(() => {
-    if (hourAverages.length === 0) return null;
-    return [...hourAverages].sort((a, b) => a.avg - b.avg)[0];
-  }, [hourAverages]);
+  const { hours: hourAverages, supportedPattern, peak: peakHour, low: lowHour, observedDays } = useMemo(
+    () => hourlyEnergyProfile(logs),
+    [logs],
+  );
+  const observedHours = hourAverages.filter((row) => row.avg != null);
 
   async function handleSave() {
     if (!userId || !selected) return;
@@ -267,23 +245,28 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
               className="rounded-2xl bg-[#F5EDF7]/30 p-3"
             >
-              {hourAverages.length === 0 ? (
+              {observedHours.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
                   {t("Logga några gånger så börjar din karta ta form.")}
                 </p>
               ) : (
                 <>
-                  <div role="img" aria-label={`${t("Snittenergi per timme")}: ${hourAverages.map((r) => `${r.hour} ${r.avg}`).join(", ")}`}>
-                    <SoftWaveChart series={[{ id: "hour", tone: "primary", values: hourAverages.map((r) => ((r.avg - 1) / 4) * 100) }]} />
-                    <div className="mt-1 flex justify-between" aria-hidden="true">
-                      {hourAverages.map((r, i) => (
-                        <span key={r.hour} className="flex-1 text-center text-[10px] text-muted-foreground">
-                          {i === 0 || i === hourAverages.length - 1 || hourAverages.length <= 8 ? r.hour : ""}
-                        </span>
-                      ))}
+                  <div role="img" aria-label={`${t("Snittenergi per timme")}: ${observedHours.map((r) => `${r.hour} ${r.avg}`).join(", ")}`}>
+                    <SoftWaveChart series={[{ id: "hour", tone: "primary", values: hourAverages.map((r) => r.avg == null ? null : ((r.avg - 1) / 4) * 100) }]} />
+                    <div className="mt-1 flex justify-between gap-2 px-1 text-[10px] tabular-nums text-muted-foreground" aria-hidden="true">
+                      <span className="shrink-0 whitespace-nowrap">00:00</span>
+                      <span className="shrink-0 whitespace-nowrap">12:00</span>
+                      <span className="shrink-0 whitespace-nowrap">23:00</span>
                     </div>
                   </div>
-                  {logs.length >= 7 && peakHour && lowHour && peakHour.hour !== lowHour.hour && (
+                  <p className="mt-2 text-xs text-muted-foreground">{t("Endast timmar med egna loggningar visas. Tomma timmar betyder att underlag saknas, inte att energin var noll.")}</p>
+                  {!supportedPattern && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {t("Vi behöver återkommande loggningar vid flera tider och minst tre olika dagar innan vi kan föreslå en vanlig energitopp.")}
+                      {observedDays > 0 ? ` (${observedDays} ${t("dagar med loggningar")})` : ""}
+                    </p>
+                  )}
+                  {supportedPattern && peakHour && lowHour && peakHour.hour !== lowHour.hour && (
                     <div className="mt-4 flex items-start gap-2 rounded-xl bg-secondary/40 p-3 text-sm">
                       <Sparkles size={16} className="text-primary shrink-0 mt-0.5" />
                       <p className="leading-snug">
