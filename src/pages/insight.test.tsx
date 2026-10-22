@@ -294,7 +294,9 @@ describe("MyFlove Insight", () => {
       render(<InsightPage />);
       fireEvent.click(within(screen.getByRole("dialog", { name: "Detta är en prototyp" })).getByRole("button", { name: "Jag förstår" }));
       fireEvent.click(screen.getByRole("button", { name: /Alex/ }));
-      await act(async () => { await vi.runAllTimersAsync(); });
+      for (let step = 0; step < 6; step++) {
+        await act(async () => { await vi.advanceTimersByTimeAsync(750); });
+      }
       const transition = screen.getByRole("button", { name: /Övergångar/ });
       fireEvent.click(transition);
       const options = screen.getAllByRole("button", { name: "Välj hur du vill använda" });
