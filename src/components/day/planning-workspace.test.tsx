@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor, within } from "@testing-librar
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PlanningWorkspace } from "./planning-workspace";
 import PlanningPage from "@/pages/planning";
-import type { ReactNode } from "react";
+import { StrictMode, type ReactNode } from "react";
 import { setCollapsed } from "@/lib/collapse-store";
 import { clearPlanningHandoffs } from "@/lib/planning-handoff";
 
@@ -109,6 +109,16 @@ describe("Plan several activities before saving", () => {
     expect(screen.getByRole("checkbox", { name: "Bella" })).toBeChecked();
     expect(screen.getByRole("button", { name: "Veckan" })).toHaveAttribute("aria-pressed", "true");
     expect(model.addChildren).not.toHaveBeenCalled();
+  });
+
+  it("restores a week selection even when React StrictMode runs setup twice", () => {
+    const first = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
+    write("Tvätta");
+    first.unmount();
+    render(<StrictMode><PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" /></StrictMode>);
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Tvätta");
+    expect(screen.getByRole("button", { name: "Veckan" })).toHaveAttribute("aria-pressed", "true");
+    expect(model.addTasks).not.toHaveBeenCalled();
   });
 
   it("drops successfully saved drafts rather than resurrecting them on a later visit", async () => {
