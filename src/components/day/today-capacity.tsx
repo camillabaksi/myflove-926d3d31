@@ -51,7 +51,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
         </div>
         <Button
           variant="outline"
-          className="mt-1.5 h-auto min-h-11 w-full whitespace-normal rounded-full border-0 bg-[#F0E5F4] text-ink shadow-none ring-0 hover:bg-[#E9DCEF] focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="mt-2 h-12 w-full whitespace-normal rounded-full border-0 bg-[#F0E5F4] text-ink shadow-none ring-0 hover:bg-[#E9DCEF] focus-visible:ring-2 focus-visible:ring-primary/50"
           onClick={() => setOpen(true)}
         >
           <Heart size={16} aria-hidden />
