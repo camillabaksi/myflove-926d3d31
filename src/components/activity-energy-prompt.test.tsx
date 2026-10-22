@@ -71,7 +71,7 @@ describe("aktivitetens faktiska energipåverkan", () => {
       expect.objectContaining({ id: input.id }),
       dayOf(input.occurredAt),
     );
-    expect(dayOf(input.occurredAt)).toBe(todayISO();
+    expect(dayOf(input.occurredAt)).toBe(todayISO());
     expect(dayOf(input.occurredAt)).not.toBe("2026-10-10");
     expect(screen.getByText(/Planerad 2026-10-10 · energin visas för dagen då den registrerades/)).toBeInTheDocument();
   });
