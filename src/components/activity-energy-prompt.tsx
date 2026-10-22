@@ -143,7 +143,7 @@ export function ActivityEnergyPrompt({
       <h2 className="text-base font-semibold">Hur kändes det?</h2>
       <p className="text-sm">{item.title}</p>
       {item.dueDate && item.dueDate !== todayISO() && (
-        <p className="text-xs text-muted-foreground">Planerad {item.dueDate} · hur energin påverkades registreras för idag.</p>
+        <p className="text-xs text-muted-foreground">Planerad {item.dueDate} · energin visas för dagen då den registrerades.</p>
       )}
       <WhyHint label="vi frågar om energin" className="self-start">
         Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
