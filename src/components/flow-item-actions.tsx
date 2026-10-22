@@ -209,7 +209,7 @@ export function FlowItemActions({
             onClick={() => setOpen(true)}
             aria-label="Ta bort"
             title="Ta bort"
-            className="press rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive"
+            className={showLabel ? "inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-muted-foreground hover:bg-muted hover:text-destructive" : "press rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive"}
           >
             <Trash2 size={size} />
           </button>
