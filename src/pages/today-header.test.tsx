@@ -25,6 +25,7 @@ describe("Approved Today-only header boundary", () => {
     expect(today).toContain("<DayGreeting");
     expect(today).toContain("<TodayCapacity percent={dayCapacity.percent} />");
     expect(today).toContain('<FamilyDayPerspectives defaultPerspective="me"');
-    expect(today).toContain('myDay={<DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false}');
+    expect(today).toContain('myDay={<><DailyFlowList dayHeadings presentation="integrated" includeChildSchedules={false}');
+    expect(today).toContain('<InvisibleWorkToday pending={pendingInvisible}');
   });
 });
