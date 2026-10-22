@@ -32,8 +32,8 @@ export function DaySummaryCard() {
   return (
     <section className="min-w-0 rounded-3xl border border-border/60 bg-card/80 px-4 py-4 sm:px-5" aria-labelledby="day-summary-title" data-testid="day-summary">
       <h2 id="day-summary-title">
-        <button type="button" aria-expanded={expanded} aria-controls={detailsId} onClick={() => setExpanded(value => !value)} className="flex min-h-12 w-full items-center justify-between gap-3 text-left text-lg font-semibold leading-snug text-ink">
-          <span className="flex min-w-0 items-center gap-2"><Sparkles size={21} className="shrink-0 text-primary" aria-hidden />{t("Din dag hittills")}</span>
+        <button type="button" aria-expanded={expanded} aria-controls={detailsId} onClick={() => setExpanded(value => !value)} className="flex min-h-12 w-full items-center justify-between gap-3 text-left text-[18px] font-semibold leading-[1.35] text-ink">
+          <span className="flex min-w-0 items-center gap-2"><Sparkles size={21} strokeWidth={1.8} className="shrink-0 text-primary" aria-hidden />{t("Din dag hittills")}</span>
           <ChevronRight size={21} aria-hidden className={`shrink-0 text-[#512654] transition-transform ${expanded ? "rotate-90" : ""}`} />
         </button>
       </h2>
