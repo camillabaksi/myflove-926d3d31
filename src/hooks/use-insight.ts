@@ -15,6 +15,8 @@ export interface SavedStrategy {
   /** Konkreta påminnelser som användaren accepterat (kan vara tom). */
   nudges: StrategyNudge[];
   profileId?: string;
+  /** Personal support or an explicitly fictional demo selection. Legacy items have no source. */
+  source?: "personal" | "demo";
   addedAt: number;
 }
 
