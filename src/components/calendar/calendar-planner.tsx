@@ -5,7 +5,7 @@ import { Link, useLocation } from "wouter";
 import { Link as PlanningLink } from "@tanstack/react-router";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
-import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, House, Leaf, MoreHorizontal, NotebookPen, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, House, Leaf, MoreHorizontal, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { paceEveryday } from "@/components/paceable/design-system";
 import { Input } from "@/components/ui/input";
