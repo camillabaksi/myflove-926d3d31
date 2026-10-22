@@ -12,8 +12,8 @@ vi.mock("@/hooks/use-insight", () => ({
   useInsightStrategies: () => ({ saved: model.saved }),
 }));
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, search }: { children: ReactNode; search?: Record<string, string> }) => (
-    <a href="/planera" data-search={JSON.stringify(search)}>{children}</a>
+  Link: ({ children, search, to }: { children: ReactNode; search?: Record<string, string>; to: string }) => (
+    <a href={to} data-search={JSON.stringify(search)}>{children}</a>
   ),
   useNavigate: () => vi.fn(),
   useRouterState: ({ select }: { select: (state: { location: { pathname: string } }) => unknown }) =>
@@ -47,6 +47,7 @@ describe("Optional strategy surfaces", () => {
     expect(screen.getByRole("link", { name: /Använd ett stöd när jag planerar/ })).toHaveAttribute("href", "/planera");
     expect(screen.getByRole("link", { name: /Använd ett stöd när jag planerar/ }))
       .toHaveAttribute("data-search", JSON.stringify({ audience: "me", period: "today", supports: "1" }));
+    expect(screen.getByRole("link", { name: /Hantera mina stöd/ })).toHaveAttribute("href", "/insight");
     expect(screen.queryByRole("checkbox")).toBeNull();
   });
 
@@ -55,6 +56,7 @@ describe("Optional strategy surfaces", () => {
     expect(screen.getByRole("button", { name: "Mina stöd" })).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByText("Gör tiden synlig")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Ta med i utkastet" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Hantera mina stöd/ })).toHaveAttribute("href", "/insight");
   });
 
   it("only updates a planning draft after explicit choice, never directly saves tasks", () => {
