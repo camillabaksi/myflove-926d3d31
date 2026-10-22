@@ -13,7 +13,13 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { todayISO, type FlowItem } from "@/lib/flow-items";
 import { cn } from "@/lib/utils";
 
+/** The source ID, not the title, identifies a saved activity across views. */
 function itemKey(item: FlowItem) {
+  return item.id;
+}
+
+/** Compatibility with orders stored before identity-based sorting. */
+function legacyItemKey(item: FlowItem) {
   return `${item.title.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim()}|${item.time ?? ""}`;
 }
 
@@ -103,34 +109,25 @@ export function DailyFlowList({
     const saved = orderMap[dayISO];
     if (!saved || saved.length === 0) return sorted;
     const byKey = new Map(sorted.map((item) => [itemKey(item), item]));
+    // Older day orders used title + time. Resolve those only when unambiguous.
+    // Two independent activities with the same title must never be lost.
+    const byLegacyKey = new Map<string, FlowItem[]>();
+    for (const item of sorted) {
+      const key = legacyItemKey(item);
+      byLegacyKey.set(key, [...(byLegacyKey.get(key) ?? []), item]);
+    }
     const out: FlowItem[] = [];
     for (const key of saved) {
-      const found = byKey.get(key);
-      if (found) {
+      const legacyMatches = byLegacyKey.get(key) ?? [];
+      const found = byKey.get(key) ?? (legacyMatches.length === 1 ? legacyMatches[0] : undefined);
+      if (found && byKey.has(itemKey(found))) {
         out.push(found);
-        byKey.delete(key);
+        byKey.delete(itemKey(found));
       }
     }
     for (const item of sorted) if (byKey.has(itemKey(item))) out.push(item);
     return out;
   }, [sourceItems, orderMap, dayISO]);
-
-  /**
-   * Samma titel + tid visas som en rad. Tar man bort raden ska även dolda
-   * kopior (t.ex. en äldre, oavslutad dag som rullat över) försvinna –
-   * annars dyker kopian upp i samma ögonblick och det ser ut som att
-   * borttagningen inte fungerade.
-   */
-  const duplicatesByKey = useMemo(() => {
-    const map = new Map<string, string[]>();
-    for (const item of sourceItems) {
-      const key = itemKey(item);
-      const ids = map.get(key) ?? [];
-      if (!ids.includes(item.id)) ids.push(item.id);
-      map.set(key, ids);
-    }
-    return map;
-  }, [sourceItems]);
 
   const move = useCallback(
     (index: number, direction: -1 | 1) => {
@@ -254,7 +251,6 @@ export function DailyFlowList({
                   actions={
                     <FlowItemActions
                       itemId={item.id}
-                      duplicateIds={duplicatesByKey.get(itemKey(item))}
                       size={14}
                       compact
                       className={cn("text-muted-foreground", integrated ? "h-11 w-11" : "h-9 w-9")}
