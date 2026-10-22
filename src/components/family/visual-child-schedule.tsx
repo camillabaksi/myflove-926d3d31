@@ -616,7 +616,6 @@ export default function VisualChildSchedule({
                     <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
                   </button>; })())}
                   {dated.length + recurring.length === 0 && <p className="py-2 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
-                  {!readOnly && <button type="button" onClick={() => openAdd(undefined, date)} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-secondary/30 px-2 text-sm font-medium text-primary"><Plus size={16} aria-hidden />{t("Lägg till")}</button>}
                 </div>
               </section>;
             })}
