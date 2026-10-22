@@ -516,7 +516,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
             <details className="rounded-xl border border-border/50 bg-secondary/20 px-3 py-1">
               <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">{t("Fler typer")} {["recovery", "period"].includes(kind) ? `· ${t(kind === "recovery" ? "Återhämtning" : "Period")}` : ""}</summary>
               <div className="grid grid-cols-2 gap-2 border-t border-border/50 py-2">
-                {([["recovery", "Återhämtning"], ["period", "Period"]] as const).map(([value, label]) => <Button key={value} type="button" variant={kind === value ? "default" : "outline"} className="min-h-11 rounded-xl" aria-pressed={kind === value} onClick={() => { setKind(value); if (value === "recovery") setImpact("gives"); }}>{t(label)}</Button>)}
+                {([["recovery", "Återhämtning"], ["period", "Period"]] as const).map(([value, label]) => <Button key={value} type="button" variant={kind === value ? "default" : "outline"} className="min-h-11 rounded-xl" aria-pressed={kind === value} onClick={() => { setKind(value); setNotify(false); if (value === "recovery") setImpact("gives"); }}>{t(label)}</Button>)}
               </div>
             </details>
           </div>}
