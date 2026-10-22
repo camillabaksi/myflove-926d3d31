@@ -111,7 +111,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const planningEntries = (planningDays[date] ?? []).filter(e => !e.parentTaskId || !entries.some(own => own.source === "task" && own.sourceId === e.parentTaskId));
   const monthStats = view === "manad" ? (() => {
     const monthDates = dates.filter(d => d.slice(0, 7) === date.slice(0, 7));
-    const counts = monthDates.map(d => (planningDays[d] ?? []).length);
+    const counts = monthDates.map(d => (days[d] ?? []).filter(e => !isFamilyEntry(e) || e.requiresParent === true).length);
     const total = counts.reduce((a, b) => a + b, 0);
     const active = counts.filter(n => n > 0).length;
     return { total, active, empty: monthDates.length - active };
