@@ -323,6 +323,7 @@ function FlowItemEditDialog({
     initial ?? { title: "", date: "", time: "", endTime: "", endDate: "", note: "", area: "vardag" as LifeArea },
   );
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [detailsExpanded, setDetailsExpanded] = useState(() => !!(initial?.endDate || initial?.endTime || initial?.note));
 
   const home = externalHome(itemId);
 
@@ -456,8 +457,8 @@ function FlowItemEditDialog({
             )}
 
 
-            <details className="rounded-xl border border-border/60 bg-secondary/20 px-3 py-1" defaultOpen={!!(initial?.endDate || initial?.endTime || initial?.note)}>
-              <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-muted-foreground">
+            <details className="rounded-xl border border-border/60 bg-secondary/20 px-3 py-1" open={detailsExpanded}>
+              <summary onClick={(event) => { event.preventDefault(); setDetailsExpanded(open => !open); }} className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-muted-foreground">
                 Fler inställningar (frivilligt)
               </summary>
               <div className="space-y-3 border-t border-border/40 py-3">
