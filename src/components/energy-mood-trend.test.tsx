@@ -60,6 +60,6 @@ describe("Energi och mående – periodpresentation", () => {
     expect(screen.getAllByRole("listitem")[0].className).toContain("w-full");
     expect(screen.getAllByRole("listitem")[0].className).not.toContain("100cqw");
     expect(screen.getAllByRole("listitem")[2].querySelectorAll("p.whitespace-nowrap")).toHaveLength(2);
-    expect(screen.getByText("1 energisvar")).toBeTruthy();
+    expect(screen.getAllByText("1 energisvar")).toHaveLength(2);
   });
 });
