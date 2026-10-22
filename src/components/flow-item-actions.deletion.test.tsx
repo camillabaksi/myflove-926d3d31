@@ -49,9 +49,9 @@ describe("Delete a day activity by source identity", () => {
     const dialog = within(screen.getByRole("dialog"));
     const more = dialog.getByText("Fler inställningar (frivilligt)").closest("details");
     expect(more).toHaveAttribute("open");
-    expect(dialog.getByLabelText("Slutdatum (valfritt – för en sammanhängande period)")).toHaveValue("2026-11-30");
+    expect(dialog.getByLabelText(/Slutdatum \(valfritt/)).toHaveValue("2026-11-30");
     expect(dialog.queryByLabelText("Tid (frivilligt)")).not.toBeInTheDocument();
-    fireEvent.change(dialog.getByLabelText("Slutdatum (valfritt – för en sammanhängande period)"), { target: { value: "2026-12-01" } });
+    fireEvent.change(dialog.getByLabelText(/Slutdatum \(valfritt/), { target: { value: "2026-12-01" } });
     fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
     expect(calls.updateReminder).toHaveBeenCalledWith("period", expect.objectContaining({
       endDate: "2026-12-01", time: undefined, endTime: undefined,
