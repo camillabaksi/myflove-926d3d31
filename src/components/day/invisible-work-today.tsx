@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/react";
-import { ChevronRight, HeartHandshake, Plus } from "lucide-react";
+import { ChevronRight, HeartHandshake } from "lucide-react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { isActiveOwner } from "@/lib/account-scope";
 import { todayISO } from "@/lib/day";
