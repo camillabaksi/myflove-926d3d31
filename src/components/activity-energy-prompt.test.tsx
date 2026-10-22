@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import type { FlowItem } from "@/lib/flow-items";
+import { dayOf, todayISO } from "@/lib/day";
 import type { InstanceRecord } from "@/lib/activity-history";
 import type { NewEnergyFactor } from "@/hooks/use-energy-flow";
 import type { EnergyFactorEntry } from "@/lib/energy-flow";
@@ -64,10 +65,43 @@ describe("aktivitetens faktiska energipåverkan", () => {
       occurredAt: input.occurredAt,
     });
     expect(setTaskActualEnergy).not.toHaveBeenCalled();
+    // The instance journal keeps the planned occurrence, while energy is
+    // observed on the actual local day (needed for accurate battery feedback).
     expect(announceSavedEnergy).toHaveBeenCalledWith(
       expect.objectContaining({ id: input.id }),
-      "2026-10-10",
+      dayOf(input.occurredAt),
     );
+    expect(dayOf(input.occurredAt)).toBe(todayISO());
+    expect(dayOf(input.occurredAt)).not.toBe("2026-10-10");
+    expect(screen.getByText(/Planerad 2026-10-10 · energin visas för dagen då den registrerades/)).toBeInTheDocument();
+  });
+
+  it("uses today's local day for an overdue task, without moving its old history record", async () => {
+    const onClose = vi.fn();
+    render(<ActivityEnergyPrompt item={item("task-overdue", "2026-01-05")} onClose={onClose} />);
+    fireEvent.click(screen.getByRole("button", { name: /Gav lite energi/ }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
+    const factor = addFactor.mock.calls[0]![0];
+    expect(factor.strength).toBe(1);
+    expect(setHistoryEnergy).toHaveBeenCalledWith(
+      "task-overdue", "2026-01-05", "gives",
+      expect.objectContaining({ id: factor.id, occurredAt: factor.occurredAt }),
+    );
+    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), dayOf(factor.occurredAt));
+    expect(dayOf(factor.occurredAt)).toBe(todayISO());
+  });
+
+  it("keeps an existing energy factor on its original observation date when it is corrected", async () => {
+    records = [{
+      key: "task-one|2026-10-11", sourceId: "task-one", date: "2026-10-11",
+      energyImpact: "drains_much", energyFactorId: "old-factor",
+      energyFactorOccurredAt: "2026-10-11T09:00:00.000Z",
+    }];
+    const close = vi.fn();
+    render(<ActivityEnergyPrompt item={item()} onClose={close} />);
+    fireEvent.click(screen.getByRole("button", { name: /Gav energi/ }));
+    await waitFor(() => expect(close).toHaveBeenCalledOnce());
+    expect(announceSavedEnergy).toHaveBeenCalledWith(expect.anything(), dayOf("2026-10-11T09:00:00.000Z"));
   });
 
   it("låter användaren försöka igen med samma energipost efter ett fel", async () => {
