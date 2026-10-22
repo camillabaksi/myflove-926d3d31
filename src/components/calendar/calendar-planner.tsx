@@ -432,8 +432,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
               <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
             </button>
           </li>)}
-        </ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
-        {familyEntries.length > 0 && <p className="text-xs text-muted-foreground">{t("Familj (visas som stöd)")} · {familyEntries.length}</p>}
+        </ul> : <p className="py-3 text-sm text-muted-foreground">{t(familyEntries.length > 0 ? "Inga egna aktiviteter planerade. Familjens händelser finns nedan." : "Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
+        {familyEntries.length > 0 && <details className="rounded-xl border border-[#EDE5E9] bg-[#FAF9F6] px-3 py-2"><summary className="min-h-11 cursor-pointer py-2 text-sm text-[#512654]">{t("Familj (visas som stöd)")} · {familyEntries.length}</summary><ul className="mt-1 space-y-1.5">{familyEntries.map(entry => <li key={entry.id}>{blockButton(entry, true)}</li>)}</ul></details>}
         <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
       </section></>}
     {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
