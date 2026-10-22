@@ -62,6 +62,9 @@ describe("Calendar entry view", () => {
     const choices = within(add.getByRole("group", { name: "Vad gäller det?" }));
     expect(choices.getAllByRole("button").map(button => button.textContent)).toEqual(["Att göra", "Händelse", "Påminnelse"]);
     expect(choices.getByRole("button", { name: "Att göra" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(choices.getByRole("button", { name: "Påminnelse" }));
+    fireEvent.change(add.getByLabelText("Tid"), { target: { value: "09:00" } });
+    expect(add.getByRole("checkbox", { name: "Påminn mig vid start" })).toBeChecked();
     expect(add.queryByRole("button", { name: "Återhämtning" })).not.toBeInTheDocument();
     fireEvent.click(add.getByText("Fler typer"));
     fireEvent.click(add.getByRole("button", { name: "Återhämtning" }));
