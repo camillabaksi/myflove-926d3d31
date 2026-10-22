@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import type { FlowKnowledge } from "@/lib/flow-learning";
 import type { SavedStrategy } from "@/hooks/use-insight";
 import type { EverydayPatterns } from "@/lib/everyday-patterns";
@@ -285,6 +285,35 @@ describe("MyFlove Insight", () => {
     expect(screen.queryByText(/Skapa en egen testprofil/i)).toBeNull();
     expect(screen.queryByText(/Fiktivt underlag/i)).toBeNull();
     expect(screen.queryByTestId("insight-open-demo")).toBeNull();
+  });
+
+  it("never saves a real task or strategy when testing fictional demo recommendations", async () => {
+    state.demo = true;
+    vi.useFakeTimers();
+    try {
+      render(<InsightPage />);
+      fireEvent.click(screen.getByRole("button", { name: /Alex/ }));
+      await act(async () => { await vi.runAllTimersAsync(); });
+      const transition = screen.getByRole("button", { name: /Övergångar/ });
+      fireEvent.click(transition);
+      const options = screen.getAllByRole("button", { name: "Välj hur du vill använda" });
+      fireEvent.click(options[0]!);
+      const dialog = within(screen.getByRole("dialog", { name: "Prova ett stöd i demoläge" }));
+      expect(dialog.getByText(/Inget sparas i dina riktiga uppgifter/)).toBeTruthy();
+      fireEvent.click(dialog.getByRole("button", { name: "Prova att spara ett stöd" }));
+      expect(savedActions.addStrategy).not.toHaveBeenCalled();
+      expect(savedActions.addTask).not.toHaveBeenCalled();
+      expect(screen.getByText("Sparat stöd")).toBeTruthy();
+
+      const remainingOptions = screen.getAllByRole("button", { name: "Välj hur du vill använda" });
+      fireEvent.click(remainingOptions[0]!);
+      const newDialog = within(screen.getByRole("dialog", { name: "Prova ett stöd i demoläge" }));
+      fireEvent.click(newDialog.getByRole("button", { name: "Prova uppgift utan påminnelser" }));
+      expect(savedActions.addTask).not.toHaveBeenCalled();
+      expect(savedActions.addStrategy).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("visar testprofiler endast i explicit demoläge", () => {
