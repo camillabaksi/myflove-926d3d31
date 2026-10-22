@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PlanningWorkspace } from "./planning-workspace";
 import PlanningPage from "@/pages/planning";
 import type { ReactNode } from "react";
+import { setCollapsed } from "@/lib/collapse-store";
 
 const model = vi.hoisted(() => ({
   owner: "owner",
@@ -61,6 +62,7 @@ beforeEach(() => {
   model.audience = "me";
   model.period = "today";
   model.supports = [];
+  setCollapsed(`${window.location.pathname}::optional-saved-strategies`, true, true);
   model.addTasks.mockReset();
   model.addChildren.mockReset().mockResolvedValue(undefined);
   model.syncUser.mockReset().mockResolvedValue({ id: "owner" });
