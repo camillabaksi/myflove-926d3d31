@@ -13,6 +13,7 @@ import { DayGreeting } from "@/components/day/day-greeting";
 import { TodayCapacity } from "@/components/day/today-capacity";
 import { DayReplanButton } from "@/components/day/day-replan";
 import { PlanningEntry } from "@/components/day/planning-workspace";
+import OptionalSavedStrategies from "@/components/day/optional-saved-strategies";
 import { MyFlovePageGrid, MyFloveWide } from "@/components/myflove/block";
 import QuickAddSheet from "@/components/quick-add-sheet";
 import { Button } from "@/components/ui/button";
@@ -114,6 +115,7 @@ export function TodayContent() {
       </MyFloveWide>
 
       <MyFloveWide className="pt-2">
+        <OptionalSavedStrategies mode="today" />
       </MyFloveWide>
       <MyFloveWide className="pt-2">
         <EveningCheck />
