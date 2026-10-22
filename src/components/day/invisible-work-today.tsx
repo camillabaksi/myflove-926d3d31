@@ -22,7 +22,6 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
       if (previous.some(row => row.owner === owner && row.date === date && (sourceId ? row.sourceId === sourceId : row.source === source && row.text.trim() === text.trim()))) return previous;
       return [...previous, { id: crypto.randomUUID(), owner, date, text: text.trim(), source, sourceId }];
     });
-    setExpanded(true);
   }
   useEffect(() => {
     const handler = (event: Event) => {
@@ -42,10 +41,10 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
     {mine.length > 0 && <section className="rounded-2xl bg-[#F8ECE6] p-3 text-ink" aria-label="Det osynliga arbetet">
       <button type="button" className="flex min-h-11 w-full items-center gap-2 text-left" aria-expanded={expanded} onClick={() => setExpanded(value => !value)}>
         <HeartHandshake size={20} className="shrink-0 text-[#986F80]" aria-hidden />
-        <span className="flex-1 font-semibold">Det osynliga arbetet <span className="text-xs font-normal text-muted-foreground">({mine.length})</span></span>
+        <span className="flex-1 font-semibold">Det osynliga arbetet ({mine.length})</span>
         <ChevronRight size={20} className={expanded ? "rotate-90 transition-transform" : "transition-transform"} aria-hidden />
       </button>
-      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row => <li key={row.id} className="flex items-start gap-2 rounded-xl bg-white/60 px-3 py-2 text-sm"><HeartHandshake size={16} className="mt-0.5 shrink-0 text-[#986F80]" aria-hidden /><span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span><span className="shrink-0 text-xs text-muted-foreground">Redan gjort</span></li>)}</ul>}
+      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row => <li key={row.id} className="flex items-start gap-2 rounded-xl bg-white/60 px-3 py-2 text-sm"><span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span><span className="shrink-0 text-xs text-muted-foreground">Redan gjort</span></li>)}</ul>}
     </section>}
   </div>;
 }
