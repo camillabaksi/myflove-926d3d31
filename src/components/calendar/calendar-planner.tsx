@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type DragEvent, type ReactNode } from "react";
 import { isoWeekNumber } from "@/lib/iso-week";
+import { PRIMARY_ADD_CHOICES, CALENDAR_ADD_KIND } from "@/lib/add-entry-choices";
 import { Link, useLocation } from "wouter";
 import { Link as PlanningLink } from "@tanstack/react-router";
 import { useUser } from "@clerk/react";
@@ -508,17 +509,36 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       <DialogContent className="pace-mobile-controls max-h-[88dvh] overflow-y-auto rounded-3xl">
         <DialogHeader><DialogTitle>{t(kind === "child" ? "Lägg till i barnens schema" : "Vad vill du lägga till?")}</DialogTitle><DialogDescription>{t("En sak i taget, i din takt.")}</DialogDescription></DialogHeader>
         <fieldset disabled={savingChildren} className="min-w-0 space-y-4">
-          {kind !== "child" && <div className="grid grid-cols-2 gap-2">{[["task", "Uppgift"], ["activity", "Aktivitet"], ["reminder", "Påminnelse"], ["recovery", "Återhämtning"], ["period", "Period"]].map(([value, label]) => <Button key={value} variant={kind === value ? "default" : "outline"} onClick={() => { setKind(value ?? "task"); if (value === "recovery") setImpact("gives"); }}>{t(label ?? "")}</Button>)}</div>}
+          {kind !== "child" && <div className="space-y-2">
+            <div className="grid grid-cols-3 gap-1.5" role="group" aria-label={t("Vad gäller det?")}>
+              {PRIMARY_ADD_CHOICES.map(choice => <Button key={choice.id} type="button" variant={kind === CALENDAR_ADD_KIND[choice.id] ? "default" : "outline"} aria-pressed={kind === CALENDAR_ADD_KIND[choice.id]} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-xl px-1.5 py-2 text-center text-xs sm:text-sm" onClick={() => { setKind(CALENDAR_ADD_KIND[choice.id]); setNotify(choice.id === "reminder"); }}>{t(choice.label)}</Button>)}
+            </div>
+            <details className="rounded-xl border border-border/50 bg-secondary/20 px-3 py-1">
+              <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">{t("Fler typer")} {["recovery", "period"].includes(kind) ? `· ${t(kind === "recovery" ? "Återhämtning" : "Period")}` : ""}</summary>
+              <div className="grid grid-cols-2 gap-2 border-t border-border/50 py-2">
+                {([["recovery", "Återhämtning"], ["period", "Period"]] as const).map(([value, label]) => <Button key={value} type="button" variant={kind === value ? "default" : "outline"} className="min-h-11 rounded-xl" aria-pressed={kind === value} onClick={() => { setKind(value); setNotify(false); if (value === "recovery") setImpact("gives"); }}>{t(label)}</Button>)}
+              </div>
+            </details>
+          </div>}
           <label className="block text-sm">{t("Namn")}<Input className="mt-1 min-h-11" value={title} onChange={e => { setTitle(e.target.value); setChosenArea(null); }} maxLength={240} autoFocus /></label>
-          <label className="block text-sm">{t("Anteckningar (valfritt)")}<textarea value={note} onChange={e => setNote(e.target.value)} maxLength={4000} rows={3} placeholder={t("Detaljer, saker att komma ihåg…")} className="mt-1 min-h-20 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" /></label>
+
           {kind !== "child" && <label className="block text-sm">{t("Område")}{proposedArea && chosenArea === null && <span className="ml-2 text-xs text-muted-foreground">{t("Föreslaget")}</span>}<select aria-label={t("Område")} className="mt-1 min-h-11 w-full rounded-xl border border-border bg-card px-3" value={newArea} onChange={e => setChosenArea(e.target.value as LifeArea)}>{ALL_AREAS.map(id => <option key={id} value={id}>{AREA_META[id].label}</option>)}</select></label>}
           {kind === "child" && <ChildScheduleRecipients children={ownedChildren} selectedIds={childIds} onChange={setChildIds} disabled={savingChildren} />}
           {kind === "child" && <label className="flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={childPeriod} onChange={e => { setChildPeriod(e.target.checked); if (e.target.checked) { setTime(""); setLength(""); } }} />Flera dagar / semester / lov</label>}
           {kind === "child" && childPeriod && <div className="space-y-2"><label className="block text-sm">Från<Input type="date" value={editDate} onChange={e => setEditDate(e.target.value)} className="mt-1 min-h-11" /></label><label className="block text-sm">Till och med<Input type="date" min={editDate} value={periodEnd} onChange={e => setPeriodEnd(e.target.value)} className="mt-1 min-h-11" /></label><p className="text-xs text-muted-foreground">En sammanhängande familjeperiod för valda barn. Blockerar inte dagens tider.</p></div>}
           {kind === "period" ? <div className="space-y-2"><div className="grid grid-cols-1 gap-3 sm:grid-cols-2"><label className="min-w-0 text-sm">{t("Från")}<Input type="date" value={editDate} onChange={e => setEditDate(e.target.value)} className="mt-1 min-h-11 w-full min-w-0 text-base" /></label><label className="min-w-0 text-sm">{t("Till och med")}<Input type="date" min={editDate} value={periodEnd} onChange={e => setPeriodEnd(e.target.value)} className="mt-1 min-h-11 w-full min-w-0 text-base" /></label></div><p className="text-xs text-muted-foreground">Visas under hela perioden utan att blockera tid eller påverka batteriet. Lektioner och utflykter läggs till separat.</p></div> : scheduleFields}
-          {kind === "child" ? (title.trim() && <div className="flex items-center gap-2 text-xs text-muted-foreground"><MulberryPictogram id={activityPresetForTitle(title)?.pictogram ?? "calendar"} className="h-8 w-8" />{t("Bildstödet kan ändras i barnets schema.")}</div>) : energyFields}
+          {kind === "child" && title.trim() && <div className="flex items-center gap-2 text-xs text-muted-foreground"><MulberryPictogram id={activityPresetForTitle(title)?.pictogram ?? "calendar"} className="h-8 w-8" />{t("Bildstödet kan ändras i barnets schema.")}</div>}
+          {kind === "recovery" && <p className="text-xs text-muted-foreground">{t("Återhämtning registreras som något som ger energi.")}</p>}
+          <details className="rounded-xl border border-border/50 bg-secondary/20 px-3 py-1">
+            <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">{t("Anteckningar och energi (frivilligt)")}</summary>
+            <div className="space-y-3 border-t border-border/50 py-3">
+              <label className="block text-sm">{t("Anteckningar (valfritt)")}<textarea value={note} onChange={e => setNote(e.target.value)} maxLength={4000} rows={3} placeholder={t("Detaljer, saker att komma ihåg…")} className="mt-1 min-h-20 w-full resize-y rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" /></label>
+              {kind !== "child" && energyFields}
+            </div>
+          </details>
           {kind !== "child" && time && <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" checked={notify} onChange={e => setNotify(e.target.checked)} />{t("Påminn mig vid start")}</label>}
           <Button className="w-full min-h-11 rounded-2xl" disabled={savingChildren || !title.trim() || !editDate || kind === "child" && !childIds.length || (kind === "period" || kind === "child" && childPeriod) && (!periodEnd || periodEnd < editDate)} onClick={() => saveNew()}><Plus size={16} />{savingChildren ? t("Sparar...") : kind === "child" ? `${t("Spara för")} ${childIds.length} ${t("barn")}` : t("Lägg till")}</Button>
+          <PlanningLink to="/planera" search={{ audience: kind === "child" ? "children" : "me", period: editDate === today ? "today" : editDate === shiftDate(today, 1) ? "tomorrow" : "week" }} onClick={() => setAdding(false)} className="flex min-h-11 items-center justify-center rounded-xl px-3 text-sm font-medium text-primary underline-offset-4 hover:underline">{t("Planera flera aktiviteter i stället")}</PlanningLink>
         </fieldset>
       </DialogContent>
     </Dialog>

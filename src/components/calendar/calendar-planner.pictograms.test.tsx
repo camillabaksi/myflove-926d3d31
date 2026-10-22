@@ -55,6 +55,24 @@ function openChildForm() {
 }
 
 describe("Calendar entry view", () => {
+  it("offers the same simple add choices as Today, with optional extras and batch planning", () => {
+    render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
+    const add = within(screen.getByRole("dialog"));
+    const choices = within(add.getByRole("group", { name: "Vad gäller det?" }));
+    expect(choices.getAllByRole("button").map(button => button.textContent)).toEqual(["Att göra", "Händelse", "Påminnelse"]);
+    expect(choices.getByRole("button", { name: "Att göra" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(choices.getByRole("button", { name: "Påminnelse" }));
+    fireEvent.change(add.getByLabelText("Tid"), { target: { value: "09:00" } });
+    expect(add.getByRole("checkbox", { name: "Påminn mig vid start" })).toBeChecked();
+    expect(add.getByText("Fler typer").closest("details")).not.toHaveAttribute("open");
+    fireEvent.click(add.getByText("Fler typer"));
+    fireEvent.click(add.getByRole("button", { name: "Återhämtning" }));
+    expect(add.getByText("Återhämtning registreras som något som ger energi.")).toBeInTheDocument();
+    expect(add.getByRole("link", { name: "Planera flera aktiviteter i stället" })).toHaveAttribute("href", "/planera");
+    expect(write).not.toHaveBeenCalledWith(expect.objectContaining({ title: expect.any(String) }));
+  });
+
   it("edits the selected month day through the shared day dialog without leaving month view", () => {
     render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     const monthButton = screen.getByRole("button", { name: "Månad" });

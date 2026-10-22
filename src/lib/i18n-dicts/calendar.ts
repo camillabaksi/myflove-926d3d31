@@ -43,6 +43,12 @@ export const EN_CALENDAR: Record<string, string> = {
 
   // calendar.tsx – selected day
   "Lägg till": "Add",
+  "Att göra": "To do",
+  "Händelse": "Event",
+  "Fler typer": "More types",
+  "Anteckningar och energi (frivilligt)": "Notes and energy (optional)",
+  "Återhämtning registreras som något som ger energi.": "Recovery is recorded as something that gives energy.",
+  "Planera flera aktiviteter i stället": "Plan several activities instead",
   "Registrera aktivitet": "Log activity",
   "Påminnelse och upprepning": "Reminder and repeats",
   Påminnelse: "Reminder",
