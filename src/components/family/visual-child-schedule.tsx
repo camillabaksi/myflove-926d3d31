@@ -480,7 +480,7 @@ export default function VisualChildSchedule({
         <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
         <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-primary" aria-hidden>{child.avatar ? <span className="text-2xl">{child.avatar}</span> : <UserRound size={24} />}</span>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-display text-xl font-bold text-ink">{child.name}</h2>
+          <h2 className="break-words text-xl font-semibold leading-snug text-ink">{child.name}</h2>
           <p className="text-sm text-muted-foreground">{t(mode === "week" ? "Veckoschema" : `Idag – ${new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(today))}`)}</p>
         </div>
         {!readOnly && <Button type="button" variant={selectionMode ? "default" : "outline"} onClick={() => { setSelectionMode((currentMode) => !currentMode); setSelectedIds([]); }} className="h-10 rounded-xl px-3"><Check size={15} /><span className="hidden sm:inline">{t(selectionMode ? "Klar" : "Välj flera")}</span></Button>}
@@ -533,13 +533,13 @@ export default function VisualChildSchedule({
               <div className="flex items-center gap-3">
                 {current && <><span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
                 <ActivityVisual enabled={showPictograms} item={current} openDoc={openDoc} />
-                 <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="pace-type-activity font-display text-lg font-bold text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="pace-type-time text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
+                 <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="pace-type-activity break-words text-base font-semibold leading-snug text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="pace-type-time text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
                 </>}
               </div>
               {next && (
                 <div className="border-t border-primary/15 pt-3">
                   <p className="text-xs font-bold uppercase text-muted-foreground">{t("Sedan")}</p>
-                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual enabled={showPictograms} item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
+                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual enabled={showPictograms} item={next} openDoc={openDoc} /><div><p className="break-words text-base font-semibold leading-snug text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
                   {wantsWarning && nextPrompt && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{nextPrompt}</p>}
                 </div>
               )}
@@ -551,7 +551,7 @@ export default function VisualChildSchedule({
 
           {todaySchoolEntries.length > 0 && (
             <section className="space-y-2" aria-label={t("Skolschema idag")}>
-              <h3 className="text-sm font-bold text-ink">{t("Skolschema idag")}</h3>
+              <h3 className="text-base font-semibold text-ink">{t("Skolschema idag")}</h3>
               {todaySchoolEntries.map((entry) => (
                 <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-sky bg-card px-3 py-2 shadow-sm">
                   {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-10 w-10" />}
@@ -568,7 +568,7 @@ export default function VisualChildSchedule({
             {(["Morgon", "Dag", "Efter skolan", "Kväll", "Utan tid"] as const).map((part) => {
               const partItems = todayItems.filter((item) => (item.time ? dayPart(item.time) : "Utan tid") === part);
               if (partItems.length === 0) return null;
-               return <section key={part}><h3 className="mb-2 text-sm font-bold text-ink">{t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
+               return <section key={part}><h3 className="mb-2 text-base font-semibold text-ink">{t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
                 const isCurrent = current?.id === item.id;
                 const isNext = next?.id === item.id;
                  const category = decodeVisualNotes(item.notes).meta.category;
