@@ -2,7 +2,7 @@ import type { SavedStrategy } from "@/hooks/use-insight";
 
 /** Legacy demo-profile strategies must not appear as personal daily suggestions. */
 export function personalSavedStrategies(saved: readonly SavedStrategy[]): SavedStrategy[] {
-  return saved.filter((s) => !s.profileId && !!s.title?.trim() && !!s.strategyId);
+  return saved.filter((s) => s.source !== "demo" && !s.profileId && !!s.title?.trim() && !!s.strategyId);
 }
 
 /** A strategy is only a draft until Planera's ordinary review and save steps. */
