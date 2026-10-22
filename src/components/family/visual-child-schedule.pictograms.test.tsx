@@ -43,7 +43,7 @@ describe("Child schedule picture support", () => {
     await waitFor(() => expect(screen.getByRole("img", { name: "Frukost" })).toHaveAttribute("src", "https://example.test/own-photo.png"));
     expect(screen.getByRole("img", { name: "Frukost" })).toHaveClass("h-11", "w-11");
     fireEvent.click(screen.getByRole("tab", { name: "Vecka" }));
-    await waitFor(() => expect(screen.getByRole("img", { name: "Frukost" })).toHaveClass("h-8", "w-8"));
+    await waitFor(() => expect(screen.getByRole("img", { name: "Frukost" })).toHaveClass("h-9", "w-9"));
   });
 });
 
@@ -66,6 +66,7 @@ describe("Add from a child schedule", () => {
     const dated = { ...item, time: "06:15" };
     const view = render(<VisualChildSchedule child={child} children={[child]} items={[dated]} {...callbacks} addItem={addItem} />);
     fireEvent.click(screen.getByRole("tab", { name: "Vecka" }));
+    fireEvent.click(screen.getByRole("button", { name: "Verktyg för schemat" }));
     fireEvent.click(screen.getByRole("button", { name: "Spara dagen som mall" }));
     prompt.mockRestore();
     view.rerender(<VisualChildSchedule child={child} children={[child]} items={[{ ...dated, date: addDaysISO(todayISO(), -7), repeat: "daily" }]} {...callbacks} addItem={addItem} />);

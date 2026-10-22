@@ -41,12 +41,12 @@ export default function OwnChildCalendar() {
           data-testid="shared-to-me"
           className="rounded-3xl border border-border/60 bg-card p-4 shadow-soft"
         >
-          <h2 className="font-display text-base font-bold text-ink">Delat med dig</h2>
+          <h2 className="text-base font-semibold text-ink">Delat med dig</h2>
           <ul className="mt-3 space-y-2">
             {sharedToMe.map((item) => (
-              <li key={item.id} className="flex items-center gap-3 rounded-2xl bg-secondary/30 p-3">
+              <li key={item.id} className="flex min-w-0 items-center gap-3 rounded-2xl bg-secondary/30 p-3">
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-ink">{item.title}</span>
+                  <span className="block break-words text-sm font-medium leading-snug text-ink">{item.title}</span>
                   {(item.date || item.time) && (
                     <span className="block text-xs text-muted-foreground">
                       {[item.date, item.time?.slice(0, 5)].filter(Boolean).join(" · ")}

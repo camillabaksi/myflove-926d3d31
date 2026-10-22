@@ -472,6 +472,7 @@ export default function VisualChildSchedule({
     toast.success(t("Tillagd i barnets schema."));
   };
 
+  const [toolsExpanded, setToolsExpanded] = useState(false);
   const weekLabel = `v. ${isoWeekNumberFromString(dates[0]!)} · ${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[0]!))}–${new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseISODate(dates[6]!))}`;
 
   return (
@@ -480,7 +481,7 @@ export default function VisualChildSchedule({
         <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-11 w-11 rounded-full" aria-label={t("Tillbaka")}><ChevronLeft /></Button>
         <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blush text-primary" aria-hidden>{child.avatar ? <span className="text-2xl">{child.avatar}</span> : <UserRound size={24} />}</span>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate font-display text-xl font-bold text-ink">{child.name}</h2>
+          <h2 className="break-words text-xl font-semibold leading-snug text-ink">{child.name}</h2>
           <p className="text-sm text-muted-foreground">{t(mode === "week" ? "Veckoschema" : `Idag – ${new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "short" }).format(parseISODate(today))}`)}</p>
         </div>
         {!readOnly && <Button type="button" variant={selectionMode ? "default" : "outline"} onClick={() => { setSelectionMode((currentMode) => !currentMode); setSelectedIds([]); }} className="h-10 rounded-xl px-3"><Check size={15} /><span className="hidden sm:inline">{t(selectionMode ? "Klar" : "Välj flera")}</span></Button>}
@@ -533,13 +534,13 @@ export default function VisualChildSchedule({
               <div className="flex items-center gap-3">
                 {current && <><span className={cn("h-12 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(current.notes).meta.category].marker)} aria-hidden />
                 <ActivityVisual enabled={showPictograms} item={current} openDoc={openDoc} />
-                 <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="pace-type-activity font-display text-lg font-bold text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="pace-type-time text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
+                 <div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase text-primary">{t("Nu")}</p><p className="pace-type-activity break-words text-base font-semibold leading-snug text-ink">{current.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(current.notes).meta)}</p>{current.time && <p className="pace-type-time text-sm text-muted-foreground">{current.time.slice(0, 5)}</p>}</div>
                 </>}
               </div>
               {next && (
                 <div className="border-t border-primary/15 pt-3">
                   <p className="text-xs font-bold uppercase text-muted-foreground">{t("Sedan")}</p>
-                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual enabled={showPictograms} item={next} openDoc={openDoc} /><div><p className="font-semibold text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
+                   <div className="mt-2 flex items-center gap-3"><span className={cn("h-10 w-1 shrink-0 rounded-full", CATEGORY_STYLES[decodeVisualNotes(next.notes).meta.category].marker)} aria-hidden /><ActivityVisual enabled={showPictograms} item={next} openDoc={openDoc} /><div><p className="break-words text-base font-semibold leading-snug text-ink">{next.title}</p><p className="text-xs text-muted-foreground">{contextLabel(decodeVisualNotes(next.notes).meta)}</p>{next.time && <p className="text-sm text-muted-foreground">{next.time.slice(0, 5)}</p>}</div></div>
                   {wantsWarning && nextPrompt && <p className="mt-3 rounded-2xl bg-card/80 p-3 text-sm text-ink">{nextPrompt}</p>}
                 </div>
               )}
@@ -551,7 +552,7 @@ export default function VisualChildSchedule({
 
           {todaySchoolEntries.length > 0 && (
             <section className="space-y-2" aria-label={t("Skolschema idag")}>
-              <h3 className="text-sm font-bold text-ink">{t("Skolschema idag")}</h3>
+              <h3 className="text-base font-semibold text-ink">{t("Skolschema idag")}</h3>
               {todaySchoolEntries.map((entry) => (
                 <div key={entry.id} className="flex items-center gap-3 rounded-xl border border-sky bg-card px-3 py-2 shadow-sm">
                   {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-10 w-10" />}
@@ -568,7 +569,7 @@ export default function VisualChildSchedule({
             {(["Morgon", "Dag", "Efter skolan", "Kväll", "Utan tid"] as const).map((part) => {
               const partItems = todayItems.filter((item) => (item.time ? dayPart(item.time) : "Utan tid") === part);
               if (partItems.length === 0) return null;
-               return <section key={part}><h3 className="mb-2 text-sm font-bold text-ink">{t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
+               return <section key={part}><h3 className="mb-2 text-base font-semibold text-ink">{t(part)}</h3><ul className="space-y-2">{partItems.map((item) => {
                 const isCurrent = current?.id === item.id;
                 const isNext = next?.id === item.id;
                  const category = decodeVisualNotes(item.notes).meta.category;
@@ -583,18 +584,38 @@ export default function VisualChildSchedule({
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
             <Button type="button" variant="ghost" size="icon" onClick={() => setAnchor(addDaysISO(anchor, -7))} className="h-11 w-11 rounded-2xl" aria-label={t("Föregående vecka")}><ChevronLeft /></Button>
-            <p className="text-sm font-semibold text-ink">{weekLabel}</p>
+            <p className="min-w-0 flex-1 text-center text-sm font-semibold leading-snug text-ink">{weekLabel}</p>
             <Button type="button" variant="ghost" size="icon" onClick={() => setAnchor(addDaysISO(anchor, 7))} className="h-11 w-11 rounded-2xl" aria-label={t("Nästa vecka")}><ChevronRight /></Button>
           </div>
-          <div className="grid min-w-0 grid-cols-7 gap-1 sm:gap-2" data-testid="family-week-grid">
+          <div className="space-y-2" data-testid="family-week-grid">
             {dates.map((date, index) => {
-               const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
-               const recurring = schoolEntries.filter((entry) => entry.weekday === index);
-                return <section key={date} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { const item = childItems.find((candidate) => candidate.id === event.dataTransfer.getData("text/plain")); if (item) void moveByDrop(item, date); }} className={cn("min-w-0 rounded-xl p-1 sm:p-2", DAY_COLUMN_CLASS[index], date === today && "ring-2 ring-primary")}><div className="mb-2 flex items-start justify-between gap-0.5"><button type="button" onClick={() => { setViewDate(date); setMode("today"); }} aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`} className="min-w-0 flex-1 rounded-md text-center hover:bg-card/60"><p className="truncate text-[11px] font-bold text-ink sm:text-sm"><span className="sm:hidden">{t(SHORT_DAYS[index] ?? "")}</span><span className="hidden sm:inline">{t(DAY_NAMES[index] ?? "")}</span></p><p className="text-[10px] text-muted-foreground">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</p></button>{!readOnly && <Button type="button" variant="ghost" size="icon" onClick={() => openCopy("day", undefined, date)} className="h-6 w-6 rounded-full" aria-label={t("Kopiera dagen")}><Ellipsis size={13} /></Button>}</div><div className="space-y-1.5">{recurring.map((entry) => <div key={`school-${entry.id}`} className="rounded-lg border border-sky bg-sky/30 p-1 text-center shadow-sm">{showPictograms && <ActivityPictogram id="school" tone="sky" className="mx-auto h-8 w-8 rounded-lg" />}<p className="truncate text-[9px] font-bold text-ink sm:text-xs">{entry.title}</p></div>)}{dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <Button key={`${item.id}-${date}`} type="button" variant="ghost" draggable={!selectionMode && !readOnly} onDragStart={(event) => event.dataTransfer.setData("text/plain", item.id)} onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("h-auto min-h-14 w-full flex-col gap-0 whitespace-normal rounded-lg border p-1 text-center shadow-sm", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}><ActivityVisual enabled={showPictograms} item={item} className="h-8 w-8 rounded-lg" openDoc={openDoc} /><span className={"block max-w-full truncate text-[9px] font-bold text-ink sm:text-xs"}>{item.title}</span><span className="hidden text-[8px] text-muted-foreground sm:block">{contextLabel(meta)}</span></Button>; })}{!readOnly && <Button type="button" variant="ghost" onClick={() => openAdd(undefined, date)} className="h-9 w-full rounded-lg border border-dashed border-border bg-card/50 p-0" aria-label={`${t("Lägg till")} ${SHORT_DAYS[index]}`}><Plus size={14} /></Button>}</div></section>;
+              const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
+              const recurring = schoolEntries.filter((entry) => entry.weekday === index);
+              return <section key={date} className={cn("grid min-w-0 grid-cols-[3.25rem_minmax(0,1fr)] gap-2 rounded-2xl border border-border/50 bg-card p-2 sm:grid-cols-[4rem_minmax(0,1fr)] sm:p-3", date === today && "ring-1 ring-primary/50")}>
+                <button type="button" onClick={() => { setViewDate(date); setMode("today"); }} className="flex min-h-11 flex-col items-center justify-start rounded-xl px-1 py-2 text-ink hover:bg-secondary/50" aria-label={`${t("Visa")} ${t(DAY_NAMES[index] ?? "")}`}>
+                  <span className="text-xs font-medium">{t(SHORT_DAYS[index] ?? "")}</span>
+                  <span className="text-lg font-semibold tabular-nums">{new Intl.DateTimeFormat(locale, { day: "numeric" }).format(parseISODate(date))}</span>
+                </button>
+                <div className="min-w-0 space-y-1.5">
+                  {recurring.map((entry) => <div key={`school-${entry.id}`} className={cn("flex min-w-0 items-center gap-2 rounded-xl border px-2 py-2", CATEGORY_STYLES.skola.card)}>
+                    {showPictograms && <ActivityPictogram id="school" tone="sky" className="h-9 w-9 shrink-0 rounded-lg" />}
+                    <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{entry.title}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{entry.start}</span>
+                  </div>)}
+                  {dated.map((item) => { const { meta } = decodeVisualNotes(item.notes); return <button key={`${item.id}-${date}`} type="button" onClick={() => readOnly ? (setViewDate(date), setMode("today")) : selectionMode ? toggleSelected(item.id) : openEdit(item, date)} className={cn("flex min-h-11 w-full min-w-0 items-center gap-2 rounded-xl border px-2 py-2 text-left", CATEGORY_STYLES[meta.category].card, selectedIds.includes(item.id) && "ring-2 ring-primary")}>
+                    {showPictograms && <ActivityVisual enabled item={item} className="h-9 w-9 shrink-0 rounded-lg" openDoc={openDoc} />}
+                    <span className="min-w-0 flex-1 break-words text-sm font-medium leading-snug text-ink">{item.title}</span>
+                    {item.time && <span className="shrink-0 whitespace-nowrap text-xs tabular-nums text-muted-foreground">{item.time.slice(0, 5)}</span>}
+                    <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
+                  </button>; })}
+                  {dated.length + recurring.length === 0 && <p className="py-2 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
+                  {!readOnly && <button type="button" onClick={() => openAdd(undefined, date)} className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-secondary/30 px-2 text-sm font-medium text-primary"><Plus size={16} aria-hidden />{t("Lägg till")}</button>}
+                </div>
+              </section>;
             })}
           </div>
           {!readOnly && <><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-11 w-full rounded-xl"><Plus size={16} /> {t("Lägg till aktivitet")}</Button>
-           <section className="space-y-2"><h3 className="text-sm font-bold text-ink">{t("Snabblänkar")}</h3><div className="grid grid-cols-3 gap-2"><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Library /><span className="text-xs">{t("Aktivitetsbank")}</span></Button><Button type="button" variant="secondary" onClick={() => { openAdd(); window.setTimeout(() => galleryRef.current?.click(), 0); }} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Images /><span className="text-xs">{t("Egna bilder")}</span></Button><Button type="button" variant="secondary" onClick={() => openCopy("week")} className="h-auto min-h-20 flex-col rounded-xl px-2 py-3"><Copy /><span className="text-xs">{t("Kopiera vecka")}</span></Button></div><div className="flex flex-wrap gap-2"><Button type="button" variant="outline" onClick={() => saveDayTemplate(anchor)} className="h-10 rounded-xl">{t("Spara dagen som mall")}</Button>{templates.map((template) => <Button key={template.id} type="button" variant="outline" onClick={() => void applyTemplate(template, anchor)} className="h-10 rounded-xl">{t(template.name)}</Button>)}</div></section></>}
+           <section className="space-y-2"><button type="button" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-muted/50 px-3 text-left text-base font-semibold text-ink" aria-expanded={toolsExpanded} onClick={() => setToolsExpanded(value => !value)}><span>{t("Verktyg för schemat")}</span><ChevronDown size={18} className={cn("transition-transform", toolsExpanded && "rotate-180")} aria-hidden /></button>{toolsExpanded && <><div className="grid grid-cols-2 gap-2 sm:grid-cols-3"><Button type="button" variant="secondary" onClick={() => openAdd()} className="h-auto min-h-16 min-w-0 flex-col gap-1 whitespace-normal break-words rounded-xl px-2 py-3 text-center"><Library /><span className="text-sm font-medium leading-snug">{t("Aktivitetsbank")}</span></Button><Button type="button" variant="secondary" onClick={() => { openAdd(); window.setTimeout(() => galleryRef.current?.click(), 0); }} className="h-auto min-h-16 min-w-0 flex-col gap-1 whitespace-normal break-words rounded-xl px-2 py-3 text-center"><Images /><span className="text-sm font-medium leading-snug">{t("Egna bilder")}</span></Button><Button type="button" variant="secondary" onClick={() => openCopy("week")} className="h-auto min-h-16 min-w-0 flex-col gap-1 whitespace-normal break-words rounded-xl px-2 py-3 text-center"><Copy /><span className="text-sm font-medium leading-snug">{t("Kopiera vecka")}</span></Button></div><div className="flex flex-wrap gap-2"><Button type="button" variant="outline" onClick={() => saveDayTemplate(anchor)} className="h-auto min-h-11 max-w-full whitespace-normal rounded-xl px-3 py-2 text-sm">{t("Spara dagen som mall")}</Button>{templates.map((template) => <Button key={template.id} type="button" variant="outline" onClick={() => void applyTemplate(template, anchor)} className="h-auto min-h-11 max-w-full whitespace-normal break-words rounded-xl px-3 py-2 text-sm">{t(template.name)}</Button>)}</div></>}</section></>}
         </div>
       )}
 
