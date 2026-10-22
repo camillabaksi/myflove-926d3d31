@@ -127,6 +127,7 @@ export default function EnergyMoodTrend() {
   return (
     <CollapsibleSection
       id="insight-energy-mood-trend"
+      defaultCollapsed
       title="Energipåverkan & mående"
       description="Vad som gett eller tagit energi, tillsammans med dina måendekollar"
       className="pace-insight-chart @container min-w-0 rounded-3xl border border-border bg-card p-[12px] font-sans @[22rem]:p-[20px] [&>div:first-child>button]:min-h-11 [&>div:first-child>button]:min-w-0 [&>div:first-child>button>span]:break-words"
