@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { todayISO } from "@/lib/flow-items";
 import type { FlowItem } from "@/lib/flow-items";
 import DailyFlowList from "./daily-flow-list";
 import FamilyDayPerspectives from "./family-day-perspectives";
@@ -18,7 +19,8 @@ vi.mock("@/hooks/use-flow-items", () => ({
     return { today, toggleItem: (item: FlowItem) => setToday(current => current.map(row => row.id === item.id ? { ...row, done: !row.done } : row)) };
   },
 }));
-vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: (_key: string, initial: Record<string, string[]>) => useState(initial) }));
+const storedDayOrder = vi.hoisted(() => ({ value: null as Record<string, string[]> | null }));
+vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: (_key: string, initial: Record<string, string[]>) => useState(storedDayOrder.value ?? initial) }));
 vi.mock("@/components/flow-item-actions", () => ({
   FlowItemActions: ({ className }: { className?: string }) => <button aria-label="Fler val" className={className} />,
   kindFromId: () => ({ kind: "uppgift", realId: "test" }),
@@ -38,6 +40,7 @@ vi.mock("@/hooks/use-child-events", () => ({
 vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ updateTask: vi.fn(), toggleTask: vi.fn() }) }));
 
 describe("Compact day activity presentation", () => {
+  beforeEach(() => { storedDayOrder.value = null; });
   it("keeps completion, read-only family rows, ordering and accessible controls", () => {
     const completed = vi.fn();
     const { container } = render(<DailyFlowList presentation="integrated" dayHeadings onCompleted={completed} />);
@@ -65,6 +68,15 @@ describe("Compact day activity presentation", () => {
     expect(screen.getAllByText(rows[1]!.title)).toHaveLength(2);
     expect(screen.getAllByRole("button", { name: `Klarmarkera ${rows[1]!.title}` })).toHaveLength(2);
     expect(screen.getAllByRole("button", { name: "Fler val" })).toHaveLength(rows.length + 1);
+  });
+
+  it("reads an existing title-based day order without migrating storage", () => {
+    const legacyKey = `${rows[3]!.title.toLocaleLowerCase("sv")}|`;
+    storedDayOrder.value = { [todayISO()]: [legacyKey] };
+    render(<DailyFlowList presentation="integrated" />);
+    expect(screen.getAllByRole("listitem").map(li => li.textContent).filter(Boolean)[0]).toContain(rows[3]!.title);
+    // The other three items stay visible and retain their individual source IDs.
+    for (const row of rows) expect(screen.getByText(row.title)).toBeInTheDocument();
   });
 
   it("leaves legacy card presentation as the default", () => {
