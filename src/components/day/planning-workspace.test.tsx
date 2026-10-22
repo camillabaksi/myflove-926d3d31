@@ -71,11 +71,23 @@ const write = (text: string) =>
   });
 
 describe("Plan several activities before saving", () => {
+  it("opens saved supports immediately after an explicit navigation from Today", () => {
+    model.supports = [{
+      id: "s1", strategyId: "time-visible", title: "Gör tiden synlig", areaId: "tid",
+      contexts: ["vardag"], friction: 2, minutes: 5, nudges: [], addedAt: 1,
+    }];
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" revealSupports />);
+    expect(screen.getByRole("button", { name: "Mina stöd" })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: "Ta med i utkastet" })).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("only turns a saved Insight support into a task after the Planera review and save", async () => {
     model.supports = [{ id:"s1", strategyId:"time-visible", title:"Gör tiden synlig", areaId:"tid",
       contexts:["vardag"], friction:2, minutes:5, nudges:[], addedAt:1 }];
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
-    const supports = screen.getByRole("button", { name: "Mina frivilliga stöd" });
+    const supports = screen.getByRole("button", { name: "Mina stöd" });
     expect(supports).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(supports);
     expect(model.addTasks).not.toHaveBeenCalled();
