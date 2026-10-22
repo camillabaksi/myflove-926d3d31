@@ -12,6 +12,7 @@ import { track } from "@/lib/analytics";
 import { activityEnergySourceId } from "@/lib/activity-energy-event";
 import { announceSavedEnergy } from "@/lib/energy-save-feedback";
 import { newEnergyFactorId } from "@/lib/energy-factor-id";
+import { energyOccurredAtForDay, initialActualDate } from "@/lib/activity-completion-date";
 
 /** Actual impact, including a small effect, stays voluntary and one tap. */
 const CHOICES: {
@@ -55,6 +56,13 @@ export function ActivityEnergyPrompt({
   const [error, setError] = useState<string | null>(null);
   const writes = useRef(new Map<string, { id: string; occurredAt: string }>());
   const saving = useRef(false);
+  const [chosenActualDate, setChosenActualDate] = useState<string | null>(null);
+  const plannedDate = item?.dueDate ?? todayISO();
+  const existingRecord = item ? records.find((record) =>
+    record.sourceId === activityEnergySourceId(item.id) && record.date === plannedDate,
+  ) : undefined;
+  const actualDate = chosenActualDate ?? initialActualDate(plannedDate, existingRecord?.energyFactorOccurredAt);
+  const isOlderActivity = !!item?.dueDate && item.dueDate < todayISO();
 
   const pick = async (choice: (typeof CHOICES)[number]) => {
     if (!item || saving.current) return;
@@ -67,7 +75,7 @@ export function ActivityEnergyPrompt({
     setBusy(true);
     setError(null);
 
-    const date = item.dueDate ?? todayISO();
+    const date = plannedDate;
     const sourceId = activityEnergySourceId(item.id);
     const record = records.find((r) => r.sourceId === sourceId && r.date === date);
     const key = `${sourceId}|${date}`;
@@ -92,11 +100,13 @@ export function ActivityEnergyPrompt({
       : legacy.length === 1
         ? { id: legacy[0].id, occurredAt: legacy[0].occurredAt }
         : undefined;
-    const write = previous ??
-      writes.current.get(key) ?? { id: newEnergyFactorId(), occurredAt: new Date().toISOString() };
-    writes.current.set(key, write);
-
     try {
+      const retried = writes.current.get(key);
+      const write = {
+        id: previous?.id ?? retried?.id ?? newEnergyFactorId(),
+        occurredAt: energyOccurredAtForDay(actualDate, previous?.occurredAt ?? retried?.occurredAt),
+      };
+      writes.current.set(key, write);
       const entry = await addFactor({
         ...write,
         title: item.title,
@@ -117,11 +127,10 @@ export function ActivityEnergyPrompt({
         setHistoryEnergy(sourceId, date, choice.history, {
           id: entry.id,
           occurredAt: entry.occurredAt,
-        });
+        }, actualDate);
       track("activity_energy_logged", { source: "idag", result: "completed" });
-      // The history entry belongs to the scheduled occurrence (date), while
-      // the energy factor happened when the user actually answered.
-      // Battery feedback must use that actual local day, not an old due date.
+      // History keeps the planned occurrence and the user-selected actual day.
+      // Only energy recorded for today's actual day can affect today's battery.
       announceSavedEnergy(entry, dayOf(entry.occurredAt) ?? todayISO());
       onClose();
     } catch {
@@ -142,9 +151,33 @@ export function ActivityEnergyPrompt({
     >
       <h2 className="text-base font-semibold">Hur kändes det?</h2>
       <p className="text-sm">{item.title}</p>
-      {item.dueDate && item.dueDate !== todayISO() && (
-        <p className="text-xs text-muted-foreground">Planerad {item.dueDate} · energin visas för dagen då den registrerades.</p>
-      )}
+      {isOlderActivity && (
+        <fieldset className="space-y-2 rounded-2xl border border-border/60 bg-secondary/20 p-3">
+          <legend className="px-1 text-sm font-medium">När gjorde du det?</legend>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" disabled={busy} aria-pressed={actualDate === plannedDate}
+              onClick={() => setChosenActualDate(plannedDate)}
+              className={cn("min-h-11 rounded-xl border px-2 py-2 text-sm", actualDate === plannedDate ? "border-primary bg-primary/10 font-semibold text-primary" : "border-border bg-card")}>
+              Planerad dag ({plannedDate})
+            </button>
+            <button type="button" disabled={busy} aria-pressed={actualDate === todayISO()}
+              onClick={() => setChosenActualDate(todayISO())}
+              className={cn("min-h-11 rounded-xl border px-2 py-2 text-sm", actualDate === todayISO() ? "border-primary bg-primary/10 font-semibold text-primary" : "border-border bg-card")}>
+              Idag
+            </button>
+          </div>
+          <details className="rounded-xl">
+            <summary className="min-h-11 cursor-pointer py-3 text-xs text-muted-foreground">Välj ett annat datum</summary>
+            <label className="block space-y-1 text-sm text-muted-foreground">
+              <span>Genomfördes</span>
+              <input type="date" value={actualDate} max={todayISO()} disabled={busy}
+                onChange={(event) => { if (event.target.value && event.target.value <= todayISO()) setChosenActualDate(event.target.value); }}
+                className="min-h-11 w-full rounded-xl border border-border bg-card px-3 text-foreground" />
+            </label>
+          </details>
+          <p className="text-xs text-muted-foreground">Energipåverkan sparas på den dag du gjorde aktiviteten, inte automatiskt på idag.</p>
+        </fieldset>
+      )
       <WhyHint label="vi frågar om energin" className="self-start">
         Vi frågar hur aktiviteten påverkade dig för att Pace över tid ska kunna förstå vad som ger
         och tar energi för just dig. Svaret är alltid frivilligt.
