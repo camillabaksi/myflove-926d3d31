@@ -130,12 +130,9 @@ export function FlowItemActions({
   size = 16,
   only,
   compact = false,
-  duplicateIds,
   children,
 }: {
   itemId: string;
-  /** Dolda kopior med samma titel och tid som tas bort tillsammans med raden. */
-  duplicateIds?: string[];
   className?: string;
   size?: number;
   /** "edit" när vyn redan har en egen ta bort-knapp. */
@@ -183,7 +180,6 @@ export function FlowItemActions({
         {open && (
           <FlowItemEditDialog
             itemId={itemId}
-            duplicateIds={duplicateIds}
             onClose={() => setOpen(false)}
           />
         )}
@@ -218,7 +214,6 @@ export function FlowItemActions({
       {open && (
           <FlowItemEditDialog
             itemId={itemId}
-            duplicateIds={duplicateIds}
             onClose={() => setOpen(false)}
           />
         )}
@@ -228,11 +223,9 @@ export function FlowItemActions({
 
 function FlowItemEditDialog({
   itemId,
-  duplicateIds,
   onClose,
 }: {
   itemId: string;
-  duplicateIds?: string[];
   onClose: () => void;
 }) {
   const { kind, realId } = kindFromId(itemId);
@@ -363,38 +356,14 @@ function FlowItemEditDialog({
   };
 
   const remove = () => {
-    /**
-     * Öppna uppgifter med samma namn och tid som redan rullat in i idag
-     * (t.ex. en oavslutad kopia från en tidigare dag) visas som EN rad.
-     * Tas raden bort ska kopiorna följa med, oavsett vilken vy man står i –
-     * annars dyker kopian upp direkt och borttagningen ser misslyckad ut.
-     */
-    const sameTaskIds: string[] = [];
-    if (kind === "uppgift" && source) {
-      const t = source as (typeof tasks)[number];
-      const today = new Date();
-      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-      const norm = (s: string) => s.toLocaleLowerCase("sv").replace(/\s+/g, " ").trim();
-      const shownToday = (d?: string) => !d || d <= todayStr;
-      if (shownToday(t.dueDate)) {
-        for (const other of tasks) {
-          if (other.id === t.id || other.completed) continue;
-          if (!shownToday(other.dueDate)) continue;
-          if (norm(other.title) !== norm(t.title) || (other.time ?? "") !== (t.time ?? "")) continue;
-          sameTaskIds.push(`task-${other.id}`);
-        }
-      }
-    }
-    const ids = Array.from(new Set([itemId, ...(duplicateIds ?? []), ...sameTaskIds]));
-    for (const id of ids) {
-      const target = kindFromId(id);
-      if (target.kind === "uppgift") deleteTask(target.realId);
-      else if (target.kind === "kalender") deleteReminder(target.realId);
-      else if (target.kind === "quickflow") removePriority(target.realId);
-      else if (target.kind === "tanke") removeThought(target.realId);
-      else if (target.kind === "rutin")
-        setRoutines((prev) => (prev ?? []).filter((r) => r.id !== target.realId));
-    }
+    // Never delete independent records based on a shared title or time.
+    // A projected duplicate has the same source ID and needs only one delete.
+    if (kind === "uppgift") deleteTask(realId);
+    else if (kind === "kalender") deleteReminder(realId);
+    else if (kind === "quickflow") removePriority(realId);
+    else if (kind === "tanke") removeThought(realId);
+    else if (kind === "rutin")
+      setRoutines((prev) => (prev ?? []).filter((r) => r.id !== realId));
     toast.success("Borttagen", { description: "En sak mindre att hålla i huvudet. Planen får förändras." });
     onClose();
   };
