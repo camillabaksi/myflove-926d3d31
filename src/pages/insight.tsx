@@ -169,11 +169,11 @@ function AreaStrategies({
                       >
                         {added ? (
                           <>
-                            <Check size={14} /> Tillagd som uppgift
+                            <Check size={14} /> Sparat stöd
                           </>
                         ) : (
                           <>
-                            <Plus size={14} /> Lägg till som uppgift
+                            <Plus size={14} /> Välj hur du vill använda
                           </>
                         )}
                       </Button>
@@ -390,7 +390,7 @@ export default function InsightPage() {
                               <p className="text-xs text-muted-foreground">Ungefär {featuredSupport.minutes} minuter. Inget läggs till förrän du väljer det.</p>
                               <div className="flex flex-wrap items-center gap-2">
                                 <Button type="button" className="min-h-11 rounded-xl" onClick={() => openAdd(featuredSupport)}>
-                                  <Plus size={16} aria-hidden /> Välj som uppgift
+                                  <Plus size={16} aria-hidden /> Välj hur du vill använda det
                                 </Button>
                                 <Button type="button" variant="ghost" className="min-h-11 rounded-xl" onClick={() => setShowFeaturedSupport(false)}>
                                   Inte nu
