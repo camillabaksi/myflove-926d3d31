@@ -1,6 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import type { FlowKnowledge } from "@/lib/flow-learning";
+import type { SavedStrategy } from "@/hooks/use-insight";
+import type { EverydayPatterns } from "@/lib/everyday-patterns";
 import { setCollapsed } from "@/lib/collapse-store";
 
 const state = {
@@ -12,9 +14,11 @@ const state = {
   } as FlowKnowledge,
   completed: [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }, { id: "5" }],
   totalDays: 9,
+  saved: [] as SavedStrategy[],
+  patterns: { ready: false, busiest: null, calmest: null, draining: null, activityDays: 0, energyLogs: 0, lines: [] } as EverydayPatterns & {lines: string[]},
 };
 const goBack = vi.fn();
-const savedActions = vi.hoisted(() => ({ addTask: vi.fn(), addStrategy: vi.fn() }));
+const savedActions = vi.hoisted(() => ({ addTask: vi.fn(), addStrategy: vi.fn(), removeStrategy: vi.fn() }));
 vi.mock("@/hooks/use-smart-back", () => ({ useSmartBack: () => goBack }));
 
 vi.mock("@tanstack/react-router", () => ({
@@ -39,13 +43,14 @@ vi.mock("@/hooks/use-data", () => ({
 vi.mock("@/hooks/use-flowscore", () => ({ useFlowScore: () => ({ flow: { maxFriction: 5 } }) }));
 vi.mock("@/hooks/use-insight", () => ({
   useInsightStrategies: () => ({
-    saved: [],
+    saved: state.saved,
     addStrategy: savedActions.addStrategy,
-    removeStrategy: vi.fn(),
-    hasStrategy: () => false,
+    removeStrategy: savedActions.removeStrategy,
+    hasStrategy: (id: string) => state.saved.some(s => s.strategyId === id),
   }),
 }));
 vi.mock("@/hooks/use-flow-learning", () => ({ useFlowLearning: () => state.knowledge }));
+vi.mock("@/hooks/use-everyday-patterns", () => ({ useEverydayPatterns: () => state.patterns }));
 vi.mock("@/hooks/use-visit-streak", () => ({
   useVisitStreak: () => ({ totalDays: state.totalDays }),
 }));
@@ -63,8 +68,11 @@ beforeEach(() => {
   goBack.mockClear();
   savedActions.addTask.mockClear();
   savedActions.addStrategy.mockClear();
+  savedActions.removeStrategy.mockClear();
+  state.saved = [];
+  state.patterns = { ready: false, busiest: null, calmest: null, draining: null, activityDays: 0, energyLogs: 0, lines: [] };
   state.demo = false;
-  for (const id of ["insight-deeper", "insight-more-observations", "insight-strategy-suggestions", "insight-my-data", "insight-energy-mood-trend", "insight-battery-load-trend"]) {
+  for (const id of ["insight-deeper", "insight-merged-patterns", "insight-saved-and-optional-supports", "insight-energy-mood-trend"]) {
     setCollapsed(`/insight::${id}`, true, true);
   }
   state.totalDays = 9;
@@ -128,14 +136,14 @@ describe("MyFlove Insight", () => {
     expect(screen.queryByText(/Balken speglar hur mycket underlag/)).toBeNull();
     const deeper = screen.getByRole("button", { name: "Utforska mer" });
     expect(deeper).toHaveAttribute("aria-expanded", "false");
-    expect(screen.queryByRole("button", { name: "Fler observationer" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Mina mönster" })).toBeNull();
     fireEvent.click(deeper);
-    const more = screen.getByRole("button", { name: "Fler observationer" });
+    const more = screen.getByRole("button", { name: "Mina mönster" });
     expect(more.getAttribute("aria-expanded")).toBe("false");
     fireEvent.click(more);
     expect(screen.getByText("En återkommande morgonobservation.")).toBeTruthy();
     expect(screen.getByText("Ett första energimönster.")).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Förslag att prova" }).getAttribute("aria-expanded")).toBe("false");
+    expect(screen.getByRole("button", { name: "Mina stöd" }).getAttribute("aria-expanded")).toBe("false");
   });
 
   it("låter användaren välja fördjupning utan att behöva öppna diagram", () => {
@@ -143,16 +151,59 @@ describe("MyFlove Insight", () => {
     const deeper = screen.getByRole("button", { name: "Utforska mer" });
     expect(deeper).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByRole("button", { name: "Energipåverkan & mående" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Mitt underlag" })).toBeNull();
+    expect(screen.queryByText("Så fungerar mina insikter")).toBeNull();
     fireEvent.click(deeper);
-    expect(screen.getByText("Diagram")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Mina stöd" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Energipåverkan & mående" }).getAttribute("aria-expanded")).toBe("false");
-    expect(screen.getByRole("button", { name: "Batteri & aktivitetstid" }).getAttribute("aria-expanded")).toBe("false");
-    const basis = screen.getByRole("button", { name: "Mitt underlag" });
-    expect(basis.getAttribute("aria-expanded")).toBe("false");
-    fireEvent.click(basis);
+    expect(screen.queryByRole("button", { name: "Batteri & aktivitetstid" })).toBeNull();
+    const method = screen.getByText("Så fungerar mina insikter");
+    fireEvent.click(method);
     expect(screen.getByText("Avslutade uppgifter")).toBeTruthy();
-    expect(screen.getByText(/antal registreringar, inte ett betyg/)).toBeTruthy();
+    expect(screen.getByText(/Antal registreringar är inget betyg/)).toBeTruthy();
+  });
+
+  it("slår ihop planeringsmönster och övriga observationer utan att påstå att en plan genomförts", () => {
+    state.knowledge = {
+      level: 50, label: "Mönster", insights: [
+        { id: "mornings", text: "Morgnarna fungerar ibland.", confidence: "vet" },
+        { id: "midday", text: "Fler saker verkar ske mitt på dagen.", confidence: "ser" },
+      ],
+    };
+    state.patterns = {
+      ready: true, activityDays: 6, energyLogs: 10, draining: { label: "tvätta", days: 3, average: 2, baseline: 4 },
+      busiest: { weekday: 1, label: "måndagar", average: 2.5, overall: 1 },
+      calmest: null, lines: ["Äldre formulering som påstod att tvätta tar energi"],
+    };
+    render(<InsightPage />);
+    fireEvent.click(screen.getByRole("button", { name: "Utforska mer" }));
+    fireEvent.click(screen.getByRole("button", { name: "Mina mönster" }));
+    const patterns = screen.getByTestId("insight-personal-list");
+    expect(within(patterns).getByText("Fler saker verkar ske mitt på dagen.")).toBeTruthy();
+    expect(within(patterns).getByText(/Bland dina planerade aktiviteter verkar måndagar/)).toBeTruthy();
+    expect(within(patterns).queryByText(/tvätta tar energi/)).toBeNull();
+    expect(screen.getByText(/inte bekräftat genomförande/)).toBeTruthy();
+  });
+
+  it("samlar redan sparade stöd och ytterligare förslag utan separata listor eller fiktiva stöd", () => {
+    state.saved = [
+      { id:"s1", strategyId:"time-visible", title:"Gör tiden synlig med timer", areaId:"tid",
+        contexts:["vardag"], friction:2, minutes:5, nudges:[], addedAt:1, source:"personal" },
+      { id:"s2", strategyId:"sensory-break", title:"Fiktivt provstöd", areaId:"sensorisk",
+        contexts:["vardag"], friction:2, minutes:5, nudges:[], addedAt:1, source:"demo" },
+    ];
+    render(<InsightPage />);
+    expect(screen.queryByText("Dina valda strategier")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Utforska mer" }));
+    const support = screen.getByRole("button", { name: "Mina stöd" });
+    fireEvent.click(support);
+    const saved = screen.getByTestId("insight-saved-supports");
+    expect(within(saved).getByText("Gör tiden synlig med timer")).toBeTruthy();
+    expect(within(saved).queryByText("Fiktivt provstöd")).toBeNull();
+    expect(screen.getByText("Fler stöd att prova")).toBeTruthy();
+    fireEvent.click(within(saved).getByRole("button", { name: "Ta bort stödet Gör tiden synlig med timer" }));
+    expect(savedActions.removeStrategy).toHaveBeenCalledOnce();
+    expect(savedActions.removeStrategy).toHaveBeenCalledWith("s1");
+    expect(savedActions.addTask).not.toHaveBeenCalled();
   });
 
   it("visar ett enda valfritt litet steg utan att skapa något vid förhandsvisning", () => {
