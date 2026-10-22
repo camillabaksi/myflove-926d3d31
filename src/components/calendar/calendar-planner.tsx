@@ -421,7 +421,6 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       <section className={cn("mt-3 space-y-3 p-3 sm:p-4", paceEveryday.surface)} aria-label="Vald dags aktiviteter">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}</h2>
-          <Button type="button" variant="secondary" className="min-h-10 rounded-full bg-[#F0EAF2] px-4 text-[#512654] hover:bg-[#E9DFEC]" onClick={() => openAdd(false, date)}><Plus size={16} className="mr-1.5" />{t("Lägg till")}</Button>
         </div>
         {selectedDayList.length ? <ul className="space-y-1.5">
           {selectedDayList.slice(0, 3).map(entry => <li key={entry.id}>
