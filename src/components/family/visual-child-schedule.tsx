@@ -594,7 +594,7 @@ export default function VisualChildSchedule({
           <div className="space-y-2" data-testid="family-week-grid">
             {dates.map((date, index) => {
               const dated = childItems.filter((item) => activityOccursOn(item, date)).sort((a, b) => (a.time ?? "99:99").localeCompare(b.time ?? "99:99"));
-              const recurring = schoolEntries.filter((entry) => entry.weekday === index);
+              const recurring = schoolEntries.filter((entry) => entry.weekday === index && !dated.some(item => { const { meta } = decodeVisualNotes(item.notes); return item.title.trim().toLocaleLowerCase("sv") === entry.title.trim().toLocaleLowerCase("sv") && (item.time?.slice(0, 5) ?? "") === entry.start && (meta.endTime ?? "") === (entry.end ?? "") && (meta.location ?? "").trim().toLocaleLowerCase("sv") === (entry.location ?? "").trim().toLocaleLowerCase("sv"); }));
               const orderedRows = [
                 ...recurring.map(entry => ({ kind: "school" as const, entry, time: entry.start })),
                 ...dated.map(item => ({ kind: "activity" as const, item, time: item.time ?? "99:99" })),
