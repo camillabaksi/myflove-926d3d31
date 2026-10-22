@@ -25,6 +25,7 @@ export const EN_CALENDAR: Record<string, string> = {
   Dag: "Day",
   Idag: "Today",
   "Visa kategorier": "Show categories",
+  "Visa och redigera dagen": "View and edit the day",
   Privat: "Private",
   Relationer: "Relationships",
   Barn: "Children",
