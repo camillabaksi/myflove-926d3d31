@@ -198,7 +198,7 @@ describe("Calendar month summary", () => {
     model.entries = [fixture];
     const { container } = render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     const todayCell = container.querySelector<HTMLElement>(`[data-month-date="${fixture.date}"]`);
-    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 aktivitet\./));
+    expect(todayCell).toHaveAttribute("aria-label", expect.stringMatching(/1 egen aktivitet eller närvaro, 0 familjehändelser\./));
   });
   it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
     model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", title: "Ring banken", time: undefined, endTime: undefined }, { ...fixture, id: "task-c", sourceId: "c", title: "Morgonpromenad", time: "07:00", endTime: "07:15" }];
