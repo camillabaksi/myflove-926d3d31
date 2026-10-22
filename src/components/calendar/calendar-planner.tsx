@@ -404,7 +404,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
               onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)}
               aria-current={d === today ? "date" : undefined}
               aria-pressed={d === date}
-              aria-label={`${index % 7 === 0 ? `Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}, ` : ""}${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.length} ${t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}. ${t("Visa dagens aktiviteter nedanför kalendern")}`}
+              aria-label={`${index % 7 === 0 ? `Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}, ` : ""}${new Date(`${d}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long" })}, ${dayEntries.filter(e => !isFamilyEntry(e) || e.requiresParent === true).length} ${t(dayEntries.filter(e => !isFamilyEntry(e) || e.requiresParent === true).length === 1 ? "egen aktivitet eller närvaro" : "egna aktiviteter eller närvaro")}, ${dayEntries.filter(isFamilyEntry).length} ${t("familjehändelser")}. ${t("Visa dagens aktiviteter nedanför kalendern")}`}
               className={cn("relative flex h-[4.6rem] min-w-0 flex-col items-center gap-2 overflow-hidden border-b border-r border-[#EEE9E7] px-0.5 py-1.5 text-left transition-colors hover:bg-secondary/30 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary sm:h-24 sm:px-1.5", index % 7 === 6 && "border-r-0", adjacent && "bg-secondary/15 text-muted-foreground", d === date && "bg-primary/5")}>
               <span className={cn("mx-auto flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-xs font-semibold", d === today && "bg-primary text-primary-foreground")}>{Number(d.slice(-2))}</span>
               <span className="flex min-h-0 w-full flex-1 flex-col items-center gap-1" aria-hidden="true">
@@ -433,7 +433,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
             </button>
           </li>)}
         </ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat än. Du behöver inte fylla dagen bara för att det finns plats.")}</p>}
-        {familyEntries.length > 0 && <p className="text-xs text-muted-foreground">{t("Familj")} · {familyEntries.length}</p>}
+        {familyEntries.length > 0 && <p className="text-xs text-muted-foreground">{t("Familj (visas som stöd)")} · {familyEntries.length}</p>}
         <Button type="button" variant="ghost" className="min-h-11 w-full justify-between rounded-xl bg-[#F1ECF2] px-4 text-sm text-[#512654] hover:bg-[#E9E1EB]" onClick={() => setView("dag")}>{t("Visa alla dagens aktiviteter")}<ChevronRight size={17} /></Button>
       </section></>}
     {view === "vecka" && <section className="space-y-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm" aria-label={t("Veckans dagar")}>
