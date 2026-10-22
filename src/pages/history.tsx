@@ -191,7 +191,7 @@ export default function History() {
           </div>
         </MyFloveWide>
       </MyFlovePageGrid>
-      <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />
+      {energyItem && <ActivityEnergyPrompt item={energyItem} onClose={() => setEnergyItem(null)} />}
     </Layout>
   );
 }
