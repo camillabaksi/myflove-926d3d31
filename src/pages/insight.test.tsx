@@ -292,6 +292,7 @@ describe("MyFlove Insight", () => {
     vi.useFakeTimers();
     try {
       render(<InsightPage />);
+      fireEvent.click(within(screen.getByRole("dialog", { name: "Detta är en prototyp" })).getByRole("button", { name: "Jag förstår" }));
       fireEvent.click(screen.getByRole("button", { name: /Alex/ }));
       await act(async () => { await vi.runAllTimersAsync(); });
       const transition = screen.getByRole("button", { name: /Övergångar/ });
