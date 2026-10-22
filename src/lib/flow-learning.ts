@@ -99,7 +99,7 @@ export function analyzeFlow(input: FlowLearningInput): FlowKnowledge {
     } else if (medianHour >= 18) {
       insights.push({
         id: "evenings",
-        text: "Du verkar få mest gjort på kvällen. Jag lägger förslagen där.",
+        text: "Flera uppgifter verkar bli klara på kvällen. Du kan själv välja om du vill planera efter det.",
         confidence: hours.length >= 15 ? "vet" : "ser",
       });
     } else {
@@ -119,7 +119,7 @@ export function analyzeFlow(input: FlowLearningInput): FlowKnowledge {
   if (heavy && heavy.count >= 3) {
     insights.push({
       id: "heavy-day",
-      text: `Jag har märkt att du brukar behöva lite mer luft mellan aktiviteter på ${WEEKDAYS[heavy.value]}ar.`,
+      text: `Du har flera öppna uppgifter planerade på ${WEEKDAYS[heavy.value]}ar. Det kan vara värt att se över utrymmet i planen.`,
       confidence: heavy.count >= 5 ? "ser" : "börjar",
     });
   }
@@ -145,7 +145,7 @@ export function analyzeFlow(input: FlowLearningInput): FlowKnowledge {
     if (lowPeak && lowPeak.count >= 3) {
       insights.push({
         id: "energy-dip",
-        text: `Din energi brukar dippa runt kl ${lowPeak.value}. Jag lägger inget tungt där.`,
+        text: `Du har registrerat låg energi flera gånger runt kl ${lowPeak.value}. Det kan vara värt att lämna utrymme då.`,
         confidence: "ser",
       });
     } else {
@@ -160,7 +160,7 @@ export function analyzeFlow(input: FlowLearningInput): FlowKnowledge {
   if (input.people > 0) {
     insights.push({
       id: "people",
-      text: "Jag har koll på vilka som hör till din vardag och räknar med dem i planen.",
+      text: "Du har lagt till personer som hör till din vardag. De kan vara relevanta när du själv planerar.",
       confidence: "ser",
     });
   }

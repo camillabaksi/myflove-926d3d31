@@ -40,6 +40,7 @@ vi.mock("@/components/simple-checkin", () => ({
 vi.mock("@/pages/mood", () => ({ MoodContent: () => null }));
 vi.mock("@/pages/energy-map", () => ({ EnergyContent: ({ readOnly }: { readOnly?: boolean }) => <div data-testid="energy-history" data-readonly={String(!!readOnly)} /> }));
 vi.mock("@/pages/energy-flow", () => ({ EnergyFlowContent: () => <div data-testid="existing-energy-tools" /> }));
+vi.mock("@/components/battery-load-trend", () => ({ default: () => <div data-testid="battery-activity-chart">Batteri & aktivitetstid</div> }));
 vi.mock("@/lib/cloud-storage", () => ({ useCloudSyncedStorage: () => [false, vi.fn()] }));
 vi.mock("@/hooks/use-energy-pattern", () => ({ useEnergyPattern: () => ({ pattern: { reliable: false } }) }));
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
@@ -81,6 +82,8 @@ describe("battery check-in entry", () => {
     fireEvent.click(screen.getByRole("button", { name: "Historik" }));
     await userEvent.click(screen.getByRole("tab", { name: /Energi/ }));
     expect(screen.getByTestId("energy-history")).toHaveAttribute("data-readonly", "true");
+    expect(screen.getByTestId("battery-activity-time-trend")).toBeInTheDocument();
+    expect(screen.getByTestId("battery-activity-chart")).toHaveTextContent("Batteri & aktivitetstid");
     fireEvent.click(screen.getByRole("button", { name: "Vad påverkar min energi?" }));
     expect(screen.getByTestId("existing-energy-tools")).toBeVisible();
     expect(screen.getByRole("link", { name: "Logga energi & mående" })).toHaveAttribute("href", "/idag");

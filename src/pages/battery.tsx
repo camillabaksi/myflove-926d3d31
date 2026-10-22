@@ -15,6 +15,7 @@ import CollapsibleSection from "@/components/collapsible-section";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MoodContent } from "@/pages/mood";
 import { EnergyContent } from "@/pages/energy-map";
+import BatteryLoadTrend from "@/components/battery-load-trend";
 import { EnergyFlowContent } from "@/pages/energy-flow";
 import { Button } from "@/components/ui/button";
 import { track } from "@/lib/analytics";
@@ -106,6 +107,9 @@ export default function BatteryPage() {
               <EnergyContent showHeader={false} readOnly />
             </TabsContent>
           </Tabs>
+          <div className="min-w-0 pt-2" data-testid="battery-activity-time-trend">
+            <BatteryLoadTrend />
+          </div>
           </div>
           </CollapsibleSection>
         </MyFloveWide>
