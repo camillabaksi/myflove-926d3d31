@@ -19,13 +19,11 @@ describe("Insikter describe observations rather than promising automatic plannin
   it("does not claim that planned-open tasks prove someone's day was demanding", () => {
     const data = base();
     data.open = Array.from({ length: 4 }, (_, i) => ({
-      createdAt: Date.now(), dueDate: `2026-10-${String(19+i*7).padStart(2, "0")}`, title: "Plan",
+      createdAt: Date.now(), dueDate: `2026-10-${String(5+i*7).padStart(2, "0")}`, title: "Plan",
     }));
     const observed = analyzeFlow(data).insights.find(i => i.id === "heavy-day");
-    if (observed) {
-      expect(observed.text).toContain("öppna uppgifter planerade");
-      expect(observed.text).not.toContain("du brukar behöva");
-    }
+    expect(observed?.text).toContain("öppna uppgifter planerade");
+    expect(observed?.text).not.toContain("du brukar behöva");
   });
 
   it("suggests considering time to recover, never implies automatic change to the user's plan", () => {
