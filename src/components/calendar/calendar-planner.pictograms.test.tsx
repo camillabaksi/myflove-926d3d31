@@ -35,7 +35,7 @@ vi.mock("@/hooks/use-children", () => ({ useChildren: () => ({ children, items: 
 vi.mock("@/hooks/use-flow-items", () => ({ useFlowItems: () => ({ today: [], toggleItem: write }) }));
 vi.mock("@/hooks/use-capacity-mode", () => ({ useCapacityMode: () => ({ mode: "normal" }) }));
 vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => ({ percent: null }) }));
-vi.mock("@/components/flow-item-actions", () => ({ FlowItemActions: () => null }));
+vi.mock("@/components/flow-item-actions", () => ({ FlowItemActions: ({ showLabel }: { showLabel?: boolean }) => showLabel ? <button type="button">Ändra aktivitet</button> : null }));
 vi.mock("@/components/flow-mascot", () => ({ FlowMascot: () => null }));
 vi.mock("@/components/calendar/family-layer-settings", () => ({ FamilyLayerSettings: () => null }));
 
@@ -84,7 +84,10 @@ describe("Calendar entry view", () => {
     fireEvent.click(day.getByRole("button", { name: /Fika med Sara/ }));
     expect(monthButton).toBeInTheDocument();
     expect(monthButton).toHaveAttribute("aria-pressed", "true");
-    expect(within(screen.getByRole("dialog")).getByRole("button", { name: "Redigera aktivitet" })).toBeInTheDocument();
+    const editDialog = within(screen.getByRole("dialog"));
+    expect(editDialog.getAllByRole("button", { name: "Ändra aktivitet" })).toHaveLength(1);
+    expect(editDialog.queryByRole("button", { name: "Redigera aktivitet" })).not.toBeInTheDocument();
+    expect(editDialog.getByRole("button", { name: "Hjälp att planera tiden" })).toBeInTheDocument();
   });
   it("keeps empty weeks short and explicitly opens or collapses all 24 hours without saving anything", () => {
     model.entries = [];
