@@ -503,29 +503,16 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
                           : "border-primary/30 bg-primary/10 text-primary hover:bg-primary/15"
                       }`}
                     >
-                      <Plus size={16} /> {t("Lägg till")}
+                      <CheckSquare size={16} aria-hidden /> {t("Registrera aktivitet")}
                     </button>
                     <button
                       onClick={() => setIsAddingReminder(true)}
                       className="flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors bg-card border-border text-foreground hover:border-primary/40 hover:bg-secondary/50"
                     >
-                      <Plus size={16} className="text-primary" />
-                      {t("Påminnelse")}
+                      <Bell size={16} className="text-primary" aria-hidden />
+                      {t("Påminnelse och upprepning")}
                     </button>
                     <CopyDayButton date={selectedDateStr} />
-                    <button
-                      onClick={() => setPictoMode(!pictoMode)}
-                      aria-pressed={pictoMode}
-                      title={t("Visa bildstöd för aktiviteter")}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-sm font-medium border transition-colors ${
-                        pictoMode
-                          ? "bg-accent/30 border-accent/40 text-foreground"
-                          : "bg-card border-border text-muted-foreground hover:border-primary/40 hover:bg-secondary/50"
-                      }`}
-                    >
-                      <span aria-hidden>🖼️</span>
-                      {t("Bildstöd")}
-                    </button>
                   </div>
                 </div>
 
