@@ -188,6 +188,19 @@ describe("aktivitetens faktiska energipåverkan", () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
+  it("visar bara en energifråga när samma källa signalerar en klar påminnelse två gånger", () => {
+    render(<GlobalActivityEnergyPrompt />);
+    act(() => {
+      emitActivityDone({ id: "rem-once", title: "Hämta paket", dueDate: "2026-10-22" });
+      emitActivityDone({ id: "rem-once", title: "Hämta paket", dueDate: "2026-10-22" });
+    });
+    expect(screen.getAllByRole("region", { name: "Hur kändes det?" })).toHaveLength(1);
+    expect(screen.getByText("Hämta paket")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: /Vet inte/ }));
+    expect(screen.queryByRole("region", { name: "Hur kändes det?" })).not.toBeInTheDocument();
+    expect(addFactor).not.toHaveBeenCalled();
+  });
+
   it("behåller nästa aktivitet i kön medan den första besvaras", async () => {
     render(<GlobalActivityEnergyPrompt />);
     act(() => {
