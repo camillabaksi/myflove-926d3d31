@@ -32,6 +32,8 @@ import {
   type PlanningPeriod,
 } from "@/lib/planning";
 import { DayReplanButton } from "@/components/day/day-replan";
+import OptionalSavedStrategies from "@/components/day/optional-saved-strategies";
+import { addStrategyToPlanningDraft } from "@/lib/saved-strategy-planning";
 
 export const PLANNING_PERIODS = [
   ["today", "Idag"],
@@ -456,6 +458,13 @@ export function PlanningWorkspace({
               )}
               className="resize-y rounded-2xl border-[#E8DDE6] bg-[#FAF9F6] text-base leading-7 focus-visible:ring-[#9C80A3]"
             />
+            {!forChildren && (
+              <OptionalSavedStrategies
+                mode="planning"
+                draftText={text}
+                onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
+              />
+            )}
             <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
               <span aria-live="polite">
                 {lineCount} {t(lineCount === 1 ? "aktivitet" : "aktiviteter")}
