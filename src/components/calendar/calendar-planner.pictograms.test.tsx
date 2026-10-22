@@ -55,6 +55,19 @@ function openChildForm() {
 }
 
 describe("Calendar entry view", () => {
+  it("edits the selected month day through the shared day dialog without leaving month view", () => {
+    render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    const monthButton = screen.getByRole("button", { name: "Månad" });
+    expect(monthButton).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByRole("button", { name: "Lägg till" })).toHaveLength(1);
+    fireEvent.click(screen.getByRole("button", { name: "Visa och redigera dagen" }));
+    const day = within(screen.getByRole("dialog"));
+    expect(day.getByText("Visa, redigera eller lägg till aktiviteter för dagen.")).toBeInTheDocument();
+    fireEvent.click(day.getByRole("button", { name: /Fika med Sara/ }));
+    expect(monthButton).toBeInTheDocument();
+    expect(monthButton).toHaveAttribute("aria-pressed", "true");
+    expect(within(screen.getByRole("dialog")).getByRole("button", { name: "Redigera aktivitet" })).toBeInTheDocument();
+  });
   it("keeps empty weeks short and explicitly opens or collapses all 24 hours without saving anything", () => {
     model.entries = [];
     const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
