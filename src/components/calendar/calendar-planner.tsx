@@ -511,7 +511,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         <fieldset disabled={savingChildren} className="min-w-0 space-y-4">
           {kind !== "child" && <div className="space-y-2">
             <div className="grid grid-cols-3 gap-1.5" role="group" aria-label={t("Vad gäller det?")}>
-              {PRIMARY_ADD_CHOICES.map(choice => <Button key={choice.id} type="button" variant={kind === CALENDAR_ADD_KIND[choice.id] ? "default" : "outline"} aria-pressed={kind === CALENDAR_ADD_KIND[choice.id]} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-xl px-1.5 py-2 text-center text-xs sm:text-sm" onClick={() => setKind(CALENDAR_ADD_KIND[choice.id])}>{t(choice.label)}</Button>)}
+              {PRIMARY_ADD_CHOICES.map(choice => <Button key={choice.id} type="button" variant={kind === CALENDAR_ADD_KIND[choice.id] ? "default" : "outline"} aria-pressed={kind === CALENDAR_ADD_KIND[choice.id]} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-xl px-1.5 py-2 text-center text-xs sm:text-sm" onClick={() => { setKind(CALENDAR_ADD_KIND[choice.id]); setNotify(choice.id === "reminder"); }}>{t(choice.label)}</Button>)}
             </div>
             <details className="rounded-xl border border-border/50 bg-secondary/20 px-3 py-1">
               <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">{t("Fler typer")} {["recovery", "period"].includes(kind) ? `· ${t(kind === "recovery" ? "Återhämtning" : "Period")}` : ""}</summary>
