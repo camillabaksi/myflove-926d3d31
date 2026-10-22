@@ -87,14 +87,14 @@ export function TodayContent() {
               <div className="min-w-0"><h2 id="your-day-title" className="pace-editorial pace-editorial-section text-xl sm:text-2xl text-ink">{t("Din dag")}</h2><p className="text-xs sm:text-sm text-muted-foreground">{dateHeadingLabel(dateLabel, locale)}</p></div>
               <div className="flex shrink-0 items-center gap-1">
                 <RouterLink to="/quickflow" className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><Feather size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Fånga")}</span><span className="sr-only min-[390px]:hidden">{t("Fånga en tanke")}</span></RouterLink>
-                <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-lavender/55 px-2 text-xs font-semibold text-ink hover:bg-lavender/75"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
+                <RouterLink to="/planera" search={{ audience: "me", period: "today" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><NotebookPen size={15} aria-hidden />{t("Planera")}</RouterLink>
                 <RouterLink to="/kalender" search={{ view: "vecka" }} className="inline-flex min-h-11 items-center gap-1 rounded-xl px-1.5 text-xs font-medium text-muted-foreground hover:bg-secondary/50"><CalendarDays size={15} aria-hidden /><span className="hidden min-[390px]:inline">{t("Veckan")}</span><span className="sr-only min-[390px]:hidden">{t("Visa veckan")}</span></RouterLink>
               </div>
             </div>
           </header>
           <div className="pt-0.5">
             <FamilyDayPerspectives defaultPerspective="me" compactSelector selectorLeadingControl={<>
-              <Button type="button" size="sm" className="min-h-11 shrink-0 gap-1 whitespace-nowrap rounded-full border-0 bg-[#512654] px-3 text-xs text-white shadow-none ring-0 hover:bg-[#623466] focus-visible:ring-2 focus-visible:ring-primary/50" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
+              <Button type="button" size="sm" className="h-12 shrink-0 gap-1 whitespace-nowrap rounded-full border-0 bg-[#512654] px-3.5 text-xs text-white shadow-none ring-0 hover:bg-[#623466] focus-visible:ring-2 focus-visible:ring-primary/50" onClick={() => setAddOpen(true)}><Plus size={13} aria-hidden />{t("Lägg till")}</Button>
               <DropdownMenu open={extraMenuOpen} onOpenChange={setExtraMenuOpen}>
                 <DropdownMenuTrigger asChild><button type="button" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border border-border bg-card px-2.5 text-xs text-muted-foreground" {...extraTriggerProps}>{t("Fler val")}{dayFilter !== "alla" && <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />}<ChevronDown size={12} aria-hidden /></button></DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="min-w-44">
