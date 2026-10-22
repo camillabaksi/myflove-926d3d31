@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useUser } from "@clerk/react";
-import { Feather, History, Save, X, Sparkles, Trash2, ChevronDown } from "lucide-react";
+import { Feather, History, Save, X, Sparkles, Trash2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,7 +34,7 @@ export function DaySpaceNote({ compact = false }: { compact?: boolean }) {
       <Button ref={opener} variant="ghost" className="min-h-11 max-w-full gap-2 whitespace-normal text-left text-muted-foreground" onClick={() => { setDate(todayISO()); setOpen(true); }}><Feather size={15} aria-hidden />Det som också tog plats</Button>
       <Dialog open={open} onOpenChange={setOpen}><DialogContent className="pace-ds max-h-[85dvh] overflow-y-auto" onCloseAutoFocus={event => { event.preventDefault(); opener.current?.focus(); }}><DialogTitle>Det som också tog plats</DialogTitle><DialogDescription>Din privata anteckning för dagen.</DialogDescription>{editor}</DialogContent></Dialog>
     </> : <>
-      <div className="pace-day-space-card"><header className="flex min-w-0 items-center justify-between gap-2"><button type="button" aria-expanded={expanded} aria-controls={panelId} onClick={() => setExpanded(value => !value)} className="flex min-h-11 min-w-0 flex-1 items-center justify-between gap-2 text-left"><h2 className="font-handwritten text-[clamp(1.9rem,6vw,2.5rem)] leading-tight text-ink">Det som också tog plats</h2><ChevronDown size={21} aria-hidden className={`shrink-0 text-[#512654] transition-transform ${expanded ? "rotate-180" : ""}`} /></button>{expanded && <Button variant="ghost" size="icon" aria-label="Välj tidigare datum" aria-expanded={history} onClick={() => setHistory(value => !value)}><History size={18} aria-hidden /></Button>}</header>
+      <div className="pace-day-space-card"><header className="flex min-w-0 items-center justify-between gap-2"><button type="button" aria-expanded={expanded} aria-controls={panelId} onClick={() => setExpanded(value => !value)} className="flex min-h-11 min-w-0 flex-1 items-center justify-between gap-2 text-left"><h2 className="font-handwritten text-[clamp(1.9rem,6vw,2.5rem)] leading-tight text-ink">Det som också tog plats</h2><ChevronRight size={21} aria-hidden className={`shrink-0 text-[#512654] transition-transform ${expanded ? "rotate-90" : ""}`} /></button>{expanded && <Button variant="ghost" size="icon" aria-label="Välj tidigare datum" aria-expanded={history} onClick={() => setHistory(value => !value)}><History size={18} aria-hidden /></Button>}</header>
       {expanded && history && <label className="block text-sm text-muted-foreground">Datum<input aria-label="Anteckningens datum" type="date" value={date} max={currentDay} onChange={event => { if (validSpaceDate(event.target.value) && event.target.value <= currentDay) setDate(event.target.value); }} className="ml-2 min-h-11 max-w-full rounded-lg border border-border bg-card px-2 text-ink" /></label>}
       <div id={panelId} hidden={!expanded}>{editor}</div>
       </div>
