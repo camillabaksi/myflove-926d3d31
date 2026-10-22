@@ -162,7 +162,7 @@ describe("MyFlove Insight", () => {
   it("kräver separat bekräftelse innan ett frivilligt stöd sparas som uppgift", () => {
     render(<InsightPage />);
     fireEvent.click(screen.getByRole("button", { name: "Visa ett litet steg att prova" }));
-    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj hur du vill använda det" }));
     expect(screen.getByRole("dialog", { name: "Var vill du använda den?" })).toBeTruthy();
     expect(savedActions.addTask).not.toHaveBeenCalled();
     const firstDialog = within(screen.getByRole("dialog"));
@@ -170,7 +170,7 @@ describe("MyFlove Insight", () => {
     expect(savedActions.addTask).not.toHaveBeenCalled();
     expect(savedActions.addStrategy).not.toHaveBeenCalled();
 
-    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj hur du vill använda det" }));
     fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Lägg till som uppgift utan påminnelser" }));
     expect(savedActions.addTask).toHaveBeenCalledTimes(1);
     expect(savedActions.addTask).toHaveBeenCalledWith("Gör tiden synlig med timer", undefined,
@@ -184,7 +184,7 @@ describe("MyFlove Insight", () => {
   it("sparar strategi som frivilligt stöd utan att lägga till en uppgift idag", () => {
     render(<InsightPage />);
     fireEvent.click(screen.getByRole("button", { name: "Visa ett litet steg att prova" }));
-    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj som uppgift" }));
+    fireEvent.click(within(screen.getByTestId("insight-support-preview")).getByRole("button", { name: "Välj hur du vill använda det" }));
     const dialog = within(screen.getByRole("dialog"));
     expect(dialog.getByText("Ingen uppgift och ingen påminnelse skapas.")).toBeTruthy();
     fireEvent.click(dialog.getByRole("button", { name: "Spara som frivilligt stöd" }));
