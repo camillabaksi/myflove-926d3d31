@@ -397,7 +397,14 @@ export function PlanningWorkspace({
               variant={period === value ? "default" : "ghost"}
               aria-pressed={period === value}
               className="pace-segment"
-              onClick={() => void navigate({ to: "/planera", search: { audience, period: value } })}
+              onClick={() => {
+                // Update the local controls even if the URL already holds
+                // the selected period after restoring a different draft.
+                setPeriod(value);
+                setDate(value === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
+                setWeekAnchor(todayISO());
+                void navigate({ to: "/planera", search: { audience, period: value } });
+              }}
             >
               {t(label)}
             </Button>
