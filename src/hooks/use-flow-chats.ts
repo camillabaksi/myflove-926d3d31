@@ -174,13 +174,15 @@ export async function saveFlowMessage(
   conversationId: string,
   role: FlowRole,
   content: string,
+  /** Optional preassigned UUID so approved actions keep a stable origin ID. */
+  messageId?: string,
 ): Promise<void> {
   const { data: userData } = await supabase.auth.getUser();
   const uid = userData.user?.id;
   if (!uid) throw new Error("Du verkar inte vara inloggad – meddelandet kunde inte sparas.");
   const { error } = await supabase
     .from("flow_messages")
-    .insert({ conversation_id: conversationId, user_id: uid, role, content });
+    .insert({ conversation_id: conversationId, user_id: uid, role, content, ...(messageId ? { id: messageId } : {}) });
   if (error) throw new Error("Meddelandet kunde inte sparas. Försök igen.");
   await supabase
     .from("flow_conversations")
