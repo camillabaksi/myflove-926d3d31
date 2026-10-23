@@ -167,6 +167,62 @@ export function paceActionTaskId(actionKey: string): string | undefined {
   return `pace-action-${match[1].toLowerCase()}-${match[2]}`;
 }
 
+/**
+ * Each item in a saved Pace action gets its own stable source identity. The
+ * shopping receipt stores IDs only (never titles or household information).
+ */
+export function paceActionItemId(actionKey: string, index: number): string | undefined {
+  const sourceId = paceActionTaskId(actionKey);
+  return sourceId && Number.isSafeInteger(index) && index >= 0
+    ? `${sourceId}-item-${index}`
+    : undefined;
+}
+
+/** Steps belong to both the approved suggestion and its intended task. */
+export function paceActionStepId(actionKey: string, taskId: string, index: number): string | undefined {
+  const sourceId = paceActionItemId(actionKey, index);
+  return sourceId && taskId ? `${sourceId}-step-${taskId}` : undefined;
+}
+
+export type PaceShoppingReceipt = { id: string };
+
+export function recordPaceShoppingReceipt(
+  receipts: PaceShoppingReceipt[],
+  id: string,
+): PaceShoppingReceipt[] {
+  return receipts.some((receipt) => receipt.id === id) ? receipts : [...receipts, { id }];
+}
+
+/**
+ * Add shopping items sequentially so a confirmed subset remains recoverable
+ * after a transient network error. The caller stores a receipt immediately
+ * after each confirmed insert; no receipt is recorded before acknowledgement.
+ */
+export async function addPaceShoppingItems(
+  actionKey: string,
+  titles: string[],
+  savedReceiptIds: ReadonlySet<string>,
+  addConfirmed: (title: string, id: string) => Promise<void>,
+  confirmReceipt: (id: string) => void,
+  isAllowed: () => boolean,
+): Promise<number> {
+  const entries = titles.map((title, index) => ({ title, id: paceActionItemId(actionKey, index) }));
+  if (entries.some(entry => !entry.id)) throw new Error("An unsaved suggestion cannot write shopping items");
+  const saved = new Set(savedReceiptIds);
+  let added = 0;
+  for (const entry of entries) {
+    const id = entry.id!;
+    if (saved.has(id)) continue;
+    if (!isAllowed()) throw new Error("The active account changed");
+    await addConfirmed(entry.title, id);
+    if (!isAllowed()) throw new Error("The active account changed");
+    confirmReceipt(id);
+    saved.add(id);
+    added++;
+  }
+  return added;
+}
+
 export const ACTION_LABEL: Record<FlowActionKind, string> = {
   flytta: "Flytta uppgiften",
   forenkla: "Gör den mindre",

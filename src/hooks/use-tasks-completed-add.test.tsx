@@ -9,7 +9,38 @@ vi.mock("@/lib/cloud-storage", () => ({
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
 vi.mock("@/lib/flow-signal", () => ({ flowDone: vi.fn() }));
 vi.mock("@/lib/haptics", () => ({ haptic: vi.fn() }));
-import { useTasks } from "./use-data";
+import { useShoppingList, useTasks } from "./use-data";
+
+describe("Pace proposals reuse the existing task and personal shopping sources", () => {
+  it("does not duplicate saved step IDs when the same Pace split is accepted again", () => {
+    const { result } = renderHook(() => useTasks());
+    act(() => result.current.addTask("Inlämning", "2026-10-23", { id: "assignment" }));
+    const one = { id: "pace-action-message-0-item-0-step-assignment", title: "Hitta källor" };
+    const two = { id: "pace-action-message-0-item-1-step-assignment", title: "Skriv första stycket" };
+    act(() => {
+      result.current.addTaskSteps("assignment", [one, two]);
+      result.current.addTaskSteps("assignment", [one, two]);
+    });
+    expect(result.current.tasks[0]?.steps).toHaveLength(2);
+    expect(result.current.tasks[0]?.steps?.map(step => step.id)).toEqual([one.id, two.id]);
+    act(() => result.current.addTaskSteps("assignment", [one, { title: "Korrekturläs" }]));
+    expect(result.current.tasks[0]?.steps).toHaveLength(3);
+  });
+
+  it("supports the same item title in separate approved suggestions without duplicating one source ID", () => {
+    const { result } = renderHook(() => useShoppingList());
+    const sourceA = "pace-action-8734a390-b95c-4981-9c5d-1298534245a2-0-item-0";
+    const sourceB = "pace-action-8734a390-b95c-4981-9c5d-1298534245a2-1-item-0";
+    act(() => {
+      result.current.addItem("Mjölk", sourceA);
+      result.current.addItem("Mjölk", sourceA);
+    });
+    expect(result.current.items).toHaveLength(1);
+    act(() => result.current.addItem("Mjölk", sourceB));
+    expect(result.current.items).toHaveLength(2);
+    expect(new Set(result.current.items.map(item => item.id)).size).toBe(2);
+  });
+});
 
 describe("manual completed task creation", () => {
   it("creates at most one activity for the same Pace action, even across synchronous double clicks", () => {

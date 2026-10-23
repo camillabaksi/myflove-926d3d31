@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allowedFlowMoveDate, flowEditTaskPatch, matchTask, paceActionTaskId, parseFlowReply, validFlowDate, type FlowAction } from "./flow-actions";
+import { addPaceShoppingItems, allowedFlowMoveDate, flowEditTaskPatch, matchTask, paceActionItemId, paceActionStepId, paceActionTaskId, parseFlowReply, recordPaceShoppingReceipt, validFlowDate, type FlowAction } from "./flow-actions";
 
 const tasks = [
   { id: "mon", title: "Handla", dueDate: "2026-10-19" },
@@ -21,6 +21,57 @@ describe("Pace task actions share identity with Idag and Kalender", () => {
     expect(paceActionTaskId("not-a-uuid:0")).toBeUndefined();
     expect(paceActionTaskId(`${message}:-1`)).toBeUndefined();
     expect(paceActionTaskId(`${message}:1.2`)).toBeUndefined();
+  });
+
+  it("gives every shopping line and every task-specific step a unique saved-proposal identity", () => {
+    const first = "8734a390-b95c-4981-9c5d-1298534245a2:0";
+    const second = "8734a390-b95c-4981-9c5d-1298534245a2:1";
+    const firstItem = paceActionItemId(first, 0);
+    expect(firstItem).toBe("pace-action-8734a390-b95c-4981-9c5d-1298534245a2-0-item-0");
+    expect(paceActionItemId(first, 0)).toBe(firstItem);
+    expect(paceActionItemId(first, 1)).not.toBe(firstItem);
+    expect(paceActionItemId(second, 0)).not.toBe(firstItem);
+    expect(paceActionItemId("tmp-a-1:0", 0)).toBeUndefined();
+    expect(paceActionItemId(first, -1)).toBeUndefined();
+    expect(paceActionStepId(first, "task-a", 0)).not.toBe(paceActionStepId(first, "task-b", 0));
+    expect(paceActionStepId(first, "task-a", 0)).not.toBe(paceActionStepId(first, "task-a", 1));
+    expect(paceActionStepId("tmp-a-1:0", "task-a", 0)).toBeUndefined();
+  });
+
+  it("records only successfully acknowledged shopping items and retries only missing ones", async () => {
+    const key = "8734a390-b95c-4981-9c5d-1298534245a2:2";
+    const receipts: string[] = [];
+    let failSecond = true;
+    const added: string[] = [];
+    const add = async (title: string, id: string) => {
+      if (title === "mjölk" && failSecond) throw new Error("Nätverksfel");
+      added.push(id);
+    };
+    const confirm = (id: string) => { receipts.push(id); };
+    await expect(addPaceShoppingItems(key, ["bröd", "mjölk", "ägg"], new Set(receipts), add, confirm, () => true))
+      .rejects.toThrow("Nätverksfel");
+    expect(receipts).toEqual([paceActionItemId(key, 0)]);
+    expect(added).toEqual([paceActionItemId(key, 0)]);
+    failSecond = false;
+    expect(await addPaceShoppingItems(key, ["bröd", "mjölk", "ägg"], new Set(receipts), add, confirm, () => true))
+      .toBe(2);
+    expect(added).toEqual([paceActionItemId(key, 0), paceActionItemId(key, 1), paceActionItemId(key, 2)]);
+    expect(await addPaceShoppingItems(key, ["bröd", "mjölk", "ägg"], new Set(receipts), add, confirm, () => true))
+      .toBe(0);
+    expect(recordPaceShoppingReceipt(receipts.map(id => ({ id })), receipts[0]!)).toHaveLength(3);
+  });
+
+  it("never acknowledges an unsaved message or a shopping mutation after account change", async () => {
+    const ids: string[] = [];
+    const key = "8734a390-b95c-4981-9c5d-1298534245a2:3";
+    let sameOwner = true;
+    await expect(addPaceShoppingItems("tmp-a-1:0", ["bröd"], new Set(), async () => {}, id => ids.push(id), () => true))
+      .rejects.toThrow(/unsaved/i);
+    expect(ids).toEqual([]);
+    await expect(addPaceShoppingItems(key, ["bröd"], new Set(), async () => {
+      sameOwner = false;
+    }, id => ids.push(id), () => sameOwner)).rejects.toThrow(/account changed/i);
+    expect(ids).toEqual([]);
   });
 
   it("uses an explicit stable ID even when titles match on different days", () => {
