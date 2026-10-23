@@ -359,35 +359,7 @@ export function PlanningWorkspace({
                   {t("Lägg till eller hantera barn")}
                 </Link>
               </p>
-            ) : (
-              stage === "write" && (
-                <fieldset className="mt-4">
-                  <legend className="text-sm font-medium">{t("Vilka barn gäller det?")}</legend>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {children.map((child) => (
-                      <label
-                        key={child.id}
-                        className="flex min-h-11 max-w-full cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 text-sm"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selected.includes(child.id)}
-                          onChange={(event) =>
-                            setSelected((previous) =>
-                              event.target.checked
-                                ? [...previous, child.id]
-                                : previous.filter((id) => id !== child.id),
-                            )
-                          }
-                          className="h-4 w-4 accent-primary"
-                        />
-                        <span className="min-w-0 break-words">{child.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-              )
-            )}
+            ) : null}
           </>
         )}
         {stage === "write" && (
@@ -500,7 +472,7 @@ export function PlanningWorkspace({
               {t("Vad vill du planera?")}
             </label>
             <p id={`help-${audience}`} className="text-sm text-muted-foreground">
-              {t("En aktivitet per rad. Lägg till detaljer efteråt om du vill.")}
+              {t("En aktivitet per rad. Detaljer kan du välja sedan.")}
             </p>
             <Textarea
               id={`activities-${audience}`}
@@ -516,6 +488,33 @@ export function PlanningWorkspace({
               )}
               className="resize-y rounded-2xl border-[#E8DDE6] bg-[#FAF9F6] text-base leading-7 focus-visible:ring-[#9C80A3]"
             />
+            {forChildren && !childStore.loading && children.length > 0 && (
+              <fieldset className="mt-4" data-testid="planning-children-after-input">
+                <legend className="text-sm font-medium">{t("Vilka barn gäller det?")}</legend>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {children.map((child) => (
+                    <label
+                      key={child.id}
+                      className="flex min-h-11 max-w-full cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(child.id)}
+                        onChange={(event) =>
+                          setSelected((previous) =>
+                            event.target.checked
+                              ? [...previous, child.id]
+                              : previous.filter((id) => id !== child.id),
+                          )
+                        }
+                        className="h-4 w-4 accent-primary"
+                      />
+                      <span className="min-w-0 break-words">{child.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
             {!forChildren && (
               <OptionalSavedStrategies
                 mode="planning"
