@@ -115,7 +115,7 @@ describe("Plan several activities before saving", () => {
     expect(within(first).getByText("Frukost")).toBeTruthy();
     expect(within(second).getByText("Simskola")).toBeTruthy();
     expect(within(first).getByText("Bella, Bianca")).toBeTruthy();
-    expect(within(first).getByText(/\\d{4}/)).toBeTruthy();
+    expect(within(first).getByText(/\d{4}/)).toBeTruthy();
     expect(model.addChildren).not.toHaveBeenCalled();
 
     fireEvent.click(first.querySelector("summary")!);
