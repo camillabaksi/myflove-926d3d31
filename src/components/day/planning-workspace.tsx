@@ -163,9 +163,11 @@ export function PlanningWorkspace({
   const { addPlannedPeriods } = useReminders();
   const { activeArea } = useActiveArea();
   const today = todayISO();
-  const [period, setPeriod] = useState<PlanningPeriod>(restored?.period ?? requestedPeriod ?? "today");
-  const [date, setDate] = useState(restored?.date ?? requestedDate ?? (requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today));
-  const [weekAnchor, setWeekAnchor] = useState(restored?.weekAnchor ?? requestedDate ?? today);
+  // An empty earlier draft must never replace the date chosen in Calendar.
+  const restoredWins = draftOverridesRoute(restored, requestedPeriod);
+  const [period, setPeriod] = useState<PlanningPeriod>((restoredWins ? restored?.period : undefined) ?? requestedPeriod ?? "today");
+  const [date, setDate] = useState((restoredWins ? restored?.date : undefined) ?? requestedDate ?? (requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today));
+  const [weekAnchor, setWeekAnchor] = useState((restoredWins ? restored?.weekAnchor : undefined) ?? requestedDate ?? today);
   const [selected, setSelected] = useState<string[]>(restored?.selected ?? []);
   const [text, setText] = useState(restored?.text ?? "");
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
@@ -208,9 +210,11 @@ export function PlanningWorkspace({
     // Never replace text edited during unlock or a newer in-memory draft.
     if (saved && !handoffRef.current.text.trim() && handoffRef.current.rows.length === 0) {
       setTarget(saved.target);
-      setPeriod(saved.period);
-      setDate(saved.date);
-      setWeekAnchor(saved.weekAnchor);
+      if (draftOverridesRoute(saved, requestedPeriod)) {
+        setPeriod(saved.period);
+        setDate(saved.date);
+        setWeekAnchor(saved.weekAnchor);
+      }
       setSelected(saved.selected);
       setText(saved.text);
       setRows(saved.rows);
@@ -244,7 +248,7 @@ export function PlanningWorkspace({
     if (!requestedPeriod) return;
     // Returning from Insikter must not overwrite the selected date/week.
     // Comparing route input also remains safe if StrictMode re-runs effects.
-    if (restored && initialRequestedPeriod.current === requestedPeriod && initialRequestedDate.current === requestedDate) return;
+    if (restoredWins && initialRequestedPeriod.current === requestedPeriod && initialRequestedDate.current === requestedDate) return;
     // A date sent from Calendar must not silently redate typed or reviewed activities.
     if (requestedDate && requestedDate !== date && (text.trim() || rows.length)) return;
     initialRequestedPeriod.current = requestedPeriod;
