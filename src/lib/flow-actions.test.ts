@@ -45,7 +45,7 @@ describe("Pace task actions share identity with Idag and Kalender", () => {
     for (const invalid of ["2026-02-30", "2026-13-01", "2026-00-12", "2026-10-99", "2026-1-2"]) {
       expect(validFlowDate(invalid)).toBe(false);
       expect(allowedFlowMoveDate(invalid, "2026-10-23")).toBeUndefined();
-      const parsed = parseFlowReply(```flow-action\n{"kind":"ny","title":"Test","date":"${invalid}"}\n```);
+      const parsed = parseFlowReply(["```flow-action", JSON.stringify({ kind: "ny", title: "Test", date: invalid }), "```"].join("\n"));
       expect(parsed.actions[0]?.date).toBeUndefined();
     }
     expect(validFlowDate("2028-02-29")).toBe(true);
