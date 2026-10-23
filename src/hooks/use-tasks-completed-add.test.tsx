@@ -12,6 +12,32 @@ vi.mock("@/lib/haptics", () => ({ haptic: vi.fn() }));
 import { useTasks } from "./use-data";
 
 describe("manual completed task creation", () => {
+  it("creates at most one activity for the same Pace action, even across synchronous double clicks", () => {
+    const { result, rerender } = renderHook(() => useTasks());
+    const sameMessage = "pace-action-8734a390-b95c-4981-9c5d-1298534245a2-0";
+    const differentMessage = "pace-action-5ed34332-4619-4e95-8107-130eaa87fc4b-0";
+    act(() => {
+      result.current.addTask("Handla", "2026-10-23", { id: sameMessage });
+      result.current.addTask("Handla", "2026-10-23", { id: sameMessage });
+    });
+    expect(result.current.tasks).toHaveLength(1);
+    expect(result.current.tasks[0]).toMatchObject({ id: sameMessage, dueDate: "2026-10-23" });
+    rerender();
+    act(() => result.current.addTask("Handla", "2026-10-23", { id: sameMessage }));
+    expect(result.current.tasks).toHaveLength(1);
+    act(() => result.current.addTask("Handla", "2026-10-23", { id: differentMessage }));
+    expect(result.current.tasks).toHaveLength(2);
+    expect(new Set(result.current.tasks.map(task => task.id)).size).toBe(2);
+  });
+
+  it("keeps QuickFlow's established upsert behavior for its own recurring hydration", () => {
+    const { result } = renderHook(() => useTasks());
+    act(() => result.current.addTask("Gammalt namn", "2026-10-23", { id: "from-quickflow", quickflowId: "quickflow-1" }));
+    act(() => result.current.addTask("Nytt namn", "2026-10-24", { id: "from-quickflow", quickflowId: "quickflow-1" }));
+    expect(result.current.tasks).toHaveLength(1);
+    expect(result.current.tasks[0]).toMatchObject({ title: "Nytt namn", dueDate: "2026-10-23" });
+  });
+
   it("uses one shared energy event when a planned task is completed and none when reopened", () => {
     const events: ActivityDoneDetail[] = [];
     const listener = (event: Event) => events.push((event as CustomEvent<ActivityDoneDetail>).detail);
