@@ -57,6 +57,35 @@ const isoDaysAgo = (days: number): string => {
 };
 
 describe("useFlowItems – sena uppgifter följer med in i idag", () => {
+  it("visar två separata aktiviteter med samma namn och klockslag i Idag och Kalender", () => {
+    const date = todayISO();
+    tasks = [
+      { id: "shopping-one", title: "Handla", dueDate: date, time: "14:00", completed: false } as Task,
+      { id: "shopping-two", title: "Handla", dueDate: date, time: "14:00", completed: false } as Task,
+    ];
+    reminders = [{ id: "calendar-one", title: "Handla", date, time: "14:00", completed: false, createdAt: 1 }];
+    const { result } = renderHook(() => useFlowItems(date));
+    const ids = result.current.todayOpen.map(item => item.id);
+    expect(ids).toEqual(expect.arrayContaining(["task-shopping-one", "task-shopping-two", "rem-calendar-one"]));
+    expect(ids).toHaveLength(3);
+    act(() => result.current.toggleItem(result.current.items.find(item => item.id === "task-shopping-two")!));
+    expect(toggleTask).toHaveBeenCalledExactlyOnceWith("shopping-two");
+    expect(toggleReminder).not.toHaveBeenCalled();
+  });
+
+  it("visar både en sen och en dagens uppgift med samma namn och klockslag", () => {
+    const date = todayISO();
+    tasks = [
+      { id: "overdue", title: "Handla", dueDate: isoDaysAgo(1), time: "14:00", completed: false } as Task,
+      { id: "today", title: "Handla", dueDate: date, time: "14:00", completed: false } as Task,
+    ];
+    const { result } = renderHook(() => useFlowItems(date));
+    expect(result.current.todayOpen.map(item => item.id))
+      .toEqual(expect.arrayContaining(["task-overdue", "task-today"]));
+    expect(result.current.todayOpen).toHaveLength(2);
+    expect(result.current.todayOpen.find(item => item.id === "task-overdue")?.daysUntil).toBe(-1);
+  });
+
   it("delegates an ordinary reminder to the source, producing just one energy prompt", () => {
     const date = todayISO();
     reminders = [{ id: "once", title: "Lämna nyckel", date, time: "16:00", completed: false, createdAt: 1, repeat: "none" }];
