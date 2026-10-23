@@ -1,3 +1,6 @@
+## 2026-10-23 – Planera: tydligt besked om tidigare utkast
+- **Planera** (2026-10-23): När ett osparat utkast från en annan dag finns och man öppnar Planera från kalendern visas nu ett besked med valen Fortsätt med utkastet eller Planera vald dag i stället (med bekräftelse). Inget raderas eller datumflyttas automatiskt. Ingen publicering.
+
 ## 2026-10-23 – Kalender, Planera och Historik: tre rättningar
 - **Kalender, Planera och Historik** (2026-10-23): En pågående period, t.ex. en kurs, visas bara under Pågående perioder och upprepas inte längre under Just nu; separata tidsatta aktiviteter visas fortfarande där. Min dag skriver 1 aktivitet i singular. Valt datum i dag-, vecko- och månadsvyn följer nu med till Planera även om ett tomt tidigare utkast fanns; utkast med text behåller sitt datum. Kalenderns valda dag och vy sparas i adressen så Tillbaka och omladdning återvänder till samma dag, och Planera visar Till kalendern när man kom därifrån. Historik syns nu även i enkelt läge i Mer under Insikter & historik (en enda ingång). Inga data-, period-, barnschema-, energi- eller synkändringar. Ingen publicering.
 
