@@ -226,6 +226,7 @@ export function PlanningWorkspace({
   useEffect(() => {
     setShowAllExisting(false);
   }, [date, target, selected.join("|")]);
+  const hasExistingActivities = shown.length > 0 && (!forChildren || selected.length > 0);
   const lineCount = text.split(/\r?\n/).filter((line) => line.trim()).length;
   const dateLabel = (day: string, short = false) =>
     dateHeadingLabel(
@@ -708,17 +709,21 @@ export function PlanningWorkspace({
           </p>
         )}
       </section>
-      <section className="min-w-0 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4 lg:sticky lg:top-6" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
-        <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
-          {t(forChildren ? "I barnens schema" : "Redan i planen")}
-          {(!forChildren || selected.length > 0) && shown.length > 0 && (
-            <>
-              {" "}
+      <section
+        className={`min-w-0 lg:sticky lg:top-6 ${hasExistingActivities
+          ? "rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4"
+          : "px-1 py-1"}`}
+        aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}
+      >
+        {hasExistingActivities && (
+          <>
+            <h2 className="font-display text-lg font-medium tracking-tight text-[#512654]">
+              {t(forChildren ? "I barnens schema" : "Redan i planen")}{" "}
               <span className="text-sm font-normal tabular-nums text-muted-foreground">({shown.length})</span>
-            </>
-          )}
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">{dateLabel(date)}</p>
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">{dateLabel(date)}</p>
+          </>
+        )}
         {(!planningReady || externalError) && (
           <p role="status" className="mt-3 text-sm text-muted-foreground">
             {t(
@@ -739,7 +744,7 @@ export function PlanningWorkspace({
               .map((entry, index) => (
                 <li
                   key={entry.id}
-                  className={`grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1] ${!showAllExisting && index >= 3 ? "hidden lg:grid" : "grid"}`}
+                  className={`grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1] ${!showAllExisting && index >= 2 ? "hidden lg:grid" : "grid"}`}
                 >
                   <span className="text-sm text-muted-foreground">
                     {entry.time || t("Utan tid")}
@@ -759,10 +764,10 @@ export function PlanningWorkspace({
           </ul>
         ) : (
           planningReady && (
-            <p className="mt-3 text-sm text-muted-foreground">{t("Inget inplanerat här ännu.")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("Inget inplanerat här ännu.")}</p>
           )
         )}
-        {(!forChildren || selected.length > 0) && shown.length > 3 && (
+        {(!forChildren || selected.length > 0) && shown.length > 2 && (
           <Button
             type="button"
             variant="ghost"
