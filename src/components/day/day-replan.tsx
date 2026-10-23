@@ -98,7 +98,7 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
     setSelected(next.map(taskId => `${taskId}:tomorrow`));
   }
   function chooseRecovery(title: string, timed: boolean) {
-    if (saving || changed || timedOut || !calendarReady) {
+    if (saving || changed || timedOut) {
       // A recent activity/energy check-in can change today's capacity while
       // this modal is open. Never add from a stale plan before refresh.
       toast.error(t("Dagen har ändrats. Uppdatera förslaget innan du lägger till något."));
@@ -181,21 +181,21 @@ export function DayReplanDialog({ date, entries, capacity, calendarReady, calend
               </button>
               {recoveryChoice === item.title && <div className="space-y-2 border-t border-border/70 pt-3">
                 <p className="text-xs">{t("Vad skulle passa dig? Det är frivilligt och påverkar inte ditt batteri automatiskt.")}</p>
-                <Button variant="outline" disabled={changed || saving || timedOut || !calendarReady} className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, false)}>{t("Gör nu · lägg till utan tid")}</Button>
+                <Button variant="outline" disabled={changed || saving || timedOut} className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, false)}>{t("Gör nu · lägg till utan tid")}</Button>
                 <label className="block text-xs">{t("Tid om du vill planera in det")}
                   <span className="mt-1 flex items-center gap-2">
-                    <select aria-label={t("Timme")} value={recoveryHour} disabled={changed || saving || timedOut || !calendarReady} onChange={event => setRecoveryHour(event.target.value)} className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-3 text-ink">
+                    <select aria-label={t("Timme")} value={recoveryHour} disabled={changed || saving || timedOut} onChange={event => setRecoveryHour(event.target.value)} className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-3 text-ink">
                       <option value="">{t("Timme")}</option>
                       {Array.from({ length: 24 }, (_, hour) => String(hour).padStart(2, "0")).map(hour => <option key={hour} value={hour}>{hour}</option>)}
                     </select>
                     <span aria-hidden>:</span>
-                    <select aria-label={t("Minut")} value={recoveryMinute} disabled={changed || saving || timedOut || !calendarReady} onChange={event => setRecoveryMinute(event.target.value)} className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-3 text-ink">
+                    <select aria-label={t("Minut")} value={recoveryMinute} disabled={changed || saving || timedOut} onChange={event => setRecoveryMinute(event.target.value)} className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-3 text-ink">
                       <option value="">{t("Minut")}</option>
                       {Array.from({ length: 60 }, (_, minute) => String(minute).padStart(2, "0")).map(minute => <option key={minute} value={minute}>{minute}</option>)}
                     </select>
                   </span>
                 </label>
-                <Button variant="outline" disabled={!recoveryHour || !recoveryMinute || changed || saving || timedOut || !calendarReady} className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, true)}>{t("Lägg till i min dag")}</Button>
+                <Button variant="outline" disabled={!recoveryHour || !recoveryMinute || changed || saving || timedOut} className="min-h-11 w-full rounded-full" onClick={() => chooseRecovery(item.title, true)}>{t("Lägg till i min dag")}</Button>
                 <Button variant="ghost" className="min-h-11 w-full rounded-full" onClick={() => setRecoveryChoice(null)}>{t("Inte idag")}</Button>
               </div>}
             </li>)}</ul>
