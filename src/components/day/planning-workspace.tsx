@@ -515,14 +515,6 @@ export function PlanningWorkspace({
                 </div>
               </fieldset>
             )}
-            {!forChildren && (
-              <OptionalSavedStrategies
-                mode="planning"
-                revealToken={revealSupports ? "from-saved-supports" : undefined}
-                draftText={text}
-                onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
-              />
-            )}
             {forChildren && !selected.length && (
               <p className="text-sm text-muted-foreground">
                 {t("Välj barn innan du granskar aktiviteterna.")}
@@ -535,6 +527,16 @@ export function PlanningWorkspace({
             >
               {t("Granska aktiviteter")} ({lineCount})<ArrowRight size={16} aria-hidden />
             </Button>
+            {/* Writing and review stay first; saved supports remain an optional detour.
+                A link from Insikter or Idag still reveals and scrolls to this section. */}
+            {!forChildren && (
+              <OptionalSavedStrategies
+                mode="planning"
+                revealToken={revealSupports ? "from-saved-supports" : undefined}
+                draftText={text}
+                onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
+              />
+            )}
           </form>
         ) : (
           <form
