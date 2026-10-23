@@ -164,7 +164,7 @@ export function PlanningWorkspace({
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
   const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
   const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
-  const [lastSaved, setLastSaved] = useState<{ firstDate: string; dayCount: number; count: number; includesChildren: boolean } | null>(null);
+  const [lastSaved, setLastSaved] = useState<{ firstDate: string; dayCount: number; count: number } | null>(null);
   const [expandedRows, setExpandedRows] = useState<string[]>(() =>
     restored?.stage === "review" && restored.rows.length === 1 ? [restored.rows[0].id] : [],
   );
@@ -302,7 +302,7 @@ export function PlanningWorkspace({
         `${batch.length} ${t(batch.length === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}`,
       );
       const savedDates = [...new Set(batch.map((row) => row.date))].sort();
-      setLastSaved({ firstDate: savedDates[0]!, dayCount: savedDates.length, count: batch.length, includesChildren: forChildren });
+      setLastSaved({ firstDate: savedDates[0]!, dayCount: savedDates.length, count: batch.length });
       pending.current = null;
       childrenWritten.current = false;
       discardPlanningHandoff(owner, audience);
