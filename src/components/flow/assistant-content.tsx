@@ -290,6 +290,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       updateTask(task.id, { friction: "small" });
       setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
     } else if (action.kind === "dela") {
+      if (savingReplyId === key.split(":")[0] || unsavedReply?.messageId === key.split(":")[0]) {
+        toast.error("Spara samtalet innan aktiviteten delas upp.");
+        return;
+      }
       const steps = (action.steps ?? ["Första lilla steget"]).map((title, index) => ({
         title,
         id: paceActionStepId(key, task.id, index),
