@@ -42,6 +42,7 @@ import {
   actionCta,
   matchTask,
   allowedFlowMoveDate,
+  flowEditTaskPatch,
   parseFlowReply,
   type FlowAction,
 } from "@/lib/flow-actions";
@@ -128,7 +129,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const flowPlan = useFlowPlan();
   const { exercises: savedExercises } = useSavedExercises();
   const { children: childProfiles } = useChildren();
-  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask, setTaskTime } =
+  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask } =
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
 
@@ -178,12 +179,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         [key]: date === tomorrowISO() ? "Flyttad till imorgon." : `Flyttad till ${date}.`,
       }));
     } else if (action.kind === "andra") {
-      if (action.title && action.title !== task.title) updateTask(task.id, { title: action.title });
-      // Editing an explicitly chosen historical date must not keep a
-      // different day while claiming the whole edit succeeded.
-      if (action.date) setTaskDueDate(task.id, action.date);
-      if (action.time) setTaskTime(task.id, action.time);
-      setDoneActions((p) => ({ ...p, [key]: "Ändrad." }));
+      // One guarded source-store write retains reminder lead times, notes and
+      // area instead of resetting them via the separate quick-time setter.
+      const patch = flowEditTaskPatch(action, task);
+      if (Object.keys(patch).length) updateTask(task.id, patch);
+      setDoneActions((p) => ({ ...p, [key]: Object.keys(patch).length ? "Ändrad." : "Inget att ändra." }));
     } else if (action.kind === "ta-bort") {
       deleteTask(task.id);
       setDoneActions((p) => ({ ...p, [key]: "Borttagen." }));
