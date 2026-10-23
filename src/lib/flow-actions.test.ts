@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allowedFlowMoveDate, matchTask, parseFlowReply, validFlowDate, type FlowAction } from "./flow-actions";
+import { allowedFlowMoveDate, flowEditTaskPatch, matchTask, parseFlowReply, validFlowDate, type FlowAction } from "./flow-actions";
 
 const tasks = [
   { id: "mon", title: "Handla", dueDate: "2026-10-19" },
@@ -29,6 +29,15 @@ describe("Pace task actions share identity with Idag and Kalender", () => {
     expect(matchTask(action({ taskTitle: "ringa tandläkaren" }), tasks)).toBe(tasks[2]);
     expect(matchTask(action({ taskTitle: "tandläkaren" }), tasks)).toBe(tasks[2]);
     expect(matchTask(action({ taskTitle: "Ha" }), tasks)).toBeUndefined();
+  });
+
+  it("edits date, time and title in one patch without resetting stored reminders", () => {
+    const task = { title: "Ringa tandläkaren", dueDate: "2026-10-24", time: "09:00", reminderMinutesBefore: 10, area: "privat" };
+    const patch = flowEditTaskPatch(action({ title: "Ring tandläkaren", date: "2026-10-22", time: "11:00" }), task);
+    expect(patch).toEqual({ title: "Ring tandläkaren", dueDate: "2026-10-22", time: "11:00" });
+    expect(patch).not.toHaveProperty("reminderMinutesBefore");
+    expect({ ...task, ...patch }).toMatchObject({ reminderMinutesBefore: 10, area: "privat" });
+    expect(flowEditTaskPatch(action({}), task)).toEqual({});
   });
 
   it("keeps a specified past date on new or edited items instead of silently assigning today", () => {
