@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { todayISO } from "@/lib/day";
 import type { EveningAnswer } from "@/lib/day-journey";
 
 export interface EveningEntry {
@@ -20,7 +21,8 @@ const KEY = "myflove-evening-check";
 const HISTORY_KEY = "myflove-evening-check-history";
 const HISTORY_DAYS = 120;
 
-const todayKey = () => new Date().toISOString().slice(0, 10);
+// Keep evening history on the same local calendar day as Idag and tomorrow planning.
+const todayKey = () => todayISO();
 
 /**
  * Kvällscheck – "Hur blev dagen?". En rad per dag, kontosynkad via befintlig
