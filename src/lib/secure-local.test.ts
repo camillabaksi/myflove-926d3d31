@@ -26,6 +26,8 @@ describe("krypterad lokal lagring", () => {
     expect(isSensitiveKey("myflove-medications")).toBe(true);
     expect(isSensitiveKey("myflove-finances")).toBe(true);
     expect(isSensitiveKey("myflove-flow-memories")).toBe(true);
+    expect(isSensitiveKey("myflove-planning-draft-me-v1")).toBe(true);
+    expect(isSensitiveKey("myflove-planning-draft-children-v1")).toBe(true);
     expect(isSensitiveKey("myflove-theme")).toBe(false);
   });
 
