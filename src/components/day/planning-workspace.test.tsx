@@ -122,6 +122,21 @@ describe("Plan several activities before saving", () => {
     expect(model.addTasks).not.toHaveBeenCalled();
   });
 
+  it("reveals an invalid collapsed review row and prevents saving", async () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Handla\nTvätta");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    const first = screen.getByTestId("planning-review-row-0");
+    fireEvent.click(first.querySelector("summary")!);
+    fireEvent.change(within(first).getByRole("textbox", { name: "Aktivitet 1" }), { target: { value: "" } });
+    fireEvent.click(first.querySelector("summary")!);
+    expect(first).not.toHaveAttribute("open");
+    fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Kontrollera aktivitet, datum, tid och plats.");
+    expect(first).toHaveAttribute("open");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("shows a concise date and recipient overview before a multi-activity save", () => {
     render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
     write("Frukost\nSimskola");
