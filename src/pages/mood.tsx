@@ -163,11 +163,11 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                     className="flex min-w-0 items-center gap-3 rounded-xl bg-card/75 px-3 py-2"
                   >
                     <div className="text-xl shrink-0">{emoji}</div>
-                    <div className="flex-1">
+                    <div className="min-w-0 flex-1">
                       <p className="text-xs text-muted-foreground capitalize">
                         {formatDate(mood.date)}
                       </p>
-                      {mood.note && <p className="text-foreground leading-relaxed">{mood.note}</p>}
+                      {mood.note && <p className="text-foreground leading-relaxed [overflow-wrap:anywhere]">{mood.note}</p>}
                     </div>
                   </div>
                 );
