@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import EveningCheck from "./evening-check";
@@ -78,6 +79,53 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe("Kvällsstunden – explicit save and optional tomorrow", () => {
+  it("keeps all six step headings large, handwritten, and distinct from secondary card headings", () => {
+    render(<EveningCheck />);
+    expect(screen.getByRole("heading", { name: "Hur blev dagen?" })).toHaveClass("pace-evening-entry-heading");
+    fireEvent.click(screen.getByRole("button", { name: "Ja, börja kvällsstunden" }));
+    expect(screen.getByRole("heading", { name: "En stund för dig" }))
+      .toHaveClass("pace-evening-title", "pace-evening-title--hero");
+    fireEvent.click(screen.getByRole("button", { name: "Börja" }));
+    expect(screen.getByRole("heading", { name: "Hur känns det efter idag?" }))
+      .toHaveClass("pace-evening-title", "font-handwritten");
+    next();
+    expect(screen.getByRole("heading", { name: "Hur är din energi nu?" }))
+      .toHaveClass("pace-evening-title");
+    expect(screen.getByText("Vad har gett energi idag?"))
+      .toHaveClass("pace-evening-section-title");
+    next();
+    expect(screen.getByRole("heading", { name: "Så här såg din dag ut" }))
+      .toHaveClass("pace-evening-title");
+    expect(screen.getByText("Det här fick plats"))
+      .toHaveClass("pace-evening-card-title");
+    next();
+    expect(screen.getByRole("heading", { name: "Vad vill du ta med dig från idag?" }))
+      .toHaveClass("pace-evening-title", "pace-evening-title--long");
+    expect(screen.getByText("Dagens styrka")).toHaveClass("pace-evening-section-title");
+    next();
+    expect(screen.getByRole("heading", { name: "Tack för idag ♡" }))
+      .toHaveClass("pace-evening-title", "pace-evening-title--hero");
+    expect(screen.getByText("Du har gjort mer än det som syns. Det räknas också."))
+      .toHaveClass("pace-evening-affirmation");
+  });
+
+  it("overrides only the evening ritual's shared compact font-size with responsive sizes", () => {
+    const styles = readFileSync("src/styles.css", "utf8");
+    const selectors = [
+      ".pace-evening-ritual .pace-evening-title",
+      ".pace-evening-ritual .pace-evening-title--hero",
+      ".pace-evening-ritual .pace-evening-title--long",
+      ".pace-evening-ritual .pace-evening-section-title",
+      ".pace-evening-ritual .pace-evening-card-title",
+      ".pace-evening-ritual .pace-evening-affirmation",
+    ];
+    for (const selector of selectors) {
+      const block = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
+      expect(block, selector).toMatch(/font-size:\s*clamp\([^;]+\) !important/);
+      expect(block, selector).not.toMatch(/white-space:\s*nowrap/);
+    }
+  });
+
   it("does not write mood or energy just because the user presses Next, then closes early", () => {
     render(<EveningCheck />);
     startEvening();
