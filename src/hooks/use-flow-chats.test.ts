@@ -12,6 +12,7 @@ const state = vi.hoisted(() => ({
   insertError: null as { message: string } | null,
   conversationError: null as { message: string } | null,
   conversationTouched: false,
+  lastMessageInsert: null as unknown,
 }));
 
 vi.mock("@/lib/analytics", () => ({ track: vi.fn() }));
@@ -24,7 +25,10 @@ vi.mock("@/integrations/supabase/client", () => ({
     from: (table: string) => {
       if (table === "flow_messages") {
         return {
-          insert: async () => ({ error: state.insertError }),
+          insert: async (row: unknown) => {
+            state.lastMessageInsert = row;
+            return { error: state.insertError };
+          },
         };
       }
       if (table === "flow_conversations") {
@@ -55,9 +59,24 @@ beforeEach(() => {
   state.insertError = null;
   state.conversationError = null;
   state.conversationTouched = false;
+  state.lastMessageInsert = null;
 });
 
 describe("Chattens sparning är ärlig", () => {
+  it("persists the same preassigned assistant UUID used by the rendered action card", async () => {
+    const messageId = "8734a390-b95c-4981-9c5d-1298534245a2";
+    await saveFlowMessage("conv-1", "assistant", "Du kan lägga till uppgiften.", messageId);
+    expect(state.lastMessageInsert).toMatchObject({
+      id: messageId, conversation_id: "conv-1", user_id: "user-1", role: "assistant",
+    });
+    expect(state.conversationTouched).toBe(true);
+  });
+
+  it("keeps legacy callers working without an explicit message UUID", async () => {
+    await saveFlowMessage("conv-1", "user", "hej");
+    expect(state.lastMessageInsert).not.toHaveProperty("id");
+  });
+
   it("kastar fel när meddelandet inte går att spara", async () => {
     state.insertError = { message: "nätverksfel" };
     await expect(saveFlowMessage("conv-1", "user", "hej")).rejects.toThrow(/kunde inte sparas/);

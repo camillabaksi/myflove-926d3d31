@@ -156,6 +156,17 @@ export function flowEditTaskPatch(
   return patch;
 }
 
+/**
+ * A saved assistant message has a database UUID. Pair it with the action index
+ * so the approved task keeps the same ID after reloading an old conversation.
+ * Never derive an activity from an unsaved/temporary message.
+ */
+export function paceActionTaskId(actionKey: string): string | undefined {
+  const match = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}):(0|[1-9]\d*)$/i.exec(actionKey);
+  if (!match || !Number.isSafeInteger(Number(match[2]))) return undefined;
+  return `pace-action-${match[1].toLowerCase()}-${match[2]}`;
+}
+
 export const ACTION_LABEL: Record<FlowActionKind, string> = {
   flytta: "Flytta uppgiften",
   forenkla: "Gör den mindre",
