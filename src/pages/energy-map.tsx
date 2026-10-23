@@ -145,7 +145,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
             )}
             headingClassName="font-sans text-base font-semibold text-ink"
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
-            className={readOnly ? "space-y-3 rounded-2xl bg-[#F5EDF7]/30 p-3" : "pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"}
+            className={readOnly ? "space-y-3 rounded-2xl bg-secondary/30 p-3" : "pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"}
           >
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,5.5rem),1fr))] gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
@@ -216,7 +216,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                   ? t("Ingen loggning idag än – lägg en när det passar.")
                   : `${todayLogs.length} ${todayLogs.length === 1 ? t("loggning idag.") : t("loggningar idag.")}`
               }
-              className="rounded-2xl bg-[#F5EDF7]/30 p-3"
+              className="rounded-2xl bg-secondary/30 p-3"
             >
               {todayLogs.length > 0 && (
                 <div className="h-40">
@@ -243,7 +243,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
               )}
               headingClassName="font-sans text-base font-semibold text-ink"
               description={t("Snittenergi per timme, senaste 7 dagarna.")}
-              className="rounded-2xl bg-[#F5EDF7]/30 p-3"
+              className="rounded-2xl bg-secondary/30 p-3"
             >
               {observedHours.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-6 text-center">
