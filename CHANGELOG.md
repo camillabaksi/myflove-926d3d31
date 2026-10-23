@@ -1,3 +1,6 @@
+## 2026-10-23 – Kvällsstund och Mer: riktad finjustering
+- **Kvällsstund och Mer** (2026-10-23): Kvällsstunds sex stegrubriker visas större med fungerande prioritet mot appens kompakta textskala. Sektioner och fyra sammanfattningskort får mindre handskriftsrubriker, måendevalen jämnare ovala former och mjukare skugga. Sluttexten är mindre med plommontext på diskret ljust underlag. Alla visade energivärden avrundas till högst en svensk decimal utan ändrade registreringar eller beräkningar. Mer får tydligare men mjuka områdeslister, ikonbakgrunder och korttoner; layout, navigation, funktioner och etapp 1–2 bevaras. Ingen publicering.
+
 ## 2026-10-23 – Etapp 2: visuell harmoni
 - Etapp 2 visuell harmoni: Pace-fotot tonar mjukt in under toppraden och mot kanterna på dator (ingen skarp skarv); dubbla chattknappar borttagna i Pace; energi- och Pace-korten på Idag har samma bredd som Din dag på dator; familjens personprickar visas i dämpade toner (sparade färger oförändrade); Familj-sidan använder samma ikon som menyn. Del 2: genomgång av Kalender, Planera, Tankar/Fånga, Dagbok, Min plats, Mer, Barn, Energi, Insikter, Historik, Inställningar och Profil; Mer-vyns livsområdeskort har dämpade färglister, svagare bakgrundston och samma hörnradie som kortet. Ingen data-, navigations- eller funktionsändring. Ingen publicering.
 

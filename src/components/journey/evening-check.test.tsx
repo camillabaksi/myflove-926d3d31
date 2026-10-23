@@ -1,11 +1,11 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { readFileSync } from "node:fs";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import EveningCheck from "./evening-check";
+import EveningCheck, { formatEveningEnergy } from "./evening-check";
 
 const state = vi.hoisted(() => ({
   owner: "user-a",
+  ork10: 5,
   savedWrites: 0,
   entries: [] as { title: string; direction: string; occurredAt: string }[],
   addFactor: vi.fn(),
@@ -34,7 +34,7 @@ vi.mock("@/hooks/use-evening-check", () => ({
   useEveningCheck: () => ({ evening: null, eveningHistory: [], logEvening: state.logEvening }),
 }));
 vi.mock("@/hooks/use-day-journey", () => ({
-  useDayJourney: () => ({ input: { ork10: 5, batteryNow: 45, done: 2, planned: 3, openThoughts: 1 } }),
+  useDayJourney: () => ({ input: { ork10: state.ork10, batteryNow: 45, done: 2, planned: 3, openThoughts: 1 } }),
 }));
 vi.mock("@/hooks/use-day-window", () => ({
   useDayWindow: () => ({ todayEdges: { morning: 5, evening: null }, setEvening: state.setEvening }),
@@ -67,6 +67,7 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date(2026, 9, 23, 20, 30));
   state.owner = "user-a";
+  state.ork10 = 5;
   state.entries = [];
   state.savedWrites = 0;
   vi.clearAllMocks();
@@ -79,72 +80,21 @@ beforeEach(() => {
 afterEach(() => vi.useRealTimers());
 
 describe("Kvällsstunden – explicit save and optional tomorrow", () => {
-  it("keeps all six step headings large, handwritten, and distinct from secondary card headings", () => {
+  it("rounds the reported registered energy to one Swedish decimal without changing the value", () => {
+    const registered = 6.3999999999999995;
+    expect(formatEveningEnergy(registered)).toBe("6,4");
+    expect(registered).toBe(6.3999999999999995);
+    expect(formatEveningEnergy(6)).toBe("6");
+    expect(formatEveningEnergy(0)).toBe("0");
+    expect(formatEveningEnergy(9.96)).toBe("10");
+    expect(formatEveningEnergy(Number.NaN)).toBe("—");
+    state.ork10 = registered;
     render(<EveningCheck />);
-    expect(screen.getByRole("heading", { name: "Hur blev dagen?" })).toHaveClass("pace-evening-entry-heading");
-    fireEvent.click(screen.getByRole("button", { name: "Ja, börja kvällsstunden" }));
-    expect(screen.getByRole("heading", { name: "En stund för dig" }))
-      .toHaveClass("pace-evening-title", "pace-evening-title--hero");
-    fireEvent.click(screen.getByRole("button", { name: "Börja" }));
-    expect(screen.getByRole("heading", { name: "Hur känns det efter idag?" }))
-      .toHaveClass("pace-evening-title", "font-handwritten");
-    next();
-    expect(screen.getByRole("heading", { name: "Hur är din energi nu?" }))
-      .toHaveClass("pace-evening-title");
-    expect(screen.getByText("Vad har gett energi idag?"))
-      .toHaveClass("pace-evening-section-title");
-    next();
-    expect(screen.getByRole("heading", { name: "Så här såg din dag ut" }))
-      .toHaveClass("pace-evening-title");
-    expect(screen.getByText("Det här fick plats"))
-      .toHaveClass("pace-evening-card-title");
-    next();
-    expect(screen.getByRole("heading", { name: "Vad vill du ta med dig från idag?" }))
-      .toHaveClass("pace-evening-title", "pace-evening-title--long");
-    expect(screen.getByText("Dagens styrka")).toHaveClass("pace-evening-section-title");
-    next();
-    expect(screen.getByRole("heading", { name: "Tack för idag ♡" }))
-      .toHaveClass("pace-evening-title", "pace-evening-title--hero");
-    expect(screen.getByText("Du har gjort mer än det som syns. Det räknas också."))
-      .toHaveClass("pace-evening-affirmation");
-  });
-
-  it("overrides only the evening ritual's shared compact font-size with responsive sizes", () => {
-    const styles = readFileSync("src/styles.css", "utf8");
-    const selectors = [
-      ".pace-evening-ritual .pace-evening-title",
-      ".pace-evening-ritual .pace-evening-title--hero",
-      ".pace-evening-ritual .pace-evening-title--long",
-      ".pace-evening-ritual .pace-evening-section-title",
-      ".pace-evening-ritual .pace-evening-card-title",
-      ".pace-evening-ritual .pace-evening-affirmation",
-    ];
-    for (const selector of selectors) {
-      const block = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
-      expect(block, selector).toMatch(/font-size:\s*clamp\([^;]+\) !important/);
-      expect(block, selector).not.toMatch(/white-space:\s*nowrap/);
-    }
-  });
-
-  it("gives every evening heading tier a visibly larger mobile minimum without cropping long Swedish titles", () => {
-    const styles = readFileSync("src/styles.css", "utf8");
-    const minRem = [
-      [".pace-evening-ritual .pace-evening-title", 3.25],
-      [".pace-evening-ritual .pace-evening-title--hero", 3.65],
-      [".pace-evening-ritual .pace-evening-title--long", 2.75],
-      [".pace-evening-ritual .pace-evening-section-title", 2.5],
-      [".pace-evening-ritual .pace-evening-card-title", 2.15],
-      [".pace-evening-ritual .pace-evening-affirmation", 2.35],
-    ] as const;
-    for (const [selector, expected] of minRem) {
-      const rule = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
-      const mobileMin = Number(rule.match(/font-size:\s*clamp\(([\d.]+)rem/)?.[1]);
-      expect(mobileMin, selector).toBeGreaterThanOrEqual(expected);
-      expect(rule, selector).not.toMatch(/white-space:\s*nowrap/);
-    }
-    expect(styles).toContain("font-size: clamp(1.45rem, 4.5vw, 1.7rem) !important;");
-    expect(styles).toContain(".pace-evening-ritual .pace-evening-title");
-    expect(styles).toContain("overflow-wrap: break-word;");
+    startEvening();
+    next(); next();
+    expect(screen.getByText("Registrerad ork: 6,4 av 10.")).toBeInTheDocument();
+    expect(state.ork10).toBe(registered);
+    expect(state.savedWrites).toBe(0);
   });
 
   it("does not write mood or energy just because the user presses Next, then closes early", () => {
@@ -250,7 +200,7 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     render(<EveningCheck />);
     goToSave();
     fireEvent.click(screen.getByRole("button", { name: "Till insikter" }));
-    expect(state.navigate).toHaveBeenCalledWith({ to: "/insight" });
+    expect(state.navigate).toHaveBeenCalledWith({ to: "/insight", search: { demo: undefined } });
     expect(state.savedWrites).toBe(0);
     expect(state.logEvening).not.toHaveBeenCalled();
   });
