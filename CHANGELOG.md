@@ -1,3 +1,7 @@
+## 2026-10-23 – Funktionsgranskning: tydligare ingångar i Mer
+- Navigation: Ta bort en överflödig länk till den äldre Pace-chattingången `/flow` från Mer och ersätt den med den befintliga `/planera`-ingången. Skilj på ”Planera aktiviteter” (skapa/granska/spara) och ”Dagens ordning i Pace” (läsa en föreslagen ordning). Samma tydlighet i datorns Mer-navigation.
+- Alla tidigare länkar och routes (inklusive `/flow`) finns kvar; ingen förändring av aktiviteter, batteri, konton eller synk. Ingen publicering.
+
 ## 2026-10-23 – Krypterad återställning av Planera-utkast
 - Egna och barns Planera-utkast får separata AES-GCM-krypterade, lokala och kontoägda snapshots. Formulär och granskning återställs efter omladdning när säker lagring fungerar. Det finns ingen klartextreserv, molnsynk eller automatiskt skapade aktiviteter. Krypterat utkast ligger i rätt kontos förråd vid vanlig utloggning och rensas när sparning bekräftas eller kontot raderas. Vid otillgänglig kryptering visas ett tydligt minnesendast-besked. Ingen publicering.
 
