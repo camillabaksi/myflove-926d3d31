@@ -204,7 +204,7 @@ export default function FamilySharing({ members }: { members: FamilyMember[] }) 
                             >
                               <span
                                 className="h-2.5 w-2.5 rounded-full"
-                                style={{ backgroundColor: m.color }}
+                                style={{ backgroundColor: `color-mix(in oklab, ${m.color} 45%, #E9E1EB)` }}
                               />
                               {m.display_name}
                               {childAccounts.has(m.user_id) && (
