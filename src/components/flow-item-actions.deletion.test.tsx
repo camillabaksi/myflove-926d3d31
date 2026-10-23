@@ -97,7 +97,7 @@ describe("Delete a day activity by source identity", () => {
     fireEvent.change(dialog.getByLabelText(/Slutdatum \(valfritt/), { target: { value: "2026-12-01" } });
     fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
     expect(calls.updateReminder).toHaveBeenCalledWith("period", expect.objectContaining({
-      endDate: "2026-12-01", time: undefined, endTime: undefined,
+      endDate: "2026-12-01", time: "", endTime: undefined,
     }));
   });
 
