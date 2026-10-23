@@ -3382,3 +3382,19 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 }
 .pace-day-space-card .font-handwritten {font-family:"Caveat","Segoe Print",cursive;font-weight:500;}
 .pace-day-space-card button[aria-pressed="true"] {box-shadow:inset 0 1px 3px rgba(81,38,84,.08);}
+
+/* Etapp 2: Pace scene edges dissolve into the canvas (presentation only). */
+.pace-assistant-mobile-header { background: #f9e5dc; }
+.pace-scene::before {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 3.5rem, #000 48%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.35) 83%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 3.5rem, #000 48%, rgba(0,0,0,.9) 62%, rgba(0,0,0,.35) 83%, transparent 100%);
+}
+@media (min-width: 700px) {
+  .pace-scene::before {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 4rem, #000 50%, rgba(0,0,0,.55) 75%, transparent 97%), linear-gradient(to right, transparent 0, #000 4rem, #000 calc(100% - 4rem), transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 4rem, #000 50%, rgba(0,0,0,.55) 75%, transparent 97%), linear-gradient(to right, transparent 0, #000 4rem, #000 calc(100% - 4rem), transparent 100%);
+    mask-composite: intersect;
+  }
+}
+html.dark .pace-assistant-mobile-header { background: var(--background); }
