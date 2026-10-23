@@ -44,6 +44,7 @@ export const EN_PLANNING: Record<string, string> = {
   "Öppna kalendern": "Open calendar",
   "Lägg till eller hantera barn": "Add or manage children",
   "Till min dag": "Back to my day",
+  "Till kalendern": "Back to calendar",
   "Vem vill du planera för?": "Who would you like to plan for?",
   "Min plan": "My plan",
   "Laddar ditt konto...": "Loading your account...",
