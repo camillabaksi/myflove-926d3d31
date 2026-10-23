@@ -106,6 +106,34 @@ describe("useFlowItems – sena uppgifter följer med in i idag", () => {
       }
     },
   );
+  it("keeps a moved reminder and the normal recurring event independently completable", () => {
+    reminders = [{
+      id: "repeat", title: "Promenad", date: "2026-10-20", time: "09:00",
+      repeat: "daily", completed: false, createdAt: 1,
+      occurrenceOverrides: { "2026-10-21": { date: "2026-10-22", time: "10:15" } },
+    }];
+    const date = "2026-10-22";
+    const { result } = renderHook(() => useFlowItems(date));
+    expect(result.current.items.filter(e => e.source === "kalender").map(e => [e.id, e.time]))
+      .toEqual([["rem-repeat", "09:00"], ["rem-repeat:2026-10-21", "10:15"]]);
+    const moved = result.current.items.find(e => e.id === "rem-repeat:2026-10-21")!;
+    const normal = result.current.items.find(e => e.id === "rem-repeat")!;
+    act(() => result.current.toggleItem(moved));
+    expect(setInstanceDone).toHaveBeenCalledWith("reminder-repeat", "2026-10-21", true);
+    act(() => result.current.toggleItem(normal));
+    expect(setInstanceDone).toHaveBeenCalledWith("reminder-repeat", "2026-10-22", true);
+    expect(result.current.deleteItem(moved)).toBe(false);
+  });
+
+  it("does not collapse two reminder occurrences when a move creates equal times", () => {
+    reminders = [{
+      id: "repeat", title: "Promenad", date: "2026-10-20", time: "09:00",
+      repeat: "daily", completed: false, createdAt: 1,
+      occurrenceOverrides: { "2026-10-21": { date: "2026-10-22", time: "09:00" } },
+    }];
+    const { result } = renderHook(() => useFlowItems("2026-10-22"));
+    expect(result.current.items.filter(e => e.source === "kalender")).toHaveLength(2);
+  });
   it("rejects completion for child schedules even with an incorrect task flag", () => {
     toggleTask.mockClear();
     const { result } = renderHook(() => useFlowItems());
