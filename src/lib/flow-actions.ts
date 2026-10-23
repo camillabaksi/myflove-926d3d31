@@ -167,6 +167,32 @@ export function paceActionTaskId(actionKey: string): string | undefined {
   return `pace-action-${match[1].toLowerCase()}-${match[2]}`;
 }
 
+/**
+ * Each item in a saved Pace action gets its own stable source identity. The
+ * shopping receipt stores IDs only (never titles or household information).
+ */
+export function paceActionItemId(actionKey: string, index: number): string | undefined {
+  const sourceId = paceActionTaskId(actionKey);
+  return sourceId && Number.isSafeInteger(index) && index >= 0
+    ? `${sourceId}-item-${index}`
+    : undefined;
+}
+
+/** Steps belong to both the approved suggestion and its intended task. */
+export function paceActionStepId(actionKey: string, taskId: string, index: number): string | undefined {
+  const sourceId = paceActionItemId(actionKey, index);
+  return sourceId && taskId ? `${sourceId}-step-${taskId}` : undefined;
+}
+
+export type PaceShoppingReceipt = { id: string };
+
+export function recordPaceShoppingReceipt(
+  receipts: PaceShoppingReceipt[],
+  id: string,
+): PaceShoppingReceipt[] {
+  return receipts.some((receipt) => receipt.id === id) ? receipts : [...receipts, { id }];
+}
+
 export const ACTION_LABEL: Record<FlowActionKind, string> = {
   flytta: "Flytta uppgiften",
   forenkla: "Gör den mindre",
