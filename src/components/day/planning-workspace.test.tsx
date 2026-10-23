@@ -152,6 +152,29 @@ describe("Plan several activities before saving", () => {
     expect(model.addTasks).not.toHaveBeenCalled();
   });
 
+  it("shows the real editable dates during review without misleading week or period selectors", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
+    const days = within(screen.getByRole("group", { name: "Veckans dagar" })).getAllByRole("button");
+    fireEvent.click(days[2]!);
+    write("Studera\\nHandla".replace("\\n", "\n"));
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+
+    expect(screen.getByRole("heading", { name: "Så här blir din plan" })).toBeTruthy();
+    expect(screen.queryByRole("group", { name: "Veckans dagar" })).toBeNull();
+    expect(screen.queryByRole("group", { name: "Välj planeringsperiod" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Nästa vecka" })).toBeNull();
+    expect(screen.getAllByLabelText("Dag")).toHaveLength(2);
+    fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-18" } });
+    expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
+
+    fireEvent.click(screen.getByRole("button", { name: "Ändra listan" }));
+    expect(screen.getByRole("group", { name: "Veckans dagar" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Veckan" })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("offers joint family planning as one quiet, optional control", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     expect(screen.getByRole("button", { name: "Även för barnen" })).toBeTruthy();
@@ -234,6 +257,9 @@ describe("Plan several activities before saving", () => {
     expect(screen.getByRole("heading", { name: "Så här blir din plan" })).toBeTruthy();
     expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Skolutflykt");
     expect(screen.getByRole("checkbox", { name: "Bella" })).toBeChecked();
+    expect(screen.queryByRole("group", { name: "Välj planeringsperiod" })).toBeNull();
+    expect(screen.queryByRole("group", { name: "Veckans dagar" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Ändra listan" }));
     expect(screen.getByRole("button", { name: "Veckan" })).toHaveAttribute("aria-pressed", "true");
     expect(model.addChildren).not.toHaveBeenCalled();
   });
