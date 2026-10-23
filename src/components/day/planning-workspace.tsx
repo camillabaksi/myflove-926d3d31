@@ -161,6 +161,9 @@ export function PlanningWorkspace({
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
   const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
   const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
+  const [expandedRows, setExpandedRows] = useState<string[]>(() =>
+    restored?.stage === "review" && restored.rows.length === 1 ? [restored.rows[0].id] : [],
+  );
   // Show a short existing-plan preview on narrow screens; keep the full list on desktop.
   const [showAllExisting, setShowAllExisting] = useState(false);
   const [error, setError] = useState("");
@@ -243,7 +246,9 @@ export function PlanningWorkspace({
     try {
       if (!ready || (forChildren && !selected.length))
         throw Error("Välj minst ett barn innan du fortsätter.");
-      setRows(draftPlanningLines(text, date, forChildren ? selected : [], rows));
+      const nextRows = draftPlanningLines(text, date, forChildren ? selected : [], rows);
+      setRows(nextRows);
+      setExpandedRows(nextRows.length === 1 ? [nextRows[0].id] : []);
       setStage("review");
       setError("");
     } catch (cause) {
@@ -562,12 +567,42 @@ export function PlanningWorkspace({
                 {t("Ändra listan")}
               </Button>
             </div>
-            <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
+            <fieldset disabled={locked || saving} className="min-w-0 space-y-2">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
-                <div key={row.id} className="min-w-0 border-t border-border/60 pt-3">
-                  <div className="flex items-center gap-2">
-                    <label className="min-w-0 flex-1">
+                <details
+                  key={row.id}
+                  data-testid={`planning-review-row-${index}`}
+                  className="min-w-0 rounded-xl border border-border/60 bg-card/60 px-3"
+                  open={expandedRows.includes(row.id)}
+                  onToggle={(event) => {
+                    const isOpen = event.currentTarget.open;
+                    setExpandedRows((previous) => isOpen
+                      ? (previous.includes(row.id) ? previous : [...previous, row.id])
+                      : previous.filter((id) => id !== row.id));
+                  }}
+                >
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 py-2 [&::-webkit-details-marker]:hidden">
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="break-words text-sm font-medium text-ink">{row.title || `${t("Aktivitet")} ${index + 1}`}</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">
+                        {new Date(`${row.date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}
+                        {row.endDate && ` – ${new Date(`${row.endDate}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}`}
+                      </span>
+                      {forChildren && (
+                        <span className="break-words text-xs text-primary">
+                          {[
+                            ...(forMe ? [t("Du")] : []),
+                            ...children.filter((child) => row.childIds.includes(child.id)).map((child) => child.name),
+                          ].join(", ") || t("Välj barn")}
+                        </span>
+                      )}
+                    </span>
+                    <span className="shrink-0 text-xs font-medium text-primary underline underline-offset-2">{t("Ändra")}</span>
+                  </summary>
+                  <div className="min-w-0 border-t border-border/60 pb-3 pt-3">
+                    <div className="flex items-center gap-2">
+                      <label className="min-w-0 flex-1">
                       <span className="sr-only">
                         {t("Aktivitet")} {index + 1}
                       </span>
@@ -691,7 +726,8 @@ export function PlanningWorkspace({
                       </div>
                     </fieldset>
                   )}
-                </div>
+                  </div>
+                </details>
               ))}
             </fieldset>
             {locked && !saving && (

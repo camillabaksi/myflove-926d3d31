@@ -16,6 +16,8 @@ export const EN_PLANNING: Record<string, string> = {
   "Granska aktiviteter": "Review activities",
   "Välj barn innan du granskar aktiviteterna.": "Choose children before reviewing the activities.",
   "Så här blir din plan": "Here's your plan",
+  "Du": "You",
+  "Välj barn": "Choose children",
   "Byt dag om du vill. Klockslag är frivilligt.": "Change the day if you like. Times are optional.",
   "Ändra listan": "Edit the list",
   "Aktiviteter att spara": "Activities to save",
