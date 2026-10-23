@@ -319,7 +319,7 @@ function HouseholdView({
             >
               <span
                 className="h-3 w-3 shrink-0 rounded-full"
-                style={{ backgroundColor: m.color }}
+                style={{ backgroundColor: `color-mix(in oklab, ${m.color} 45%, #E9E1EB)` }}
               />
               {m.display_name}
               {m.user_id === currentUserId && (
