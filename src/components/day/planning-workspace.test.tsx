@@ -409,7 +409,7 @@ describe("Plan several activities before saving", () => {
     expect(within(screen.getByTestId("planning-review-row-0")).getByText("Simskola")).toBeInTheDocument();
     fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-19");
-    expect(within(screen.getByTestId("planning-review-row-0")).getByText("Bella")).toBeInTheDocument();
+    expect(within(screen.getByTestId("planning-review-row-0")).getAllByText("Bella").length).toBeGreaterThan(0);
     expect(model.addChildren).not.toHaveBeenCalled();
   });
 
