@@ -1,4 +1,8 @@
 # Roadmap
+## Etapp 3 – navigation och användarflöden (2026-10-23)
+- [ ] Inspektera befintliga förenklingar och rätta enbart verifierade återvägs-/spar-/meny-/statusproblem.
+- [ ] Verifiera riktade regressioner och verkliga inloggade flöden 360/1280 px samt stor text med blockerade kontoskrivningar.
+- [ ] Uppdatera ändringsloggar och redovisa exakt utfall och begränsningar; ingen publicering.
 ## Kvällsstund och Mer – riktad korrigeringsrunda (2026-10-23)
 - [x] Inspekterat ritualens sex steg, typografikollisionen och Mers befintliga områdestoner; exakt avgränsad plan framtagen.
 - [x] Genomfört endast godkända text-, form-, kontrast-, avrundnings- och färgstyrkekorrigeringar; etapp 1–2 och all sparning/navigation bevarade.
