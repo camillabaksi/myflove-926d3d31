@@ -28,6 +28,18 @@ describe("visual calendar", () => {
     expect(calendarLoad([]).segments).toBe(0);
     expect(calendarLoad([{ ...entry("a", "09:00"), energyImpact: "gives" }]).label).toBe("Låg");
   });
+  it("keeps a multi-day period's original start across day, week and month projections", () => {
+    const reminder = { id: "course", title: "Pågående kurs", date: "2026-10-05", endDate: "2026-10-30", completed: false, createdAt: 0, repeat: "none" as const };
+    const days = projectCalendar(["2026-10-05", "2026-10-12", "2026-10-23"], { ...empty, reminders: [reminder] }, "2026-10-23");
+    for (const date of ["2026-10-05", "2026-10-12", "2026-10-23"]) {
+      expect(days[date]).toEqual([expect.objectContaining({
+        id: "rem-course", date, periodStart: "2026-10-05", periodEnd: "2026-10-30",
+        time: undefined, done: false,
+      })]);
+    }
+    expect(days["2026-10-23"]?.[0]?.date).toBe("2026-10-23");
+    expect(reminder.date).toBe("2026-10-05");
+  });
   it("preserves original records while projecting routines", () => {
     const data = { ...empty, routines: [{ id: "r", title: "Medicin", enabled: true, time: "09:00", createdAt: 0, repeat: "daily" as const }] };
     const original = JSON.stringify(data);
