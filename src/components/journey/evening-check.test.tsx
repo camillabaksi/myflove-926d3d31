@@ -83,7 +83,7 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     startEvening();
     fireEvent.click(screen.getByRole("button", { name: /Blandat/ }));
     next();
-    fireEvent.change(screen.getByLabelText("evening-ritual-energy"), { target: { value: "3" } });
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "3" } });
     next();
     expect(state.logEvening).not.toHaveBeenCalled();
     expect(state.setEvening).not.toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     startEvening();
     fireEvent.click(screen.getByRole("button", { name: /Blandat/ }));
     next();
-    fireEvent.change(screen.getByLabelText("evening-ritual-energy"), { target: { value: "3" } });
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "3" } });
     next();
     next();
     fireEvent.change(screen.getByLabelText("Frivillig reflektion"), { target: { value: "Jag behövde lugn." } });
