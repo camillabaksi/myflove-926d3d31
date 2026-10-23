@@ -84,7 +84,7 @@ beforeEach(() => {
 });
 
 describe("MyFlove Insight", () => {
-  it("har separat navigation och en oklippt editorialrubrik i Paceables listbredd", () => {
+  it("behåller rubrik och innehåll utan egna återvägar utöver appens skal", () => {
     render(<InsightPage />);
     const header = screen.getByTestId("insight-header");
     const heading = within(header).getByRole("heading", { name: "Insikter", level: 1 });
@@ -92,13 +92,8 @@ describe("MyFlove Insight", () => {
     expect(heading.className).not.toMatch(/truncate|nowrap|line-clamp/);
     expect(header.closest(".pace-ds-content-list")).toBeTruthy();
     expect(within(header).queryByText("MyFlove Insight")).toBeNull();
-    const back = within(header).getByRole("button", { name: "Tillbaka" });
-    expect(back.className).toContain("pace-ds-button");
-    fireEvent.click(back);
-    expect(goBack).toHaveBeenCalledOnce();
-    const today = within(header).getByRole("link", { name: "Till Idag" });
-    expect(today.getAttribute("to")).toBe("/idag");
-    expect(today.className).toContain("pace-ds-button");
+    expect(within(header).queryByRole("button", { name: "Tillbaka" })).toBeNull();
+    expect(within(header).queryByRole("link", { name: "Till Idag" })).toBeNull();
   });
 
   it("behåller den befintliga frivilliga förklaringen under rubriken", () => {

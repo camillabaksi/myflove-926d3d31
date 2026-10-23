@@ -103,7 +103,7 @@ const FLOW_HIDDEN_PATHS = new Set([
 import { useEnabledAreas } from "@/lib/life-areas";
 
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
-import { useNpfSettings, plainLabel } from "@/lib/npf-mode";
+import { useNpfSettings, navigationLabel } from "@/lib/npf-mode";
 import { useLang } from "@/hooks/use-language";
 import { track } from "@/lib/analytics";
 import { trackRetention } from "@/lib/analytics-retention";
@@ -523,7 +523,7 @@ export default function Layout({ children }: LayoutProps) {
     },
   ].map((item) => {
     const i = { ...item, ...APP_DESTINATIONS[item.href] };
-    return { ...i, label: t(plainLabel(i.label, npf.plainWords)), hint: t(i.hint) };
+    return { ...i, label: t(navigationLabel(i.href, i.label, npf.plainWords)), hint: t(i.hint) };
   });
 
   // Kategorier – gör navigationen lugnare genom att gruppera sektionerna.

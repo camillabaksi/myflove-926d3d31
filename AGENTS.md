@@ -12,6 +12,7 @@
 <!-- LOVABLE:END -->
 
 Read docs/architecture-rules.md before any changes; it preserves the project’s full architecture and privacy rules.
+Insights uses the shared shell's history-aware back control with the existing Today fallback; navigation labels may override plain-word aliases by destination without renaming subpages. Profile name feedback reflects local-first autosave, and cloud status/retry remains owned by the shared sync notice to avoid false cloud confirmation.
 Evening ritual typography uses explicit portal-scoped roles that outrank the shared compact scale; registered energy is formatted only at display boundaries, preserving stores and calculations.
 Read src/components/flow/AGENTS.md and src/components/paceable/AGENTS.md before changes in those directories.
 Decision presentation stays scoped to `.book-decision` and its notebook workspace; point actions reuse the shared accessible dropdown without changing draft or persistence ownership, so other notebook editors and account data remain unaffected.

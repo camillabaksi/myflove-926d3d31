@@ -20,6 +20,15 @@ vi.mock("@tanstack/react-router", () => ({
 import { useSmartBack } from "@/hooks/use-smart-back";
 
 describe("useSmartBack", () => {
+  it("uses Today as the safe default for a directly opened Insights page", () => {
+    canGoBack = false;
+    back.mockClear();
+    navigate.mockClear();
+    const { result } = renderHook(() => useSmartBack());
+    act(() => result.current());
+    expect(navigate).toHaveBeenCalledWith({ to: "/idag" });
+    expect(back).not.toHaveBeenCalled();
+  });
   it("går tillbaka i historiken när det finns en föregående sida", () => {
     canGoBack = true;
     back.mockClear();

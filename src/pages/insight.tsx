@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Check, ChevronRight, Home, Info, Plus, Sparkles, X } from "lucide-react";
+import { Check, ChevronRight, Info, Plus, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
-import { useSmartBack } from "@/hooks/use-smart-back";
 import Layout from "@/components/layout";
 
 import { Button } from "@/components/ui/button";
-import { PaceContent, PacePage, PacePageTitle, PaceButton } from "@/components/paceable/design-system";
+import { PaceContent, PacePage, PacePageTitle } from "@/components/paceable/design-system";
 import {
   Dialog,
   DialogContent,
@@ -333,8 +332,6 @@ export default function InsightPage() {
     });
   };
 
-  const goBack = useSmartBack("/idag");
-
   const toggleContext = (c: InsightContext) =>
     setContexts((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
@@ -343,23 +340,6 @@ export default function InsightPage() {
       <PacePage className="pace-compact-page page-enter px-[16px]! pb-28 sm:px-[24px]! lg:px-[32px]!">
         <PaceContent width="list" className="@container pace-compact-stack">
         <header className="min-w-0 space-y-4" data-testid="insight-header">
-          <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-[8px] sm:flex sm:justify-between">
-            <PaceButton
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={goBack}
-              aria-label="Tillbaka"
-              className="min-w-[44px] w-[44px] shrink-0 rounded-full text-foreground"
-            >
-              <ArrowLeft size={18} strokeWidth={2.2} />
-            </PaceButton>
-            <PaceButton asChild variant="ghost" className="min-w-[44px] justify-self-end gap-1 rounded-full px-2 text-foreground">
-              <Link to="/idag" aria-label="Till Idag">
-                <Home size={14} /> Idag
-              </Link>
-            </PaceButton>
-          </div>
           <div className="min-w-0 space-y-2">
               <PacePageTitle className="text-[var(--pace-primary)] dark:text-foreground">
                 Insikter
