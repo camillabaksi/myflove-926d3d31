@@ -104,7 +104,7 @@ describe("Plan several activities before saving", () => {
   it("uses Calendar's chosen date for a week plan without creating any activity", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-18" />);
     const selectedDay = within(screen.getByRole("group", { name: "Veckans dagar" }))
-      .getByRole("button", { name: /ons.*18/ });
+      .getByRole("button", { name: /ons.*18/i });
     expect(selectedDay).toHaveAttribute("aria-pressed", "true");
     write("Handla\nSimskola");
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
