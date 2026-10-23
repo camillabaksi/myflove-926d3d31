@@ -121,8 +121,8 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     ];
     for (const selector of selectors) {
       const block = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
-      expect(block, selector).toMatch(/font-size:\\s*clamp\\([^;]+\\) !important/);
-      expect(block, selector).not.toMatch(/white-space:\\s*nowrap/);
+      expect(block, selector).toMatch(/font-size:\s*clamp\([^;]+\) !important/);
+      expect(block, selector).not.toMatch(/white-space:\s*nowrap/);
     }
   });
 
