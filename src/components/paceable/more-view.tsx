@@ -26,16 +26,16 @@ export const MORE_AREAS: readonly MoreArea[] = [
 ];
 export const MORE_OVERALL: readonly MoreArea[] = [
   { title: "Stöd & reflektion", area: null, hint: "Pace, Fånga och anteckningar", icon: MessageCircle, tone: "peach", hrefs: ["/assistant", "/quickflow", "/anteckningar", "/planera", "/flowplan"] },
-  { title: "Insikter & historik", area: null, hint: "Se mönster över tid", icon: BarChart3, tone: "lavender", hrefs: ["/insight", "/statistik", "/friktionsindex"] },
+  { title: "Insikter & historik", area: null, hint: "Se mönster över tid", icon: BarChart3, tone: "lavender", hrefs: ["/insight", "/historik", "/statistik", "/friktionsindex"] },
 ];
 export const MORE_TOOL_GROUPS = [
   { title: "Konto och app", hrefs: ["/installningar"] },
   { title: "Admin", hrefs: ["/admin", "/admin-statistik"] },
 ] as const;
 export const MORE_LEGACY = ["/flowscore", "/beloningar"];
-/** Direkta entrycksgenvägar högst upp i Mer med det namn användaren letar efter; varje adress visas bara här. */
-export const MORE_QUICK_LINKS = ["/historik"] as const;
-export const MORE_ALL_HREFS: string[] = [...MORE_AREAS, ...MORE_OVERALL, ...MORE_TOOL_GROUPS].flatMap((g) => [...g.hrefs]).concat(MORE_LEGACY, MORE_QUICK_LINKS);
+/** Grupper som är öppna direkt så att t.ex. Historik nås med ett tryck. */
+export const MORE_OPEN_GROUPS = ["Insikter & historik"];
+export const MORE_ALL_HREFS: string[] = [...MORE_AREAS, ...MORE_OVERALL, ...MORE_TOOL_GROUPS].flatMap((g) => [...g.hrefs]).concat(MORE_LEGACY);
 
 export function getMoreItems(items: MoreItem[], hrefs: readonly string[], simpleMode: boolean) {
   return hrefs.flatMap((href) => {
@@ -63,7 +63,7 @@ type Props = {
 export default function MoreView({ items, simpleMode, enlarged, onClose, onNavigate, t }: Props) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [open, setOpen] = useState<string[]>([]);
+  const [open, setOpen] = useState<string[]>(MORE_OPEN_GROUPS);
   const closeRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   useEffect(() => { closeRef.current?.focus({ preventScroll: true }); }, []);
@@ -83,7 +83,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     const Icon = item.icon;
     return <li key={item.href}><Link href={item.href} onClick={(event) => navigate(event, item.href)} className="pace-more-link">
       <Icon size={18} className="shrink-0" />
-      <span className="min-w-0"><span className="block font-semibold">{item.label}</span><span className="pace-more-muted block text-xs">{item.hint}</span></span>
+      <span className="min-w-0"><span className="block font-semibold">{item.href === "/historik" && !query.trim() ? t("Historik") : item.label}</span><span className="pace-more-muted block text-xs">{item.hint}</span></span>
       <ChevronRight size={16} className="shrink-0" />
     </Link></li>;
   })}</ul>;
@@ -114,7 +114,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
       : card(g.title, g.hint, g.icon, g.tone, undefined, g.title, rows(entries));
     return <div key={g.title} className="pace-more-area" style={g.area ? { "--pace-more-area-color": areaColor(g.area) } as CSSProperties : undefined}>{content}</div>;
   };
-  const areas = MORE_AREAS.map(groupCard).filter(Boolean), overall = MORE_OVERALL.map(groupCard).filter(Boolean), legacy = visible(MORE_LEGACY), quick = visible(MORE_QUICK_LINKS);
+  const areas = MORE_AREAS.map(groupCard).filter(Boolean), overall = MORE_OVERALL.map(groupCard).filter(Boolean), legacy = visible(MORE_LEGACY);
   return <div className={cn("pace-more-view", enlarged && "pace-more-enlarged")}>
     <div className="pace-more-tools">
       <Button variant="ghost" onClick={() => setSearchOpen(!searchOpen)} aria-expanded={searchOpen} aria-controls="pace-more-search" className="pace-more-search-trigger"><Search aria-hidden />{t("Sök i appen")}</Button>
@@ -124,10 +124,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     {searchOpen && <div id="pace-more-search" className="pace-more-search"><input ref={searchRef} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("Sök i appen…")} aria-label={t("Sök i appen")} /></div>}
     {query.trim() ? <section aria-label={t("Sökresultat")}>{results.length ? rows(results) : <p className="pace-more-muted">{t("Hittade inget som matchar")} ”{query}”.</p>}</section> : <>
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
-      <nav aria-label={t("Genvägar")} className="pace-more-quick">
-        {quick.map((item) => { const Icon = item.icon; return <Link key={item.href} href={item.href} onClick={(event) => navigate(event, item.href)} className="pace-more-settings"><Icon size={16} className="shrink-0" />{t("Historik")}</Link>; })}
-        <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} aria-hidden />{t("Inställningar")}</Link>
-      </nav>
+      <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} />{t("Inställningar")}</Link>
       {areas.length > 0 && section("DINA LIVSOMRÅDEN", <div className="grid gap-2">{areas}</div>)}
       {overall.length > 0 && section("ÖVERGRIPANDE", <div className="grid gap-2">{overall}</div>)}
       {section("FLER VERKTYG", <>

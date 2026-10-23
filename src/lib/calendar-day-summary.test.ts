@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { activityWord, draftOverridesRoute, nowCandidateIds, planningPeriodForDate } from "./calendar-day-summary";
-import { MORE_ALL_HREFS, MORE_OVERALL, MORE_QUICK_LINKS } from "@/components/paceable/more-view";
+import { MORE_ALL_HREFS, MORE_OVERALL } from "@/components/paceable/more-view";
 
 describe("Kalender > Min dag: perioder och Just nu", () => {
   it("never repeats the same ongoing period under Just nu", () => {
@@ -45,10 +45,9 @@ describe("Valt kalenderdatum → Planera", () => {
 });
 
 describe("Historik-ingång", () => {
-  it("has exactly one Historik link in Mer, as a top shortcut instead of inside Insikter & historik", () => {
+  it("has exactly one Historik link in Mer, inside Insikter & historik", () => {
     expect(MORE_ALL_HREFS.filter((h) => h === "/historik")).toHaveLength(1);
-    expect(MORE_QUICK_LINKS).toContain("/historik");
-    expect(MORE_OVERALL.find((g) => g.title === "Insikter & historik")?.hrefs).not.toContain("/historik");
+    expect(MORE_OVERALL.find((g) => g.title === "Insikter & historik")?.hrefs).toContain("/historik");
   });
   it("stays visible in simple mode (marked essential)", () => {
     const src = readFileSync("src/components/layout.tsx", "utf8");
