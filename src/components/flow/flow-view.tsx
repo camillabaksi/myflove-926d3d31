@@ -7,7 +7,6 @@ import { track } from "@/lib/analytics";
 import FlowTabs, { type FlowTab } from "@/components/flow/flow-tabs";
 import { FlowPlanContent } from "@/components/flow/flow-plan-content";
 import { AssistantContent } from "@/components/flow/assistant-content";
-import { MessageCircle } from "lucide-react";
 
 /** /flow visar Flow-chatten; Min Flow är tillfälligt borttagen. */
 export default function FlowView({
@@ -38,7 +37,7 @@ export default function FlowView({
       <div className={!chatId ? `pace-scene${tab === "planera" ? " pace-scene-planera" : ""}` : undefined}>
       {!chatId && (
         <>
-        <div className="pace-scene-actions"><span aria-hidden="true" />{tab !== "planera" && <button type="button" aria-label="Skriv till Pace" onClick={() => document.getElementById("pace-chat-input")?.focus()}><MessageCircle size={22} /></button>}</div>
+        <div className="pace-scene-actions"><span aria-hidden="true" /></div>
         <section className="pace-welcome-hero" aria-label="Pace, din följeslagare">
           <div className="pace-welcome-copy">
             <h1>Pace</h1>

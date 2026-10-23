@@ -1,7 +1,7 @@
 import { PacePageHeader } from "@/components/paceable/page-header";
 import { useState } from "react";
 import { Link } from "wouter";
-import { HeartPulse, Lock } from "lucide-react";
+import { Lock, Users } from "lucide-react";
 
 import Layout from "@/components/layout";
 import CollapsibleSection from "@/components/collapsible-section";
@@ -98,7 +98,7 @@ export default function FamilyFlowPage() {
       <MyFlovePageGrid area="hem" className="pace-ds pace-compact-page">
         <MyFloveWide>
           <div className="space-y-3">
-<PacePageHeader icon={HeartPulse} title={t("Familj")} description={t("Få vardagen att fungera för hela familjen.")} />
+<PacePageHeader icon={Users} title={t("Familj")} description={t("Få vardagen att fungera för hela familjen.")} />
 
             {children.length > 0 && (
                <CollapsibleSection

@@ -328,7 +328,7 @@ export default function FamilyAreaSharing() {
           {people.map(([ownerId, p]) => (
             <div key={ownerId} className="rounded-2xl border border-border p-3 space-y-3">
               <div className="flex items-center gap-2 text-sm font-medium text-ink">
-                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
+                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: `color-mix(in oklab, ${p.color} 45%, #E9E1EB)` }} />
                 {p.name}
               </div>
               {AREAS.filter((a) => p.rows.some((r) => r.area === a.id)).map((a) => {
