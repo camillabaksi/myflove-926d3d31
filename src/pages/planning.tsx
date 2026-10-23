@@ -7,16 +7,23 @@ import { PlanningWorkspace } from "@/components/day/planning-workspace";
 import { useLang } from "@/hooks/use-language";
 
 export default function PlanningPage() {
-  const { audience, period, supports, date } = useSearch({ from: "/_app/planera" });
+  const { audience, period, supports, date, from, view } = useSearch({ from: "/_app/planera" });
   const { user } = useUser();
   const { t } = useLang();
   return (
     <Layout>
       <div className="pace-ds pace-compact-page pace-next-page pace-compact-stack mx-auto w-full max-w-6xl">
-        <Link to="/idag" className="inline-flex min-h-11 items-center gap-2 text-sm">
-          <ArrowLeft size={16} aria-hidden />
-          {t("Till min dag")}
-        </Link>
+        {from === "kalender" ? (
+          <Link to="/kalender" search={{ view, date }} className="inline-flex min-h-11 items-center gap-2 text-sm">
+            <ArrowLeft size={16} aria-hidden />
+            {t("Till kalendern")}
+          </Link>
+        ) : (
+          <Link to="/idag" className="inline-flex min-h-11 items-center gap-2 text-sm">
+            <ArrowLeft size={16} aria-hidden />
+            {t("Till min dag")}
+          </Link>
+        )}
         <PacePageHeader icon={CalendarDays} title={t(audience === "children" ? "Barnens schema" : "Planera")} />
         <nav className="pace-segmented" aria-label={t("Vem vill du planera för?")}>
           {(
@@ -28,7 +35,7 @@ export default function PlanningPage() {
             <Link
               key={value}
               to="/planera"
-              search={{ audience: value, period, ...(date ? { date } : {}) }}
+              search={{ audience: value, period, ...(date ? { date } : {}), ...(from ? { from, view } : {}) }}
               aria-current={audience === value ? "page" : undefined}
               className="pace-segment"
             >
