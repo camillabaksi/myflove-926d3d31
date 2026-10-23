@@ -1,3 +1,6 @@
+## 2026-10-23 – Kalenderns valda dag följer med till Planera
+- Kalenderns befintliga planeringslänkar skickar med vald dag, även från månad/vecka och vid planering av flera aktiviteter eller barnens schema. Planera validerar datumet, behåller rätt vecka och skyddar påbörjade utkast från tysta datumändringar. Granskning visar felaktiga rader i stället för att låta dold formulärvalidering stoppa sparandet utan förklaring. Inga nya knappar, lagringsändringar eller produktionspubliceringar.
+
 ## 2026-10-23 – Kompakt granskning i Planera
 - Flera aktiviteter visas först som korta översikter med titel, datum och valda barn. Varje aktivitet går att öppna för redigering, medan en enda aktivitet förblir öppen direkt. Befintliga utkast, kontoseparering, kalenderposter, barnval och sparlogik lämnas orörda. Ingen webbpublicering.
 

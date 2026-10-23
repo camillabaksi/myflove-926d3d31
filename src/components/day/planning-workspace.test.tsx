@@ -101,6 +101,42 @@ describe("Compact calendar context", () => {
 });
 
 describe("Plan several activities before saving", () => {
+  it("uses Calendar's chosen date for a week plan without creating any activity", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-18" />);
+    const selectedDay = within(screen.getByRole("group", { name: "Veckans dagar" }))
+      .getByRole("button", { name: /ons.*18/i });
+    expect(selectedDay).toHaveAttribute("aria-pressed", "true");
+    write("Handla\nSimskola");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
+    expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("preserves an unfinished Calendar-date draft instead of silently moving it", () => {
+    const page = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-18" />);
+    write("Studera");
+    page.rerender(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-22" />);
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(screen.getByLabelText("Dag")).toHaveValue("2026-11-18");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("reveals an invalid collapsed review row and prevents saving", async () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Handla\nTvätta");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    const first = screen.getByTestId("planning-review-row-0");
+    fireEvent.click(first.querySelector("summary")!);
+    fireEvent.change(within(first).getByRole("textbox", { name: "Aktivitet 1" }), { target: { value: "" } });
+    fireEvent.click(first.querySelector("summary")!);
+    expect(first).not.toHaveAttribute("open");
+    fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Kontrollera aktivitet, datum, tid och plats.");
+    expect(first).toHaveAttribute("open");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("shows a concise date and recipient overview before a multi-activity save", () => {
     render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
     write("Frukost\nSimskola");

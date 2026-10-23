@@ -7,7 +7,7 @@ import { PlanningWorkspace } from "@/components/day/planning-workspace";
 import { useLang } from "@/hooks/use-language";
 
 export default function PlanningPage() {
-  const { audience, period, supports } = useSearch({ from: "/_app/planera" });
+  const { audience, period, supports, date } = useSearch({ from: "/_app/planera" });
   const { user } = useUser();
   const { t } = useLang();
   return (
@@ -28,7 +28,7 @@ export default function PlanningPage() {
             <Link
               key={value}
               to="/planera"
-              search={{ audience: value, period }}
+              search={{ audience: value, period, ...(date ? { date } : {}) }}
               aria-current={audience === value ? "page" : undefined}
               className="pace-segment"
             >
@@ -44,6 +44,7 @@ export default function PlanningPage() {
                   owner={user.id}
                   audience={value}
                   requestedPeriod={audience === value ? period : undefined}
+                  requestedDate={audience === value ? date : undefined}
                   revealSupports={audience === value && value === "me" && supports === "1"}
                 />
               </div>
