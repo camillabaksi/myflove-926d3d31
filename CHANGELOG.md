@@ -1,3 +1,6 @@
+## 2026-10-23 – Hitta tillbaka från Planera till rätt kalenderdag
+- Efter en bekräftad plansparning visas en diskret länk till sparat datum i Kalender. Vid flera datum leder den uttryckligen till första sparade dagen. Kalenderns dagvy kan öppnas på ett validerat datum från adressen och håller den dagen tills användaren själv navigerar. Osparade utkast, kontoseparation, sparlogik och energibatteri lämnas orörda. Ingen produktionspublicering.
+
 ## 2026-10-23 – Kalenderns valda dag följer med till Planera
 - Kalenderns befintliga planeringslänkar skickar med vald dag, även från månad/vecka och vid planering av flera aktiviteter eller barnens schema. Planera validerar datumet, behåller rätt vecka och skyddar påbörjade utkast från tysta datumändringar. Granskning visar felaktiga rader i stället för att låta dold formulärvalidering stoppa sparandet utan förklaring. Inga nya knappar, lagringsändringar eller produktionspubliceringar.
 
