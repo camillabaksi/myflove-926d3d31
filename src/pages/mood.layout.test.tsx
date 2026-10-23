@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MoodContent } from "./mood";
 
 const state = vi.hoisted(() => ({ addMood: vi.fn(), toast: vi.fn() }));
@@ -26,6 +26,7 @@ vi.mock("@/components/collapsible-section", () => ({
 }));
 
 describe("Mående: fem val ska vara läsbara också på smal skärm", () => {
+  beforeEach(() => vi.clearAllMocks());
   it("keeps the Mood form and pattern action wide in the desktop page grid", () => {
     const { container } = render(<MoodContent showHeader={false} />);
     const choice = screen.getByRole("button", { name: "Okej" });
