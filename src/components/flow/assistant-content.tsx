@@ -47,6 +47,7 @@ import {
   paceActionItemId,
   paceActionStepId,
   recordPaceShoppingReceipt,
+  addPaceShoppingItems,
   type PaceShoppingReceipt,
   allowedFlowMoveDate,
   flowEditTaskPatch,
@@ -149,6 +150,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     "myflove-pace-shopping-receipts", [],
   );
   const shoppingInFlight = useRef(new Set<string>());
+  // Prevent a second click in the same render before receipt state updates.
+  // Reset when a different account becomes the active data owner.
+  const shoppingConfirmedInSession = useRef<{ owner: string | null; ids: Set<string> }>({
+    owner: null, ids: new Set(),
+  });
   const [pendingShopping, setPendingShopping] = useState<Record<string, boolean>>({});
 
   // Once a task is visible in the shared store, its stable ID is the guard.
@@ -182,9 +188,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         toast("Inköpslistan hämtas. Prova igen när den är redo.");
         return;
       }
+      if (shoppingConfirmedInSession.current.owner !== owner) {
+        shoppingConfirmedInSession.current = { owner, ids: new Set() };
+      }
       if (shoppingInFlight.current.has(key)) return;
-      const remaining = items.filter(item => !shoppingReceipts.some(receipt => receipt.id === item.id));
-      if (!remaining.length) {
+      const saved = new Set([
+        ...shoppingReceipts.map(receipt => receipt.id),
+        ...shoppingConfirmedInSession.current.ids,
+      ]);
+      if (items.every(item => item.id && saved.has(item.id))) {
         setDoneActions(prev => ({ ...prev, [key]: "Redan tillagt i inköpslistan." }));
         return;
       }
@@ -192,14 +204,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       setPendingShopping(prev => ({ ...prev, [key]: true }));
       void (async () => {
         try {
-          for (const item of remaining) {
-            if (!isActiveOwner(owner) || !item.id) throw new Error("Account changed");
-            // Household inserts are confirmed via mutateAsync, not assumed from
-            // a fire-and-forget mutation. Personal items also have stable IDs.
-            await shopping.addItemConfirmed(item.title, item.id);
-            if (!isActiveOwner(owner)) throw new Error("Account changed");
-            setShoppingReceipts(prev => recordPaceShoppingReceipt(prev, item.id!));
-          }
+          await addPaceShoppingItems(
+            key, titles, saved,
+            (title, id) => shopping.addItemConfirmed(title, id),
+            (id) => {
+              shoppingConfirmedInSession.current.ids.add(id);
+              setShoppingReceipts(prev => recordPaceShoppingReceipt(prev, id));
+            },
+            () => isActiveOwner(owner),
+          );
           if (isActiveOwner(owner)) {
             setDoneActions(prev => ({ ...prev, [key]: "Tillagt i inköpslistan." }));
           }
