@@ -138,9 +138,9 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     ] as const;
     for (const [selector, expected] of minRem) {
       const rule = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
-      const mobileMin = Number(rule.match(/font-size:\\s*clamp\\(([\\d.]+)rem/)?.[1]);
+      const mobileMin = Number(rule.match(/font-size:\s*clamp\(([\d.]+)rem/)?.[1]);
       expect(mobileMin, selector).toBeGreaterThanOrEqual(expected);
-      expect(rule, selector).not.toMatch(/white-space:\\s*nowrap/);
+      expect(rule, selector).not.toMatch(/white-space:\s*nowrap/);
     }
     expect(styles).toContain("font-size: clamp(1.45rem, 4.5vw, 1.7rem) !important;");
     expect(styles).toContain(".pace-evening-ritual .pace-evening-title");
