@@ -5,7 +5,6 @@ genomfört eller inte längre aktuellt ligger oförändrat i `docs/roadmap-arkiv
 (565 rader, 45 öppna punkter före städningen).
 
 ## Väntar på ditt beslut
-- [ ] Engelska och språkval på landningssidan. Idag är sidan helt på svenska och saknar språkval.
 - [ ] Taktilt djup: jämförelse mellan Fraunces och Newsreader. Newsreader finns inte i appen än, så jämförelsen är inte gjord.
 - [ ] Etapp 2: sid-specifika gradienter och hårdkodade färger. 316 färgkoderna ligger kvar i 21 filer, mest i kalendern, Kvällsstund och test-sidan.
 - [ ] Läsbarhet i de fasta veckoblocken vid 200 % text. Kräver att dagbredderna låses upp, vilket ändrar kalenderns tidsgeometri.
@@ -21,11 +20,11 @@ genomfört eller inte längre aktuellt ligger oförändrat i `docs/roadmap-arkiv
 - [ ] Filmgranskningar som väntar: den förfina 3D-filmen saknar sin ursprungliga källa, två filmer om Min plats/chatt/återhämtning fastnade i renderingsfelet, och en verklig realtidsgranskning kräver en spelare som fungerar.
 
 ## Ej påbörjat
-- [ ] Serverstyrd versionshantering för synkkonflikter. Idag jämförs ändringstider från enheterna, vilket kan skilja sig något åt.
+- [ ] Serverstyrd versionshantering för synkkonflikter. En serverstyrd tidsstämpel styr redan vilken skrivning som får gå igenom, men en egen räknare per post saknas, så vid motsatta ändringar på två enheter vinner den senaste ändringstiden – och enheternas klockor kan skilja sig något.
 
 ## Klart och stängt i denna städning
-- Slogan och rubriker på landningssidan: "Ditt liv, i din takt." och "Du behöver inte hålla allt i huvudet." finns på plats.
-- Kalender: månad, vecka och dag finns, med tidslinje, pågående perioder, "Just nu" och "Få ihop dagen".
+- Landningssidan: sloganen "Ditt liv, i din takt.", rubriken "Du behöver inte hålla allt i huvudet." och ett språkval mellan svenska och engelska finns på plats. Engelskan översätter sidans exempel och dialoger; sloganen står kvar på svenska med flit.
+- Kalender: månad, vecka och dag finns. Dagvyn listar aktiviteter med och utan bestämd tid, med pågående perioder och "Just nu". Den grafiska tidslinjen ligger i veckodelen "Visa veckans tidslinje", och en aktivitet bockas av i sin detaljvy.
 - Historik: ligger i Mer under Insikter & historik och syns även i enkelt läge.
 - Rubriker och kompakta avstånd: 42 sidor använder gemensamma sidhuvudet och 42 den kompakta layouten.
 - Fånga: heter Fånga i huvudmenyn även med enkelt språk, och undersidors ordval behålls.
