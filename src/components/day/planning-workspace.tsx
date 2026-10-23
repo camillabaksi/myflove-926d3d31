@@ -164,6 +164,7 @@ export function PlanningWorkspace({
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
   const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
   const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
+  const [lastSaved, setLastSaved] = useState<{ firstDate: string; dayCount: number; count: number; includesChildren: boolean } | null>(null);
   const [expandedRows, setExpandedRows] = useState<string[]>(() =>
     restored?.stage === "review" && restored.rows.length === 1 ? [restored.rows[0].id] : [],
   );
@@ -257,6 +258,7 @@ export function PlanningWorkspace({
       setRows(nextRows);
       setExpandedRows(nextRows.length === 1 ? [nextRows[0].id] : []);
       setStage("review");
+      setLastSaved(null);
       setError("");
     } catch (cause) {
       setError(t(cause instanceof Error ? cause.message : "Kontrollera aktiviteterna."));
@@ -299,6 +301,8 @@ export function PlanningWorkspace({
       toast.success(
         `${batch.length} ${t(batch.length === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}`,
       );
+      const savedDates = [...new Set(batch.map((row) => row.date))].sort();
+      setLastSaved({ firstDate: savedDates[0]!, dayCount: savedDates.length, count: batch.length, includesChildren: forChildren });
       pending.current = null;
       childrenWritten.current = false;
       discardPlanningHandoff(owner, audience);
@@ -348,6 +352,19 @@ export function PlanningWorkspace({
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t("Lägg till aktiviteter")}
         </h2>
+        {lastSaved && (
+          <div role="status" className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#DDE7DC] bg-[#F1F5EF] px-3 py-2 text-sm text-ink">
+            <span>{lastSaved.count} {t(lastSaved.count === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}{lastSaved.dayCount > 1 ? ` · ${lastSaved.dayCount} ${t("olika datum")}` : ""}</span>
+            <Link
+              to="/kalender"
+              search={{ view: "dag", date: lastSaved.firstDate }}
+              className="inline-flex min-h-11 items-center gap-1 rounded-xl px-2 font-medium text-primary underline underline-offset-4"
+            >
+              {t(lastSaved.dayCount > 1 ? "Visa första datumet i kalendern" : "Visa i kalendern")}
+              <ArrowRight size={16} aria-hidden />
+            </Link>
+          </div>
+        )}
         {stage === "write" && children.length > 0 && (
           <div className="mt-1 flex flex-wrap items-center gap-x-3 text-sm">
             {target === "both" ? (
@@ -504,7 +521,7 @@ export function PlanningWorkspace({
               id={`activities-${audience}`}
               aria-describedby={`help-${audience}`}
               value={text}
-              onChange={(event) => setText(event.target.value)}
+              onChange={(event) => { setText(event.target.value); setLastSaved(null); }}
               rows={3}
               maxLength={12500}
               placeholder={t(
