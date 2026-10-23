@@ -98,12 +98,12 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
             <text x="16" y="161" fill="#756B77" fontSize="11">{win.start}</text>
             <text x="324" y="161" textAnchor="end" fill="#756B77" fontSize="11">{win.end}</text>
           </svg>
-          {selectedPoint !== null && graph.points[selectedPoint] && <div role="status" className="mt-2 flex items-start justify-between gap-2 rounded-xl bg-white/75 p-3 text-sm text-ink shadow-sm">
+          {selectedPoint !== null && graph.points[selectedPoint] && <div role="status" className="mt-2 flex min-w-0 items-start justify-between gap-2 rounded-xl bg-card/75 p-3 text-sm text-ink shadow-sm">
             <div className="min-w-0">
               <p className="font-semibold">{graph.points[selectedPoint].label}</p>
               <p className="mt-1 text-xs text-muted-foreground">{graph.points[selectedPoint].occurredAt ? new Date(graph.points[selectedPoint].occurredAt).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" }) + " · " : ""}{t(graph.points[selectedPoint].direction === "gives" ? "Gav energi" : graph.points[selectedPoint].direction === "drains" ? "Tog energi" : graph.points[selectedPoint].direction === "both" ? "Både gav och tog" : "Egen registrering eller uppskattning")}</p>
             </div>
-            <button type="button" aria-label={t("Stäng")} onClick={() => setSelectedPoint(null)} className="shrink-0 rounded-lg px-2 py-1 text-muted-foreground">×</button>
+            <button type="button" aria-label={t("Stäng")} onClick={() => setSelectedPoint(null)} className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2">×</button>
           </div>}
           <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
             <span><span className="text-[#829C87]">●</span> {t("Gav energi")}</span>
@@ -144,9 +144,9 @@ export default function DayEdgesCheckin({ className }: { className?: string }) {
 
 function EdgeSlider({icon,label,value,onChange,onSave,saved}: {icon:React.ReactNode;label:string;value:number;onChange:(n:number)=>void;onSave:()=>void;saved:boolean}) {
   const {t}=useLang();
-  return <div className="space-y-2 rounded-xl bg-white/50 p-3">
+  return <div className="space-y-2 rounded-xl bg-card/70 p-3">
     <div className="flex items-center gap-2 text-sm text-ink">{icon}<span className="flex-1">{label}</span><span className="text-xs font-semibold text-primary">{value}/10</span></div>
     <input type="range" min={1} max={10} step={1} value={value} onChange={e=>onChange(Number(e.target.value))} aria-label={label} className="w-full accent-[hsl(var(--primary))]"/>
-    <button type="button" onClick={onSave} className="min-h-9 rounded-xl bg-[#F5EDF7] px-4 py-2 text-sm font-medium text-ink shadow-sm">{saved?t("Uppdatera"):t("Spara")}</button>
+    <button type="button" onClick={onSave} className="min-h-11 rounded-xl bg-secondary/70 px-4 py-2 text-sm font-medium text-ink shadow-sm">{saved?t("Uppdatera"):t("Spara")}</button>
   </div>;
 }
