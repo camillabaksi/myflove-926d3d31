@@ -2812,7 +2812,7 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="false"][
 html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][data-expanded="false"] > button > span:last-child { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
 
 /* Pace welcome: warm, editorial and calm. No second brand logo on this route. */
-.pace-assistant-mobile-header { position: relative; border: 0; background: #fcf9f5; padding: 0.65rem 1rem; }
+.pace-assistant-mobile-header { position: relative; border: 0; background: #fffdfb; padding: 0.65rem 1rem; }
 .pace-welcome-hero {
   position: relative; isolation: isolate; display: flex; align-items: center;
   min-height: 220px; overflow: hidden; border-radius: 1.8rem;
