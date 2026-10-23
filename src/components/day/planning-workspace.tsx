@@ -131,11 +131,14 @@ export function PlanningWorkspace({
   owner,
   audience,
   requestedPeriod,
+  requestedDate,
   revealSupports = false,
 }: {
   owner: string;
   audience: "me" | "children";
   requestedPeriod?: PlanningPeriod;
+  /** Optional calendar-selected date; never overrides an unfinished draft. */
+  requestedDate?: string;
   /** Only opens the saved-support section. Never edits or saves a draft. */
   revealSupports?: boolean;
 }) {
@@ -154,8 +157,8 @@ export function PlanningWorkspace({
   const { activeArea } = useActiveArea();
   const today = todayISO();
   const [period, setPeriod] = useState<PlanningPeriod>(restored?.period ?? requestedPeriod ?? "today");
-  const [date, setDate] = useState(restored?.date ?? (requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today));
-  const [weekAnchor, setWeekAnchor] = useState(restored?.weekAnchor ?? today);
+  const [date, setDate] = useState(restored?.date ?? requestedDate ?? (requestedPeriod === "tomorrow" ? addDaysISO(today, 1) : today));
+  const [weekAnchor, setWeekAnchor] = useState(restored?.weekAnchor ?? requestedDate ?? today);
   const [selected, setSelected] = useState<string[]>(restored?.selected ?? []);
   const [text, setText] = useState(restored?.text ?? "");
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
@@ -182,6 +185,7 @@ export function PlanningWorkspace({
   // Capture current controlled input on every render, including review edits.
   handoffRef.current = { target, period, date, weekAnchor, selected, text, rows, periodAreas, stage };
   const initialRequestedPeriod = useRef(requestedPeriod);
+  const initialRequestedDate = useRef(requestedDate);
   useEffect(() => {
     mounted.current = true;
     // Clear the handoff only after mounting; React may run initializers twice.
@@ -199,12 +203,15 @@ export function PlanningWorkspace({
     if (!requestedPeriod) return;
     // Returning from Insikter must not overwrite the selected date/week.
     // Comparing route input also remains safe if StrictMode re-runs effects.
-    if (restored && initialRequestedPeriod.current === requestedPeriod) return;
+    if (restored && initialRequestedPeriod.current === requestedPeriod && initialRequestedDate.current === requestedDate) return;
+    // A date sent from Calendar must not silently redate typed or reviewed activities.
+    if (requestedDate && requestedDate !== date && (text.trim() || rows.length)) return;
     initialRequestedPeriod.current = requestedPeriod;
+    initialRequestedDate.current = requestedDate;
     setPeriod(requestedPeriod);
-    setDate(requestedPeriod === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
-    setWeekAnchor(todayISO());
-  }, [requestedPeriod]);
+    setDate(requestedDate ?? (requestedPeriod === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO()));
+    setWeekAnchor(requestedDate ?? todayISO());
+  }, [requestedPeriod, requestedDate]);
   const week = useMemo(() => periodDates(weekAnchor, "vecka"), [weekAnchor]);
   const dates = useMemo(() => (period === "week" ? week : [date]), [period, week, date]);
   const { days, planningReady, planningError, externalError } = useVisualCalendar(dates);
