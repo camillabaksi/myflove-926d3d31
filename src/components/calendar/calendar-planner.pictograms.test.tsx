@@ -258,6 +258,21 @@ describe("Calendar month summary", () => {
     expect(within(activityList).getAllByRole("button")).toHaveLength(1);
     expect(within(activityList).getByRole("button")).toHaveTextContent("Fika med Sara");
   });
+  it("shows the true start of a continuous period in its details from day, week and month", () => {
+    const originalStart = "2026-10-01";
+    const periodEnd = "2026-10-30";
+    model.entries = [{ ...fixture, id: "rem-course", sourceId: "course", source: "reminder",
+      title: "Pågående kurs", time: undefined, endTime: undefined, periodStart: originalStart, periodEnd, recurring: true }];
+    for (const view of ["manad", "vecka", "dag"] as const) {
+      const page = render(<CalendarPlanner initialView={view} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+      const button = screen.getByRole("button", { name: /Pågående kurs/ });
+      fireEvent.click(button);
+      const details = within(screen.getByRole("dialog"));
+      expect(details.getByText(/2026-10-01–2026-10-30/)).toBeInTheDocument();
+      expect(details.queryByRole("button", { name: "Markera klar" })).not.toBeInTheDocument();
+      page.unmount();
+    }
+  });
   it("lists the selected day compactly: timed first in clock order, then untimed, also without picture support", () => {
     model.entries = [fixture, { ...fixture, id: "task-b", sourceId: "b", title: "Ring banken", time: undefined, endTime: undefined }, { ...fixture, id: "task-c", sourceId: "c", title: "Morgonpromenad", time: "07:00", endTime: "07:15" }];
     render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);

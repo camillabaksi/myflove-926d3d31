@@ -62,6 +62,17 @@ describe("family calendar layer", () => {
     expect(projectFamilyCalendar("2026-10-08", [child("bella")], [activity], {}, "parent")).toHaveLength(1);
     expect(projectFamilyCalendar("2026-10-12", [child("bella")], [activity], {}, "parent")).toHaveLength(0);
   });
+  it("retains the real start of an untimed child period without exposing notes or making it completable", () => {
+    const activity = { ...item("holiday", "bella"), title: "Höstlov", date: "2026-10-20",
+      time: null, repeat: "daily" as const,
+      notes: encodeVisualNotes({ pictogram: "calendar", category: "familj", tone: "lavender", repeatUntil: "2026-10-30" }, "PRIVATE NOTE") };
+    const projected = projectFamilyCalendar("2026-10-23", [child("bella")], [activity], {}, "parent");
+    expect(projected).toEqual([expect.objectContaining({
+      date: "2026-10-23", periodStart: "2026-10-20", periodEnd: "2026-10-30",
+      done: false, editable: false, time: undefined,
+    })]);
+    expect(JSON.stringify(projected)).not.toContain("PRIVATE");
+  });
   it("honors registered travel/preparation without inventing missing durations", () => {
     const context = { ...own("pickup", "16:30", "17:00"), source: "child" as const, requiresParent: true, prepMinutes: 10, travelMinutes: 15 };
     expect(familyPlanningContext([context], "16:00", "16:15").presence).toHaveLength(1);
