@@ -10,6 +10,7 @@ import { todayISO } from "@/lib/day";
 import { isActiveOwner } from "@/lib/account-scope";
 import { applyDayReplanChanges, type ReplanChange } from "@/lib/day-replan";
 import { appendPlanningTasks } from "@/lib/planning";
+import { moveReminderOccurrence, restoreReminderOccurrence, type ReminderOccurrenceOverride } from "@/lib/reminder-occurrences";
 import { SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import {
   MEDICATIONS_KEY,
@@ -813,6 +814,8 @@ export interface Reminder {
   note?: string; // fri anteckning om vad det gäller
   area?: LifeArea; // livsområde – styr färgen i alla vyer
   canceled?: boolean; // avbokad – ligger kvar men ger inga notiser
+  /** Enskilda flyttar av återkommande förekomster, nycklade på ursprungsdatum. */
+  occurrenceOverrides?: Record<string, ReminderOccurrenceOverride>;
 }
 
 export function useReminders() {
@@ -918,6 +921,19 @@ export function useReminders() {
         return next;
       }),
     );
+  };
+
+  /** Only the selected occurrence moves; update the original account-owned store. */
+  const rescheduleReminderOccurrence = (id: string, originalDate: string, date: string, time: string) => {
+    setReminders(prev => prev.map(reminder => reminder.id === id
+      ? { ...reminder, occurrenceOverrides: moveReminderOccurrence(reminder, originalDate, date, time) }
+      : reminder));
+  };
+
+  const resetReminderOccurrence = (id: string, originalDate: string) => {
+    setReminders(prev => prev.map(reminder => reminder.id === id
+      ? { ...reminder, occurrenceOverrides: restoreReminderOccurrence(reminder, originalDate) }
+      : reminder));
   };
 
   const cancelReminder = (id: string) => {
