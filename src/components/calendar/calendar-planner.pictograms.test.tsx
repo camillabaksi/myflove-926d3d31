@@ -59,7 +59,7 @@ describe("Calendar entry view", () => {
     const date = "2026-11-18";
     const page = render(<CalendarPlanner initialView="dag" initialDate={date} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     expect(write).toHaveBeenCalledWith(date);
-    expect(screen.getByRole("heading", { name: /18 november 2026/i })).toBeInTheDocument();
+    expect(screen.getByText(/onsdag 18 november/i)).toBeInTheDocument();
     const before = write.mock.calls.length;
     page.rerender(<CalendarPlanner initialView="dag" initialDate={date} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     expect(write).toHaveBeenCalledTimes(before);
