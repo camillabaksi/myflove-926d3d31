@@ -41,6 +41,7 @@ import {
   ACTION_LABEL,
   actionCta,
   matchTask,
+  allowedFlowMoveDate,
   parseFlowReply,
   type FlowAction,
 } from "@/lib/flow-actions";
@@ -131,10 +132,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
 
-  /** Uppgifterna Flow får referera till – bara titel och id, inget privat. */
+  /** Same source tasks as Idag and Kalender. They are not all due today. */
   const taskListContext = activeTasks
     .slice(0, 20)
-    .map((t) => `- id:${t.id} · ${t.title}${t.dueDate ? ` (datum ${t.dueDate})` : ""}`)
+    .map((t) => `- id:${t.id} · ${t.title}${t.dueDate ? ` (planerat datum ${t.dueDate})` : ""}`)
     .join("\n");
 
   const shopping = useSharedShoppingList();
@@ -148,21 +149,24 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     }
     if (action.kind === "ny") {
       if (!action.title) return;
-      const date = action.date && action.date >= todayStr() ? action.date : undefined;
-      addTask(action.title, date, action.time ? { time: action.time } : undefined);
-      setDoneActions((p) => ({ ...p, [key]: "Tillagd." }));
+      // An explicitly chosen past date belongs to history, not silently today.
+      addTask(action.title, action.date, action.time ? { time: action.time } : undefined);
+      setDoneActions((p) => ({ ...p, [key]: action.date ? `Tillagd för ${action.date}.` : "Tillagd för idag." }));
       return;
     }
     const task = matchTask(action, activeTasks);
     if (!task) {
-      setDoneActions((p) => ({ ...p, [key]: "Jag hittar inte uppgiften längre." }));
+      setDoneActions((p) => ({ ...p, [key]: "Jag kan inte avgöra säkert vilken aktivitet det gäller. Öppna den i Idag eller Kalender för att ändra rätt aktivitet." }));
       return;
     }
     if (action.kind === "flytta") {
-      // Flow kan råka föreslå ett datum som redan passerat – då blir det alltid
-      // imorgon i stället, så inget hamnar bakåt i tiden.
-      const wanted = action.date;
-      const date = wanted && wanted > todayStr() ? wanted : tomorrowISO();
+      // Never silently move to tomorrow when an AI-proposed date is missing
+      // or already past. The user must approve the actual destination.
+      const date = allowedFlowMoveDate(action.date, todayStr());
+      if (!date) {
+        setDoneActions((p) => ({ ...p, [key]: "Datumet är oklart eller har passerat. Be Pace föreslå ett nytt datum innan du flyttar." }));
+        return;
+      }
       setTaskDueDate(task.id, date);
       if (action.steps?.length)
         addTaskSteps(
@@ -175,7 +179,9 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       }));
     } else if (action.kind === "andra") {
       if (action.title && action.title !== task.title) updateTask(task.id, { title: action.title });
-      if (action.date && action.date >= todayStr()) setTaskDueDate(task.id, action.date);
+      // Editing an explicitly chosen historical date must not keep a
+      // different day while claiming the whole edit succeeded.
+      if (action.date) setTaskDueDate(task.id, action.date);
       if (action.time) setTaskTime(task.id, action.time);
       setDoneActions((p) => ({ ...p, [key]: "Ändrad." }));
     } else if (action.kind === "ta-bort") {
@@ -255,7 +261,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         ? `Barnprofiler i Familj: ${childProfiles.map((c) => c.name).join(", ")}`
         : "";
       const context =
-        `${exerciseContext}\n${childNames}\n\n${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nDagens uppgifter (dagens datum ${todayStr()}, imorgon ${tomorrowISO()}):\n${taskListContext}`
+        `${exerciseContext}\n${childNames}\n\n${flowPlanContext(flowPlan)}\n\n${personalContext}\n\n${contextPrompt}\n\nÖppna aktiviteter från samma lista som Idag och Kalender (även kommande och försenade; ett angivet datum är aktivitetens planerade datum, inte nödvändigtvis idag). Idag ${todayStr()}, imorgon ${tomorrowISO()}:\n${taskListContext}`
           .trim()
           .slice(0, 4000);
       const { reply } = await chat({
