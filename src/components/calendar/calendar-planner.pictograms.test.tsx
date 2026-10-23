@@ -5,17 +5,20 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import CalendarPlanner from "./calendar-planner";
 import { todayISO } from "@/lib/day";
 import type { Child } from "@/hooks/use-children";
+import type { Reminder } from "@/hooks/use-data";
 import type { ChildScheduleInput } from "@/lib/add-child-schedule";
 import { decodeVisualNotes } from "@/lib/child-visual-schedule";
 import type { CalendarEntry } from "@/lib/visual-calendar";
 import { periodDates } from "@/lib/visual-calendar";
 
 const fixture: CalendarEntry = { id: "task-a", sourceId: "a", source: "task", date: todayISO(), title: "Fika med Sara", time: "09:00", endTime: "09:30", done: false, editable: true };
-const model = { entries: [fixture], ready: true, error: false };
+const model = { entries: [fixture], reminders: [] as Reminder[], ready: true, error: false };
 const write = vi.fn();
+const reschedule = vi.fn();
+const restore = vi.fn();
 const addChild = vi.fn(async (_input: ChildScheduleInput) => "created");
 const children: Child[] = ["Bella", "Bianca", "Foreign"].map((name, i) => ({ id: name, name, owner_id: i === 2 ? "other" : "owner", birthdate: null, color: "", note: null, helps: [], avatar: null }));
-beforeEach(() => { addChild.mockReset(); addChild.mockResolvedValue("created"); write.mockClear(); model.entries = [fixture]; model.ready = true; model.error = false; });
+beforeEach(() => { addChild.mockReset(); addChild.mockResolvedValue("created"); write.mockClear(); model.entries = [fixture]; model.reminders = []; model.ready = true; model.error = false; reschedule.mockClear(); restore.mockClear(); });
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: "owner" } }) }));
 vi.mock("@/hooks/use-language", () => ({ useLang: () => ({ t: (s: string) => s, locale: "sv-SE" }) }));
 vi.mock("wouter", () => ({
@@ -29,7 +32,10 @@ vi.mock("@tanstack/react-router", async importOriginal => {
 vi.mock("@/hooks/use-text-layout", () => ({ useTextLayout: () => ({ ref: useRef(null), enlarged: false }) }));
 vi.mock("@/lib/cloud-storage", () => ({ ACCOUNT_BOUND_EVENT: "myflove-account-bound", useCloudSyncedStorage: (_key: string, initial: unknown) => useState(initial), getSyncUser: async () => ({ id: "owner" }) }));
 vi.mock("@/hooks/use-visual-calendar", () => ({ useVisualCalendar: (dates: string[]) => ({ days: Object.fromEntries(dates.map(date => [date, model.entries.filter(entry => entry.date === date)])), familyMembers: [], externalError: null, planningReady: model.ready, planningError: model.error }) }));
-vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: model.entries.filter(entry => entry.source === "task").map(entry => ({ id: entry.sourceId, dueDate: entry.date, title: entry.title, time: entry.time, endTime: entry.endTime })), addTask: write, updateTask: write }), useReminders: () => ({ reminders: [], addReminder: write, updateReminder: write }) }));
+vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ tasks: model.entries.filter(entry => entry.source === "task").map(entry => ({ id: entry.sourceId, dueDate: entry.date, title: entry.title, time: entry.time, endTime: entry.endTime })), addTask: write, updateTask: write }), useReminders: () => ({
+  reminders: model.reminders, addReminder: write, updateReminder: write,
+  rescheduleReminderOccurrence: reschedule, resetReminderOccurrence: restore,
+}) }));
 vi.mock("@/lib/account-scope", () => ({ isActiveOwner: () => true }));
 vi.mock("@/hooks/use-children", () => ({ useChildren: () => ({ children, items: [], updateItem: write, addItem: addChild }) }));
 vi.mock("@/hooks/use-flow-items", () => ({ useFlowItems: () => ({ today: [], toggleItem: write }) }));
@@ -101,6 +107,44 @@ describe("Calendar entry view", () => {
     expect(editDialog.queryByRole("button", { name: "Redigera aktivitet" })).not.toBeInTheDocument();
     expect(editDialog.getByRole("button", { name: "Hjälp att planera tiden" })).toBeInTheDocument();
   });
+  it.each(["dag", "vecka", "manad"] as const)(
+    "moves only a selected recurring occurrence from the %s detail view",
+    view => {
+      model.entries = [{ ...fixture, id: "rem-repeat", sourceId: "repeat", source: "reminder",
+        title: "Daglig paus", occurrenceDate: fixture.date, recurring: true, editable: true }];
+      model.reminders = [{ id: "repeat", title: "Daglig paus", date: "2026-10-20", repeat: "daily",
+        time: "09:00", completed: false, createdAt: 1 }];
+      const page = render(<CalendarPlanner initialView={view} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+      fireEvent.click(screen.getByRole("button", { name: /Daglig paus/ }));
+      const dialog = within(screen.getByRole("dialog"));
+      expect(dialog.getByRole("button", { name: "Ändra bara detta tillfälle" })).toBeInTheDocument();
+      fireEvent.click(dialog.getByRole("button", { name: "Ändra bara detta tillfälle" }));
+      const save = dialog.getByRole("button", { name: "Spara bara detta tillfälle" });
+      fireEvent.change(dialog.getByLabelText("Nytt datum för tillfället"), { target: { value: "2026-10-24" } });
+      fireEvent.change(dialog.getByLabelText("Ny tid för tillfället"), { target: { value: "10:15" } });
+      expect(save).toBeEnabled();
+      fireEvent.click(save);
+      expect(reschedule).toHaveBeenCalledWith("repeat", fixture.date, "2026-10-24", "10:15");
+      expect(write).not.toHaveBeenCalledWith("repeat", expect.anything());
+      page.unmount();
+    },
+  );
+
+  it("restores one moved reminder to the series without changing any other occurrence", () => {
+    const original = "2026-10-21";
+    model.entries = [{ ...fixture, id: `rem-repeat:${original}`, sourceId: "repeat", source: "reminder",
+      title: "Daglig paus", occurrenceDate: original, recurring: true, editable: true }];
+    model.reminders = [{ id: "repeat", title: "Daglig paus", date: "2026-10-20", repeat: "daily",
+      time: "09:00", completed: false, createdAt: 1,
+      occurrenceOverrides: { [original]: { date: fixture.date, time: "09:00" } } }];
+    render(<CalendarPlanner initialView="dag" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    fireEvent.click(screen.getByRole("button", { name: /Daglig paus/ }));
+    const dialog = within(screen.getByRole("dialog"));
+    fireEvent.click(dialog.getByRole("button", { name: "Återställ till seriens tid" }));
+    expect(restore).toHaveBeenCalledWith("repeat", original);
+    expect(reschedule).not.toHaveBeenCalled();
+  });
+
   it("keeps empty weeks short and explicitly opens or collapses all 24 hours without saving anything", () => {
     model.entries = [];
     const { container } = render(<CalendarPlanner initialView="vecka" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
