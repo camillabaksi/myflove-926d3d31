@@ -600,7 +600,9 @@ export function PlanningWorkspace({
                   </div>
                   <details className="mt-2 rounded-xl border border-border/60 bg-secondary/15 px-3" data-testid={`planning-optional-${index}`}>
                     <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-sm text-muted-foreground">
-                      <span>Tid, plats och område <span className="text-xs">(valfritt)</span></span>
+                      <span>
+                        {t(row.endDate ? (forMe ? "Plats och område" : "Plats") : (forMe ? "Tid, plats och område" : "Tid och plats"))} <span className="text-xs">({t("valfritt")})</span>
+                      </span>
                       {(row.time || row.endTime || row.location || periodAreas[row.id]) && <span className="shrink-0 text-xs text-primary">Ifyllt</span>}
                     </summary>
                     <div className="space-y-3 pb-3">
