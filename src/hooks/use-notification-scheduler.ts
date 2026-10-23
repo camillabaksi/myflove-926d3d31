@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useTasks, useReminders } from "./use-data";
 import { sendPushNotification } from "../lib/push-notifications";
 import { todayISO } from "@/lib/day";
+import { reminderOccurrencesForDay } from "@/lib/reminder-occurrences";
 
 /**
  * Kollar varje minut om det finns uppgifter/påminnelser med tid som
@@ -63,52 +64,39 @@ export function useNotificationScheduler() {
         }
       }
 
-      // Aktiva påminnelser (ej klara, ej avbokade) – inkl. upprepning och "minuter innan"
-      const dow = now.getDay(); // 0=Sö .. 6=Lö
+      // Foreground reminders use the same occurrence projection as the
+      // calendar and queued native/web reminders. Both instances are retained
+      // if one is moved onto an otherwise occupied recurring day.
       for (const r of reminders) {
-        if (r.completed || r.canceled || !r.time) continue;
-
-        const repeat = r.repeat ?? "none";
-        let occursToday = false;
-        if (repeat === "none") {
-          occursToday = r.date === todayStr;
-        } else if (todayStr >= r.date) {
-          if (repeat === "daily") occursToday = true;
-          else if (repeat === "weekdays") occursToday = dow >= 1 && dow <= 5;
-          else if (repeat === "weekly") {
-            const start = new Date(r.date + "T00:00:00");
-            const today = new Date(todayStr + "T00:00:00");
-            const diffDays = Math.round((today.getTime() - start.getTime()) / 86_400_000);
-            occursToday = diffDays % 7 === 0;
+        if (r.completed || r.canceled) continue;
+        for (const occurrence of reminderOccurrencesForDay(r, todayStr)) {
+          if (!occurrence.time) continue;
+          const target = parseHM(occurrence.time);
+          if (target === null) continue;
+          const occurrenceKey = `rem-${r.id}-${occurrence.occurrenceDate}`;
+          if (target === nowMinutes) {
+            const key = `${occurrenceKey}-start`;
+            if (!firedRef.current.has(key)) {
+              firedRef.current.add(key);
+              sendPushNotification(`🔔 ${r.title}`, {
+                body: r.note ? `Kl ${occurrence.time} – ${r.note}` : `Påminnelse kl ${occurrence.time}`,
+                tag: key,
+                itemKey: `reminder:${r.id}:${occurrence.occurrenceDate}`,
+              });
+            }
           }
-        }
-        if (!occursToday) continue;
 
-        const target = parseHM(r.time);
-        if (target === null) continue;
-
-        if (target === nowMinutes) {
-          const key = `rem-${r.id}-${todayStr}`;
-          if (!firedRef.current.has(key)) {
-            firedRef.current.add(key);
-            sendPushNotification(`🔔 ${r.title}`, {
-              body: r.note ? `Kl ${r.time} – ${r.note}` : `Påminnelse kl ${r.time}`,
-              tag: key,
-              itemKey: `reminder:${r.id}:${todayStr}`,
-            });
-          }
-        }
-
-        const lead = r.remindMinutesBefore;
-        if (lead && target - lead === nowMinutes && target !== nowMinutes) {
-          const key = `rem-${r.id}-${todayStr}-lead`;
-          if (!firedRef.current.has(key)) {
-            firedRef.current.add(key);
-            sendPushNotification(`🔔 Om ${lead} min: ${r.title}`, {
-              body: `Kl ${r.time}`,
-              tag: key,
-              itemKey: `reminder:${r.id}:${todayStr}`,
-            });
+          const lead = r.remindMinutesBefore;
+          if (lead && target - lead === nowMinutes && target !== nowMinutes) {
+            const key = `${occurrenceKey}-lead`;
+            if (!firedRef.current.has(key)) {
+              firedRef.current.add(key);
+              sendPushNotification(`🔔 Om ${lead} min: ${r.title}`, {
+                body: `Kl ${occurrence.time}`,
+                tag: key,
+                itemKey: `reminder:${r.id}:${occurrence.occurrenceDate}`,
+              });
+            }
           }
         }
       }
