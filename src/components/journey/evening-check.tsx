@@ -1,13 +1,16 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, Heart, Leaf, Moon, Sparkles, X, CheckCircle2, BatteryCharging } from "lucide-react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
+import { dayOf, todayISO } from "@/lib/day";
+import { pendingEveningEnergySources } from "@/lib/evening-energy-sources";
 import { useNavigate } from "@tanstack/react-router";
 import { useLang } from "@/hooks/use-language";
 import { useEveningCheck } from "@/hooks/use-evening-check";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import { useDayWindow } from "@/hooks/use-day-window";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
-import { isSameDay } from "@/lib/energy-flow";
+import { eveningEnergySourceKey } from "@/lib/evening-energy-sources";
 import { EVENING_ANSWERS, eveningReply, type EveningAnswer } from "@/lib/day-journey";
 import { buildEveningInsight } from "@/lib/evening-insight";
 import { track } from "@/lib/analytics";
@@ -21,26 +24,32 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 export default function EveningCheck() {
   const { t } = useLang();
   const navigate = useNavigate();
-  const [, setSavedDays] = useCloudSyncedStorage<Record<string, { reflection: string; mood: string | null; strengths: string[]; energy: number | null; energySources: string[]; done: number; planned: number; savedAt: string }>>("paceable-evening-reflections-v1", {});
+  const [savedDays, setSavedDays] = useCloudSyncedStorage<Record<string, { reflection: string; mood: string | null; strengths: string[]; energy: number | null; energySources: string[]; done: number; planned: number; savedAt: string }>>("paceable-evening-reflections-v1", {});
   const [mood, setMood] = useState<string | null>(null);
   const moodOptions = [{label:"Tungt",tone:"lilac",emoji:"☁"},{label:"Blandat",tone:"apricot",emoji:"◒"},{label:"Ganska bra",tone:"sage",emoji:"✦"},{label:"Bra",tone:"lavender",emoji:"☀"},{label:"Vet inte",tone:"cream",emoji:"· · ·"}] as const;
-  const todayKey = new Date().toLocaleDateString("sv-SE");
+  const todayKey = todayISO();
+  const savedToday = !!savedDays?.[todayKey];
   const { evening, eveningHistory, logEvening } = useEveningCheck();
   const { input } = useDayJourney();
   const { todayEdges, setEvening } = useDayWindow();
-  const { entries, addFactor } = useEnergyFlow();
+  const { entries, addFactor, loading: energyLoading } = useEnergyFlow();
   const [energyChoices, setEnergyChoices] = useState<string[]>([]);
   const [otherEnergy, setOtherEnergy] = useState("");
   const [strengths, setStrengths] = useState<string[]>([]);
   const [otherStrength, setOtherStrength] = useState("");
   const [flipped, setFlipped] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const saveInFlight = useRef(false);
+  // An unfinished evening belongs to the original owner and local day,
+  // even if the user changes account or midnight passes mid-dialog.
+  const openedFor = useRef<{ owner: string | null; date: string } | null>(null);
+  const acknowledgedSources = useRef(new Set<string>());
   const [saveError, setSaveError] = useState("");
   const energyOptions = ["En paus", "Något roligt", "Lugn och ro", "Någon nära", "Naturen", "Träning/rörelse"];
   const strengthOptions = ["Jag tog en paus", "Jag var snäll mot mig själv", "Jag kämpade vidare", "Jag gjorde mitt bästa", "Jag fick något gjort", "Jag är stolt över mig själv"];
   const toggleChoice = (value: string, selected: string[], setter: (value: string[]) => void) => setter(selected.includes(value) ? selected.filter(item => item !== value) : [...selected, value]);
   const [eveningEnergy, setEveningEnergy] = useState<number | null>(null);
-  const todayEnergy = useMemo(() => entries.filter(entry => isSameDay(entry.occurredAt)), [entries]);
+  const todayEnergy = useMemo(() => entries.filter(entry => dayOf(entry.occurredAt) === todayKey), [entries, todayKey]);
   const gives = todayEnergy.filter(entry => entry.direction === "gives" || entry.direction === "both").length;
   const drains = todayEnergy.filter(entry => entry.direction === "drains" || entry.direction === "both").length;
   const { collapsed, toggle } = useCollapsible("home-evening-check");
@@ -51,28 +60,69 @@ export default function EveningCheck() {
   const insight = useMemo(() => buildEveningInsight(eveningHistory, evening), [eveningHistory, evening]);
   const screens = 6;
 
-  function start() { setStep(0); setAnswer(evening?.answer ?? null); setEveningEnergy(todayEdges.evening ?? null); setReflection(""); setMood(null); setEnergyChoices([]); setOtherEnergy(""); setStrengths([]); setOtherStrength(""); setFlipped([]); setSaveError(""); setOpen(true); }
+  function start() {
+    openedFor.current = { owner: getDataOwner(), date: todayISO() };
+    // Saved factors remain in the shared energy store. The transient retry
+    // ledger must never leak acknowledgements into a different owner/day.
+    acknowledgedSources.current.clear();
+    setStep(0);
+    setAnswer(evening?.answer ?? null);
+    setEveningEnergy(todayEdges.evening ?? null);
+    setReflection(""); setMood(null);
+    setEnergyChoices([]); setOtherEnergy(""); setStrengths([]); setOtherStrength("");
+    setFlipped([]); setSaveError(""); setOpen(true);
+  }
+  // Navigation is read-only. Nothing is registered just by pressing Nästa
+  // or by closing the optional ritual before explicit "Spara min dag".
   function next() {
-    if (step === 1 && mood && mood !== "Vet inte" && answer && answer !== evening?.answer) {
-      logEvening(answer, { ork10: input.ork10, battery: input.batteryNow, planned: input.planned, done: input.done, openThoughts: input.openThoughts });
-      track("evening_check_completed", { source: "kvallsstund", method: answer });
-    }
-    if (step === 2 && eveningEnergy !== null && eveningEnergy !== todayEdges.evening) setEvening(eveningEnergy);
     setStep(current => Math.min(screens - 1, current + 1));
   }
 
   async function saveDay() {
-    if (saving) return;
+    if (saveInFlight.current) return;
+    saveInFlight.current = true;
     setSaving(true); setSaveError("");
+    const session = openedFor.current;
+    const current = () => !!session?.owner && session.date === todayISO() && isActiveOwner(session.owner);
     try {
+      if (!current()) throw new Error("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
       const sources = [...energyChoices, ...(otherEnergy.trim() ? [otherEnergy.trim()] : [])];
-      for (const title of sources) {
-        if (!todayEnergy.some(entry => entry.title === title && entry.direction === "gives")) await addFactor({ title, direction: "gives", strength: 1, category: "aterhamtning" });
+      if (sources.length && energyLoading)
+        throw new Error("Energihistoriken laddas fortfarande. Försök igen när den är redo.");
+      // Existing confirmed observations and confirmed writes from an earlier
+      // partial attempt are never logged a second time.
+      const missing = pendingEveningEnergySources(sources, todayEnergy, acknowledgedSources.current);
+      for (const title of missing) {
+        if (!current()) throw new Error("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
+        const result = await addFactor({ title, direction: "gives", strength: 1, category: "aterhamtning" });
+        if (!result || !current()) throw new Error("Energiposten kunde inte bekräftas för rätt konto.");
+        acknowledgedSources.current.add(eveningEnergySourceKey(title));
       }
+      if (!current()) throw new Error("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
+      // These existing stores are updated ONLY by the final explicit Save,
+      // never by Nästa, Hoppa över, Stäng or Till insikter.
+      if (mood && mood !== "Vet inte" && answer && answer !== evening?.answer) {
+        logEvening(answer, { ork10: input.ork10, battery: input.batteryNow, planned: input.planned, done: input.done, openThoughts: input.openThoughts });
+        track("evening_check_completed", { source: "kvallsstund", method: answer });
+      }
+      if (eveningEnergy !== null && eveningEnergy !== todayEdges.evening) setEvening(eveningEnergy);
       const allStrengths = [...strengths, ...(otherStrength.trim() ? [otherStrength.trim()] : [])];
-      setSavedDays(previous => ({ ...previous, [todayKey]: { reflection, mood, strengths: allStrengths, energy: eveningEnergy, energySources: sources, done: input.done, planned: input.planned, savedAt: new Date().toISOString() } }));
+      setSavedDays(previous => ({
+        ...previous,
+        [session!.date]: {
+          reflection, mood, strengths: allStrengths, energy: eveningEnergy,
+          energySources: sources, done: input.done, planned: input.planned,
+          savedAt: new Date().toISOString(),
+        },
+      }));
       setOpen(false);
-    } catch { setSaveError("Det gick inte att spara allt. Försök igen."); } finally { setSaving(false); }
+    } catch (error) {
+      if (current()) setSaveError(error instanceof Error ? error.message : "Det gick inte att spara allt. Försök igen.");
+      else setSaveError("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
+    } finally {
+      saveInFlight.current = false;
+      setSaving(false);
+    }
   }
 
   return <>
@@ -83,7 +133,8 @@ export default function EveningCheck() {
       </button>
       {!collapsed && <>
         <p className="mt-2 text-sm text-muted-foreground">{evening ? t(eveningReply(evening.answer)) : "En liten stund för dig. Allt är frivilligt."}</p>
-        <button type="button" onClick={start} className="mt-3 min-h-11 w-full rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground">{evening ? "Öppna min kvällsstund" : "Ja, börja kvällsstunden"}</button>
+        <button type="button" onClick={start} className="mt-3 min-h-11 w-full rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground">{savedToday ? "Öppna min kvällsstund" : "Ja, börja kvällsstunden"}</button>
+        {savedToday && <button type="button" onClick={() => navigate({ to: "/planera", search: { audience: "me", period: "tomorrow" } })} className="mt-2 min-h-11 w-full rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-primary">{t("Planera morgondagen")} <span aria-hidden="true">→</span></button>}
         {(insight.todayLine || insight.patternLine) && <div className="mt-3 rounded-2xl bg-muted/50 p-3 text-sm text-muted-foreground">{insight.todayLine && <p>{t(insight.todayLine)}</p>}{insight.patternLine && <p className="mt-1">{t(insight.patternLine)}</p>}</div>}
       </>}
     </section>
