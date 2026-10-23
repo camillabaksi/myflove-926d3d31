@@ -29,7 +29,7 @@ const TABS: { id: DayTab; href: string; label: string; icon: React.ComponentType
  *
  * Varje flik har en egen adress, så länkar, bakåtknapp och delning fungerar.
  */
-export function DayHub({ tab, initialView }: { tab: DayTab; initialView?: CalendarView }) {
+export function DayHub({ tab, initialView, initialDate }: { tab: DayTab; initialView?: CalendarView; initialDate?: string }) {
   const { t } = useLang();
   useEffect(() => {
     track("day_hub_viewed", { source: tab });
@@ -60,7 +60,7 @@ export function DayHub({ tab, initialView }: { tab: DayTab; initialView?: Calend
       </nav>}
 
       {tab === "idag" && <TodayContent />}
-      {tab === "kalender" && <><CalendarContent initialView={initialView ?? "dag"} /><div className="mt-6"><OwnChildCalendar /></div></>}
+      {tab === "kalender" && <><CalendarContent initialView={initialView ?? "dag"} initialDate={initialDate} /><div className="mt-6"><OwnChildCalendar /></div></>}
       {tab === "lagg-till" && <AddToDay />}
     </Layout>
   );
