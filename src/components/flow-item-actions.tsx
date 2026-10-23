@@ -101,7 +101,7 @@ export type EditableKind = "uppgift" | "kalender" | "tanke" | "quickflow" | "rut
 /** Vilken sorts sak ett id pekar på: "task-123", "rem-9", "qf-a1", "routine-x". */
 export function kindFromId(id: string): { kind: EditableKind; realId: string } {
   if (id.startsWith("task-")) return { kind: "uppgift", realId: id.slice(5) };
-  if (id.startsWith("rem-")) return { kind: "kalender", realId: id.slice(4) };
+  if (id.startsWith("rem-")) return { kind: "kalender", realId: id.slice(4).split(":")[0]! };
   if (id.startsWith("qf-")) return { kind: "tanke", realId: id.slice(3) };
   if (id.startsWith("prio-")) return { kind: "quickflow", realId: id.slice(5) };
   if (id.startsWith("routine-")) return { kind: "rutin", realId: id.slice(8) };
