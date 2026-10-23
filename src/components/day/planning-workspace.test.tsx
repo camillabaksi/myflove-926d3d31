@@ -19,8 +19,8 @@ const model = vi.hoisted(() => ({
   existing: {} as Record<string, Array<{ id: string; title: string; date: string; source: "task"; time: string }>>,
 }));
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({ children, to, search: _search, ...props }: { children: ReactNode; to: string; search?: unknown }) => (
-    <a href={to} {...props}>
+  Link: ({ children, to, search, ...props }: { children: ReactNode; to: string; search?: unknown }) => (
+    <a href={to} data-route-search={JSON.stringify(search ?? null)} {...props}>
       {children}
     </a>
   ),
@@ -355,6 +355,33 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(screen.getByRole("button", { name: "Idag" }));
     expect(screen.getByRole("button", { name: "Idag" })).toHaveAttribute("aria-pressed", "true");
     expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("offers a dated way back to Calendar only after a confirmed save", async () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-18" />);
+    expect(screen.queryByRole("link", { name: /Visa i kalendern/ })).not.toBeInTheDocument();
+    write("Handla");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(screen.queryByRole("link", { name: /Visa i kalendern/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
+    const link = await screen.findByRole("link", { name: "Visa i kalendern" });
+    expect(link).toHaveAttribute("href", "/kalender");
+    expect(JSON.parse(link.getAttribute("data-route-search") || "null")).toEqual({ view: "dag", date: "2026-11-18" });
+    expect(model.addTasks).toHaveBeenCalledTimes(1);
+    write("Boka tid");
+    expect(screen.queryByRole("link", { name: /Visa i kalendern/ })).not.toBeInTheDocument();
+  });
+
+  it("shows the first saved date rather than today's date when a batch spans days", async () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" requestedDate="2026-11-18" />);
+    write("Handla\\nSimskola".replace("\\n", "\n"));
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
+    fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-19" } });
+    fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
+    const link = await screen.findByRole("link", { name: "Visa första datumet i kalendern" });
+    expect(JSON.parse(link.getAttribute("data-route-search") || "null")).toEqual({ view: "dag", date: "2026-11-18" });
+    expect(model.addTasks).toHaveBeenCalledTimes(1);
   });
 
   it("drops successfully saved drafts rather than resurrecting them on a later visit", async () => {
