@@ -506,6 +506,7 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
     await screen.findByRole("alert");
+    expect(screen.queryByRole("link", { name: /Visa i kalendern/ })).not.toBeInTheDocument();
     const first = structuredClone(model.addChildren.mock.calls[0]![0]);
     expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Frukost");
     expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toBeDisabled();
