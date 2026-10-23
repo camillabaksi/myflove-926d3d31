@@ -315,9 +315,6 @@ export function PlanningWorkspace({
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t("Lägg till aktiviteter")}
         </h2>
-        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-          {t("Skriv en eller flera aktiviteter och granska innan du sparar.")}
-        </p>
         {stage === "write" && children.length > 0 && (
           <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
             <span className="font-medium text-[#512654]">
@@ -443,7 +440,7 @@ export function PlanningWorkspace({
                 <ChevronRight size={18} />
               </Button>
             </div>
-            <div className="space-y-1" role="group" aria-label={t("Veckans dagar")}>
+            <div className="mt-2 grid grid-cols-7 gap-1 sm:gap-2" role="group" aria-label={t("Veckans dagar")}>
               {week.map((day) => {
                 const dayEntries = days[day] ?? [];
                 const count = forChildren
@@ -453,14 +450,20 @@ export function PlanningWorkspace({
                   <button
                     key={day}
                     type="button"
+                    aria-label={`${dateLabel(day, true)} · ${count} ${t(count === 1 ? "planerad aktivitet" : "planerade aktiviteter")}`}
                     aria-pressed={date === day}
                     onClick={() => setDate(day)}
-                    className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
+                    className={`flex min-h-[72px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
                   >
-                    <span className="w-10 shrink-0 text-sm font-medium capitalize">{new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>
-                    <span className="w-8 shrink-0 text-sm tabular-nums">{Number(day.slice(-2))}</span>
-                    <span className="min-w-0 flex-1 text-sm text-muted-foreground">{count ? `${count} ${t(count === 1 ? "aktivitet" : "aktiviteter")}` : t("Inget planerat")}</span>
-                    <ChevronRight size={17} aria-hidden="true" className="shrink-0 opacity-60" />
+                    <span className="text-[11px] font-medium capitalize leading-4 sm:text-xs" aria-hidden="true">
+                      {new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}
+                    </span>
+                    <span className="text-base font-semibold tabular-nums leading-5" aria-hidden="true">
+                      {Number(day.slice(-2))}
+                    </span>
+                    <span className="text-[10px] tabular-nums leading-4 text-muted-foreground" aria-hidden="true">
+                      {count > 0 ? `${count} plan.` : "–"}
+                    </span>
                   </button>
                 );
               })}
@@ -485,7 +488,7 @@ export function PlanningWorkspace({
               {t("Vad vill du planera?")}
             </label>
             <p id={`help-${audience}`} className="text-sm text-muted-foreground">
-              {t("Skriv en aktivitet per rad.")}
+              {t("En aktivitet per rad. Granska innan du sparar.")}
             </p>
             <Textarea
               id={`activities-${audience}`}
@@ -586,7 +589,25 @@ export function PlanningWorkspace({
                     </Button>
                   </div>
                   <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
-                  {forMe && <label className="mt-2 block text-sm">Område {suggestActivityArea(row.title) && !periodAreas[row.id] && <span className="text-xs text-muted-foreground">· Föreslaget</span>}<select value={periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)} onChange={event => setPeriodAreas(prev => ({ ...prev, [row.id]: event.target.value as LifeArea }))} className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base">{Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}</select></label>}
+                  {forMe && (
+                     <details className="mt-2 rounded-xl">
+                       <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">
+                         {t("Område · valfritt")}
+                         <span className="ml-2 text-xs">({AREA_META[periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)]?.label ?? "Vardag"})</span>
+                       </summary>
+                       <label className="mt-1 block text-sm">
+                         <span className="sr-only">{t("Område")}</span>
+                         <select
+                           aria-label={`${t("Område")} · ${row.title}`}
+                           value={periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)}
+                           onChange={(event) => setPeriodAreas((prev) => ({ ...prev, [row.id]: event.target.value as LifeArea }))}
+                           className="min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base"
+                         >
+                           {Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}
+                         </select>
+                       </label>
+                     </details>
+                   )}
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {row.endDate ? "Från" : t("Dag")}
