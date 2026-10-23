@@ -79,10 +79,11 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           </div>
         </MyFloveWide>
       ) : (
-        <div className="pace-card-surface bg-card p-6 md:p-8 rounded-3xl shadow-sm border border-border">
+        <MyFloveWide span="wide">
+          <div className="pace-card-surface min-w-0 rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-6 md:p-8">
           {justSaved ? (
             <div className="text-center py-8 animate-in fade-in zoom-in duration-500">
-              <div className="text-5xl mb-4">💚</div>
+              <Heart aria-hidden="true" className="mx-auto mb-4 h-11 w-11 text-primary" />
               <h2 className="text-xl font-medium">{t("Tack för att du checkade in")}</h2>
               <p className="text-muted-foreground mt-2">
                 {t("Det är värdefullt att lyssna på sig själv.")}
@@ -130,10 +131,11 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
               )}
             </div>
           )}
-        </div>
+          </div>
+        </MyFloveWide>
       )}
 
-      {!readOnly && <button
+      {!readOnly && <MyFloveWide span="wide"><button
         type="button"
         onClick={() => setFlowInsightsOpen(true)}
         className="pace-card-surface press flex w-full flex-col items-center justify-center gap-1.5 rounded-3xl border-2 border-border/60 bg-lavender/60 px-3 py-6 text-center shadow-soft transition-shadow hover:shadow-lifted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -144,7 +146,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
         <span className="font-display text-base font-bold leading-tight text-ink">
           {t("Se mina mönster")}
         </span>
-      </button>}
+      </button></MyFloveWide>}
 
       {moods.length > 0 && (
         <MyFloveWide>
