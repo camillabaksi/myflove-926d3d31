@@ -55,9 +55,10 @@ describe("Mer sorterad efter livsområden", () => {
     expect(MORE_QUICK_LINKS).toEqual(["/historik"]);
     expect(MORE_OVERALL.find((g) => g.title === "Insikter & historik")?.hrefs).toEqual(["/insight", "/statistik", "/friktionsindex"]);
     for (const simple of [false, true]) {
-      const { container, unmount } = show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Historik" } : e), simple);
+      const { container, unmount } = show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Dina aktiviteter", essential: true } : e), simple);
       const quick = screen.getByRole("navigation", { name: "Genvägar" });
-      expect(quick.querySelector('a[href="/historik"]')).not.toBeNull();
+      expect(screen.getByRole("link", { name: "Historik" })).toHaveAttribute("href", "/historik");
+      expect(quick.contains(screen.getByRole("link", { name: "Historik" }))).toBe(true);
       expect(quick.compareDocumentPosition(container.querySelector(".pace-more-section")!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       fireEvent.click(screen.getByRole("button", { name: /Insikter & historik/ }));
       expect(container.querySelectorAll('a[href="/historik"]')).toHaveLength(1);
@@ -65,10 +66,10 @@ describe("Mer sorterad efter livsområden", () => {
       unmount();
     }
   });
-  it("still finds Historik through search", () => {
-    show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Historik" } : e));
+  it("keeps the history destination in search as before", () => {
+    const { container } = show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Dina aktiviteter" } : e));
     fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "histor" } });
-    expect(screen.getByRole("link", { name: /Historik/ })).toHaveAttribute("href", "/historik");
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Dina aktiviteter" } });
+    expect(container.querySelectorAll('a[href="/historik"]')).toHaveLength(1);
   });
 });
