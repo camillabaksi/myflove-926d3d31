@@ -159,6 +159,50 @@ export function describeEnergy(energy?: number): string | null {
 
 const PRIORITY_RANK: Record<FlowPriority, number> = { nu: 0, idag: 1, snart: 2, senare: 3 };
 
+/**
+ * Only a routine plus a calendar entry at the same time can be the familiar
+ * double projection of one planned activity. Two independent tasks, calendar
+ * entries, routines, children or thoughts must NEVER disappear because their
+ * human-readable title and time happen to match.
+ *
+ * Consume counterpart rows one-to-one so a second same-named routine or
+ * reminder is still available for its own completion/edit action.
+ */
+export function mergeRoutineCalendarDuplicates(items: FlowItem[]): FlowItem[] {
+  const normalized = (s: string) => s.toLocaleLowerCase("sv-SE").replace(/\s+/g, " ").trim();
+  const pendingRoutines = new Map<string, number[]>();
+  const pendingCalendar = new Map<string, number[]>();
+  const merged: FlowItem[] = [];
+
+  for (const item of items) {
+    if (item.source !== "rutin" && item.source !== "kalender") {
+      merged.push(item);
+      continue;
+    }
+
+    const key = `${normalized(item.title)}|${item.time ?? ""}`;
+    const counterparts = item.source === "rutin" ? pendingCalendar : pendingRoutines;
+    const own = item.source === "rutin" ? pendingRoutines : pendingCalendar;
+    const counterpartQueue = counterparts.get(key);
+    const previousIndex = counterpartQueue?.shift();
+
+    if (previousIndex !== undefined) {
+      const previous = merged[previousIndex]!;
+      // Preserve the old behavior: prefer done, otherwise the calendar entry.
+      if ((item.done && !previous.done) ||
+          (item.done === previous.done && previous.source === "rutin")) {
+        merged[previousIndex] = item;
+      }
+    } else {
+      const index = merged.push(item) - 1;
+      const queue = own.get(key) ?? [];
+      queue.push(index);
+      own.set(key, queue);
+    }
+  }
+  return merged;
+}
+
 /** Sorterar så att det mest tidsnära kommer först, sedan klockslag. */
 export function sortFlowItems(items: FlowItem[]): FlowItem[] {
   return [...items].sort((a, b) => {

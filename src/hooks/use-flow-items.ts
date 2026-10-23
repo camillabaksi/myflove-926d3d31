@@ -26,6 +26,7 @@ import {
   todayISO,
   type FlowItem,
   meetingUrlFrom,
+  mergeRoutineCalendarDuplicates,
 } from "@/lib/flow-items";
 
 /**
@@ -298,38 +299,9 @@ export function useFlowItems(dateISO?: string): {
     // kalendern eller dagens lista. De är en känslo-/orkregistrering och
     // påverkar bara batteriet, energihistoriken och mönstren.
 
-    // Dubbletter: samma sak kan finnas både som rutin och som kalenderpost
-    // (t.ex. "Göra frukost 06:00"). Slå ihop dem – samma normaliserade titel
-    // och samma klockslag på samma dag räknas som EN sak. Posten som redan
-    // är gjord, eller som inte är en rutin, vinner.
-    const normTitle = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
-    const seen = new Map<string, number>();
-    const deduped: FlowItem[] = [];
-    for (const item of out) {
-      const key = `${normTitle(item.title)}|${item.time ?? ""}`;
-      const prevIdx = seen.get(key);
-      // Two occurrences of the same recurring reminder can legitimately
-      // land at the same hour after a single move. Both must stay selectable.
-      if (prevIdx !== undefined && item.id.startsWith("rem-") &&
-        deduped[prevIdx]?.id.startsWith("rem-") && item.id !== deduped[prevIdx]?.id) {
-        deduped.push(item);
-        continue;
-      }
-      if (prevIdx === undefined) {
-        seen.set(key, deduped.length);
-        deduped.push(item);
-        continue;
-      }
-      const prev = deduped[prevIdx]!;
-      // Behåll den som är gjord; annars behåll den som inte är en rutin
-      // (kalenderposten/uppgiften är oftast den användaren bockar i).
-      const keepNew =
-        (item.done && !prev.done) ||
-        (item.done === prev.done && prev.source === "rutin" && item.source !== "rutin");
-      if (keepNew) deduped[prevIdx] = item;
-    }
-
-    return sortFlowItems(deduped);
+    // Keep independently saved rows visible. Suppress only the one-to-one
+    // routine/calendar double projection of a genuinely shared day entry.
+    return sortFlowItems(mergeRoutineCalendarDuplicates(out));
   }, [
     tasks,
     reminders,
