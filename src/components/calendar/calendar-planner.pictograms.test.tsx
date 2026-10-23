@@ -115,7 +115,7 @@ describe("Calendar entry view", () => {
       model.reminders = [{ id: "repeat", title: "Daglig paus", date: "2026-10-20", repeat: "daily",
         time: "09:00", completed: false, createdAt: 1 }];
       const page = render(<CalendarPlanner initialView={view} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
-      fireEvent.click(screen.getByRole("button", { name: /Daglig paus/ }));
+      fireEvent.click(screen.getAllByRole("button", { name: /Daglig paus/ })[0]!);
       const dialog = within(screen.getByRole("dialog"));
       expect(dialog.getByRole("button", { name: "Ändra bara detta tillfälle" })).toBeInTheDocument();
       fireEvent.click(dialog.getByRole("button", { name: "Ändra bara detta tillfälle" }));
