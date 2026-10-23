@@ -390,99 +390,103 @@ export function PlanningWorkspace({
             )}
           </>
         )}
-        <div
-          className="pace-segmented mt-4"
-          role="group"
-          aria-label={t("Välj planeringsperiod")}
-        >
-          {PLANNING_PERIODS.map(([value, label]) => (
-            <Button
-              key={value}
-              type="button"
-              variant={period === value ? "default" : "ghost"}
-              aria-pressed={period === value}
-              className="pace-segment"
-              onClick={() => {
-                // Update the local controls even if the URL already holds
-                // the selected period after restoring a different draft.
-                setPeriod(value);
-                setDate(value === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
-                setWeekAnchor(todayISO());
-                void navigate({ to: "/planera", search: { audience, period: value } });
-              }}
+        {stage === "write" && (
+          <>
+            <div
+              className="pace-segmented mt-4"
+              role="group"
+              aria-label={t("Välj planeringsperiod")}
             >
-              {t(label)}
-            </Button>
-          ))}
-        </div>
-        {period === "week" && (
-          <div className="mt-4">
-            <div className="flex items-center justify-between gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="min-h-11 min-w-11"
-                aria-label={t("Föregående vecka")}
-                onClick={() => {
-                  const next = addDaysISO(weekAnchor, -7);
-                  setWeekAnchor(next);
-                  setDate(periodDates(next, "vecka")[0]!);
-                }}
-              >
-                <ChevronLeft size={18} />
-              </Button>
-              <p className="min-w-0 flex-1 break-words text-center text-sm">
-                {dateLabel(week[0]!, true)} – {dateLabel(week[6]!, true)}
-              </p>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="min-h-11 min-w-11"
-                aria-label={t("Nästa vecka")}
-                onClick={() => {
-                  const next = addDaysISO(weekAnchor, 7);
-                  setWeekAnchor(next);
-                  setDate(periodDates(next, "vecka")[0]!);
-                }}
-              >
-                <ChevronRight size={18} />
-              </Button>
+              {PLANNING_PERIODS.map(([value, label]) => (
+                <Button
+                  key={value}
+                  type="button"
+                  variant={period === value ? "default" : "ghost"}
+                  aria-pressed={period === value}
+                  className="pace-segment"
+                  onClick={() => {
+                    // Update the local controls even if the URL already holds
+                    // the selected period after restoring a different draft.
+                    setPeriod(value);
+                    setDate(value === "tomorrow" ? addDaysISO(todayISO(), 1) : todayISO());
+                    setWeekAnchor(todayISO());
+                    void navigate({ to: "/planera", search: { audience, period: value } });
+                  }}
+                >
+                  {t(label)}
+                </Button>
+              ))}
             </div>
-            <div className="mt-2 grid grid-cols-4 gap-1 min-[390px]:grid-cols-7 sm:gap-2" role="group" aria-label={t("Veckans dagar")}>
-              {week.map((day) => {
-                const dayEntries = days[day] ?? [];
-                const count = forChildren
-                  ? familyLayerEntries(dayEntries.filter((entry) => entry.source === "child"), { ...DEFAULT_FAMILY_LAYER, children: selected }).length
-                  : dayEntries.filter((entry) => !isFamilyEntry(entry)).length;
-                return (
-                  <button
-                    key={day}
-                    type="button"
-                    aria-label={`${dateLabel(day, true)} · ${count} ${t(count === 1 ? "planerad aktivitet" : "planerade aktiviteter")}`}
-                    aria-pressed={date === day}
-                    onClick={() => setDate(day)}
-                    className={`flex min-h-[72px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
+            {period === "week" && (
+              <div className="mt-4">
+                <div className="flex items-center justify-between gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="min-h-11 min-w-11"
+                    aria-label={t("Föregående vecka")}
+                    onClick={() => {
+                      const next = addDaysISO(weekAnchor, -7);
+                      setWeekAnchor(next);
+                      setDate(periodDates(next, "vecka")[0]!);
+                    }}
                   >
-                    <span className="text-[11px] font-medium capitalize leading-4 sm:text-xs" aria-hidden="true">
-                      {new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}
-                    </span>
-                    <span className="text-base font-semibold tabular-nums leading-5" aria-hidden="true">
-                      {Number(day.slice(-2))}
-                    </span>
-                    <span className="text-[10px] tabular-nums leading-4 text-muted-foreground" aria-hidden="true">
-                      {count > 0 ? `${count} plan.` : "–"}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-        <h3 className="mt-5 border-t border-[#EDE5E9] pt-4 font-display text-lg">{dateLabel(date)}</h3>
-        {!forChildren && date !== today && (
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("En förhandsplan. Orken får du känna efter den dagen.")}
-          </p>
+                    <ChevronLeft size={18} />
+                  </Button>
+                  <p className="min-w-0 flex-1 break-words text-center text-sm">
+                    {dateLabel(week[0]!, true)} – {dateLabel(week[6]!, true)}
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="min-h-11 min-w-11"
+                    aria-label={t("Nästa vecka")}
+                    onClick={() => {
+                      const next = addDaysISO(weekAnchor, 7);
+                      setWeekAnchor(next);
+                      setDate(periodDates(next, "vecka")[0]!);
+                    }}
+                  >
+                    <ChevronRight size={18} />
+                  </Button>
+                </div>
+                <div className="mt-2 grid grid-cols-4 gap-1 min-[390px]:grid-cols-7 sm:gap-2" role="group" aria-label={t("Veckans dagar")}>
+                  {week.map((day) => {
+                    const dayEntries = days[day] ?? [];
+                    const count = forChildren
+                      ? familyLayerEntries(dayEntries.filter((entry) => entry.source === "child"), { ...DEFAULT_FAMILY_LAYER, children: selected }).length
+                      : dayEntries.filter((entry) => !isFamilyEntry(entry)).length;
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        aria-label={`${dateLabel(day, true)} · ${count} ${t(count === 1 ? "planerad aktivitet" : "planerade aktiviteter")}`}
+                        aria-pressed={date === day}
+                        onClick={() => setDate(day)}
+                        className={`flex min-h-[72px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-2 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${date === day ? "bg-[#EFE5F0] text-[#512654]" : "bg-[#FAF9F6] text-ink hover:bg-[#F6F0F4]"}`}
+                      >
+                        <span className="text-[11px] font-medium capitalize leading-4 sm:text-xs" aria-hidden="true">
+                          {new Date(`${day}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}
+                        </span>
+                        <span className="text-base font-semibold tabular-nums leading-5" aria-hidden="true">
+                          {Number(day.slice(-2))}
+                        </span>
+                        <span className="text-[10px] tabular-nums leading-4 text-muted-foreground" aria-hidden="true">
+                          {count > 0 ? `${count} plan.` : "–"}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            <h3 className="mt-5 border-t border-[#EDE5E9] pt-4 font-display text-lg">{dateLabel(date)}</h3>
+            {!forChildren && date !== today && (
+              <p className="mt-1 text-sm text-muted-foreground">
+                {t("En förhandsplan. Orken får du känna efter den dagen.")}
+              </p>
+            )}
+          </>
         )}
         {stage === "write" ? (
           <form
