@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, Heart, Leaf, Moon, Sparkles, X, CheckCircle2, BatteryCharging } from "lucide-react";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
-import { todayISO } from "@/lib/day";
+import { dayOf, todayISO } from "@/lib/day";
 import { pendingEveningEnergySources } from "@/lib/evening-energy-sources";
 import { useNavigate } from "@tanstack/react-router";
 import { useLang } from "@/hooks/use-language";
@@ -10,7 +10,7 @@ import { useEveningCheck } from "@/hooks/use-evening-check";
 import { useDayJourney } from "@/hooks/use-day-journey";
 import { useDayWindow } from "@/hooks/use-day-window";
 import { useEnergyFlow } from "@/hooks/use-energy-flow";
-import { isSameDay } from "@/lib/energy-flow";
+import { eveningEnergySourceKey } from "@/lib/evening-energy-sources";
 import { EVENING_ANSWERS, eveningReply, type EveningAnswer } from "@/lib/day-journey";
 import { buildEveningInsight } from "@/lib/evening-insight";
 import { track } from "@/lib/analytics";
@@ -49,7 +49,7 @@ export default function EveningCheck() {
   const strengthOptions = ["Jag tog en paus", "Jag var snäll mot mig själv", "Jag kämpade vidare", "Jag gjorde mitt bästa", "Jag fick något gjort", "Jag är stolt över mig själv"];
   const toggleChoice = (value: string, selected: string[], setter: (value: string[]) => void) => setter(selected.includes(value) ? selected.filter(item => item !== value) : [...selected, value]);
   const [eveningEnergy, setEveningEnergy] = useState<number | null>(null);
-  const todayEnergy = useMemo(() => entries.filter(entry => isSameDay(entry.occurredAt)), [entries]);
+  const todayEnergy = useMemo(() => entries.filter(entry => dayOf(entry.occurredAt) === todayKey), [entries, todayKey]);
   const gives = todayEnergy.filter(entry => entry.direction === "gives" || entry.direction === "both").length;
   const drains = todayEnergy.filter(entry => entry.direction === "drains" || entry.direction === "both").length;
   const { collapsed, toggle } = useCollapsible("home-evening-check");
@@ -62,6 +62,9 @@ export default function EveningCheck() {
 
   function start() {
     openedFor.current = { owner: getDataOwner(), date: todayISO() };
+    // Saved factors remain in the shared energy store. The transient retry
+    // ledger must never leak acknowledgements into a different owner/day.
+    acknowledgedSources.current.clear();
     setStep(0);
     setAnswer(evening?.answer ?? null);
     setEveningEnergy(todayEdges.evening ?? null);
@@ -93,7 +96,7 @@ export default function EveningCheck() {
         if (!current()) throw new Error("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
         const result = await addFactor({ title, direction: "gives", strength: 1, category: "aterhamtning" });
         if (!result || !current()) throw new Error("Energiposten kunde inte bekräftas för rätt konto.");
-        acknowledgedSources.current.add(title.toLocaleLowerCase("sv-SE").replace(/\\s+/g, " ").trim());
+        acknowledgedSources.current.add(eveningEnergySourceKey(title));
       }
       if (!current()) throw new Error("Dagen eller kontot har ändrats. Stäng och öppna kvällsstunden igen.");
       // These existing stores are updated ONLY by the final explicit Save,
