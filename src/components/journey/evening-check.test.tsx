@@ -126,6 +126,27 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     }
   });
 
+  it("gives every evening heading tier a visibly larger mobile minimum without cropping long Swedish titles", () => {
+    const styles = readFileSync("src/styles.css", "utf8");
+    const minRem = [
+      [".pace-evening-ritual .pace-evening-title", 3.25],
+      [".pace-evening-ritual .pace-evening-title--hero", 3.65],
+      [".pace-evening-ritual .pace-evening-title--long", 2.75],
+      [".pace-evening-ritual .pace-evening-section-title", 2.5],
+      [".pace-evening-ritual .pace-evening-card-title", 2.15],
+      [".pace-evening-ritual .pace-evening-affirmation", 2.35],
+    ] as const;
+    for (const [selector, expected] of minRem) {
+      const rule = styles.split(selector + " {")[1]?.split("}")[0] ?? "";
+      const mobileMin = Number(rule.match(/font-size:\s*clamp\(([\d.]+)rem/)?.[1]);
+      expect(mobileMin, selector).toBeGreaterThanOrEqual(expected);
+      expect(rule, selector).not.toMatch(/white-space:\s*nowrap/);
+    }
+    expect(styles).toContain("font-size: clamp(1.45rem, 4.5vw, 1.7rem) !important;");
+    expect(styles).toContain(".pace-evening-ritual .pace-evening-title");
+    expect(styles).toContain("overflow-wrap: break-word;");
+  });
+
   it("does not write mood or energy just because the user presses Next, then closes early", () => {
     render(<EveningCheck />);
     startEvening();
