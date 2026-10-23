@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { readFileSync } from "node:fs";
 import IntroTour from "@/components/intro-tour";
 
 const navigate = vi.fn();
@@ -11,6 +12,12 @@ describe("onboarding: en enkel första handling", () => {
   beforeEach(() => {
     window.localStorage.clear();
     navigate.mockClear();
+  });
+
+  it("shows Paceable's existing approved stones instead of the retired empty mascot", () => {
+    const source = readFileSync("src/components/intro-tour.tsx", "utf8");
+    expect(source).toContain("<PaceableStones tactile compact");
+    expect(source).not.toContain("<FlowMascot");
   });
 
   it("visar den enkla frågan för en ny användare", async () => {
