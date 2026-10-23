@@ -91,17 +91,36 @@ describe("Plan several activities before saving", () => {
     expect(model.addTasks).not.toHaveBeenCalled();
   });
 
-  it("keeps suggested activity areas available but collapses them until requested", () => {
+  it("shows review dates immediately but keeps time, location and area optional", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
-    write("Handla");
+    write("Handla\\nPromenad".replace("\\n", "\n"));
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
-    const details = screen.getByText("Område · valfritt").closest("details");
-    expect(details).not.toBeNull();
-    expect(details).not.toHaveAttribute("open");
-    fireEvent.click(screen.getByText("Område · valfritt"));
-    expect(details).toHaveAttribute("open");
-    expect(screen.getByRole("combobox", { name: "Område · Handla" })).toBeTruthy();
+    expect(screen.getAllByLabelText("Dag")).toHaveLength(2);
+    const optional = screen.getByTestId("planning-optional-0");
+    const nextOptional = screen.getByTestId("planning-optional-1");
+    expect(optional).not.toHaveAttribute("open");
+    expect(nextOptional).not.toHaveAttribute("open");
+    fireEvent.click(within(optional).getByText(/Tid, plats och område/));
+    expect(optional).toHaveAttribute("open");
+    expect(within(optional).getByRole("combobox", { name: "Område · Handla" })).toBeTruthy();
+    fireEvent.change(within(optional).getByLabelText("Start · frivilligt"), { target: { value: "10:30" } });
+    fireEvent.change(within(optional).getByLabelText("Plats · frivilligt"), { target: { value: "Butiken" } });
+    expect(optional).toHaveTextContent("Ifyllt");
+    expect(nextOptional).not.toHaveAttribute("open");
     expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("keeps multi-day dates visible and hides irrelevant time inputs", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Kurs");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Pågår flera dagar" }));
+    expect(screen.getByLabelText("Från")).toBeTruthy();
+    expect(screen.getByLabelText("Till och med")).toBeTruthy();
+    const optional = screen.getByTestId("planning-optional-0");
+    fireEvent.click(within(optional).getByText(/Plats och område/));
+    expect(within(optional).queryByLabelText("Start · frivilligt")).toBeNull();
+    expect(within(optional).getByLabelText("Plats · frivilligt")).toBeTruthy();
   });
 
   it("restores the unsaved review and edited date after leaving for Insights and returning", () => {
