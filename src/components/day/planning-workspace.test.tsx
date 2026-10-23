@@ -152,6 +152,20 @@ describe("Plan several activities before saving", () => {
     expect(model.addTasks).not.toHaveBeenCalled();
   });
 
+  it("offers joint family planning as one quiet, optional control", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    expect(screen.getByRole("button", { name: "Även för barnen" })).toBeTruthy();
+    expect(screen.queryByText("Planera för mig")).toBeNull();
+    expect(screen.queryByText("Vilka barn gäller det?")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Även för barnen" }));
+    expect(screen.getByText("För mig och barnen")).toBeTruthy();
+    expect(screen.getByRole("checkbox", { name: "Bella" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Bara mig" }));
+    expect(screen.queryByText("Vilka barn gäller det?")).toBeNull();
+    expect(model.addTasks).not.toHaveBeenCalled();
+    expect(model.addChildren).not.toHaveBeenCalled();
+  });
+
   it("shows review dates immediately but keeps time, location and area optional", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     write("Handla\\nPromenad".replace("\\n", "\n"));
@@ -161,7 +175,7 @@ describe("Plan several activities before saving", () => {
     const nextOptional = screen.getByTestId("planning-optional-1");
     expect(optional).not.toHaveAttribute("open");
     expect(nextOptional).not.toHaveAttribute("open");
-    fireEvent.click(within(optional).getByText(/Tid, plats och område/));
+    fireEvent.click(within(optional).getByText(/Fler val/));
     expect(optional).toHaveAttribute("open");
     expect(within(optional).getByRole("combobox", { name: "Område · Handla" })).toBeTruthy();
     fireEvent.change(within(optional).getByLabelText("Start · frivilligt"), { target: { value: "10:30" } });
@@ -175,11 +189,14 @@ describe("Plan several activities before saving", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     write("Kurs");
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
-    fireEvent.click(screen.getByRole("checkbox", { name: "Pågår flera dagar" }));
+    const optional = screen.getByTestId("planning-optional-0");
+    expect(optional).not.toHaveAttribute("open");
+    expect(within(optional).queryByRole("checkbox", { name: "Pågår flera dagar" })).toBeNull();
+    fireEvent.click(within(optional).getByText(/Fler val/));
+    fireEvent.click(within(optional).getByRole("checkbox", { name: "Pågår flera dagar" }));
     expect(screen.getByLabelText("Från")).toBeTruthy();
     expect(screen.getByLabelText("Till och med")).toBeTruthy();
-    const optional = screen.getByTestId("planning-optional-0");
-    fireEvent.click(within(optional).getByText(/Plats och område/));
+    expect(optional).toHaveTextContent("Ifyllt");
     expect(within(optional).queryByLabelText("Start · frivilligt")).toBeNull();
     expect(within(optional).getByLabelText("Plats · frivilligt")).toBeTruthy();
   });
