@@ -11,8 +11,8 @@ const pageSource = (name: string) => readFileSync(`src/pages/${name}.tsx`, "utf8
 describe("shared Paceable mobile readability across secondary pages", () => {
   it("lets energy balance labels wrap and keeps the net tile readable on mobile", () => {
     const page = pageSource("energy-flow");
-    expect(page).toContain('className="grid grid-cols-2 gap-2 sm:grid-cols-3"');
-    expect(page).toContain('className="col-span-2 sm:col-span-1"');
+    expect(page).toContain('grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 sm:grid-cols-3');
+    expect(page).toContain('className="col-span-full sm:col-span-1"');
     expect(page).toContain('text-sm font-medium leading-snug text-muted-foreground [overflow-wrap:anywhere]');
     expect(page).not.toContain('truncate text-[11px]');
   });
