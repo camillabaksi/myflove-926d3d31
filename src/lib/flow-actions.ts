@@ -142,6 +142,20 @@ export function matchTask<T extends { id: string; title: string }>(
   return partial.length === 1 ? partial[0] : undefined;
 }
 
+/** Change only the fields Pace explicitly suggested. In particular, a time
+ * edit must not erase the user's already chosen reminder lead time. */
+export function flowEditTaskPatch(
+  action: FlowAction,
+  task: { title: string; dueDate?: string; time?: string },
+): { title?: string; dueDate?: string; time?: string } {
+  if (action.kind !== "andra") return {};
+  const patch: { title?: string; dueDate?: string; time?: string } = {};
+  if (action.title && action.title !== task.title) patch.title = action.title;
+  if (validFlowDate(action.date) && action.date !== task.dueDate) patch.dueDate = action.date;
+  if (action.time && action.time !== task.time) patch.time = action.time;
+  return patch;
+}
+
 export const ACTION_LABEL: Record<FlowActionKind, string> = {
   flytta: "Flytta uppgiften",
   forenkla: "Gör den mindre",
