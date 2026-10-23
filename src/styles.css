@@ -3088,7 +3088,7 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 .pace-ds.pace-compact-page .pace-segment:focus-visible { outline: 2px solid var(--pace-focus); outline-offset: 2px; }
 .pace-compact-page .pace-period-navigation { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--pace-space-2); }
 .pace-compact-page .pace-period-label { min-width: 0; margin: 0; text-align: center; overflow-wrap: normal; hyphens: auto; }
-.pace-compact-page .pace-period-navigation > button { min-width: var(--pace-touch); }
+.pace-compact-page .pace-period-navigation > button { min-width: var(--pace-touch); height: auto; min-height: var(--pace-touch); white-space: normal; text-align: center; }
 @media (max-width: 40rem) {
   .pace-compact-page .pace-period-navigation { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .pace-compact-page .pace-period-label { grid-column: 1 / -1; grid-row: 1; }
