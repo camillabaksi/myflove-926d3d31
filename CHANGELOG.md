@@ -1,3 +1,6 @@
+## 2026-10-23 – Etapp 1: mobil och tillgänglighet
+- Mobil och stor text: bottenmenyn ligger på en rad (etiketter kvar för skärmläsare), Idags energi, välkomstdialog, barnkort och veckohistorik staplas i stället för att klippas. Kalenderns vecka/månad visar titlar på upp till två rader, inget streck för poster utan tid, antal i stället för ••• och veckonummer flyttat på smala skärmar. Personväljaren klipps inte, Fånga/Planera/Veckan och Pace-flikar har minst 44 px. Inga data- eller funktionsändringar. Ingen publicering.
+
 ## 2026-10-23 – Funktionsgranskning: tydligare ingångar i Mer
 - Navigation: Ta bort en överflödig länk till den äldre Pace-chattingången `/flow` från Mer och ersätt den med den befintliga `/planera`-ingången. Skilj på ”Planera aktiviteter” (skapa/granska/spara) och ”Dagens ordning i Pace” (läsa en föreslagen ordning). Samma tydlighet i datorns Mer-navigation.
 - Alla tidigare länkar och routes (inklusive `/flow`) finns kvar; ingen förändring av aktiviteter, batteri, konton eller synk. Ingen publicering.

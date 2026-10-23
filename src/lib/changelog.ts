@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-21";
+export const CHANGELOG_UPDATED = "2026-10-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-23 – Etapp 1: mobil och tillgänglighet",
+    items: ["Mobil och stor text: bottenmenyn ligger på en rad (etiketter kvar för skärmläsare), Idags energi, välkomstdialog, barnkort och veckohistorik staplas i stället för att klippas. Kalenderns vecka/månad visar titlar på upp till två rader, inget streck för poster utan tid, antal i stället för ••• och veckonummer flyttat på smala skärmar. Personväljaren klipps inte, Fånga/Planera/Veckan och Pace-flikar har minst 44 px. Inga data- eller funktionsändringar. Ingen publicering."],
+  },
   {
     title: "2026-10-21 – Det som också tog plats",
     items: ["Frivillig privat dagsanteckning på Idag och samma skrivflöde från Pace. Fri text, valfria kategorier, krypterad kontosynk och konfliktversioner. Osparade utkast behålls vid dialog-/datumbyte och rensas vid utloggning; kalender, batteri och mejlmallar oförändrade. Överföring till Pace är pausad tills privat tjänsteloggning har verifierats. Ingen publicering."],
