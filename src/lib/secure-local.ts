@@ -22,6 +22,8 @@
 const SENSITIVE_KEYS = new Set<string>([
   "myflove-day-space-revisions-v1",
   "myflove-notebook-revisions-v1",
+  "myflove-planning-draft-me-v1",
+  "myflove-planning-draft-children-v1",
   "myflove-flow-memories",
   "myflove-energy-log",
   "myflove-energy-pending",
