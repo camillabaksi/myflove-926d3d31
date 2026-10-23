@@ -57,14 +57,14 @@ export default function CollapsibleSection({
 
   return (
     <section ref={section} id={id} className={cn("pace-collapse-section space-y-4", className)}>
-      <div className="pace-collapse-header flex items-center gap-2">
+      <div className="pace-collapse-header flex min-w-0 flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={toggle}
           aria-expanded={!collapsed}
-          className="pace-collapse-trigger flex min-h-11 flex-1 items-center justify-between gap-3 rounded-xl text-left group"
+          className="pace-collapse-trigger group flex min-h-11 min-w-[min(100%,10rem)] flex-1 items-center justify-between gap-3 rounded-xl text-left"
         >
-          <span className={cn("pace-collapse-title min-w-0 text-xl font-medium", headingClassName)}>{title}</span>
+          <span className={cn("pace-collapse-title min-w-0 break-words [overflow-wrap:anywhere] text-xl font-medium", headingClassName)}>{title}</span>
           <ChevronDown
             size={18}
             aria-hidden="true"
