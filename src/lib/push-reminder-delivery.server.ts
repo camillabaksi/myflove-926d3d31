@@ -1,4 +1,5 @@
 import type { PushLogMeta, PushNotificationBody, StoredSubscription } from "@/lib/push.server";
+import { notificationItemKeyForClientKey } from "@/lib/notification-actions";
 
 export type QueuedPushReminder = {
   id: string;
@@ -40,7 +41,7 @@ export async function deliverQueuedReminder(
         url: reminder.url ?? "/idag",
         // Samma tag för alla försök, även om svaret från pushtjänsten försvinner.
         tag: `${reminder.kind}-${reminder.id}`,
-        itemKey: reminder.client_key,
+        itemKey: notificationItemKeyForClientKey(reminder.client_key),
       },
       { userId: reminder.user_id, source: `reminder:${reminder.kind}`, ref: reminder.client_key },
     );
