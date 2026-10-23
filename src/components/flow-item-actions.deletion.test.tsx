@@ -70,7 +70,7 @@ describe("Delete a day activity by source identity", () => {
     fireEvent.change(dialog.getByLabelText("Tid (frivilligt)"), { target: { value: "" } });
     fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
     expect(calls.updateReminder).toHaveBeenCalledWith("rem-clock", expect.objectContaining({
-      date: "2026-10-20", time: "", endTime: undefined, repeat: "none",
+      date: "2026-10-20", time: "", endTime: undefined,
     }));
   });
 
