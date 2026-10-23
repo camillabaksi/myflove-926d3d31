@@ -161,6 +161,8 @@ export function PlanningWorkspace({
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
   const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
   const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
+  // Show a short existing-plan preview on narrow screens; keep the full list on desktop.
+  const [showAllExisting, setShowAllExisting] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [locked, setLocked] = useState(false);
@@ -220,6 +222,10 @@ export function PlanningWorkspace({
         { ...DEFAULT_FAMILY_LAYER, children: selected },
       )
     : entries.filter((entry) => !isFamilyEntry(entry));
+  // Changing date or whose calendar is shown starts a fresh, compact preview.
+  useEffect(() => {
+    setShowAllExisting(false);
+  }, [date, target, selected.join("|")]);
   const lineCount = text.split(/\r?\n/).filter((line) => line.trim()).length;
   const dateLabel = (day: string, short = false) =>
     dateHeadingLabel(
@@ -687,13 +693,13 @@ export function PlanningWorkspace({
                   ? t("Försök igen")
                   : `${t("Spara aktiviteter")} (${rows.length})`}
             </Button>
-            <p className="text-sm text-muted-foreground">
-              {t(
-                forChildren
-                  ? "Aktiviteterna läggs i de valda barnens scheman när du sparar."
-                  : "Alla läggs till när du trycker på Spara.",
-              )}
-            </p>
+            {forChildren && (
+              <p className="text-sm text-muted-foreground">
+                {t(forMe
+                  ? "Aktiviteterna sparas i din plan och de valda barnens scheman."
+                  : "Aktiviteterna sparas i de valda barnens scheman.")}
+              </p>
+            )
           </form>
         )}
         {error && (
@@ -705,6 +711,9 @@ export function PlanningWorkspace({
       <section className="min-w-0 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-3 shadow-sm sm:p-4 lg:sticky lg:top-6" aria-label={t(forChildren ? "I barnens schema" : "Redan i planen")}>
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
+          {(!forChildren || selected.length > 0) && shown.length > 0 && (
+            <span className="ml-2 text-sm font-normal tabular-nums text-muted-foreground">({shown.length})</span>
+          )}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{dateLabel(date)}</p>
         {(!planningReady || externalError) && (
@@ -724,8 +733,11 @@ export function PlanningWorkspace({
           <ul className="mt-3 divide-y divide-[#EFE9EB]">
             {[...shown]
               .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
-              .map((entry) => (
-                <li key={entry.id} className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1]">
+              .map((entry, index) => (
+                <li
+                  key={entry.id}
+                  className={`grid-cols-[4.5rem_minmax(0,1fr)] gap-3 rounded-xl px-2 py-3 even:bg-[#F7F3F1] ${!showAllExisting && index >= 3 ? "hidden lg:grid" : "grid"}`}
+                >
                   <span className="text-sm text-muted-foreground">
                     {entry.time || t("Utan tid")}
                     {entry.endTime && <span className="block">–{entry.endTime}</span>}
@@ -746,6 +758,17 @@ export function PlanningWorkspace({
           planningReady && (
             <p className="mt-3 text-sm text-muted-foreground">{t("Inget inplanerat här ännu.")}</p>
           )
+        )}
+        {(!forChildren || selected.length > 0) && shown.length > 3 && (
+          <Button
+            type="button"
+            variant="ghost"
+            className="mt-2 min-h-11 w-full rounded-xl text-sm lg:hidden"
+            aria-expanded={showAllExisting}
+            onClick={() => setShowAllExisting((previous) => !previous)}
+          >
+            {showAllExisting ? t("Visa färre") : `${t("Visa alla")} ${shown.length}`}
+          </Button>
         )}
       </section>
       {!forChildren && date === today && (
