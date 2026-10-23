@@ -60,7 +60,7 @@ export function SyncStatusNote() {
           )}
           {shown === "error" && (
             <>
-              <RefreshCw className="h-3.5 w-3.5 shrink-0" aria-hidden /> Molnsynken misslyckades. Ändringarna väntar på synk.
+              <span className="inline-flex min-w-0 items-start gap-1.5"><RefreshCw className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden /><span>Molnsynken misslyckades.</span></span>
               <Button
                 type="button"
                 variant="link"

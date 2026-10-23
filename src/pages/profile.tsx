@@ -105,7 +105,7 @@ export default function ProfilePage() {
             id="profile-name"
             title="Vad ska jag kalla dig?"
             headingClassName="text-base font-semibold"
-            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri. Namnet sparas automatiskt; molnstatus visas överst vid väntan eller fel.`}
+            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri. Namnet sparas automatiskt.`}
             className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <form
