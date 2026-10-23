@@ -817,7 +817,7 @@ export default function Layout({ children }: LayoutProps) {
             >
               <ArrowLeft size={22} />
             </button>
-          ) : null} actions={["/familj", "/familjeflow"].includes(location) ? null : <Link href="/assistant" aria-label="Öppna Pace-chatten" title="Öppna Pace-chatten" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link>} />}
+          ) : null} actions={["/familj", "/familjeflow", "/assistant"].includes(location) ? null : <Link href="/assistant" aria-label="Öppna Pace-chatten" title="Öppna Pace-chatten" className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-lavender text-foreground hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><MessageCircle size={21} strokeWidth={1.8} /></Link>} />}
           {["/assistant", "/flowplan", "/flow"].some(path => location === path || location.startsWith(`${path}/`)) && <button type="button" onClick={handleBack} aria-label="Gå tillbaka" className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-foreground shadow-sm"><ArrowLeft size={22} /></button>}
         </header>
 
