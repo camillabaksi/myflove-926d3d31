@@ -2841,7 +2841,7 @@ html[data-pace-refresh="true"] [data-pace-expandable][data-pace-widget="true"][d
 
 /* Full-bleed Pace landscape: the welcome copy is part of the scene, never a card. */
 .pace-scene { position:relative; isolation:isolate; margin:-1rem; padding:1rem 1rem 2rem; min-height:calc(100vh - 9rem); background:#fffdfb; overflow:hidden; }
-.pace-scene::before { content:""; position:absolute; inset:0 0 auto; z-index:0; pointer-events:none; height:calc(100vw * 2.0045); background:url("/__l5e/assets-v1/e5dcb942-7bbf-4df5-83f1-5f62a3bfcb85/pace-scene-portrait.png") center top / 100% auto no-repeat; -webkit-mask-image:linear-gradient(to bottom,#000 55%,transparent 96%); mask-image:linear-gradient(to bottom,#000 55%,transparent 96%); }
+.pace-scene::before { content:""; position:absolute; inset:0 0 auto; z-index:0; pointer-events:none; height:calc(100vw * 2.0045); background:url("/__l5e/assets-v1/e5dcb942-7bbf-4df5-83f1-5f62a3bfcb85/pace-scene-portrait.png") center top / 100% auto no-repeat; -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 4.5rem,#000 55%,transparent 96%); mask-image:linear-gradient(to bottom,transparent 0,#000 4.5rem,#000 55%,transparent 96%); }
 .pace-scene::after { content:""; position:absolute; inset:0; z-index:0; pointer-events:none; background:linear-gradient(to bottom,#fffdfb14 30%,#fffdfb59 55%,#fffdfbd9 78%,#fffdfb 95%); }
 .pace-scene-actions { position:relative; z-index:2; display:flex; justify-content:space-between; }
 .pace-scene-actions button { width:44px; height:44px; display:grid; place-items:center; border-radius:50%; background:#fffaf8d9; color:#38263d; box-shadow:0 2px 10px #4b334116; }
