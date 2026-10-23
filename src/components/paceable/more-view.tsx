@@ -125,7 +125,7 @@ export default function MoreView({ items, simpleMode, enlarged, onClose, onNavig
     {query.trim() ? <section aria-label={t("Sökresultat")}>{results.length ? rows(results) : <p className="pace-more-muted">{t("Hittade inget som matchar")} ”{query}”.</p>}</section> : <>
       {card("Min profil", "Ditt konto, dina inställningar och din familj", User, "lavender", "/profil")}
       <nav aria-label={t("Genvägar")} className="pace-more-quick">
-        {quick.map((item) => <Link key={item.href} href={item.href} onClick={(event) => navigate(event, item.href)} className="pace-more-settings"><History size={16} aria-hidden />{item.label}</Link>)}
+        {quick.map((item) => { const Icon = item.icon; return <Link key={item.href} href={item.href} onClick={(event) => navigate(event, item.href)} className="pace-more-settings"><Icon size={16} className="shrink-0" />{item.label}</Link>; })}
         <Link href="/installningar" onClick={(event) => navigate(event, "/installningar")} className="pace-more-settings"><Settings2 size={16} aria-hidden />{t("Inställningar")}</Link>
       </nav>
       {areas.length > 0 && section("DINA LIVSOMRÅDEN", <div className="grid gap-2">{areas}</div>)}

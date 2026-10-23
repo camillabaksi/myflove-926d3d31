@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { ReactNode, MouseEventHandler } from "react";
-import MoreView, { getMoreItems, MORE_AREAS, MORE_OVERALL, MORE_LEGACY, MORE_ALL_HREFS, MORE_TOOL_GROUPS, type MoreItem } from "./more-view";
+import MoreView, { getMoreItems, MORE_AREAS, MORE_OVERALL, MORE_LEGACY, MORE_ALL_HREFS, MORE_TOOL_GROUPS, MORE_QUICK_LINKS, type MoreItem } from "./more-view";
 import { User } from "lucide-react";
 
 vi.mock("wouter", () => ({ Link: ({ children, href, ...props }: { children: ReactNode; href: string; className?: string; onClick?: MouseEventHandler<HTMLAnchorElement> }) => <a href={href} {...props}>{children}</a> }));
@@ -50,5 +50,25 @@ describe("Mer sorterad efter livsområden", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "/flowplan" } });
     expect(screen.getByRole("link", { name: /flowplan/ })).toHaveAttribute("href", "/flowplan");
+  });
+  it("shows exactly one Historik link near the top, without expanding, in normal and simple mode", () => {
+    expect(MORE_QUICK_LINKS).toEqual(["/historik"]);
+    expect(MORE_OVERALL.find((g) => g.title === "Insikter & historik")?.hrefs).toEqual(["/insight", "/statistik", "/friktionsindex"]);
+    for (const simple of [false, true]) {
+      const { container, unmount } = show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Historik" } : e), simple);
+      const quick = screen.getByRole("navigation", { name: "Genvägar" });
+      expect(quick.querySelector('a[href="/historik"]')).not.toBeNull();
+      expect(quick.compareDocumentPosition(container.querySelector(".pace-more-section")!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      fireEvent.click(screen.getByRole("button", { name: /Insikter & historik/ }));
+      expect(container.querySelectorAll('a[href="/historik"]')).toHaveLength(1);
+      expect(container.querySelector('a[href="/insight"]')).not.toBeNull();
+      unmount();
+    }
+  });
+  it("still finds Historik through search", () => {
+    show(allItems().map((e) => e.href === "/historik" ? { ...e, label: "Historik" } : e));
+    fireEvent.click(screen.getByRole("button", { name: "Sök i appen" }));
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "histor" } });
+    expect(screen.getByRole("link", { name: /Historik/ })).toHaveAttribute("href", "/historik");
   });
 });
