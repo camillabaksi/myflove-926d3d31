@@ -359,10 +359,7 @@ export function PlanningWorkspace({
                   {t("Lägg till eller hantera barn")}
                 </Link>
               </p>
-            ) : (
-              null
-              )
-            )}
+            ) : null}
           </>
         )}
         {stage === "write" && (
@@ -475,7 +472,7 @@ export function PlanningWorkspace({
               {t("Vad vill du planera?")}
             </label>
             <p id={`help-${audience}`} className="text-sm text-muted-foreground">
-              {t("En aktivitet per rad. Lägg till detaljer efteråt om du vill.")}
+              {t("En aktivitet per rad. Detaljer kan du välja sedan.")}
             </p>
             <Textarea
               id={`activities-${audience}`}
