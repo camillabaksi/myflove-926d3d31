@@ -64,8 +64,10 @@ function entryStyle(start: number, end: number, lane: number, lanes: number, fir
   return { top: `${calendarOffset(start, first, geometry.scale)}px`, height: `${calendarBlockHeight(start, end, geometry.scale, geometry.entryMinimum)}px`, left: `${lane / lanes * 100}%`, width: `${100 / lanes}%` };
 }
 
-export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "dag", showPictograms = false, onPictogramsChange }: {
+export default function CalendarPlanner({ tools, weekGoals, checkin, connection, onDateChange, initialView = "dag", initialDate, showPictograms = false, onPictogramsChange }: {
   initialView?: CalendarView;
+  /** Date passed by Planera; never changes stored activities or capacity. */
+  initialDate?: string;
   showPictograms?: boolean;
   onPictogramsChange?: (enabled: boolean) => void;
   tools: ReactNode;
@@ -90,10 +92,11 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   }, []);
   const geometry = calendarGeometry(desktopLayout, textLayout.enlarged ? 2 : 1);
   const today = calendarDate(new Date());
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState(initialDate ?? today);
   const [view, setView] = useState<CalendarView>(initialView);
   const [fullDay, setFullDay] = useState(false);
   useEffect(() => { setView(initialView); }, [initialView]);
+  useEffect(() => { if (initialDate) setDate(initialDate); }, [initialDate]);
   useEffect(() => { onDateChange(date); }, [date, onDateChange]);
   const dates = useMemo(() => periodDates(date, view), [date, view]);
   const { days: allDays, familyMembers, externalError, planningReady, planningError } = useVisualCalendar(dates);
