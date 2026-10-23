@@ -43,6 +43,7 @@ export default function ProfilePage() {
   useEffect(() => {
     if (nameDraft.trim() === lastSaved.current.trim()) return;
     const id = window.setTimeout(() => {
+      if (nameDraft.trim() === lastSaved.current.trim()) return;
       lastSaved.current = nameDraft;
       setName(nameDraft);
     }, 700);
