@@ -438,6 +438,7 @@ export default function Layout({ children }: LayoutProps) {
       label: "Historik",
       icon: CalendarDays,
       hint: "Vad hände dina dagar – och vad gav eller tog energi",
+      essential: true,
     },
     { href: "/statistik", label: "Statistik", icon: BarChart3, hint: "Se dina mönster över tid" },
     {
