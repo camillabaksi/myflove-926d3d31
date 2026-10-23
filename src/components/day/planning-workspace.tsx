@@ -390,11 +390,13 @@ export function PlanningWorkspace({
             )}
           </>
         )}
-        <div
-          className="pace-segmented mt-4"
-          role="group"
-          aria-label={t("Välj planeringsperiod")}
-        >
+        {stage === "write" && (
+          <>
+            <div
+              className="pace-segmented mt-4"
+              role="group"
+              aria-label={t("Välj planeringsperiod")}
+            >
           {PLANNING_PERIODS.map(([value, label]) => (
             <Button
               key={value}
@@ -483,6 +485,8 @@ export function PlanningWorkspace({
           <p className="mt-1 text-sm text-muted-foreground">
             {t("En förhandsplan. Orken får du känna efter den dagen.")}
           </p>
+        )}
+          </>
         )}
         {stage === "write" ? (
           <form
