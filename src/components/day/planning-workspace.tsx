@@ -440,7 +440,7 @@ export function PlanningWorkspace({
                 <ChevronRight size={18} />
               </Button>
             </div>
-            <div className="mt-2 grid grid-cols-7 gap-1 sm:gap-2" role="group" aria-label={t("Veckans dagar")}>
+            <div className="mt-2 grid grid-cols-4 gap-1 min-[390px]:grid-cols-7 sm:gap-2" role="group" aria-label={t("Veckans dagar")}>
               {week.map((day) => {
                 const dayEntries = days[day] ?? [];
                 const count = forChildren
