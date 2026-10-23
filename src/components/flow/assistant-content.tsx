@@ -41,6 +41,7 @@ import {
   ACTION_LABEL,
   actionCta,
   matchTask,
+  paceActionTaskId,
   allowedFlowMoveDate,
   flowEditTaskPatch,
   parseFlowReply,
@@ -93,7 +94,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   /** Ett svar som visats men inte kunnat sparas – kan försökas igen. */
-  const [unsavedReply, setUnsavedReply] = useState<{ conversationId: string; content: string } | null>(null);
+  const [unsavedReply, setUnsavedReply] = useState<{ conversationId: string; messageId: string; content: string } | null>(null);
+  const [savingReplyId, setSavingReplyId] = useState<string | null>(null);
+  /** Blocks repeated clicks before React re-renders; the saved task ID blocks replays after reload. */
+  const appliedNewActions = useRef(new Set<string>());
   const [historyOpen, setHistoryOpen] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(true);
@@ -129,7 +133,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const flowPlan = useFlowPlan();
   const { exercises: savedExercises } = useSavedExercises();
   const { children: childProfiles } = useChildren();
-  const { activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask } =
+  const { tasks, activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask } =
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
 
@@ -150,9 +154,28 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     }
     if (action.kind === "ny") {
       if (!action.title) return;
-      // An explicitly chosen past date belongs to history, not silently today.
-      addTask(action.title, action.date, action.time ? { time: action.time } : undefined);
-      setDoneActions((p) => ({ ...p, [key]: action.date ? `Tillagd för ${action.date}.` : "Tillagd för idag." }));
+      const taskId = paceActionTaskId(key);
+      if (!taskId || savingReplyId === key.split(":")[0] || unsavedReply?.messageId === key.split(":")[0]) {
+        setDoneActions((p) => ({ ...p, [key]: "Spara samtalet innan aktiviteten läggs till." }));
+        return;
+      }
+      if (tasks.some((task) => task.id === taskId) || appliedNewActions.current.has(taskId)) {
+        setDoneActions((p) => ({ ...p, [key]: "Redan tillagd i din dag." }));
+        return;
+      }
+      appliedNewActions.current.add(taskId);
+      try {
+        // Same approved message + action creates exactly one account-owned task,
+        // including on another device after cloud sync or from old chat history.
+        addTask(action.title, action.date, {
+          id: taskId,
+          ...(action.time ? { time: action.time } : {}),
+        });
+        setDoneActions((p) => ({ ...p, [key]: action.date ? `Tillagd för ${action.date}.` : "Tillagd för idag." }));
+      } catch {
+        appliedNewActions.current.delete(taskId);
+        setDoneActions((p) => ({ ...p, [key]: "Kunde inte lägga till just nu. Försök igen." }));
+      }
       return;
     }
     const task = matchTask(action, activeTasks);
@@ -270,19 +293,27 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
           context,
         },
       });
-      setMessages((m) => [...m, { id: `tmp-a-${Date.now()}`, role: "assistant", content: reply }]);
+      // Use the SAME UUID for the optimistic message and its database row.
+      // Action cards can then recognize their stored task after a reload.
+      const replyMessageId = crypto.randomUUID();
+      setSavingReplyId(replyMessageId);
+      setMessages((m) => [...m, { id: replyMessageId, role: "assistant", content: reply }]);
       setJustAnswered(true);
+      let replySaved = false;
       try {
-        await saveFlowMessage(id, "assistant", reply);
+        await saveFlowMessage(id, "assistant", reply, replyMessageId);
+        replySaved = true;
         setUnsavedReply(null);
       } catch {
-        // Svaret visas men är inte sparat – säg det ärligt och erbjud återförsök.
-        setUnsavedReply({ conversationId: id, content: reply });
+        // An unsaved reply remains visible but cannot create untraceable tasks.
+        setUnsavedReply({ conversationId: id, messageId: replyMessageId, content: reply });
         setError("Svaret kunde inte sparas. Det finns kvar här på skärmen – försök spara igen nedan.");
+      } finally {
+        setSavingReplyId(null);
       }
       void refresh();
-      // Navigera först när svaret är sparat – annars avbryts anropet av omladdningen.
-      if (created) {
+      // Do not navigate away from an unsaved response that needs retrying.
+      if (created && replySaved) {
         void navigate({ to: "/assistant/$chatId", params: { chatId: id }, replace: true });
       }
     } catch (e) {
@@ -555,7 +586,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                         ))}
                         {parsed.actions.map((a, i) => {
                           const key = `${m.id}:${i}`;
-                          const done = doneActions[key];
+                          const storedTaskId = a.kind === "ny" ? paceActionTaskId(key) : undefined;
+                          const alreadyAdded = !!storedTaskId && tasks.some(task => task.id === storedTaskId);
+                          const pendingSave = savingReplyId === m.id || unsavedReply?.messageId === m.id;
+                          const done = alreadyAdded ? "Redan tillagd i din dag." : doneActions[key];
                           return (
                             <div
                               key={key}
@@ -591,6 +625,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                   <Button
                                     size="sm"
                                     className="rounded-xl"
+                                    disabled={pendingSave}
                                     onClick={() => runAction(key, a)}
                                   >
                                     {actionCta(a)}
@@ -599,6 +634,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                     size="sm"
                                     variant="ghost"
                                     className="rounded-xl"
+                                    disabled={pendingSave}
                                     onClick={() =>
                                       setDoneActions((p) => ({ ...p, [key]: "Vi lät den vara." }))
                                     }
@@ -606,6 +642,11 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                     Nej, låt den vara
                                   </Button>
                                 </div>
+                              )}
+                              {pendingSave && a.kind === "ny" && (
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  Spara samtalet innan aktiviteten läggs till.
+                                </p>
                               )}
                             </div>
                           );
@@ -638,13 +679,16 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                       className="mt-2 rounded-xl"
                       onClick={() => {
                         const pending = unsavedReply;
-                        void saveFlowMessage(pending.conversationId, "assistant", pending.content)
+                        setSavingReplyId(pending.messageId);
+                        void saveFlowMessage(pending.conversationId, "assistant", pending.content, pending.messageId)
                           .then(() => {
                             setUnsavedReply(null);
                             setError(null);
                             void refresh();
+                            if (!conversationId) void navigate({ to: "/assistant/$chatId", params: { chatId: pending.conversationId }, replace: true });
                           })
-                          .catch(() => setError("Det gick fortfarande inte att spara. Försök igen om en liten stund."));
+                          .catch(() => setError("Det gick fortfarande inte att spara. Försök igen om en liten stund."))
+                          .finally(() => setSavingReplyId(null));
                       }}
                     >
                       Försök spara igen
