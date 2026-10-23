@@ -113,14 +113,14 @@ export function MyFloveBlock({
             {eyebrow}
           </span>
         )}
-        <h2 className="font-display text-base font-bold leading-tight text-ink line-clamp-1">
+        <h2 className="font-display text-base font-bold leading-snug text-ink [overflow-wrap:anywhere]">
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">{subtitle}</p>
+          <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground [overflow-wrap:anywhere]">{subtitle}</p>
         )}
         {status && collapsed && (
-          <div className="mt-1.5 text-sm text-ink line-clamp-1">{status}</div>
+          <div className="mt-1.5 text-sm text-ink [overflow-wrap:anywhere]">{status}</div>
         )}
       </div>
     </div>
@@ -133,7 +133,7 @@ export function MyFloveBlock({
       {...areaProps(area)}
       data-expanded={!collapsed}
       className={cn(
-        "pace-journal-card flex min-w-0 h-auto flex-col gap-3 rounded-3xl border border-border p-4 shadow-soft data-[expanded='false']:min-h-[10rem]  data-[expanded='false']:justify-center sm:gap-4 sm:p-5",
+        "pace-journal-card flex min-w-0 h-auto flex-col gap-3 rounded-3xl border border-border p-4 shadow-soft data-[expanded='false']:min-h-0 sm:gap-4 sm:p-5",
         area && "area-border",
         surface ? SURFACE[surface] : "bg-card",
         !area && (!surface || surface === "plain") && "pace-app-card",
@@ -141,21 +141,21 @@ export function MyFloveBlock({
         className,
       )}
     >
-      <div className="pace-block-header flex items-start gap-3">
+      <div className="pace-block-header flex min-w-0 flex-wrap items-start gap-3">
         {collapsible ? (
           <button
             type="button"
             onClick={toggle}
             aria-expanded={!collapsed}
             title={collapsed ? "Visa mer" : "Minimera"}
-            className="pace-block-trigger press flex w-full min-w-0 flex-1 items-start text-left"
+            className="pace-block-trigger press flex min-h-11 w-full min-w-0 flex-1 items-start text-left"
           >
             {heading}
           </button>
         ) : (
           heading
         )}
-        {action && <div className="shrink-0">{action}</div>}
+        {action && <div className="min-w-0 max-w-full shrink-0">{action}</div>}
       </div>
 
       {!collapsed && children && (
