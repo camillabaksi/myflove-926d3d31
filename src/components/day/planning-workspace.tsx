@@ -312,7 +312,20 @@ export function PlanningWorkspace({
       setText("");
       setStage("write");
     } catch (cause) {
-      if (mounted.current && isActiveOwner(owner))
+      if (mounted.current && isActiveOwner(owner)) {
+        // Collapsed review cards must reveal invalid input, never silently block Save.
+        if (!pending.current) {
+          const invalid = rows.find((row) => {
+            try {
+              validatePlanningDrafts([row]);
+              if (forChildren) childPlanningRows([row], owner, ownedIds);
+              return false;
+            } catch {
+              return true;
+            }
+          });
+          if (invalid) setExpandedRows((previous) => previous.includes(invalid.id) ? previous : [...previous, invalid.id]);
+        }
         setError(
           t(
             cause instanceof Error
@@ -320,6 +333,7 @@ export function PlanningWorkspace({
               : "Sparandet kunde inte bekräftas. Dina aktiviteter ligger kvar, försök igen.",
           ),
         );
+      }
     } finally {
       busy.current = false;
       if (mounted.current) setSaving(false);
@@ -552,6 +566,7 @@ export function PlanningWorkspace({
           </form>
         ) : (
           <form
+            noValidate
             className="mt-4 space-y-3"
             onSubmit={(event) => {
               event.preventDefault();
