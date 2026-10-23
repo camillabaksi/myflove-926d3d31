@@ -99,13 +99,13 @@ export default function PausePage() {
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5">
+              <div className="mt-3 grid grid-cols-[repeat(auto-fit,minmax(min(100%,6rem),1fr))] gap-2">
                 {PRESETS.map((m) => (
                   <Button
                     key={m}
                     type="button"
                     variant={m === minutes ? "default" : "secondary"}
-                    className={`pace-compact-control ${m === minutes ? "pace-compact-primary" : ""}`}
+                    className={`pace-compact-control min-w-0 whitespace-normal ${m === minutes ? "pace-compact-primary" : ""}`}
                     onClick={() => startPause(m)}
                   >
                     {m} min
