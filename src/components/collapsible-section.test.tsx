@@ -36,6 +36,37 @@ describe("CollapsibleSection", () => {
     expect(screen.getByText("innehåll")).toBeTruthy();
   });
 
+  it("keeps a long title, help and another action independently usable at mobile/large text sizes", () => {
+    const save = vi.fn();
+    render(
+      <CollapsibleSection
+        title="Aktiviteter och återhämtning under hela eftermiddagen"
+        help="Här kan du se mer om dagens aktiviteter."
+        actions={<button type="button" onClick={save}>Spara inställningar</button>}
+      >
+        <p>Detaljerna till min dag</p>
+      </CollapsibleSection>,
+    );
+    const title = screen.getByText("Aktiviteter och återhämtning under hela eftermiddagen");
+    expect(title).toHaveClass("break-words");
+    const collapse = screen.getByRole("button", { name: /Aktiviteter och återhämtning/ });
+    expect(collapse).toHaveClass("min-h-11");
+    expect(collapse.className).toContain("min-w-[min(100%,10rem)]");
+    expect(collapse.closest(".pace-collapse-header")).toHaveClass("flex-wrap");
+
+    const help = screen.getByRole("button", { name: /Vad är Aktiviteter och återhämtning/ });
+    expect(help).toHaveClass("min-h-11", "min-w-11");
+    const symbol = help.querySelector('span[aria-hidden="true"]');
+    expect(symbol).toHaveClass("h-6", "w-6");
+
+    fireEvent.click(screen.getByRole("button", { name: "Spara inställningar" }));
+    expect(save).toHaveBeenCalledOnce();
+    expect(collapse).toHaveAttribute("aria-expanded", "true");
+    fireEvent.click(collapse);
+    expect(screen.queryByText("Detaljerna till min dag")).not.toBeInTheDocument();
+    expect(help).toBeInTheDocument();
+  });
+
   it("kommer ihåg minimerat läge när sektionen visas igen", () => {
     const view = render(
       <CollapsibleSection title="Mitt batteri">
