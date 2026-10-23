@@ -10,8 +10,8 @@ export const CHANGELOG_UPDATED = "2026-10-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
-    title: "2026-10-23 – Mer: Historik som direktlänk",
-    items: ["Mer (2026-10-23): Historik har nu en synlig direktlänk högst upp i Mer, bredvid Inställningar, i både vanligt och enkelt läge – inget kort behöver öppnas. Länken finns bara där; Insikter & historik behåller Insikter, Statistik och Friktionsindex. Sidan, sökningen, tillbakavägen och all historikdata är oförändrade. Ingen publicering."],
+    title: "2026-10-23 – Mer: Historik direkt i Insikter & historik",
+    items: ["Mer (2026-10-23): Gruppen Insikter & historik är nu öppen direkt, så Historik syns som eget val bredvid Insikter i både vanligt och enkelt läge – ett tryck räcker. Ingen extra Historik-länk på annan plats; gruppen kan fortfarande fällas ihop. Sidan, sökningen, tillbakavägen och all historikdata är oförändrade. Ingen publicering."],
   },
   {
     title: "2026-10-23 – Planera: tydligt besked om tidigare utkast",
