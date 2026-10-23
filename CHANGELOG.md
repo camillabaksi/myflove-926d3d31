@@ -1,3 +1,6 @@
+## 2026-10-23 – Kompakt granskning i Planera
+- Flera aktiviteter visas först som korta översikter med titel, datum och valda barn. Varje aktivitet går att öppna för redigering, medan en enda aktivitet förblir öppen direkt. Befintliga utkast, kontoseparering, kalenderposter, barnval och sparlogik lämnas orörda. Ingen webbpublicering.
+
 ## 2026-10-21
 - Det som också tog plats: frivillig privat dagsanteckning på Idag och samma skrivflöde från Pace, med fri text, valfria kategorier, krypterad kontosynk och bevarade konfliktversioner. Osparade utkast behålls vid dialog-/datumbyte och rensas vid utloggning. Ingen kalender- eller energiändring. Överföring till Pace är pausad eftersom content-free tjänsteloggning inte har verifierats. Ingen publicering.
 - Android höjd till 6.7 (versionCode 28) och iOS till 1.5 (byggnummer 17). App-ID:n, domän, ikoner och signering oförändrade. Ingen signerad AAB/IPA byggd i denna miljö; bygget sker i Codemagic. Ingen publicering.
