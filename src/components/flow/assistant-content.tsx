@@ -144,8 +144,8 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
   // Only stable source IDs, never shopping titles or any private notes.
-  // The existing encrypted owner-scoped sync stores successful item receipts
-  // for both the personal and the shared household shopping paths.
+  // Existing account-scoped sync stores source IDs (no titles or notes)
+  // for both personal and shared household shopping paths.
   const [shoppingReceipts, setShoppingReceipts] = useCloudSyncedStorage<PaceShoppingReceipt[]>(
     "myflove-pace-shopping-receipts", [],
   );
