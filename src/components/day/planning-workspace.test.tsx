@@ -101,6 +101,29 @@ describe("Compact calendar context", () => {
 });
 
 describe("Plan several activities before saving", () => {
+  it("shows a concise date and recipient overview before a multi-activity save", () => {
+    render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
+    write("Frukost\nSimskola");
+    fireEvent.click(screen.getByRole("checkbox", { name: "Bella" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Bianca" }));
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+
+    const first = screen.getByTestId("planning-review-row-0");
+    const second = screen.getByTestId("planning-review-row-1");
+    expect(first).not.toHaveAttribute("open");
+    expect(second).not.toHaveAttribute("open");
+    expect(within(first).getByText("Frukost")).toBeTruthy();
+    expect(within(second).getByText("Simskola")).toBeTruthy();
+    expect(within(first).getByText("Bella, Bianca")).toBeTruthy();
+    expect(within(first).getByText(/\\d{4}/)).toBeTruthy();
+    expect(model.addChildren).not.toHaveBeenCalled();
+
+    fireEvent.click(first.querySelector("summary")!);
+    expect(first).toHaveAttribute("open");
+    expect(within(first).getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Frukost");
+    expect(model.addChildren).not.toHaveBeenCalled();
+  });
+
   it("shows activity input before child recipients without extra steps", () => {
     render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
     const field = screen.getByRole("textbox", { name: "Vad vill du planera?" });
@@ -180,6 +203,7 @@ describe("Plan several activities before saving", () => {
     expect(screen.queryByRole("group", { name: "Veckans dagar" })).toBeNull();
     expect(screen.queryByRole("group", { name: "Välj planeringsperiod" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Nästa vecka" })).toBeNull();
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     expect(screen.getAllByLabelText("Dag")).toHaveLength(2);
     fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-18" } });
     expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
@@ -385,6 +409,7 @@ describe("Plan several activities before saving", () => {
     write("Handla\nTvätta\nPromenad");
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
     expect(model.addTasks).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     const dates = screen.getAllByLabelText("Dag");
     fireEvent.change(dates[0]!, { target: { value: "2026-11-01" } });
     page.rerender(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
@@ -410,11 +435,9 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Bella" }));
     fireEvent.click(screen.getByRole("checkbox", { name: "Bianca" }));
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
-    expect(
-      screen
-        .getAllByRole("checkbox", { name: "Bella" })
-        .every((input) => (input as HTMLInputElement).checked),
-    ).toBe(true);
+    expect(within(screen.getByTestId("planning-review-row-0")).getByText("Bella, Bianca")).toBeTruthy();
+    expect(within(screen.getByTestId("planning-review-row-1")).getByText("Bella, Bianca")).toBeTruthy();
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
     await screen.findByRole("alert");
     const first = structuredClone(model.addChildren.mock.calls[0]![0]);
