@@ -101,6 +101,23 @@ describe("Compact calendar context", () => {
 });
 
 describe("Plan several activities before saving", () => {
+  it("shows activity input before child recipients without extra steps", () => {
+    render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
+    const field = screen.getByRole("textbox", { name: "Vad vill du planera?" });
+    const bella = screen.getByRole("checkbox", { name: "Bella" });
+    expect(field.compareDocumentPosition(bella) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Granska aktiviteter/ })).toBeDisabled();
+    write("Simskola");
+    expect(field).toHaveValue("Simskola");
+    fireEvent.click(bella);
+    expect(screen.getByRole("button", { name: /Granska aktiviteter/ })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(screen.getByRole("heading", { name: "Så här blir din plan" })).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Simskola");
+    expect(model.addChildren).not.toHaveBeenCalled();
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("starts with two existing items on mobile, reveals the rest on request, and never changes the draft", () => {
     const date = todayISO();
     model.existing = {
