@@ -15,7 +15,7 @@ import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { getArea } from "@/lib/life-areas";
 import type { Routine } from "@/lib/recurrence";
 import { routineOccurrencesForDay, type RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
-import { occursOn } from "@/lib/recurrence";
+
 import { reminderOccurrencesForDay } from "@/lib/reminder-occurrences";
 
 import {
