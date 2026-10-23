@@ -12,7 +12,7 @@ genomfört eller inte längre aktuellt ligger oförändrat i `docs/roadmap-arkiv
 - [ ] Rumsbilder i Anpassa och Min samling. Flows figur är inbakad i hela scenen och kan inte tas bort som en egen bild.
 
 ## Blockerat – kräver något utanför mig
-- [ ] Android 6.7/28 och iOS 1.5/17 till TestFlight och Play. Codemagic-flödena finns i `codemagic.yaml`, men jag saknar Codemagic-nyckeln och uppladdningsnyckeln till Google Play.
+- [ ] Android 6.8/29 och iOS 1.6/18 till TestFlight och Play. Codemagic-flödena finns i `codemagic.yaml`, men jag saknar Codemagic-nyckeln och uppladdningsnyckeln till Google Play.
 - [ ] Riktig synkkontroll mellan två enheter. Kräver ett isolerat testkonto och två telefoner; jag vill inte spara testgrejer i ditt personliga konto.
 - [ ] Djupare säkerhetskontroll av koden, plus kontroll av flera konton och notiser. Kräver en aktuell djupskanning och en egen testmiljö.
 - [ ] Dagsanteckningen "Det som också tog plats" in i Pace-förslag. Spärrad tills AI-tjänstens loggning är verifierat innehållsfri. Ingen text skickas idag.
