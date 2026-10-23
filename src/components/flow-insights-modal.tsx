@@ -32,7 +32,7 @@ export default function FlowInsightsModal({ open, onOpenChange }: FlowInsightsMo
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             <Sparkles size={20} className="text-primary" />
-            Hitta mitt flow
+            Se mina mönster
           </DialogTitle>
           <DialogDescription>
             Bara sådant som syns i din egen data. Finns inget underlag säger jag hellre inget.
