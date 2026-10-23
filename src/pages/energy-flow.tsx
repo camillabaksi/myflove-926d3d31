@@ -280,14 +280,14 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true, embed
           collapsible
           status={`${t("Netto")} ${balance.net > 0 ? "+" : ""}${balance.net}`}
         >
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2 sm:grid-cols-3">
             <BalanceStat emoji="🔋" label={t("Gett energi")} value={`+${balance.gives}`} />
             <BalanceStat emoji="🪫" label={t("Tagit energi")} value={`−${balance.drains}`} />
             <BalanceStat
               emoji="⚖️"
               label={t("Netto")}
               value={`${balance.net > 0 ? "+" : ""}${balance.net}`}
-              className="col-span-2 sm:col-span-1"
+              className="col-span-full sm:col-span-1"
             />
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">
