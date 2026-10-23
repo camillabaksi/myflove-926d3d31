@@ -26,6 +26,9 @@ export const EN_PLANNING: Record<string, string> = {
   "Plats · frivilligt": "Place · optional",
   "Gäller för": "For",
   "Spara aktiviteter": "Save activities",
+  "Visa i kalendern": "View in calendar",
+  "Visa första datumet i kalendern": "View first date in calendar",
+  "olika datum": "different dates",
   "Alla läggs till när du trycker på Spara.": "All are added when you press Save.",
   "Aktiviteterna läggs i de valda barnens scheman när du sparar.":
     "Activities are added to the selected children's schedules when you save.",
