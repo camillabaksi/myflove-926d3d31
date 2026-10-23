@@ -191,7 +191,8 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
     const optional = screen.getByTestId("planning-optional-0");
     expect(optional).not.toHaveAttribute("open");
-    expect(within(optional).queryByRole("checkbox", { name: "Pågår flera dagar" })).toBeNull();
+    // Closed <details> keeps its input in the DOM but does not show it visually.
+    // Assert the native open state, not whether jsdom exposes the descendant role.
     fireEvent.click(within(optional).getByText(/Fler val/));
     fireEvent.click(within(optional).getByRole("checkbox", { name: "Pågår flera dagar" }));
     expect(screen.getByLabelText("Från")).toBeTruthy();
