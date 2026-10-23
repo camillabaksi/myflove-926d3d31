@@ -16,7 +16,7 @@ vi.mock("@/hooks/use-toast", () => ({
 }));
 vi.mock("@/components/myflove/block", () => ({
   MyFlovePageGrid: ({ children }: { children: ReactNode }) => <main>{children}</main>,
-  MyFloveWide: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  MyFloveWide: ({ children, span }: { children: ReactNode; span?: "full" | "wide" }) => <div data-testid="mood-wide" data-span={span ?? "full"}>{children}</div>,
 }));
 vi.mock("@/components/flow-insights-modal", () => ({
   default: () => null,
@@ -26,6 +26,35 @@ vi.mock("@/components/collapsible-section", () => ({
 }));
 
 describe("Mående: fem val ska vara läsbara också på smal skärm", () => {
+  it("keeps the Mood form and pattern action wide in the desktop page grid", () => {
+    const { container } = render(<MoodContent showHeader={false} />);
+    const choice = screen.getByRole("button", { name: "Okej" });
+    const insights = screen.getByRole("button", { name: "Se mina mönster" });
+    expect(choice.closest('[data-testid="mood-wide"]')).toHaveAttribute("data-span", "wide");
+    expect(insights.closest('[data-testid="mood-wide"]')).toHaveAttribute("data-span", "wide");
+    const form = choice.closest(".pace-card-surface");
+    expect(form).toHaveClass("min-w-0", "p-4", "sm:p-6");
+    expect(container.querySelectorAll('[data-testid="mood-wide"][data-span="wide"]')).toHaveLength(2);
+  });
+
+  it("keeps the read-only history path full-width without offering competing check-in controls", () => {
+    render(<MoodContent showHeader={false} readOnly />);
+    expect(screen.getByTestId("mood-history-readonly").closest('[data-testid="mood-wide"]'))
+      .toHaveAttribute("data-span", "full");
+    expect(screen.queryByRole("button", { name: "Spara mående" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Se mina mönster" })).not.toBeInTheDocument();
+  });
+
+  it("uses the approved plum icon when confirming a logged mood", () => {
+    render(<MoodContent showHeader={false} />);
+    fireEvent.click(screen.getByRole("button", { name: "Okej" }));
+    fireEvent.click(screen.getByRole("button", { name: "Spara mående" }));
+    const confirmed = screen.getByRole("heading", { name: "Tack för att du checkade in" });
+    expect(confirmed.parentElement?.querySelector("svg.text-primary")).not.toBeNull();
+    expect(confirmed.parentElement?.textContent).not.toContain("💚");
+    expect(state.addMood).toHaveBeenCalledWith(3, "");
+  });
+
   it("allows choices to wrap rather than compressing all five into one row", () => {
     const { container } = render(<MoodContent showHeader={false} />);
     const buttons = ["Tungt", "Låg", "Okej", "Bra", "Toppen"].map(label =>
