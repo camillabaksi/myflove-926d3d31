@@ -40,7 +40,7 @@ describe("Valt kalenderdatum → Planera", () => {
     const withDate = links.filter((l) => l.includes("date,") || l.includes("date:"));
     expect(withDate.length).toBeGreaterThanOrEqual(3);
     for (const link of withDate.filter((l) => !l.includes("editDate"))) expect(link).toContain('from: "kalender", view');
-    expect(src).toContain('routerNavigate({ to: "/kalender", search: { view, date }, replace: true })');
+    expect(src).toContain('url.searchParams.set("date", date)');
   });
 });
 

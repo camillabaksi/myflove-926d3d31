@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, typ
 import { isoWeekNumber } from "@/lib/iso-week";
 import { PRIMARY_ADD_CHOICES, CALENDAR_ADD_KIND } from "@/lib/add-entry-choices";
 import { Link, useLocation } from "wouter";
-import { Link as PlanningLink, useNavigate as usePlanningNavigate, useLocation as usePlanningLocation } from "@tanstack/react-router";
+import { Link as PlanningLink } from "@tanstack/react-router";
 import { activityWord, nowCandidateIds, planningPeriodForDate } from "@/lib/calendar-day-summary";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
@@ -100,12 +100,14 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   useEffect(() => { if (initialDate) setDate(initialDate); }, [initialDate]);
   useEffect(() => { onDateChange(date); }, [date, onDateChange]);
   // Keep the chosen day/view in the address so Back from Planera and refresh return to the same day.
-  const routerNavigate = usePlanningNavigate();
-  const calendarPath = usePlanningLocation({ select: (l) => l.pathname });
   useEffect(() => {
-    if (calendarPath !== "/kalender") return;
-    void routerNavigate({ to: "/kalender", search: { view, date }, replace: true });
-  }, [calendarPath, view, date, routerNavigate]);
+    if (typeof window === "undefined" || window.location.pathname !== "/kalender") return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("view") === view && url.searchParams.get("date") === date) return;
+    url.searchParams.set("view", view);
+    url.searchParams.set("date", date);
+    window.history.replaceState(window.history.state, "", url);
+  }, [view, date]);
   const dates = useMemo(() => periodDates(date, view), [date, view]);
   const { days: allDays, familyMembers, externalError, planningReady, planningError } = useVisualCalendar(dates);
   const [visible, setVisible] = useCloudSyncedStorage<string[]>("myflove-calendar-categories", ["privat", "relationer", "barn", "jobb", "studier"]);
