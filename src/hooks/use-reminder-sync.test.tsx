@@ -107,6 +107,56 @@ describe("köning av påminnelser efter aktivering", () => {
     });
   });
 
+  it("schedules a moved occurrence under its original key on the new day without modifying later repeats", async () => {
+    mocks.subscribed = true;
+    const original = new Date();
+    original.setHours(0, 0, 0, 0);
+    const movedTo = new Date(original);
+    movedTo.setDate(movedTo.getDate() + 1);
+    const when = new Date(movedTo);
+    when.setHours(16, 30, 0, 0);
+    const originalDate = mocksDate(original);
+    const targetDate = mocksDate(movedTo);
+    mocks.reminders = [{
+      id: "repeat", title: "Promenad", date: originalDate, time: "09:00",
+      completed: false, createdAt: 1, repeat: "daily", remindMinutesBefore: 0,
+      occurrenceOverrides: { [originalDate]: { date: targetDate, time: "16:30" } },
+    }];
+    renderHook(() => useReminderSync());
+    await waitFor(() => expect(mocks.reconcile).toHaveBeenCalledOnce());
+    const values = mocks.sync.mock.calls.map(([arg]) => arg.data);
+    const moved = values.find(value => value.clientKey === `rem:repeat:${originalDate}`);
+    expect(moved).toBeDefined();
+    expect(new Date(moved.deliverAt).getTime()).toBe(when.getTime());
+    expect(moved.body).toBe("Påminnelse kl 16:30");
+    expect(values.find(value => value.clientKey === `rem:repeat:${targetDate}`)?.body)
+      .toBe("Påminnelse kl 09:00");
+    expect(values.some(value => value.clientKey === `rem:repeat:${originalDate}` &&
+      value.body === "Påminnelse kl 09:00")).toBe(false);
+  });
+
+  it("projects the same moved occurrence to the native queue with an origin key", async () => {
+    mocks.native = true;
+    const origin = new Date();
+    origin.setHours(0, 0, 0, 0);
+    const target = new Date(origin);
+    target.setDate(target.getDate() + 1);
+    const originalDate = mocksDate(origin);
+    const destination = mocksDate(target);
+    mocks.reminders = [{
+      id: "repeat", title: "Promenad", date: originalDate, time: "09:00",
+      completed: false, createdAt: 1, repeat: "daily", remindMinutesBefore: 0,
+      occurrenceOverrides: { [originalDate]: { date: destination, time: "16:30" } },
+    }];
+    renderHook(() => useReminderSync());
+    await waitFor(() => expect(mocks.nativeSync).toHaveBeenCalledOnce());
+    const planned = mocks.nativeSync.mock.calls[0][1] as Array<{ clientKey: string; body: string }>;
+    expect(planned).toEqual(expect.arrayContaining([
+      expect.objectContaining({ clientKey: `rem:repeat:${originalDate}`, body: "Påminnelse kl 16:30" }),
+      expect.objectContaining({ clientKey: `rem:repeat:${destination}`, body: "Påminnelse kl 09:00" }),
+    ]));
+  });
+
   it("avbokar en köad påminnelse direkt när den avbryts", async () => {
     mocks.subscribed = true;
     const { rerender } = renderHook(() => useReminderSync());
