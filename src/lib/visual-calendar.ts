@@ -1,6 +1,6 @@
 import type { PictogramId } from "@/lib/child-visual-schedule";
 import type { Task, Reminder } from "@/hooks/use-data";
-import { occursOn, type Routine } from "@/lib/recurrence";
+import type { Routine } from "@/lib/recurrence";
 import { routineOccurrencesForDay, type RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
 import type { Lecture } from "@/lib/study-calendar";
 import type { QuickflowItem } from "@/lib/quickflow";
