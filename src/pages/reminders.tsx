@@ -212,7 +212,9 @@ function ReminderEditor({
           <DialogDescription>
             {planAgain
               ? "Välj ett nytt datum eller klockslag. Påminnelsen aktiveras när du sparar."
-              : "Ändra datum, klockslag eller anteckning för påminnelsen."}
+              : (reminder.repeat ?? "none") !== "none"
+                ? "Ändringar av datum, klockslag eller text gäller hela den återkommande serien, inte bara en enskild dag."
+                : "Ändra datum, klockslag eller anteckning för påminnelsen."}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-3">
