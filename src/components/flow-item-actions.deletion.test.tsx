@@ -10,12 +10,14 @@ vi.mock("@/hooks/use-data", () => ({
       { id: "a", title: "Ring skolan", dueDate: "2026-10-20", time: "09:00", completed: false },
       { id: "b", title: "Ring skolan", dueDate: "2026-10-21", time: "09:00", completed: false },
       { id: "undated", title: "Skriv ett brev", completed: false },
+      { id: "timed", title: "Hämtning", dueDate: "2026-10-20", time: "15:00", endTime: "15:30", reminderMinutesBefore: 10, completed: false },
     ],
     updateTask: calls.updateTask,
     deleteTask: calls.deleteTask,
   }),
   useReminders: () => ({ reminders: [
     { id: "period", title: "Pågående kurs", date: "2026-11-01", endDate: "2026-11-30", time: undefined, note: "Veckokurs", repeat: "none" },
+    { id: "rem-clock", title: "Ring läkaren", date: "2026-10-20", time: "12:00", endTime: "12:30", remindMinutesBefore: 10, repeat: "none" },
   ], updateReminder: calls.updateReminder, deleteReminder: calls.deleteReminder }),
 }));
 vi.mock("@/hooks/use-quickflow", () => ({ useQuickflow: () => ({ items: [], update: vi.fn(), remove: vi.fn() }) }));
@@ -46,6 +48,32 @@ describe("Delete a day activity by source identity", () => {
     expect(saved).toHaveBeenCalledTimes(1);
   });
 
+  it("clears an activity's end time and start notification when its start time is removed", () => {
+    render(<FlowItemActions itemId="task-timed" showLabel />);
+    fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
+    const dialog = within(screen.getByRole("dialog"));
+    expect(dialog.getByLabelText("Tid (frivilligt)")).toHaveValue("15:00");
+    expect(dialog.getByLabelText("Sluttid (frivilligt)")).toHaveValue("15:30");
+    fireEvent.change(dialog.getByLabelText("Tid (frivilligt)"), { target: { value: "" } });
+    expect(dialog.getByLabelText("Sluttid (frivilligt)")).toHaveValue("");
+    fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
+    expect(calls.updateTask).toHaveBeenCalledWith("timed", expect.objectContaining({
+      dueDate: "2026-10-20", time: "", endTime: undefined,
+    }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("clears timed reminder metadata without changing its date or recurrence", () => {
+    render(<FlowItemActions itemId="rem-rem-clock" showLabel />);
+    fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
+    const dialog = within(screen.getByRole("dialog"));
+    fireEvent.change(dialog.getByLabelText("Tid (frivilligt)"), { target: { value: "" } });
+    fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
+    expect(calls.updateReminder).toHaveBeenCalledWith("rem-clock", expect.objectContaining({
+      date: "2026-10-20", time: "", endTime: undefined,
+    }));
+  });
+
   it("allows editing a task with no due date without assigning a date", () => {
     render(<FlowItemActions itemId="task-undated" showLabel />);
     fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
@@ -69,7 +97,7 @@ describe("Delete a day activity by source identity", () => {
     fireEvent.change(dialog.getByLabelText(/Slutdatum \(valfritt/), { target: { value: "2026-12-01" } });
     fireEvent.click(dialog.getByRole("button", { name: "Spara ändringar" }));
     expect(calls.updateReminder).toHaveBeenCalledWith("period", expect.objectContaining({
-      endDate: "2026-12-01", time: undefined, endTime: undefined,
+      endDate: "2026-12-01", time: "", endTime: undefined,
     }));
   });
 

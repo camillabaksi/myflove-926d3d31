@@ -348,8 +348,10 @@ function FlowItemEditDialog({
       updateTask(realId, {
         title,
         dueDate: form.date || undefined,
-        time: form.time || undefined,
-        endTime: form.endTime || undefined,
+        // An explicit empty string lets the shared task store clear the start,
+        // end and notification together. Undefined would leave an old alert.
+        time: form.time,
+        endTime: form.time ? form.endTime || undefined : undefined,
         note: form.note,
         area: form.area,
       });
@@ -358,8 +360,9 @@ function FlowItemEditDialog({
         title,
         date: form.date || undefined,
         endDate: form.endDate || undefined,
-        time: form.endDate ? undefined : form.time || undefined,
-        endTime: form.endDate ? undefined : form.endTime || undefined,
+        // A period or untimed reminder must not retain its old start alert.
+        time: form.endDate ? "" : form.time,
+        endTime: form.endDate || !form.time ? undefined : form.endTime || undefined,
         note: form.note,
       });
     } else if (kind === "quickflow") {
@@ -439,7 +442,10 @@ function FlowItemEditDialog({
                 {!(kind === "kalender" && form.endDate) && (
                   <label className="space-y-1 text-sm">
                     <span className="text-muted-foreground">Tid (frivilligt)</span>
-                    <Input type="time" className="min-h-11" value={form.time} onChange={(e) => set({ time: e.target.value })} />
+                    <Input type="time" className="min-h-11" value={form.time} onChange={(e) => set({
+                      time: e.target.value,
+                      ...(e.target.value ? {} : { endTime: "" }),
+                    })} />
                   </label>
                 )}
               </div>
