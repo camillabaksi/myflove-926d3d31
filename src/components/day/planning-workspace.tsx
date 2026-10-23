@@ -323,17 +323,18 @@ export function PlanningWorkspace({
           {t("Lägg till aktiviteter")}
         </h2>
         {stage === "write" && children.length > 0 && (
-          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-            <span className="font-medium text-[#512654]">
-              {t(target === "both" ? "Planera för mig och barnen" : audience === "children" ? "Planera för barnen" : "Planera för mig")}
-            </span>
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 text-sm">
             {target === "both" ? (
-              <Button type="button" variant="ghost" className="min-h-11 rounded-xl text-sm" onClick={() => { setTarget(audience); setError(""); }}>
-                {t("Ångra gemensam planering")}
-              </Button>
+              <>
+                <span className="text-sm font-medium text-[#512654]">{t("För mig och barnen")}</span>
+                <Button type="button" variant="ghost" className="min-h-11 rounded-xl px-2 text-sm text-primary" onClick={() => { setTarget(audience); setError(""); }}>
+                  {t(audience === "children" ? "Bara barnen" : "Bara mig")}
+                </Button>
+              </>
             ) : (
-              <Button type="button" variant="outline" className="min-h-11 rounded-xl text-sm" onClick={() => { setTarget("both"); setError(""); }}>
-                {t("Planera för mig och barnen")}
+              <Button type="button" variant="ghost" className="min-h-11 gap-2 rounded-xl px-2 text-sm text-primary" onClick={() => { setTarget("both"); setError(""); }}>
+                <Users size={16} aria-hidden />
+                {t(audience === "children" ? "Även för mig" : "Även för barnen")}
               </Button>
             )}
           </div>
@@ -586,7 +587,6 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
-                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Pågår flera dagar</label>
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {row.endDate ? "Från" : t("Dag")}
@@ -607,12 +607,23 @@ export function PlanningWorkspace({
                   </div>
                   <details className="mt-2 rounded-xl border border-border/60 bg-secondary/15 px-3" data-testid={`planning-optional-${index}`}>
                     <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-sm text-muted-foreground">
-                      <span>
-                        {t(row.endDate ? (forMe ? "Plats och område" : "Plats") : (forMe ? "Tid, plats och område" : "Tid och plats"))} <span className="text-xs">({t("valfritt")})</span>
+                      <span className="min-w-0">
+                        {t("Fler val")} <span className="text-xs">({t(forMe ? "flera dagar, tid, plats, område" : "flera dagar, tid och plats")})</span>
                       </span>
-                      {(row.time || row.endTime || row.location || periodAreas[row.id]) && <span className="shrink-0 text-xs text-primary">Ifyllt</span>}
+                      {(row.endDate || row.time || row.endTime || row.location || periodAreas[row.id]) && <span className="shrink-0 text-xs text-primary">Ifyllt</span>}
                     </summary>
                     <div className="space-y-3 pb-3">
+                      <label className="flex min-h-11 items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={!!row.endDate}
+                          onChange={(event) => patchRow(row.id, event.target.checked
+                            ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" }
+                            : { endDate: undefined })}
+                          className="h-4 w-4 accent-primary"
+                        />
+                        {t("Pågår flera dagar")}
+                      </label>
                       {!row.endDate && (
                         <div className="grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                           <label className="min-w-0 text-sm">
