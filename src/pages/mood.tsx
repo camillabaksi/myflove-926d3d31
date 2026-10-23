@@ -68,7 +68,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
       {readOnly ? (
         <MyFloveWide>
           <div
-            className="rounded-2xl bg-[#F5EDF7]/40 p-3 text-sm text-muted-foreground"
+            className="rounded-2xl bg-secondary/40 p-3 text-sm text-muted-foreground"
             data-testid="mood-history-readonly"
           >
             {t("Här ser du dina tidigare loggar. Vill du logga nytt gör du det under")}{" "}
@@ -152,7 +152,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
             title={t("Tidigare incheckningar")}
             help={t("Dina tidigare loggar. Mönstren här används för att anpassa dagens förslag.")}
             headingClassName="font-sans text-base font-semibold text-ink"
-            className="rounded-2xl bg-[#F5EDF7]/30 p-3"
+            className="rounded-2xl bg-secondary/30 p-3"
           >
             <div className="space-y-2">
               {(showAllMoods ? moods : moods.slice(0, 3)).map((mood) => {
