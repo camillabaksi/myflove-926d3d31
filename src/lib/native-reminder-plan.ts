@@ -1,4 +1,5 @@
 import type { LocalNotificationSchema, Channel } from "@capacitor/local-notifications";
+import { notificationItemKeyForClientKey } from "./notification-actions";
 import type { AlarmFormat, AlarmSoundId } from "./personalization";
 import { isQuietNow, type QuietModeState } from "./quiet-mode";
 import { nativeSoundFile, NATIVE_SILENT_FILE } from "./native-sound-assets";
@@ -31,7 +32,7 @@ export interface NativeReminderExtra {
 export const NATIVE_PENDING_LIMIT = 60;
 
 export function reminderItemKey(key: string): string {
-  return key.startsWith("rem:") ? `reminder:${key.split(":")[1]}` : key;
+  return notificationItemKeyForClientKey(key);
 }
 export function nativeExtra(notification: { extra?: unknown }): NativeReminderExtra | null {
   const e = notification.extra as Partial<NativeReminderExtra> | undefined;
