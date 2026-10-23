@@ -78,7 +78,8 @@ describe("Plan several activities before saving", () => {
   it("shows one compact seven-day picker before the input without seven tall day rows", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
     const picker = screen.getByRole("group", { name: "Veckans dagar" });
-    expect(picker.className).toContain("grid-cols-7");
+    expect(picker.className).toContain("grid-cols-4");
+    expect(picker.className).toContain("min-[390px]:grid-cols-7");
     const days = within(picker).getAllByRole("button");
     expect(days).toHaveLength(7);
     expect(days.every((day) => day.getAttribute("aria-label")?.includes("planerade aktiviteter"))).toBe(true);
