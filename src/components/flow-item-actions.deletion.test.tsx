@@ -130,7 +130,7 @@ describe("Delete a day activity by source identity", () => {
     fireEvent.click(screen.getByRole("button", { name: "Fler val" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Ta bort" }));
     const dialog = within(screen.getByRole("dialog"));
-    fireEvent.click(dialog.getByRole("button", { name: "Ta bort", exact: true }));
+    fireEvent.click(dialog.getByRole("button", { name: "Ta bort"}));
     fireEvent.click(dialog.getByRole("button", { name: "Ja, ta bort" }));
     expect(calls.deleteTask).toHaveBeenCalledTimes(1);
     expect(calls.deleteTask).toHaveBeenCalledWith("a");

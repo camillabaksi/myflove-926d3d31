@@ -194,7 +194,7 @@ export default function EveningCheck() {
           <div className="relative z-10 mt-auto space-y-3 pt-8">
             <button type="button" onClick={() => step === screens - 1 ? void saveDay() : next()} disabled={saving} className="min-h-12 w-full rounded-full bg-[#70466E] px-5 py-3 font-medium text-white">{step === screens - 1 ? (saving ? "Sparar…" : "Spara min dag") : step === 0 ? "Börja" : "Nästa"}</button>
             {saveError && <p role="alert" className="text-center text-sm text-red-800">{saveError}</p>}
-            {step === screens - 1 && <button type="button" onClick={() => { setOpen(false); navigate({ to: "/insight", search: {} as never }); }} className="min-h-11 w-full rounded-full border border-[#BCA6BA] bg-white/70 text-[#512654]">Till insikter</button>}
+            {step === screens - 1 && <button type="button" onClick={() => { setOpen(false); navigate({ to: "/insight", search: { demo: undefined } }); }} className="min-h-11 w-full rounded-full border border-[#BCA6BA] bg-white/70 text-[#512654]">Till insikter</button>}
             {step > 0 && step < screens - 1 && <button type="button" onClick={() => { if (step === 1) setAnswer(null); if (step === 2) setEveningEnergy(null); setStep(current => Math.min(screens - 1, current + 1)); }} className="min-h-11 w-full text-sm text-[#6D566C]">Hoppa över</button>}
             <p className="text-center text-xs text-[#FFF5EE] [text-shadow:0_1px_3px_rgba(35,15,38,.8)]">Helt frivilligt. Du kan avsluta när som helst.</p>
           </div>
