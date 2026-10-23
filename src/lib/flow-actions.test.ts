@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allowedFlowMoveDate, flowEditTaskPatch, matchTask, parseFlowReply, validFlowDate, type FlowAction } from "./flow-actions";
+import { allowedFlowMoveDate, flowEditTaskPatch, matchTask, paceActionTaskId, parseFlowReply, validFlowDate, type FlowAction } from "./flow-actions";
 
 const tasks = [
   { id: "mon", title: "Handla", dueDate: "2026-10-19" },
@@ -9,6 +9,20 @@ const tasks = [
 const action = (patch: Partial<FlowAction>): FlowAction => ({ kind: "andra", ...patch });
 
 describe("Pace task actions share identity with Idag and Kalender", () => {
+  it("uses the same task identity on a historical chat replay and different identities for separate actions", () => {
+    const message = "8734a390-b95c-4981-9c5d-1298534245a2";
+    const another = "5ed34332-4619-4e95-8107-130eaa87fc4b";
+    const originalId = paceActionTaskId(`${message}:0`);
+    expect(originalId).toBe("pace-action-8734a390-b95c-4981-9c5d-1298534245a2-0");
+    expect(paceActionTaskId(`${message}:0`)).toBe(originalId);
+    expect(paceActionTaskId(`${message}:1`)).not.toBe(originalId);
+    expect(paceActionTaskId(`${another}:0`)).not.toBe(originalId);
+    expect(paceActionTaskId("tmp-a-123:0")).toBeUndefined();
+    expect(paceActionTaskId("not-a-uuid:0")).toBeUndefined();
+    expect(paceActionTaskId(`${message}:-1`)).toBeUndefined();
+    expect(paceActionTaskId(`${message}:1.2`)).toBeUndefined();
+  });
+
   it("uses an explicit stable ID even when titles match on different days", () => {
     expect(matchTask(action({ taskId: "fri", taskTitle: "Handla" }), tasks)).toBe(tasks[1]);
     expect(matchTask(action({ taskId: "mon", taskTitle: "Handla" }), tasks)).toBe(tasks[0]);
