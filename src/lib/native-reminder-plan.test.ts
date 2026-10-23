@@ -136,7 +136,7 @@ describe("device reminder planning", () => {
     );
     expect(plan.map((n) => nativeExtra(n)?.itemKey).sort()).toEqual([
       "med:one:2026-10-11:14:00",
-      "reminder:calendar",
+      "reminder:calendar:2026-10-11",
     ]);
   });
 });
