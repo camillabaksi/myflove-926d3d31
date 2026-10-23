@@ -161,6 +161,9 @@ export function PlanningWorkspace({
   const [rows, setRows] = useState<PlanningDraft[]>(restored?.rows ?? []);
   const [periodAreas, setPeriodAreas] = useState<Record<string, LifeArea>>(restored?.periodAreas ?? {});
   const [stage, setStage] = useState<"write" | "review">(restored?.stage ?? "write");
+  const [expandedRows, setExpandedRows] = useState<string[]>(() =>
+    restored?.stage === "review" && restored.rows.length === 1 ? [restored.rows[0].id] : [],
+  );
   // Show a short existing-plan preview on narrow screens; keep the full list on desktop.
   const [showAllExisting, setShowAllExisting] = useState(false);
   const [error, setError] = useState("");
@@ -243,7 +246,9 @@ export function PlanningWorkspace({
     try {
       if (!ready || (forChildren && !selected.length))
         throw Error("Välj minst ett barn innan du fortsätter.");
-      setRows(draftPlanningLines(text, date, forChildren ? selected : [], rows));
+      const nextRows = draftPlanningLines(text, date, forChildren ? selected : [], rows);
+      setRows(nextRows);
+      setExpandedRows(nextRows.length === 1 ? [nextRows[0].id] : []);
       setStage("review");
       setError("");
     } catch (cause) {
@@ -569,7 +574,13 @@ export function PlanningWorkspace({
                   key={row.id}
                   data-testid={`planning-review-row-${index}`}
                   className="min-w-0 rounded-xl border border-border/60 bg-card/60 px-3"
-                  defaultOpen={rows.length === 1 || (forChildren && row.childIds.length === 0)}
+                  open={expandedRows.includes(row.id)}
+                  onToggle={(event) => {
+                    const isOpen = event.currentTarget.open;
+                    setExpandedRows((previous) => isOpen
+                      ? (previous.includes(row.id) ? previous : [...previous, row.id])
+                      : previous.filter((id) => id !== row.id));
+                  }}
                 >
                   <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 py-2 [&::-webkit-details-marker]:hidden">
                     <span className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -591,7 +602,7 @@ export function PlanningWorkspace({
                   </summary>
                   <div className="min-w-0 border-t border-border/60 pb-3 pt-3">
                     <div className="flex items-center gap-2">
-                    <label className="min-w-0 flex-1">
+                      <label className="min-w-0 flex-1">
                       <span className="sr-only">
                         {t("Aktivitet")} {index + 1}
                       </span>
