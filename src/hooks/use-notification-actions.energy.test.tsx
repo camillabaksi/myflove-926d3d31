@@ -66,6 +66,7 @@ describe("Energy feedback from notification completion", () => {
     state.scheduleNativeOneOff.mockClear();
     state.nativeSupported = false;
     state.reminders[0]!.completed = false;
+    Object.assign(state.reminders[0]!, { occurrenceOverrides: undefined });
     state.reminders[1]!.completed = false;
     events.length = 0;
     window.addEventListener(ACTIVITY_DONE_EVENT, listener);
@@ -106,6 +107,19 @@ describe("Energy feedback from notification completion", () => {
     actOn("repeat", "done", "2026-10-21");
     expect(state.setInstanceDone).toHaveBeenCalledWith("reminder-repeat", "2026-10-21", true);
     expect(events).toEqual([{ id: "rem-repeat", title: "Ta en promenad", dueDate: "2026-10-21" }]);
+    expect(state.updateReminder).not.toHaveBeenCalled();
+  });
+
+  it("marks a moved reminder's original instance but logs energy for its actual day", () => {
+    Object.assign(state.reminders[0]!, {
+      occurrenceOverrides: { "2026-10-21": { date: "2026-10-22", time: "10:15" } },
+    });
+    renderHook(() => useNotificationActions());
+    actOn("repeat", "done", "2026-10-21");
+    expect(state.setInstanceDone).toHaveBeenCalledWith("reminder-repeat", "2026-10-21", true);
+    expect(events).toEqual([{
+      id: "rem-repeat:2026-10-21", title: "Ta en promenad", dueDate: "2026-10-22",
+    }]);
     expect(state.updateReminder).not.toHaveBeenCalled();
   });
 
