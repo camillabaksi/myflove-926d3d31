@@ -24,11 +24,15 @@ export default function HelpHint({ children, label, className }: HelpHintProps) 
           aria-label={label ? `Vad är ${label}?` : "Vad är det här?"}
           onClick={(e) => e.stopPropagation()}
           className={cn(
-            "inline-grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border/70 bg-muted/50 text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            // Keep the familiar discreet 24px icon, but never make users tap
+            // a 24px target. This also applies in the collapsed header row.
+            "group inline-grid min-h-11 min-w-11 shrink-0 place-items-center rounded-xl text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
         >
-          <Info size={13} aria-hidden="true" />
+          <span aria-hidden="true" className="grid h-6 w-6 place-items-center rounded-full border border-border/70 bg-muted/50 transition-colors group-hover:bg-muted">
+            <Info size={13} />
+          </span>
         </button>
       </PopoverTrigger>
       <PopoverContent
