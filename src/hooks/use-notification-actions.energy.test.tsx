@@ -13,7 +13,7 @@ const state = vi.hoisted(() => ({
   toggleReminder: vi.fn(),
   updateReminder: vi.fn(),
   syncReminder: vi.fn(async (_args: unknown) => ({ ok: true })),
-  scheduleNativeOneOff: vi.fn(async (_args: unknown) => true),
+  scheduleNativeOneOff: vi.fn(async (_args: unknown, _sourceKey?: string) => true),
   nativeSupported: false,
 }));
 
