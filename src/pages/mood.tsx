@@ -142,7 +142,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
           <Sparkles size={24} />
         </span>
         <span className="font-display text-base font-bold leading-tight text-ink">
-          {t("Hitta mitt flow")}
+          {t("Se mina mönster")}
         </span>
       </button>}
 
@@ -160,7 +160,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                 return (
                   <div
                     key={mood.id}
-                    className="flex items-center gap-3 rounded-xl bg-white/65 px-3 py-2"
+                    className="flex min-w-0 items-center gap-3 rounded-xl bg-card/75 px-3 py-2"
                   >
                     <div className="text-xl shrink-0">{emoji}</div>
                     <div className="flex-1">
