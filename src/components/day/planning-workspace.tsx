@@ -488,7 +488,7 @@ export function PlanningWorkspace({
               )}
               className="resize-y rounded-2xl border-[#E8DDE6] bg-[#FAF9F6] text-base leading-7 focus-visible:ring-[#9C80A3]"
             />
-            {forChildren && (
+            {forChildren && !childStore.loading && children.length > 0 && (
               <fieldset className="mt-4" data-testid="planning-children-after-input">
                 <legend className="text-sm font-medium">{t("Vilka barn gäller det?")}</legend>
                 <div className="mt-2 flex flex-wrap gap-2">
