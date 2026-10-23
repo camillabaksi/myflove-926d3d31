@@ -102,7 +102,7 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
                         : "hover:bg-secondary opacity-70 hover:opacity-100 grayscale-[0.5] hover:grayscale-0"
                     }`}
                   >
-                    <span className="text-4xl md:text-5xl drop-shadow-sm">{item.emoji}</span>
+                    <span aria-hidden="true" className="text-4xl drop-shadow-sm md:text-5xl">{item.emoji}</span>
                     <span
                       className={`text-center text-xs font-medium leading-snug [overflow-wrap:anywhere] md:text-sm ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
                     >
