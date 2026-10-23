@@ -220,8 +220,8 @@ export default function ChildProfiles({
                 </div>
              </div>
              <div className={cn("pace-adaptive-grid mt-3 grid gap-2", !userId || c.owner_id === userId ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px]" : "grid-cols-2")}>
-               <Button type="button" onClick={() => onSchedule?.(c)} className="h-11 min-w-0 rounded-2xl px-2 text-sm"><CalendarDays size={16} className="shrink-0" aria-hidden /> {t("Schema")}</Button>
-               <Button type="button" variant="outline" onClick={() => onHelp?.(c)} className="h-11 min-w-0 rounded-2xl px-2 text-sm"><HeartHandshake size={16} className="shrink-0" aria-hidden /> {t("Hjälp")}</Button>
+               <Button type="button" onClick={() => onSchedule?.(c)} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-2xl px-2 text-sm"><CalendarDays size={16} className="shrink-0" aria-hidden /> {t("Schema")}</Button>
+               <Button type="button" variant="outline" onClick={() => onHelp?.(c)} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-2xl px-2 text-sm"><HeartHandshake size={16} className="shrink-0" aria-hidden /> {t("Hjälp")}</Button>
                {(!userId || c.owner_id === userId) && <DropdownMenu>
                  <DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon" className="h-11 w-11 rounded-2xl" aria-label={`${t("Fler val för")} ${c.name}`}><Ellipsis size={20} /></Button></DropdownMenuTrigger>
                  <DropdownMenuContent align="end" className="min-w-40 rounded-2xl">
