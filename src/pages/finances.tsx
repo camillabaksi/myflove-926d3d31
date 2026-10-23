@@ -97,14 +97,14 @@ export default function Finances() {
         </MyFloveWide>
 
         <MyFloveWide>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-3 sm:grid-cols-3 sm:gap-4">
             <MyFloveStat label="Inkomster" value={`+${totalIncome} kr`} />
             <MyFloveStat label="Utgifter" value={`-${totalExpense} kr`} />
             <MyFloveStat
               label="Kvar"
               value={`${balance} kr`}
               tone="lavender"
-              className="col-span-2 sm:col-span-1"
+              className="col-span-full sm:col-span-1"
             />
           </div>
         </MyFloveWide>
