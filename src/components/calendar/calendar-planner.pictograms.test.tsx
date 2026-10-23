@@ -55,6 +55,18 @@ function openChildForm() {
 }
 
 describe("Calendar entry view", () => {
+  it("opens the date sent from Planera and stays on it until the user navigates", () => {
+    const date = "2026-11-18";
+    const page = render(<CalendarPlanner initialView="dag" initialDate={date} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(write).toHaveBeenCalledWith(date);
+    expect(screen.getByRole("heading", { name: /18 november 2026/i })).toBeInTheDocument();
+    const before = write.mock.calls.length;
+    page.rerender(<CalendarPlanner initialView="dag" initialDate={date} tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(write).toHaveBeenCalledTimes(before);
+    page.rerender(<CalendarPlanner initialView="dag" initialDate="2026-11-19" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
+    expect(write).toHaveBeenCalledWith("2026-11-19");
+  });
+
   it("offers the same simple add choices as Today, with optional extras and batch planning", () => {
     render(<CalendarPlanner initialView="manad" tools={null} weekGoals={null} checkin={null} connection={null} onDateChange={write} />);
     fireEvent.click(screen.getByRole("button", { name: "Lägg till" }));
