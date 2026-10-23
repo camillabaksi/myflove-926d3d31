@@ -147,7 +147,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
             description={t("Välj det som passar närmast – det finns inga fel svar.")}
             className={readOnly ? "space-y-3 rounded-2xl bg-[#F5EDF7]/30 p-3" : "pace-card-surface rounded-2xl bg-card border border-border p-5 shadow-sm"}
           >
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,5.5rem),1fr))] gap-2">
               {[1, 2, 3, 4, 5].map((lvl) => {
                 const active = selected === lvl;
                 return (
@@ -156,14 +156,14 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                     type="button"
                     onClick={() => setSelected(lvl)}
                     aria-pressed={active}
-                    className={`pace-health-choice flex min-h-11 flex-col items-center justify-center gap-1 rounded-2xl border px-1 py-2 transition-all ${
+                    className={`pace-health-choice flex min-h-11 min-w-0 flex-col items-center justify-center gap-1 rounded-2xl border px-2 py-2 transition-all ${
                       active
                         ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]"
                         : "bg-secondary/40 border-transparent hover:bg-secondary"
                     }`}
                   >
                     <span className="text-2xl leading-none">{LEVEL_EMOJI[lvl]}</span>
-                    <span className="text-[11px] leading-tight">{levelLabels[lvl]}</span>
+                    <span className="text-center text-xs leading-snug break-words">{levelLabels[lvl]}</span>
                   </button>
                 );
               })}
