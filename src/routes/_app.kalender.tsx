@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import DayHub from "@/pages/day-hub";
 import type { CalendarView } from "@/lib/visual-calendar";
+import { validPlanDate } from "@/lib/planning";
 
 export const Route = createFileRoute("/_app/kalender")({
-  validateSearch: (search: Record<string, unknown>): { view?: CalendarView } => ({
+  validateSearch: (search: Record<string, unknown>): { view?: CalendarView; date?: string } => ({
     view: search.view === "manad" || search.view === "vecka" || search.view === "dag"
       ? search.view
       : undefined,
+    date: typeof search.date === "string" && validPlanDate(search.date) ? search.date : undefined,
   }),
   head: () => ({
     meta: [
@@ -22,5 +24,8 @@ export const Route = createFileRoute("/_app/kalender")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <DayHub tab="kalender" initialView={Route.useSearch().view} />,
+  component: () => {
+    const { view, date } = Route.useSearch();
+    return <DayHub tab="kalender" initialView={view} initialDate={date} />;
+  },
 });
