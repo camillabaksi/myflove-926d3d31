@@ -16,6 +16,31 @@ describe("daily space save guards",()=>{
     act(()=>{result.current.save("Mitt sammanhang",[],[]);});rerender();
     expect(result.current.heads[0]?.text).toBe("Mitt sammanhang");
   });
+  it("persists an explicit empty revision to delete a saved note without erasing its private history",()=>{
+    const {result,rerender}=renderHook(()=>useDaySpace("A","2026-10-21"));
+    act(()=>{result.current.save("Omsorg och planering",["Omsorg"],[]);});
+    rerender();
+    const original=result.current.heads[0];
+    expect(original.text).toBe("Omsorg och planering");
+    act(()=>{result.current.save("",[],[original.id]);});
+    rerender();
+    expect(result.current.heads).toHaveLength(1);
+    expect(result.current.heads[0].text).toBe("");
+    expect(result.current.heads[0].parents).toEqual([original.id]);
+    expect(state.rows).toHaveLength(2);
+    expect(state.rows[0].text).toBe("Omsorg och planering");
+  });
+  it("does not delete another account's saved note through a stale callback",()=>{
+    const {result,rerender}=renderHook(()=>useDaySpace("A","2026-10-21"));
+    act(()=>{result.current.save("Privat",[],[]);});
+    rerender();
+    const original=result.current.heads[0];
+    const staleSave=result.current.save;
+    state.owner="B";
+    expect(staleSave("",[],[original.id])).toBeNull();
+    expect(state.rows).toHaveLength(1);
+    expect(state.rows[0].text).toBe("Privat");
+  });
   it("reports no save for first empty text",()=>{
     const {result}=renderHook(()=>useDaySpace("A","2026-10-21"));
     expect(result.current.save("   ",[],[])).toBeNull();expect(state.write).not.toHaveBeenCalled();
