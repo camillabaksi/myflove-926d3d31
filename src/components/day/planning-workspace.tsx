@@ -260,6 +260,12 @@ export function PlanningWorkspace({
   }, [requestedPeriod, requestedDate]);
   const week = useMemo(() => periodDates(weekAnchor, "vecka"), [weekAnchor]);
   const dates = useMemo(() => (period === "week" ? week : [date]), [period, week, date]);
+  // An earlier unsaved draft keeps its own date; say so instead of silently ignoring the Calendar choice.
+  const [conflictDismissed, setConflictDismissed] = useState(false);
+  const draftConflict = Boolean(
+    requestedDate && !conflictDismissed && (text.trim() || rows.length) &&
+    (period === "week" ? !week.includes(requestedDate) : date !== requestedDate),
+  );
   const { days, planningReady, planningError, externalError } = useVisualCalendar(dates);
   const capacityOf = useDayCapacity();
   const entries = days[date] ?? [];
@@ -398,6 +404,31 @@ export function PlanningWorkspace({
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t("Lägg till aktiviteter")}
         </h2>
+        {draftConflict ? (
+          <div role="status" className="mt-3 rounded-2xl border border-border/60 bg-background p-3 text-sm">
+            <p>
+              {t("Du har ett osparat utkast från tidigare. Det gäller inte dagen du valde i kalendern")} ({new Date(`${requestedDate}T12:00:00`).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}).
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button type="button" className="min-h-11 rounded-full border border-border px-4 font-semibold" onClick={() => setConflictDismissed(true)}>
+                {t("Fortsätt med utkastet")}
+              </button>
+              <button
+                type="button"
+                className="min-h-11 rounded-full bg-[#512654] px-4 font-semibold text-[#FFFEFC]"
+                onClick={() => {
+                  if (!window.confirm(t("Det osparade utkastet tas bort. Vill du börja om för den valda dagen?"))) return;
+                  setText(""); setRows([]); setSelected([]); setPeriodAreas({}); setStage("write"); setExpandedRows([]);
+                  if (requestedPeriod) setPeriod(requestedPeriod);
+                  if (requestedDate) { setDate(requestedDate); setWeekAnchor(requestedDate); }
+                  setConflictDismissed(true);
+                }}
+              >
+                {t("Planera vald dag i stället")}
+              </button>
+            </div>
+          </div>
+        ) : null}
         {!draftHydrated && <p role="status" className="mt-3 text-sm text-muted-foreground">{t("Laddar skyddat utkast...")}</p>}
         {draftHydrated && secureStatus !== "ready" && (
           <p role="status" className="mt-3 text-xs text-muted-foreground">{t("Krypterad lagring är inte tillgänglig. Utkastet finns bara kvar medan appen är öppen.")}</p>
