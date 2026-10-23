@@ -2,7 +2,8 @@ import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, typ
 import { isoWeekNumber } from "@/lib/iso-week";
 import { PRIMARY_ADD_CHOICES, CALENDAR_ADD_KIND } from "@/lib/add-entry-choices";
 import { Link, useLocation } from "wouter";
-import { Link as PlanningLink } from "@tanstack/react-router";
+import { Link as PlanningLink, useNavigate as usePlanningNavigate, useLocation as usePlanningLocation } from "@tanstack/react-router";
+import { activityWord, nowCandidateIds, planningPeriodForDate } from "@/lib/calendar-day-summary";
 import { useUser } from "@clerk/react";
 import { toast } from "sonner";
 import { ArrowLeftRight, ArrowRight, Battery, BookOpen, CalendarDays, Check, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, CircleHelp, Clock, Heart, House, Leaf, MoreHorizontal, SlidersHorizontal, Link2, Pill, Plus, Repeat, UserRound, Users, Zap } from "lucide-react";
@@ -98,6 +99,13 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   useEffect(() => { setView(initialView); }, [initialView]);
   useEffect(() => { if (initialDate) setDate(initialDate); }, [initialDate]);
   useEffect(() => { onDateChange(date); }, [date, onDateChange]);
+  // Keep the chosen day/view in the address so Back from Planera and refresh return to the same day.
+  const routerNavigate = usePlanningNavigate();
+  const calendarPath = usePlanningLocation({ select: (l) => l.pathname });
+  useEffect(() => {
+    if (calendarPath !== "/kalender") return;
+    void routerNavigate({ to: "/kalender", search: { view, date }, replace: true });
+  }, [calendarPath, view, date, routerNavigate]);
   const dates = useMemo(() => periodDates(date, view), [date, view]);
   const { days: allDays, familyMembers, externalError, planningReady, planningError } = useVisualCalendar(dates);
   const [visible, setVisible] = useCloudSyncedStorage<string[]>("myflove-calendar-categories", ["privat", "relationer", "barn", "jobb", "studier"]);
@@ -174,7 +182,8 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const untimed = myEntries.filter(e => !e.time && ["task", "quickflow", "priority"].includes(e.source));
   const gaps = calendarGaps(planningEntries);
   const load = calendarLoad(planningEntries);
-  const plan = useMemo(() => buildFlowPlan(flowItems.filter(i => !i.done && entries.some(e => e.id === i.id)).map(i => ({ ...i, time: entries.find(e => e.id === i.id)?.time, fixed: i.source !== "uppgift", movable: i.source === "uppgift" })), { today: date, mode: capacity.mode, nowMinutes: now ?? 0 }), [flowItems, entries, date, capacity.mode, now]);
+  const nowIds = useMemo(() => nowCandidateIds(myEntries), [myEntries]);
+  const plan = useMemo(() => buildFlowPlan(flowItems.filter(i => !i.done && nowIds.has(i.id)).map(i => ({ ...i, time: entries.find(e => e.id === i.id)?.time, fixed: i.source !== "uppgift", movable: i.source === "uppgift" })), { today: date, mode: capacity.mode, nowMinutes: now ?? 0 }), [flowItems, entries, nowIds, date, capacity.mode, now]);
   const intensive = planningEntries.filter(e => e.energyImpact === "drains" && !e.done).length >= 3;
   const period = new Date(`${date}T12:00:00`).toLocaleDateString(locale, view === "manad" ? { month: "long", year: "numeric" } : { weekday: "long", day: "numeric", month: "long" });
   const step = (direction: number) => {
@@ -471,7 +480,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     </section>}
     {view === "dag" && <div className="pace-calendar-day mx-auto max-w-3xl space-y-4">
       <section className="rounded-3xl border border-[#EDE5E9] bg-[#FFFEFC] p-4 shadow-sm" aria-label={t("Min dag")}>
-        <div className="flex items-center justify-between gap-2"><div><p className="text-xs text-muted-foreground">{t("Min dag")}</p><h2 className="font-display text-xl font-medium capitalize text-[#512654]">{dateHeading(date)}</h2></div><span className="text-sm text-muted-foreground">{myEntries.length} {t("aktiviteter")}</span></div>
+        <div className="flex items-center justify-between gap-2"><div><p className="text-xs text-muted-foreground">{t("Min dag")}</p><h2 className="font-display text-xl font-medium capitalize text-[#512654]">{dateHeading(date)}</h2></div><span className="text-sm text-muted-foreground">{myEntries.length} {t(activityWord(myEntries.length))}</span></div>
         {myEntries.some(e => e.periodEnd) && <div className="mt-3 space-y-1 rounded-xl bg-[#F2EDF5] p-2"><p className="text-xs font-medium text-[#512654]">Pågående perioder</p>{myEntries.filter(e => e.periodEnd).map(e => <button key={e.id} type="button" onClick={() => openDetails(e)} className="flex min-h-10 w-full items-center justify-between gap-2 rounded-lg px-2 text-left text-sm hover:bg-white/70"><span className="min-w-0 truncate">{e.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {e.periodEnd?.slice(5)}</span></button>)}</div>}
         {date === today && plan.now && <div className="mt-3 rounded-2xl bg-[#F7F1F5] p-3"><p className="text-xs text-muted-foreground">{t("Just nu")}</p><p className="mt-1 break-words text-sm font-medium">{plan.now.item.title}</p>{plan.next && <p className="mt-2 break-words text-xs text-muted-foreground">{t("Härnäst")}: {plan.next.item.title}</p>}</div>}
         {myEntries.some(e => e.time && !e.periodEnd) && <div className="mt-4"><h3 className="text-sm font-medium text-[#512654]">{t("Med bestämd tid")}</h3><ul className="mt-2 space-y-2.5">{myEntries.filter(e => e.time && !e.periodEnd).sort((a,b) => (minuteOf(a.time) ?? 0) - (minuteOf(b.time) ?? 0)).map(e => <li key={e.id}>{blockButton(e)}</li>)}</ul></div>}
@@ -485,10 +494,10 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     <div className="mt-2"><details className="group rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] px-3 py-1" aria-label={t("Planeringsverktyg")}>
       <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 text-sm font-semibold text-[#512654] [&::-webkit-details-marker]:hidden"><Plus size={17} aria-hidden />{t("Planera eller lägg till")}<ChevronDown size={17} aria-hidden className="ml-auto text-muted-foreground transition-transform group-open:rotate-180" /></summary>
     <nav aria-label={t("Snabbplanering")} className="flex flex-wrap gap-2 rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC] p-2 shadow-sm">
-      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: date === today ? "today" : date === shiftDate(today, 1) ? "tomorrow" : "week", date }}>{t(date === today ? "Planera idag" : "Planera vald dag")}</PlanningLink></Button>
+      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: planningPeriodForDate(date, today, shiftDate(today, 1)), date, from: "kalender", view }}>{t(date === today ? "Planera idag" : "Planera vald dag")}</PlanningLink></Button>
       <Button asChild variant="outline" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "tomorrow" }}>{t("Imorgon")}</PlanningLink></Button>
-      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "week", date }}>{t("Veckan")}</PlanningLink></Button>
-      {ownedChildren.length > 0 && <Button asChild variant="ghost" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "children", period: view === "vecka" || (date !== today && date !== shiftDate(today, 1)) ? "week" : date === today ? "today" : "tomorrow", date }}><Users size={15} aria-hidden />{t("Barnens planering")}</PlanningLink></Button>}
+      <Button asChild variant="outline" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "me", period: "week", date, from: "kalender", view }}>{t("Veckan")}</PlanningLink></Button>
+      {ownedChildren.length > 0 && <Button asChild variant="ghost" size="sm" className="min-h-11 rounded-xl border-[#E8DDE6] bg-[#FAF9F6] text-[#512654] hover:bg-[#F3EBF2]"><PlanningLink to="/planera" search={{ audience: "children", period: view === "vecka" || (date !== today && date !== shiftDate(today, 1)) ? "week" : date === today ? "today" : "tomorrow", date, from: "kalender", view }}><Users size={15} aria-hidden />{t("Barnens planering")}</PlanningLink></Button>}
     </nav>
     </details>
 </div>
