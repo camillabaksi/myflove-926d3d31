@@ -49,7 +49,7 @@ describe("CollapsibleSection", () => {
     );
     const title = screen.getByText("Aktiviteter och återhämtning under hela eftermiddagen");
     expect(title).toHaveClass("break-words");
-    const collapse = screen.getByRole("button", { name: /Aktiviteter och återhämtning/ });
+    const collapse = screen.getByRole("button", { name: /^Aktiviteter och återhämtning under hela eftermiddagen$/ });
     expect(collapse).toHaveClass("min-h-11");
     expect(collapse.className).toContain("min-w-[min(100%,10rem)]");
     expect(collapse.closest(".pace-collapse-header")).toHaveClass("flex-wrap");
