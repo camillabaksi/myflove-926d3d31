@@ -246,6 +246,11 @@ export function useTasks() {
         );
       }
 
+      // A stable caller-supplied ID (e.g. a saved Pace action) may be
+      // replayed after remount or a double tap. Do not create a second row.
+      // QuickFlow hydration above still owns its existing update behavior.
+      if (existingIndex >= 0) return prev;
+
       return [
         {
           id,
