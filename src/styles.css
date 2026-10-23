@@ -2229,7 +2229,8 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-muted { color: hsl(var(--muted-foreground)); }
 .pace-more-card .pace-more-arrow { width: 1rem; height: 1rem; color: hsl(var(--muted-foreground)); }
 .pace-more-wide-decor { position: absolute; right: 2.5rem; bottom: -0.4rem; opacity: 0.12; z-index: -1; }
-.pace-more-settings { display: flex; align-items: center; gap: 0.4rem; width: fit-content; min-height: 44px; margin-left: auto; font-size: 0.75rem; color: hsl(var(--foreground)); border-radius: 0.5rem; }
+.pace-more-quick { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0 1rem; }
+.pace-more-settings { display: flex; align-items: center; gap: 0.4rem; width: fit-content; min-height: 44px; min-width: 44px; font-size: 0.75rem; color: hsl(var(--foreground)); border-radius: 0.5rem; }
 .pace-more-section { margin-top: 1.25rem; }
 .pace-more-section > h2 { margin-bottom: 0.55rem; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; line-height: 1.5; color: hsl(var(--muted-foreground)); letter-spacing: 0; }
 .pace-more-daily { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0.7rem; }

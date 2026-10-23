@@ -1,3 +1,6 @@
+## 2026-10-23 – Mer: Historik som direktlänk
+- **Mer** (2026-10-23): Historik har nu en synlig direktlänk högst upp i Mer, bredvid Inställningar, i både vanligt och enkelt läge – inget kort behöver öppnas. Länken finns bara där; Insikter & historik behåller Insikter, Statistik och Friktionsindex. Sidan, sökningen, tillbakavägen och all historikdata är oförändrade. Ingen publicering.
+
 ## 2026-10-23 – Planera: tydligt besked om tidigare utkast
 - **Planera** (2026-10-23): När ett osparat utkast från en annan dag finns och man öppnar Planera från kalendern visas nu ett besked med valen Fortsätt med utkastet eller Planera vald dag i stället (med bekräftelse). Inget raderas eller datumflyttas automatiskt. Ingen publicering.
 
