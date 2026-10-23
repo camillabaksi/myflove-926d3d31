@@ -156,7 +156,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       if (!action.title) return;
       const taskId = paceActionTaskId(key);
       if (!taskId || savingReplyId === key.split(":")[0] || unsavedReply?.messageId === key.split(":")[0]) {
-        setDoneActions((p) => ({ ...p, [key]: "Spara samtalet innan aktiviteten läggs till." }));
+        toast.error("Spara samtalet innan aktiviteten läggs till.");
         return;
       }
       if (tasks.some((task) => task.id === taskId) || appliedNewActions.current.has(taskId)) {
@@ -174,7 +174,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
         setDoneActions((p) => ({ ...p, [key]: action.date ? `Tillagd för ${action.date}.` : "Tillagd för idag." }));
       } catch {
         appliedNewActions.current.delete(taskId);
-        setDoneActions((p) => ({ ...p, [key]: "Kunde inte lägga till just nu. Försök igen." }));
+        toast.error("Kunde inte lägga till just nu. Försök igen.");
       }
       return;
     }
