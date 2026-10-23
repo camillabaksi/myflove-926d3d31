@@ -565,7 +565,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                 <FlowActionIcon kind={a.kind} />{" "}
                                 {a.label ?? ACTION_LABEL[a.kind]}
                               </p>
-                              {(a.title || a.date || a.time) && a.kind !== "flytta" && (
+                              {(a.title || a.date || a.time) && (
                                 <p className="truncate text-xs text-muted-foreground">
                                   {[a.title, a.date, a.time].filter(Boolean).join(" · ")}
                                 </p>
