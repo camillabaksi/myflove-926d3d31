@@ -712,7 +712,10 @@ export function PlanningWorkspace({
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t(forChildren ? "I barnens schema" : "Redan i planen")}
           {(!forChildren || selected.length > 0) && shown.length > 0 && (
-            <span className="ml-2 text-sm font-normal tabular-nums text-muted-foreground">({shown.length})</span>
+            <>
+              {" "}
+              <span className="text-sm font-normal tabular-nums text-muted-foreground">({shown.length})</span>
+            </>
           )}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">{dateLabel(date)}</p>
