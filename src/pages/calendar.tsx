@@ -482,7 +482,7 @@ export function CalendarContent({ initialView = "dag", initialDate }: { initialV
 
   return (
     <CalendarPlanner
-  initialDate={initialDate}
+      initialDate={initialDate}
       initialView={initialView}
       showPictograms={pictoMode}
       onPictogramsChange={setPictoMode}
