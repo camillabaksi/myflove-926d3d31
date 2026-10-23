@@ -26,6 +26,17 @@ Genomgång av källkod för **48 appvyer** i `src/pages`, de gemensamma kort- oc
 3. **Mående / tidigare incheckningar:** Förklarande fri text får nu krympbar flexbehållare och säkert ordomslag så långa ord/länkliknande anteckningar inte driver hela sidan i sidled.
 4. **Energikarta / timmar:** Diagrammets 10px-tidsmarkörer använder den vanliga metadata-storleken. Diagramvärden, observationer och beräkningar är oförändrade.
 
+## Kompletterande mobillayout i samma granskning
+
+I en uppföljande kontroll av sidornas faktiska grid- och färgklasser hittades följande risker, utöver de tidigare åtgärderna:
+
+- **Återhämtning/Paus:** Förvalda paustider hade alltid exakt tre kolumner under 640 px även vid förstorad text. `auto-fit` med lämplig minbredd samt radbrytbara knappetiketter låter rutnätet bli en eller två kolumner när det behövs. Startknappens befintliga funktion är orörd.
+- **Ekonomi:** Nyckeltalen Inkomster/Utgifter/Kvar hade fasta två mobilkolumner; med större systemtext blir långa värden svåra att läsa. Nu används anpassningsbara kolumner, där Kvar spänner över den tillgängliga mobilbredden; den vanliga bredare trekolumnsvyn är kvar.
+- **Energiflöde:** Samma förbättring finns för Gett energi/Tagit energi/Netto, även när en smal skärm eller hög zoom bara rymmer en kolumn. Statistikens underliggande energiberäkningar är oförändrade.
+- **Energikarta och Mående:** Tidigare hårdkodade ljuslavendelfält i kollapsbara sektioner har ersatts med Paceables semantiska `bg-secondary`-färger, som kan följa anpassat och mörkt tema. Diagramfärger, bedömningsskalor och lagring har inte ändrats.
+
+Presentationsregressioner verifierar klasskontrakt, handlingarnas befintliga koppling och avsaknad av äldre hårdkodad bakgrund. **Det bevisar inte** exakt hur varje skärm ser ut vid 200 % text; prioriterade manuella bildtester nedan kvarstår.
+
 ## Viktigt som redan fungerar – lämnat orört
 
 - Primärnavigering, Idag, Kalender, Tankar, Min plats och Mer har särskilt godkänd design. Ingen global färg-, logotyp-, typografi- eller kortmigrering.
