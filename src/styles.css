@@ -2201,18 +2201,22 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-more-tone-blush { --more-tone: var(--more-blush); }
 .pace-more-tone-plain { --more-tone: hsl(var(--secondary)); }
 .pace-more-card-shell { overflow: hidden; border: 1px solid var(--pace-border-warm); border-radius: 1.2rem; background: var(--pace-surface-raised); box-shadow: var(--pace-highlight-top), var(--pace-elevation-1); }
-/* A whisper of the user's existing life-area colour, only for the six area cards.
+/* A soft, distinguishable life-area colour, only for the six area cards.
    Overall tools keep their neutral surfaces. */
+.pace-more-area[style*="--pace-more-area-color"] {
+  border-inline-start: 3px solid color-mix(in srgb, var(--pace-more-area-color) 75%, var(--pace-border-warm));
+  border-radius: 1.2rem;
+}
 .pace-more-area[style*="--pace-more-area-color"] .pace-more-card-shell {
-  background: color-mix(in srgb, var(--pace-more-area-color) 4%, var(--pace-surface-raised));
+  background: color-mix(in srgb, var(--pace-more-area-color) 8%, var(--pace-surface-raised));
 }
 .pace-more-area[style*="--pace-more-area-color"] .pace-more-card:hover {
-  background: color-mix(in srgb, var(--pace-more-area-color) 7%, var(--pace-surface-raised));
+  background: color-mix(in srgb, var(--pace-more-area-color) 12%, var(--pace-surface-raised));
 }
 /* Match each life-area icon disc to its existing category colour.
    This selector excludes profile, overview tools and other cards. */
 .pace-more-area[style*="--pace-more-area-color"] .pace-more-card .pace-more-icon {
-  background: color-mix(in srgb, var(--pace-more-area-color) 15%, var(--pace-surface-raised));
+  background: color-mix(in srgb, var(--pace-more-area-color) 28%, var(--pace-surface-raised));
   color: hsl(var(--foreground));
 }
 .pace-more-card { position: relative; display: grid; grid-template-columns: auto minmax(0,1fr) auto; width: 100%; min-height: 5rem; height: auto; gap: 0.85rem; padding: 0.85rem 1rem; border-radius: inherit; text-align: left; color: hsl(var(--foreground)); background: transparent; isolation: isolate; }
@@ -3187,33 +3191,41 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   line-height: 1.3;
   overflow-wrap: break-word;
 }
-.pace-evening-ritual .pace-evening-title {
-  font-size: clamp(3.25rem, 9vw, 4.15rem) !important;
-  line-height: 1.08 !important;
-  overflow-wrap: break-word;
-  text-wrap: balance;
-}
-.pace-evening-ritual .pace-evening-title--hero {
-  font-size: clamp(3.65rem, 10vw, 4.85rem) !important;
-}
-.pace-evening-ritual .pace-evening-title--long {
-  font-size: clamp(2.75rem, 8vw, 3.5rem) !important;
-}
-.pace-evening-ritual .pace-evening-section-title {
-  font-size: clamp(2.5rem, 7vw, 3.35rem) !important;
-  line-height: 1.13 !important;
-  overflow-wrap: break-word;
-  text-wrap: balance;
-}
-.pace-evening-ritual .pace-evening-card-title {
-  font-size: clamp(2.15rem, 6vw, 2.8rem) !important;
+/* Explicit ritual roles outrank the shared compact app headings, including portals.
+   Fixed rem sizes retain the user's text enlargement without viewport font scaling. */
+.pace-evening-ritual.pace-evening-ritual .pace-evening-title {
+  font-size: 2.25rem !important;
   line-height: 1.15 !important;
-  overflow-wrap: anywhere;
-}
-.pace-evening-ritual .pace-evening-affirmation {
-  font-size: clamp(2.35rem, 6.8vw, 3.15rem) !important;
-  line-height: 1.13 !important;
+  overflow-wrap: break-word;
   text-wrap: balance;
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-title--hero {
+  font-size: 2.75rem !important;
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-title--long {
+  font-size: 2.125rem !important;
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-section-title {
+  font-size: 1.65rem !important;
+  line-height: 1.25 !important;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-card-title {
+  font-size: 1.375rem !important;
+  line-height: 1.3 !important;
+  overflow-wrap: break-word;
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-affirmation {
+  --evening-affirmation-ink: #512654;
+  --evening-affirmation-surface: #FFFEFC;
+  font-size: 1.375rem !important;
+  line-height: 1.45 !important;
+  text-wrap: balance;
+  color: var(--evening-affirmation-ink);
+  background: color-mix(in srgb, var(--evening-affirmation-surface) 94%, transparent);
+  border-radius: 1.5rem;
+  padding: 1rem;
 }
 
 /* Evening ritual: immersive, warm, quiet first screen. No decorative layers intercept taps. */
@@ -3352,13 +3364,13 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 
 /* Reference design: matte organic ceramic pebbles, no concentric-ripple texture. */
 .pace-evening-ritual .pace-evening-stone {
-  border-radius: 44% 56% 53% 47% / 55% 46% 54% 45%;
+  border-radius: 50% / 46%;
   background-image:
     radial-gradient(ellipse at 27% 20%,rgba(255,255,255,.42),transparent 56%),
     radial-gradient(ellipse at 80% 83%,rgba(76,48,76,.11),transparent 64%);
   box-shadow: inset 4px 7px 11px rgba(255,255,255,.5),
-    inset -9px -11px 17px rgba(81,38,84,.13),
-    0 12px 19px rgba(81,38,84,.19),0 3px 4px rgba(81,38,84,.05);
+    inset -6px -8px 14px rgba(81,38,84,.10),
+    0 8px 16px rgba(81,38,84,.12),0 2px 4px rgba(81,38,84,.05);
 }
 .pace-evening-ritual .pace-evening-stone-lilac { background-color:#e6d5e9; }
 .pace-evening-ritual .pace-evening-stone-apricot { background-color:#f7ddcc; }
