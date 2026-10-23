@@ -512,12 +512,6 @@ export function PlanningWorkspace({
                 onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
               />
             )}
-            <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
-              <span aria-live="polite">
-                {lineCount} {t(lineCount === 1 ? "aktivitet" : "aktiviteter")}
-              </span>
-              <span>{t("Inte sparade än")}</span>
-            </div>
             {forChildren && !selected.length && (
               <p className="text-sm text-muted-foreground">
                 {t("Välj barn innan du granskar aktiviteterna.")}
@@ -555,9 +549,6 @@ export function PlanningWorkspace({
                 {t("Ändra listan")}
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Välj en dag eller markera flera dagar för exempelvis en kurs eller semester.
-            </p>
             <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
@@ -607,7 +598,7 @@ export function PlanningWorkspace({
                       </label>
                     )}
                   </div>
-                  <details className="mt-2 rounded-xl border border-border/60 bg-secondary/15 px-3" data-testid={`planning-optional-${index}`} defaultOpen={Boolean(row.time || row.endTime || row.location || periodAreas[row.id])}>
+                  <details className="mt-2 rounded-xl border border-border/60 bg-secondary/15 px-3" data-testid={`planning-optional-${index}`}>
                     <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-sm text-muted-foreground">
                       <span>Tid, plats och område <span className="text-xs">(valfritt)</span></span>
                       {(row.time || row.endTime || row.location || periodAreas[row.id]) && <span className="shrink-0 text-xs text-primary">Ifyllt</span>}
