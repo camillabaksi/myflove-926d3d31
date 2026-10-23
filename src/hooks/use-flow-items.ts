@@ -16,6 +16,7 @@ import { getArea } from "@/lib/life-areas";
 import type { Routine } from "@/lib/recurrence";
 import { routineOccurrencesForDay, type RoutineOccurrenceException } from "@/lib/routine-occurrence-exceptions";
 import { occursOn } from "@/lib/recurrence";
+import { reminderOccurrencesForDay } from "@/lib/reminder-occurrences";
 
 import {
   completedBelongsToDay,
@@ -125,39 +126,35 @@ export function useFlowItems(dateISO?: string): {
     }
 
     for (const r of reminders) {
-      // Datumet på påminnelsen (plus ev. upprepning) avgör dagen – aldrig när
-      // den skapades. occursOn är samma logik som kalendern använder.
       if (r.canceled) continue;
-      // En flerdagsperiod (t.ex. en veckas semester) hör till varje dag i
-      // intervallet – exakt som i kalendern, inte bara startdagen.
+      // Preserve continuous, untimed context periods without daily completion.
       const inPeriod = !!r.endDate && today >= r.date && today <= r.endDate;
-      if (!occursOn(r.date, r.repeat, today) && !inPeriod) continue;
-      // Mitt i en period finns inget klockslag – bara på startdagen.
-      const time = inPeriod && today !== r.date ? undefined : r.time;
-      // En återkommande post är EN aktivitet med en repetitionsregel. Varje
-      // dag den inträffar har sin egen status – att bocka av idag får aldrig
-      // ta bort morgondagens förekomst.
+      const occurrences = reminderOccurrencesForDay(r, today);
+      if (inPeriod && !occurrences.length)
+        occurrences.push({ occurrenceDate: today, date: today, time: r.time, endTime: r.endTime, moved: false });
       const recurring = (r.repeat ?? "none") !== "none";
-      // Continuous periods describe context, not daily tasks to complete.
       const isPeriod = !!r.endDate && !r.time;
-      const doneToday = isPeriod ? false : recurring ? isInstanceDone(`reminder-${r.id}`, today) : r.completed;
-      out.push({
-        id: `rem-${r.id}`,
-        title: r.title,
-        source: "kalender",
-        area: getArea(r),
-        emoji: "📅",
-        time,
-        dueDate: r.date,
-        daysUntil: 0,
-        priority: priorityFor({ time, daysUntil: 0, fixed: true }),
-        done: doneToday,
-        // En kalenderhändelse är oftast något man faktiskt genomför
-        // (möte, läkarbesök, lämning) – därför går den att bocka av.
-        completable: !isPeriod,
-        href: "/kalender",
-        meetingUrl: meetingUrlFrom(r.note),
-      });
+      for (const occurrence of occurrences) {
+        const time = inPeriod && today !== r.date ? undefined : occurrence.time;
+        const doneToday = isPeriod ? false :
+          recurring ? isInstanceDone(`reminder-${r.id}`, occurrence.occurrenceDate) : r.completed;
+        out.push({
+          id: `rem-${r.id}${occurrence.moved ? `:${occurrence.occurrenceDate}` : ""}`,
+          title: r.title,
+          source: "kalender",
+          area: getArea(r),
+          emoji: "📅",
+          time,
+          // Energy reflects when the activity actually happens, not the series' start.
+          dueDate: today,
+          daysUntil: 0,
+          priority: priorityFor({ time, daysUntil: 0, fixed: true }),
+          done: doneToday,
+          completable: !isPeriod,
+          href: "/kalender",
+          meetingUrl: meetingUrlFrom(r.note),
+        });
+      }
     }
 
     for (const l of lectures) {
@@ -311,6 +308,13 @@ export function useFlowItems(dateISO?: string): {
     for (const item of out) {
       const key = `${normTitle(item.title)}|${item.time ?? ""}`;
       const prevIdx = seen.get(key);
+      // Two occurrences of the same recurring reminder can legitimately
+      // land at the same hour after a single move. Both must stay selectable.
+      if (prevIdx !== undefined && item.id.startsWith("rem-") &&
+        deduped[prevIdx]?.id.startsWith("rem-") && item.id !== deduped[prevIdx]?.id) {
+        deduped.push(item);
+        continue;
+      }
       if (prevIdx === undefined) {
         seen.set(key, deduped.length);
         deduped.push(item);
@@ -360,17 +364,15 @@ export function useFlowItems(dateISO?: string): {
       // Uppgifter och engångspåminnelser skickar sin signal från källan
       // (useTasks/useReminders), även vid avbockning via notis. Återkommande
       // påminnelser skickar per förekomst här, aldrig från hela serien.
-      const oneOffReminder = item.id.startsWith("rem-") &&
-        (reminders.find((r) => `rem-${r.id}` === item.id)?.repeat ?? "none") === "none";
+      const reminderIdentity = item.id.startsWith("rem-") ? item.id.slice(4).split(":") : [];
+      const activeReminder = reminders.find(r => r.id === reminderIdentity[0]);
+      const occurrenceDate = reminderIdentity[1] ?? targetDay;
+      const oneOffReminder = !!activeReminder && (activeReminder.repeat ?? "none") === "none";
       if (!item.done && !item.id.startsWith("task-") && !oneOffReminder) {
         emitActivityDone({
           id: item.id,
           title: item.title,
-          dueDate: item.id.startsWith("rem-")
-            ? (reminders.find((r) => `rem-${r.id}` === item.id)?.repeat ?? "none") !== "none"
-              ? targetDay
-              : item.dueDate ?? targetDay
-            : item.dueDate ?? targetDay,
+          dueDate: item.dueDate ?? targetDay,
         });
       }
       const [, rest] = [
@@ -379,9 +381,10 @@ export function useFlowItems(dateISO?: string): {
       ];
       if (item.id.startsWith("task-")) return toggleTask(rest);
       if (item.id.startsWith("rem-")) {
-        const reminder = reminders.find((r) => r.id === rest);
+        const [reminderId] = rest.split(":");
+        const reminder = reminders.find((r) => r.id === reminderId);
         if (reminder && (reminder.repeat ?? "none") !== "none") {
-          setInstanceDone(`reminder-${rest}`, targetDay, !item.done);
+          setInstanceDone(`reminder-${reminderId}`, occurrenceDate, !item.done);
           return;
         }
         return toggleReminder(rest);
@@ -428,7 +431,7 @@ export function useFlowItems(dateISO?: string): {
         return true;
       }
       if (item.id.startsWith("rem-")) {
-        const reminder = reminders.find((r) => r.id === rest);
+        const reminder = reminders.find((r) => r.id === rest.split(":")[0]);
         // Återkommande poster tas bort i kalendern, så inte alla
         // framtida förekomster försvinner av ett misstag här.
         if (reminder && (reminder.repeat ?? "none") !== "none") return false;
