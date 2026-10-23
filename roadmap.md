@@ -1,8 +1,8 @@
 # Roadmap
 ## Etapp 3 – navigation och användarflöden (2026-10-23)
-- [ ] Inspektera befintliga förenklingar och rätta enbart verifierade återvägs-/spar-/meny-/statusproblem.
-- [ ] Verifiera riktade regressioner och verkliga inloggade flöden 360/1280 px samt stor text med blockerade kontoskrivningar.
-- [ ] Uppdatera ändringsloggar och redovisa exakt utfall och begränsningar; ingen publicering.
+- [x] Inspekterat etapp 1–2, senaste Mer/Kvällsstund och redan förbättrade Planera-utkast/datumvägar; rättat Insikters dubbla återvägar, profilens överflödiga namnknapp, huvudmenynamnet och statuspresentation utan synkmodelländring.
+- [x] 92 tester i 11 filer passerar. Inloggade 360/1280 px samt 390 px med 32 px rottext: Insikter via Mer från Idag/Historik, tangentbordsretur och framåt, direktlänksreserv, Kalender dag/vecka/månad → Planera → återgång, Få ihop dagen öppna/Escape och Pace → återgång verifierade. 782 icke-läsande nätverksanrop blockerade, inga tillåtna kontoskrivningar; inga formulär sparade. Automatiskt bygge OK, separat manuell typkontroll ej körd enligt miljöreglerna.
+- [x] Båda ändringsloggarna uppdaterade; exakt utfall och begränsningar i docs/stage-three-navigation-verification.md. Ingen publicering. Verklig molnsparning/återförsök, fysiska enheter och skärmläsare inte verifierade; fel i spärrad preview är inte bevis för produktionsfel.
 ## Kvällsstund och Mer – riktad korrigeringsrunda (2026-10-23)
 - [x] Inspekterat ritualens sex steg, typografikollisionen och Mers befintliga områdestoner; exakt avgränsad plan framtagen.
 - [x] Genomfört endast godkända text-, form-, kontrast-, avrundnings- och färgstyrkekorrigeringar; etapp 1–2 och all sparning/navigation bevarade.
