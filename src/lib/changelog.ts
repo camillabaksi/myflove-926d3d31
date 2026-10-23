@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-23";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-23 – Etapp 2: visuell harmoni",
-    items: ["Etapp 2 visuell harmoni: Pace-fotot tonar mjukt in under toppraden och mot kanterna på dator (ingen skarp skarv); dubbla chattknappar borttagna i Pace; energi- och Pace-korten på Idag har samma bredd som Din dag på dator; familjens personprickar visas i dämpade toner (sparade färger oförändrade); Familj-sidan använder samma ikon som menyn. Ingen data-, navigations- eller funktionsändring. Ingen publicering."],
+    items: ["Etapp 2 visuell harmoni: Pace-fotot tonar mjukt in under toppraden och mot kanterna på dator (ingen skarp skarv); dubbla chattknappar borttagna i Pace; energi- och Pace-korten på Idag har samma bredd som Din dag på dator; familjens personprickar visas i dämpade toner (sparade färger oförändrade); Familj-sidan använder samma ikon som menyn. Del 2: genomgång av Kalender, Planera, Tankar/Fånga, Dagbok, Min plats, Mer, Barn, Energi, Insikter, Historik, Inställningar och Profil; Mer-vyns livsområdeskort har dämpade färglister, svagare bakgrundston och samma hörnradie som kortet. Ingen data-, navigations- eller funktionsändring. Ingen publicering."],
   },
   {
     title: "2026-10-23 – Etapp 1: mobil och tillgänglighet",
