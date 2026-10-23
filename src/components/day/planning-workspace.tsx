@@ -13,6 +13,7 @@ import { useLang } from "@/hooks/use-language";
 import { useActiveArea, AREA_META, type LifeArea } from "@/lib/life-areas";
 import { suggestActivityArea } from "@/lib/smart-area-suggestions";
 import { isActiveOwner } from "@/lib/account-scope";
+import { getSecureStatus, SECURE_STATUS_EVENT, SECURE_UNLOCK_EVENT, unlockSecureLocal } from "@/lib/secure-local";
 import { getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { addDaysISO, todayISO } from "@/lib/day";
 import { dateHeadingLabel } from "@/lib/date-presentation";
@@ -38,6 +39,9 @@ import {
   readPlanningHandoff,
   rememberPlanningHandoff,
   discardPlanningHandoff,
+  readEncryptedPlanningHandoff,
+  persistPlanningHandoff,
+  clearEncryptedPlanningHandoff,
   type PlanningHandoff,
 } from "@/lib/planning-handoff";
 
@@ -126,7 +130,7 @@ export function PlanningEntry({
   );
 }
 
-/** Both audience panels stay mounted while switching views. Drafts never enter storage or analytics. */
+/** Both audience panels stay mounted. Unsaved drafts are encrypted locally, never sent to analytics or cloud. */
 export function PlanningWorkspace({
   owner,
   audience,
@@ -147,6 +151,9 @@ export function PlanningWorkspace({
   // Restore only an unfinished, same-account draft from an earlier visit to Planera.
   // Nothing here is synced or turned into an activity until the usual save action.
   const [restored] = useState(() => readPlanningHandoff(owner, audience));
+  const [secureStatus, setSecureStatus] = useState(() => getSecureStatus());
+  // Hold blank form state until an encrypted snapshot has been decrypted.
+  const [draftHydrated, setDraftHydrated] = useState(() => getSecureStatus() !== "pending");
   const [target, setTarget] = useState<"me" | "children" | "both">(restored?.target ?? audience);
   const forChildren = target !== "me";
   const forMe = target !== "children";
@@ -185,6 +192,39 @@ export function PlanningWorkspace({
   });
   // Capture current controlled input on every render, including review edits.
   handoffRef.current = { target, period, date, weekAnchor, selected, text, rows, periodAreas, stage };
+  useEffect(() => {
+    const refresh = () => setSecureStatus(getSecureStatus());
+    window.addEventListener(SECURE_STATUS_EVENT, refresh);
+    window.addEventListener(SECURE_UNLOCK_EVENT, refresh);
+    void unlockSecureLocal().then(refresh);
+    return () => {
+      window.removeEventListener(SECURE_STATUS_EVENT, refresh);
+      window.removeEventListener(SECURE_UNLOCK_EVENT, refresh);
+    };
+  }, []);
+  useEffect(() => {
+    if (draftHydrated || secureStatus === "pending") return;
+    const saved = readEncryptedPlanningHandoff(owner, audience);
+    // Never replace text edited during unlock or a newer in-memory draft.
+    if (saved && !handoffRef.current.text.trim() && handoffRef.current.rows.length === 0) {
+      setTarget(saved.target);
+      setPeriod(saved.period);
+      setDate(saved.date);
+      setWeekAnchor(saved.weekAnchor);
+      setSelected(saved.selected);
+      setText(saved.text);
+      setRows(saved.rows);
+      setPeriodAreas(saved.periodAreas);
+      setStage(saved.stage);
+      setExpandedRows(saved.stage === "review" && saved.rows.length === 1 ? [saved.rows[0].id] : []);
+    }
+    setDraftHydrated(true);
+  }, [secureStatus, draftHydrated, owner, audience]);
+  useEffect(() => {
+    if (!draftHydrated || secureStatus !== "ready" ||
+        !isActiveOwner(owner) || busy.current || lockedRef.current || pending.current) return;
+    persistPlanningHandoff(owner, audience, handoffRef.current);
+  }, [draftHydrated, secureStatus, owner, audience, target, period, date, weekAnchor, selected, text, rows, periodAreas, stage]);
   const initialRequestedPeriod = useRef(requestedPeriod);
   const initialRequestedDate = useRef(requestedDate);
   useEffect(() => {
@@ -306,6 +346,7 @@ export function PlanningWorkspace({
       pending.current = null;
       childrenWritten.current = false;
       discardPlanningHandoff(owner, audience);
+      clearEncryptedPlanningHandoff(owner, audience);
       // Prevent a same-tick navigation from handing off the just-saved batch.
       handoffRef.current = {
         ...handoffRef.current, text: "", rows: [], periodAreas: {}, stage: "write",
@@ -352,6 +393,10 @@ export function PlanningWorkspace({
         <h2 className="font-display text-2xl font-medium tracking-tight text-[#512654]">
           {t("Lägg till aktiviteter")}
         </h2>
+        {!draftHydrated && <p role="status" className="mt-3 text-sm text-muted-foreground">{t("Laddar skyddat utkast...")}</p>}
+        {draftHydrated && secureStatus !== "ready" && (
+          <p role="status" className="mt-3 text-xs text-muted-foreground">{t("Krypterad lagring är inte tillgänglig. Utkastet finns bara kvar medan appen är öppen.")}</p>
+        )}
         {lastSaved && (
           <div role="status" className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#DDE7DC] bg-[#F1F5EF] px-3 py-2 text-sm text-ink">
             <span>{lastSaved.count} {t(lastSaved.count === 1 ? "aktivitet sparad." : "aktiviteter sparade.")}{lastSaved.dayCount > 1 ? ` · ${lastSaved.dayCount} ${t("olika datum")}` : ""}</span>
@@ -365,7 +410,7 @@ export function PlanningWorkspace({
             </Link>
           </div>
         )}
-        {stage === "write" && children.length > 0 && (
+        {draftHydrated && stage === "write" && children.length > 0 && (
           <div className="mt-1 flex flex-wrap items-center gap-x-3 text-sm">
             {target === "both" ? (
               <>
@@ -405,7 +450,7 @@ export function PlanningWorkspace({
             ) : null}
           </>
         )}
-        {stage === "write" && (
+        {draftHydrated && stage === "write" && (
           <>
             <div
               className="pace-segmented mt-4"
@@ -503,7 +548,7 @@ export function PlanningWorkspace({
             )}
           </>
         )}
-        {stage === "write" ? (
+        {!draftHydrated ? null : stage === "write" ? (
           <form
             className="mt-4 space-y-3"
             onSubmit={(event) => {

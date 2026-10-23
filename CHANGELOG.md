@@ -1,3 +1,6 @@
+## 2026-10-23 – Krypterad återställning av Planera-utkast
+- Egna och barns Planera-utkast får separata AES-GCM-krypterade, lokala och kontoägda snapshots. Formulär och granskning återställs efter omladdning när säker lagring fungerar. Det finns ingen klartextreserv, molnsynk eller automatiskt skapade aktiviteter. Krypterat utkast ligger i rätt kontos förråd vid vanlig utloggning och rensas när sparning bekräftas eller kontot raderas. Vid otillgänglig kryptering visas ett tydligt minnesendast-besked. Ingen publicering.
+
 ## 2026-10-23 – Hitta tillbaka från Planera till rätt kalenderdag
 - Efter en bekräftad plansparning visas en diskret länk till sparat datum i Kalender. Vid flera datum leder den uttryckligen till första sparade dagen. Kalenderns dagvy kan öppnas på ett validerat datum från adressen och håller den dagen tills användaren själv navigerar. Osparade utkast, kontoseparation, sparlogik och energibatteri lämnas orörda. Ingen produktionspublicering.
 

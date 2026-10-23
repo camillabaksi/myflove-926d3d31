@@ -4,7 +4,7 @@ import { PlanningWorkspace } from "./planning-workspace";
 import PlanningPage from "@/pages/planning";
 import { StrictMode, type ReactNode } from "react";
 import { setCollapsed } from "@/lib/collapse-store";
-import { clearPlanningHandoffs } from "@/lib/planning-handoff";
+import { clearPlanningHandoffs, PLANNING_DRAFT_KEYS } from "@/lib/planning-handoff";
 import { todayISO } from "@/lib/day";
 
 const model = vi.hoisted(() => ({
@@ -28,6 +28,15 @@ vi.mock("@tanstack/react-router", () => ({
   useRouterState: ({ select }: { select: (state: { location: { pathname: string } }) => unknown }) =>
     select({ location: { pathname: window.location.pathname } }),
   useSearch: () => ({ audience: model.audience, period: model.period }),
+}));
+const encryptedDraftStore = vi.hoisted(() => new Map<string, string>());
+vi.mock("@/lib/secure-local", () => ({
+  getSecureStatus: () => "ready",
+  unlockSecureLocal: async () => {},
+  SECURE_STATUS_EVENT: "secure-status",
+  SECURE_UNLOCK_EVENT: "secure-unlocked",
+  secureGetItem: (key: string) => encryptedDraftStore.get(key) ?? null,
+  secureSetItem: (key: string, value: string) => { encryptedDraftStore.set(key, value); },
 }));
 vi.mock("@clerk/react", () => ({ useUser: () => ({ user: { id: model.owner } }) }));
 vi.mock("@/hooks/use-insight", () => ({ useInsightStrategies: () => ({ saved: model.supports }) }));
@@ -62,6 +71,7 @@ vi.mock("@/components/day/day-replan", () => ({
 
 beforeEach(() => {
   clearPlanningHandoffs();
+  encryptedDraftStore.clear();
   model.owner = "owner";
   model.audience = "me";
   model.period = "today";
@@ -384,6 +394,37 @@ describe("Plan several activities before saving", () => {
     expect(model.addTasks).toHaveBeenCalledTimes(1);
   });
 
+  it("restores encrypted unsaved review dates and children after a full reload", () => {
+    const first = render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="week" requestedDate="2026-11-18" />);
+    write("Simskola\\nFrukost".replace("\\n", "\n"));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Bella" }));
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
+    fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-19" } });
+    expect(encryptedDraftStore.get(PLANNING_DRAFT_KEYS.children)).toContain("Simskola");
+    first.unmount();
+    clearPlanningHandoffs(); // emulate a new app process, not a route handoff
+    render(<PlanningWorkspace owner="owner" audience="children" requestedPeriod="today" />);
+    expect(screen.getByRole("heading", { name: "Så här blir din plan" })).toBeInTheDocument();
+    expect(within(screen.getByTestId("planning-review-row-0")).getByText("Simskola")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
+    expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-19");
+    expect(within(screen.getByTestId("planning-review-row-0")).getAllByText("Bella").length).toBeGreaterThan(0);
+    expect(model.addChildren).not.toHaveBeenCalled();
+  });
+
+  it("never reads an encrypted draft belonging to a different account", () => {
+    const first = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Privat möte");
+    first.unmount();
+    clearPlanningHandoffs();
+    model.owner = "different";
+    render(<PlanningWorkspace owner="different" audience="me" requestedPeriod="today" />);
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("");
+    expect(screen.queryByText("Privat möte")).toBeNull();
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("drops successfully saved drafts rather than resurrecting them on a later visit", async () => {
     const first = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     write("Liten promenad");
@@ -394,6 +435,7 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(screen.getByRole("button", { name: /Spara aktiviteter/ }));
     await waitFor(() => expect(model.addTasks).toHaveBeenCalledTimes(1));
     await waitFor(() => expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue(""));
+    expect(JSON.parse(encryptedDraftStore.get(PLANNING_DRAFT_KEYS.me) ?? "{}").draft).toBeNull();
     returned.unmount();
 
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);

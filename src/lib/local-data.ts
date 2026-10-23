@@ -17,6 +17,7 @@ import { PERSONALIZATION_KEY, THEME_KEY, ALARM_SOUND_KEY, ALARM_FORMAT_KEY, APPE
 import { lockSecureLocal, secureGetItem, unlockSecureLocal } from "@/lib/secure-local";
 import { flushCloudSync, hasUnsyncedCloudData } from "@/lib/cloud-storage";
 import { PENDING_ENERGY_KEY } from "@/lib/energy-pending";
+import { PLANNING_DRAFT_KEYS } from "@/lib/planning-handoff";
 import {
   getDataOwner,
   hasAnyStash,
@@ -66,6 +67,10 @@ export function unsafeToClearKeys(): string[] {
     /* utan lagring finns inget att skydda */
   }
   if (hasPendingEnergy() && !keep.includes(PENDING_ENERGY_KEY)) keep.push(PENDING_ENERGY_KEY);
+  // Never discard an unconfirmed encrypted plan that has no cloud copy.
+  for (const key of Object.values(PLANNING_DRAFT_KEYS)) {
+    if (window.localStorage.getItem(key) !== null && !keep.includes(key)) keep.push(key);
+  }
   return keep;
 }
 
