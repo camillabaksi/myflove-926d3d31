@@ -562,11 +562,35 @@ export function PlanningWorkspace({
                 {t("Ändra listan")}
               </Button>
             </div>
-            <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
+            <fieldset disabled={locked || saving} className="min-w-0 space-y-2">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
-                <div key={row.id} className="min-w-0 border-t border-border/60 pt-3">
-                  <div className="flex items-center gap-2">
+                <details
+                  key={row.id}
+                  data-testid={`planning-review-row-${index}`}
+                  className="min-w-0 rounded-xl border border-border/60 bg-card/60 px-3"
+                  defaultOpen={rows.length === 1 || (forChildren && row.childIds.length === 0)}
+                >
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 py-2 [&::-webkit-details-marker]:hidden">
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="break-words text-sm font-medium text-ink">{row.title || `${t("Aktivitet")} ${index + 1}`}</span>
+                      <span className="text-xs tabular-nums text-muted-foreground">
+                        {new Date(`${row.date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}
+                        {row.endDate && ` – ${new Date(`${row.endDate}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}`}
+                      </span>
+                      {forChildren && (
+                        <span className="break-words text-xs text-primary">
+                          {[
+                            ...(forMe ? [t("Du")] : []),
+                            ...children.filter((child) => row.childIds.includes(child.id)).map((child) => child.name),
+                          ].join(", ") || t("Välj barn")}
+                        </span>
+                      )}
+                    </span>
+                    <span className="shrink-0 text-xs font-medium text-primary underline underline-offset-2">{t("Ändra")}</span>
+                  </summary>
+                  <div className="min-w-0 border-t border-border/60 pb-3 pt-3">
+                    <div className="flex items-center gap-2">
                     <label className="min-w-0 flex-1">
                       <span className="sr-only">
                         {t("Aktivitet")} {index + 1}
@@ -691,7 +715,8 @@ export function PlanningWorkspace({
                       </div>
                     </fieldset>
                   )}
-                </div>
+                  </div>
+                </details>
               ))}
             </fieldset>
             {locked && !saving && (
