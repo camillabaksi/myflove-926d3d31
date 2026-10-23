@@ -448,25 +448,22 @@ export function useTasks() {
     );
   };
 
-  /** Lägger till flera delsteg på en gång (t.ex. Flows uppdelning av en inlämning). */
-  const addTaskSteps = (id: string, steps: { title: string; when?: string }[]) => {
+  /** Lägger till delsteg på samma källa. Ett angivet ID gör återspelade Pace-förslag idempotenta. */
+  const addTaskSteps = (id: string, steps: { id?: string; title: string; when?: string }[]) => {
     setTasks((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              steps: [
-                ...(t.steps ?? []),
-                ...steps.map((s) => ({
-                  id: generateId(),
-                  title: s.title,
-                  done: false,
-                  when: s.when,
-                })),
-              ],
-            }
-          : t,
-      ),
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        const existing = t.steps ?? [];
+        const known = new Set(existing.map((step) => step.id));
+        const additions: TaskStep[] = [];
+        for (const step of steps) {
+          const stepId = step.id ?? generateId();
+          if (known.has(stepId)) continue;
+          known.add(stepId);
+          additions.push({ id: stepId, title: step.title, done: false, when: step.when });
+        }
+        return additions.length ? { ...t, steps: [...existing, ...additions] } : t;
+      }),
     );
   };
 
@@ -683,11 +680,13 @@ export function useTasks() {
 export function useShoppingList() {
   const [items, setItems] = useCloudSyncedStorage<ShoppingItem[]>("myflow-shopping", []);
 
-  const addItem = (title: string) => {
-    setItems((prev) => [
-      { id: generateId(), title, completed: false, createdAt: Date.now() },
-      ...prev,
-    ]);
+  const addItem = (title: string, sourceId?: string) => {
+    const id = sourceId ?? generateId();
+    setItems((prev) =>
+      prev.some(item => item.id === id)
+        ? prev
+        : [{ id, title, completed: false, createdAt: Date.now() }, ...prev],
+    );
   };
 
   const toggleItem = (id: string) => {
