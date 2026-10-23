@@ -77,8 +77,31 @@ const write = (text: string) =>
     target: { value: text },
   });
 
+describe("Compact calendar context", () => {
+  it("shows an empty-plan message without a redundant large heading and date card", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    const existing = screen.getByRole("region", { name: "Redan i planen" });
+    expect(within(existing).getByText("Inget inplanerat här ännu.")).toBeTruthy();
+    expect(existing.querySelector("h2")).toBeNull();
+    expect(existing.className).toContain("px-1 py-1");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("keeps the existing-plan list available without changing typed tasks", () => {
+    const date = todayISO();
+    model.existing = { [date]: [{ id: "a", title: "Tandläkaren", date, source: "task", time: "11:00" }] };
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Handla");
+    const existing = screen.getByRole("region", { name: "Redan i planen" });
+    expect(within(existing).getByRole("heading", { name: "Redan i planen (1)" })).toBeTruthy();
+    expect(within(existing).getByText("Tandläkaren")).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Handla");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+});
+
 describe("Plan several activities before saving", () => {
-  it("starts with three existing items on mobile, reveals the rest on request, and never changes the draft", () => {
+  it("starts with two existing items on mobile, reveals the rest on request, and never changes the draft", () => {
     const date = todayISO();
     model.existing = {
       [date]: Array.from({ length: 5 }, (_, index) => ({
@@ -91,8 +114,8 @@ describe("Plan several activities before saving", () => {
     const existing = screen.getByRole("region", { name: "Redan i planen" });
     const entries = within(existing).getAllByRole("listitem");
     expect(entries).toHaveLength(5);
-    expect(entries.slice(0, 3).every(entry => !entry.className.includes("hidden"))).toBe(true);
-    expect(entries.slice(3).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
+    expect(entries.slice(0, 2).every(entry => !entry.className.includes("hidden"))).toBe(true);
+    expect(entries.slice(2).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
 
     const expand = within(existing).getByRole("button", { name: "Visa alla 5" });
     expect(expand.className).toContain("lg:hidden");
@@ -100,7 +123,7 @@ describe("Plan several activities before saving", () => {
     fireEvent.click(expand);
     expect(entries.every(entry => !entry.className.includes("hidden lg:grid"))).toBe(true);
     fireEvent.click(within(existing).getByRole("button", { name: "Visa färre" }));
-    expect(entries.slice(3).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
+    expect(entries.slice(2).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
     expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("");
     expect(model.addTasks).not.toHaveBeenCalled();
   });
