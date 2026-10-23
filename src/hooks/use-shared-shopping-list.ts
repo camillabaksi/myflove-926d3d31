@@ -84,6 +84,11 @@ export function useSharedShoppingList() {
       activeItems: active,
       completedItems: completed,
       addItem: (title: string) => addMutation.mutate({ data: { title } }),
+      // Unlike mutate(), mutateAsync confirms the household insert. Pace
+      // writes its per-item receipt only after this resolves successfully.
+      addItemConfirmed: async (title: string, _sourceId: string): Promise<void> => {
+        await addMutation.mutateAsync({ data: { title } });
+      },
       toggleItem: (id: string) => toggleMutation.mutate({ id: Number(id) }),
       deleteItem: (id: string) => deleteMutation.mutate({ id: Number(id) }),
     };
@@ -98,6 +103,10 @@ export function useSharedShoppingList() {
     activeItems: local.activeItems,
     completedItems: local.completedItems,
     addItem: local.addItem,
+    // Personal entries can also keep the originating action's stable ID.
+    addItemConfirmed: async (title: string, sourceId: string): Promise<void> => {
+      local.addItem(title, sourceId);
+    },
     toggleItem: local.toggleItem,
     deleteItem: local.deleteItem,
   };
