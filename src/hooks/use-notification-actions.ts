@@ -106,7 +106,14 @@ export function useNotificationActions() {
             const sourceId = `reminder-${rem.id}`;
             if (!s.isInstanceDone(sourceId, occurrenceDate)) {
               s.setInstanceDone(sourceId, occurrenceDate, true);
-              emitActivityDone({ id: `rem-${rem.id}`, title: rem.title, dueDate: occurrenceDate });
+              // Completion belongs to the original instance, but recovery/
+              // energy belongs to the day the moved activity actually happens.
+              const actualDate = rem.occurrenceOverrides?.[occurrenceDate]?.date ?? occurrenceDate;
+              emitActivityDone({
+                id: actualDate === occurrenceDate ? `rem-${rem.id}` : `rem-${rem.id}:${occurrenceDate}`,
+                title: rem.title,
+                dueDate: actualDate,
+              });
             }
           } else if (!rem.completed) {
             s.toggleReminder(rem.id);
