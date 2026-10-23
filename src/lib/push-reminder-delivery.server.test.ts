@@ -39,6 +39,15 @@ describe("återförsök per enhet", () => {
     expect(send).toHaveBeenCalledOnce();
     expect(send.mock.calls[0][0].endpoint).toBe("phone-b");
   });
+  it("gives recurring web reminders a dated action key, without changing their stored source key", async () => {
+    const send = vi.fn().mockResolvedValue("ok");
+    const delivery = { send, remember: vi.fn().mockResolvedValue(true), forget: vi.fn() };
+    const recurring = { ...reminder, kind: "custom", client_key: "rem:daily-walk:2026-10-22" };
+    await deliverQueuedReminder(recurring, [subs[0]], delivery);
+    expect(send.mock.calls[0][1]).toMatchObject({ itemKey: "reminder:daily-walk:2026-10-22" });
+    expect(send.mock.calls[0][2]).toMatchObject({ ref: recurring.client_key });
+  });
+
   it("räknar inte ett fel eller en saknad prenumeration som levererad", async () => {
     const delivery = {
       send: vi.fn().mockResolvedValue("error"),
