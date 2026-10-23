@@ -5,6 +5,7 @@ import PlanningPage from "@/pages/planning";
 import { StrictMode, type ReactNode } from "react";
 import { setCollapsed } from "@/lib/collapse-store";
 import { clearPlanningHandoffs } from "@/lib/planning-handoff";
+import { todayISO } from "@/lib/day";
 
 const model = vi.hoisted(() => ({
   owner: "owner",
@@ -15,6 +16,7 @@ const model = vi.hoisted(() => ({
   syncUser: vi.fn(),
   navigate: vi.fn(),
   supports: [] as Array<{id:string;strategyId:string;title:string;areaId:"tid";contexts:["vardag"];friction:number;minutes:number;nudges:[];addedAt:number}>,
+  existing: {} as Record<string, Array<{ id: string; title: string; date: string; source: "task"; time: string }>>,
 }));
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children, to, search: _search, ...props }: { children: ReactNode; to: string; search?: unknown }) => (
@@ -45,7 +47,7 @@ vi.mock("@/hooks/use-children", () => ({
   }),
 }));
 vi.mock("@/hooks/use-visual-calendar", () => ({
-  useVisualCalendar: () => ({ days: {}, planningReady: true, planningError: false }),
+  useVisualCalendar: () => ({ days: model.existing, planningReady: true, planningError: false }),
 }));
 vi.mock("@/hooks/use-day-capacity", () => ({ useDayCapacity: () => () => ({ percent: 42 }) }));
 vi.mock("@/lib/life-areas", async (importOriginal) => ({ ...await importOriginal<typeof import("@/lib/life-areas")>(), useActiveArea: () => ({ activeArea: "alla" }) }));
@@ -64,6 +66,7 @@ beforeEach(() => {
   model.audience = "me";
   model.period = "today";
   model.supports = [];
+  model.existing = {};
   setCollapsed(`${window.location.pathname}::optional-saved-strategies`, true, true);
   model.addTasks.mockReset();
   model.addChildren.mockReset().mockResolvedValue(undefined);
@@ -75,6 +78,41 @@ const write = (text: string) =>
   });
 
 describe("Plan several activities before saving", () => {
+  it("starts with three existing items on mobile, reveals the rest on request, and never changes the draft", () => {
+    const date = todayISO();
+    model.existing = {
+      [date]: Array.from({ length: 5 }, (_, index) => ({
+        id: `item-${index}`, title: `Befintlig aktivitet ${index + 1}`, date,
+        source: "task" as const, time: `1${index}:00`,
+      })),
+    };
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    expect(screen.getByRole("heading", { name: "Redan i planen (5)" })).toBeTruthy();
+    const existing = screen.getByRole("region", { name: "Redan i planen" });
+    const entries = within(existing).getAllByRole("listitem");
+    expect(entries).toHaveLength(5);
+    expect(entries.slice(0, 3).every(entry => !entry.className.includes("hidden"))).toBe(true);
+    expect(entries.slice(3).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
+
+    const expand = within(existing).getByRole("button", { name: "Visa alla 5" });
+    expect(expand.className).toContain("lg:hidden");
+    expect(expand).toHaveAttribute("aria-expanded", "false");
+    fireEvent.click(expand);
+    expect(entries.every(entry => !entry.className.includes("hidden lg:grid"))).toBe(true);
+    fireEvent.click(within(existing).getByRole("button", { name: "Visa färre" }));
+    expect(entries.slice(3).every(entry => entry.className.includes("hidden lg:grid"))).toBe(true);
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("does not add a second explanatory paragraph after the save button for personal tasks", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Handla");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    expect(screen.getByRole("button", { name: /Spara aktiviteter/ })).toBeTruthy();
+    expect(screen.queryByText("Alla läggs till när du trycker på Spara.")).toBeNull();
+  });
+
   it("shows one compact seven-day picker before the input without seven tall day rows", () => {
     render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
     const picker = screen.getByRole("group", { name: "Veckans dagar" });
