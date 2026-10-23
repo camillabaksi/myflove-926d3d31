@@ -24,6 +24,7 @@ import {
   PUSH_SUBSCRIPTION_EVENT,
 } from "@/lib/push-client";
 import { ACCOUNT_BOUND_EVENT, getSyncUser, useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { reminderOccurrencesForDay } from "@/lib/reminder-occurrences";
 import { isActiveOwner } from "@/lib/account-scope";
 import { todayISO } from "@/lib/day";
 import { routineOccursOn, type Routine } from "@/lib/recurrence";
@@ -130,6 +131,7 @@ export function useReminderSync() {
       r.time,
       r.repeat,
       r.remindMinutesBefore,
+      r.occurrenceOverrides,
       r.title,
       r.note,
     ]),
@@ -274,40 +276,26 @@ export function useReminderSync() {
           }
         }
       }
-      // Calendar reminders: one-off or recurring (daily / weekdays / weekly) for 14 dagar
+      // Schedule the REAL occurrences, including moved originals outside the
+      // visible horizon. Keep client keys tied to the original day so edits
+      // cancel/replace the correct OS or web push without touching the series.
       const horizonDates: string[] = [];
       for (let i = -1; i < 14; i++) horizonDates.push(todayIso(i));
       for (const r of reminders) {
-        if (r.completed || r.canceled || !r.time) continue;
+        if (r.completed || r.canceled) continue;
         const repeat = r.repeat ?? "none";
-        const occurrences: string[] = [];
-        if (repeat === "none") {
-          if (horizonDates.includes(r.date)) occurrences.push(r.date);
-        } else {
-          for (const date of horizonDates) {
-            if (date < r.date) continue;
-            const d = new Date(date + "T00:00:00");
-            const dow = d.getDay(); // 0=Sö,1=Må..6=Lö
-            if (repeat === "daily") occurrences.push(date);
-            else if (repeat === "weekdays" && dow >= 1 && dow <= 5) occurrences.push(date);
-            else if (repeat === "weekly") {
-              const start = new Date(r.date + "T00:00:00");
-              const diffDays = Math.round((d.getTime() - start.getTime()) / 86_400_000);
-              if (diffDays % 7 === 0) occurrences.push(date);
-            }
-          }
-        }
         const leadMins = applyAdaptiveLead(r.remindMinutesBefore ?? 0, adaptiveLead, "kalender");
-        for (const date of occurrences) {
-          const when = combineDateTime(date, r.time);
+        for (const day of horizonDates) for (const occurrence of reminderOccurrencesForDay(r, day)) {
+          if (!occurrence.time) continue;
+          const when = combineDateTime(day, occurrence.time);
           if (!when) continue;
           const deliverAt = new Date(when.getTime() - leadMins * 60_000);
-          const key = repeat === "none" ? `rem:${r.id}` : `rem:${r.id}:${date}`;
+          const key = repeat === "none" ? `rem:${r.id}` : `rem:${r.id}:${occurrence.occurrenceDate}`;
           desired.set(key, {
             clientKey: key,
             kind: "custom",
             title: leadMins > 0 ? `🔔 Om ${leadMins} min: ${r.title}` : `🔔 ${r.title}`,
-            body: `Påminnelse kl ${r.time}`,
+            body: `Påminnelse kl ${occurrence.time}`,
             deliverAt: deliverAt.toISOString(),
             url: "/kalender",
           });
