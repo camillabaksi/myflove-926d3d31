@@ -37,7 +37,7 @@ export default function HelpHint({ children, label, className }: HelpHintProps) 
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="w-72 rounded-2xl text-sm leading-relaxed"
+        className="w-72 max-w-[calc(100vw-2rem)] rounded-2xl text-sm leading-relaxed"
         onClick={(e) => e.stopPropagation()}
       >
         {label && <p className="mb-1 font-medium text-foreground">{label}</p>}
