@@ -74,6 +74,11 @@ export function plainLabel(label: string, enabled: boolean): string {
   return CURRENT_PLAIN_WORDS[label] ?? PLAIN_WORDS[label] ?? label;
 }
 
+/** Main navigation stays recognisable; descriptive subpage aliases stay intact. */
+export function navigationLabel(href: string, label: string, plainWords: boolean): string {
+  return href === "/quickflow" ? "Fånga" : plainLabel(label, plainWords);
+}
+
 export function useNpfSettings() {
   const [settings, setSettings] = useCloudSyncedStorage<NpfSettings>(KEY, NPF_DEFAULTS);
 

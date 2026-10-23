@@ -25,7 +25,6 @@ export default function ProfilePage() {
   const { name, setName } = useUserProfile();
   const { lang, setLang, t } = useLang();
   const [nameDraft, setNameDraft] = useState(name);
-  const [savedName, setSavedName] = useState(false);
 
   const { userId, children, addChild, updateChild, deleteChild } = useChildren();
   const { cycle, setEnabled: setCycleEnabled } = useCycle();
@@ -46,23 +45,14 @@ export default function ProfilePage() {
     const id = window.setTimeout(() => {
       lastSaved.current = nameDraft;
       setName(nameDraft);
-      setSavedName(true);
-      window.setTimeout(() => setSavedName(false), 1500);
     }, 700);
     return () => window.clearTimeout(id);
   }, [nameDraft, setName]);
 
   const saveName = () => {
+    if (nameDraft.trim() === lastSaved.current.trim()) return;
     lastSaved.current = nameDraft;
     setName(nameDraft);
-    setSavedName(true);
-    toast({
-      title: "Sparat!",
-      description: nameDraft.trim()
-        ? `Vi hälsar på dig som ${nameDraft.trim()}.`
-        : "Vi kallar dig bara du.",
-    });
-    setTimeout(() => setSavedName(false), 1500);
   };
 
   const addChildHandler = async () => {
@@ -114,7 +104,7 @@ export default function ProfilePage() {
             id="profile-name"
             title="Vad ska jag kalla dig?"
             headingClassName="text-base font-semibold"
-            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri.${savedName ? " Sparat ✓" : " Sparas automatiskt."}`}
+            description={`Används i “Hej ${name || "…"}!” på startsidan och på ditt batteri. Namnet sparas automatiskt; molnstatus visas överst vid väntan eller fel.`}
             className="pace-card-surface rounded-3xl border border-border/60 bg-card p-5 shadow-soft"
           >
             <form
@@ -128,14 +118,12 @@ export default function ProfilePage() {
                 value={nameDraft}
                 onChange={(e) => setNameDraft(e.target.value)}
                 placeholder="Ditt namn"
+                aria-label="Ditt namn"
                 maxLength={40}
                 className="rounded-2xl"
                 onBlur={() => saveName()}
                 data-testid="profile-name-input"
               />
-              <Button type="submit" className="rounded-2xl" data-testid="profile-name-save">
-                {savedName ? <Check size={16} /> : "Spara"}
-              </Button>
             </form>
           </CollapsibleSection>
         </MyFloveWide>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Cloud, CloudOff, RefreshCw, ShieldAlert } from "lucide-react";
 import { flushCloudSync, useCloudSyncStatus, type CloudSyncStatus } from "@/lib/cloud-storage";
 import { SECURE_STATUS_EVENT, getSecureStatus, type SecureStatus } from "@/lib/secure-local";
+import { Button } from "@/components/ui/button";
 
 /** Väntar synken längre än så här visas det – kortare blinkningar döljs. */
 const PENDING_DELAY_MS = 3000;
@@ -29,6 +30,8 @@ export function SyncStatusNote() {
       return;
     }
     if (status === "pending") {
+      // A retry is no longer a failed attempt; do not keep a stale error visible.
+      setShown("idle");
       const t = setTimeout(() => setShown("pending"), PENDING_DELAY_MS);
       return () => clearTimeout(t);
     }
@@ -44,7 +47,7 @@ export function SyncStatusNote() {
   return (
     <div className="flex flex-col gap-1 px-4 pt-2" aria-live="polite" data-testid="sync-status-note">
       {shown !== "idle" && (
-        <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+        <p role={shown === "error" ? "alert" : "status"} className="flex min-w-0 flex-wrap items-center justify-center gap-x-1.5 gap-y-0 text-xs text-muted-foreground">
           {shown === "saved" && (
             <>
               <Cloud className="h-3.5 w-3.5" aria-hidden /> Sparat
@@ -52,19 +55,21 @@ export function SyncStatusNote() {
           )}
           {shown === "pending" && (
             <>
-              <CloudOff className="h-3.5 w-3.5" aria-hidden /> Sparat på enheten – väntar på synk
+              <CloudOff className="h-3.5 w-3.5 shrink-0" aria-hidden /> {insecure ? "Väntar på molnsynk – behåll appen öppen" : "Sparat på enheten – väntar på synk"}
             </>
           )}
           {shown === "error" && (
             <>
-              <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Kunde inte spara i molnet.
-              <button
+              <RefreshCw className="h-3.5 w-3.5 shrink-0" aria-hidden /> Molnsynken misslyckades. Ändringarna väntar på synk.
+              <Button
                 type="button"
+                variant="link"
+                size="sm"
                 onClick={() => void flushCloudSync()}
-                className="font-semibold text-primary underline-offset-2 hover:underline"
+                className="min-h-11 shrink-0 px-2 font-semibold"
               >
                 Försök igen
-              </button>
+              </Button>
             </>
           )}
         </p>
