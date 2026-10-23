@@ -114,7 +114,10 @@ describe("aktivitetens faktiska energipåverkan", () => {
     }];
     const onClose = vi.fn();
     render(<ActivityEnergyPrompt item={item("task-shop", "2026-10-21")} onClose={onClose} />);
-    expect(screen.getByRole("button", { name: "Idag" })).toHaveAttribute("aria-pressed", "true");
+    // An earlier observation stays on its own date, even when this test runs
+    // on a later calendar day (instead of assuming it is still 22 October).
+    fireEvent.click(screen.getByText("Välj ett annat datum"));
+    expect(screen.getByLabelText("Genomfördes")).toHaveValue("2026-10-22");
     fireEvent.click(screen.getByRole("button", { name: "Planerad dag (2026-10-21)" }));
     fireEvent.click(screen.getByRole("button", { name: "Tog lite energi" }));
     await waitFor(() => expect(onClose).toHaveBeenCalledOnce());
