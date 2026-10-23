@@ -6,6 +6,7 @@ import type { Lecture } from "@/lib/study-calendar";
 import type { QuickflowItem } from "@/lib/quickflow";
 import type { PriorityTask } from "@/lib/quickflow-priority";
 import { todayISO, completedBelongsToDay } from "@/lib/flow-items";
+import { reminderOccurrencesForDay } from "@/lib/reminder-occurrences";
 
 export type CalendarView = "manad" | "vecka" | "dag";
 export type CalendarSource = "task" | "reminder" | "routine" | "study" | "quickflow" | "priority" | "family" | "child" | "external";
@@ -102,14 +103,24 @@ export function projectCalendar(dates: string[], data: CalendarSources, today = 
         label: task.dueDate && task.dueDate < date ? "Tidigare planerad" : task.quickflowId ? "Fånga" : undefined });
     }
     for (const r of data.reminders) {
-      if (r.canceled || !(occursOn(r.date, r.repeat, date) || (r.endDate && date >= r.date && date <= r.endDate))) continue;
-      const middle = !!r.endDate && r.date !== date;
-      out.push({ id: `rem-${r.id}`, sourceId: r.id, source: "reminder", date, title: r.title,
-        time: middle ? undefined : r.time, endTime: middle ? undefined : r.endTime,
-        periodEnd: r.endDate && !r.time ? r.endDate : undefined,
-        periodStart: r.endDate && !r.time ? r.date : undefined,
-        energyImpact: r.energyImpact, area: r.area, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
-        recurring: (r.repeat ?? "none") !== "none" || !!r.endDate });
+      if (r.canceled) continue;
+      // Continuous periods still occupy their original calendar dates.
+      const inPeriod = !!r.endDate && date >= r.date && date <= r.endDate;
+      const occurrences = reminderOccurrencesForDay(r, date);
+      if (inPeriod && !occurrences.length)
+        occurrences.push({ occurrenceDate: date, date, time: r.time, endTime: r.endTime, moved: false });
+      for (const occurrence of occurrences) {
+        const middle = !!r.endDate && r.date !== date;
+        out.push({
+          id: `rem-${r.id}${occurrence.moved ? `:${occurrence.occurrenceDate}` : ""}`,
+          sourceId: r.id, source: "reminder", date, occurrenceDate: occurrence.occurrenceDate, title: r.title,
+          time: middle ? undefined : occurrence.time, endTime: middle ? undefined : occurrence.endTime,
+          periodEnd: r.endDate && !r.time ? r.endDate : undefined,
+          periodStart: r.endDate && !r.time ? r.date : undefined,
+          energyImpact: r.energyImpact, area: r.area, done: r.completed && (r.repeat ?? "none") === "none", editable: true,
+          recurring: (r.repeat ?? "none") !== "none" || !!r.endDate,
+        });
+      }
     }
     for (const r of data.routines) for (const occurrence of routineOccurrencesForDay(r, date, data.routineExceptions ?? [])) {
       out.push({ id: `routine-${r.id}${occurrence.occurrenceDate === date ? "" : `:${occurrence.occurrenceDate}`}`, sourceId: r.id, source: "routine", date, occurrenceDate: occurrence.occurrenceDate, title: r.title,
