@@ -327,8 +327,7 @@ function FlowItemEditDialog({
 
   const home = externalHome(itemId);
   const changesWholeReminderSeries = kind === "kalender" &&
-    (source as (typeof reminders)[number] | null)?.repeat != null &&
-    (source as (typeof reminders)[number])?.repeat !== "none";
+    (reminders.find(reminder => reminder.id === realId)?.repeat ?? "none") !== "none";
 
   const set = (patch: Partial<typeof form>) => setForm((f) => ({ ...f, ...patch }));
 
