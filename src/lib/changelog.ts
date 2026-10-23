@@ -11,7 +11,7 @@ export const CHANGELOG_UPDATED = "2026-10-23";
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
     title: "2026-10-23 – Nya editorial­skärmbilder med de senaste ändringarna",
-    items: ["Material (2026-10-23): Ny svensk editorialbildserie i Paceable-editorialbilder-2026-10-23/ (38 bilder: 19 vyer × mobil 390 px och desktop 1280 px), tagna efter etapp 3, Historik i Insikter & historik, kalenderrättelserna och Kvällsstund/Mer-typografin. Anonymiserat underlag från ett verkligt konto i isolerad skrivskyddad session; kontot oförandrat, ingen appändring och ingen publicering."],
+    items: ["Material (2026-10-23): Ny svensk editorialbildserie i Paceable-editorialbilder-2026-10-23/ (38 bilder: 19 vyer × mobil 390 px och desktop 1280 px), tagna efter etapp 3, Historik i Insikter & historik, kalenderrättelserna och Kvällsstund/Mer-typografin. Anonymiserat underlag från ett verkligt konto i isolerad skrivskyddad session; kontot oförändrat, ingen appändring och ingen publicering."],
   },
   {
     title: "2026-10-23 – Roadmap städad till verkligt återstående arbete",
