@@ -23,6 +23,8 @@ import { FlowMicButton } from "@/components/flow/flow-mic-button";
 import { chatWithFlow } from "@/lib/flow-chat.functions";
 import { FlowRichText, FlowActionIcon } from "@/components/flow/flow-rich-text";
 import { useTasks } from "@/hooks/use-data";
+import { useCloudSyncedStorage } from "@/lib/cloud-storage";
+import { getDataOwner, isActiveOwner } from "@/lib/account-scope";
 import { useLifePuzzle } from "@/hooks/use-life-puzzle";
 import { useFlowPlan } from "@/hooks/use-flow-plan";
 import { flowPlanContext } from "@/lib/flow-plan";
@@ -42,6 +44,10 @@ import {
   actionCta,
   matchTask,
   paceActionTaskId,
+  paceActionItemId,
+  paceActionStepId,
+  recordPaceShoppingReceipt,
+  type PaceShoppingReceipt,
   allowedFlowMoveDate,
   flowEditTaskPatch,
   parseFlowReply,
@@ -136,6 +142,14 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
   const { tasks, activeTasks, setTaskDueDate, addTaskSteps, updateTask, toggleTask, addTask, deleteTask } =
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
+  // Only stable source IDs, never shopping titles or any private notes.
+  // The existing encrypted owner-scoped sync stores successful item receipts
+  // for both the personal and the shared household shopping paths.
+  const [shoppingReceipts, setShoppingReceipts] = useCloudSyncedStorage<PaceShoppingReceipt[]>(
+    "myflove-pace-shopping-receipts", [],
+  );
+  const shoppingInFlight = useRef(new Set<string>());
+  const [pendingShopping, setPendingShopping] = useState<Record<string, boolean>>({});
 
   // Once a task is visible in the shared store, its stable ID is the guard.
   // Releasing the short-lived tap lock also permits intentional re-adds after
@@ -156,9 +170,46 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
 
   const runAction = (key: string, action: FlowAction) => {
     if (action.kind === "handla") {
-      const items = [action.title, ...(action.steps ?? [])].filter((t): t is string => !!t);
-      items.forEach((t) => shopping.addItem(t));
-      setDoneActions((p) => ({ ...p, [key]: "Tillagd i inköpslistan." }));
+      const titles = [action.title, ...(action.steps ?? [])].filter((title): title is string => !!title);
+      const items = titles.map((title, index) => ({ title, id: paceActionItemId(key, index) }));
+      const owner = getDataOwner();
+      if (!owner || !isActiveOwner(owner) || items.some(item => !item.id) ||
+          savingReplyId === key.split(":")[0] || unsavedReply?.messageId === key.split(":")[0]) {
+        toast.error("Spara samtalet innan inköpslistan ändras.");
+        return;
+      }
+      if (shopping.isLoading) {
+        toast("Inköpslistan hämtas. Prova igen när den är redo.");
+        return;
+      }
+      if (shoppingInFlight.current.has(key)) return;
+      const remaining = items.filter(item => !shoppingReceipts.some(receipt => receipt.id === item.id));
+      if (!remaining.length) {
+        setDoneActions(prev => ({ ...prev, [key]: "Redan tillagt i inköpslistan." }));
+        return;
+      }
+      shoppingInFlight.current.add(key);
+      setPendingShopping(prev => ({ ...prev, [key]: true }));
+      void (async () => {
+        try {
+          for (const item of remaining) {
+            if (!isActiveOwner(owner) || !item.id) throw new Error("Account changed");
+            // Household inserts are confirmed via mutateAsync, not assumed from
+            // a fire-and-forget mutation. Personal items also have stable IDs.
+            await shopping.addItemConfirmed(item.title, item.id);
+            if (!isActiveOwner(owner)) throw new Error("Account changed");
+            setShoppingReceipts(prev => recordPaceShoppingReceipt(prev, item.id!));
+          }
+          if (isActiveOwner(owner)) {
+            setDoneActions(prev => ({ ...prev, [key]: "Tillagt i inköpslistan." }));
+          }
+        } catch {
+          if (isActiveOwner(owner)) toast.error("Alla varor kunde inte sparas. Prova igen för de som saknas.");
+        } finally {
+          shoppingInFlight.current.delete(key);
+          setPendingShopping(prev => ({ ...prev, [key]: false }));
+        }
+      })();
       return;
     }
     if (action.kind === "ny") {
@@ -204,7 +255,10 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       if (action.steps?.length)
         addTaskSteps(
           task.id,
-          action.steps.map((title) => ({ title })),
+          action.steps.map((title, index) => ({
+            title,
+            id: paceActionStepId(key, task.id, index),
+          })),
         );
       setDoneActions((p) => ({
         ...p,
@@ -223,11 +277,21 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
       updateTask(task.id, { friction: "small" });
       setDoneActions((p) => ({ ...p, [key]: "Nu räcker en mindre version." }));
     } else if (action.kind === "dela") {
-      addTaskSteps(
-        task.id,
-        (action.steps ?? ["Första lilla steget"]).map((title) => ({ title })),
-      );
-      setDoneActions((p) => ({ ...p, [key]: "Uppdelad i små steg." }));
+      const steps = (action.steps ?? ["Första lilla steget"]).map((title, index) => ({
+        title,
+        id: paceActionStepId(key, task.id, index),
+      }));
+      if (steps.some(step => !step.id)) {
+        toast.error("Spara samtalet innan aktiviteten delas upp.");
+        return;
+      }
+      const existingIds = new Set((task.steps ?? []).map(step => step.id));
+      const additions = steps.filter(step => !existingIds.has(step.id!));
+      if (additions.length) addTaskSteps(task.id, additions);
+      setDoneActions((p) => ({
+        ...p,
+        [key]: additions.length ? "Uppdelad i små steg." : "Redan uppdelad i små steg.",
+      }));
     } else {
       toggleTask(task.id);
       setDoneActions((p) => ({ ...p, [key]: "Avbockad." }));
@@ -598,7 +662,23 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                           const storedTaskId = a.kind === "ny" ? paceActionTaskId(key) : undefined;
                           const alreadyAdded = !!storedTaskId && tasks.some(task => task.id === storedTaskId);
                           const pendingSave = savingReplyId === m.id || unsavedReply?.messageId === m.id;
-                          const done = alreadyAdded ? "Redan tillagd i din dag." : doneActions[key];
+                          const shoppingTitles = a.kind === "handla"
+                            ? [a.title, ...(a.steps ?? [])].filter((title): title is string => !!title)
+                            : [];
+                          const shoppingIds = shoppingTitles.map((_, index) => paceActionItemId(key, index));
+                          const savedShoppingCount = shoppingIds.filter(id => id && shoppingReceipts.some(receipt => receipt.id === id)).length;
+                          const shoppingComplete = shoppingIds.length > 0 && savedShoppingCount === shoppingIds.length;
+                          const splitTask = a.kind === "dela" ? matchTask(a, activeTasks) : undefined;
+                          const splitSteps = a.kind === "dela" && splitTask
+                            ? (a.steps ?? ["Första lilla steget"]).map((_, index) => paceActionStepId(key, splitTask.id, index))
+                            : [];
+                          const splitComplete = splitSteps.length > 0 && splitSteps.every(
+                            id => !!id && splitTask?.steps?.some(step => step.id === id),
+                          );
+                          const done = alreadyAdded ? "Redan tillagd i din dag."
+                            : shoppingComplete ? "Redan tillagt i inköpslistan."
+                            : splitComplete ? "Redan uppdelad i små steg."
+                            : doneActions[key];
                           return (
                             <div
                               key={key}
@@ -634,7 +714,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                   <Button
                                     size="sm"
                                     className="rounded-xl"
-                                    disabled={pendingSave}
+                                    disabled={pendingSave || !!pendingShopping[key] || (a.kind === "handla" && shopping.isLoading)}
                                     onClick={() => runAction(key, a)}
                                   >
                                     {actionCta(a)}
@@ -643,7 +723,7 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                     size="sm"
                                     variant="ghost"
                                     className="rounded-xl"
-                                    disabled={pendingSave}
+                                    disabled={pendingSave || !!pendingShopping[key]}
                                     onClick={() =>
                                       setDoneActions((p) => ({ ...p, [key]: "Vi lät den vara." }))
                                     }
@@ -652,10 +732,18 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
                                   </Button>
                                 </div>
                               )}
-                              {pendingSave && a.kind === "ny" && (
+                              {pendingSave && ["ny", "handla", "dela"].includes(a.kind) && (
                                 <p className="mt-1 text-xs text-muted-foreground">
-                                  Spara samtalet innan aktiviteten läggs till.
+                                  Spara samtalet innan förslaget används.
                                 </p>
+                              )}
+                              {a.kind === "handla" && !shoppingComplete && savedShoppingCount > 0 && (
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                  {savedShoppingCount} av {shoppingIds.length} varor tillagda. Du kan försöka igen med resten.
+                                </p>
+                              )}
+                              {pendingShopping[key] && (
+                                <p className="mt-1 text-xs text-muted-foreground">Sparar varor…</p>
                               )}
                             </div>
                           );
