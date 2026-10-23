@@ -270,6 +270,7 @@ describe("Plan several activities before saving", () => {
     const visit = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     write("Handla\nBoka tid");
     fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     fireEvent.change(screen.getAllByLabelText("Dag")[0]!, { target: { value: "2026-11-18" } });
     expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
     visit.unmount(); // Navigate to Insights; Planera is no longer mounted.
@@ -277,6 +278,8 @@ describe("Plan several activities before saving", () => {
 
     const back = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     expect(screen.getByRole("heading", { name: "Så här blir din plan" })).toBeTruthy();
+    expect(within(screen.getByTestId("planning-review-row-0")).getByText(/18 nov/)).toBeTruthy();
+    fireEvent.click(screen.getByTestId("planning-review-row-0").querySelector("summary")!);
     expect(screen.getAllByLabelText("Dag")[0]).toHaveValue("2026-11-18");
     expect(screen.getByRole("textbox", { name: "Aktivitet 1" })).toHaveValue("Handla");
     expect(model.addTasks).not.toHaveBeenCalled();
