@@ -26,8 +26,8 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <section className="pace-surface rounded-2xl px-3 py-2.5 sm:p-3" aria-labelledby="today-capacity-title">
-        <div className="flex items-center justify-between gap-1.5 sm:gap-3">
+      <section className="pace-surface pace-adaptive rounded-2xl px-3 py-2.5 sm:p-3" aria-labelledby="today-capacity-title">
+        <div className="pace-adaptive-row flex items-center justify-between gap-1.5 sm:gap-3">
           <div className="min-w-0 flex-1">
             {percent === null ? (
               <>
@@ -51,7 +51,7 @@ export function TodayCapacity({ percent }: { percent: number | null }) {
         </div>
         <Button
           variant="outline"
-          className="mt-2 h-12 w-full whitespace-normal rounded-full border-0 bg-[#F0E5F4] text-ink shadow-none ring-0 hover:bg-[#E9DCEF] focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="mt-2 h-auto min-h-12 w-full whitespace-normal rounded-full border-0 bg-[#F0E5F4] text-ink shadow-none ring-0 hover:bg-[#E9DCEF] focus-visible:ring-2 focus-visible:ring-primary/50"
           onClick={() => setOpen(true)}
         >
           <Heart size={16} aria-hidden />
