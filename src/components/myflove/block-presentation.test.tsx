@@ -38,6 +38,34 @@ describe("Refreshed block presentation retains existing behavior", () => {
     expect(screen.getByRole("textbox")).toHaveValue("Mitt utkast");
     expect(screen.getByRole("button", { name: "Fortsätt" })).toBeVisible();
   });
+  it("does not clamp long headings, subtitles or saved status and does not reserve a 160px blank collapsed card", () => {
+    render(
+      <MyFloveBlock
+        title="En längre rubrik som behöver synas även när textstorleken är 200 procent"
+        subtitle="Beskrivningen måste kunna få flera rader för att gå att förstå"
+        status="Tre aktiviteter återstår i den här sektionen"
+        collapseId="presentation::long-copy"
+        defaultCollapsed
+        action={<button type="button">Visa alternativ för aktiviteterna</button>}
+      >
+        <p>Undersida</p>
+      </MyFloveBlock>,
+    );
+    const heading = screen.getByRole("heading", { name: /En längre rubrik/ });
+    const subtitle = screen.getByText(/Beskrivningen måste/);
+    const status = screen.getByText(/Tre aktiviteter återstår/);
+    expect(heading).not.toHaveClass("line-clamp-1");
+    expect(subtitle).not.toHaveClass("line-clamp-1");
+    expect(status).not.toHaveClass("line-clamp-1");
+    const section = heading.closest("section");
+    expect(section).not.toHaveClass("data-[expanded='false']:min-h-[10rem]");
+    expect(section).toHaveClass("data-[expanded='false']:min-h-0");
+    expect(section?.querySelector(".pace-block-header")).toHaveClass("flex-wrap");
+    expect(screen.getByRole("button", { name: /Visa alternativ för aktiviteterna/ })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: /En längre rubrik/ }));
+    expect(screen.getByText("Undersida")).toBeVisible();
+  });
+
   it("keeps an existing collapse preference across a remount", () => {
     const view = render(
       <MyFloveBlock title="Bestående block" collapseId="presentation::persist">

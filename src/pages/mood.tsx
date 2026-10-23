@@ -90,21 +90,21 @@ export function MoodContent({ showHeader = true, readOnly = false }: MoodContent
             </div>
           ) : (
             <div className="space-y-8 animate-in fade-in">
-              <div className="flex justify-between md:justify-center md:gap-6">
+              <div className="flex flex-wrap justify-center gap-2 md:gap-6">
                 {EMOJIS.map((item) => (
                   <button
                     key={item.score}
                     onClick={() => setSelectedScore(item.score)}
                     aria-pressed={selectedScore === item.score}
-                    className={`pace-health-choice min-h-11 min-w-11 flex flex-col items-center gap-2 p-2 rounded-2xl transition-all ${
+                    className={`pace-health-choice min-h-11 min-w-11 flex min-w-0 flex-col items-center gap-2 rounded-2xl p-2 transition-all ${
                       selectedScore === item.score
-                        ? "bg-primary/10 scale-110"
+                        ? "bg-primary/10 ring-2 ring-primary/30"
                         : "hover:bg-secondary opacity-70 hover:opacity-100 grayscale-[0.5] hover:grayscale-0"
                     }`}
                   >
-                    <span className="text-4xl md:text-5xl drop-shadow-sm">{item.emoji}</span>
+                    <span aria-hidden="true" className="text-4xl drop-shadow-sm md:text-5xl">{item.emoji}</span>
                     <span
-                      className={`text-xs md:text-sm font-medium ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
+                      className={`text-center text-xs font-medium leading-snug [overflow-wrap:anywhere] md:text-sm ${selectedScore === item.score ? "text-primary" : "text-muted-foreground"}`}
                     >
                       {item.label}
                     </span>
