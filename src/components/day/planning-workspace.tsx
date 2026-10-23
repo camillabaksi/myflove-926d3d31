@@ -699,7 +699,7 @@ export function PlanningWorkspace({
                   ? "Aktiviteterna sparas i din plan och de valda barnens scheman."
                   : "Aktiviteterna sparas i de valda barnens scheman.")}
               </p>
-            )
+            )}
           </form>
         )}
         {error && (
