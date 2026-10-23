@@ -193,6 +193,36 @@ export function recordPaceShoppingReceipt(
   return receipts.some((receipt) => receipt.id === id) ? receipts : [...receipts, { id }];
 }
 
+/**
+ * Add shopping items sequentially so a confirmed subset remains recoverable
+ * after a transient network error. The caller stores a receipt immediately
+ * after each confirmed insert; no receipt is recorded before acknowledgement.
+ */
+export async function addPaceShoppingItems(
+  actionKey: string,
+  titles: string[],
+  savedReceiptIds: ReadonlySet<string>,
+  addConfirmed: (title: string, id: string) => Promise<void>,
+  confirmReceipt: (id: string) => void,
+  isAllowed: () => boolean,
+): Promise<number> {
+  const entries = titles.map((title, index) => ({ title, id: paceActionItemId(actionKey, index) }));
+  if (entries.some(entry => !entry.id)) throw new Error("An unsaved suggestion cannot write shopping items");
+  const saved = new Set(savedReceiptIds);
+  let added = 0;
+  for (const entry of entries) {
+    const id = entry.id!;
+    if (saved.has(id)) continue;
+    if (!isAllowed()) throw new Error("The active account changed");
+    await addConfirmed(entry.title, id);
+    if (!isAllowed()) throw new Error("The active account changed");
+    confirmReceipt(id);
+    saved.add(id);
+    added++;
+  }
+  return added;
+}
+
 export const ACTION_LABEL: Record<FlowActionKind, string> = {
   flytta: "Flytta uppgiften",
   forenkla: "Gör den mindre",
