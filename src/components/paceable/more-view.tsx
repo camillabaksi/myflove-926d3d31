@@ -25,7 +25,7 @@ export const MORE_AREAS: readonly MoreArea[] = [
   { title: "Familj & barn", area: "privat", hint: "Familjens vardag och relationer", icon: Users, tone: "blush", hrefs: ["/familjeflow", "/familj", "/barn", "/relationer"] },
 ];
 export const MORE_OVERALL: readonly MoreArea[] = [
-  { title: "Stöd & reflektion", area: null, hint: "Pace, Fånga och anteckningar", icon: MessageCircle, tone: "peach", hrefs: ["/assistant", "/quickflow", "/anteckningar", "/flow", "/flowplan"] },
+  { title: "Stöd & reflektion", area: null, hint: "Pace, Fånga och anteckningar", icon: MessageCircle, tone: "peach", hrefs: ["/assistant", "/quickflow", "/anteckningar", "/planera", "/flowplan"] },
   { title: "Insikter & historik", area: null, hint: "Se mönster över tid", icon: BarChart3, tone: "lavender", hrefs: ["/insight", "/historik", "/statistik", "/friktionsindex"] },
 ];
 export const MORE_TOOL_GROUPS = [
