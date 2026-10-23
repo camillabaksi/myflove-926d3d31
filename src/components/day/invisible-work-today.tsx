@@ -35,7 +35,7 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
   return <div className="mt-2 space-y-2">
     {pending && <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#F8ECE6] px-3 py-2 text-sm text-ink" role="status">
       <span className="min-w-0 flex-1">Klart: {pending.title}. Räkna med det som också tog plats?</span>
-      <button type="button" className="min-h-11 rounded-full bg-white/80 px-3 font-medium" onClick={() => { add(pending.title, "activity", pending.id); onDismiss(); }}>Räkna med det</button>
+      <button type="button" className="min-h-11 rounded-full bg-card/85 px-3 font-medium text-ink" onClick={() => { add(pending.title, "activity", pending.id); onDismiss(); }}>Räkna med det</button>
       <button type="button" className="min-h-11 px-2 text-muted-foreground" onClick={onDismiss}>Bara klart</button>
     </div>}
     {mine.length > 0 && <section className="rounded-2xl bg-[#F8ECE6] p-3 text-ink" aria-label="Det osynliga arbetet">
@@ -44,7 +44,7 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
         <span className="flex-1 font-semibold">Det osynliga arbetet ({mine.length})</span>
         <ChevronRight size={20} className={expanded ? "rotate-90 transition-transform" : "transition-transform"} aria-hidden />
       </button>
-      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row => <li key={row.id} className="flex items-start gap-2 rounded-xl bg-white/60 px-3 py-2 text-sm"><span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span><span className="shrink-0 text-xs text-muted-foreground">Redan gjort</span></li>)}</ul>}
+      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row => <li key={row.id} className="flex min-w-0 items-start gap-2 rounded-xl bg-card/75 px-3 py-2 text-sm"><span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span><span className="shrink-0 text-xs text-muted-foreground">Redan gjort</span></li>)}</ul>}
     </section>}
   </div>;
 }
