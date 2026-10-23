@@ -40,6 +40,20 @@ describe("visual calendar", () => {
     expect(days["2026-10-23"]?.[0]?.date).toBe("2026-10-23");
     expect(reminder.date).toBe("2026-10-05");
   });
+  it("shows a rescheduled reminder once on the new day alongside that day's own occurrence", () => {
+    const reminder = { id: "walk", title: "Promenad", date: "2026-10-20",
+      time: "09:00", endTime: "09:30", repeat: "daily" as const, completed: false, createdAt: 0,
+      occurrenceOverrides: { "2026-10-21": { date: "2026-10-22", time: "10:00" } } };
+    const original = JSON.stringify(reminder);
+    const days = projectCalendar(["2026-10-21", "2026-10-22", "2026-10-23"], { ...empty, reminders: [reminder] }, "2026-10-22");
+    expect(days["2026-10-21"]).toEqual([]);
+    expect(days["2026-10-22"]?.map(entry => [entry.id, entry.occurrenceDate, entry.time, entry.endTime])).toEqual([
+      ["rem-walk", "2026-10-22", "09:00", "09:30"],
+      ["rem-walk:2026-10-21", "2026-10-21", "10:00", "10:30"],
+    ]);
+    expect(days["2026-10-23"]?.map(e => e.time)).toEqual(["09:00"]);
+    expect(JSON.stringify(reminder)).toBe(original);
+  });
   it("preserves original records while projecting routines", () => {
     const data = { ...empty, routines: [{ id: "r", title: "Medicin", enabled: true, time: "09:00", createdAt: 0, repeat: "daily" as const }] };
     const original = JSON.stringify(data);

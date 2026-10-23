@@ -105,6 +105,9 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [routineExceptions, setRoutineExceptions] = useCloudSyncedStorage<RoutineOccurrenceException[]>("myflove-routine-occurrence-exceptions", []);
   const [routineEditOpen, setRoutineEditOpen] = useState(false);
   const [routineTime, setRoutineTime] = useState("");
+  const [singleReminderEditOpen, setSingleReminderEditOpen] = useState(false);
+  const [singleReminderDate, setSingleReminderDate] = useState("");
+  const [singleReminderTime, setSingleReminderTime] = useState("");
   const [familySettings, setFamilySettings] = useState(false);
   const categoryDays = useMemo(() => Object.fromEntries(Object.entries(allDays).map(([d, items]) => [d, items.filter(e => isFamilyEntry(e) || visible.includes(e.source === "study" || e.area === "studier" ? "studier" : e.area === "jobb" ? "jobb" : "privat"))])), [allDays, visible]);
   const planningDays = useMemo(() => Object.fromEntries(Object.entries(categoryDays).map(([d, items]) => [d, applyFamilyPresence(items, familyPreferences)])), [categoryDays, familyPreferences]);
@@ -125,7 +128,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [familyConfirm, setFamilyConfirm] = useState<{ entries: CalendarEntry[]; action: () => void; duration: number; day: string } | null>(null);
   const [familyAlternatives, setFamilyAlternatives] = useState<{ day: string; duration: number } | null>(null);
   const { tasks, addTask, updateTask } = useTasks();
-  const { reminders, addReminder, updateReminder } = useReminders();
+  const { reminders, addReminder, updateReminder, rescheduleReminderOccurrence, resetReminderOccurrence } = useReminders();
   const { children, items: originalChildItems, updateItem: updateChildItem, addItem: addChildItem } = useChildren();
   const ownedChildren = (children ?? []).filter(child => child.owner_id === owner);
   const { today: flowItems, toggleItem } = useFlowItems(date);
@@ -166,7 +169,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const [suggestions, setSuggestions] = useState(false);
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => { const tick = () => { const d = new Date(); setNow(d.getHours() * 60 + d.getMinutes()); }; tick(); const timer = setInterval(tick, 30000); return () => clearInterval(timer); }, []);
-  useEffect(() => { setDetails(null); setCluster([]); setAdding(false); setPlanning(false); setSuggestions(false); setDismissed(null); setUtility(null); setFamilySettings(false); setFamilyConfirm(null); setFamilyAlternatives(null); setChildIds([]); setFullDay(false); }, [owner]);
+  useEffect(() => { setDetails(null); setCluster([]); setAdding(false); setPlanning(false); setSingleReminderEditOpen(false); setSuggestions(false); setDismissed(null); setUtility(null); setFamilySettings(false); setFamilyConfirm(null); setFamilyAlternatives(null); setChildIds([]); setFullDay(false); }, [owner]);
   const timed = entries.filter(e => !!e.time);
   const untimed = myEntries.filter(e => !e.time && ["task", "quickflow", "priority"].includes(e.source));
   const gaps = calendarGaps(planningEntries);
@@ -180,13 +183,32 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   };
   const openAdd = (forChildren = false, targetDate = date) => { setDayEditorOpen(false); setChildIds(forChildren && ownedChildren.length === 1 ? [ownedChildren[0]!.id] : []); setEditDate(targetDate); setPeriodEnd(""); setChildPeriod(false); setTitle(""); setNote(""); setTime(""); setLength(""); setImpact("unknown"); setKind(forChildren ? "child" : "task"); setNotify(false); setAdding(true); };
   const openDetails = (entry: CalendarEntry) => {
-    setDetails(entry); setPlanning(false); setRoutineEditOpen(false); setRoutineTime(entry.time ?? ""); setEditDate(entry.date); setTime(entry.time ?? "");
+    setDetails(entry); setPlanning(false); setRoutineEditOpen(false); setSingleReminderEditOpen(false);
+    setSingleReminderDate(entry.date); setSingleReminderTime(entry.time ?? "");
+    setRoutineTime(entry.time ?? ""); setEditDate(entry.date); setTime(entry.time ?? "");
     const task = tasks.find(item => item.id === entry.sourceId);
     const reminder = reminders.find(item => item.id === entry.sourceId);
     setNote(task?.note ?? reminder?.note ?? ""); setPeriodEnd(reminder?.endDate ?? "");
     const start = minuteOf(entry.time), end = minuteOf(entry.endTime);
     setLength(start !== null && end !== null && end > start ? String(end - start) : "");
     setImpact(entry.energyImpact ?? "unknown");
+  };
+  const saveSingleReminderOccurrence = (entry: CalendarEntry) => {
+    if (!owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner) return;
+    try {
+      rescheduleReminderOccurrence(entry.sourceId, entry.occurrenceDate ?? entry.date,
+        singleReminderDate, singleReminderTime);
+      setDetails(null);
+      toast.success("Bara detta tillfälle flyttades. Övriga dagar är oförändrade.");
+    } catch {
+      toast.error("Kontrollera datum och tid. Ingen ändring har sparats.");
+    }
+  };
+  const restoreSingleReminderOccurrence = (entry: CalendarEntry) => {
+    if (!owner || !isActiveOwner(owner) || document.documentElement.dataset.calendarOwner !== owner) return;
+    resetReminderOccurrence(entry.sourceId, entry.occurrenceDate ?? entry.date);
+    setDetails(null);
+    toast.success("Tillfället följer nu seriens ordinarie tid.");
   };
   const confirmFamily = (day: string, start: string, end: string | undefined, duration: number, action: () => void): boolean => {
     const related = familyPlanningContext(planningDays[day] ?? [], start, end);
@@ -526,7 +548,41 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
         </fieldset>
       </DialogContent>
     </Dialog>
-    <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="pace-mobile-controls max-h-[88dvh] w-[calc(100vw-2rem)] max-w-lg overflow-x-hidden overflow-y-auto rounded-3xl px-4 sm:px-6"><DialogHeader><DialogTitle className="break-words pr-5 text-xl leading-snug sm:text-2xl">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4">{details.periodEnd && <p className="rounded-xl bg-secondary/45 px-3 py-2 text-sm text-muted-foreground">{t("Pågående period · ingen daglig avbockning")}. {details.periodStart ?? details.date}–{details.periodEnd}</p>}<p data-calendar-area={calendarArea(details)} className="flex items-center gap-2 text-sm"><span className="h-2.5 w-2.5 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(calendarArea(details)))}</p>{isFamilyEntry(details) && <div className="space-y-2 rounded-2xl bg-secondary/35 p-3"><p className="text-xs text-muted-foreground">{t("Familjekontext, inte en egen uppgift.")}</p><Button variant="outline" aria-pressed={details.requiresParent === true} className="min-h-11 w-full" onClick={() => void setPresence(details)}><UserRound size={16} />{t(details.requiresParent ? "Behöver mig" : "Markera: Behöver mig")}</Button></div>}{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && (details.source === "task" || details.source === "reminder") && <FlowItemActions itemId={details.id} showLabel onSaved={() => setDetails(null)} className="flex min-w-0 items-center gap-2" />} {details.editable && !details.recurring && !details.periodEnd && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Hjälp att planera tiden")}</Button>}{details.editable && !details.recurring && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{details.editable && !details.periodEnd && (details.source === "task" || details.source === "reminder") && <div className="space-y-3">
+    <Dialog open={!!details} onOpenChange={open => { if (!open) setDetails(null); }}><DialogContent className="pace-mobile-controls max-h-[88dvh] w-[calc(100vw-2rem)] max-w-lg overflow-x-hidden overflow-y-auto rounded-3xl px-4 sm:px-6"><DialogHeader><DialogTitle className="break-words pr-5 text-xl leading-snug sm:text-2xl">{details?.title}</DialogTitle><DialogDescription>{details?.date} {details?.time}{details?.endTime && `–${details.endTime}`} {details?.label}</DialogDescription></DialogHeader>{details && <div className="space-y-4">{details.periodEnd && <p className="rounded-xl bg-secondary/45 px-3 py-2 text-sm text-muted-foreground">{t("Pågående period · ingen daglig avbockning")}. {details.periodStart ?? details.date}–{details.periodEnd}</p>}<p data-calendar-area={calendarArea(details)} className="flex items-center gap-2 text-sm"><span className="h-2.5 w-2.5 rounded-full calendar-area-dot" aria-hidden />{t(calendarAreaLabel(calendarArea(details)))}</p>{isFamilyEntry(details) && <div className="space-y-2 rounded-2xl bg-secondary/35 p-3"><p className="text-xs text-muted-foreground">{t("Familjekontext, inte en egen uppgift.")}</p><Button variant="outline" aria-pressed={details.requiresParent === true} className="min-h-11 w-full" onClick={() => void setPresence(details)}><UserRound size={16} />{t(details.requiresParent ? "Behöver mig" : "Markera: Behöver mig")}</Button></div>}{planning ? <>{scheduleFields}{energyFields}<Button className="w-full min-h-11" onClick={() => moveEntry(details, editDate, time, length, impact)}>{t("Spara")}</Button></> : <>{details.editable && (details.source === "task" || details.source === "reminder") && <FlowItemActions itemId={details.source === "reminder" ? `rem-${details.sourceId}` : details.id} showLabel onSaved={() => setDetails(null)} className="flex min-w-0 items-center gap-2" />} {details.source === "reminder" && details.recurring && !details.periodEnd &&
+          (reminders.find(r => r.id === details.sourceId)?.repeat ?? "none") !== "none" &&
+          <div className="space-y-2 rounded-xl border border-[#EDE5E9] bg-secondary/25 p-3">
+            <p className="text-xs text-muted-foreground">Återkommande påminnelse · välj om bara det här tillfället ska ändras.</p>
+            <Button type="button" variant="outline" className="min-h-11 w-full"
+              onClick={() => setSingleReminderEditOpen(value => !value)}>
+              <Clock size={16} />{t("Ändra bara detta tillfälle")}
+            </Button>
+            {singleReminderEditOpen && <div className="space-y-3 rounded-xl bg-card p-3">
+              <p className="text-xs text-muted-foreground">Ursprungligt tillfälle: {details.occurrenceDate ?? details.date}. Framtida dagar ändras inte.</p>
+              <label className="block text-sm">Nytt datum
+                <Input aria-label="Nytt datum för tillfället" type="date" className="mt-1 min-h-11"
+                  value={singleReminderDate} onChange={event => setSingleReminderDate(event.target.value)} />
+              </label>
+              <label className="block text-sm">Ny tid
+                <Input aria-label="Ny tid för tillfället" type="time" className="mt-1 min-h-11"
+                  value={singleReminderTime} onChange={event => setSingleReminderTime(event.target.value)} />
+              </label>
+              <Button type="button" className="min-h-11 w-full"
+                disabled={!/^\d{4}-\d{2}-\d{2}$/.test(singleReminderDate) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(singleReminderTime)}
+                onClick={() => saveSingleReminderOccurrence(details)}>
+                {t("Spara bara detta tillfälle")}
+              </Button>
+              <Button type="button" variant="ghost" className="min-h-11 w-full" onClick={() => setSingleReminderEditOpen(false)}>
+                {t("Avbryt")}
+              </Button>
+            </div>}
+            {details.occurrenceDate &&
+              reminders.find(r => r.id === details.sourceId)?.occurrenceOverrides?.[details.occurrenceDate] &&
+              <Button type="button" variant="ghost" className="min-h-11 w-full"
+                onClick={() => restoreSingleReminderOccurrence(details)}>
+                {t("Återställ till seriens tid")}
+              </Button>}
+          </div>}
+        {details.editable && !details.recurring && !details.periodEnd && <Button variant="outline" className="min-h-11 w-full" onClick={() => setPlanning(true)}><Clock size={16} />{t("Hjälp att planera tiden")}</Button>}{details.editable && !details.recurring && details.time && <Button variant="ghost" className="min-h-11 w-full" onClick={() => moveEntry(details, details.date, "", "")}>{t("Ta bort tid")}</Button>}{details.editable && !details.periodEnd && (details.source === "task" || details.source === "reminder") && <div className="space-y-3">
   <div className="flex min-w-0 flex-wrap items-center gap-2">
     {(() => { const match = flowItems.find(i => i.id === details.id); return match?.completable ? <Button variant="outline" className="min-h-11 min-w-0 flex-1 whitespace-normal px-3 text-sm sm:flex-none" onClick={() => { toggleItem(match); setDetails(null); }}><Check size={16} className="shrink-0" />{t(match.done ? "Ångra klart" : "Markera klar")}</Button> : null; })()}
     
