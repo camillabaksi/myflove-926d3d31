@@ -488,7 +488,7 @@ export function PlanningWorkspace({
               {t("Vad vill du planera?")}
             </label>
             <p id={`help-${audience}`} className="text-sm text-muted-foreground">
-              {t("En aktivitet per rad. Granska innan du sparar.")}
+              {t("En aktivitet per rad. Lägg till detaljer efteråt om du vill.")}
             </p>
             <Textarea
               id={`activities-${audience}`}
@@ -512,12 +512,6 @@ export function PlanningWorkspace({
                 onAddToDraft={(title) => setText((previous) => addStrategyToPlanningDraft(previous, title))}
               />
             )}
-            <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
-              <span aria-live="polite">
-                {lineCount} {t(lineCount === 1 ? "aktivitet" : "aktiviteter")}
-              </span>
-              <span>{t("Inte sparade än")}</span>
-            </div>
             {forChildren && !selected.length && (
               <p className="text-sm text-muted-foreground">
                 {t("Välj barn innan du granskar aktiviteterna.")}
@@ -555,9 +549,6 @@ export function PlanningWorkspace({
                 {t("Ändra listan")}
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Välj en dag eller markera flera dagar för exempelvis en kurs eller semester.
-            </p>
             <fieldset disabled={locked || saving} className="min-w-0 space-y-4">
               <legend className="sr-only">{t("Aktiviteter att spara")}</legend>
               {rows.map((row, index) => (
@@ -588,26 +579,7 @@ export function PlanningWorkspace({
                       <Trash2 size={16} />
                     </Button>
                   </div>
-                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Flera dagar / period</label>
-                  {forMe && (
-                     <details className="mt-2 rounded-xl">
-                       <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">
-                         {t("Område · valfritt")}
-                         <span className="ml-2 text-xs">({AREA_META[periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)]?.label ?? "Vardag"})</span>
-                       </summary>
-                       <label className="mt-1 block text-sm">
-                         <span className="sr-only">{t("Område")}</span>
-                         <select
-                           aria-label={`${t("Område")} · ${row.title}`}
-                           value={periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)}
-                           onChange={(event) => setPeriodAreas((prev) => ({ ...prev, [row.id]: event.target.value as LifeArea }))}
-                           className="min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base"
-                         >
-                           {Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}
-                         </select>
-                       </label>
-                     </details>
-                   )}
+                  <label className="mt-2 flex min-h-10 items-center gap-2 text-sm"><input type="checkbox" checked={!!row.endDate} onChange={(event) => patchRow(row.id, event.target.checked ? { endDate: addDaysISO(row.date, 1), time: "", endTime: "" } : { endDate: undefined })} />Pågår flera dagar</label>
                   <div className="mt-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
                     <label className="min-w-0 text-sm">
                       {row.endDate ? "Från" : t("Dag")}
@@ -619,39 +591,51 @@ export function PlanningWorkspace({
                         className="mt-1 min-h-11 w-full min-w-0 bg-card text-base"
                       />
                     </label>
-                    {row.endDate ? <label className="min-w-0 text-sm">Till och med<Input type="date" min={row.date} required value={row.endDate} onChange={(event) => patchRow(row.id, { endDate: event.target.value })} className="mt-1 min-h-11 w-full min-w-0 bg-card text-base" /></label> : <>                    <label className="min-w-0 text-sm">
-                      {t("Start · frivilligt")}
-                      <Input
-                        type="time"
-                        value={row.time}
-                        onChange={(event) => patchRow(row.id, { time: event.target.value })}
-                        className="mt-1 min-h-11 min-w-0 bg-card text-base"
-                      />
-                    </label>
-                    <label className="min-w-0 text-sm">
-                      {t("Slut · frivilligt")}
-                      <Input
-                        type="time"
-                        value={row.endTime}
-                        onChange={(event) => patchRow(row.id, { endTime: event.target.value })}
-                        className="mt-1 min-h-11 min-w-0 bg-card text-base"
-                      />
-                    </label>
-</>}
+                    {row.endDate && (
+                      <label className="min-w-0 text-sm">
+                        Till och med
+                        <Input type="date" min={row.date} required value={row.endDate} onChange={(event) => patchRow(row.id, { endDate: event.target.value })} className="mt-1 min-h-11 w-full min-w-0 bg-card text-base" />
+                      </label>
+                    )}
                   </div>
-                  <details className="mt-2">
-                    <summary className="flex min-h-11 cursor-pointer items-center text-sm text-muted-foreground">
-                      {t("Plats · frivilligt")}
+                  <details className="mt-2 rounded-xl border border-border/60 bg-secondary/15 px-3" data-testid={`planning-optional-${index}`}>
+                    <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 text-sm text-muted-foreground">
+                      <span>
+                        {t(row.endDate ? (forMe ? "Plats och område" : "Plats") : (forMe ? "Tid, plats och område" : "Tid och plats"))} <span className="text-xs">({t("valfritt")})</span>
+                      </span>
+                      {(row.time || row.endTime || row.location || periodAreas[row.id]) && <span className="shrink-0 text-xs text-primary">Ifyllt</span>}
                     </summary>
-                    <label className="block text-sm">
-                      <span className="sr-only">{t("Plats")}</span>
-                      <Input
-                        value={row.location}
-                        onChange={(event) => patchRow(row.id, { location: event.target.value })}
-                        maxLength={160}
-                        className="min-h-11 bg-card text-base"
-                      />
-                    </label>
+                    <div className="space-y-3 pb-3">
+                      {!row.endDate && (
+                        <div className="grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-2">
+                          <label className="min-w-0 text-sm">
+                            {t("Start · frivilligt")}
+                            <Input type="time" value={row.time} onChange={(event) => patchRow(row.id, { time: event.target.value })} className="mt-1 min-h-11 w-full min-w-0 bg-card text-base" />
+                          </label>
+                          <label className="min-w-0 text-sm">
+                            {t("Slut · frivilligt")}
+                            <Input type="time" value={row.endTime} onChange={(event) => patchRow(row.id, { endTime: event.target.value })} className="mt-1 min-h-11 w-full min-w-0 bg-card text-base" />
+                          </label>
+                        </div>
+                      )}
+                      <label className="block text-sm">
+                        {t("Plats · frivilligt")}
+                        <Input value={row.location} onChange={(event) => patchRow(row.id, { location: event.target.value })} maxLength={160} className="mt-1 min-h-11 w-full bg-card text-base" />
+                      </label>
+                      {forMe && (
+                        <label className="block text-sm">
+                          {t("Område · valfritt")}
+                          <select
+                            aria-label={`${t("Område")} · ${row.title}`}
+                            value={periodAreas[row.id] ?? suggestActivityArea(row.title) ?? (activeArea === "alla" ? "vardag" : activeArea)}
+                            onChange={(event) => setPeriodAreas((prev) => ({ ...prev, [row.id]: event.target.value as LifeArea }))}
+                            className="mt-1 min-h-11 w-full rounded-xl border border-input bg-card px-3 text-base"
+                          >
+                            {Object.entries(AREA_META).map(([value, meta]) => <option key={value} value={value}>{meta.label}</option>)}
+                          </select>
+                        </label>
+                      )}
+                    </div>
                   </details>
                   {forChildren && (
                     <fieldset className="mt-2">
