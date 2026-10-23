@@ -18,6 +18,7 @@ vi.mock("@/hooks/use-data", () => ({
   useReminders: () => ({ reminders: [
     { id: "period", title: "Pågående kurs", date: "2026-11-01", endDate: "2026-11-30", time: undefined, note: "Veckokurs", repeat: "none" },
     { id: "rem-clock", title: "Ring läkaren", date: "2026-10-20", time: "12:00", endTime: "12:30", remindMinutesBefore: 10, repeat: "none" },
+    { id: "repeat", title: "Daglig paus", date: "2026-10-20", time: "14:00", repeat: "daily", completed: false },
   ], updateReminder: calls.updateReminder, deleteReminder: calls.deleteReminder }),
 }));
 vi.mock("@/hooks/use-quickflow", () => ({ useQuickflow: () => ({ items: [], update: vi.fn(), remove: vi.fn() }) }));
@@ -84,6 +85,19 @@ describe("Delete a day activity by source identity", () => {
     expect(calls.updateTask).toHaveBeenCalledWith("undated", expect.objectContaining({
       title: "Skriv brevet", dueDate: undefined,
     }));
+  });
+
+  it("warns before editing or deleting an entire recurring reminder series", () => {
+    render(<FlowItemActions itemId="rem-repeat" showLabel />);
+    fireEvent.click(screen.getByRole("button", { name: "Ändra aktivitet" }));
+    const dialog = within(screen.getByRole("dialog"));
+    expect(dialog.getByText(/gäller hela serien/)).toBeInTheDocument();
+    fireEvent.click(dialog.getByRole("button", { name: "Ta bort hela serien" }));
+    expect(dialog.getByRole("button", { name: "Ja, ta bort hela serien" })).toBeInTheDocument();
+    expect(calls.deleteReminder).not.toHaveBeenCalled();
+    fireEvent.click(dialog.getByRole("button", { name: "Behåll" }));
+    fireEvent.click(dialog.getByRole("button", { name: "Avbryt" }));
+    expect(calls.deleteReminder).not.toHaveBeenCalled();
   });
 
   it("keeps existing continuous-period settings available without turning it into a timed task", () => {

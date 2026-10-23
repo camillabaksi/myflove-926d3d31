@@ -24,6 +24,13 @@ const QUEUE_KEY = "myflove-notis-atgarder";
 /** Hur många minuter "skjut upp" flyttar fram tiden. */
 export const SNOOZE_MINUTES = 10;
 
+/** Calendar notification actions identify the original recurrence date.
+ * Legacy undated keys remain supported for notifications already delivered. */
+export function notificationItemKeyForClientKey(clientKey: string): string {
+  const match = /^rem:([^:]+)(?::(\d{4}-\d{2}-\d{2}))?(?::.*)?$/.exec(clientKey);
+  return match ? `reminder:${match[1]}${match[2] ? `:${match[2]}` : ""}` : clientKey;
+}
+
 /** Notiser med de här prefixen får snabbval. */
 export function supportsQuickActions(itemKey: string | undefined): boolean {
   if (!itemKey) return false;

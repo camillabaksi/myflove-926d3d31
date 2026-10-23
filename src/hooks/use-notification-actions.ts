@@ -5,6 +5,8 @@ import { useQuickflow } from "@/hooks/use-quickflow";
 import { useInstanceStatus } from "@/hooks/use-instance-status";
 import { emitActivityDone } from "@/lib/activity-energy-event";
 import { todayISO } from "@/lib/day";
+import { occursOn } from "@/lib/recurrence";
+import { nativeRemindersSupported, scheduleNativeOneOff } from "@/lib/native-reminders";
 import { syncReminder } from "@/lib/push.functions";
 import {
   captureActionFromUrl,
@@ -68,7 +70,7 @@ export function useNotificationActions() {
   useEffect(() => {
     const apply = (itemKey: string, action: NotificationActionType) => {
       const s = stateRef.current;
-      const [kind, id] = itemKey.split(":");
+      const [kind, id, specifiedDate] = itemKey.split(":");
       if (!kind || !id) return;
 
       if (kind === "task" || kind === "deadline") {
@@ -92,21 +94,48 @@ export function useNotificationActions() {
       if (kind === "reminder") {
         const rem = s.reminders.find((r) => r.id === id);
         if (!rem) return;
+        // New notifications carry the original occurrence date; older, already
+        // delivered actions lack one and are interpreted in the current day.
+        const recurring = (rem.repeat ?? "none") !== "none";
+        if (recurring && specifiedDate &&
+          (!/^\d{4}-\d{2}-\d{2}$/.test(specifiedDate) ||
+           !occursOn(rem.date, rem.repeat, specifiedDate))) return;
+        const occurrenceDate = specifiedDate || todayISO();
         if (action === "done") {
-          if ((rem.repeat ?? "none") !== "none") {
-            // A notification represents the occurrence being acknowledged today,
-            // never completion of the recurring master reminder itself.
-            const date = todayISO();
+          if (recurring) {
             const sourceId = `reminder-${rem.id}`;
-            if (!s.isInstanceDone(sourceId, date)) {
-              s.setInstanceDone(sourceId, date, true);
-              emitActivityDone({ id: `rem-${rem.id}`, title: rem.title, dueDate: date });
+            if (!s.isInstanceDone(sourceId, occurrenceDate)) {
+              s.setInstanceDone(sourceId, occurrenceDate, true);
+              emitActivityDone({ id: `rem-${rem.id}`, title: rem.title, dueDate: occurrenceDate });
             }
           } else if (!rem.completed) {
             s.toggleReminder(rem.id);
           }
           toast.success("Klart ✓", { description: rem.title });
-        } else {
+        } else if (action === "snooze" && recurring) {
+          // The series' clock belongs to every occurrence. A ten-minute snooze
+          // must be a separate one-off reminder, never updateReminder(master).
+          const now = Date.now();
+          const target = new Date(now + SNOOZE_MINUTES * 60_000).toISOString();
+          const occurrenceKey = `rem:${rem.id}:${occurrenceDate}`;
+          const oneOff = {
+            clientKey: `${occurrenceKey}:snooze:${now}`,
+            title: `🔔 ${rem.title}`,
+            body: `Uppskjuten påminnelse: ${rem.title}`,
+            deliverAt: target,
+            url: "/kalender",
+          };
+          const success = () => toast(`Påminnelse om ${SNOOZE_MINUTES} min`, { description: rem.title });
+          const failed = () => toast.error("Kunde inte skjuta upp påminnelsen.", { description: rem.title });
+          if (nativeRemindersSupported()) {
+            void scheduleNativeOneOff(oneOff, occurrenceKey)
+              .then(ok => { if (ok) success(); else failed(); })
+              .catch(failed);
+          } else {
+            void syncReminder({ data: { ...oneOff, kind: "custom" } })
+              .then(success).catch(failed);
+          }
+        } else if (action === "snooze") {
           if (rem.time) s.updateReminder(rem.id, { time: shiftTime(rem.time, SNOOZE_MINUTES) });
           toast(`Skjuten ${SNOOZE_MINUTES} min`, { description: rem.title });
         }

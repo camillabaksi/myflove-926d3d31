@@ -326,6 +326,8 @@ function FlowItemEditDialog({
   const [detailsExpanded, setDetailsExpanded] = useState(() => !!(initial?.endDate || initial?.endTime || initial?.note));
 
   const home = externalHome(itemId);
+  const changesWholeReminderSeries = kind === "kalender" &&
+    (reminders.find(reminder => reminder.id === realId)?.repeat ?? "none") !== "none";
 
   const set = (patch: Partial<typeof form>) => setForm((f) => ({ ...f, ...patch }));
 
@@ -403,7 +405,9 @@ function FlowItemEditDialog({
           <DialogDescription>
             {kind === "extern"
               ? `Den här kommer från ${home?.label ?? "en annan del av appen"}. Ändra den där så följer den med hit.`
-              : "Du bestämmer själv – ändra det du vill eller ta bort helt."}
+              : changesWholeReminderSeries
+                ? "Det här är en återkommande påminnelse. Ändringar av datum, tid eller titel gäller hela serien. Enbart dagens avbockning ändrar du i kalendern."
+                : "Du bestämmer själv – ändra det du vill eller ta bort helt."}
           </DialogDescription>
         </DialogHeader>
 
@@ -522,7 +526,7 @@ function FlowItemEditDialog({
               {confirmDelete ? (
                 <div className="flex items-center gap-2">
                   <Button variant="destructive" className="rounded-full" onClick={remove}>
-                    Ja, ta bort
+                    {changesWholeReminderSeries ? "Ja, ta bort hela serien" : "Ja, ta bort"}
                   </Button>
                   <Button
                     variant="ghost"
@@ -538,7 +542,7 @@ function FlowItemEditDialog({
                   className="rounded-full text-destructive"
                   onClick={() => setConfirmDelete(true)}
                 >
-                  <Trash2 size={16} /> Ta bort
+                  <Trash2 size={16} /> {changesWholeReminderSeries ? "Ta bort hela serien" : "Ta bort"}
                 </Button>
               )}
               <div className="flex items-center gap-2">

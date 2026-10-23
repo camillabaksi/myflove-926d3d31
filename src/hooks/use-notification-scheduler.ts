@@ -94,7 +94,7 @@ export function useNotificationScheduler() {
             sendPushNotification(`🔔 ${r.title}`, {
               body: r.note ? `Kl ${r.time} – ${r.note}` : `Påminnelse kl ${r.time}`,
               tag: key,
-              itemKey: `reminder:${r.id}`,
+              itemKey: `reminder:${r.id}:${todayStr}`,
             });
           }
         }
@@ -107,7 +107,7 @@ export function useNotificationScheduler() {
             sendPushNotification(`🔔 Om ${lead} min: ${r.title}`, {
               body: `Kl ${r.time}`,
               tag: key,
-              itemKey: `reminder:${r.id}`,
+              itemKey: `reminder:${r.id}:${todayStr}`,
             });
           }
         }
