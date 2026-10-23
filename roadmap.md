@@ -1,8 +1,8 @@
 # Roadmap
 ## Kvällsstund och Mer – riktad korrigeringsrunda (2026-10-23)
 - [x] Inspekterat ritualens sex steg, typografikollisionen och Mers befintliga områdestoner; exakt avgränsad plan framtagen.
-- [ ] Genomför endast godkända text-, form-, kontrast-, avrundnings- och färgstyrkekorrigeringar; bevara etapp 1–2 och all sparning/navigation.
-- [ ] Kontrollera mobilens sex steg och Mer utan kontosparning, kör relevanta tester, kontrollera byggresultat och uppdatera båda ändringsloggarna. Ingen publicering.
+- [x] Genomfört endast godkända text-, form-, kontrast-, avrundnings- och färgstyrkekorrigeringar; etapp 1–2 och all sparning/navigation bevarade.
+- [x] Mobilens sex steg kontrollerade inloggat vid 360 px och 390 px med simulerad 200 % text utan sparning eller horisontellt dialogoverflow; Mer och sluttext bildgranskade. 17 riktade tester godkända och automatiskt bygge OK; båda ändringsloggarna uppdaterade. Ingen publicering. Fysisk mobil/skärmläsare ej verifierade.
 ## Det som också tog plats (2026-10-21)
 - [x] Registrerat kraven och påbörjat granskning av Idag, privat kontolagring och Pace-omplanering.
 - [x] Avgränsad plan godkänd och arkiverad före implementation.

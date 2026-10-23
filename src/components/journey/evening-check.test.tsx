@@ -5,6 +5,7 @@ import EveningCheck, { formatEveningEnergy } from "./evening-check";
 
 const state = vi.hoisted(() => ({
   owner: "user-a",
+  ork10: 5,
   savedWrites: 0,
   entries: [] as { title: string; direction: string; occurredAt: string }[],
   addFactor: vi.fn(),
@@ -33,7 +34,7 @@ vi.mock("@/hooks/use-evening-check", () => ({
   useEveningCheck: () => ({ evening: null, eveningHistory: [], logEvening: state.logEvening }),
 }));
 vi.mock("@/hooks/use-day-journey", () => ({
-  useDayJourney: () => ({ input: { ork10: 5, batteryNow: 45, done: 2, planned: 3, openThoughts: 1 } }),
+  useDayJourney: () => ({ input: { ork10: state.ork10, batteryNow: 45, done: 2, planned: 3, openThoughts: 1 } }),
 }));
 vi.mock("@/hooks/use-day-window", () => ({
   useDayWindow: () => ({ todayEdges: { morning: 5, evening: null }, setEvening: state.setEvening }),
@@ -66,6 +67,7 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date(2026, 9, 23, 20, 30));
   state.owner = "user-a";
+  state.ork10 = 5;
   state.entries = [];
   state.savedWrites = 0;
   vi.clearAllMocks();
@@ -86,6 +88,13 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     expect(formatEveningEnergy(0)).toBe("0");
     expect(formatEveningEnergy(9.96)).toBe("10");
     expect(formatEveningEnergy(Number.NaN)).toBe("—");
+    state.ork10 = registered;
+    render(<EveningCheck />);
+    startEvening();
+    next(); next();
+    expect(screen.getByText("Registrerad ork: 6,4 av 10.")).toBeInTheDocument();
+    expect(state.ork10).toBe(registered);
+    expect(state.savedWrites).toBe(0);
   });
 
   it("does not write mood or energy just because the user presses Next, then closes early", () => {
