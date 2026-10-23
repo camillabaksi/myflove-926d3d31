@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-23 – Roadmap städad till verkligt återstående arbete",
+    items: ["Dokumentation (2026-10-23): Roadmap-listan gick från 565 rader med 45 öppna punkter till en sida som bara innehåller det som faktiskt återstår: punkter som väntar på ett beslut, punkter blockerade av något utanför appen och ett ej påbörjat arbete. Genomfört eller ersatt arbete flyttades till docs/roadmap-arkiv-2026-10-23.md oförändrat. Ingen app-, data- eller funktionsskillnad. Ingen publicering."],
+  },
+  {
     title: "2026-10-23 – Mer: Historik direkt i Insikter & historik",
     items: ["Mer (2026-10-23): Gruppen Insikter & historik är nu öppen direkt, så Historik syns som eget val bredvid Insikter i både vanligt och enkelt läge – ett tryck räcker. Ingen extra Historik-länk på annan plats; gruppen kan fortfarande fällas ihop. Sidan, sökningen, tillbakavägen och all historikdata är oförändrade. Ingen publicering."],
   },
