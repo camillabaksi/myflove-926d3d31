@@ -75,6 +75,35 @@ const write = (text: string) =>
   });
 
 describe("Plan several activities before saving", () => {
+  it("shows one compact seven-day picker before the input without seven tall day rows", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="week" />);
+    const picker = screen.getByRole("group", { name: "Veckans dagar" });
+    expect(picker.className).toContain("grid-cols-4");
+    expect(picker.className).toContain("min-[390px]:grid-cols-7");
+    const days = within(picker).getAllByRole("button");
+    expect(days).toHaveLength(7);
+    expect(days.every((day) => day.getAttribute("aria-label")?.includes("planerade aktiviteter"))).toBe(true);
+    expect(within(picker).queryByText("Inget planerat")).toBeNull();
+    fireEvent.click(days[2]!);
+    expect(days[2]).toHaveAttribute("aria-pressed", "true");
+    write("Studera");
+    expect(screen.getByRole("textbox", { name: "Vad vill du planera?" })).toHaveValue("Studera");
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
+  it("keeps suggested activity areas available but collapses them until requested", () => {
+    render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
+    write("Handla");
+    fireEvent.click(screen.getByRole("button", { name: /Granska aktiviteter/ }));
+    const details = screen.getByText("Område · valfritt").closest("details");
+    expect(details).not.toBeNull();
+    expect(details).not.toHaveAttribute("open");
+    fireEvent.click(screen.getByText("Område · valfritt"));
+    expect(details).toHaveAttribute("open");
+    expect(screen.getByRole("combobox", { name: "Område · Handla" })).toBeTruthy();
+    expect(model.addTasks).not.toHaveBeenCalled();
+  });
+
   it("restores the unsaved review and edited date after leaving for Insights and returning", () => {
     const visit = render(<PlanningWorkspace owner="owner" audience="me" requestedPeriod="today" />);
     write("Handla\nBoka tid");
