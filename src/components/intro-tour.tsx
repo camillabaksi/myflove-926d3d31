@@ -1,10 +1,10 @@
 import { BrandLogo } from "@/components/paceable/brand-logo";
 import { useEffect, useState } from "react";
-import { Brain, X } from "lucide-react";
+import { Feather, X } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { FlowMascot } from "@/components/flow-mascot";
+import { PaceableStones } from "@/components/paceable/paceable-stones";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { isDemoSession } from "@/lib/demo-account";
 
@@ -49,13 +49,13 @@ export default function IntroTour() {
           </button>
         </div>
 
-        <div className="mx-auto grid h-24 w-24 place-items-center rounded-3xl bg-lavender/70">
-          <FlowMascot size="md" mood="calm" alt="Pace hälsar dig välkommen" />
+        <div className="mx-auto flex min-h-20 items-center justify-center" aria-hidden="true">
+          <PaceableStones tactile compact className="h-20 w-36" />
         </div>
 
         <div className="flex flex-col items-center gap-2">
           <Button className="w-full rounded-2xl press" onClick={() => finish(true)}>
-            <Brain className="h-4 w-4" aria-hidden /> Skriv en tanke
+            <Feather className="h-4 w-4" aria-hidden /> Skriv en tanke
           </Button>
           <Button
             variant="ghost"
