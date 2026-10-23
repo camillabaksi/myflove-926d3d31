@@ -137,6 +137,15 @@ export function AssistantContent({ chatId }: { chatId?: string }) {
     useTasks();
   const [doneActions, setDoneActions] = useState<Record<string, string>>({});
 
+  // Once a task is visible in the shared store, its stable ID is the guard.
+  // Releasing the short-lived tap lock also permits intentional re-adds after
+  // a user explicitly deletes the original task.
+  useEffect(() => {
+    for (const id of appliedNewActions.current) {
+      if (tasks.some((task) => task.id === id)) appliedNewActions.current.delete(id);
+    }
+  }, [tasks]);
+
   /** Same source tasks as Idag and Kalender. They are not all due today. */
   const taskListContext = activeTasks
     .slice(0, 20)
