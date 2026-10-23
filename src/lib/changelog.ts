@@ -10,6 +10,10 @@ export const CHANGELOG_UPDATED = "2026-10-23";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
   {
+    title: "2026-10-23 – Nya editorial­skärmbilder med de senaste ändringarna",
+    items: ["Material (2026-10-23): Ny svensk editorialbildserie i Paceable-editorialbilder-2026-10-23/ (38 bilder: 19 vyer × mobil 390 px och desktop 1280 px), tagna efter etapp 3, Historik i Insikter & historik, kalenderrättelserna och Kvällsstund/Mer-typografin. Anonymiserat underlag från ett verkligt konto i isolerad skrivskyddad session; kontot oförandrat, ingen appändring och ingen publicering."],
+  },
+  {
     title: "2026-10-23 – Roadmap städad till verkligt återstående arbete",
     items: ["Dokumentation (2026-10-23): Roadmap-listan gick från 565 rader med 45 öppna punkter till en sida som bara innehåller det som faktiskt återstår: punkter som väntar på ett beslut, punkter blockerade av något utanför appen och ett ej påbörjat arbete. Genomfört eller ersatt arbete flyttades till docs/roadmap-arkiv-2026-10-23.md oförändrat. Ingen app-, data- eller funktionsskillnad. Ingen publicering."],
   },
