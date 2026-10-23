@@ -182,7 +182,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
   const untimed = myEntries.filter(e => !e.time && ["task", "quickflow", "priority"].includes(e.source));
   const gaps = calendarGaps(planningEntries);
   const load = calendarLoad(planningEntries);
-  const nowIds = useMemo(() => nowCandidateIds(myEntries), [myEntries]);
+  const nowIds = useMemo(() => nowCandidateIds(entries.filter(e => !isFamilyEntry(e))), [entries]);
   const plan = useMemo(() => buildFlowPlan(flowItems.filter(i => !i.done && nowIds.has(i.id)).map(i => ({ ...i, time: entries.find(e => e.id === i.id)?.time, fixed: i.source !== "uppgift", movable: i.source === "uppgift" })), { today: date, mode: capacity.mode, nowMinutes: now ?? 0 }), [flowItems, entries, nowIds, date, capacity.mode, now]);
   const intensive = planningEntries.filter(e => e.energyImpact === "drains" && !e.done).length >= 3;
   const period = new Date(`${date}T12:00:00`).toLocaleDateString(locale, view === "manad" ? { month: "long", year: "numeric" } : { weekday: "long", day: "numeric", month: "long" });
