@@ -206,22 +206,22 @@ export default function ChildProfiles({
         ) : (
            <article
             key={c.id}
-             className="rounded-3xl border border-border bg-card p-4 shadow-soft"
-          >
-             <div className="flex min-w-0 items-center gap-3">
+             className="pace-adaptive rounded-3xl border border-border bg-card p-4 shadow-soft"
+           >
+             <div className="pace-adaptive-row flex min-w-0 items-center gap-3">
                <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-secondary text-2xl">{c.avatar || "💜"}</span>
                <div className="min-w-0 flex-1">
-                 <Button variant="link" type="button" onClick={() => onSelect?.(c)} className="h-auto max-w-full justify-start p-0 text-left font-display text-lg font-bold text-ink hover:text-primary">
-                   <span className="truncate">{c.name}</span><ChevronRight size={16} className="shrink-0" aria-hidden />
+                 <Button variant="link" type="button" onClick={() => onSelect?.(c)} className="h-auto max-w-full justify-start whitespace-normal p-0 text-left font-display text-lg font-bold text-ink hover:text-primary">
+                   <span className="min-w-0 break-words">{c.name}</span><ChevronRight size={16} className="shrink-0" aria-hidden />
                  </Button>
                  <p className="line-clamp-2 break-words text-xs leading-relaxed text-muted-foreground">
                    {c.helps.length ? c.helps.slice(0, 2).map((h) => t(h)).join(" · ") : t("Inget stöd sparat än")}
                  </p>
-               </div>
+                </div>
              </div>
-             <div className={cn("mt-3 grid gap-2", !userId || c.owner_id === userId ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px]" : "grid-cols-2")}>
-               <Button type="button" onClick={() => onSchedule?.(c)} className="h-11 min-w-0 rounded-2xl px-2 text-sm"><CalendarDays size={16} className="shrink-0" aria-hidden /> {t("Schema")}</Button>
-               <Button type="button" variant="outline" onClick={() => onHelp?.(c)} className="h-11 min-w-0 rounded-2xl px-2 text-sm"><HeartHandshake size={16} className="shrink-0" aria-hidden /> {t("Hjälp")}</Button>
+             <div className={cn("pace-adaptive-grid mt-3 grid gap-2", !userId || c.owner_id === userId ? "grid-cols-[minmax(0,1fr)_minmax(0,1fr)_44px]" : "grid-cols-2")}>
+               <Button type="button" onClick={() => onSchedule?.(c)} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-2xl px-2 text-sm"><CalendarDays size={16} className="shrink-0" aria-hidden /> {t("Schema")}</Button>
+               <Button type="button" variant="outline" onClick={() => onHelp?.(c)} className="h-auto min-h-11 min-w-0 whitespace-normal rounded-2xl px-2 text-sm"><HeartHandshake size={16} className="shrink-0" aria-hidden /> {t("Hjälp")}</Button>
                {(!userId || c.owner_id === userId) && <DropdownMenu>
                  <DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon" className="h-11 w-11 rounded-2xl" aria-label={`${t("Fler val för")} ${c.name}`}><Ellipsis size={20} /></Button></DropdownMenuTrigger>
                  <DropdownMenuContent align="end" className="min-w-40 rounded-2xl">

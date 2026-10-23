@@ -395,11 +395,11 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
     {externalError && <p role="status" className="text-sm text-muted-foreground">{t("Den externa kalendern kunde inte hämtas just nu. Dina egna poster finns kvar.")}</p>}
     {view === "manad" && <>
       <div className="overflow-hidden rounded-2xl border border-[#EDE5E9] bg-[#FFFEFC]" role="group" aria-label={t("Månadskalender")}>
-        <div className="grid grid-cols-[2rem_repeat(7,minmax(0,1fr))] border-b border-[#EDE5E9] bg-[#FAF9F6]">
-          <span aria-hidden="true" />
+        <div className="grid grid-cols-[repeat(7,minmax(0,1fr))] min-[380px]:grid-cols-[2rem_repeat(7,minmax(0,1fr))] border-b border-[#EDE5E9] bg-[#FAF9F6]">
+          <span aria-hidden="true" className="hidden min-[380px]:block" />
           {dates.slice(0, 7).map(d => <span key={`heading-${d}`} className="py-2 text-center text-[11px] font-medium text-muted-foreground">{new Date(`${d}T12:00:00`).toLocaleDateString(locale, { weekday: "short" })}</span>)}
         </div>
-        <div className="grid grid-cols-[2rem_repeat(7,minmax(0,1fr))]">
+        <div className="grid grid-cols-[repeat(7,minmax(0,1fr))] min-[380px]:grid-cols-[2rem_repeat(7,minmax(0,1fr))]">
           {dates.map((d, index) => {
             const dayEntries = days[d] ?? [];
             const dailyEntries = dayEntries.filter(e => !e.periodEnd);
@@ -409,7 +409,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
             const areaKeys = [...new Set(dayEntries.map(entry => calendarArea(entry)))].slice(0, 3);
             const periodHere = dayEntries.some(entry => Boolean(entry.periodEnd));
             return <Fragment key={d}>
-              {index % 7 === 0 && <span className="flex items-start justify-center border-b border-r border-[#EEE9E7] bg-[#FAF9F6]/70 pt-3 text-[10px] font-semibold text-[#806583]" aria-label={`Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}`}>v.{isoWeekNumber(new Date(`${d}T12:00:00`))}</span>}
+              {index % 7 === 0 && <span className="hidden items-start justify-center border-b border-r border-[#EEE9E7] bg-[#FAF9F6]/70 pt-3 min-[380px]:flex text-[10px] font-semibold text-[#806583]" aria-label={`Vecka ${isoWeekNumber(new Date(`${d}T12:00:00`))}`}>v.{isoWeekNumber(new Date(`${d}T12:00:00`))}</span>}
               <button type="button" data-month-date={d}
               onClick={() => setDate(d)}
               onDragOver={e => e.preventDefault()} onDrop={e => drop(e, d)}
@@ -424,7 +424,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
                   {areaKeys.map(area => <span key={area} data-calendar-area={area} className="h-2 w-2 rounded-full calendar-area-dot opacity-55" />)}
                 </span>
               </span>
-              {dayEntries.length > 3 && <span aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 text-xs font-semibold leading-none tracking-[2px] text-[#512654]/75 sm:bottom-1.5" title={`${dayEntries.length} aktiviteter`}>•••</span>}
+              {dayEntries.length > 3 && <span aria-hidden="true" className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-semibold leading-none text-[#512654]/80 sm:bottom-1.5" title={`${dayEntries.length} aktiviteter`}>{dayEntries.length} st</span>}
               </button>
             </Fragment>;
           })}
@@ -432,15 +432,15 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
       </div>
       <section className={cn("mt-3 space-y-3 p-3 sm:p-4", paceEveryday.surface)} aria-label="Vald dags aktiviteter">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}</h2>
+          <h2 className="font-display text-lg font-medium capitalize text-[#512654]">{new Date(`${date}T12:00:00`).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })}<span className="min-[380px]:hidden"> · v.{isoWeekNumber(new Date(`${date}T12:00:00`))}</span></h2>
         </div>
         {ongoingPeriods.length > 0 && <div className="space-y-1 rounded-xl bg-[#F2EDF5] p-2" aria-label={t("Pågående perioder")}><p className="text-xs font-medium text-[#512654]">{t("Pågående perioder")}</p>{ongoingPeriods.map(entry => <button key={entry.id} type="button" onClick={() => openDetails(entry)} className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg bg-white/70 px-2 text-left text-sm hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"><span className="min-w-0 flex-1 truncate">{entry.title}</span><span className="shrink-0 text-xs text-muted-foreground">t.o.m. {entry.periodEnd?.slice(5)}</span><ChevronRight size={15} className="shrink-0 text-muted-foreground" aria-hidden /></button>)}</div>}
         {selectedDayList.length ? <ul className="space-y-1.5">
           {selectedDayList.slice(0, 3).map(entry => <li key={entry.id}>
             <button type="button" onClick={() => openDetails(entry)} data-calendar-area={calendarArea(entry)} className={cn("w-full text-left", paceEveryday.inset, paceEveryday.row)}>
-              <span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{entry.time ?? "—"}</span>
+              {entry.time && <span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{entry.time}</span>}
               <span className="h-2.5 w-2.5 shrink-0 rounded-full calendar-area-dot opacity-55" aria-hidden />
-              <span className="min-w-0 flex-1 truncate text-sm text-[#392B3D]">{entry.title}</span>
+              <span className="min-w-0 flex-1 line-clamp-2 break-words text-sm text-[#392B3D]">{entry.title}</span>
               <ChevronRight size={16} className="shrink-0 text-muted-foreground" aria-hidden />
             </button>
           </li>)}
@@ -463,7 +463,7 @@ export default function CalendarPlanner({ tools, weekGoals, checkin, connection,
             <span className="font-display text-lg font-medium">{new Date(`${d}T12:00:00`).getDate()}</span>
           </button>
           <div className="min-w-0 flex-1">
-            <p className="sr-only">{dayEntries.length} {t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}</p>{ordered.length ? <ul className="space-y-0">{ordered.map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-11 w-full items-center gap-1.5 rounded-md px-1.5 text-left hover:bg-[#EEE8F0]"><span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{e.time ?? "—"}</span><span className="min-w-0 flex-1 truncate text-sm">{e.title}</span><ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden /></button></li>)}</ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
+            <p className="sr-only">{dayEntries.length} {t(dayEntries.length === 1 ? "aktivitet" : "aktiviteter")}</p>{ordered.length ? <ul className="space-y-0">{ordered.map(e => <li key={e.id}><button type="button" onClick={() => openDetails(e)} className="flex min-h-11 w-full items-center gap-1.5 rounded-md px-1.5 text-left hover:bg-[#EEE8F0]">{e.time && <span className="w-11 shrink-0 text-xs tabular-nums text-muted-foreground">{e.time}</span>}<span className="min-w-0 flex-1 line-clamp-2 break-words py-1 text-sm">{e.title}</span><ChevronRight size={14} className="shrink-0 text-muted-foreground" aria-hidden /></button></li>)}</ul> : <p className="py-3 text-sm text-muted-foreground">{t("Inget planerat")}</p>}
           </div>
         </section>;
       })}</div>

@@ -53,7 +53,7 @@ export default function OptionalSavedStrategies(props: Props) {
       </ul>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
         <Link
-          to="/insight"
+          to="/insight" search={{ demo: undefined }}
           className="inline-flex min-h-11 items-center gap-1 rounded-xl px-2 text-sm font-medium text-primary underline underline-offset-4"
         >
           Hantera mina stöd <ArrowUpRight size={16} aria-hidden />

@@ -66,7 +66,7 @@ export function WeekReviewCard({
           )}
 
           {!collapsed && (
-            <dl className="mt-3 grid grid-cols-2 gap-2">
+            <dl className="mt-3 grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2">
               {rows.map((row) => (
                 <div
                   key={row.label}
@@ -75,7 +75,7 @@ export function WeekReviewCard({
                   <row.icon size={16} className="shrink-0 text-primary" aria-hidden />
                   <div className="min-w-0">
                     <dt className="text-[11px] text-muted-foreground">{row.label}</dt>
-                    <dd className="truncate text-sm font-medium text-ink">{row.value}</dd>
+                    <dd className="text-sm font-medium text-ink [overflow-wrap:anywhere]">{row.value}</dd>
                   </div>
                 </div>
               ))}

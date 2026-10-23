@@ -2165,9 +2165,22 @@ html[data-npf-less="true"] [data-npf="optional"] {
 .pace-mobile-nav-icon svg { flex-shrink: 0; }
 .pace-mobile-nav-label { display: block; min-width: 0; max-width: 100%; font-size: 0.625rem; line-height: 1.25; white-space: normal; overflow-wrap: anywhere; }
 .pace-mobile-nav-item:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: -2px; }
+/* Stor text (rem-baserat): menyn stannar på EN rad med fem ikoner. Etiketterna
+   döljs bara visuellt och finns kvar som tillgängligt namn för skärmläsare. */
 @container pace-mobile-navigation (width < 18rem) {
-  .pace-mobile-navigation-items { display: flex; flex-wrap: wrap; }
-  .pace-mobile-nav-item { width: auto; flex: 1 1 calc((100% - 8px) / 3); }
+  .pace-mobile-nav-item { position: relative; grid-template-rows: 32px; min-height: 52px; padding: 6px 0; }
+  .pace-mobile-nav-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+}
+
+/* Delad stapling för kort med text + ikon/batteri: när kortets bredd är liten i
+   förhållande till textstorleken (stor text eller mycket smal skärm) staplas
+   innehållet i stället för att texten bryts ett ord per rad. */
+.pace-adaptive { container-type: inline-size; }
+@container (width < 16rem) {
+  .pace-adaptive-row { flex-direction: column; align-items: flex-start; }
+  .pace-adaptive-row > * { flex: none; max-width: 100%; }
+  .pace-adaptive-row > .flex-1 { width: 100%; }
+  .pace-adaptive-grid { grid-template-columns: minmax(0, 1fr) !important; }
 }
 @media (max-width: 767px) {
   .pace-mobile-content-scroll { padding-bottom: calc(var(--pace-mobile-nav-height, calc(72px + env(safe-area-inset-bottom))) + 24px); }
@@ -3088,7 +3101,7 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
 .pace-ds.pace-compact-page .pace-segment:focus-visible { outline: 2px solid var(--pace-focus); outline-offset: 2px; }
 .pace-compact-page .pace-period-navigation { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--pace-space-2); }
 .pace-compact-page .pace-period-label { min-width: 0; margin: 0; text-align: center; overflow-wrap: normal; hyphens: auto; }
-.pace-compact-page .pace-period-navigation > button { min-width: var(--pace-touch); }
+.pace-compact-page .pace-period-navigation > button { min-width: var(--pace-touch); height: auto; min-height: var(--pace-touch); white-space: normal; text-align: center; }
 @media (max-width: 40rem) {
   .pace-compact-page .pace-period-navigation { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .pace-compact-page .pace-period-label { grid-column: 1 / -1; grid-row: 1; }

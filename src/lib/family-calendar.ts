@@ -22,8 +22,8 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
     const mine = item.owner_id === owner;
     const member = members.get(item.child_id) ?? { id: item.child_id, name: "Delad barnaktivitet" };
     out.push({ id: `c-${item.id}`, sourceId: item.id, source: "child", date, title: item.title,
-      time: item.time?.slice(0, 5) || undefined, endTime: meta.endTime, periodEnd: item.repeat === "daily" && !item.time ? meta.repeatUntil : undefined,
-      periodStart: item.repeat === "daily" && !item.time && meta.repeatUntil ? item.date : undefined, location: meta.location, linkGroup: meta.linkGroup, done: false, editable: false,
+      time: item.time?.slice(0, 5) || undefined, endTime: meta.endTime ?? undefined, periodEnd: item.repeat === "daily" && !item.time ? meta.repeatUntil : undefined,
+      periodStart: item.repeat === "daily" && !item.time && meta.repeatUntil ? item.date ?? undefined : undefined, location: meta.location ?? undefined, linkGroup: meta.linkGroup ?? undefined, done: false, editable: false,
       familyMembers: [member], label: member.name, href: "/barn", pictogram: pictogramForActivity(item.title, meta.pictogram),
       requiresParent: mine && meta.parentPresence === true,
       ...(mine ? { parentTaskId: meta.parentTaskId, prepMinutes: meta.prepMinutes, travelMinutes: meta.travelMinutes } : {}) });
