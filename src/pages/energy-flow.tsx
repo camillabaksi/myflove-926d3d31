@@ -57,13 +57,13 @@ interface Props {
 }
 
 /** Liten horisontell nyckeltalsruta – används i Dagens balans. */
-function BalanceStat({ emoji, label, value }: { emoji: string; label: string; value: string }) {
+function BalanceStat({ emoji, label, value, className = "" }: { emoji: string; label: string; value: string; className?: string }) {
   return (
-    <div className="min-w-0 rounded-2xl bg-card/70 px-2 py-3 text-center">
+    <div className={`min-w-0 rounded-2xl bg-card/70 px-3 py-3 text-center ${className}`}>
       <div className="text-lg leading-none" aria-hidden>
         {emoji}
       </div>
-      <div className="mt-1 truncate text-[11px] font-medium text-muted-foreground">{label}</div>
+      <div className="mt-1 text-sm font-medium leading-snug text-muted-foreground [overflow-wrap:anywhere]">{label}</div>
       <div className="font-display text-xl font-bold leading-tight text-ink">{value}</div>
     </div>
   );
@@ -87,11 +87,11 @@ function TrendRow({
         <span aria-hidden className="shrink-0">
           {emoji}
         </span>
-        <span className="truncate">{label}</span>
+        <span className="min-w-0 whitespace-normal break-words [overflow-wrap:anywhere]">{label}</span>
       </span>
       <span className="shrink-0 text-right text-sm text-muted-foreground">
         {value}
-        {hint && <span className="block text-[11px]">{hint}</span>}
+        {hint && <span className="block text-xs [overflow-wrap:anywhere]">{hint}</span>}
       </span>
     </div>
   );
@@ -280,13 +280,14 @@ export function EnergyFlowContent({ showHeader = true, showDayFlow = true, embed
           collapsible
           status={`${t("Netto")} ${balance.net > 0 ? "+" : ""}${balance.net}`}
         >
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <BalanceStat emoji="🔋" label={t("Gett energi")} value={`+${balance.gives}`} />
             <BalanceStat emoji="🪫" label={t("Tagit energi")} value={`−${balance.drains}`} />
             <BalanceStat
               emoji="⚖️"
               label={t("Netto")}
               value={`${balance.net > 0 ? "+" : ""}${balance.net}`}
+              className="col-span-2 sm:col-span-1"
             />
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">

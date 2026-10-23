@@ -253,7 +253,7 @@ export function EnergyContent({ showHeader = true, readOnly = false }: EnergyCon
                 <>
                   <div role="img" aria-label={`${t("Snittenergi per timme")}: ${observedHours.map((r) => `${r.hour} ${r.avg}`).join(", ")}`}>
                     <SoftWaveChart series={[{ id: "hour", tone: "primary", values: hourAverages.map((r) => r.avg == null ? null : ((r.avg - 1) / 4) * 100) }]} />
-                    <div className="mt-1 flex justify-between gap-2 px-1 text-[10px] tabular-nums text-muted-foreground" aria-hidden="true">
+                    <div className="mt-1 flex justify-between gap-2 px-1 text-xs tabular-nums text-muted-foreground" aria-hidden="true">
                       <span className="shrink-0 whitespace-nowrap">00:00</span>
                       <span className="shrink-0 whitespace-nowrap">12:00</span>
                       <span className="shrink-0 whitespace-nowrap">23:00</span>
