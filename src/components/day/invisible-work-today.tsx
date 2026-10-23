@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/react";
-import { ChevronRight, HeartHandshake } from "lucide-react";
+import { ChevronRight, HeartHandshake, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { useCloudSyncedStorage } from "@/lib/cloud-storage";
 import { isActiveOwner } from "@/lib/account-scope";
 import { todayISO } from "@/lib/day";
@@ -21,6 +22,29 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
     setEntries(previous => {
       if (previous.some(row => row.owner === owner && row.date === date && (sourceId ? row.sourceId === sourceId : row.source === source && row.text.trim() === text.trim()))) return previous;
       return [...previous, { id: crypto.randomUUID(), owner, date, text: text.trim(), source, sourceId }];
+    });
+  }
+  /** Remove only this display entry. The original task/note and energy history
+   * are independent sources and must never be changed by this action. */
+  function remove(row: InvisibleWorkEntry) {
+    if (!owner || !isActiveOwner(owner) || row.owner !== owner || row.date !== todayISO()) return;
+    setEntries(previous => isActiveOwner(owner)
+      ? previous.filter(entry => !(entry.id === row.id && entry.owner === owner && entry.date === row.date))
+      : previous,
+    );
+    toast("Borttaget från Det osynliga arbetet.", {
+      action: {
+        label: "Ångra",
+        onClick: () => {
+          // A stale undo from an old session or another day cannot restore
+          // a private entry into the next signed-in account.
+          if (!isActiveOwner(owner) || row.date !== todayISO()) return;
+          setEntries(previous => isActiveOwner(owner) && !previous.some(entry => entry.id === row.id)
+            ? [...previous, row]
+            : previous,
+          );
+        },
+      },
     });
   }
   useEffect(() => {
@@ -44,7 +68,20 @@ export function InvisibleWorkToday({ pending, onDismiss }: { pending: { id: stri
         <span className="flex-1 font-semibold">Det osynliga arbetet ({mine.length})</span>
         <ChevronRight size={20} className={expanded ? "rotate-90 transition-transform" : "transition-transform"} aria-hidden />
       </button>
-      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row => <li key={row.id} className="flex min-w-0 items-start gap-2 rounded-xl bg-card/75 px-3 py-2 text-sm"><span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span><span className="shrink-0 text-xs text-muted-foreground">Redan gjort</span></li>)}</ul>}
+      {expanded && <ul className="space-y-2 border-t border-[#E6CFC7] pt-2">{mine.map(row =>
+        <li key={row.id} className="flex min-w-0 items-center gap-2 rounded-xl bg-card/75 px-3 py-2 text-sm">
+          <span className="min-w-0 flex-1 whitespace-pre-wrap break-words">{row.text}</span>
+          <button
+            type="button"
+            onClick={() => remove(row)}
+            aria-label={`Ta bort ${row.text} från Det osynliga arbetet`}
+            title="Ta bort från Det osynliga arbetet"
+            className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl text-muted-foreground hover:bg-secondary/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Trash2 size={18} aria-hidden="true" />
+          </button>
+        </li>,
+      )}</ul>}
     </section>}
   </div>;
 }
