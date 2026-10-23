@@ -13,9 +13,10 @@ const rows: FlowItem[] = [
   { id: "task-untimed", title: "En aktivitet utan tid", source: "uppgift", area: "halsa", done: false, completable: true, priority: "idag", emoji: "" },
 ];
 
+const emptyDayFixture = vi.hoisted(() => ({ rows: null as FlowItem[] | null }));
 vi.mock("@/hooks/use-flow-items", () => ({
   useFlowItems: () => {
-    const [today, setToday] = useState(rows);
+    const [today, setToday] = useState(emptyDayFixture.rows ?? rows);
     return { today, toggleItem: (item: FlowItem) => setToday(current => current.map(row => row.id === item.id ? { ...row, done: !row.done } : row)) };
   },
 }));
@@ -40,7 +41,22 @@ vi.mock("@/hooks/use-child-events", () => ({
 vi.mock("@/hooks/use-data", () => ({ useTasks: () => ({ updateTask: vi.fn(), toggleTask: vi.fn() }) }));
 
 describe("Compact day activity presentation", () => {
-  beforeEach(() => { storedDayOrder.value = null; });
+  beforeEach(() => { storedDayOrder.value = null; emptyDayFixture.rows = null; });
+  it("gives an empty first day a gentle next step using the existing Add button, without creating a second button", () => {
+    emptyDayFixture.rows = [];
+    const { container } = render(<DailyFlowList presentation="integrated" includeChildSchedules={false} />);
+    expect(screen.getByText(/Det är lugnt här än så länge/)).toHaveTextContent(/välj Lägg till ovanför/);
+    expect(container.querySelectorAll("button")).toHaveLength(0);
+    expect(screen.queryByText("Inget inplanerat den här dagen.")).not.toBeInTheDocument();
+  });
+
+  it("keeps the ordinary neutral empty state for calendar and older day views", () => {
+    emptyDayFixture.rows = [];
+    render(<DailyFlowList date="2026-10-10" presentation="integrated" />);
+    expect(screen.getByText("Inget inplanerat den här dagen.")).toBeInTheDocument();
+    expect(screen.queryByText(/välj Lägg till ovanför/)).not.toBeInTheDocument();
+  });
+
   it("keeps completion, read-only family rows, ordering and accessible controls", () => {
     const completed = vi.fn();
     const { container } = render(<DailyFlowList presentation="integrated" dayHeadings onCompleted={completed} />);

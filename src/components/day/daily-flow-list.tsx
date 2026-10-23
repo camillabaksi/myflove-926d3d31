@@ -174,8 +174,10 @@ export function DailyFlowList({
 
   if (items.length === 0 && !showFilter) {
     return (
-      <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">
-        Inget inplanerat den här dagen.
+      <p className="rounded-2xl bg-secondary/30 px-4 py-4 text-sm text-muted-foreground">
+        {integrated && isToday
+          ? "Det är lugnt här än så länge. Vill du börja, välj Lägg till ovanför. En enda sak räcker."
+          : "Inget inplanerat den här dagen."}
       </p>
     );
   }
@@ -221,7 +223,7 @@ export function DailyFlowList({
           {filter === "viktigast" ? "Inget är markerat som viktigast just nu." : "Inget med klockslag den här dagen."}
         </p>
       )}
-      {items.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-5 text-sm text-muted-foreground">Inget inplanerat den här dagen.</p>}
+      {items.length === 0 && <p className="rounded-2xl bg-secondary/30 px-4 py-4 text-sm text-muted-foreground">{integrated && isToday ? "Det är lugnt här än så länge. Vill du börja, välj Lägg till ovanför. En enda sak räcker." : "Inget inplanerat den här dagen."}</p>}
       <ul className={cn(integrated ? "space-y-0.5" : "divide-y divide-border/50")} aria-label="Dagens innehåll">
         {shownItems.map((item, index) => {
 
