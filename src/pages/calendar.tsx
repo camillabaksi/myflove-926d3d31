@@ -149,7 +149,7 @@ function useFamilyEventsByDate() {
   return { eventsForDate, hasHousehold: !!household?.id, isSignedIn: !!isSignedIn };
 }
 
-export function CalendarContent({ initialView = "dag" }: { initialView?: CalendarView }) {
+export function CalendarContent({ initialView = "dag", initialDate }: { initialView?: CalendarView; initialDate?: string }) {
   const { t, locale } = useLang();
   const { currentFocus } = useFocus();
   const { activeTasks, completedTasks, deleteTask, addTask, updateTask } = useTasks();
@@ -164,7 +164,8 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(() => initialDate ? parseISODate(initialDate) : new Date());
+  useEffect(() => { if (initialDate) setCurrentDate(parseISODate(initialDate)); }, [initialDate]);
   const [view, setView] = useCloudSyncedStorage<CalView>("myflove-calendar-view", "manad");
   /** Optional compact symbols; an explicit local off also overrides global opt-in. */
   const { settings: npfSettings } = useNpfSettings();
@@ -191,7 +192,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
     setVisible((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
 
   const [selectedDateStr, setSelectedDateStr] = useState(
-    new Date().toLocaleDateString("sv-SE").split(" ")[0], // fallback format YYYY-MM-DD
+    initialDate ?? new Date().toLocaleDateString("sv-SE").split(" ")[0],
   );
   // Den förenklade dagvyn är kalenderns enda primära dagpresentation.
   const allInDay = true;
@@ -481,6 +482,7 @@ export function CalendarContent({ initialView = "dag" }: { initialView?: Calenda
 
   return (
     <CalendarPlanner
+  initialDate={initialDate}
       initialView={initialView}
       showPictograms={pictoMode}
       onPictogramsChange={setPictoMode}
