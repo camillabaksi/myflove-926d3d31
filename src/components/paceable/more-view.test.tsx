@@ -12,7 +12,7 @@ const show = (items: MoreItem[], simpleMode = false) => render(<MoreView items={
 
 describe("Mer sorterad efter livsområden", () => {
   it("covers every existing navigation destination exactly once", () => {
-    const existing = ["/idag", "/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin", "/quickflow", "/anteckningar", "/assistant", "/kalender", "/paminnelser", "/tasks", "/flowscore", "/pomodoro", "/shopping", "/matlista", "/stadning", "/finances", "/relationer", "/familjeflow", "/familj", "/barn", "/historik", "/statistik", "/beloningar", "/insight", "/flowplan", "/flow", "/friktionsindex", "/studyflow", "/jobb", "/admin", "/admin-statistik", "/installningar"];
+    const existing = ["/idag", "/halsa", "/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin", "/quickflow", "/anteckningar", "/assistant", "/kalender", "/paminnelser", "/tasks", "/flowscore", "/pomodoro", "/shopping", "/matlista", "/stadning", "/finances", "/relationer", "/familjeflow", "/familj", "/barn", "/historik", "/statistik", "/beloningar", "/insight", "/flowplan", "/planera", "/friktionsindex", "/studyflow", "/jobb", "/admin", "/admin-statistik", "/installningar"];
     expect(new Set(MORE_ALL_HREFS)).toEqual(new Set(existing));
     expect(MORE_ALL_HREFS).toHaveLength(existing.length);
   });
@@ -20,6 +20,11 @@ describe("Mer sorterad efter livsområden", () => {
     expect(MORE_AREAS.map((g) => [g.title, g.area])).toEqual([["Hem & vardag", "vardag"], ["Arbete", "jobb"], ["Studier", "studier"], ["Ekonomi", "ekonomi"], ["Hälsa & egen tid", "halsa"], ["Familj & barn", "privat"]]);
     expect(MORE_AREAS.find((g) => g.title === "Familj & barn")?.hrefs).toContain("/barn");
     expect(MORE_OVERALL.map((g) => g.title)).toEqual(["Stöd & reflektion", "Insikter & historik"]);
+    const support = MORE_OVERALL[0].hrefs;
+    expect(support).toContain("/assistant");
+    expect(support).toContain("/planera");
+    expect(support).toContain("/flowplan");
+    expect(support).not.toContain("/flow"); // legacy address remains accessible, but no duplicate chat link
     expect(MORE_TOOL_GROUPS.map((g) => g.title)).toEqual(["Konto och app", "Admin"]);
     expect(MORE_LEGACY).not.toContain("/hem");
   });

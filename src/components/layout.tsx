@@ -454,10 +454,16 @@ export default function Layout({ children }: LayoutProps) {
       essential: true,
     },
     {
+      href: "/planera",
+      label: "Planera aktiviteter",
+      icon: NotebookPen,
+      hint: "Skriv, granska och spara aktiviteter för en dag eller vecka",
+    },
+    {
       href: "/flowplan",
-      label: "Planera",
+      label: "Dagens ordning i Pace",
       icon: Sparkles,
-      hint: "Planeringsläget i Pace – ordna dagens saker",
+      hint: "Se en föreslagen ordning för dagens planerade aktiviteter",
     },
 
 
@@ -711,7 +717,7 @@ export default function Layout({ children }: LayoutProps) {
     const byHref = (href: string) => navItems.find((i) => i.href === href);
     const groups: { id: string; label: string; hrefs: string[]; legacy?: boolean; rename?: Record<string, string> }[] = [
       { id: "dag", label: "Min dag", hrefs: ["/paminnelser", "/tasks", "/pomodoro"] },
-      { id: "stod", label: "Stöd & samtal", hrefs: ["/assistant", "/flow", "/flowplan", "/anteckningar"] },
+      { id: "stod", label: "Stöd & samtal", hrefs: ["/assistant", "/planera", "/flowplan", "/anteckningar"] },
       { id: "ork", label: "Ork & återhämtning", hrefs: ["/mitt-batteri", "/energifloede", "/aterhamtning", "/stop-paus", "/traning", "/daglig-rutin"] },
       { id: "familj", label: "Familj", hrefs: ["/familjeflow", "/barn", "/relationer"] },
       { id: "vardag", label: "Hem & vardag", hrefs: ["/matlista", "/shopping", "/stadning", "/finances"] },
