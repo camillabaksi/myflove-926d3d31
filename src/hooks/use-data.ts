@@ -971,6 +971,8 @@ export function useReminders() {
     toggleReminder,
     deleteReminder,
     updateReminder,
+    rescheduleReminderOccurrence,
+    resetReminderOccurrence,
     cancelReminder,
     restoreReminder,
   };
