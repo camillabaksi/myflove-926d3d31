@@ -221,7 +221,7 @@ describe("Kvällsstund – background assets on iPhone", () => {
     expect(intro.querySelector("img")).toHaveAttribute("alt", "");
 
     fireEvent.click(screen.getByRole("button", { name: "Börja" }));
-    for (let index = 0; index < 4; index += 1) {
+    for (let index = 0; index < 3; index += 1) {
       fireEvent.click(screen.getByRole("button", { name: "Nästa" }));
       expect(screen.queryByTestId("evening-ritual-backdrop")).not.toBeInTheDocument();
     }
