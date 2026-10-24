@@ -12,9 +12,9 @@ describe("approved native release settings", () => {
     expect(Number(android.match(/versionCode\s+(\d+)/)?.[1])).toBe(29);
   });
 
-  it("sets both iOS configurations to version 1.6 and build 18", () => {
+  it("sets both iOS configurations to version 1.6 and build 19", () => {
     expect(Array.from(ios.matchAll(/MARKETING_VERSION = ([^;]+);/g), match => match[1])).toEqual(["1.6", "1.6"]);
-    expect(Array.from(ios.matchAll(/CURRENT_PROJECT_VERSION = (\d+);/g), match => Number(match[1]))).toEqual([18, 18]);
+    expect(Array.from(ios.matchAll(/CURRENT_PROJECT_VERSION = (\d+);/g), match => Number(match[1]))).toEqual([19, 19]);
   });
 
   it("preserves the existing separate Android and iOS store identities", () => {
