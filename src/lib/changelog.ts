@@ -6,9 +6,13 @@ export type ChangelogSection = {
 export const CHANGELOG_TITLE = "Paceable Changelog";
 export const CHANGELOG_INTRO =
   "Komplett logg över allt som byggts i Paceable – från första prototypen till dagens version.";
-export const CHANGELOG_UPDATED = "2026-10-23";
+export const CHANGELOG_UPDATED = "2026-10-24";
 
 export const CHANGELOG_SECTIONS: ChangelogSection[] = [
+  {
+    title: "2026-10-24 – Barnens aktiviteter visas en gång i kalendern",
+    items: ["Kalender och familjelager (2026-10-24): Samma barnaktivitet för två barn visas nu en gång i stället för som dubletter. Vid identisk tid visas en rad med båda namnen (t.ex. \"bella & bianca · Frukost, 06:15\"). Vid samma aktivitet men olika tider visas en kompakt grupp vid tidigaste tiden med varje barns egen tid synlig (t.ex. \"Vakna · bella 05:00 · bianca 05:30\"), så ingen tidsuppgift försvinner. Exakt samma händelse för samma barn från två källor visas en gång. Grupperingen är enbart visuell: inga poster, ID:n, tider, synk eller konton ändras, och varje barns aktivitet kan fortfarande öppnas och ändras separat. Aktiviteter med olika platser, perioder eller oklar identitet slås aldrig ihop. \"Behöver mig\" behålls om någon kopia kräver det. Nya riktade regressionstester; hela testsviten (1329 tester) och typkontrollen passerar. Ingen publicering."],
+  },
   {
     title: "2026-10-23 – Nya editorial­skärmbilder med de senaste ändringarna",
     items: ["Material (2026-10-23): Ny svensk editorialbildserie i Paceable-editorialbilder-2026-10-23/ (38 bilder: 19 vyer × mobil 390 px och desktop 1280 px), tagna efter etapp 3, Historik i Insikter & historik, kalenderrättelserna och Kvällsstund/Mer-typografin. Anonymiserat underlag från ett verkligt konto i isolerad skrivskyddad session; kontot oförändrat, ingen appändring och ingen publicering."],
