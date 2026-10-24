@@ -220,11 +220,13 @@ describe("Kvällsstund – background assets on iPhone", () => {
     expect(intro.querySelector("img")).toHaveAttribute("loading", "eager");
     expect(intro.querySelector("img")).toHaveAttribute("alt", "");
 
-    for (let index = 0; index < 5; index += 1) {
+    fireEvent.click(screen.getByRole("button", { name: "Börja" }));
+    for (let index = 0; index < 4; index += 1) {
       fireEvent.click(screen.getByRole("button", { name: "Nästa" }));
-      if (index < 4) expect(screen.queryByTestId("evening-ritual-backdrop")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("evening-ritual-backdrop")).not.toBeInTheDocument();
     }
 
+    fireEvent.click(screen.getByRole("button", { name: "Nästa" }));
     const outro = screen.getByTestId("evening-ritual-backdrop");
     expect(outro.querySelector("source")?.getAttribute("srcset")).toContain("outro-desktop");
     expect(outro.querySelector("img")?.getAttribute("src")).toContain("outro-mobile");
