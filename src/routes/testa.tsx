@@ -48,6 +48,7 @@ function TesterPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const needsGooglePlayEmail = platform === "android" || platform === "both";
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -183,26 +184,6 @@ function TesterPage() {
                 </p>
                 <form onSubmit={submit} className="mt-5 space-y-4 sm:mt-7 sm:space-y-5">
                   <div>
-                    <label htmlFor="tester-email" className={label}>
-                      Din mejladress *
-                    </label>
-                    <input
-                      id="tester-email"
-                      className={control}
-                      type="email"
-                      name="email"
-                      autoComplete="email"
-                      maxLength={254}
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="namn@exempel.se"
-                    />
-                    <p className="mt-1.5 text-xs leading-5 text-[#746979]">
-                      För Android: ange gärna adressen du använder i Google Play.
-                    </p>
-                  </div>
-                  <div>
                     <label htmlFor="tester-platform" className={label}>
                       Vilken enhet vill du testa på? *
                     </label>
@@ -219,6 +200,32 @@ function TesterPage() {
                       <option value="both">Både Android och iPhone</option>
                       <option value="web">Webbläsare</option>
                     </select>
+                  </div>
+                  <div>
+                    <label htmlFor="tester-email" className={label}>
+                      {needsGooglePlayEmail
+                        ? "E-postadress kopplad till ditt Google Play-konto *"
+                        : "Din mejladress *"}
+                    </label>
+                    <input
+                      id="tester-email"
+                      className={control}
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      aria-describedby={needsGooglePlayEmail ? "tester-email-help" : undefined}
+                      maxLength={254}
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="namn@exempel.se"
+                    />
+                    {needsGooglePlayEmail && (
+                      <p id="tester-email-help" className="mt-1.5 text-xs leading-5 text-[#746979]">
+                        Ange samma e-postadress som du använder i Google Play Butik. Vi behöver den
+                        för att kunna lägga till dig i vår slutna Android-testning.
+                      </p>
+                    )}
                   </div>
                   <div>
                     <label htmlFor="tester-participation" className={label}>
