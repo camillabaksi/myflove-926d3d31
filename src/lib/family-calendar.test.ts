@@ -30,7 +30,7 @@ describe("family calendar layer", () => {
     expect(entries[0]?.familyMembers).toHaveLength(1);
   });
   it("shows the same activity at the same time once with both names, without touching sources", () => {
-    const frukost = (id: string, childId: string) => ({ ...item(id, childId), title: "Frukost", time: "06:15", notes: encodeVisualNotes({ pictogram: "dinner", category: "hemma", tone: "mint" }) });
+    const frukost = (id: string, childId: string) => ({ ...item(id, childId), title: "Frukost", time: "06:15", date: "2026-10-26", notes: encodeVisualNotes({ pictogram: "dinner", category: "hemma", tone: "mint" }) });
     const entries = projectFamilyCalendar("2026-10-26", [child("bella"), child("bianca")], [frukost("a", "bella"), frukost("b", "bianca")], {}, "parent");
     const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
     expect(grouped).toHaveLength(1);
@@ -39,7 +39,7 @@ describe("family calendar layer", () => {
     expect(entries).toHaveLength(2);
   });
   it("groups the same activity at different times with explicit per-person times", () => {
-    const vakna = (id: string, childId: string, time: string) => ({ ...item(id, childId), title: "Vakna", time, notes: encodeVisualNotes({ pictogram: "house", category: "hemma", tone: "mint" }) });
+    const vakna = (id: string, childId: string, time: string) => ({ ...item(id, childId), title: "Vakna", time, date: "2026-10-26", notes: encodeVisualNotes({ pictogram: "house", category: "hemma", tone: "mint" }) });
     const entries = projectFamilyCalendar("2026-10-26", [child("bella"), child("bianca")], [vakna("a", "bella", "05:00"), vakna("b", "bianca", "05:30")], {}, "parent");
     const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
     expect(grouped).toHaveLength(1);
