@@ -19,12 +19,51 @@ describe("family calendar layer", () => {
     const projected = projectFamilyCalendar("2026-10-07", [child("bella")], [item("a", "bella", true)], {}, "other-parent");
     expect(projected[0]?.requiresParent).toBe(false);
   });
-  it("groups identical child activities, but never different responsibilities", () => {
+  it("groups identical child activities, keeping presence when any copy requires it", () => {
     const entries = projectFamilyCalendar("2026-10-07", [child("bella"), child("bianca")], [item("a", "bella"), item("b", "bianca")], {}, "parent");
     const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
     expect(grouped).toHaveLength(1); expect(grouped[0]?.label).toBe("bella & bianca");
-    expect(familyLayerEntries(entries, { ...DEFAULT_FAMILY_LAYER, presence: { "c-a": true } })).toHaveLength(2);
+    const withPresence = familyLayerEntries(entries, { ...DEFAULT_FAMILY_LAYER, presence: { "c-a": true } });
+    expect(withPresence).toHaveLength(1);
+    expect(withPresence[0]?.requiresParent).toBe(true);
+    expect(withPresence[0]?.familyMembers).toHaveLength(2);
     expect(entries[0]?.familyMembers).toHaveLength(1);
+  });
+  it("shows the same activity at the same time once with both names, without touching sources", () => {
+    const frukost = (id: string, childId: string) => ({ ...item(id, childId), title: "Frukost", time: "06:15", date: "2026-10-26", notes: encodeVisualNotes({ pictogram: "meal", category: "hemma", tone: "mint" }) });
+    const entries = projectFamilyCalendar("2026-10-26", [child("bella"), child("bianca")], [frukost("a", "bella"), frukost("b", "bianca")], {}, "parent");
+    const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
+    expect(grouped).toHaveLength(1);
+    expect(grouped[0]).toMatchObject({ title: "Frukost", time: "06:15", label: "bella & bianca" });
+    expect(grouped[0]?.memberTimes).toBeUndefined();
+    expect(entries).toHaveLength(2);
+  });
+  it("groups the same activity at different times with explicit per-person times", () => {
+    const vakna = (id: string, childId: string, time: string) => ({ ...item(id, childId), title: "Vakna", time, date: "2026-10-26", notes: encodeVisualNotes({ pictogram: "home", category: "hemma", tone: "mint" }) });
+    const entries = projectFamilyCalendar("2026-10-26", [child("bella"), child("bianca")], [vakna("a", "bella", "05:00"), vakna("b", "bianca", "05:30")], {}, "parent");
+    const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
+    expect(grouped).toHaveLength(1);
+    expect(grouped[0]?.time).toBe("05:00");
+    expect(grouped[0]?.memberTimes).toEqual([
+      { id: "bella", name: "bella", time: "05:00" },
+      { id: "bianca", name: "bianca", time: "05:30" },
+    ]);
+  });
+  it("never merges different locations, periods, or activities sharing a child", () => {
+    const vakna = (id: string, childId: string, time: string) => ({ ...item(id, childId), title: "Vakna", time, date: "2026-10-26", notes: encodeVisualNotes({ pictogram: "home", category: "hemma", tone: "mint" }) });
+    const base = projectFamilyCalendar("2026-10-26", [child("bella"), child("bianca")], [vakna("a", "bella", "05:00"), vakna("b", "bianca", "05:30")], {}, "parent");
+    expect(familyLayerEntries(base.map((entry, i) => ({ ...entry, location: i ? "Mormor" : undefined })), DEFAULT_FAMILY_LAYER)).toHaveLength(2);
+    const sameChild = projectFamilyCalendar("2026-10-26", [child("bella")], [vakna("a", "bella", "05:00"), vakna("b", "bella", "05:30")], {}, "parent");
+    expect(familyLayerEntries(sameChild, DEFAULT_FAMILY_LAYER)).toHaveLength(2);
+    const period = { ...item("p", "bella"), title: "Höstlov", time: null, date: "2026-10-26", repeat: "daily" as const, notes: encodeVisualNotes({ pictogram: "calendar", category: "familj", tone: "lavender", repeatUntil: "2026-10-30" }) };
+    const periodEntries = projectFamilyCalendar("2026-10-27", [child("bella"), child("bianca")], [period, { ...period, id: "q", child_id: "bianca" }], {}, "parent");
+    expect(familyLayerEntries(periodEntries, DEFAULT_FAMILY_LAYER)).toHaveLength(2);
+  });
+  it("hides an exact duplicate of the same child's occurrence without deleting it", () => {
+    const entries = projectFamilyCalendar("2026-10-26", [child("bella")], [{ ...item("a", "bella"), date: "2026-10-26" }, { ...item("b", "bella"), date: "2026-10-26" }], {}, "parent");
+    const grouped = familyLayerEntries(entries, DEFAULT_FAMILY_LAYER);
+    expect(grouped).toHaveLength(1);
+    expect(entries).toHaveLength(2);
   });
   it("hides family, honors empty child selection and never hides own tasks about children", () => {
     const entries = projectFamilyCalendar("2026-10-07", [child("bella")], [item("a", "bella")], {}, "parent");

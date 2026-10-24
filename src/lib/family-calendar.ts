@@ -46,7 +46,23 @@ export function projectFamilyCalendar(date: string, children: Child[], items: Ch
 export function applyFamilyPresence(entries: CalendarEntry[], prefs: FamilyLayerPreferences): CalendarEntry[] {
   return entries.map(e => isFamilyEntry(e) ? { ...e, requiresParent: prefs.presence[e.id] ?? (e.requiresParent === true) } : e);
 }
-/** Group only identical calendar information with identical responsibility; preserve original IDs. */
+const norm = (value: string | undefined) => (value ?? "").trim().toLocaleLowerCase("sv");
+
+/**
+ * Presentation-only grouping of child activities. Source rows, IDs, sync and
+ * ownership are untouched; each group keeps every original entry id via
+ * familyMembers/memberTimes so edits still target one child's own activity.
+ *
+ * Safe merges:
+ * - Same child, same occurrence (title/time/end/location): show once.
+ * - Different children, same day, same normalized title, same time: one row
+ *   with all names. "Behöver mig" is kept if ANY copy requires it.
+ * - Different children, same day, same normalized title, different times:
+ *   one compact group under the earliest time with per-person times in
+ *   memberTimes, so no time information is lost.
+ * Never merged: different locations, periods, untimed rows without an
+ * explicit link, entries sharing a child, or conflicting parent-task links.
+ */
 export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerPreferences): CalendarEntry[] {
   const out: CalendarEntry[] = [];
   for (const entry of applyFamilyPresence(entries, prefs)) {
@@ -55,18 +71,51 @@ export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerP
     const members = entry.familyMembers?.filter(m => prefs.children === null || prefs.children.includes(m.id));
     if (entry.source === "child" && !members?.length) continue;
     const e = { ...entry, familyMembers: members, label: members?.map(m => m.name).join(" & ") || entry.label };
-    const match = out.find(o => o.source === "child" && e.source === "child" &&
-      o.title.trim().toLocaleLowerCase("sv") === e.title.trim().toLocaleLowerCase("sv") &&
-      o.date === e.date && o.time === e.time && o.endTime === e.endTime &&
-      (!!e.time || !!e.linkGroup && e.linkGroup === o.linkGroup) &&
-      (o.location ?? "").trim().toLocaleLowerCase("sv") === (e.location ?? "").trim().toLocaleLowerCase("sv") &&
-      o.requiresParent === e.requiresParent && o.parentTaskId === e.parentTaskId &&
-      o.prepMinutes === e.prepMinutes && o.travelMinutes === e.travelMinutes && o.pictogram === e.pictogram &&
-      !o.familyMembers?.some(m => members?.some(n => n.id === m.id)));
-    if (match) {
-      match.familyMembers = [...(match.familyMembers ?? []), ...(members ?? [])];
-      match.label = match.familyMembers.map(m => m.name).join(" & ");
-    } else out.push(e);
+    if (e.source !== "child") { out.push(e); continue; }
+
+    // Exact same occurrence for the same child from two sources: show once, keep storage untouched.
+    const sameChildDupe = out.some(o => o.source === "child" && o.date === e.date &&
+      norm(o.title) === norm(e.title) && o.time === e.time && o.endTime === e.endTime &&
+      norm(o.location) === norm(e.location) &&
+      o.familyMembers?.some(m => members?.some(n => n.id === m.id)));
+    if (sameChildDupe) continue;
+
+    const match = out.find(o => o.source === "child" &&
+      o.date === e.date &&
+      norm(o.title) === norm(e.title) &&
+      norm(o.location) === norm(e.location) &&
+      o.pictogram === e.pictogram &&
+      !o.periodEnd && !e.periodEnd &&
+      !o.familyMembers?.some(m => members?.some(n => n.id === m.id)) &&
+      (o.parentTaskId ?? null) === (e.parentTaskId ?? null) &&
+      (
+        // Identical time: one shared row.
+        (o.time === e.time && o.endTime === e.endTime && (!!e.time || !!e.linkGroup && e.linkGroup === o.linkGroup)) ||
+        // Same activity at different times: compact group with per-person times.
+        (!!o.time && !!e.time && !o.linkGroup && !e.linkGroup)
+      ));
+    if (!match) { out.push(e); continue; }
+
+    const mergedMembers = [...(match.familyMembers ?? []), ...(members ?? [])];
+    match.familyMembers = mergedMembers;
+    match.label = mergedMembers.map(m => m.name).join(" & ");
+    if (match.time !== e.time || match.endTime !== e.endTime) {
+      // Seed per-person times from the row the group started with, then add the new copy's time.
+      if (!match.memberTimes) {
+        match.memberTimes = (match.familyMembers ?? [])
+          .filter(m => !members?.some(n => n.id === m.id))
+          .map(m => ({ ...m, time: match.time!, ...(match.endTime ? { endTime: match.endTime } : {}) }));
+      }
+      for (const m of members ?? []) match.memberTimes.push({ ...m, time: e.time!, ...(e.endTime ? { endTime: e.endTime } : {}) });
+      // Show the group at the earliest start; no shared end time when they differ.
+      if ((e.time ?? "99") < (match.time ?? "99")) match.time = e.time;
+      if (new Set(match.memberTimes.map(mt => mt.endTime ?? "")).size > 1) match.endTime = undefined;
+    }
+    if (e.requiresParent === true) {
+      match.requiresParent = true;
+      match.prepMinutes = match.prepMinutes ?? e.prepMinutes;
+      match.travelMinutes = match.travelMinutes ?? e.travelMinutes;
+    }
   }
   return out;
 }

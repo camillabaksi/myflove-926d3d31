@@ -36,7 +36,7 @@ describe("Valt kalenderdatum → Planera", () => {
   });
   it("calendar sends date, view and return hint to every Planera link", () => {
     const src = readFileSync("src/components/calendar/calendar-planner.tsx", "utf8");
-    const links = src.match(/<PlanningLink to="\/planera" search=\{\{[^}]*\}\}/g) ?? [];
+    const links: string[] = src.match(/<PlanningLink to="\/planera" search=\{\{[^}]*\}\}/g) ?? [];
     const withDate = links.filter((l) => l.includes("date,") || l.includes("date:"));
     expect(withDate.length).toBeGreaterThanOrEqual(3);
     for (const link of withDate.filter((l) => !l.includes("editDate"))) expect(link).toContain('from: "kalender", view');

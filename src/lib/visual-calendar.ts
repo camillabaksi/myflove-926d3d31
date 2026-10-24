@@ -34,6 +34,8 @@ export interface CalendarEntry {
   recoveryAction?: Task["recoveryAction"];
   label?: string;
   familyMembers?: Array<{ id: string; name: string }>;
+  /** Per-person times when a shared child activity is shown once but starts at different times. Presentation only; source rows keep their own times. */
+  memberTimes?: Array<{ id: string; name: string; time: string; endTime?: string }>;
   requiresParent?: boolean;
   pictogram?: PictogramId;
   linkGroup?: string;
