@@ -3410,3 +3410,18 @@ html.dark .app-shell-bg[data-paceable-app="true"] {
   }
 }
 html.dark .pace-assistant-mobile-header { background: var(--background); }
+
+
+/* iPhone/WebView resilience for the first and last Kvällsstund panels.
+   The actual photos render as bundled <picture>/<img> elements so Vite can
+   include them in mobile builds. Gradients remain if an image cannot decode. */
+.pace-evening-ritual.pace-evening-ritual .pace-evening-intro {
+  background-image:
+    radial-gradient(ellipse at 75% 78%, rgba(245, 189, 147, .55), transparent 50%),
+    linear-gradient(160deg, #65516d 0%, #987583 51%, #dbad9b 100%);
+}
+.pace-evening-ritual.pace-evening-ritual .pace-evening-outro {
+  background-image:
+    radial-gradient(ellipse at 20% 78%, rgba(244, 209, 188, .65), transparent 56%),
+    linear-gradient(170deg, #f4e9e7 0%, #e9d9e7 58%, #eccdbb 100%);
+}
