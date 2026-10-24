@@ -73,6 +73,13 @@ export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerP
     const e = { ...entry, familyMembers: members, label: members?.map(m => m.name).join(" & ") || entry.label };
     if (e.source !== "child") { out.push(e); continue; }
 
+    // Exact same occurrence for the same child from two sources: show once, keep storage untouched.
+    const sameChildDupe = out.some(o => o.source === "child" && o.date === e.date &&
+      norm(o.title) === norm(e.title) && o.time === e.time && o.endTime === e.endTime &&
+      norm(o.location) === norm(e.location) &&
+      o.familyMembers?.some(m => members?.some(n => n.id === m.id)));
+    if (sameChildDupe) continue;
+
     const match = out.find(o => o.source === "child" &&
       o.date === e.date &&
       norm(o.title) === norm(e.title) &&
