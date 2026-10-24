@@ -84,7 +84,26 @@ function SpaceEditor({ owner, date, currentDay }: { owner: string; date: string;
     {store.heads.length > 1 && <div role="status" className="space-y-2 border-l-2 border-border pl-3 text-sm"><p>Det finns flera sparade versioner. Din text är kvar.</p>{store.heads.map((head, index) => <Button key={head.id} variant="outline" className="h-auto min-h-11 w-full whitespace-normal text-left" onClick={() => updateDraft(head.text, head.categories, store.heads.map(value => value.id))}>Använd version {index + 1}: {head.text || "Tom anteckning"}</Button>)}</div>}
     <div className="space-y-2 border-t border-border/70 pt-3"><Button size="sm" variant="outline" disabled={!dirty || (!text.trim() && !store.hasRows)} onClick={save}><Save size={14} aria-hidden className="mr-1" />Spara anteckning</Button><Button type="button" variant="outline" size="sm" className="h-auto min-h-11 whitespace-normal" disabled={!text.trim() || dirty || date !== currentDay} onClick={() => { if (!isActiveOwner(owner) || date !== todayISO()) return; window.dispatchEvent(new CustomEvent(INVISIBLE_WORK_EVENT, { detail: { owner, date, text: text.trim() } })); setMessage("Visas under Det osynliga arbetet i Din dag."); }}><Feather size={15} aria-hidden className="mr-1" />Visa i Övrigt idag</Button><Button variant="ghost" size="sm" className="h-auto min-h-11 w-full justify-start whitespace-normal text-left" disabled={!text.trim() || date !== currentDay} onClick={() => { setHelp(value => !value); setContext(""); setMessage(""); }}><Sparkles size={16} aria-hidden className="mr-2 shrink-0" />Använd för omplaneringshjälp</Button></div>
     <p role="status" className="text-xs text-muted-foreground">{dirty ? "Inte sparat än" : store.hasRows ? store.status : "Bara för dig"}</p>
-    {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => { if (window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) updateDraft("", [], store.heads.map(head => head.id)); }}><Trash2 size={15} aria-hidden className="mr-2" />Ta bort anteckning</Button>}
+    {store.hasRows && text.trim() && <Button variant="ghost" size="sm" onClick={() => {
+      if (!window.confirm("Ta bort anteckningen för detta datum? Tidigare versioner behålls för återställning.")) return;
+      if (!isActiveOwner(owner) || date !== todayISO() || todayISO() !== currentDay) {
+        setMessage("Dagen eller kontot har ändrats. Öppna anteckningen igen.");
+        return;
+      }
+      try {
+        // An empty revision is the deletion marker. Clearing only the draft
+        // leaves the original visible on reload, so persist it immediately.
+        // Parent every current head to avoid reviving a concurrent version.
+        const revision = store.save("", [], store.heads.map(head => head.id));
+        if (!revision) throw new Error("Kunde inte spara borttagningen.");
+        clearSpaceDraft(owner, date);
+        setText(""); setCategories([]); setParents([revision.id]);
+        setDirty(false); setHelp(false); setContext("");
+        setMessage("Anteckningen är borttagen. Tidigare versioner finns kvar för återställning.");
+      } catch {
+        setMessage("Kunde inte ta bort anteckningen. Din text finns kvar; försök igen.");
+      }
+    }}><Trash2 size={15} aria-hidden className="mr-2" />Ta bort anteckning</Button>}
     {store.status.includes("misslyckades") && <Button variant="ghost" size="sm" onClick={() => void store.retry()}>Försök synka igen</Button>}
     {help && <div className="space-y-3 rounded-2xl bg-lavender/25 p-3 text-sm">
       <div className="flex items-center justify-between gap-2"><h3 className="font-medium text-ink">Frivillig omplaneringshjälp</h3><Button variant="ghost" size="icon" aria-label="Stäng omplaneringshjälp" onClick={() => { setHelp(false); setContext(""); setMessage(""); }}><X size={15} aria-hidden /></Button></div>
