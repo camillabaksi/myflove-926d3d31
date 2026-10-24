@@ -92,14 +92,17 @@ export function familyLayerEntries(entries: CalendarEntry[], prefs: FamilyLayerP
     const mergedMembers = [...(match.familyMembers ?? []), ...(members ?? [])];
     match.familyMembers = mergedMembers;
     match.label = mergedMembers.map(m => m.name).join(" & ");
-    const timeOf = (m: { id: string; name: string }) =>
-      m.id === (members?.[0]?.id ?? "") ? { ...m, time: e.time!, ...(e.endTime ? { endTime: e.endTime } : {}) }
-        : { ...m, time: match.memberTimes?.find(mt => mt.id === m.id)?.time ?? match.time!, ...(match.memberTimes?.find(mt => mt.id === m.id)?.endTime ?? match.endTime ? { endTime: match.memberTimes?.find(mt => mt.id === m.id)?.endTime ?? match.endTime! } : {}) };
     if (match.time !== e.time || match.endTime !== e.endTime) {
-      match.memberTimes = mergedMembers.map(timeOf);
+      // Seed per-person times from the row the group started with, then add the new copy's time.
+      if (!match.memberTimes) {
+        match.memberTimes = (match.familyMembers ?? [])
+          .filter(m => !members?.some(n => n.id === m.id))
+          .map(m => ({ ...m, time: match.time!, ...(match.endTime ? { endTime: match.endTime } : {}) }));
+      }
+      for (const m of members ?? []) match.memberTimes.push({ ...m, time: e.time!, ...(e.endTime ? { endTime: e.endTime } : {}) });
       // Show the group at the earliest start; no shared end time when they differ.
       if ((e.time ?? "99") < (match.time ?? "99")) match.time = e.time;
-      if (match.memberTimes.some(mt => mt.endTime !== match.memberTimes?.[0]?.endTime)) match.endTime = undefined;
+      if (new Set(match.memberTimes.map(mt => mt.endTime ?? "")).size > 1) match.endTime = undefined;
     }
     if (e.requiresParent === true) {
       match.requiresParent = true;
