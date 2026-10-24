@@ -23,11 +23,11 @@ describe("Paceable signed native release source preflight", () => {
 
   it("keeps two Xcode configurations at the same monotonically increased version/build", () => {
     expect(ios.match(/MARKETING_VERSION = 1\.6;/g)).toHaveLength(2);
-    expect(ios.match(/CURRENT_PROJECT_VERSION = 18;/g)).toHaveLength(2);
+    expect(ios.match(/CURRENT_PROJECT_VERSION = 19;/g)).toHaveLength(2);
     expect(android).toMatch(/versionName "6\.8"/);
     expect(android).toMatch(/versionCode 29/);
     expect(releaseInstructions).toContain("| Android | 6.8 | versionCode 29 | app.myflove.mobile |");
-    expect(releaseInstructions).toContain("| iOS | 1.6 | CURRENT_PROJECT_VERSION 18 | se.myflove.app |");
+    expect(releaseInstructions).toContain("| iOS | 1.6 | CURRENT_PROJECT_VERSION 19 | se.myflove.app |");
   });
 
   it("loads the existing public host and only existing signed Codemagic workflows", () => {
