@@ -205,3 +205,33 @@ describe("Kvällsstunden – explicit save and optional tomorrow", () => {
     expect(state.logEvening).not.toHaveBeenCalled();
   });
 });
+
+
+describe("Kvällsstund – background assets on iPhone", () => {
+  it("uses bundled responsive image elements on first and last step without saving", () => {
+    render(<EveningCheck />);
+    fireEvent.click(screen.getByRole("button", { name: "Ja, börja kvällsstunden" }));
+
+    const intro = screen.getByTestId("evening-ritual-backdrop");
+    expect(intro.tagName.toLowerCase()).toBe("picture");
+    expect(intro.querySelector("source")).toHaveAttribute("media", "(min-width: 640px)");
+    expect(intro.querySelector("source")?.getAttribute("srcset")).toContain("intro-desktop");
+    expect(intro.querySelector("img")?.getAttribute("src")).toContain("intro-mobile");
+    expect(intro.querySelector("img")).toHaveAttribute("loading", "eager");
+    expect(intro.querySelector("img")).toHaveAttribute("alt", "");
+
+    fireEvent.click(screen.getByRole("button", { name: "Börja" }));
+    for (let index = 0; index < 3; index += 1) {
+      fireEvent.click(screen.getByRole("button", { name: "Nästa" }));
+      expect(screen.queryByTestId("evening-ritual-backdrop")).not.toBeInTheDocument();
+    }
+
+    fireEvent.click(screen.getByRole("button", { name: "Nästa" }));
+    const outro = screen.getByTestId("evening-ritual-backdrop");
+    expect(outro.querySelector("source")?.getAttribute("srcset")).toContain("outro-desktop");
+    expect(outro.querySelector("img")?.getAttribute("src")).toContain("outro-mobile");
+    expect(state.savedWrites).toBe(0);
+    expect(state.setEvening).not.toHaveBeenCalled();
+    expect(state.logEvening).not.toHaveBeenCalled();
+  });
+});

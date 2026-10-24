@@ -17,6 +17,10 @@ import { track } from "@/lib/analytics";
 import { useCollapsible } from "@/lib/collapse-store";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import eveningIntroMobile from "@/assets/evening/intro-mobile.webp";
+import eveningIntroDesktop from "@/assets/evening/intro-desktop.webp";
+import eveningOutroMobile from "@/assets/evening/outro-mobile.webp";
+import eveningOutroDesktop from "@/assets/evening/outro-desktop.webp";
 
 /** Display only: preserve the original registered value in every store/calculation. */
 export function formatEveningEnergy(value: number): string {
@@ -66,6 +70,13 @@ export default function EveningCheck() {
   const [reflection, setReflection] = useState("");
   const insight = useMemo(() => buildEveningInsight(eveningHistory, evening), [eveningHistory, evening]);
   const screens = 6;
+  // These images are bundled by Vite, rather than requested from an absolute
+  // /images path that may be missing in an older iOS WebView/native bundle.
+  const backdrop = step === 0
+    ? { mobile: eveningIntroMobile, desktop: eveningIntroDesktop }
+    : step === screens - 1
+      ? { mobile: eveningOutroMobile, desktop: eveningOutroDesktop }
+      : null;
 
   function start() {
     openedFor.current = { owner: getDataOwner(), date: todayISO() };
@@ -148,6 +159,10 @@ export default function EveningCheck() {
     <Dialog open={open} onOpenChange={value => { setOpen(value); if (!value) setReflection(""); }}>
       <DialogContent className="pace-evening-ritual !fixed !inset-0 !left-0 !top-0 !h-[100dvh] !w-screen !max-h-none !max-w-none !translate-x-0 !translate-y-0 overflow-hidden border-0 bg-[#FAF7F4] p-0 text-[#512654] sm:!inset-auto sm:!left-1/2 sm:!top-1/2 sm:!h-[min(92dvh,820px)] sm:!w-full sm:!max-w-md sm:!-translate-x-1/2 sm:!-translate-y-1/2 sm:rounded-[2rem] [&>button]:hidden">
         <div className={cn("relative flex h-full min-h-0 flex-col overflow-y-auto overscroll-contain bg-gradient-to-b from-[#F7E9E3] via-[#FAF7F4] to-[#F0E7F2] p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:min-h-0 sm:rounded-[1.8rem] sm:p-7", step === 0 && "pace-evening-intro", step === 5 && "pace-evening-outro")}>
+          {backdrop && <picture aria-hidden="true" data-testid="evening-ritual-backdrop" className="pointer-events-none absolute inset-0 z-0 block overflow-hidden">
+            <source media="(min-width: 640px)" type="image/webp" srcSet={backdrop.desktop} />
+            <img src={backdrop.mobile} alt="" draggable={false} loading="eager" decoding="async" className="block h-full w-full object-cover object-center" />
+          </picture>}
           <div className="relative z-10 flex items-center justify-between gap-2">
             <button type="button" onClick={() => step ? setStep(step - 1) : setOpen(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/75 text-[#512654]" aria-label={step ? "Föregående" : "Stäng"}>{step ? <ChevronLeft size={20}/> : <X size={19}/>}</button>
             <span className={cn("text-xs", step === 0 ? "text-white" : "text-[#6D566C]")}>Kvällsstund · {step + 1} av {screens}</span>
